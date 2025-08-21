@@ -600,10 +600,10 @@ public class TableViewerDialog extends JFrame implements ItemListener {
                                     eu = currentUnits.get(tu.getRealFilename());// existing
                                     // unit
                                     if (eu.getTables().get(currTableName) == null) {
-                                        eu.getTables().put(currTableName, new Double(frequency));
+                                        eu.getTables().put(currTableName, Double.valueOf(frequency));
                                     } else {
                                         Double currFreq = eu.getTables().get(currTableName);
-                                        Double newFreq = new Double(currFreq.doubleValue() + frequency);
+                                        Double newFreq = Double.valueOf(currFreq.doubleValue() + frequency);
                                         eu.getTables().remove(currTableName);
                                         eu.getTables().put(currTableName, newFreq);
                                     }
@@ -628,10 +628,10 @@ public class TableViewerDialog extends JFrame implements ItemListener {
                                 eu = currentUnits.get(Filename);// existing
                                 // unit
                                 if (eu.getTables().get(currTableName) == null) {
-                                    eu.getTables().put(currTableName, new Double(frequency));
+                                    eu.getTables().put(currTableName, Double.valueOf(frequency));
                                 } else {
                                     Double currFreq = eu.getTables().get(currTableName);
-                                    Double newFreq = new Double(currFreq.doubleValue() + frequency);
+                                    Double newFreq = Double.valueOf(currFreq.doubleValue() + frequency);
                                     eu.getTables().remove(currTableName);
                                     eu.getTables().put(currTableName, newFreq);
                                 }
@@ -657,9 +657,9 @@ public class TableViewerDialog extends JFrame implements ItemListener {
                                     Double d = next.get(crossTableName);
                                     double newTableWeight = d.doubleValue() + ((weight / totaltableweight) * tablemultiplier);
                                     next.remove(crossTableName);
-                                    next.put(crossTableName, new Double(newTableWeight));
+                                    next.put(crossTableName, Double.valueOf(newTableWeight));
                                 } else {
-                                    next.put(crossTableName, new Double((weight / totaltableweight) * tablemultiplier));
+                                    next.put(crossTableName, Double.valueOf((weight / totaltableweight) * tablemultiplier));
                                 }
                             }
                         }
@@ -780,7 +780,7 @@ public class TableViewerDialog extends JFrame implements ItemListener {
          * value and carries a 100% weight.
          */
         TreeMap<String, Double> temp = new TreeMap<String, Double>();
-        temp.put(factionString, new Double(100.0));// using 100 makes things
+        temp.put(factionString, Double.valueOf(100.0));// using 100 makes things
         // %'s instead of decimals
         // ...
         // System.out.println("this.doTableLayer - base");
@@ -1017,10 +1017,10 @@ public class TableViewerDialog extends JFrame implements ItemListener {
                             Double d1 = 0.0;
                             Double d2 = 0.0;
                             if (t1 != null) {
-                                d1 = new Double(t1.getFrequency());
+                                d1 = Double.valueOf(t1.getFrequency());
                             }
                             if (t2 != null) {
-                                d2 = new Double(t2.getFrequency());
+                                d2 = Double.valueOf(t2.getFrequency());
                             }
                             return d1.compareTo(d2);
                         } catch (Exception ex) {
