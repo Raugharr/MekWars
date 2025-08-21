@@ -1,6 +1,6 @@
 rootProject.name = 'MekWarsRoot'
 
-include 'mekwars'
+include 'MekWars'
 
 
 includeBuild('../megamek')

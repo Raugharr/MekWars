@@ -86,8 +86,6 @@ import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.looks.plastic.theme.DesertGreen;
 import com.jgoodies.looks.plastic.theme.SkyBlue;
-import com.l2fprod.gui.plaf.skin.Skin;
-import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
 import client.campaign.CCampaign;
 import client.campaign.CPlayer;
 import client.campaign.CUnit;
@@ -146,7 +144,6 @@ import megamek.common.preference.ClientPreferences;
 import megamek.common.preference.PreferenceManager;
 import megamek.server.GameManager;
 import megamek.server.Server;
-import net.sourceforge.mlf.metouia.MetouiaLookAndFeel;
 
 
 public final class MWClient extends GameHost implements IClient {
@@ -1972,12 +1969,8 @@ public final class MWClient extends GameHost implements IClient {
      */
     public void setLookAndFeel(boolean isRedraw) {
 
-        LookAndFeel LAF = new com.incors.plaf.kunststoff.KunststoffLookAndFeel();
-        if (Config.getParam("LOOKANDFEEL").equals("metal")) {
-            LAF = new MetalLookAndFeel();
-        } else if (Config.getParam("LOOKANDFEEL").equals("metouia")) {
-            LAF = new MetouiaLookAndFeel();
-        } else if (Config.getParam("LOOKANDFEEL").equals("plastic")) {
+        LookAndFeel LAF = new MetalLookAndFeel();
+        if (Config.getParam("LOOKANDFEEL").equals("plastic")) {
             PlasticLookAndFeel.setMyCurrentTheme(new DesertGreen());
             LAF = new Plastic3DLookAndFeel();
         } else if (Config.getParam("LOOKANDFEEL").equals("plasticxp")) {
