@@ -11,6 +11,9 @@
 
 package server.campaign;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.thoughtworks.xstream.XStream;
 
 import java.io.BufferedReader;
@@ -157,7 +160,7 @@ import server.util.rss.Feed;
 import server.util.rss.FeedMessage;
 
 public final class CampaignMain implements Serializable {
-
+	private static final Logger logger = LogManager.getLogger(CampaignMain.class);
     private static final long serialVersionUID = -8671163467590633378L;
 
     /**
@@ -351,18 +354,18 @@ public final class CampaignMain implements Serializable {
         // Load & Init Data
         data = new CampaignData();
 
+		xstream = new MMNetXStream();
+
         // load megamek gameoptions;
         MWLogger.infoLog("Loading MegaMek Game Options");
         cm.megaMekClient.getGame().getOptions().loadOptions();
 
         // Parse Terrain
-		// FIXME: Write Converter
-        // new XMLTerrainDataParser("./data/terrain.xml");
-
-
-		File advancedTerrainFile = new File("./data/advterr.xml");
-		AdvancedTerrain advancedTerrain = (AdvancedTerrain) getXStream().fromXML(advancedTerrainFile);
-		getData().addAdvancedTerrain(advancedTerrain);
+		File advancedTerrainFile = new File("./data/advancedTerrain.xml");
+		AdvancedTerrain[] advancedTerrainList = (AdvancedTerrain[]) getXStream().fromXML(advancedTerrainFile);
+		for(AdvancedTerrain advancedTerrain: advancedTerrainList) {
+			getData().addAdvancedTerrain(advancedTerrain);
+		}
 
         cm.loadTopUnitID();
         gamesCompleted = 0;
@@ -446,8 +449,6 @@ public final class CampaignMain implements Serializable {
         
         //@Salient for quirks
 		quirkHandler = QuirkHandler.getInstance();
-
-		xstream = new MMNetXStream();
 
         // create & start a data provider
         int dataport = -1;

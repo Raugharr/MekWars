@@ -45,7 +45,7 @@ public final class MWLogger {// final - no extension of the server logger
     }
     
     public static void mainLog(String message) {
-        LogManager.getLogger().log(Level.ALL, message);
+        LogManager.getLogger().info(message);
     }
     
     public static void modLog(String message) {
@@ -57,7 +57,7 @@ public final class MWLogger {// final - no extension of the server logger
     }
     
     public static void ipLog(String message) {
-        LogManager.getLogger().info( message);
+        LogManager.getLogger().info(message);
     }
     
     public static void cmdLog(String message) {

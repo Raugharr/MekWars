@@ -1135,7 +1135,7 @@ public class ShortOperation implements Comparable<Object> {
             		tempToSet -= Math.abs(aTerrain.getNightTempMod());
             		intelTimeFrame = PlanetaryConditions.L_FULL_MOON;
             		aTerrain.setLightConditions(PlanetaryConditions.L_FULL_MOON);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getMoonLessNightChance()) {
+            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getMoonlessNightChance()) {
             		tempToSet -= Math.abs(aTerrain.getNightTempMod());
             		intelTimeFrame = PlanetaryConditions.L_MOONLESS;
             		aTerrain.setLightConditions(PlanetaryConditions.L_MOONLESS);
@@ -1173,44 +1173,44 @@ public class ShortOperation implements Comparable<Object> {
             		aTerrain.setWeatherConditions(PlanetaryConditions.WE_HEAVY_HAIL);
             	}
 
-            	if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightWindsChance()) {
+            	if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightWindChance()) {
             		aTerrain.setWindStrength(PlanetaryConditions.WI_LIGHT_GALE);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getModerateWindsChance()) {
+            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getModerateWindChance()) {
             		aTerrain.setWindStrength(PlanetaryConditions.WI_MOD_GALE);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getStrongWindsChance()) {
+            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getStrongWindChance()) {
             		aTerrain.setWindStrength(PlanetaryConditions.WI_STRONG_GALE);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getStormWindsChance()) {
+            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getStormWindChance()) {
             		aTerrain.setWindStrength(PlanetaryConditions.WI_STORM);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getTornadoF13WindsChance()) {
+            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getTornadoF13WindChance()) {
             		aTerrain.setWindStrength(PlanetaryConditions.WI_TORNADO_F13);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getTornadoF4WindsChance()) {
+            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getTornadoF4WindChance()) {
             		aTerrain.setWindStrength(PlanetaryConditions.WI_TORNADO_F4);
             	}
 
             	boolean wind = false;
 
-            	if (aTerrain.getLightWindsChance() > 0) {
+            	if (aTerrain.getLightWindChance() > 0) {
             		wind = true;
             		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_LIGHT_GALE);
             	}
 
-            	if (aTerrain.getModerateWindsChance() > 0) {
+            	if (aTerrain.getModerateWindChance() > 0) {
             		wind = true;
             		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_MOD_GALE);
             	}
-            	if (aTerrain.getStrongWindsChance() > 0) {
+            	if (aTerrain.getStrongWindChance() > 0) {
             		wind = true;
             		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_STRONG_GALE);
             	}
-            	if (aTerrain.getStormWindsChance() > 0) {
+            	if (aTerrain.getStormWindChance() > 0) {
             		wind = true;
             		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_STORM);
             	}
-            	if (aTerrain.getTornadoF13WindsChance() > 0) {
+            	if (aTerrain.getTornadoF13WindChance() > 0) {
             		wind = true;
             		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_TORNADO_F13);
             	}
-            	if (aTerrain.getTornadoF4WindsChance() > 0) {
+            	if (aTerrain.getTornadoF4WindChance() > 0) {
             		wind = true;
             		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_TORNADO_F4);
             	}
