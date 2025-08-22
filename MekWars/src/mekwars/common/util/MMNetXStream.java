@@ -22,6 +22,7 @@ import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider
 import com.thoughtworks.xstream.core.ReferenceByIdMarshallingStrategy;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 
+import common.AdvancedTerrain;
 import common.House;
 import common.Planet;
 
@@ -33,21 +34,21 @@ import common.Planet;
 public class MMNetXStream extends XStream {
     public MMNetXStream() {
         super(new PureJavaReflectionProvider());
-        // you may add shortcuts here, so XStream will not 
-        // write the whole class name each time ;-)
-        alias("faction",House.class);
-        alias("planet",Planet.class);
-        // Enables reference marshalling.
-        setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
+		setup();
     }
     
     public MMNetXStream(HierarchicalStreamDriver hierarchicalStreamDriver){
     	super(hierarchicalStreamDriver);
+		setup();
+    }
+
+	protected void setup() {
         // you may add shortcuts here, so XStream will not 
         // write the whole class name each time ;-)
+        alias("advancedTerrain",AdvancedTerrain.class);
         alias("faction",House.class);
         alias("planet",Planet.class);
         // Enables reference marshalling.
         setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
-    }
+	}
 }

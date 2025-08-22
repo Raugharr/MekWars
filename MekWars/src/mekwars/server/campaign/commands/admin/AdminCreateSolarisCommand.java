@@ -59,7 +59,7 @@ public class AdminCreateSolarisCommand implements Command {
         CampaignMain.cm.addHouse(solaris);
         HashMap<Integer, Integer> solFlu = new HashMap<Integer, Integer>();
         solFlu.put(CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"), null).getId(), 100);
-        SPlanet newbieP = new SPlanet(0, "Solaris VII", new Influences(solFlu), 0, 0, -3, -2);
+        SPlanet newbieP = new SPlanet("Solaris VII", new Influences(solFlu), 0, -3, -2);
         CampaignMain.cm.addPlanet(newbieP);
 
         solaris.addPlanet(newbieP);

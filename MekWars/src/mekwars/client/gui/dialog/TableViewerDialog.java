@@ -70,10 +70,10 @@ import common.util.SpringLayoutHelper;
 import common.util.UnitUtils;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
+import megamek.common.EntityListFile;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
-import megamek.common.MULParser;
 
 /**
  * 
@@ -572,7 +572,7 @@ public class TableViewerDialog extends JFrame implements ItemListener {
                                 File entityFile = new File("data/armies/" + Filename);
 
                                 try {
-                                    loadedUnits = new MULParser(entityFile,null).getEntities();
+                                    loadedUnits = EntityListFile.loadFrom(entityFile);
                                     loadedUnits.trimToSize();
                                     frequency /= loadedUnits.size();
                                 } catch (Exception ex) {
@@ -941,11 +941,11 @@ public class TableViewerDialog extends JFrame implements ItemListener {
                     return "";
                 }
             case WEIGHT:
-                return new Integer((int) currU.getEntity().getWeight());
+                return Integer.valueOf((int) currU.getEntity().getWeight());
 
             case BATTLEVALUE:
 
-                return new Integer(currU.getEntity().calculateBattleValue());
+                return Integer.valueOf(currU.getEntity().calculateBattleValue());
 
             case FREQUENCY:
 

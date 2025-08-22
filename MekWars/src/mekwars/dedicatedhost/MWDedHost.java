@@ -41,8 +41,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import org.mekwars.libpk.logging.PKLogManager;
-
 import common.GameInterface;
 import common.GameWrapper;
 import common.MMGame;
@@ -66,12 +64,12 @@ import megamek.common.Entity;
 import megamek.common.Game;
 import megamek.common.Mech;
 import megamek.common.MechWarrior;
-import megamek.common.enums.GamePhase;
+import megamek.common.IGame;
+import megamek.common.IGame.Phase;
 import megamek.common.event.GameCFREvent;
 import megamek.common.options.IOption;
-import megamek.common.preference.ClientPreferences;
+import megamek.common.preference.IClientPreferences;
 import megamek.common.preference.PreferenceManager;
-import megamek.server.GameManager;
 import megamek.server.Server;
 
 
@@ -106,7 +104,7 @@ public final class MWDedHost extends GameHost implements IClient {
     long LastPing = 0;
     int Status = 0;
 
-    private GamePhase currentPhase = GamePhase.DEPLOYMENT;
+    private Phase currentPhase = IGame.Phase.PHASE_DEPLOYMENT;
     private int turn = 0;
 
     Dimension MapSize;
@@ -133,8 +131,6 @@ public final class MWDedHost extends GameHost implements IClient {
     public static void main(String[] args) {
 
         DedConfig config;
-
-        createLoggers();
 
         /*
          * put StdErr and StdOut into ./logs/megameklog.txt, because MegaMek
@@ -1175,7 +1171,7 @@ public final class MWDedHost extends GameHost implements IClient {
         }
 
         String MMVersion = getserverConfigs("AllowedMegaMekVersion");
-        if (!MMVersion.equals("-1") && !MMVersion.equalsIgnoreCase(megamek.SuiteConstants.VERSION.toString())) {
+        if (!MMVersion.equals("-1") && !MMVersion.equalsIgnoreCase(MegaMek.VERSION.toString())) {
             MWLogger.errLog("You are using an invalid version of MegaMek. Please use version " + MMVersion);
             stopHost();
             updateDed();
@@ -1201,7 +1197,7 @@ public final class MWDedHost extends GameHost implements IClient {
             gpassword = "";
         }
         try {
-            myServer = new Server(gpassword, myPort, new GameManager());
+            myServer = new Server(gpassword, myPort);
         } catch (Exception ex) {
             try {
                 if (myServer == null) {
@@ -1222,10 +1218,10 @@ public final class MWDedHost extends GameHost implements IClient {
 
         ((Game)myServer.getGame()).addGameListener(this);
         // Send the new game info to the Server
-        serverSend("NG|" + new MMGame(myUsername, ip, myPort, MaxPlayers, megamek.SuiteConstants.VERSION.toString(), comment).toString());
+        serverSend("NG|" + new MMGame(myUsername, ip, myPort, MaxPlayers, MegaMek.VERSION, comment).toString());
         clearSavedGames();
         purgeOldLogs();
-        ClientPreferences cs = PreferenceManager.getClientPreferences();
+        IClientPreferences cs = PreferenceManager.getClientPreferences();
         cs.setStampFilenames(Boolean.parseBoolean(getserverConfigs("MMTimeStampLogFile")));
     }
 
@@ -1758,14 +1754,6 @@ public final class MWDedHost extends GameHost implements IClient {
 		return result;
 	}
 
-    private static void createLoggers() {
-        logger = MWLogger.getInstance();
-        PKLogManager logger = PKLogManager.getInstance();
-        logger.addLog("infolog");
-        logger.addLog("errlog");
-        logger.addLog("debuglog");
-    }
-    
     protected void sendGameReport() {
         if (myServer == null) {
             return;

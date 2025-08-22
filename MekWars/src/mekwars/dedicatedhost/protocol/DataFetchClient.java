@@ -20,7 +20,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import com.Ostermiller.util.MD5;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import common.CampaignData;
 import common.Influences;
@@ -410,7 +410,7 @@ public class DataFetchClient {
 				try {
 									
 					//get the local MD5
-					String localOptionsMD5 = MD5.getHashString(localGameOptions);
+				    String localOptionsMD5 = DigestUtils.md5Hex(new FileInputStream(localGameOptions)).toUpperCase();
 					
 					//now get the Server MD5
 					String ServerMegaMekGameOptionsMD5 = this.getServerMegaMekGameOptionsMD5();

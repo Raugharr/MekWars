@@ -491,8 +491,8 @@ public class RepodCommand implements Command {
             ((Mech) cm.getEntity()).setAutoEject(((Mech) entity).isAutoEject());
         }
 
-       	cm.getEntity().setExternalSearchlight(entity.hasSearchlight());
-        cm.getEntity().setSearchlightState(entity.isUsingSearchlight());
+       	cm.getEntity().setExternalSpotlight(entity.hasSpotlight());
+        cm.getEntity().setSpotlightState(entity.isUsingSpotlight());
         cm.setWeightclass(m.getWeightclass());
         cm.setType(m.getType());
         // since unit cannot be in armies, no checkOperations on remove

@@ -3,9 +3,9 @@ rootProject.name = 'MekWarsRoot'
 include 'MekWars'
 
 
-includeBuild('../megamek')
-includeBuild('../megameklab')
-includeBuild('../mekhq')
+// includeBuild('../megamek')
+// includeBuild('../megameklab')
+// includeBuild('../mekhq')
 
 
 def localSettings = file('settings_local.gradle')

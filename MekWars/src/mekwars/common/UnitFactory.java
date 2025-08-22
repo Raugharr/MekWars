@@ -97,6 +97,21 @@ public class UnitFactory implements Serializable {
 	 * This will allow admins to lock this factory
 	 */
 	private boolean factoryLocked = false;
+
+    public UnitFactory() {
+	
+	}
+
+    public UnitFactory(String name, String size, String faction, int ticksUntilRefresh, int refreshSpeed, int type, String buildTableFolder, int accessLevel) {
+        setName(name);
+        setSize(size);
+        setFounder(faction);
+        setTicksUntilRefresh(ticksUntilRefresh);
+        setRefreshSpeed(refreshSpeed);
+        setType(type);
+        setBuildTableFolder(buildTableFolder);
+        setAccessLevel(accessLevel);
+    }
 	
 	private String factoryID = "";
 	//private int factoryID = 0;

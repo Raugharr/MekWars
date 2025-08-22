@@ -40,8 +40,6 @@ import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
 
-// import org.mekwars.libpk.logging.PKLogManager;
-
 import common.MMGame;
 import common.comm.Command;
 import common.comm.ServerCommand;
@@ -115,7 +113,6 @@ public class MWServ {
 		String errorFileName = "./logs/errorFile.txt";
 		LogManager.getLogger().info("Server Start up");
 		logger = MWLogger.getInstance();
-		createLoggers();
 
 		try {
 			// MWLogger.mainLog("Redirecting output to " +
@@ -214,24 +211,6 @@ public class MWServ {
 		loadISPs();
 	}
 
-	private void createLoggers() {
-        // PKLogManager logger = PKLogManager.getInstance();
-        // logger.addLog("infolog");
-        // logger.addLog(PKLogManager.ERRORLOG);
-        // logger.addLog("debuglog");
-        // logger.addLog("mainlog");
-        // logger.addLog("gamelog");
-        // logger.addLog("resultslog");
-        // logger.addLog("cmdlog");
-        // logger.addLog("pmlog");
-        // logger.addLog("bmlog");
-        // logger.addLog("warnlog");
-        // logger.addLog("modlog");
-        // logger.addLog("ticklog");
-        // logger.addLog("iplog");
-        // logger.addLog("testlog");
-	}
-	
 	// this will just loop and take in info...
 	public void startServer(String[] args) {
 		if (args == null) {

@@ -38,6 +38,7 @@ import megamek.common.PlanetaryConditions;
  */
 
 public class Planet implements Comparable<Object>, MutableSerializable {
+	private static int PlanetId = 0;
 
     // VARIABLES
     /**
@@ -139,8 +140,8 @@ public class Planet implements Comparable<Object>, MutableSerializable {
     private int maxConquestPoints = 100;
 
     // CONSTRUCTORS
-    public Planet(int id, String name, Position position, Influences influence) {
-        setId(id);
+    public Planet(String name, Position position, Influences influence) {
+		setId(PlanetId++);
         setName(name);
         setPosition(position);
         setInfluence(influence);

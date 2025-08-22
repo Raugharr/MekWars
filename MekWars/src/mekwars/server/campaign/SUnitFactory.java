@@ -53,16 +53,9 @@ public class SUnitFactory extends UnitFactory implements Serializable {
         // empty
     }
 
-    public SUnitFactory(String Name, SPlanet P, String Size, String Faction, int ticksuntilrefresh, int refreshSpeed, int type, String buildTableFolder, int accessLevel) {
-        setName(Name);
-        setPlanet(P);
-        setSize(Size);
-        setFounder(Faction);
-        setTicksUntilRefresh(ticksuntilrefresh);
-        setRefreshSpeed(refreshSpeed);
-        setType(type);
-        setBuildTableFolder(buildTableFolder);
-        setAccessLevel(accessLevel);
+    public SUnitFactory(String name, SPlanet planet, String size, String faction, int ticksUntilRefresh, int refreshSpeed, int type, String buildTableFolder, int accessLevel) {
+		super(name, size, faction, ticksUntilRefresh, refreshSpeed, type, buildTableFolder, accessLevel);
+        setPlanet(planet);
     }
 
     // STRING SAVE METHODS

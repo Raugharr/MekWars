@@ -25,7 +25,6 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.mekwars.libpk.converters.HTML;
 
 import common.util.BinReader;
 import common.util.BinWriter;
@@ -387,8 +386,11 @@ public class House {
         }
 
         id = in.readInt("id");
-        name = HTML.br2cr(in.readLine("name"));
-        logo = HTML.br2cr(in.readLine("logo"));
+		// NOTE: Removed 8/21/25
+        // name = HTML.br2cr(in.readLine("name"));
+        // logo = HTML.br2cr(in.readLine("logo"));
+        name = in.readLine("name");
+        logo = in.readLine("logo");
         setBaseGunner(in.readInt("baseGunner"));
         setBasePilot(in.readInt("basePilot"));
         factionColor = in.readLine("factionColor");

@@ -60,7 +60,7 @@ public class AdminCreatePlanetCommand implements Command {
 			return;
 		HashMap<Integer,Integer> flu = new HashMap<Integer,Integer>();
 		flu.put(faction.getId(),100);
-		SPlanet planet = new SPlanet(CampaignMain.cm.getData().getUnusedPlanetID(),PlanetName, new Influences(flu), 0, 0, xcood, ycood);
+		SPlanet planet = new SPlanet(PlanetName, new Influences(flu), 0, xcood, ycood);
 		CampaignMain.cm.addPlanet(planet);
 		planet.setOwner(null,faction,true);
 		planet.setOriginalOwner(faction.getName());

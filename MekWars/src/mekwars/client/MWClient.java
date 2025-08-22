@@ -79,8 +79,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
-import org.mekwars.libpk.logging.PKLogManager;
-
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
@@ -129,6 +127,7 @@ import common.util.MWLogger;
 import common.util.ThreadManager;
 import common.util.TokenReader;
 import common.util.UnitUtils;
+import megamek.MegaMek;
 import megamek.client.ui.swing.GameOptionsDialog;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -140,9 +139,8 @@ import megamek.common.event.GameCFREvent;
 import megamek.common.event.GameEvent;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
-import megamek.common.preference.ClientPreferences;
+import megamek.common.preference.IClientPreferences;
 import megamek.common.preference.PreferenceManager;
-import megamek.server.GameManager;
 import megamek.server.Server;
 
 
@@ -265,7 +263,6 @@ public final class MWClient extends GameHost implements IClient {
         int i;
 
         
-        createLoggers();
         /*
          * put StdErr and StdOut into ./logs/megameklog.txt, because MegaMek
          * uses StdOut and StdErr, but the part of MegaMek that sets that up
@@ -334,12 +331,6 @@ public final class MWClient extends GameHost implements IClient {
         }
     }
 
-    private static void createLoggers() {
-        PKLogManager logger = PKLogManager.getInstance();
-        logger.addLog("infolog");
-        logger.addLog("errlog");
-        logger.addLog("debuglog");
-    }
     
     public MWClient(GUIClientConfig config) {
 
@@ -1970,26 +1961,26 @@ public final class MWClient extends GameHost implements IClient {
     public void setLookAndFeel(boolean isRedraw) {
 
         LookAndFeel LAF = new MetalLookAndFeel();
-        if (Config.getParam("LOOKANDFEEL").equals("plastic")) {
-            PlasticLookAndFeel.setMyCurrentTheme(new DesertGreen());
-            LAF = new Plastic3DLookAndFeel();
-        } else if (Config.getParam("LOOKANDFEEL").equals("plasticxp")) {
-            LAF = new PlasticXPLookAndFeel();
-        } else if (Config.getParam("LOOKANDFEEL").equals("plastic3d")) {
-            PlasticLookAndFeel.setMyCurrentTheme(new SkyBlue());
-            LAF = new Plastic3DLookAndFeel();
-        } else if (Config.getParam("LOOKANDFEEL").equals("skins")) {
-            try {
-                Skin theSkinToUse = SkinLookAndFeel
-                        .loadThemePack("./data/skins/"
-                                + Config.getParam("LOOKANDFEELSKIN"));
-                SkinLookAndFeel.setSkin(theSkinToUse);
-                LAF = new SkinLookAndFeel();
-            } catch (Exception ex) {
-                MWLogger.errLog(ex);
-                LAF = UIManager.getLookAndFeel();
-            }
-        }
+        // if (Config.getParam("LOOKANDFEEL").equals("plastic")) {
+        //     PlasticLookAndFeel.setMyCurrentTheme(new DesertGreen());
+        //     LAF = new Plastic3DLookAndFeel();
+        // } else if (Config.getParam("LOOKANDFEEL").equals("plasticxp")) {
+        //     LAF = new PlasticXPLookAndFeel();
+        // } else if (Config.getParam("LOOKANDFEEL").equals("plastic3d")) {
+        //     PlasticLookAndFeel.setMyCurrentTheme(new SkyBlue());
+        //     LAF = new Plastic3DLookAndFeel();
+        // } else if (Config.getParam("LOOKANDFEEL").equals("skins")) {
+        //     try {
+        //         Skin theSkinToUse = SkinLookAndFeel
+        //                 .loadThemePack("./data/skins/"
+        //                         + Config.getParam("LOOKANDFEELSKIN"));
+        //         SkinLookAndFeel.setSkin(theSkinToUse);
+        //         LAF = new SkinLookAndFeel();
+        //     } catch (Exception ex) {
+        //         MWLogger.errLog(ex);
+        //         LAF = UIManager.getLookAndFeel();
+        //     }
+        // }
 
         try {
             if (isRedraw) {
@@ -2467,7 +2458,7 @@ public final class MWClient extends GameHost implements IClient {
 
         String MMVersion = getserverConfigs("AllowedMegaMekVersion");
         if (!MMVersion.equals("-1")
-                && !MMVersion.equalsIgnoreCase(megamek.SuiteConstants.VERSION.toString())) {
+                && !MMVersion.equalsIgnoreCase(MegaMek.VERSION)) {
             if (isDedicated()) {
                 MWLogger.errLog("You are using an invalid version of MegaMek. Please use version "
                                 + MMVersion);
@@ -2508,7 +2499,7 @@ public final class MWClient extends GameHost implements IClient {
             gpassword = "";
         }
         try {
-            myServer = new Server(gpassword, myPort, new GameManager());
+            myServer = new Server(gpassword, myPort);
             if (loadSavegame) {
                 FileDialog f = new FileDialog(MainFrame, "Load Savegame");
                 f.setDirectory(System.getProperty("user.dir") + "/savegames");
@@ -2537,7 +2528,7 @@ public final class MWClient extends GameHost implements IClient {
         // Send the new game info to the Server
         serverSend("NG|"
                 + new MMGame(myUsername, ip, myPort, MaxPlayers,
-                        megamek.SuiteConstants.VERSION.toString() , comment)
+                        MegaMek.VERSION , comment)
                         .toString());
         if (!dedicated) {
 
@@ -2558,7 +2549,7 @@ public final class MWClient extends GameHost implements IClient {
         } else {
             clearSavedGames();
             purgeOldLogs();
-            ClientPreferences cs = PreferenceManager.getClientPreferences();
+            IClientPreferences cs = PreferenceManager.getClientPreferences();
             cs.setStampFilenames(Boolean
                     .parseBoolean(getserverConfigs("MMTimeStampLogFile")));
         }

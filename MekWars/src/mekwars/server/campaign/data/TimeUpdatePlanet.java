@@ -31,8 +31,8 @@ import common.util.Position;
  */
 public class TimeUpdatePlanet extends Planet {
 
-    public TimeUpdatePlanet(int id, String name, Position position, Influences flu) {
-        super(id, name, position, flu);
+    public TimeUpdatePlanet(String name, Position position, Influences flu) {
+        super(name, position, flu);
     }
 
     public TimeUpdatePlanet() {

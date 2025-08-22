@@ -11,6 +11,8 @@
 
 package server.campaign;
 
+import com.thoughtworks.xstream.XStream;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +37,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import common.AdvancedTerrain;
 import common.CampaignData;
 import common.Equipment;
 import common.House;
@@ -42,6 +45,7 @@ import common.Influences;
 import common.Planet;
 import common.campaign.operations.Operation;
 import common.flags.PlayerFlags;
+import common.util.MMNetXStream;
 import common.util.MWLogger;
 import common.util.MekwarsFileReader;
 import common.util.UnitUtils;
@@ -140,10 +144,6 @@ import server.campaign.util.HouseRankingHelpContainer;
 import server.campaign.util.MechStatistics;
 import server.campaign.util.Statistics;
 import server.campaign.util.WhoToHTML;
-import server.campaign.util.XMLAdvancedTerrainDataParser;
-import server.campaign.util.XMLFactionDataParser;
-import server.campaign.util.XMLPlanetDataParser;
-import server.campaign.util.XMLTerrainDataParser;
 import server.campaign.util.scheduler.MWScheduler;
 import server.campaign.votes.VoteManager;
 import server.dataProvider.Server;
@@ -252,6 +252,8 @@ public final class CampaignMain implements Serializable {
     
     private QuirkHandler quirkHandler;
 
+	private MMNetXStream xstream;
+
     // CONSTRUCTOR
     public CampaignMain(MWServ serv) {
 
@@ -328,7 +330,7 @@ public final class CampaignMain implements Serializable {
         }
 
         if (!getConfig("AllowedMegaMekVersion").equals("-1")) {
-            getConfig().setProperty("AllowedMegaMekVersion", megamek.SuiteConstants.VERSION.toString());
+            getConfig().setProperty("AllowedMegaMekVersion", megamek.MegaMek.VERSION);
         }
 
         dso.createConfig(); // save the cofig file so any missed defaults are
@@ -354,14 +356,13 @@ public final class CampaignMain implements Serializable {
         cm.megaMekClient.getGame().getOptions().loadOptions();
 
         // Parse Terrain
-        // XMLTerrainDataParser tParse =
-        new XMLTerrainDataParser("./data/terrain.xml");
+		// FIXME: Write Converter
+        // new XMLTerrainDataParser("./data/terrain.xml");
 
-        if (new File("./data/advancedTerrain.xml").exists())
-        	new XMLAdvancedTerrainDataParser("./data/advancedTerrain.xml");
 
-        new XMLAdvancedTerrainDataParser("./data/advterr.xml");
-
+		File advancedTerrainFile = new File("./data/advterr.xml");
+		AdvancedTerrain advancedTerrain = (AdvancedTerrain) getXStream().fromXML(advancedTerrainFile);
+		getData().addAdvancedTerrain(advancedTerrain);
 
         cm.loadTopUnitID();
         gamesCompleted = 0;
@@ -445,6 +446,8 @@ public final class CampaignMain implements Serializable {
         
         //@Salient for quirks
 		quirkHandler = QuirkHandler.getInstance();
+
+		xstream = new MMNetXStream();
 
         // create & start a data provider
         int dataport = -1;
@@ -1849,10 +1852,11 @@ public final class CampaignMain implements Serializable {
         // No SHouse Data yet? Parse the XML file and creathe them
         if (data.getAllHouses().size() == 0) {
             try {
-                XMLFactionDataParser parser = new XMLFactionDataParser("./data/factions.xml");
-                for (SHouse h : parser.getFactions()) {
-                    addHouse(h);
-                }
+				// FIXME: Write Converter
+                // XMLFactionDataParser parser = new XMLFactionDataParser("./data/factions.xml");
+                // for (SHouse h : parser.getFactions()) {
+                //     addHouse(h);
+                // }
             } catch (Exception ex) {
                 MWLogger.errLog("Error while reading faction data -- bailing out");
                 MWLogger.errLog(ex);
@@ -1878,29 +1882,29 @@ public final class CampaignMain implements Serializable {
             }
 
             try {
+				// FIXME: Write Converter
+                // XMLPlanetDataParser parser = new XMLPlanetDataParser("./data/planets.xml");
+                // for (SPlanet p : parser.getPlanets()) {
 
-                XMLPlanetDataParser parser = new XMLPlanetDataParser("./data/planets.xml");
-                for (SPlanet p : parser.getPlanets()) {
+                //     // add the planet
+                //     addPlanet(p);
 
-                    // add the planet
-                    addPlanet(p);
+                //     // set initial influences
+                //     for (House h : p.getInfluence().getHouses()) {
 
-                    // set initial influences
-                    for (House h : p.getInfluence().getHouses()) {
+                //         SHouse sh = (SHouse) h;
+                //         if (sh == null) {
+                //             MWLogger.errLog("Null faction found while loading Planets.xml. Planet: " + p.getName());
+                //             continue;
+                //         }
 
-                        SHouse sh = (SHouse) h;
-                        if (sh == null) {
-                            MWLogger.errLog("Null faction found while loading Planets.xml. Planet: " + p.getName());
-                            continue;
-                        }
+                //         if (p.getInfluence().getOwner() != null && sh.getId() == p.getInfluence().getOwner().intValue()) {
+                //             sh.addPlanet(p);
+                //         }
 
-                        if (p.getInfluence().getOwner() != null && sh.getId() == p.getInfluence().getOwner().intValue()) {
-                            sh.addPlanet(p);
-                        }
-
-                        sh.setInitialHouseRanking(sh.getInitialHouseRanking() + p.getInfluence().getInfluence(sh.getId()));
-                    }
-                }
+                //         sh.setInitialHouseRanking(sh.getInitialHouseRanking() + p.getInfluence().getInfluence(sh.getId()));
+                //     }
+                // }
             } catch (Exception ex) {
                 MWLogger.errLog("Error while reading planet data -- bailing out");
                 MWLogger.errLog(ex);
@@ -1910,7 +1914,7 @@ public final class CampaignMain implements Serializable {
 
             HashMap<Integer, Integer> solFlu = new HashMap<Integer, Integer>();
             solFlu.put(CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"), null).getId(), 100);
-            SPlanet newbieP = new SPlanet(0, "Solaris VII", new Influences(solFlu), 0, 0, -3, -2);
+            SPlanet newbieP = new SPlanet("Solaris VII", new Influences(solFlu), 0, -3, -2);
             if (data.getPlanetByName("Solaris VII") == null) {
                 addPlanet(newbieP);
                 CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"), null).addPlanet(newbieP);
@@ -4148,6 +4152,12 @@ public final class CampaignMain implements Serializable {
 		this.scheduler = scheduler;
 	}
 
+	/*
+	 * @return The XStream.
+	 */
+	public XStream getXStream() {
+		return xstream;	
+	}
 
 	/**
 	 * Send a message to a Discord Webhook

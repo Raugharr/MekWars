@@ -53,7 +53,6 @@ import megamek.common.AmmoType;
 public class CampaignData implements TerrainProvider {
 
     public static CampaignData cd;
-    //public static final PKLogManager mwlog = PKLogManager.getInstance();
 
     /**
      * All different Houses are stored here. key=Integer (id), value=House

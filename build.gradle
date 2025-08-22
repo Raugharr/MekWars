@@ -11,11 +11,16 @@ allprojects {
             url 'https://jitpack.io'
         }
     }
+	 gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xmaxerrs" << "4000"
+        }
+    }
 }
 
 subprojects {
     group = 'org.megamek'
-    version = '0.45.4'
+    version = '0.48.0'
 }
 
 ext {
@@ -26,15 +31,15 @@ ext {
     // these properties to append the branch name to the artifact id if the repo is not in the master
     // branch, making it available separately to the child project.
     // mhqBranch = grgit.branch.current().name
-    mhqBranch = 'v0.45.4'
+    mhqBranch = 'v0.48.0'
     mhqBranchTag = mhqBranch.equals('master') ? '' : '-' + mhqBranch
 
     // Allows setting a dependency on a different MM branch.
-    mmBranch = 'v0.45.4'
+    mmBranch = 'v0.48.0'
     mmBranchTag = mmBranch.equals('master') ? '' : '-' + mmBranch
-    mmlBranch = 'v0.45.4'
+    mmlBranch = 'v0.48.0'
     mmlBranchTag = mmlBranch.equals('master') ? '' : '-' + mmlBranch
-    mhqBranch = 'v0.45.4'
+    mhqBranch = 'v0.48.0'
     mhqBranchTag = mhqBranch.equals('master') ? '' : '-' + mhqBranch
 
     mmDir = "${rootDir}/../megamek"

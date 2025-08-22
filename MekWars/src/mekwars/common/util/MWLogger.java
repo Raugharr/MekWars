@@ -21,19 +21,16 @@ import java.io.File;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.MarkerManager;
-// import org.mekwars.libpk.logging.PKLogManager;
 import org.apache.logging.log4j.Marker;
 
 
 public final class MWLogger {// final - no extension of the server logger
 
     private File logDir;
-    // private static PKLogManager logmanager = null;
     private static MWLogger logger = null;
     
     private MWLogger() {
         
-        // logmanager = PKLogManager.getInstance();
         // logDir = new File("logs");
         LogManager.getLogger().info("MWLogger Started");
     //     if (!logDir.exists()) {

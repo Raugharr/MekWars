@@ -23,10 +23,10 @@ package server.campaign.pilot.skills;
 import common.MegaMekPilotOption;
 import common.Unit;
 import common.campaign.pilot.Pilot;
+import megamek.common.Crew;
 import megamek.common.Entity;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
-import megamek.common.battlevalue.BvMultiplier;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
@@ -82,9 +82,10 @@ public class GunneryBallisticSkill extends SPilotSkill {
     	//parallel code is used in GunneryLaserSkill.java, GunneryMissileSkill.java, GunneryBallisticsSkill.java, and WeaponSpecialistSkill.java  
     	double sumWeaponBV = 0;
     	double effectedWeaponBV = 0;
+		final Crew crew = unit.getCrew();
         double bvSkillDelta = 
-        		BvMultiplier.bvSkillMultiplier(unit.getCrew().getGunnery() - 1, unit.getCrew().getPiloting())
-        		/BvMultiplier.bvSkillMultiplier(unit.getCrew().getGunnery() , unit.getCrew().getPiloting())
+        		Crew.getBVSkillMultiplier(crew.getGunnery() - 1, crew.getPiloting())
+        		/ Crew.getBVSkillMultiplier(crew.getGunnery(), crew.getPiloting())
         		;
         for (Mounted weapon : unit.getWeaponList()) {
         	sumWeaponBV += weapon.getType().getBV(unit);

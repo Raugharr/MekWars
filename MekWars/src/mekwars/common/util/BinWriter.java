@@ -20,7 +20,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.mekwars.libpk.converters.HTML;
 
 
 /**
@@ -66,7 +65,9 @@ public class BinWriter {
     
     public void println(String v, String debugName) {
         if (debug) out.print(debugName+"=");
-        out.println(HTML.cr2br(v));
+		// NOTE: Deprecating this 8/21/25
+        // out.println(HTML.cr2br(v));
+        out.println(v);
     }
     
     public void println(boolean v, String debugName) {

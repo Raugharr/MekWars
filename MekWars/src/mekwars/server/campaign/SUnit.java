@@ -1278,7 +1278,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         File entityFile = new File("data/armies/" + filename);
 
         try {
-            loadedUnits = new MULParser(entityFile,null).getEntities();
+            loadedUnits = EntityListFile.loadFrom(entityFile);
             loadedUnits.trimToSize();
         } catch (Exception ex) {
             MWLogger.errLog("Unable to load file " + entityFile.getName());

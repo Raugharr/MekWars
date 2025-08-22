@@ -19,7 +19,6 @@ import megamek.common.Report;
 import megamek.common.ToHitData;
 import megamek.common.util.BoardUtilities;
 import megamek.common.weapons.Weapon;
-import megamek.server.GameManager;
 import megamek.server.Server;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
@@ -36,7 +35,7 @@ public class BattleResolver {
 	
 	private BattleResolver(){
 		try {
-			server = new Server("", 50000, new GameManager());
+			server = new Server("", 50000);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

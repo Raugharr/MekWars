@@ -38,8 +38,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.mekwars.libpk.logging.PKLogManager;
-
 import common.BMEquipment;
 import common.Planet;
 import common.SubFaction;
@@ -333,7 +331,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             setName(TokenReader.readString(ST));
 
             // start the chat logging.
-            PKLogManager.getInstance().addLog(getName());
+			MWLogger.infoLog(getName());
 
             setMoney(TokenReader.readInt(ST));
             setHouseColor(TokenReader.readString(ST));
@@ -773,7 +771,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         setHouseColor(HouseColor);
         setName(name);
 
-        PKLogManager.getInstance().addLog(getName());
+		MWLogger.infoLog(getName());
         // Vehicles = new Vector();
 
         for (int j = 0; j < 5; j++) // Type
@@ -2925,7 +2923,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         setHouseColor(CampaignMain.cm.getConfig("DisputedPlanetColor"));
         setHousePlayerColors(CampaignMain.cm.getConfig("DisputedPlanetColor"));
 
-        PKLogManager.getInstance().addLog(getName());
+		MWLogger.debugLog(getName());
         // Vehicles = new Vector();
 
         for (int j = 0; j < 5; j++) // Type

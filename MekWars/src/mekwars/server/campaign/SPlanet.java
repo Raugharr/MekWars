@@ -270,8 +270,8 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         setOriginalOwner(CampaignMain.cm.getConfig("NewbieHouseName"));
     }
 
-    public SPlanet(int id, String name, Influences flu, int income, int CompProd, double xcood, double ycood) {
-        super(id, name, new Position(xcood, ycood), flu);
+    public SPlanet(String name, Influences flu, int CompProd, double xcoord, double ycoord) {
+        super(name, new Position(xcoord, ycoord), flu);
         setCompProduction(CompProd);
         setTimestamp(new Date(0));
         setOriginalOwner(CampaignMain.cm.getConfig("NewbieHouseName"));
