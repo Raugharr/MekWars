@@ -108,41 +108,14 @@ public class MWServ {
 	}
 
 	MWServ(String[] argv) {
-
-		String logFileName = "./logs/logFile.txt";
-		String errorFileName = "./logs/errorFile.txt";
-		LogManager.getLogger().info("Server Start up");
 		logger = MWLogger.getInstance();
-
-		try {
-			// MWLogger.mainLog("Redirecting output to " +
-			// logFileName);
-			PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(logFileName), 64));
-			System.setOut(ps);
-		} catch (Exception ex) {
-			MWLogger.errLog(ex);
-			MWLogger.errLog("Unable to redirect standard output to " + logFileName);
-		}
-
-		try {
-			// MWLogger.mainLog("Redirecting output to " +
-			// logFileName);
-			PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(errorFileName), 64));
-			System.setErr(ps);
-		} catch (Exception ex) {
-			MWLogger.errLog(ex);
-			MWLogger.errLog("Unable to redirect standard error to " + errorFileName);
-		}
 
 		MWLogger.mainLog("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
 		/*** Required to kick off the Server ***/
 		MWLogger.mainLog("Loading configuration...");
 		loadConfig();
 		MWLogger.mainLog("Configuration loaded.");
-		/*
-		 * for (int i = 0; i < argv.length; i++) { if (argv[0].equals("debug"))
-		 * debug = false; }
-		 */
+
 		if (Boolean.parseBoolean(getConfigParam("RESOLVECOUNTRY"))) {
 			ipToCountry = new IpCountry("./data/iplist.txt", "./data/countrynames.txt");
 		}

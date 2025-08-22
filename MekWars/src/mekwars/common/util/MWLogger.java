@@ -30,30 +30,7 @@ public final class MWLogger {// final - no extension of the server logger
     private static MWLogger logger = null;
     
     private MWLogger() {
-        
-        // logDir = new File("logs");
         LogManager.getLogger().info("MWLogger Started");
-    //     if (!logDir.exists()) {
-    //         try {
-    //             if (!logDir.mkdirs()) {
-    //                 System.err.println("WARNING: logging directory cannot be created!");
-    //                 System.err.println("WARNING: disabling log subsystem");
-    //                 return;
-    //             }
-    //         } catch (Exception e) {
-    //             e.printStackTrace();
-    //         }
-    //     } else if (!logDir.isDirectory()) {
-    //         System.err.println("WARNING: logging directory is not a directory!");
-    //         System.err.println("WARNING: disabling log subsystem");
-    //         return;
-    //     }
-
-    //     if (!logDir.canWrite()) {
-    //         System.err.println("WARNING: cannot write in logging directory!");
-    //         System.err.println("WARNING: disabling log subsystem");
-    //         return;
-    //     }
     }
     
     public static MWLogger getInstance() {
