@@ -1,0 +1,55 @@
+plugins {
+    id 'application'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+	}
+}
+
+dependencies {
+	implementation project(':MekWarsCommon')
+
+    implementation 'org.megamek:megamek-HEAD:0.49.0'
+
+	implementation 'com.google.guava:guava:24.0-jre'
+    implementation 'org.quartz-scheduler:quartz:2.2.3'
+    implementation 'com.google.code.gson:gson:2.8.2'
+	implementation 'com.jgoodies:looks:2.2.2'
+	implementation 'org.apache.httpcomponents:httpclient:4.5'
+	implementation 'org.jsoup:jsoup:1.5.2'
+	implementation 'org.jdatepicker:jdatepicker:1.3.4'
+	implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
+	implementation 'org.apache.logging.log4j:log4j-api:2.24.3'
+	implementation 'com.thoughtworks.xstream:xstream:1.4.14'
+}
+
+application {
+	mainClassName = 'client.MWClient'
+    applicationDefaultJvmArgs = [
+            '-Xmx4096m',
+            '-Dsun.awt.disablegrab=true'
+    ]
+}
+
+ext {
+	data = "data"
+	docs = "docs"
+	mmconf = "mmconf"
+}
+
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+      'Main-Class': mainClassName
+    )
+  }
+}
+
+tasks.named('run') {
+	workingDir = file('client-dist')
+}

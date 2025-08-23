@@ -1,0 +1,88 @@
+[ERROR] 2025-08-23 15:13:57.732 [main] MWLogger - java.io.FileNotFoundException: ./logs/megameklog.txt (No such file or directory)
+[ERROR] 2025-08-23 15:13:57.735 [main] MWLogger - Unable to redirect MegaMek output to ./logs/megameklog.txt
+[INFO ] 2025-08-23 15:13:57.736 [main] MWLogger - Starting MekWars Client Version: 0.8.0.0
+[FATAL] 2025-08-23 15:14:00.494 [main] GUIClientConfig - ./data/mwconfig.txt (No such file or directory)
+[INFO ] 2025-08-23 15:15:20.870 [main] MWLogger - Starting MekWars Client Version: 0.8.0.0
+[ERROR] 2025-08-23 15:15:22.457 [main] MWLogger - RT Info: 134640@hektor
+[INFO ] 2025-08-23 15:15:30.975 [main] MWLogger - Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.
+[INFO ] 2025-08-23 15:15:30.979 [main] MWLogger - Command: OpList
+[INFO ] 2025-08-23 15:15:30.982 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 15:15:32.995 [main] MWLogger - try to import the planetcache
+[INFO ] 2025-08-23 15:15:32.996 [main] MWLogger - Command: ServerVersion
+[ERROR] 2025-08-23 15:15:32.998 [main] MWLogger - Client Version: 0.8.0 Server Version: 0.8.0
+[INFO ] 2025-08-23 15:15:32.999 [main] MWLogger - Command: ForceUpdateKey
+[ERROR] 2025-08-23 15:15:33.000 [main] MWLogger - Server Key: 
+[INFO ] 2025-08-23 15:15:33.001 [main] MWLogger - need to fetch all planet data..
+[INFO ] 2025-08-23 15:15:33.002 [main] MWLogger - Command: All
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.017 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.018 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.019 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.019 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.019 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.019 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.019 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.019 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.019 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.019 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.019 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:15:33.021 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 15:15:33.021 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 15:15:33.022 [main] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:15:33.031 [main] MWLogger - Command: ServerConfig
+[INFO ] 2025-08-23 15:15:35.088 [main] MWLogger - Command: BannedAmmo
+[INFO ] 2025-08-23 15:15:37.091 [main] MWLogger - Closing Socket.
+[INFO ] 2025-08-23 15:15:37.094 [main] MWLogger - Starting pAS
+[ERROR] 2025-08-23 15:15:37.703 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.704 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.704 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.705 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.705 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.706 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.706 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.707 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.707 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.708 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[ERROR] 2025-08-23 15:15:37.708 [main] MWLogger - Unable to read data/images/units/mechset.txt
+[INFO ] 2025-08-23 15:15:37.905 [main] MWLogger - could not read map config file. Will use defaults
+[INFO ] 2025-08-23 15:15:37.905 [main] MWLogger - could not read map overlay file.
+[INFO ] 2025-08-23 15:15:37.961 [main] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:15:37.961 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 15:15:37.961 [main] MWLogger - writing timestamp 20250823151537
+[ERROR] 2025-08-23 15:15:37.969 [main] MWLogger - Opening socket connection to localhost:2347
+[ERROR] 2025-08-23 15:15:37.970 [main] MWLogger - CConnector: connected to localhost:2347
+[ERROR] 2025-08-23 15:15:37.972 [main] MWLogger - Connected. Signing on.
+[INFO ] 2025-08-23 15:15:37.978 [main] MWLogger - SENT: /signon	Afan	Starwars92	4		0.8.0.0	b4f801cd26d38543
+[INFO ] 2025-08-23 15:15:38.012 [ConnectionHandler$ReaderThread] MWLogger - COMMAND ERROR: unknown protocol command from server.
+[INFO ] 2025-08-23 15:15:38.013 [ConnectionHandler$ReaderThread] MWLogger - COMMAND RECEIVED: denied	/denied
+[INFO ] 2025-08-23 15:15:38.017 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:15:38.019 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823151537
+[INFO ] 2025-08-23 15:15:38.086 [main] MWLogger - SENT: /comm	CH%7c%2fc+setclientversion%23Afan%230.8.0.0
+[INFO ] 2025-08-23 15:15:38.086 [main] MWLogger - SENT: /comm	CH%7c%2fgetsavedmail
+[INFO ] 2025-08-23 15:15:38.099 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:15:38.099 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823151537
+[INFO ] 2025-08-23 15:15:40.395 [ConnectionHandler$ReaderThread] MWLogger - COMMAND ERROR: unknown protocol command from server.
+[INFO ] 2025-08-23 15:15:40.395 [ConnectionHandler$ReaderThread] MWLogger - COMMAND RECEIVED: err	Youarealreadysignedon
+[INFO ] 2025-08-23 15:15:42.559 [AWT-EventQueue-0] MWLogger - SENT: /signoff
+[INFO ] 2025-08-23 15:15:42.559 [AWT-EventQueue-0] MWLogger - Closing Socket.
+[ERROR] 2025-08-23 15:15:42.561 [AWT-EventQueue-0] MWLogger - Wave file not found: ./data/sounds/exit client.wav

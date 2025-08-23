@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<MegaMekSettings>
+    <store name="ClientSettings">
+        <preference name="KeepGameLog" value="false"/>
+        <preference name="GameLogFilename" value="game.log"/>
+        <preference name="ShowUnitId" value="true"/>
+    </store>
+    <store name="megamek.client.ui.swing.GUIPreferences">
+        <preference name="WindowPosY" value="32"/>
+        <preference name="MapZoomIndex" value="3"/>
+        <preference name="WindowSizeWidth" value="1920"/>
+        <preference name="WindowSizeHeight" value="1048"/>
+    </store>
+</MegaMekSettings>

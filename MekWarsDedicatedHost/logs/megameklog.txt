@@ -1,0 +1,23 @@
+Get Data Time: 1755980132994
+Done Getting Data Time: 1755980137091
+staring PAS Time: 1755980137094
+PAS Started Time: 1755980137095
+Creating CMainFrame Time: 1755980137095
+Couldn't find: ServerRules.html
+CMainFrame Created Time: 1755980137966
+Packing/Validating CMainFrame Time: 1755980137967
+done packing/validating CMainFrame Time: 1755980137967
+Attack Menu Update Time: 1755980137967
+Attack Menu Update done Time: 1755980137969
+MainFrame Visible Time: 1755980137969
+Creating Browser Time: 1755980137969
+Connecting to Server Time: 1755980137969
+Connected to Server Time: 1755980137979
+making mainframe visible: 1755980137979
+splash not null: 1755980138017
+progress bar set to 9: 1755980138017
+progressbar going bye bye: 1755980138018
+splash going bye bye: 1755980138082
+splash going to null: 1755980138083
+splash null: 1755980138083
+MainFrame Visible Done Time: 1755980138083

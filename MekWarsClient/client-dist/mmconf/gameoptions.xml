@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<options>
+    <gameoption xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="option">
+        <optionname>DONE</optionname>
+        <optionvalue xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">DONE</optionvalue>
+    </gameoption>
+</options>

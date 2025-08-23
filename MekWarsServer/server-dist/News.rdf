@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+
+<channel>
+<atom:link href="" rel="self" type="application/rss+xml" />
+<title>ExampleTech News Feed</title>
+<link>-1</link>
+<description>Campaign News</description>
+
+<item>
+<title>MekWars Server Started!</title>
+<pubDate>Sat, 23 Aug 2025 15:48:15 -0500</pubDate>
+<category>Server News</category>
+<guid isPermaLink="false">db4ee5c6-90a2-469e-b365-a50718b603a4</guid>
+<link></link>
+<description> </description>
+</item>
+</channel>
+</rss>
+

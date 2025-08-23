@@ -1,0 +1,1125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DOCUMENT SYSTEM "advancedTerrain.dtd">
+<advancedTerrain-array>
+  <advancedTerrain>
+    <name>none</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>25</lowTemp>
+    <highTemp>25</highTemp>
+    <gravity>1.0</gravity>
+    <vacuum>false</vacuum>
+    <fullMoonChance>0</fullMoonChance>
+    <duskChance>0</duskChance>
+    <nightTempMod>0</nightTempMod>
+    <pitchBlackChance>0</pitchBlackChance>
+    <moonlessNightChance>0</moonlessNightChance>
+
+    <sleetChance>0</sleetChance>
+    <lightSnowfallChance>0</lightSnowfallChance>
+    <moderateSnowfallChance>0</moderateSnowfallChance>
+    <heavySnowfallChance>0</heavySnowfallChance>
+    <blizzardChance>0</blizzardChance>
+    <iceStormChance>0</iceStormChance>
+
+    <blowingSandChance>0</blowingSandChance>
+
+    <lightRainfallChance>0</lightRainfallChance>
+    <moderateRainfallChance>0</moderateRainfallChance>
+    <heavyRainfallChance>0</heavyRainfallChance>
+    <downPourChance>0</downPourChance>
+    <lightHailChance>0</lightHailChance>
+    <heavyHailChance>0</heavyHailChance>
+
+    <lightWindChance>0</lightWindChance>
+    <moderateWindChance>0</moderateWindChance>
+    <highWindChance>0</highWindChance>
+    <strongWindChance>0</strongWindChance>
+    <stormWindChance>0</stormWindChance>
+    <tornadoF13WindChance>0</tornadoF13WindChance>
+    <tornadoF4WindChance>0</tornadoF4WindChance>
+
+    <emiChance>0</emiChance>
+    <lightFogChance>0</lightFogChance>
+    <heavyFogChance>0</heavyFogChance>
+    <atmosphere>3</atmosphere>
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>allparams</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>25</lowTemp>
+    <highTemp>25</highTemp>
+	<temperature>25</temperature>
+    <gravity>1.0</gravity>
+    <vacuum>false</vacuum>
+    <atmosphere>3</atmosphere>
+
+	<lightConditions>0</lightConditions>
+    <nightTempMod>0</nightTempMod>
+
+    <!-- all chances are in tenth of a percent -->
+    <fullMoonChance>0</fullMoonChance>
+    <duskChance>0</duskChance>
+    <pitchBlackChance>0</pitchBlackChance>
+    <moonlessNightChance>0</moonlessNightChance>
+
+    <!-- only one of these weather conditions might happen -->
+    <sleetChance>0</sleetChance>
+    <lightSnowfallChance>0</lightSnowfallChance>
+    <moderateSnowfallChance>0</moderateSnowfallChance>
+    <heavySnowfallChance>0</heavySnowfallChance>
+    <blizzardChance>0</blizzardChance>
+    <iceStormChance>0</iceStormChance>
+    <blowingSandChance>0</blowingSandChance>
+    <lightRainfallChance>0</lightRainfallChance>
+    <moderateRainfallChance>0</moderateRainfallChance>
+    <heavyRainfallChance>0</heavyRainfallChance>
+    <downPourChance>0</downPourChance>
+    <lightHailChance>0</lightHailChance>
+    <heavyHailChance>0</heavyHailChance>
+
+
+	<windStrength>0</windStrength>
+	<windDirection>0</windDirection>
+	<shiftingWindStrength>false</shiftingWindStrength>
+    <shiftingWindDirection>true</shiftingWindDirection>
+	<maxWindStrength>0</maxWindStrength>
+
+    <!-- only one of these wind conditions will happen -->
+    <lightWindChance>0</lightWindChance>
+    <moderateWindChance>0</moderateWindChance>
+    <highWindChance>0</highWindChance>
+    <strongWindChance>0</strongWindChance>
+    <stormWindChance>0</stormWindChance>
+    <!-- hovers die here -->
+    <tornadoF13WindChance>0</tornadoF13WindChance>
+    <!-- hover, inf die here and some tanks -->
+    <tornadoF4WindChance>0</tornadoF4WindChance>
+    <!-- most things except meks die here -->
+
+    <emiChance>0</emiChance>
+	<emi>false</emi>
+
+    <lightFogChance>0</lightFogChance>
+    <heavyFogChance>0</heavyFogChance>
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>temperate</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>12</lowTemp>
+    <highTemp>28</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <nightTempMod>10</nightTempMod>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <sleetChance>5</sleetChance>
+    <lightSnowfallChance>15</lightSnowfallChance>
+    <moderateSnowfallChance>0</moderateSnowfallChance>
+    <heavySnowfallChance>0</heavySnowfallChance>
+    <blizzardChance>0</blizzardChance>
+    <iceStormChance>0</iceStormChance>
+
+    <blowingSandChance>5</blowingSandChance>
+
+    <lightRainfallChance>10</lightRainfallChance>
+    <moderateRainfallChance>15</moderateRainfallChance>
+    <heavyRainfallChance>5</heavyRainfallChance>
+    <downPourChance>2</downPourChance>
+    <lightHailChance>5</lightHailChance>
+    <heavyHailChance>2</heavyHailChance>
+    <!--93.7% clear-->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>35</lightWindChance>
+    <moderateWindChance>30</moderateWindChance>
+    <highWindChance>15</highWindChance>
+    <strongWindChance>5</strongWindChance>
+    <stormWindChance>0</stormWindChance>
+    <tornadoF13WindChance>0</tornadoF13WindChance>
+    <tornadoF4WindChance>0</tornadoF4WindChance>
+    <!--91% windless-->
+
+    <emiChance>0</emiChance>
+    <!--100% no emi-->
+
+
+    <lightFogChance>10</lightFogChance>
+    <heavyFogChance>5</heavyFogChance>
+    <!--98.5% fogless-->
+    <!--75.6% perfect conditions-->
+
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>temperate winter</name>
+    <terrainAffected>true</terrainAffected>
+    <lowTemp>-10</lowTemp>
+    <highTemp>10</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <nightTempMod>20</nightTempMod>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <sleetChance>5</sleetChance>
+    <lightSnowfallChance>35</lightSnowfallChance>
+    <moderateSnowfallChance>10</moderateSnowfallChance>
+    <heavySnowfallChance>5</heavySnowfallChance>
+    <blizzardChance>5</blizzardChance>
+    <iceStormChance>2</iceStormChance>
+    <blowingSandChance>0</blowingSandChance>
+    <lightRainfallChance>15</lightRainfallChance>
+    <moderateRainfallChance>0</moderateRainfallChance>
+    <heavyRainfallChance>0</heavyRainfallChance>
+    <downPourChance>0</downPourChance>
+    <lightHailChance>0</lightHailChance>
+    <heavyHailChance>0</heavyHailChance>
+    <!--92.5% clear-->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>35</lightWindChance>
+    <moderateWindChance>30</moderateWindChance>
+    <highWindChance>15</highWindChance>
+    <strongWindChance>5</strongWindChance>
+    <stormWindChance>0</stormWindChance>
+    <tornadoF13WindChance>0</tornadoF13WindChance>
+    <tornadoF4WindChance>0</tornadoF4WindChance>
+    <!--91% windless-->
+
+    <emiChance>0</emiChance>
+    <!--100% no emi-->
+
+
+    <lightFogChance>0</lightFogChance>
+    <heavyFogChance>0</heavyFogChance>
+    <!--100% fogless-->
+    <!--75.7% perfect conditions-->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>temperate Windy</name>
+
+    <terrainAffected>true</terrainAffected>
+
+
+    <lowTemp>12</lowTemp>
+    <highTemp>28</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+	<nightTempMod>10</nightTempMod>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <sleetChance>5</sleetChance>
+    <lightSnowfallChance>15</lightSnowfallChance>
+    <moderateSnowfallChance>0</moderateSnowfallChance>
+    <heavySnowfallChance>0</heavySnowfallChance>
+    <blizzardChance>0</blizzardChance>
+    <iceStormChance>0</iceStormChance>
+
+    <blowingSandChance>5</blowingSandChance>
+
+    <lightRainfallChance>10</lightRainfallChance>
+    <moderateRainfallChance>15</moderateRainfallChance>
+    <heavyRainfallChance>5</heavyRainfallChance>
+    <downPourChance>2</downPourChance>
+    <lightHailChance>5</lightHailChance>
+    <heavyHailChance>2</heavyHailChance>
+    <!--93.7% clear-->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>15</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>45</highWindChance>
+    <strongWindChance>15</strongWindChance>
+    <stormWindChance>0</stormWindChance>
+    <tornadoF13WindChance>0</tornadoF13WindChance>
+    <tornadoF4WindChance>0</tornadoF4WindChance>
+    <!--88.9% windless-->
+
+    <emiChance>0</emiChance>
+    <!--100% no emi-->
+
+
+    <lightFogChance>0</lightFogChance>
+    <heavyFogChance>0</heavyFogChance>
+    <!--98.5% fogless-->
+    <!--74.9% perfect conditions-->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>temperate winter Windy</name>
+
+    <terrainAffected>true</terrainAffected>
+
+
+    <lowTemp>-10</lowTemp>
+    <highTemp>10</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+    <nightTempMod>20</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <sleetChance>5</sleetChance>
+    <lightSnowfallChance>35</lightSnowfallChance>
+    <moderateSnowfallChance>10</moderateSnowfallChance>
+    <heavySnowfallChance>5</heavySnowfallChance>
+    <blizzardChance>5</blizzardChance>
+    <iceStormChance>2</iceStormChance>
+    <blowingSandChance>0</blowingSandChance>
+    <lightRainfallChance>15</lightRainfallChance>
+    <moderateRainfallChance>0</moderateRainfallChance>
+    <heavyRainfallChance>0</heavyRainfallChance>
+    <downPourChance>0</downPourChance>
+    <lightHailChance>0</lightHailChance>
+    <heavyHailChance>0</heavyHailChance>
+    <!--92.5% clear-->
+
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>15</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>45</highWindChance>
+    <strongWindChance>15</strongWindChance>
+    <stormWindChance>0</stormWindChance>
+    <tornadoF13WindChance>0</tornadoF13WindChance>
+    <tornadoF4WindChance>0</tornadoF4WindChance>
+    <!--88.9% windless-->
+
+    <!--74% perfect conditions-->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Arid</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>30</lowTemp>
+    <highTemp>45</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>50</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>55</blowingSandChance>
+    <lightRainfallChance>5</lightRainfallChance>
+    <moderateRainfallChance>5</moderateRainfallChance>
+    <heavyRainfallChance>5</heavyRainfallChance>
+    <downPourChance>30</downPourChance>
+    <!--90.2% clear-->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>35</lightWindChance>
+    <moderateWindChance>30</moderateWindChance>
+    <highWindChance>15</highWindChance>
+    <strongWindChance>10</strongWindChance>
+    <!--91.2% windless-->
+
+    <!--74.8% perfect conditions-->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Arid Hot</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>50</lowTemp>
+    <highTemp>75</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+    <nightTempMod>30</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>55</blowingSandChance>
+    <lightRainfallChance>5</lightRainfallChance>
+    <moderateRainfallChance>5</moderateRainfallChance>
+    <heavyRainfallChance>5</heavyRainfallChance>
+    <downPourChance>30</downPourChance>
+    <!--90.2% clear-->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>35</lightWindChance>
+    <moderateWindChance>30</moderateWindChance>
+    <highWindChance>15</highWindChance>
+    <strongWindChance>10</strongWindChance>
+    <!--91.2% windless-->
+
+    <!--74.8% perfect conditions-->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Arid Cold</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>-10</lowTemp>
+    <highTemp>15</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+    <nightTempMod>80</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <lightSnowfallChance>5</lightSnowfallChance>
+    <moderateSnowfallChance>5</moderateSnowfallChance>
+    <heavySnowfallChance>5</heavySnowfallChance>
+    <blizzardChance>30</blizzardChance>
+    <iceStormChance>0</iceStormChance>
+    <blowingSandChance>55</blowingSandChance>
+    <!-- 90.2% clear -->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>35</lightWindChance>
+    <moderateWindChance>30</moderateWindChance>
+    <highWindChance>15</highWindChance>
+    <strongWindChance>10</strongWindChance>
+    <!--91.2% windless-->
+    <!--74.8% perfect conditions-->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Arid Windy</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>30</lowTemp>
+    <highTemp>55</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+    <nightTempMod>50</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>55</blowingSandChance>
+    <lightRainfallChance>5</lightRainfallChance>
+    <moderateRainfallChance>5</moderateRainfallChance>
+    <heavyRainfallChance>5</heavyRainfallChance>
+    <downPourChance>30</downPourChance>
+    <!--90.2% clear-->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>15</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>45</highWindChance>
+    <strongWindChance>15</strongWindChance>
+    <!--88.9% windless-->
+
+    <!--72.9% perfect conditions-->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Arid Hot Windy </name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>50</lowTemp>
+    <highTemp>75</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+    <nightTempMod>30</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+    <blowingSandChance>55</blowingSandChance>
+    <lightRainfallChance>5</lightRainfallChance>
+    <moderateRainfallChance>5</moderateRainfallChance>
+    <heavyRainfallChance>5</heavyRainfallChance>
+    <downPourChance>30</downPourChance>
+    <!--90.2% clear-->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>15</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>45</highWindChance>
+    <strongWindChance>15</strongWindChance>
+    <!--88.9% windless-->
+    <!--72.9% perfect conditions-->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Arid Cold Windy</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>-10</lowTemp>
+    <highTemp>15</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>80</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <lightSnowfallChance>5</lightSnowfallChance>
+    <moderateSnowfallChance>5</moderateSnowfallChance>
+    <heavySnowfallChance>5</heavySnowfallChance>
+    <blizzardChance>30</blizzardChance>
+    <iceStormChance>0</iceStormChance>
+    <blowingSandChance>55</blowingSandChance>
+    <!-- 90.2% clear -->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>15</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>45</highWindChance>
+    <strongWindChance>15</strongWindChance>
+    <!--88.9% windless-->
+    <!--72.9% perfect conditions-->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Tropical Monsoon</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>22</lowTemp>
+    <highTemp>35</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>8</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <lightRainfallChance>90</lightRainfallChance>
+    <moderateRainfallChance>80</moderateRainfallChance>
+    <heavyRainfallChance>60</heavyRainfallChance>
+    <downPourChance>40</downPourChance>
+    <lightHailChance>30</lightHailChance>
+    <heavyHailChance>20</heavyHailChance>
+    <!-- 71% clear -->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>50</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>30</highWindChance>
+    <strongWindChance>20</strongWindChance>
+    <stormWindChance>10</stormWindChance>
+    <!-- 85.8% windless -->
+    <!-- 55.9% perfect conditions -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Tropical Monsoon Hot</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>50</lowTemp>
+    <highTemp>75</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>15</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+    <lightRainfallChance>90</lightRainfallChance>
+    <moderateRainfallChance>80</moderateRainfallChance>
+    <heavyRainfallChance>60</heavyRainfallChance>
+    <downPourChance>40</downPourChance>
+    <lightHailChance>30</lightHailChance>
+    <heavyHailChance>20</heavyHailChance>
+    <!-- 71% clear -->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>50</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>30</highWindChance>
+    <strongWindChance>20</strongWindChance>
+    <stormWindChance>10</stormWindChance>
+    <!-- 85.8% windless -->
+    <!-- 55.9% perfect conditions -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Tropical</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>22</lowTemp>
+    <highTemp>35</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>8</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <lightRainfallChance>60</lightRainfallChance>
+    <moderateRainfallChance>45</moderateRainfallChance>
+    <heavyRainfallChance>30</heavyRainfallChance>
+    <downPourChance>10</downPourChance>
+    <lightHailChance>3</lightHailChance>
+    <heavyHailChance>2</heavyHailChance>
+    <!-- 85% clear -->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>10</lightWindChance>
+    <moderateWindChance>10</moderateWindChance>
+    <highWindChance>8</highWindChance>
+    <strongWindChance>7</strongWindChance>
+    <!-- 96% windless -->
+    <!-- 75% perfect conditions -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Tropical Hot</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>50</lowTemp>
+    <highTemp>75</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>15</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <lightRainfallChance>60</lightRainfallChance>
+    <moderateRainfallChance>45</moderateRainfallChance>
+    <heavyRainfallChance>30</heavyRainfallChance>
+    <downPourChance>10</downPourChance>
+    <lightHailChance>3</lightHailChance>
+    <heavyHailChance>2</heavyHailChance>
+    <!-- 85% clear -->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>10</lightWindChance>
+    <moderateWindChance>10</moderateWindChance>
+    <highWindChance>8</highWindChance>
+    <strongWindChance>7</strongWindChance>
+    <!-- 96% windless -->
+    <!-- 75% perfect conditions -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Moon Thin</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>70</lowTemp>
+    <highTemp>80</highTemp>
+    <gravity>0.8</gravity>
+    <atmosphere>2</atmosphere>
+
+    <nightTempMod>160</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+
+    <blowingSandChance>50</blowingSandChance>
+    <emiChance>10</emiChance>
+    <!-- 84.6% perfect weather -->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Moon trace</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>110</lowTemp>
+    <highTemp>120</highTemp>
+    <gravity>0.8</gravity>
+    <atmosphere>1</atmosphere>
+
+	<nightTempMod>240</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+
+    <blowingSandChance>10</blowingSandChance>
+    <emiChance>50</emiChance>
+    <!-- 84.6% perfect weather -->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Moon void</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>120</lowTemp>
+    <highTemp>130</highTemp>
+    <gravity>0.8</gravity>
+    <atmosphere>0</atmosphere>
+
+    <nightTempMod>240</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>0</blowingSandChance>
+    <emiChance>60</emiChance>
+    <!-- 84.6% perfect weather -->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>asteroid Thin</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>70</lowTemp>
+    <highTemp>80</highTemp>
+    <gravity>0.5</gravity>
+    <atmosphere>2</atmosphere>
+
+    <nightTempMod>160</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+    <blowingSandChance>50</blowingSandChance>
+    <emiChance>10</emiChance>
+    <!-- 84.6% perfect weather -->
+
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>asteroid trace</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>110</lowTemp>
+    <highTemp>120</highTemp>
+    <gravity>0.5</gravity>
+    <atmosphere>1</atmosphere>
+
+    <nightTempMod>240</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+    <blowingSandChance>10</blowingSandChance>
+    <emiChance>50</emiChance>
+    <!-- 84.6% perfect weather -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Asteroid void</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>120</lowTemp>
+    <highTemp>130</highTemp>
+    <gravity>0.5</gravity>
+    <atmosphere>0</atmosphere>
+
+    <nightTempMod>240</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+    <emiChance>60</emiChance>
+    <!-- 84.6% perfect weather -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Snowy</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>0</lowTemp>
+    <highTemp>5</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>20</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <sleetChance>10</sleetChance>
+    <lightSnowfallChance>40</lightSnowfallChance>
+    <moderateSnowfallChance>30</moderateSnowfallChance>
+    <heavySnowfallChance>15</heavySnowfallChance>
+    <blizzardChance>20</blizzardChance>
+    <iceStormChance>10</iceStormChance>
+    <lightHailChance>2</lightHailChance>
+    <heavyHailChance>2</heavyHailChance>
+    <!-- 87% clear -->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>25</lightWindChance>
+    <moderateWindChance>20</moderateWindChance>
+    <highWindChance>10</highWindChance>
+    <strongWindChance>4</strongWindChance>
+    <!-- 94% windless -->
+    <!-- 75% perfect weather -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Snowy Cold</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>-40</lowTemp>
+    <highTemp>-10</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>80</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+    <sleetChance>10</sleetChance>
+    <lightSnowfallChance>40</lightSnowfallChance>
+    <moderateSnowfallChance>30</moderateSnowfallChance>
+    <heavySnowfallChance>15</heavySnowfallChance>
+    <blizzardChance>20</blizzardChance>
+    <iceStormChance>10</iceStormChance>
+    <lightHailChance>2</lightHailChance>
+    <heavyHailChance>2</heavyHailChance>
+    <!-- 87% clear -->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>25</lightWindChance>
+    <moderateWindChance>20</moderateWindChance>
+    <highWindChance>10</highWindChance>
+    <strongWindChance>4</strongWindChance>
+    <!-- 94% windless -->
+    <!-- 75% perfect weather -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Snowy Cold Windy</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>-40</lowTemp>
+    <highTemp>-10</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>80</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <sleetChance>10</sleetChance>
+    <lightSnowfallChance>40</lightSnowfallChance>
+    <moderateSnowfallChance>30</moderateSnowfallChance>
+    <heavySnowfallChance>15</heavySnowfallChance>
+    <blizzardChance>20</blizzardChance>
+    <iceStormChance>10</iceStormChance>
+    <lightHailChance>2</lightHailChance>
+    <heavyHailChance>2</heavyHailChance>
+    <!-- 87% clear -->
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>15</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>45</highWindChance>
+    <strongWindChance>15</strongWindChance>
+    <!--88.9% windless-->
+    <!-- 70.8% perfect weather -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Volcanic Ash</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>25</lowTemp>
+    <highTemp>30</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>15</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>30</blowingSandChance>
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>20</lightWindChance>
+    <moderateWindChance>10</moderateWindChance>
+    <highWindChance>6</highWindChance>
+    <strongWindChance>4</strongWindChance>
+
+    <emiChance>20</emiChance>
+
+    <lightFogChance>50</lightFogChance>
+    <heavyFogChance>50</heavyFogChance>
+    <!-- 74.8% perfect weather -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Volcanic Ash Windy</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>25</lowTemp>
+    <highTemp>30</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>15</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>60</blowingSandChance>
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>20</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>15</highWindChance>
+    <strongWindChance>5</strongWindChance>
+
+    <emiChance>20</emiChance>
+
+    <lightFogChance>10</lightFogChance>
+    <heavyFogChance>10</heavyFogChance>
+    <!-- 75.6% perfect weather -->
+  </advancedTerrain>
+
+  <advancedTerrain>
+    <name>Volcanic Ash Hot</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>50</lowTemp>
+    <highTemp>70</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>15</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>30</blowingSandChance>
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>20</lightWindChance>
+    <moderateWindChance>10</moderateWindChance>
+    <highWindChance>6</highWindChance>
+    <strongWindChance>4</strongWindChance>
+
+    <emiChance>20</emiChance>
+
+    <lightFogChance>50</lightFogChance>
+    <heavyFogChance>50</heavyFogChance>
+    <!-- 74.8% perfect weather -->
+  </advancedTerrain>
+
+  <advancedTerrain>
+    <name>Volcanic Ash Hot Windy</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>50</lowTemp>
+    <highTemp>70</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>15</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>60</blowingSandChance>
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>20</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>15</highWindChance>
+    <strongWindChance>5</strongWindChance>
+
+    <emiChance>20</emiChance>
+
+    <heavyFogChance>10</heavyFogChance>
+    <lightFogChance>0</lightFogChance>
+    <!-- 75.6% perfect weather -->
+  </advancedTerrain>
+
+  <advancedTerrain>
+    <name>Volcanic Ash Cold</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>0</lowTemp>
+    <highTemp>-10</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>30</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>30</blowingSandChance>
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>20</lightWindChance>
+    <moderateWindChance>10</moderateWindChance>
+    <highWindChance>6</highWindChance>
+    <strongWindChance>4</strongWindChance>
+
+    <emiChance>20</emiChance>
+
+    <lightFogChance>50</lightFogChance>
+    <heavyFogChance>50</heavyFogChance>
+    <!-- 74.8% perfect weather -->
+  </advancedTerrain>
+  <advancedTerrain>
+    <name>Volcanic Ash Cold Windy</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>0</lowTemp>
+    <highTemp>-10</highTemp>
+    <gravity>1.0</gravity>
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>30</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>60</blowingSandChance>
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>20</lightWindChance>
+    <moderateWindChance>40</moderateWindChance>
+    <highWindChance>15</highWindChance>
+    <strongWindChance>5</strongWindChance>
+
+    <emiChance>20</emiChance>
+
+    <lightFogChance>10</lightFogChance>
+    <heavyFogChance>10</heavyFogChance>
+    <!-- 75.6% perfect weather -->
+  </advancedTerrain>
+
+  <advancedTerrain>
+    <name>Nuclear Fallout</name>
+
+    <terrainAffected>true</terrainAffected>
+
+    <lowTemp>20</lowTemp>
+    <highTemp>-30</highTemp>
+    <gravity>1.0</gravity>
+    <lightFogChance>0</lightFogChance>
+    <heavyFogChance>0</heavyFogChance>
+
+    <atmosphere>3</atmosphere>
+
+    <nightTempMod>20</nightTempMod>
+
+    <fullMoonChance>50</fullMoonChance>
+    <duskChance>35</duskChance>
+    <pitchBlackChance>5</pitchBlackChance>
+    <moonlessNightChance>5</moonlessNightChance>
+    <!--90% day-->
+
+    <blowingSandChance>30</blowingSandChance>
+
+    <shiftingWindDirection>true</shiftingWindDirection>
+    <lightWindChance>30</lightWindChance>
+    <moderateWindChance>20</moderateWindChance>
+    <highWindChance>10</highWindChance>
+    <strongWindChance>4</strongWindChance>
+    <stormWindChance>0</stormWindChance>
+    <tornadoF13WindChance>0</tornadoF13WindChance>
+    <tornadoF4WindChance>0</tornadoF4WindChance>
+
+    <emiChance>99</emiChance>
+    <!-- 74.35 perfect weather -->
+  </advancedTerrain>
+</advancedTerrain-array>

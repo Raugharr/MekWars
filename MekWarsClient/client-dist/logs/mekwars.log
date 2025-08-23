@@ -1,0 +1,818 @@
+[ERROR] 2025-08-23 12:32:38.263 [main] MWLogger - java.io.FileNotFoundException: ./logs/megameklog.txt (No such file or directory)
+[ERROR] 2025-08-23 12:32:38.266 [main] MWLogger - Unable to redirect MegaMek output to ./logs/megameklog.txt
+[INFO ] 2025-08-23 12:32:38.266 [main] MWLogger - Starting MekWars Client Version: 0.8.0.0
+[ERROR] 2025-08-23 12:32:39.545 [main] MWLogger - RT Info: 108661@hektor
+[INFO ] 2025-08-23 12:33:13.884 [main] MWLogger - Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.
+[INFO ] 2025-08-23 12:33:13.887 [main] MWLogger - Command: OpList
+[INFO ] 2025-08-23 12:33:13.889 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 12:33:15.915 [main] MWLogger - try to import the planetcache
+[INFO ] 2025-08-23 12:33:15.916 [main] MWLogger - Command: ServerVersion
+[ERROR] 2025-08-23 12:33:15.917 [main] MWLogger - Client Version: 0.8.0 Server Version: 0.8.0
+[INFO ] 2025-08-23 12:33:15.917 [main] MWLogger - Command: ForceUpdateKey
+[ERROR] 2025-08-23 12:33:15.919 [main] MWLogger - Server Key: 
+[INFO ] 2025-08-23 12:33:15.919 [main] MWLogger - need to fetch all planet data..
+[INFO ] 2025-08-23 12:33:15.919 [main] MWLogger - Command: All
+[INFO ] 2025-08-23 12:33:15.935 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.936 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.936 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.936 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.936 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.936 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.936 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.936 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.936 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.937 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.938 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.939 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.939 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.939 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 12:33:15.941 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 12:33:15.941 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 12:33:15.942 [main] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 12:33:15.953 [main] MWLogger - Command: ServerConfig
+[INFO ] 2025-08-23 12:33:18.018 [main] MWLogger - Command: BannedAmmo
+[INFO ] 2025-08-23 12:33:20.033 [main] MWLogger - Closing Socket.
+[INFO ] 2025-08-23 12:33:20.037 [main] MWLogger - Starting pAS
+[INFO ] 2025-08-23 12:33:20.456 [main] MWLogger - could not read map config file. Will use defaults
+[INFO ] 2025-08-23 12:33:20.557 [main] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 12:33:20.557 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 12:33:20.558 [main] MWLogger - writing timestamp 20250823123320
+[INFO ] 2025-08-23 12:59:42.435 [main] MWLogger - Starting MekWars Client Version: 0.8.0.0
+[ERROR] 2025-08-23 12:59:43.558 [main] MWLogger - RT Info: 119931@hektor
+[INFO ] 2025-08-23 12:59:46.574 [main] MWLogger - Command: OpListTimestamp
+[INFO ] 2025-08-23 12:59:46.577 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 13:00:12.314 [main] MWLogger - Starting MekWars Client Version: 0.8.0.0
+[ERROR] 2025-08-23 13:00:13.446 [main] MWLogger - RT Info: 120396@hektor
+[INFO ] 2025-08-23 13:00:15.427 [main] MWLogger - Command: OpListTimestamp
+[INFO ] 2025-08-23 13:00:15.429 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 13:00:15.436 [main] MWLogger - writing timestamp 20250823123320
+[ERROR] 2025-08-23 13:00:15.439 [main] MWLogger - Local OpList: 1755970388967 Server OpList: 1755972004752
+[INFO ] 2025-08-23 13:00:15.440 [main] MWLogger - Command: OpList
+[INFO ] 2025-08-23 13:00:15.440 [main] MWLogger - writing timestamp 20250823123320
+[INFO ] 2025-08-23 13:00:17.445 [main] MWLogger - try to import the planetcache
+[INFO ] 2025-08-23 13:00:17.446 [main] MWLogger - Command: ServerVersion
+[INFO ] 2025-08-23 13:00:17.446 [main] MWLogger - writing timestamp 20250823123320
+[ERROR] 2025-08-23 13:00:17.447 [main] MWLogger - Client Version: 0.8.0 Server Version: 0.8.0
+[INFO ] 2025-08-23 13:00:17.448 [main] MWLogger - Command: ForceUpdateKey
+[INFO ] 2025-08-23 13:00:17.448 [main] MWLogger - writing timestamp 20250823123320
+[ERROR] 2025-08-23 13:00:17.449 [main] MWLogger - Server Key: 
+[INFO ] 2025-08-23 13:00:17.462 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.463 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.463 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.463 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.463 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.463 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.464 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.464 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.464 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.464 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.464 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.464 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.465 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.465 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.465 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.465 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.465 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.465 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.466 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.466 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.466 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.466 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.466 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.466 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.466 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.466 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.467 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.467 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.467 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.467 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.467 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.467 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 13:00:17.470 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 13:00:17.470 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 13:00:17.479 [main] MWLogger - Command: PDiff
+[INFO ] 2025-08-23 13:00:17.479 [main] MWLogger - writing timestamp 20250823123320
+[INFO ] 2025-08-23 13:00:17.484 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 13:00:17.484 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 13:00:17.485 [main] MWLogger - update for new planet data finished
+[INFO ] 2025-08-23 13:00:17.486 [main] MWLogger - cache data loaded
+[INFO ] 2025-08-23 13:00:17.487 [main] MWLogger - Command: ConfigTimestamp
+[INFO ] 2025-08-23 13:00:17.487 [main] MWLogger - writing timestamp 20250823130017
+[ERROR] 2025-08-23 13:00:17.488 [main] MWLogger - Local Config: 1755970388731 Server Config: 1755972004487
+[INFO ] 2025-08-23 13:00:17.489 [main] MWLogger - Command: ServerConfig
+[INFO ] 2025-08-23 13:00:17.489 [main] MWLogger - writing timestamp 20250823130017
+[INFO ] 2025-08-23 13:00:19.545 [main] MWLogger - Command: BannedAmmoTimeStamp
+[INFO ] 2025-08-23 13:00:19.545 [main] MWLogger - writing timestamp 20250823130017
+[ERROR] 2025-08-23 13:00:19.546 [main] MWLogger - Local Ban: 1755970398022 Server Ban: 1755970398022
+[INFO ] 2025-08-23 13:00:19.547 [main] MWLogger - Closing Socket.
+[INFO ] 2025-08-23 13:00:19.548 [main] MWLogger - Starting pAS
+[INFO ] 2025-08-23 13:00:19.947 [main] MWLogger - could not read map config file. Will use defaults
+[INFO ] 2025-08-23 13:00:20.032 [main] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 13:00:20.032 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 13:00:20.034 [main] MWLogger - writing timestamp 20250823130019
+[INFO ] 2025-08-23 14:41:35.666 [main] MWLogger - Starting MekWars Client Version: 0.8.0.0
+[ERROR] 2025-08-23 14:41:36.796 [main] MWLogger - RT Info: 128034@hektor
+[INFO ] 2025-08-23 14:41:39.532 [main] MWLogger - Command: OpListTimestamp
+[INFO ] 2025-08-23 14:41:39.534 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 14:41:39.539 [main] MWLogger - writing timestamp 20250823130019
+[ERROR] 2025-08-23 14:41:39.543 [main] MWLogger - Local OpList: 1755972004752 Server OpList: 1755978088835
+[INFO ] 2025-08-23 14:41:39.544 [main] MWLogger - Command: OpList
+[INFO ] 2025-08-23 14:41:39.544 [main] MWLogger - writing timestamp 20250823130019
+[INFO ] 2025-08-23 14:41:41.549 [main] MWLogger - try to import the planetcache
+[INFO ] 2025-08-23 14:41:41.550 [main] MWLogger - Command: ServerVersion
+[INFO ] 2025-08-23 14:41:41.551 [main] MWLogger - writing timestamp 20250823130019
+[ERROR] 2025-08-23 14:41:41.553 [main] MWLogger - Client Version: 0.8.0 Server Version: 0.8.0
+[INFO ] 2025-08-23 14:41:41.554 [main] MWLogger - Command: ForceUpdateKey
+[INFO ] 2025-08-23 14:41:41.554 [main] MWLogger - writing timestamp 20250823130019
+[ERROR] 2025-08-23 14:41:41.557 [main] MWLogger - Server Key: 
+[INFO ] 2025-08-23 14:41:41.569 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.569 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.569 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.569 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.569 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.570 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.570 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.570 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.570 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.570 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.571 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.571 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.571 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.571 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.571 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.571 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.571 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.571 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.572 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.573 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.573 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.573 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.573 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 14:41:41.576 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 14:41:41.576 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 14:41:41.586 [main] MWLogger - Command: PDiff
+[INFO ] 2025-08-23 14:41:41.587 [main] MWLogger - writing timestamp 20250823130019
+[INFO ] 2025-08-23 14:41:41.594 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 14:41:41.594 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 14:41:41.597 [main] MWLogger - update for new planet data finished
+[INFO ] 2025-08-23 14:41:41.598 [main] MWLogger - cache data loaded
+[INFO ] 2025-08-23 14:41:41.599 [main] MWLogger - Command: ConfigTimestamp
+[INFO ] 2025-08-23 14:41:41.599 [main] MWLogger - writing timestamp 20250823144141
+[ERROR] 2025-08-23 14:41:41.601 [main] MWLogger - Local Config: 1755972004487 Server Config: 1755978088605
+[INFO ] 2025-08-23 14:41:41.601 [main] MWLogger - Command: ServerConfig
+[INFO ] 2025-08-23 14:41:41.602 [main] MWLogger - writing timestamp 20250823144141
+[INFO ] 2025-08-23 14:41:43.657 [main] MWLogger - Command: BannedAmmoTimeStamp
+[INFO ] 2025-08-23 14:41:43.658 [main] MWLogger - writing timestamp 20250823144141
+[ERROR] 2025-08-23 14:41:43.659 [main] MWLogger - Local Ban: 1755970398022 Server Ban: 1755970398022
+[INFO ] 2025-08-23 14:41:43.659 [main] MWLogger - Closing Socket.
+[INFO ] 2025-08-23 14:41:43.661 [main] MWLogger - Starting pAS
+[INFO ] 2025-08-23 14:41:44.133 [main] MWLogger - could not read map config file. Will use defaults
+[INFO ] 2025-08-23 14:41:44.206 [main] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 14:41:44.206 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 14:41:44.207 [main] MWLogger - writing timestamp 20250823144143
+[ERROR] 2025-08-23 14:41:44.214 [main] MWLogger - Opening socket connection to localhost:2347
+[ERROR] 2025-08-23 14:41:44.215 [main] MWLogger - CConnector: connected to localhost:2347
+[ERROR] 2025-08-23 14:41:44.217 [main] MWLogger - Connected. Signing on.
+[INFO ] 2025-08-23 14:41:44.223 [main] MWLogger - SENT: /signon	Afan	1337	4		0.8.0.0	57286fc10f632d19
+[INFO ] 2025-08-23 14:41:44.267 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 14:41:44.270 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823144143
+[INFO ] 2025-08-23 14:41:44.282 [ConnectionHandler$ReaderThread] MWLogger - Signon acknowledged
+[ERROR] 2025-08-23 14:41:44.283 [ConnectionHandler$ReaderThread] MWLogger - Signon acknowledged
+[INFO ] 2025-08-23 14:41:44.288 [ConnectionHandler$ReaderThread] MWLogger - CH|Welcome to ExampleTech (Server Version: 0.8.0.0, Compatible Clients: any 0.8.0.x)
+[INFO ] 2025-08-23 14:41:44.291 [ConnectionHandler$ReaderThread] MWLogger - CH|<a href="http://www.sourceforge.net/projects/mekwars">Click here to visit the MekWars project page.</a> This is a default message.<br> to make yourself an admin register your player name and then type in the following commands: /adminpassword level#your name#200<br>/Adminsetcommandlevel adminpassword#200<br>/Adminsavecommandlevels Server admins --- you may edit this message in serverconfig.txt
+[INFO ] 2025-08-23 14:41:44.294 [ConnectionHandler$ReaderThread] MWLogger - US
+[INFO ] 2025-08-23 14:41:44.302 [ConnectionHandler$ReaderThread] MWLogger - NU|Afan~0.8.0.0~unknown~1~false|NEW
+[INFO ] 2025-08-23 14:41:44.315 [ConnectionHandler$ReaderThread] MWLogger - CH|<font color="navy"><br>---<br>It appears that you haven't signed up for this server's campaign.<br><a href="MEKWARS/c enroll">Click here to get started.</a><br>---<br></font>
+[INFO ] 2025-08-23 14:41:44.316 [ConnectionHandler$ReaderThread] MWLogger - CH|<font color="navy"><br>---<br>Warning: Your account is not password protected. [<a href="MWREG">Click to register</a>]<br>---<br></font>
+[ERROR] 2025-08-23 14:41:44.327 [Thread-4] MWLogger - Wave file not found: 
+[INFO ] 2025-08-23 14:41:44.355 [main] MWLogger - SENT: /comm	CH%7c%2fc+setclientversion%23Afan%230.8.0.0
+[INFO ] 2025-08-23 14:41:44.357 [main] MWLogger - SENT: /comm	CH%7c%2fgetsavedmail
+[INFO ] 2025-08-23 14:41:44.378 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 14:41:44.378 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823144143
+[INFO ] 2025-08-23 14:42:13.897 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:42:58.913 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:43:43.914 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:44:28.906 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:45:13.899 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:45:58.914 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:46:43.916 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:47:28.918 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:48:13.917 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:48:58.904 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:49:43.913 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:50:28.913 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:51:13.906 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:51:58.912 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:52:43.921 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:53:28.919 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:54:13.915 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:54:58.914 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:55:43.912 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:56:28.933 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:57:13.915 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:57:58.930 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:58:43.921 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 14:59:28.928 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:00:13.923 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:00:58.932 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:01:43.929 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:02:28.923 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:03:13.938 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:03:58.932 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:04:02.619 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:04:16.269 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:04:16.841 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:04:31.697 [AWT-EventQueue-0] MWLogger - SENT: /comm	CH%7c%2fregister+Afan%2cStarwars92
+[INFO ] 2025-08-23 15:04:31.697 [AWT-EventQueue-0] MWLogger - SENT: /comm	CH%7c%2fc+setclientversion%23Afan%230.8.0.0
+[INFO ] 2025-08-23 15:04:31.747 [ConnectionHandler$ReaderThread] MWLogger - CH|<font color="navy"><br>---<br>You must have a campaign account in order to register a nickname. [<a href="MEKWARS/c enroll">Click to get started</a>]<br>---<br></font>
+[INFO ] 2025-08-23 15:04:43.923 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:05:28.030 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:05:28.931 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:05:29.206 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:05:29.937 [AWT-EventQueue-0] MWLogger - SENT: /comm	CH%7c%2fc+enroll
+[INFO ] 2025-08-23 15:05:41.214 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:05:48.531 [ConnectionHandler$ReaderThread] MWLogger - PL|SHP|0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0
+[INFO ] 2025-08-23 15:05:48.551 [ConnectionHandler$ReaderThread] MWLogger - PL|SHP|0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0
+[INFO ] 2025-08-23 15:05:48.571 [ConnectionHandler$ReaderThread] MWLogger - PL|SHP|0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0
+[INFO ] 2025-08-23 15:05:48.575 [ConnectionHandler$ReaderThread] MWLogger - PL|SHP|0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0
+[INFO ] 2025-08-23 15:05:48.579 [ConnectionHandler$ReaderThread] MWLogger - PL|SHP|0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0
+[INFO ] 2025-08-23 15:05:48.583 [ConnectionHandler$ReaderThread] MWLogger - PL|SHP|0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0
+[INFO ] 2025-08-23 15:05:48.587 [ConnectionHandler$ReaderThread] MWLogger - PL|SM|300
+[INFO ] 2025-08-23 15:05:48.587 [ConnectionHandler$ReaderThread] MWLogger - PL|SRP|0
+[INFO ] 2025-08-23 15:05:48.587 [ConnectionHandler$ReaderThread] MWLogger - PL|SI|0
+[INFO ] 2025-08-23 15:05:48.587 [ConnectionHandler$ReaderThread] MWLogger - CH|AM:<font color="navy">WELCOME TO MEKWARS!</font><br><br>You've been assigned to <a href="MEKWARS/c faction#Solaris Training Company">Solaris Training Company</a>, a training faction. Take some time here to learn about the server rules, the unique qualities of the factions that you may join, and the software in general. If you're looking for helpful hints, many servers include a short <b>New Player Guide</b>. Most have active forums. All have veteran players, moderators and admins willing to help new folks learn the ropes.<br><br>You've been assigned a starting force: OMG-UR-FD (4/5), OMG-UR-FD (4/5), OMG-UR-FD (4/5), BJ-1 (4/5), VL-2T (4/5), WVR-6R (4/5).<br><br>Have fun!</font><br>
+[INFO ] 2025-08-23 15:05:48.588 [ConnectionHandler$ReaderThread] MWLogger - CH|AM:<font color="navy"><br>---<br>NOTE: Your account will not be password protected until you [<a href="MWREG">register</a>] your nickname.<br>---<br></font>
+[INFO ] 2025-08-23 15:05:48.588 [ConnectionHandler$ReaderThread] MWLogger - PL|HD|CM$Stinger STG-3G.blk$0$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Master Sgt. Adrian "Catfish" Jope#0#4#5#0#0#0#$0$0$232$0$1$
+[INFO ] 2025-08-23 15:05:48.590 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Stinger STG-3G.blk$0$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Master Sgt. Adrian "Catfish" Jope#0#4#5#0#0#0#$0$0$232$0$1$
+[INFO ] 2025-08-23 15:05:59.161 [ConnectionHandler$ReaderThread] MWLogger - PL|HD|CM$Firestarter FS9-H.blk$1$1$Error loading unit. Tried to build from Firestarter FS9-H.blk$Cpt. Alessandra "Lippen" Bauer#0#4#5#0#0#0#$0$0$232$0$2$
+[INFO ] 2025-08-23 15:05:59.162 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Firestarter FS9-H.blk$1$1$Error loading unit. Tried to build from Firestarter FS9-H.blk$Cpt. Alessandra "Lippen" Bauer#0#4#5#0#0#0#$0$0$232$0$2$
+[INFO ] 2025-08-23 15:05:59.165 [ConnectionHandler$ReaderThread] MWLogger - PL|HD|CM$Stinger STG-3G.blk$2$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Major Angela "Tuba" Klein#0#4#5#0#0#0#$0$0$232$0$3$
+[INFO ] 2025-08-23 15:05:59.165 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Stinger STG-3G.blk$2$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Major Angela "Tuba" Klein#0#4#5#0#0#0#$0$0$232$0$3$
+[INFO ] 2025-08-23 15:05:59.168 [ConnectionHandler$ReaderThread] MWLogger - PL|HD|CM$Blackjack BJ-1.mtf$3$1$Training Unit$Recruit Rob "Chachi" Polvino#0#4#5#0#0#0#$0$0$949$1$4$true$1$1$IS Ammo AC/2$45$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:05:59.169 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Blackjack BJ-1.mtf$3$1$Training Unit$Recruit Rob "Chachi" Polvino#0#4#5#0#0#0#$0$0$949$1$4$true$1$1$IS Ammo AC/2$45$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:05:59.173 [ConnectionHandler$ReaderThread] MWLogger - PL|HD|CM$Vulcan VL-2T.mtf$4$1$Training Unit$Major Ryan "Psycho" Ward#0#4#5#0#0#0#$0$0$642$1$5$true$2$3$IS Ammo MG - Full$200$false$1$IS Ammo AC/2$45$false$1$5$3$false$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:05:59.173 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Vulcan VL-2T.mtf$4$1$Training Unit$Major Ryan "Psycho" Ward#0#4#5#0#0#0#$0$0$642$1$5$true$2$3$IS Ammo MG - Full$200$false$1$IS Ammo AC/2$45$false$1$5$3$false$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:05:59.176 [ConnectionHandler$ReaderThread] MWLogger - PL|HD|CM$Wolverine WVR-6R.mtf$5$1$Training Unit$Cp. Fran "Bug" Utley#0#4#5#0#0#0#$0$0$1101$1$6$true$2$1$IS Ammo AC/5$20$false$9$IS Ammo SRM-6$15$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:05:59.176 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Wolverine WVR-6R.mtf$5$1$Training Unit$Cp. Fran "Bug" Utley#0#4#5#0#0#0#$0$0$1101$1$6$true$2$1$IS Ammo AC/5$20$false$9$IS Ammo SRM-6$15$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:05:59.178 [ConnectionHandler$ReaderThread] MWLogger - PL|SB|30
+[INFO ] 2025-08-23 15:05:59.178 [ConnectionHandler$ReaderThread] MWLogger - PL|SF|9
+[INFO ] 2025-08-23 15:05:59.178 [ConnectionHandler$ReaderThread] MWLogger - PL|SH|Solaris Training Company
+[INFO ] 2025-08-23 15:05:59.179 [ConnectionHandler$ReaderThread] MWLogger - SENT: /comm	CH%7c%2fc+getfactionconfigs%230-1
+[INFO ] 2025-08-23 15:05:59.261 [ConnectionHandler$ReaderThread] MWLogger - PL|SSN|
+[INFO ] 2025-08-23 15:05:59.262 [ConnectionHandler$ReaderThread] MWLogger - GO|restrict_game_commands|false|hidden_units|false|check_victory|true|unjam_uac|false|bridgeCF|0|tacops_take_cover|false|tacops_jump_jet_attack|false|vehicle_acceleration|false|random_basements|true|no_forced_primary_targets|false|skip_ineligable_physical|true|tacops_start_fire|false|tacops_energy_weapons|false|disable_local_save|false|simultaneous_deployment|false|tacops_coolant_failure|false|tacops_grappling|false|pilot_advantages|false|rng_log|false|on_map_predesignate|false|tacops_altdmg|false|alternate_masc|false|inf_move_multi|false|vehicles_threshold_divisor|10|autosave_msg|true|heat_by_bay|false|tacops_vehicle_effective|false|tacops_attempting_stand|false|tacops_burst|false|stratops_bracket_fire|false|tacops_engine_explosions|false|maxtech_movement_mods|false|tacops_los_range|false|vehicle_turn_mode|false|tacops_walk_backwards|false|tacops_ba_weight|false|inf_move_later|false|aa_move_mod|false|kind_rapid_ac|false|tacops_taking_damage|false|indirect_always_possible|false|tacops_skilled_evasion|false|tacops_angel_ecm|false|deep_deployment|false|paranoid_autosave|false|stratops_ecm|false|no_premove_vibra|false|no_night_move_pen|false|team_vision|true|auto_ams|true|extreme_temperature_survival|false|vehicles_threshold|false|advanced_movement|false|at2_nukes|false|falls_end_movement|false|tacops_ppc_inhibitors|false|stratops_advanced_sensors|false|tacops_direct_blow|false|ba_grab_bars|false|tacops_glancing_blows|false|tacops_advanced_mech_hit_locations|false|vehicles_can_eject|false|tacops_attack_physical_psr|false|individual_initiative|false|tacops_hull_down|false|flamer_heat|false|indirect_fire|true|hotload_in_game|false|stratops_adv_pointdef|false|tacops_battle_wreck|false|tacops_physical_psr|false|clubs_punch|false|tacops_fumbles|false|lobby_ammo_dump|false|stratops_capital_fighter|false|blind_drop|false|auto_abandon_unit|false|tacops_leaping|false|tacops_range|false|inf_deploy_even|false|vehicle_lance_movement_number|4|skip_forced_victory|false|inf_proto_move_multi|3|edge|false|tacops_ammunition|false|tacops_bap|false|stratops_conv_fusion_bonus|false|tacops_dead_zones|false|fuel_consumption|false|manual_shutdown|false|stratops_harjel|false|aero_ground_move|true|pilots_cannot_spot|false|mek_lance_movement_number|4|reverse_gear|false|pilots_visual_range_one|false|supress_all_double_blind_messages|false|use_game_turn_limit|false|team_initiative|true|set_arty_player_homeedge|false|tacops_evade|false|breeze|false|uac_tworolls|false|achieve_conditions|1|map_area_predesignate|1088|armed_mechwarriors|false|woods_burn_down_amount|5|manei_domini|false|friendly_fire|false|no_tac|false|allow_large_squadrons|false|return_flyover|true|tacops_fast_infantry_move|false|initiative_streak_compensation|false|allow_illegal_units|false|push_off_board|true|no_ignite_clear|false|tacops_manual_ams|false|no_immobile_vehicles|false|ghost_target_max|5|metal_content|false|tacops_prone_fire|false|use_kill_count|false|tacops_leg_damage|false|full_rotor_hits|false|tacops_rapid_ac|false|protos_move_even|false|stratops_aaa_laser|false|tacops_sprint|false|vehicles_threshold_variable|false|tacops_heat|false|toughness|false|tacops_falling_expanded|false|stratops_quirks|false|magscan_nohills|false|variable_damage_thresh|false|tacops_trip_attack|false|tacops_mobile_hqs|false|canon_only|false|ejected_pilots_flee|false|stratops_sensor_shadow|false|use_bv_ratio|false|front_load_initiative|false|mek_lance_movement|false|vehicles_safe_from_infernos|false|stratops_space_bomb|false|assault_drop|false|tacops_tank_crews|false|max_external_heat|15|stratops_waypoint_launch|false|num_hexes_predesignate|5|year|3150|dumping_from_round|1|inclusive_sensor_range|false|techlevel|Standard|show_bay_detail|false|stratops_bearings_only_velocity|50|begin_shutdown|false|stratops_bearings_only|false|use_bv_destroyed|false|simultaneous_firing|false|double_blind|false|tacops_woods_cover|false|ammo_explosions|false|geometric_mean_bv|false|expanded_kf_drive_damage|false|forest_fires_no_smoke|false|psr_jump_heavy_woods|false|exclusive_db_deployment|true|commander_killed|false|vtol_strafing|false|increased_ac_dmg|false|case_pilot_damage|false|game_kill_count|4|simultaneous_movement|false|clan_ignore_eq_limits|false|tacops_called_shots|false|stratops_aa_fire|false|tacops_hotload|false|sensors_detect_all|false|conditional_ejection|false|tacops_sensors|false|protos_move_multi|false|tacops_dig_in|false|tacops_eccm|false|tacops_vtol_attacks|false|skip_ineligable_firing|false|rng_type|1|inf_move_even|false|alternate_masc_enhanced|false|rpg_gunnery|false|vehicle_lance_movement|false|tacops_retractable_blades|false|tacops_crit_roll|false|tacops_ba_criticals|false|all_have_ei_cockpit|false|paratroopers|false|stratops_grav_effects|false|protos_move_later|false|tacops_ba_vs_ba|false|tacops_gauss_weapons|false|suppress_double_blind_bv|false|tacops_partial_cover|false|vehicle_advanced_maneuvers|false|really_allow_nukes|false|tacops_skin_of_the_teeth_ejection|false|simultaneous_targeting|false|real_blind_drop|false|tacops_clusterhitpen|false|protos_safe_from_infernos|false|stratops_partialrepairs|false|command_init|false|aero_artillery_munitions|false|aero_sanity|false|tacops_standing_still|false|bv_destroyed_percent|100|no_hover_charge|false|simultaneous_physical|false|game_turn_limit|10|woods_burn_down|false|tacops_ams|false|stratops_over_penetrate|false|artillery_skill|false|era_based|false|single_no_cap|false|alternate_pilot_bv_mod|false|floating_crits|false|no_clan_physical|false|bv_ratio_percent|300|atmospheric_control|false|tacops_ziplines|false|reduced_overheat_modifier_bv|false|tacops_ghost_target|false|tacops_self_destruct|false|skip_ineligable_movement|false|tacops_LOS1|false|multiuse_ams|false|tacops_fatigue|false|turn_timer|0|tacops_charge_damage|false|tacops_vehicle_arcs|false|tacops_careful_stand|false|minefields|false|increased_iserll_range|false|allow_nukes|false|
+[INFO ] 2025-08-23 15:05:59.311 [ConnectionHandler$ReaderThread] MWLogger - CS|2
+[INFO ] 2025-08-23 15:05:59.314 [ConnectionHandler$ReaderThread] MWLogger - PL|PPQ|0$0$0$0$0$0$0$0$0$0$0$0$
+[INFO ] 2025-08-23 15:05:59.315 [ConnectionHandler$ReaderThread] MWLogger - PL|AEU|0$
+[INFO ] 2025-08-23 15:05:59.315 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:05:59.315 [ConnectionHandler$ReaderThread] MWLogger - PL|PEU|0$
+[INFO ] 2025-08-23 15:05:59.315 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823144143
+[INFO ] 2025-08-23 15:05:59.315 [ConnectionHandler$ReaderThread] MWLogger - HS|CA|0
+[INFO ] 2025-08-23 15:05:59.316 [ConnectionHandler$ReaderThread] MWLogger - HS|FN|Solaris Training Company|CC|0$0$10000$1|CC|1$0$20000$1|CC|2$0$45000$1|CC|3$0$95000$1|CC|0$1$10000$1|CC|1$1$20000$1|CC|2$1$45000$1|CC|3$1$95000$1|CC|0$2$10000$1|CC|1$2$20000$1|CC|2$2$45000$1|CC|3$2$95000$1|CC|0$3$10000$1|CC|1$3$20000$1|CC|2$3$45000$1|CC|3$3$95000$1|CC|0$4$10000$1|CC|1$4$20000$1|CC|2$4$45000$1|CC|3$4$95000$1|CC|0$5$10000$1|CC|1$5$20000$1|CC|2$5$45000$1|CC|3$5$95000$1|
+[INFO ] 2025-08-23 15:05:59.320 [ConnectionHandler$ReaderThread] MWLogger - PL|UPBM|
+[INFO ] 2025-08-23 15:05:59.320 [ConnectionHandler$ReaderThread] MWLogger - SBT||
+[INFO ] 2025-08-23 15:05:59.321 [ConnectionHandler$ReaderThread] MWLogger - PF|S
+[INFO ] 2025-08-23 15:05:59.321 [ConnectionHandler$ReaderThread] MWLogger - CH|<b>[*] Logged into <font color="#33CCCC"><a href="MEKWARS/c faction#Solaris Training Company">Solaris Training Company</a></font>.</b>
+[INFO ] 2025-08-23 15:05:59.321 [ConnectionHandler$ReaderThread] MWLogger - PS|CP~Afan~300~0~6~CM$Stinger STG-3G.blk$0$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Master Sgt. Adrian "Catfish" Jope#0#4#5#0#0#0#$0$0$232$0$1$~CM$Firestarter FS9-H.blk$1$1$Error loading unit. Tried to build from Firestarter FS9-H.blk$Cpt. Alessandra "Lippen" Bauer#0#4#5#0#0#0#$0$0$232$0$2$~CM$Stinger STG-3G.blk$2$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Major Angela "Tuba" Klein#0#4#5#0#0#0#$0$0$232$0$3$~CM$Blackjack BJ-1.mtf$3$1$Training Unit$Recruit Rob "Chachi" Polvino#0#4#5#0#0#0#$0$0$949$1$4$true$1$1$IS Ammo AC/2$45$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $~CM$Vulcan VL-2T.mtf$4$1$Training Unit$Major Ryan "Psycho" Ward#0#4#5#0#0#0#$0$0$642$1$5$true$2$3$IS Ammo MG - Full$200$false$1$IS Ammo AC/2$45$false$1$5$3$false$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $~CM$Wolverine WVR-6R.mtf$5$1$Training Unit$Cp. Fran "Bug" Utley#0#4#5#0#0#0#$0$0$1101$1$6$true$2$1$IS Ammo AC/5$20$false$9$IS Ammo SRM-6$15$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $~0~30~9~0~0~0~0~0~Solaris Training Company ~Solaris Training Company ~ ~false~| |~false~ ~&~
+[INFO ] 2025-08-23 15:05:59.322 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Stinger STG-3G.blk$0$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Master Sgt. Adrian "Catfish" Jope#0#4#5#0#0#0#$0$0$232$0$1$
+[INFO ] 2025-08-23 15:05:59.328 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Firestarter FS9-H.blk$1$1$Error loading unit. Tried to build from Firestarter FS9-H.blk$Cpt. Alessandra "Lippen" Bauer#0#4#5#0#0#0#$0$0$232$0$2$
+[INFO ] 2025-08-23 15:05:59.332 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Stinger STG-3G.blk$2$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Major Angela "Tuba" Klein#0#4#5#0#0#0#$0$0$232$0$3$
+[INFO ] 2025-08-23 15:05:59.336 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Blackjack BJ-1.mtf$3$1$Training Unit$Recruit Rob "Chachi" Polvino#0#4#5#0#0#0#$0$0$949$1$4$true$1$1$IS Ammo AC/2$45$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:05:59.340 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Vulcan VL-2T.mtf$4$1$Training Unit$Major Ryan "Psycho" Ward#0#4#5#0#0#0#$0$0$642$1$5$true$2$3$IS Ammo MG - Full$200$false$1$IS Ammo AC/2$45$false$1$5$3$false$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:05:59.344 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Wolverine WVR-6R.mtf$5$1$Training Unit$Cp. Fran "Bug" Utley#0#4#5#0#0#0#$0$0$1101$1$6$true$2$1$IS Ammo AC/5$20$false$9$IS Ammo SRM-6$15$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:05:59.347 [ConnectionHandler$ReaderThread] MWLogger - My Player Flags:  
+[INFO ] 2025-08-23 15:05:59.348 [ConnectionHandler$ReaderThread] MWLogger - PI|PL|Afan|0#0#2# #Solaris Training Company#false#|
+[INFO ] 2025-08-23 15:05:59.349 [ConnectionHandler$ReaderThread] MWLogger - PI|DA|Afan|0#0#2# #Solaris Training Company#false#
+[INFO ] 2025-08-23 15:05:59.349 [ConnectionHandler$ReaderThread] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:05:59.349 [ConnectionHandler$ReaderThread] MWLogger - writing timestamp 20250823144143
+[INFO ] 2025-08-23 15:05:59.351 [ConnectionHandler$ReaderThread] MWLogger - PL|SUD|1
+[INFO ] 2025-08-23 15:05:59.351 [ConnectionHandler$ReaderThread] MWLogger - PL|SHP|0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0
+[INFO ] 2025-08-23 15:05:59.355 [ConnectionHandler$ReaderThread] MWLogger - CC|NT|340336|false
+[INFO ] 2025-08-23 15:05:59.452 [ConnectionHandler$ReaderThread] MWLogger - PL|FC|DONE#DONE
+[INFO ] 2025-08-23 15:05:59.462 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:05:59.462 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823144143
+[INFO ] 2025-08-23 15:06:13.929 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:06:58.930 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[ERROR] 2025-08-23 15:07:04.425 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:04.428 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:04.431 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:04.433 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:04.435 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:04.436 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.321 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.512 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.521 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.523 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.525 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.526 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.527 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.529 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.533 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.685 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.688 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.693 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.695 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.698 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.701 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.702 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:06.704 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:08.274 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:12.295 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:12.297 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:12.299 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:12.301 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[INFO ] 2025-08-23 15:07:16.668 [AWT-EventQueue-0] MWLogger - null
+[ERROR] 2025-08-23 15:07:17.531 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[INFO ] 2025-08-23 15:07:21.709 [AWT-EventQueue-0] MWLogger - SENT: /comm	CH%7c%2fc+hm%23tesr
+[INFO ] 2025-08-23 15:07:21.727 [ConnectionHandler$ReaderThread] MWLogger - CH|(Housemail)Afan:tesr
+[ERROR] 2025-08-23 15:07:24.375 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:24.378 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:24.380 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:24.382 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:24.383 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:07:24.384 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[INFO ] 2025-08-23 15:07:43.930 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:08:28.929 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:09:13.945 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:09:58.930 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:10:43.932 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:11:29.021 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:11:29.022 [ConnectionHandler$ReaderThread] MWLogger - SM|-------> <b>Tick! [2]</b><br><br><i><b>Your factories produced enough components to make:</b></i><br>0 Light meks<br>0 Medium meks<br>0 Heavy meks<br>0 Assault meks<br>0 Light vehicles<br>0 Medium vehicles<br>0 Heavy vehicles<br>0 Assault vehicles<br>0 Infantry<br>0 Light protomechs<br>0 Medium protomechs<br>0 Heavy protomechs<br>0 Assault protomechs<br>0 Light battle armor<br>0 Medium battle armor<br>0 Heavy battle armor<br>0 Assault battle armor<br>0 Light aero<br>0 Medium aero<br>0 Heavy aero<br>0 Assault aero<br>
+[INFO ] 2025-08-23 15:11:29.022 [ConnectionHandler$ReaderThread] MWLogger - PL|UPBM|
+[INFO ] 2025-08-23 15:11:29.023 [ConnectionHandler$ReaderThread] MWLogger - CC|NT|900000|true
+[INFO ] 2025-08-23 15:12:13.929 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:12:58.940 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:13:43.931 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:14:28.949 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:15:13.946 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[ERROR] 2025-08-23 15:18:20.983 [ConnectionHandler$WriterThread] MWLogger - WriterThread: stopping gracefully.
+[INFO ] 2025-08-23 15:18:22.491 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:18:22.492 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823144143
+[INFO ] 2025-08-23 15:48:31.459 [main] MWLogger - Starting MekWars Client Version: 0.8.0.0
+[ERROR] 2025-08-23 15:48:32.922 [main] MWLogger - RT Info: 143043@hektor
+[INFO ] 2025-08-23 15:48:35.320 [main] MWLogger - Command: OpListTimestamp
+[INFO ] 2025-08-23 15:48:35.325 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 15:48:35.334 [main] MWLogger - writing timestamp 20250823144143
+[ERROR] 2025-08-23 15:48:35.342 [main] MWLogger - Local OpList: 1755978088835 Server OpList: 1755982095826
+[INFO ] 2025-08-23 15:48:35.342 [main] MWLogger - Command: OpList
+[INFO ] 2025-08-23 15:48:35.343 [main] MWLogger - writing timestamp 20250823144143
+[INFO ] 2025-08-23 15:48:37.348 [main] MWLogger - try to import the planetcache
+[INFO ] 2025-08-23 15:48:37.348 [main] MWLogger - Command: ServerVersion
+[INFO ] 2025-08-23 15:48:37.349 [main] MWLogger - writing timestamp 20250823144143
+[ERROR] 2025-08-23 15:48:37.351 [main] MWLogger - Client Version: 0.8.0 Server Version: 0.8.0
+[INFO ] 2025-08-23 15:48:37.352 [main] MWLogger - Command: ForceUpdateKey
+[INFO ] 2025-08-23 15:48:37.352 [main] MWLogger - writing timestamp 20250823144143
+[ERROR] 2025-08-23 15:48:37.354 [main] MWLogger - Server Key: 
+[INFO ] 2025-08-23 15:48:37.368 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.368 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.369 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.369 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.369 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.369 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.369 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.369 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.369 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.369 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.369 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.370 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.370 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.370 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.370 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.370 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.370 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.370 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.370 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.371 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.371 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.371 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.371 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.371 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.371 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.371 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.371 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.372 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.372 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.372 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.372 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.372 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:48:37.375 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 15:48:37.376 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 15:48:37.387 [main] MWLogger - Command: PDiff
+[INFO ] 2025-08-23 15:48:37.387 [main] MWLogger - writing timestamp 20250823144143
+[INFO ] 2025-08-23 15:48:37.395 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 15:48:37.396 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 15:48:37.398 [main] MWLogger - update for new planet data finished
+[INFO ] 2025-08-23 15:48:37.400 [main] MWLogger - cache data loaded
+[INFO ] 2025-08-23 15:48:37.401 [main] MWLogger - Command: ConfigTimestamp
+[INFO ] 2025-08-23 15:48:37.401 [main] MWLogger - writing timestamp 20250823154837
+[ERROR] 2025-08-23 15:48:37.403 [main] MWLogger - Local Config: 1755978088605 Server Config: 1755982095530
+[INFO ] 2025-08-23 15:48:37.403 [main] MWLogger - Command: ServerConfig
+[INFO ] 2025-08-23 15:48:37.403 [main] MWLogger - writing timestamp 20250823154837
+[INFO ] 2025-08-23 15:48:39.455 [main] MWLogger - Command: BannedAmmoTimeStamp
+[INFO ] 2025-08-23 15:48:39.456 [main] MWLogger - writing timestamp 20250823154837
+[ERROR] 2025-08-23 15:48:39.458 [main] MWLogger - Local Ban: 1755970398022 Server Ban: 1755970398022
+[INFO ] 2025-08-23 15:48:39.458 [main] MWLogger - Closing Socket.
+[INFO ] 2025-08-23 15:48:39.460 [main] MWLogger - Starting pAS
+[INFO ] 2025-08-23 15:48:40.061 [main] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:48:40.062 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 15:48:40.062 [main] MWLogger - writing timestamp 20250823154839
+[ERROR] 2025-08-23 15:48:40.075 [main] MWLogger - Opening socket connection to localhost:2347
+[ERROR] 2025-08-23 15:48:40.076 [main] MWLogger - CConnector: connected to localhost:2347
+[ERROR] 2025-08-23 15:48:40.078 [main] MWLogger - Connected. Signing on.
+[INFO ] 2025-08-23 15:48:40.085 [main] MWLogger - SENT: /signon	Afan	1337	4		0.8.0.0	dadc6c7eb4a160a5
+[INFO ] 2025-08-23 15:48:40.124 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:48:40.125 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823154839
+[INFO ] 2025-08-23 15:48:40.178 [main] MWLogger - SENT: /comm	CH%7c%2fc+setclientversion%23Afan%230.8.0.0
+[INFO ] 2025-08-23 15:48:40.179 [main] MWLogger - SENT: /comm	CH%7c%2fgetsavedmail
+[INFO ] 2025-08-23 15:48:40.190 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:48:40.190 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823154839
+[INFO ] 2025-08-23 15:48:55.738 [ConnectionHandler$ReaderThread] MWLogger - Signon acknowledged
+[ERROR] 2025-08-23 15:48:55.739 [ConnectionHandler$ReaderThread] MWLogger - Signon acknowledged
+[INFO ] 2025-08-23 15:48:55.739 [ConnectionHandler$ReaderThread] MWLogger - CH|Welcome to ExampleTech (Server Version: 0.8.0.0, Compatible Clients: any 0.8.0.x)
+[INFO ] 2025-08-23 15:48:55.742 [ConnectionHandler$ReaderThread] MWLogger - CH|<a href="http://www.sourceforge.net/projects/mekwars">Click here to visit the MekWars project page.</a> This is a default message.<br> to make yourself an admin register your player name and then type in the following commands: /adminpassword level#your name#200<br>/Adminsetcommandlevel adminpassword#200<br>/Adminsavecommandlevels Server admins --- you may edit this message in serverconfig.txt
+[INFO ] 2025-08-23 15:48:55.751 [ConnectionHandler$ReaderThread] MWLogger - US
+[INFO ] 2025-08-23 15:48:55.753 [ConnectionHandler$ReaderThread] MWLogger - NU|Afan~0.8.0.0~unknown~1~false|NEW
+[INFO ] 2025-08-23 15:48:55.756 [ConnectionHandler$ReaderThread] MWLogger - PL|SH|Solaris Training Company
+[ERROR] 2025-08-23 15:48:55.757 [Thread-5] MWLogger - Wave file not found: 
+[INFO ] 2025-08-23 15:48:55.768 [ConnectionHandler$ReaderThread] MWLogger - SENT: /comm	CH%7c%2fc+getfactionconfigs%230-1
+[INFO ] 2025-08-23 15:48:55.887 [ConnectionHandler$ReaderThread] MWLogger - PL|SSN|
+[INFO ] 2025-08-23 15:48:55.889 [ConnectionHandler$ReaderThread] MWLogger - GO|restrict_game_commands|false|hidden_units|false|check_victory|true|unjam_uac|false|bridgeCF|0|tacops_take_cover|false|tacops_jump_jet_attack|false|vehicle_acceleration|false|random_basements|true|no_forced_primary_targets|false|skip_ineligable_physical|true|tacops_start_fire|false|tacops_energy_weapons|false|disable_local_save|false|simultaneous_deployment|false|tacops_coolant_failure|false|tacops_grappling|false|pilot_advantages|false|rng_log|false|on_map_predesignate|false|tacops_altdmg|false|alternate_masc|false|inf_move_multi|false|vehicles_threshold_divisor|10|autosave_msg|true|heat_by_bay|false|tacops_vehicle_effective|false|tacops_attempting_stand|false|tacops_burst|false|stratops_bracket_fire|false|tacops_engine_explosions|false|maxtech_movement_mods|false|tacops_los_range|false|vehicle_turn_mode|false|tacops_walk_backwards|false|tacops_ba_weight|false|inf_move_later|false|aa_move_mod|false|kind_rapid_ac|false|tacops_taking_damage|false|indirect_always_possible|false|tacops_skilled_evasion|false|tacops_angel_ecm|false|deep_deployment|false|paranoid_autosave|false|stratops_ecm|false|no_premove_vibra|false|no_night_move_pen|false|team_vision|true|auto_ams|true|extreme_temperature_survival|false|vehicles_threshold|false|advanced_movement|false|at2_nukes|false|falls_end_movement|false|tacops_ppc_inhibitors|false|stratops_advanced_sensors|false|tacops_direct_blow|false|ba_grab_bars|false|tacops_glancing_blows|false|tacops_advanced_mech_hit_locations|false|vehicles_can_eject|false|tacops_attack_physical_psr|false|individual_initiative|false|tacops_hull_down|false|flamer_heat|false|indirect_fire|true|hotload_in_game|false|stratops_adv_pointdef|false|tacops_battle_wreck|false|tacops_physical_psr|false|clubs_punch|false|tacops_fumbles|false|lobby_ammo_dump|false|stratops_capital_fighter|false|blind_drop|false|auto_abandon_unit|false|tacops_leaping|false|tacops_range|false|inf_deploy_even|false|vehicle_lance_movement_number|4|skip_forced_victory|false|inf_proto_move_multi|3|edge|false|tacops_ammunition|false|tacops_bap|false|stratops_conv_fusion_bonus|false|tacops_dead_zones|false|fuel_consumption|false|manual_shutdown|false|stratops_harjel|false|aero_ground_move|true|pilots_cannot_spot|false|mek_lance_movement_number|4|reverse_gear|false|pilots_visual_range_one|false|supress_all_double_blind_messages|false|use_game_turn_limit|false|team_initiative|true|set_arty_player_homeedge|false|tacops_evade|false|breeze|false|uac_tworolls|false|achieve_conditions|1|map_area_predesignate|1088|armed_mechwarriors|false|woods_burn_down_amount|5|manei_domini|false|friendly_fire|false|no_tac|false|allow_large_squadrons|false|return_flyover|true|tacops_fast_infantry_move|false|initiative_streak_compensation|false|allow_illegal_units|false|push_off_board|true|no_ignite_clear|false|tacops_manual_ams|false|no_immobile_vehicles|false|ghost_target_max|5|metal_content|false|tacops_prone_fire|false|use_kill_count|false|tacops_leg_damage|false|full_rotor_hits|false|tacops_rapid_ac|false|protos_move_even|false|stratops_aaa_laser|false|tacops_sprint|false|vehicles_threshold_variable|false|tacops_heat|false|toughness|false|tacops_falling_expanded|false|stratops_quirks|false|magscan_nohills|false|variable_damage_thresh|false|tacops_trip_attack|false|tacops_mobile_hqs|false|canon_only|false|ejected_pilots_flee|false|stratops_sensor_shadow|false|use_bv_ratio|false|front_load_initiative|false|mek_lance_movement|false|vehicles_safe_from_infernos|false|stratops_space_bomb|false|assault_drop|false|tacops_tank_crews|false|max_external_heat|15|stratops_waypoint_launch|false|num_hexes_predesignate|5|year|3150|dumping_from_round|1|inclusive_sensor_range|false|techlevel|Standard|show_bay_detail|false|stratops_bearings_only_velocity|50|begin_shutdown|false|stratops_bearings_only|false|use_bv_destroyed|false|simultaneous_firing|false|double_blind|false|tacops_woods_cover|false|ammo_explosions|false|geometric_mean_bv|false|expanded_kf_drive_damage|false|forest_fires_no_smoke|false|psr_jump_heavy_woods|false|exclusive_db_deployment|true|commander_killed|false|vtol_strafing|false|increased_ac_dmg|false|case_pilot_damage|false|game_kill_count|4|simultaneous_movement|false|clan_ignore_eq_limits|false|tacops_called_shots|false|stratops_aa_fire|false|tacops_hotload|false|sensors_detect_all|false|conditional_ejection|false|tacops_sensors|false|protos_move_multi|false|tacops_dig_in|false|tacops_eccm|false|tacops_vtol_attacks|false|skip_ineligable_firing|false|rng_type|1|inf_move_even|false|alternate_masc_enhanced|false|rpg_gunnery|false|vehicle_lance_movement|false|tacops_retractable_blades|false|tacops_crit_roll|false|tacops_ba_criticals|false|all_have_ei_cockpit|false|paratroopers|false|stratops_grav_effects|false|protos_move_later|false|tacops_ba_vs_ba|false|tacops_gauss_weapons|false|suppress_double_blind_bv|false|tacops_partial_cover|false|vehicle_advanced_maneuvers|false|really_allow_nukes|false|tacops_skin_of_the_teeth_ejection|false|simultaneous_targeting|false|real_blind_drop|false|tacops_clusterhitpen|false|protos_safe_from_infernos|false|stratops_partialrepairs|false|command_init|false|aero_artillery_munitions|false|aero_sanity|false|tacops_standing_still|false|bv_destroyed_percent|100|no_hover_charge|false|simultaneous_physical|false|game_turn_limit|10|woods_burn_down|false|tacops_ams|false|stratops_over_penetrate|false|artillery_skill|false|era_based|false|single_no_cap|false|alternate_pilot_bv_mod|false|floating_crits|false|no_clan_physical|false|bv_ratio_percent|300|atmospheric_control|false|tacops_ziplines|false|reduced_overheat_modifier_bv|false|tacops_ghost_target|false|tacops_self_destruct|false|skip_ineligable_movement|false|tacops_LOS1|false|multiuse_ams|false|tacops_fatigue|false|turn_timer|0|tacops_charge_damage|false|tacops_vehicle_arcs|false|tacops_careful_stand|false|minefields|false|increased_iserll_range|false|allow_nukes|false|
+[INFO ] 2025-08-23 15:48:56.064 [ConnectionHandler$ReaderThread] MWLogger - CS|2
+[INFO ] 2025-08-23 15:48:56.072 [ConnectionHandler$ReaderThread] MWLogger - PL|PPQ|0$0$0$0$0$0$0$0$0$0$0$0$
+[INFO ] 2025-08-23 15:48:56.073 [ConnectionHandler$ReaderThread] MWLogger - PL|AEU|0$
+[INFO ] 2025-08-23 15:48:56.073 [ConnectionHandler$ReaderThread] MWLogger - PL|PEU|0$
+[INFO ] 2025-08-23 15:48:56.073 [ConnectionHandler$ReaderThread] MWLogger - HS|CA|0
+[INFO ] 2025-08-23 15:48:56.074 [ConnectionHandler$ReaderThread] MWLogger - HS|FN|Solaris Training Company|CC|0$0$10000$1|CC|1$0$20000$1|CC|2$0$45000$1|CC|3$0$95000$1|CC|0$1$10000$1|CC|1$1$20000$1|CC|2$1$45000$1|CC|3$1$95000$1|CC|0$2$10000$1|CC|1$2$20000$1|CC|2$2$45000$1|CC|3$2$95000$1|CC|0$3$10000$1|CC|1$3$20000$1|CC|2$3$45000$1|CC|3$3$95000$1|CC|0$4$10000$1|CC|1$4$20000$1|CC|2$4$45000$1|CC|3$4$95000$1|CC|0$5$10000$1|CC|1$5$20000$1|CC|2$5$45000$1|CC|3$5$95000$1|
+[INFO ] 2025-08-23 15:48:56.084 [ConnectionHandler$ReaderThread] MWLogger - PL|UPBM|
+[INFO ] 2025-08-23 15:48:56.085 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:48:56.085 [ConnectionHandler$ReaderThread] MWLogger - SBT||
+[INFO ] 2025-08-23 15:48:56.085 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823154839
+[INFO ] 2025-08-23 15:48:56.085 [ConnectionHandler$ReaderThread] MWLogger - PF|S
+[INFO ] 2025-08-23 15:48:56.086 [ConnectionHandler$ReaderThread] MWLogger - CH|<b>[*] Logged into <font color="#33CCCC"><a href="MEKWARS/c faction#Solaris Training Company">Solaris Training Company</a></font>.</b>
+[INFO ] 2025-08-23 15:48:56.086 [ConnectionHandler$ReaderThread] MWLogger - PS|CP~Afan~300~0~6~CM$Stinger STG-3G.blk$0$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Master Sgt. Adrian "Catfish" Jope#0#4#5#0#0#0#$0$0$232$0$1$~CM$Firestarter FS9-H.blk$1$1$Error loading unit. Tried to build from Firestarter FS9-H.blk$Cpt. Alessandra "Lippen" Bauer#0#4#5#0#0#0#$0$0$232$0$2$~CM$Stinger STG-3G.blk$2$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Major Angela "Tuba" Klein#0#4#5#0#0#0#$0$0$232$0$3$~CM$Blackjack BJ-1.mtf$3$1$Training Unit$Recruit Rob "Chachi" Polvino#0#4#5#0#0#0#$0$0$949$1$4$true$1$1$IS Ammo AC/2$45$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $~CM$Vulcan VL-2T.mtf$4$1$Training Unit$Major Ryan "Psycho" Ward#0#4#5#0#0#0#$0$0$642$1$5$true$2$3$IS Ammo MG - Full$200$false$1$IS Ammo AC/2$45$false$1$5$3$false$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $~CM$Wolverine WVR-6R.mtf$5$1$Training Unit$Cp. Fran "Bug" Utley#0#4#5#0#0#0#$0$0$1101$1$6$true$2$1$IS Ammo AC/5$20$false$9$IS Ammo SRM-6$15$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $~0~30~9~0~0~0~0~0~Solaris Training Company ~Solaris Training Company ~ ~false~| |~false~ ~&~
+[INFO ] 2025-08-23 15:48:56.088 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Stinger STG-3G.blk$0$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Master Sgt. Adrian "Catfish" Jope#0#4#5#0#0#0#$0$0$232$0$1$
+[INFO ] 2025-08-23 15:52:00.145 [main] MWLogger - Starting MekWars Client Version: 0.8.0.0
+[ERROR] 2025-08-23 15:52:01.835 [main] MWLogger - RT Info: 147902@hektor
+[INFO ] 2025-08-23 15:52:06.027 [main] MWLogger - Command: OpListTimestamp
+[INFO ] 2025-08-23 15:52:06.030 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 15:52:06.037 [main] MWLogger - writing timestamp 20250823154839
+[ERROR] 2025-08-23 15:52:06.039 [main] MWLogger - Local OpList: 1755982095826 Server OpList: 1755982095826
+[INFO ] 2025-08-23 15:52:06.040 [main] MWLogger - try to import the planetcache
+[INFO ] 2025-08-23 15:52:06.040 [main] MWLogger - Command: ServerVersion
+[INFO ] 2025-08-23 15:52:06.040 [main] MWLogger - writing timestamp 20250823154839
+[ERROR] 2025-08-23 15:52:06.041 [main] MWLogger - Client Version: 0.8.0 Server Version: 0.8.0
+[INFO ] 2025-08-23 15:52:06.042 [main] MWLogger - Command: ForceUpdateKey
+[INFO ] 2025-08-23 15:52:06.042 [main] MWLogger - writing timestamp 20250823154839
+[ERROR] 2025-08-23 15:52:06.042 [main] MWLogger - Server Key: 
+[INFO ] 2025-08-23 15:52:06.053 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.054 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.055 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.056 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.056 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.056 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.056 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.056 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.056 [main] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:52:06.059 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 15:52:06.059 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 15:52:06.067 [main] MWLogger - Command: PDiff
+[INFO ] 2025-08-23 15:52:06.068 [main] MWLogger - writing timestamp 20250823154839
+[INFO ] 2025-08-23 15:52:06.069 [main] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 15:52:06.069 [main] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 15:52:06.071 [main] MWLogger - update for new planet data finished
+[INFO ] 2025-08-23 15:52:06.072 [main] MWLogger - cache data loaded
+[INFO ] 2025-08-23 15:52:06.073 [main] MWLogger - Command: ConfigTimestamp
+[INFO ] 2025-08-23 15:52:06.074 [main] MWLogger - writing timestamp 20250823155206
+[ERROR] 2025-08-23 15:52:06.075 [main] MWLogger - Local Config: 1755982095530 Server Config: 1755982095530
+[INFO ] 2025-08-23 15:52:06.079 [main] MWLogger - Command: BannedAmmoTimeStamp
+[INFO ] 2025-08-23 15:52:06.079 [main] MWLogger - writing timestamp 20250823155206
+[ERROR] 2025-08-23 15:52:06.080 [main] MWLogger - Local Ban: 1755970398022 Server Ban: 1755970398022
+[INFO ] 2025-08-23 15:52:06.080 [main] MWLogger - Closing Socket.
+[INFO ] 2025-08-23 15:52:06.082 [main] MWLogger - Starting pAS
+[INFO ] 2025-08-23 15:52:06.632 [main] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:52:06.632 [main] MWLogger - Trying to connect to localhost at port 4867
+[INFO ] 2025-08-23 15:52:06.633 [main] MWLogger - writing timestamp 20250823155206
+[ERROR] 2025-08-23 15:52:06.644 [main] MWLogger - Opening socket connection to localhost:2347
+[ERROR] 2025-08-23 15:52:06.645 [main] MWLogger - CConnector: connected to localhost:2347
+[ERROR] 2025-08-23 15:52:06.646 [main] MWLogger - Connected. Signing on.
+[INFO ] 2025-08-23 15:52:06.651 [main] MWLogger - SENT: /signon	Afan	Starwars92	4		0.8.0.0	69b2f9f4c9beb6e9
+[INFO ] 2025-08-23 15:52:06.685 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:52:06.687 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823155206
+[INFO ] 2025-08-23 15:52:06.712 [ConnectionHandler$ReaderThread] MWLogger - Signon acknowledged
+[ERROR] 2025-08-23 15:52:06.712 [ConnectionHandler$ReaderThread] MWLogger - Signon acknowledged
+[INFO ] 2025-08-23 15:52:06.715 [ConnectionHandler$ReaderThread] MWLogger - CH|Welcome to ExampleTech (Server Version: 0.8.0.0, Compatible Clients: any 0.8.0.x)
+[INFO ] 2025-08-23 15:52:06.718 [ConnectionHandler$ReaderThread] MWLogger - CH|<a href="http://www.sourceforge.net/projects/mekwars">Click here to visit the MekWars project page.</a> This is a default message.<br> to make yourself an admin register your player name and then type in the following commands: /adminpassword level#your name#200<br>/Adminsetcommandlevel adminpassword#200<br>/Adminsavecommandlevels Server admins --- you may edit this message in serverconfig.txt
+[INFO ] 2025-08-23 15:52:06.718 [ConnectionHandler$ReaderThread] MWLogger - US
+[INFO ] 2025-08-23 15:52:06.719 [ConnectionHandler$ReaderThread] MWLogger - NU|Afan~0.8.0.0~unknown~1~false|NEW
+[INFO ] 2025-08-23 15:52:06.723 [ConnectionHandler$ReaderThread] MWLogger - PL|SH|Solaris Training Company
+[ERROR] 2025-08-23 15:52:06.723 [Thread-4] MWLogger - Wave file not found: 
+[INFO ] 2025-08-23 15:52:06.726 [ConnectionHandler$ReaderThread] MWLogger - SENT: /comm	CH%7c%2fc+getfactionconfigs%230-1
+[INFO ] 2025-08-23 15:52:06.728 [main] MWLogger - SENT: /comm	CH%7c%2fc+setclientversion%23Afan%230.8.0.0
+[INFO ] 2025-08-23 15:52:06.728 [main] MWLogger - SENT: /comm	CH%7c%2fgetsavedmail
+[INFO ] 2025-08-23 15:52:06.916 [ConnectionHandler$ReaderThread] MWLogger - PL|SSN|
+[INFO ] 2025-08-23 15:52:06.918 [ConnectionHandler$ReaderThread] MWLogger - GO|restrict_game_commands|false|hidden_units|false|check_victory|true|unjam_uac|false|bridgeCF|0|tacops_take_cover|false|tacops_jump_jet_attack|false|vehicle_acceleration|false|random_basements|true|no_forced_primary_targets|false|skip_ineligable_physical|true|tacops_start_fire|false|tacops_energy_weapons|false|disable_local_save|false|simultaneous_deployment|false|tacops_coolant_failure|false|tacops_grappling|false|pilot_advantages|false|rng_log|false|on_map_predesignate|false|tacops_altdmg|false|alternate_masc|false|inf_move_multi|false|vehicles_threshold_divisor|10|autosave_msg|true|heat_by_bay|false|tacops_vehicle_effective|false|tacops_attempting_stand|false|tacops_burst|false|stratops_bracket_fire|false|tacops_engine_explosions|false|maxtech_movement_mods|false|tacops_los_range|false|vehicle_turn_mode|false|tacops_walk_backwards|false|tacops_ba_weight|false|inf_move_later|false|aa_move_mod|false|kind_rapid_ac|false|tacops_taking_damage|false|indirect_always_possible|false|tacops_skilled_evasion|false|tacops_angel_ecm|false|deep_deployment|false|paranoid_autosave|false|stratops_ecm|false|no_premove_vibra|false|no_night_move_pen|false|team_vision|true|auto_ams|true|extreme_temperature_survival|false|vehicles_threshold|false|advanced_movement|false|at2_nukes|false|falls_end_movement|false|tacops_ppc_inhibitors|false|stratops_advanced_sensors|false|tacops_direct_blow|false|ba_grab_bars|false|tacops_glancing_blows|false|tacops_advanced_mech_hit_locations|false|vehicles_can_eject|false|tacops_attack_physical_psr|false|individual_initiative|false|tacops_hull_down|false|flamer_heat|false|indirect_fire|true|hotload_in_game|false|stratops_adv_pointdef|false|tacops_battle_wreck|false|tacops_physical_psr|false|clubs_punch|false|tacops_fumbles|false|lobby_ammo_dump|false|stratops_capital_fighter|false|blind_drop|false|auto_abandon_unit|false|tacops_leaping|false|tacops_range|false|inf_deploy_even|false|vehicle_lance_movement_number|4|skip_forced_victory|false|inf_proto_move_multi|3|edge|false|tacops_ammunition|false|tacops_bap|false|stratops_conv_fusion_bonus|false|tacops_dead_zones|false|fuel_consumption|false|manual_shutdown|false|stratops_harjel|false|aero_ground_move|true|pilots_cannot_spot|false|mek_lance_movement_number|4|reverse_gear|false|pilots_visual_range_one|false|supress_all_double_blind_messages|false|use_game_turn_limit|false|team_initiative|true|set_arty_player_homeedge|false|tacops_evade|false|breeze|false|uac_tworolls|false|achieve_conditions|1|map_area_predesignate|1088|armed_mechwarriors|false|woods_burn_down_amount|5|manei_domini|false|friendly_fire|false|no_tac|false|allow_large_squadrons|false|return_flyover|true|tacops_fast_infantry_move|false|initiative_streak_compensation|false|allow_illegal_units|false|push_off_board|true|no_ignite_clear|false|tacops_manual_ams|false|no_immobile_vehicles|false|ghost_target_max|5|metal_content|false|tacops_prone_fire|false|use_kill_count|false|tacops_leg_damage|false|full_rotor_hits|false|tacops_rapid_ac|false|protos_move_even|false|stratops_aaa_laser|false|tacops_sprint|false|vehicles_threshold_variable|false|tacops_heat|false|toughness|false|tacops_falling_expanded|false|stratops_quirks|false|magscan_nohills|false|variable_damage_thresh|false|tacops_trip_attack|false|tacops_mobile_hqs|false|canon_only|false|ejected_pilots_flee|false|stratops_sensor_shadow|false|use_bv_ratio|false|front_load_initiative|false|mek_lance_movement|false|vehicles_safe_from_infernos|false|stratops_space_bomb|false|assault_drop|false|tacops_tank_crews|false|max_external_heat|15|stratops_waypoint_launch|false|num_hexes_predesignate|5|year|3150|dumping_from_round|1|inclusive_sensor_range|false|techlevel|Standard|show_bay_detail|false|stratops_bearings_only_velocity|50|begin_shutdown|false|stratops_bearings_only|false|use_bv_destroyed|false|simultaneous_firing|false|double_blind|false|tacops_woods_cover|false|ammo_explosions|false|geometric_mean_bv|false|expanded_kf_drive_damage|false|forest_fires_no_smoke|false|psr_jump_heavy_woods|false|exclusive_db_deployment|true|commander_killed|false|vtol_strafing|false|increased_ac_dmg|false|case_pilot_damage|false|game_kill_count|4|simultaneous_movement|false|clan_ignore_eq_limits|false|tacops_called_shots|false|stratops_aa_fire|false|tacops_hotload|false|sensors_detect_all|false|conditional_ejection|false|tacops_sensors|false|protos_move_multi|false|tacops_dig_in|false|tacops_eccm|false|tacops_vtol_attacks|false|skip_ineligable_firing|false|rng_type|1|inf_move_even|false|alternate_masc_enhanced|false|rpg_gunnery|false|vehicle_lance_movement|false|tacops_retractable_blades|false|tacops_crit_roll|false|tacops_ba_criticals|false|all_have_ei_cockpit|false|paratroopers|false|stratops_grav_effects|false|protos_move_later|false|tacops_ba_vs_ba|false|tacops_gauss_weapons|false|suppress_double_blind_bv|false|tacops_partial_cover|false|vehicle_advanced_maneuvers|false|really_allow_nukes|false|tacops_skin_of_the_teeth_ejection|false|simultaneous_targeting|false|real_blind_drop|false|tacops_clusterhitpen|false|protos_safe_from_infernos|false|stratops_partialrepairs|false|command_init|false|aero_artillery_munitions|false|aero_sanity|false|tacops_standing_still|false|bv_destroyed_percent|100|no_hover_charge|false|simultaneous_physical|false|game_turn_limit|10|woods_burn_down|false|tacops_ams|false|stratops_over_penetrate|false|artillery_skill|false|era_based|false|single_no_cap|false|alternate_pilot_bv_mod|false|floating_crits|false|no_clan_physical|false|bv_ratio_percent|300|atmospheric_control|false|tacops_ziplines|false|reduced_overheat_modifier_bv|false|tacops_ghost_target|false|tacops_self_destruct|false|skip_ineligable_movement|false|tacops_LOS1|false|multiuse_ams|false|tacops_fatigue|false|turn_timer|0|tacops_charge_damage|false|tacops_vehicle_arcs|false|tacops_careful_stand|false|minefields|false|increased_iserll_range|false|allow_nukes|false|
+[INFO ] 2025-08-23 15:52:07.096 [ConnectionHandler$ReaderThread] MWLogger - CS|2
+[INFO ] 2025-08-23 15:52:07.098 [ConnectionHandler$ReaderThread] MWLogger - PL|PPQ|0$0$0$0$0$0$0$0$0$0$0$0$
+[INFO ] 2025-08-23 15:52:07.098 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:52:07.099 [ConnectionHandler$ReaderThread] MWLogger - PL|AEU|0$
+[INFO ] 2025-08-23 15:52:07.099 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823155206
+[INFO ] 2025-08-23 15:52:07.099 [ConnectionHandler$ReaderThread] MWLogger - PL|PEU|0$
+[INFO ] 2025-08-23 15:52:07.099 [ConnectionHandler$ReaderThread] MWLogger - HS|CA|0
+[INFO ] 2025-08-23 15:52:07.100 [ConnectionHandler$ReaderThread] MWLogger - HS|FN|Solaris Training Company|CC|0$0$10000$1|CC|1$0$20000$1|CC|2$0$45000$1|CC|3$0$95000$1|CC|0$1$10000$1|CC|1$1$20000$1|CC|2$1$45000$1|CC|3$1$95000$1|CC|0$2$10000$1|CC|1$2$20000$1|CC|2$2$45000$1|CC|3$2$95000$1|CC|0$3$10000$1|CC|1$3$20000$1|CC|2$3$45000$1|CC|3$3$95000$1|CC|0$4$10000$1|CC|1$4$20000$1|CC|2$4$45000$1|CC|3$4$95000$1|CC|0$5$10000$1|CC|1$5$20000$1|CC|2$5$45000$1|CC|3$5$95000$1|
+[INFO ] 2025-08-23 15:52:07.116 [ConnectionHandler$ReaderThread] MWLogger - PL|UPBM|
+[INFO ] 2025-08-23 15:52:07.116 [ConnectionHandler$ReaderThread] MWLogger - SBT||
+[INFO ] 2025-08-23 15:52:07.117 [ConnectionHandler$ReaderThread] MWLogger - PF|S
+[INFO ] 2025-08-23 15:52:07.118 [ConnectionHandler$ReaderThread] MWLogger - CH|<b>[*] Logged into <font color="#33CCCC"><a href="MEKWARS/c faction#Solaris Training Company">Solaris Training Company</a></font>.</b>
+[INFO ] 2025-08-23 15:52:07.118 [ConnectionHandler$ReaderThread] MWLogger - PS|CP~Afan~300~0~6~CM$Stinger STG-3G.blk$0$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Master Sgt. Adrian "Catfish" Jope#0#4#5#0#0#0#$0$0$232$0$1$~CM$Firestarter FS9-H.blk$1$1$Error loading unit. Tried to build from Firestarter FS9-H.blk$Cpt. Alessandra "Lippen" Bauer#0#4#5#0#0#0#$0$0$232$0$2$~CM$Stinger STG-3G.blk$2$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Major Angela "Tuba" Klein#0#4#5#0#0#0#$0$0$232$0$3$~CM$Blackjack BJ-1.mtf$3$1$Training Unit$Recruit Rob "Chachi" Polvino#0#4#5#0#0#0#$0$0$949$1$4$true$1$1$IS Ammo AC/2$45$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $~CM$Vulcan VL-2T.mtf$4$1$Training Unit$Major Ryan "Psycho" Ward#0#4#5#0#0#0#$0$0$642$1$5$true$2$3$IS Ammo MG - Full$200$false$1$IS Ammo AC/2$45$false$1$5$3$false$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $~CM$Wolverine WVR-6R.mtf$5$1$Training Unit$Cp. Fran "Bug" Utley#0#4#5#0#0#0#$0$0$1101$1$6$true$2$1$IS Ammo AC/5$20$false$9$IS Ammo SRM-6$15$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $~0~30~9~0~0~0~0~0~Solaris Training Company ~Solaris Training Company ~ ~false~| |~false~ ~&~
+[INFO ] 2025-08-23 15:52:07.121 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Stinger STG-3G.blk$0$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Master Sgt. Adrian "Catfish" Jope#0#4#5#0#0#0#$0$0$232$0$1$
+[INFO ] 2025-08-23 15:52:19.773 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Firestarter FS9-H.blk$1$1$Error loading unit. Tried to build from Firestarter FS9-H.blk$Cpt. Alessandra "Lippen" Bauer#0#4#5#0#0#0#$0$0$232$0$2$
+[INFO ] 2025-08-23 15:52:19.779 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Stinger STG-3G.blk$2$1$Error loading unit. Tried to build from Stinger STG-3G.blk$Major Angela "Tuba" Klein#0#4#5#0#0#0#$0$0$232$0$3$
+[INFO ] 2025-08-23 15:52:19.784 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Blackjack BJ-1.mtf$3$1$Training Unit$Recruit Rob "Chachi" Polvino#0#4#5#0#0#0#$0$0$949$1$4$true$1$1$IS Ammo AC/2$45$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:52:19.792 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Vulcan VL-2T.mtf$4$1$Training Unit$Major Ryan "Psycho" Ward#0#4#5#0#0#0#$0$0$642$1$5$true$2$3$IS Ammo MG - Full$200$false$1$IS Ammo AC/2$45$false$1$5$3$false$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:52:19.795 [ConnectionHandler$ReaderThread] MWLogger - PDATA: CM$Wolverine WVR-6R.mtf$5$1$Training Unit$Cp. Fran "Bug" Utley#0#4#5#0#0#0#$0$0$1101$1$6$true$2$1$IS Ammo AC/5$20$false$9$IS Ammo SRM-6$15$false$0$0$0$0$-1$%%-%%-%%-$false$0$0$false$ $
+[INFO ] 2025-08-23 15:52:19.799 [ConnectionHandler$ReaderThread] MWLogger - My Player Flags:  
+[INFO ] 2025-08-23 15:52:19.799 [ConnectionHandler$ReaderThread] MWLogger - PI|PL|Afan|0#0#2# #Solaris Training Company#false#|
+[INFO ] 2025-08-23 15:52:19.799 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:52:19.800 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823155206
+[INFO ] 2025-08-23 15:52:19.800 [ConnectionHandler$ReaderThread] MWLogger - PI|DA|Afan|0#0#2# #Solaris Training Company#false#
+[INFO ] 2025-08-23 15:52:19.800 [ConnectionHandler$ReaderThread] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:52:19.801 [ConnectionHandler$ReaderThread] MWLogger - writing timestamp 20250823155206
+[INFO ] 2025-08-23 15:52:19.802 [ConnectionHandler$ReaderThread] MWLogger - PL|SUD|1
+[INFO ] 2025-08-23 15:52:19.802 [ConnectionHandler$ReaderThread] MWLogger - PL|SHP|0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0*0
+[INFO ] 2025-08-23 15:52:19.808 [ConnectionHandler$ReaderThread] MWLogger - CC|NT|669181|false
+[INFO ] 2025-08-23 15:52:19.892 [ConnectionHandler$ReaderThread] MWLogger - CH|<font color="navy"><br>---<br>Warning: Your account is not password protected. [<a href="MWREG">Click to register</a>]<br>---<br></font>
+[INFO ] 2025-08-23 15:52:19.893 [ConnectionHandler$ReaderThread] MWLogger - PL|FC|DONE#DONE
+[INFO ] 2025-08-23 15:52:19.893 [ConnectionHandler$ReaderThread] MWLogger - PM|SERVER|You have stored mail.[<a href="MEKWARS/c requestservermail">Read</a>]
+[INFO ] 2025-08-23 15:52:19.940 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:52:19.940 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823155206
+[ERROR] 2025-08-23 15:52:20.064 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.069 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.072 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.076 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.079 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.083 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.169 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.172 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.175 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.179 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.182 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:20.187 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:44.642 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:52:44.646 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[INFO ] 2025-08-23 15:52:45.914 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:52:51.775 [AWT-EventQueue-0] MWLogger - SENT: /comm	CH%7cNG
+[INFO ] 2025-08-23 15:52:51.783 [ConnectionHandler$ReaderThread] MWLogger - CH|Afan|NG
+[INFO ] 2025-08-23 15:53:30.910 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:54:08.240 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:54:08.796 [AWT-EventQueue-0] MWLogger - SENT: /comm	CH%7c%2fc+requestservermail
+[INFO ] 2025-08-23 15:54:08.810 [ConnectionHandler$ReaderThread] MWLogger - PM|SERVER|8/23 8:18 [*] You've logged out of the campaign.
+[INFO ] 2025-08-23 15:54:15.927 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:54:26.295 [AWT-EventQueue-0] MWLogger - SENT: /comm	CH%7c%2fc+players
+[INFO ] 2025-08-23 15:54:26.348 [ConnectionHandler$ReaderThread] MWLogger - SM|<br><h2>Fighting Players:</h2><br><br><h2>Active Duty Players:</h2><br><br><h2>Reserve Duty Players:</h2><br><b><font color="#33CCCC"><a href="MEKWARS/c faction#Solaris Training Company">Solaris Training Company</a></font>:</b> Afan<br>
+[INFO ] 2025-08-23 15:54:35.634 [AWT-EventQueue-0] MWLogger - CH|CLIENT: It's impossible to check legality when you have no armies.
+[INFO ] 2025-08-23 15:54:42.840 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:54:42.870 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:55:00.912 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:55:45.920 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:56:30.912 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[ERROR] 2025-08-23 15:57:08.056 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:08.058 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:08.059 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:08.060 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:08.061 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:08.062 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.569 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.571 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.574 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.575 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.577 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.579 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.580 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.748 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.750 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.753 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.756 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.758 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.760 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.763 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.765 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:09.766 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.477 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.479 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.481 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.665 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.667 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.670 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.673 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.675 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.676 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.678 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.680 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.682 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.844 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:10.846 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:11.073 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:11.075 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:11.076 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:11.078 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:11.079 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:11.081 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:11.089 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[INFO ] 2025-08-23 15:57:15.916 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[ERROR] 2025-08-23 15:57:15.917 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:16.988 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:16.989 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:16.992 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:16.993 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:16.995 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.150 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.153 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.155 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.157 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.159 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.160 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.163 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.164 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.330 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.404 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.405 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.407 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.408 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.409 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.411 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:17.416 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:57:29.047 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[INFO ] 2025-08-23 15:57:42.893 [AWT-EventQueue-0] MWLogger - null
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforBVDNIforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforBVDNIforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforBVDNIforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforDMforVehicle in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforDMforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforDMforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforDMforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforDMforAero in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforEDforVehicle in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforEDforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforEDforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforEDforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.270 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforEDforAero in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforIMforVehicle in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforIMforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforIMforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforIMforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforIMforAero in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforMSforVehicle in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforMSforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforMSforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforMSforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforMSforAero in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforMTforVehicle in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforMTforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforMTforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.271 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforPRforVehicle in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforPRforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforPRforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforPRforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforPRforAero in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforPSforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforSVforVehicle in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforSVforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforSVforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforSVforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforSVforAero in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforVDNIforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforVDNIforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforVDNIforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforCPTforMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforCPTforVehicle in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforCPTforInfantry in serverconfig!
+[INFO ] 2025-08-23 15:58:00.272 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforCPTforProtoMek in serverconfig!
+[INFO ] 2025-08-23 15:58:00.273 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforCPTforBattleArmor in serverconfig!
+[INFO ] 2025-08-23 15:58:00.273 [AWT-EventQueue-0] MWLogger - You're missing the config variable: chanceforCPTforAero in serverconfig!
+[INFO ] 2025-08-23 15:58:00.273 [AWT-EventQueue-0] MWLogger - SM|<font color="black"><b><i>MekWars/MegaMek Pilot Skills</b></i><br><table><tr><th>Name</th><th>Abbrivation</th><th>Description</th></tr><tr><td>Astech</td><td>AT</td><td>Reduces the number of techs needed to repair a unit by 1<br>  Mek xp cost: 20 Vehicle xp cost: 20 Infantry xp cost: 20 ProtoMek xp cost: 20 BattleArmor xp cost: 20 Aero xp cost: 20</td></tr> <tr><td>Dodge Maneuver</td><td>DM</td><td>Enables the unit to make a dodge maneuver instead of a physical attack.<br>This maneuver adds +2 to the BTH to physical attacks against the unit.<br>  Mek xp cost: 20</td></tr><tr><td>Edge</td><td>ED</td><td>Allows Pilot to reroll 1 roll(per level) per game.<br>  Mek xp cost: 20</td></tr>     <tr><td>Iron Man</td><td>IM</td><td>NOTE: This is an unofficial rule. A pilot with this skill receives only<br>1 pilot hit from ammunition explosions.<br>  Mek xp cost: 20</td></tr><tr><td>Maneuvering Ace</td><td>MA</td><td>Enables the unit to move laterally like a Quad. Units also receive a -1<br>BTH to rolls against skidding.<br>  Mek xp cost: 20 Vehicle xp cost: 20 Infantry xp cost: 20 ProtoMek xp cost: 20 BattleArmor xp cost: 20 Aero xp cost: 20</td></tr><tr><td>Melee Specialist</td><td>MS</td><td>Enables the unit to do 1 additional point of damage with physical attacks<br>and subtracts one from the attacker movement modifier (to a minimum of zero).<br>  Mek xp cost: 20</td></tr><tr><td>MedTech</td><td>MT</td><td>A pilot with the MedTech skill will heal 1 extra point per tick.<br>  Mek xp cost: 20 ProtoMek xp cost: 20 Aero xp cost: 20</td></tr><tr><td>Natural Aptitude: Gunnery</td><td>NAG</td><td>The pilot checks leveling for gunnery at one level higher then current i.e.<br>5 instead of 4 for a 4/5 pilot.<br>  Mek xp cost: 20 Vehicle xp cost: 20 Infantry xp cost: 20 ProtoMek xp cost: 20 BattleArmor xp cost: 20 Aero xp cost: 20</td></tr><tr><td>Natural Aptitude: Piloting</td><td>NAP</td><td>The pilot checks leveling for piloting at one level higher then current i.e.<br>6 instead of 5 for a 4/5 pilot.<br>  Mek xp cost: 20 Vehicle xp cost: 20 Infantry xp cost: 20 ProtoMek xp cost: 20 BattleArmor xp cost: 20 Aero xp cost: 20</td></tr><tr><td>Pain Resistance</td><td>PR</td><td>When making consciousness rolls, 1 is added to all rolls. Also, damage received<BR>from ammo explosions is reduced to 1.<br>  Mek xp cost: 20</td></tr>  <tr><td>Survivalist</td><td>SV</td><td>If a pilot has this skill they will have a +20% of returning home if ejected and<br>left on the field.<br>  Mek xp cost: 20</td></tr>     </table>
+[INFO ] 2025-08-23 15:58:00.930 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:58:04.626 [AWT-EventQueue-0] MWLogger - Command: All
+[INFO ] 2025-08-23 15:58:04.626 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823155206
+[INFO ] 2025-08-23 15:58:04.629 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.629 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.629 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.630 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.631 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.632 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.632 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.632 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.632 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.632 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.632 [AWT-EventQueue-0] CampaignData - Adding AdvancedTerrain: 'none'
+[INFO ] 2025-08-23 15:58:04.632 [AWT-EventQueue-0] CampaignData - Adding House: 'None'
+[INFO ] 2025-08-23 15:58:04.632 [AWT-EventQueue-0] CampaignData - Adding House: 'Solaris Training Company'
+[INFO ] 2025-08-23 15:58:04.633 [AWT-EventQueue-0] MWLogger - Command: CommandAccessLevels
+[INFO ] 2025-08-23 15:58:04.633 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823155206
+[INFO ] 2025-08-23 15:58:04.638 [AWT-EventQueue-0] MWLogger - Command: ConfigTimestamp
+[INFO ] 2025-08-23 15:58:04.638 [AWT-EventQueue-0] MWLogger - writing timestamp 20250823155206
+[ERROR] 2025-08-23 15:58:04.640 [AWT-EventQueue-0] MWLogger - Local Config: 1755982095530 Server Config: 1755982095530
+[INFO ] 2025-08-23 15:58:45.921 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[INFO ] 2025-08-23 15:59:30.926 [ConnectionHandler$ReaderThread] MWLogger - Received server ping.
+[ERROR] 2025-08-23 15:59:40.087 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:40.089 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:40.090 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:40.091 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:40.092 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:40.092 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:44.932 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:44.933 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:44.934 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:44.935 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:44.935 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:44.936 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:45.106 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:45.107 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:45.108 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:45.110 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:45.111 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[ERROR] 2025-08-23 15:59:45.111 [AWT-EventQueue-0] MWLogger - EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.
+[INFO ] 2025-08-23 15:59:53.122 [AWT-EventQueue-0] MWLogger - SENT: /comm	NG%7cAfan~127.0.0.1~2346~12~0.49.0~+~
+[INFO ] 2025-08-23 15:59:53.122 [AWT-EventQueue-0] MWLogger - Joining own game!
+[INFO ] 2025-08-23 15:59:53.139 [AWT-EventQueue-0] MWLogger - SENT: /comm	JG%7cAfan
+[INFO ] 2025-08-23 15:59:53.144 [ConnectionHandler$ReaderThread] MWLogger - SL|NG|Afan~127.0.0.1~2346~12~0.49.0~ ~
+[INFO ] 2025-08-23 15:59:53.145 [ConnectionHandler$ReaderThread] MWLogger - SL|JG|Afan|Afan
+[INFO ] 2025-08-23 15:59:54.490 [pool-2-thread-1] MWLogger - SENT: /comm	CH%7c%2fc+RequestOperationSettings
+[INFO ] 2025-08-23 15:59:54.510 [ConnectionHandler$ReaderThread] MWLogger - GO|DONE|DONE
+[INFO ] 2025-08-23 16:00:08.645 [AWT-EventQueue-0] MWLogger - Leaving Afan
+[INFO ] 2025-08-23 16:00:08.645 [AWT-EventQueue-0] MWLogger - SENT: /comm	LG%7cAfan
+[INFO ] 2025-08-23 16:00:08.815 [ConnectionHandler$ReaderThread] MWLogger - SL|LG|Afan|Afan
+[INFO ] 2025-08-23 16:00:10.386 [AWT-EventQueue-0] MWLogger - Leaving Afan
+[INFO ] 2025-08-23 16:00:10.386 [AWT-EventQueue-0] MWLogger - SENT: /comm	LG%7cAfan
+[INFO ] 2025-08-23 16:00:14.900 [AWT-EventQueue-0] MWLogger - SENT: /signoff
+[INFO ] 2025-08-23 16:00:14.900 [AWT-EventQueue-0] MWLogger - Closing Socket.
+[ERROR] 2025-08-23 16:00:15.900 [ConnectionHandler$WriterThread] MWLogger - WriterThread: stopping gracefully.
