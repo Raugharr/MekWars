@@ -1850,29 +1850,6 @@ public final class CampaignMain implements Serializable {
             return;
         }
 
-        // No SHouse Data yet? Parse the XML file and creathe them
-        if (data.getAllHouses().size() == 0) {
-            try {
-				// FIXME: Write Converter
-                // XMLFactionDataParser parser = new XMLFactionDataParser("./data/factions.xml");
-                // for (SHouse h : parser.getFactions()) {
-                //     addHouse(h);
-                // }
-            } catch (Exception ex) {
-                MWLogger.errLog("Error while reading faction data -- bailing out");
-                MWLogger.errLog(ex);
-                MWLogger.mainLog("Error while reading Faction Data!");
-                System.exit(1);
-            }
-
-            // Add the Newbie-SHouse
-            SHouse solaris = new NewbieHouse(data.getUnusedHouseID(), CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
-            addHouse(solaris);
-            SHouse none = new MercHouse();
-            none.createNoneHouse();
-            addHouse(none);
-        }
-
         // No Planets Data yet? Parse XML and create world.
         if (data.getAllPlanets().size() == 0) {
 
@@ -3791,8 +3768,27 @@ public final class CampaignMain implements Serializable {
 
         // Check for new faction save location
         if (!factionFile.exists() || factionFile.listFiles().length < 1) {
-            MWLogger.errLog("Unable to find and load faction data");
-            MWLogger.errLog("Going to create from XML");
+			if (data.getAllHouses().size() == 0) {
+				try {
+					factionFile = new File("./data/factions.xml");
+					SHouse[] factionList = (SHouse[]) getXStream().fromXML(factionFile);
+					for (SHouse house : factionList) {
+						addHouse(house);
+					}
+				} catch (Exception ex) {
+					MWLogger.errLog("Error while reading faction data -- bailing out");
+					MWLogger.errLog(ex);
+					MWLogger.mainLog("Error while reading Faction Data!");
+					System.exit(1);
+				}
+
+				// Add the Newbie-SHouse
+				SHouse solaris = new NewbieHouse(data.getUnusedHouseID(), CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
+				addHouse(solaris);
+				SHouse none = new MercHouse();
+				none.createNoneHouse();
+				addHouse(none);
+			}
             return;
         }
 
@@ -3805,24 +3801,24 @@ public final class CampaignMain implements Serializable {
             try {
                 MekwarsFileReader dis = new MekwarsFileReader(faction);
                 String line = dis.readLine();
-                SHouse h;
+                SHouse house = null;
                 if (line.startsWith("[N][C]")) {
                     line = line.substring(6);
-                    h = new NewbieHouse(data.getUnusedHouseID());
+                    house = new NewbieHouse(data.getUnusedHouseID());
                 } else if (line.startsWith("[N]")) {
                     line = line.substring(3);
-                    h = new NewbieHouse(data.getUnusedHouseID());
+                    house = new NewbieHouse(data.getUnusedHouseID());
                 } else if (line.startsWith("[M]")) {
                     line = line.substring(3);
-                    h = new MercHouse(data.getUnusedHouseID());
+                    house = new MercHouse(data.getUnusedHouseID());
                 } else {
-                    h = new SHouse(data.getUnusedHouseID());
+                    house = new SHouse(data.getUnusedHouseID());
                 }
-                h.fromString(line, r);
+                house.fromString(line, r);
                 if (isUsingIncreasedTechs()) {
-                    h.addCommonUnitSupport();
+                    house.addCommonUnitSupport();
                 }
-                addHouse(h);
+                addHouse(house);
                 dis.close();
             } catch (Exception ex) {
                 MWLogger.errLog("Unable to load " + faction.getName());
@@ -3842,7 +3838,6 @@ public final class CampaignMain implements Serializable {
         }
 
         for (House currH : data.getAllHouses()) {
-
             String saveName = currH.getName().toLowerCase().trim() + ".dat";
             File faction = new File("./campaign/costmodifiers/" + saveName);
 

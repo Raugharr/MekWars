@@ -16,6 +16,9 @@
 
 package common;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,6 +54,7 @@ import megamek.common.AmmoType;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class CampaignData implements TerrainProvider {
+	private static final Logger logger = LogManager.getLogger(CampaignData.class);
 
     public static CampaignData cd;
 
@@ -243,6 +247,7 @@ public class CampaignData implements TerrainProvider {
      * @TODO You should use XStream to initialize CampaignData
      */
     public void addHouse(House faction) {
+		logger.info("Adding House: '{}'", faction.getName());
         if (faction.getId() == -1 && !faction.getName().equalsIgnoreCase("None")) {
             faction.setId(getUnusedHouseID());
         }
@@ -597,6 +602,7 @@ public class CampaignData implements TerrainProvider {
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
     public void addAdvancedTerrain(AdvancedTerrain newAdvTerrain) {
+		logger.info("Adding AdvancedTerrain: '{}'", newAdvTerrain.getName());
     	newAdvTerrain.setId(getUnusedAdvTerrainID());
         advTerrains.add(newAdvTerrain);
         advTerrains.trimToSize();

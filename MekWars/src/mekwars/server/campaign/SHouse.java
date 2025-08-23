@@ -330,9 +330,6 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             StringTokenizer ST = new StringTokenizer(s, "|");
             setName(TokenReader.readString(ST));
 
-            // start the chat logging.
-			MWLogger.infoLog(getName());
-
             setMoney(TokenReader.readInt(ST));
             setHouseColor(TokenReader.readString(ST));
             setBaseGunner(TokenReader.readInt(ST));
@@ -679,7 +676,6 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             // Stuff for MercHouse.. Has to be here until someone tells me how
             // to move it :) - McWiz
             if (isMercHouse()) {
-                MWLogger.mainLog("Merc House");
                 int contractamount = 0;
 
                 contractamount = TokenReader.readInt(ST);
@@ -691,9 +687,6 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                 }
                 ((MercHouse) this).setOutstandingContracts(merctable);
             }
-            
-            // if (CampaignMain.cm.isDebugEnabled())
-            MWLogger.mainLog("House loaded: " + getName());
 
             /*
              * this.getPilotQueues().setBaseGunnery(this.getBaseGunner());

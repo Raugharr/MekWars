@@ -459,8 +459,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                  cs = null;
 
                 if (!mwclient.getConfig().getParam("UNITCAMO").equals(Camouflage.NO_CAMOUFLAGE)) {
-					client.getLocalPlayer().setCamoCategory("ROOT_CAMO");
-					client.getLocalPlayer().setCamoFileName(mwclient.getConfig().getParam("UNITCAMO"));
+					client.getLocalPlayer().setCamouflage(new Camouflage(Camouflage.ROOT_CATEGORY, mwclient.getConfig().getParam("UNITCAMO")));
                     playerUpdate = true;
                 }
 
@@ -486,10 +485,10 @@ public class ClientThread extends Thread implements CloseClientListener {
                     entity.setCommander(currA.isCommander(mek.getId()));
 
                     // Set slights based on games light conditions.
-                    if ( !entity.hasSpotlight()){
+                    if ( !entity.hasSearchlight()){
                         entity.getQuirks().getOption("searchlight").setValue(nightGame);
                     }
-                    entity.setSpotlightState(nightGame);
+                    entity.setSearchlightState(nightGame);
 
                     // Set the correct home edge for off board units
                     if (entity.isOffBoard()) {
@@ -547,8 +546,8 @@ public class ClientThread extends Thread implements CloseClientListener {
                     Entity entity = autoUnit.getEntity();
 
                     // Set slights based on games light conditions.
-                   	entity.setExternalSpotlight(nightGame);
-                    entity.setSpotlightState(nightGame);
+                   	entity.setExternalSearchlight(nightGame);
+                    entity.setSearchlightState(nightGame);
 
                     // Had issues with Id's so we are now setting them.
                     // entity.setId(autoUnit.getId());
