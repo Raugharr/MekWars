@@ -1,2 +1,9 @@
 
 .vscode/settings.json
+*.swp
+*.swo
+MekWarsServer/build
+MekWarsClient/build
+MekWarsCommon/build
+MekWarsDedicatedHost/build
+MekWarsHPGNet/build
