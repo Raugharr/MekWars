@@ -54,7 +54,7 @@ public class AdminCreateSolarisCommand implements Command {
         }
 
         // Add the Newbie-SHouse
-        SHouse solaris = new NewbieHouse(CampaignMain.cm.getData().getUnusedHouseID(), CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
+        SHouse solaris = new NewbieHouse(CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
 
         CampaignMain.cm.addHouse(solaris);
         HashMap<Integer, Integer> solFlu = new HashMap<Integer, Integer>();

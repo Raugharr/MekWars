@@ -38,7 +38,7 @@ import megamek.common.PlanetaryConditions;
  */
 
 public class Planet implements Comparable<Object>, MutableSerializable {
-	private static int PlanetId = 0;
+    private static int PlanetId = 0;
 
     // VARIABLES
     /**
@@ -141,7 +141,10 @@ public class Planet implements Comparable<Object>, MutableSerializable {
 
     // CONSTRUCTORS
     public Planet(String name, Position position, Influences influence) {
-		setId(PlanetId++);
+        if(influence == null) {
+            throw new IllegalArgumentException();
+        }
+        setId(PlanetId++);
         setName(name);
         setPosition(position);
         setInfluence(influence);
@@ -158,7 +161,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
      * Read the stream back to a Planet object.
      */
     public Planet(BinReader in, Map<Integer, House> factions, CampaignData data) throws IOException {
-    	this.binIn(in, data);
+        this.binIn(in, data);
     }
 
     // METHODS
@@ -628,7 +631,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
         result.append(getName() + "</b>");
         
         if (level >= 100) {
-        	result.append(" (ID: " + getId() + ")");
+            result.append(" (ID: " + getId() + ")");
         }
         
         result.append("<br><br>");
@@ -683,8 +686,8 @@ public class Planet implements Comparable<Object>, MutableSerializable {
                 result.append("<br>Average Low: " + pe.getAdvancedTerrain().getLowTemp());
                 result.append("<br>Average High: " + pe.getAdvancedTerrain().getHighTemp());
                 result.append("<br>Night Temp Mod: " + pe.getAdvancedTerrain().getNightTempMod());
-                result.append("<br>" + pe.getAdvancedTerrain().WeatherForcast() );                
-            	}
+                result.append("<br>" + pe.getAdvancedTerrain().WeatherForcast());
+                }
         }
 
         // influence

@@ -913,46 +913,30 @@
 			</inf>
 		</influence>
 		<unitFactory>
-			<factoryName>Corean Enterprises</factoryName>
+			<name>Corean Enterprises</name>
 			<size>Light</size>
 			<founder>Davion</founder>
-			<timeZone>
-				<timeZoneName>3025</timeZoneName>
-				<timeZoneProbability>100</timeZoneProbability>
-			</timeZone>
 			<type>Vehicle</type>
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Achernar Battlemeks</factoryName>
+			<name>Achernar Battlemeks</name>
 			<size>Medium</size>
 			<founder>Davion</founder>
-			<timeZone>
-				<timeZoneName>3025</timeZoneName>
-				<timeZoneProbability>100</timeZoneProbability>
-			</timeZone>
 			<type>Vehicle</type>
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Kallon Heavy Industries</factoryName>
+			<name>Kallon Heavy Industries</name>
 			<size>Heavy</size>
 			<founder>Davion</founder>
-			<timeZone>
-				<timeZoneName>3025</timeZoneName>
-				<timeZoneProbability>100</timeZoneProbability>
-			</timeZone>
 			<type>Vehicle</type>
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>General Motors and Blackwell Industries</factoryName>
+			<name>General Motors and Blackwell Industries</name>
 			<size>Assault</size>
 			<founder>Davion</founder>
-			<timeZone>
-				<timeZoneName>3025</timeZoneName>
-				<timeZoneProbability>100</timeZoneProbability>
-			</timeZone>
 			<type>Vehicle</type>
 			<type>Mek</type>
 		</unitFactory>
@@ -2130,46 +2114,30 @@
 			</inf>
 		</influence>
 		<unitFactory>
-			<factoryName>Luthien Armour Works</factoryName>
+			<name>Luthien Armour Works</name>
 			<size>Light</size>
 			<founder>Kurita</founder>
-			<timeZone>
-				<timeZoneName>3025</timeZoneName>
-				<timeZoneProbability>100</timeZoneProbability>
-			</timeZone>
 			<type>Vehicle</type>
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Gorton, Kingsley and Thorpe Enterprises</factoryName>
+			<name>Gorton, Kingsley and Thorpe Enterprises</name>
 			<size>Medium</size>
 			<founder>Kurita</founder>
-			<timeZone>
-				<timeZoneName>3025</timeZoneName>
-				<timeZoneProbability>100</timeZoneProbability>
-			</timeZone>
 			<type>Vehicle</type>
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Bulldog Enterprises</factoryName>
+			<name>Bulldog Enterprises</name>
 			<size>Heavy</size>
 			<founder>Kurita</founder>
-			<timeZone>
-				<timeZoneName>3025</timeZoneName>
-				<timeZoneProbability>100</timeZoneProbability>
-			</timeZone>
 			<type>Vehicle</type>
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Luthien Armour Works</factoryName>
+			<name>Luthien Armour Works</name>
 			<size>Assault</size>
 			<founder>Kurita</founder>
-			<timeZone>
-				<timeZoneName>3025</timeZoneName>
-				<timeZoneProbability>100</timeZoneProbability>
-			</timeZone>
 			<type>Vehicle</type>
 			<type>Mek</type>
 		</unitFactory>
@@ -3398,7 +3366,7 @@
 			</inf>
 		</influence>
 		<unitFactory>
-			<factoryName>Hellespont Mekworks</factoryName>
+			<name>Hellespont Mekworks</name>
 			<size>Light</size>
 			<founder>Liao</founder>
 			<timeZone>
@@ -3409,7 +3377,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Ceres Metals Industries</factoryName>
+			<name>Ceres Metals Industries</name>
 			<size>Medium</size>
 			<founder>Liao</founder>
 			<timeZone>
@@ -3420,7 +3388,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Quickscell Company</factoryName>
+			<name>Quickscell Company</name>
 			<size>Heavy</size>
 			<founder>Liao</founder>
 			<timeZone>
@@ -3431,7 +3399,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Aldis Industries</factoryName>
+			<name>Aldis Industries</name>
 			<size>Assault</size>
 			<founder>Liao</founder>
 			<timeZone>
@@ -3969,7 +3937,7 @@
 			</inf>
 		</influence>
 		<unitFactory>
-			<factoryName>Kali Yama Weapons Industries Inc.</factoryName>
+			<name>Kali Yama Weapons Industries Inc.</name>
 			<size>Light</size>
 			<founder>Marik</founder>
 			<timeZone>
@@ -3980,7 +3948,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Earthwerks Incorporated</factoryName>
+			<name>Earthwerks Incorporated</name>
 			<size>Medium</size>
 			<founder>Marik</founder>
 			<timeZone>
@@ -3991,7 +3959,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Federated Battlemeks</factoryName>
+			<name>Federated Battlemeks</name>
 			<size>Heavy</size>
 			<founder>Marik</founder>
 			<timeZone>
@@ -4002,7 +3970,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Atreus Battlemeks Unlimited</factoryName>
+			<name>Atreus Battlemeks Unlimited</name>
 			<size>Assault</size>
 			<founder>Marik</founder>
 			<timeZone>
@@ -6021,7 +5989,7 @@
 			</inf>
 		</influence>
 		<unitFactory>
-			<factoryName>TharHes Industries</factoryName>
+			<name>TharHes Industries</name>
 			<size>Light</size>
 			<founder>Steiner</founder>
 			<timeZone>
@@ -6032,7 +6000,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Defiance Industries</factoryName>
+			<name>Defiance Industries</name>
 			<size>Medium</size>
 			<founder>Steiner</founder>
 			<timeZone>
@@ -6043,7 +6011,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Olivetti Weaponry</factoryName>
+			<name>Olivetti Weaponry</name>
 			<size>Heavy</size>
 			<founder>Steiner</founder>
 			<timeZone>
@@ -6054,7 +6022,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Defiance Industries</factoryName>
+			<name>Defiance Industries</name>
 			<size>Assault</size>
 			<founder>Steiner</founder>
 			<timeZone>
@@ -6388,7 +6356,7 @@
 			</inf>
 		</influence>
 		<unitFactory>
-			<factoryName>Valiant Systems</factoryName>
+			<name>Valiant Systems</name>
 			<size>Light</size>
 			<founder>Davion</founder>
 			<timeZone>
@@ -6399,7 +6367,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Cray Components</factoryName>
+			<name>Cray Components</name>
 			<size>Medium</size>
 			<founder>Davion</founder>
 			<timeZone>
@@ -6410,7 +6378,7 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Kallon Heavy Industries</factoryName>
+			<name>Kallon Heavy Industries</name>
 			<size>Heavy</size>
 			<founder>Davion</founder>
 			<timeZone>
@@ -6421,13 +6389,9 @@
 			<type>Mek</type>
 		</unitFactory>
 		<unitFactory>
-			<factoryName>Terra Firma</factoryName>
+			<name>Terra Firma</name>
 			<size>Assault</size>
 			<founder>Davion</founder>
-			<timeZone>
-				<timeZoneName>3025</timeZoneName>
-				<timeZoneProbability>100</timeZoneProbability>
-			</timeZone>
 			<type>Vehicle</type>
 			<type>Mek</type>
 		</unitFactory>

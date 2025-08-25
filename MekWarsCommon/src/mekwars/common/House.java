@@ -35,6 +35,7 @@ import megamek.common.TechConstants;
  * 
  */
 public class House {
+    private static int HouseId = 0;
 
     public static final int RED_VALUE = 0;
     public static final int GREEN_VALUE = 1;
@@ -292,22 +293,9 @@ public class House {
         dbId = id;
     }
 
-    /**
-     * @param id
-     */
-    public House(int id) {
-        this.id = id;
-        for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
-            baseGunner.add(4);
-            basePilot.add(5);
-            basePilotSkills.add(" ");
-        }
-    }
 
-    /**
-     * Constructor used for serialization
-     */
     public House() {
+        this.id = HouseId++;
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
             baseGunner.add(4);
             basePilot.add(5);

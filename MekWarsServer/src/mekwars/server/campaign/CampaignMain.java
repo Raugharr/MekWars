@@ -42,6 +42,7 @@ import java.util.Vector;
 
 import common.AdvancedTerrain;
 import common.CampaignData;
+import common.Continent;
 import common.Equipment;
 import common.House;
 import common.Influences;
@@ -67,6 +68,7 @@ import server.campaign.converters.SPlanetConverter;
 import server.campaign.converters.SUnitFactoryConverter;
 import server.campaign.converters.SHouseConverter;
 import server.campaign.converters.TerrainConverter;
+import server.campaign.converters.InfluencesConverter;
 import server.campaign.commands.*;
 import server.campaign.commands.admin.*;
 import server.campaign.commands.helpers.HireAndMaintainHelper;
@@ -355,7 +357,6 @@ public final class CampaignMain implements Serializable {
         partsmarket = new PartsMarket();
 
         SPilotSkills.initializePilotSkills();
-        // data.clearHouses();
 
         // Load & Init Data
         data = new CampaignData();
@@ -367,9 +368,13 @@ public final class CampaignMain implements Serializable {
         xstream.registerConverter(new SHouseConverter());
         xstream.registerConverter(new SUnitFactoryConverter());
         xstream.registerConverter(new TerrainConverter());
+        xstream.registerConverter(new InfluencesConverter());
+        xstream.alias("continent", Continent.class);
         xstream.alias("planet", SPlanet.class);
-        xstream.alias("terrain", Terrain.class);
+        xstream.alias("faction", SHouse.class);
         xstream.alias("unitFactory", SUnitFactory.class);
+        xstream.alias("terrain", Terrain.class);
+        xstream.alias("influences", Influences.class);
 
         File terrainFile = new File("./data/terrain.xml");
         Terrain[] terrainList = (Terrain[]) getXStream().fromXML(terrainFile);
@@ -2641,38 +2646,38 @@ public final class CampaignMain implements Serializable {
         return (SHouse) data.getHouse(id);
     }
 
-    public SHouse getHouseFromPartialString(String HouseString, String Username) {
-
+    public SHouse getHouseFromPartialString(String houseString, String username) {
         // store matches so we can tell player if there's more than one
         int numMatches = 0;
         SHouse theMatch = null;
 
         for (House currH : data.getAllHouses()) {
-            SHouse sh = (SHouse) currH;
+            SHouse shouse = (SHouse) currH;
+			logger.info("checking house {}", shouse.getName());
 
             // exact match
-            if (sh.getName().equals(HouseString)) {
-                return sh;
+            if (shouse.getName().equals(houseString)) {
+                return shouse;
             }
 
             // store all matches
-            if (sh.getName().startsWith(HouseString)) {
-                theMatch = sh;
+            if (shouse.getName().startsWith(houseString)) {
+                theMatch = shouse;
                 numMatches++;
             }
         }
 
         // too many matches
         if (numMatches > 1) {
-            if (Username != null) {
-                toUser("\"" + HouseString + "\" is not unique [" + numMatches + " matches]. Please be more specific.", Username);
+            if (username != null) {
+                toUser("\"" + houseString + "\" is not unique [" + numMatches + " matches]. Please be more specific.", username);
             }
             return null;
         }
 
         if (numMatches == 0) {
-            if (Username != null) {
-                toUser("Couldn't find a factions whose name begins with \"" + HouseString + "\". Try again.", Username, true);
+            if (username != null) {
+                toUser("Couldn't find a factions whose name begins with \"" + houseString + "\". Try again.", username, true);
             }
             return null;
         }
@@ -3799,9 +3804,8 @@ public final class CampaignMain implements Serializable {
                     MWLogger.mainLog("Error while reading Faction Data!");
                     System.exit(1);
                 }
-
                 // Add the Newbie-SHouse
-                SHouse solaris = new NewbieHouse(data.getUnusedHouseID(), CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
+                SHouse solaris = new NewbieHouse(CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
                 addHouse(solaris);
                 SHouse none = new MercHouse();
                 none.createNoneHouse();
@@ -3822,15 +3826,15 @@ public final class CampaignMain implements Serializable {
                 SHouse house = null;
                 if (line.startsWith("[N][C]")) {
                     line = line.substring(6);
-                    house = new NewbieHouse(data.getUnusedHouseID());
+                    house = new NewbieHouse();
                 } else if (line.startsWith("[N]")) {
                     line = line.substring(3);
-                    house = new NewbieHouse(data.getUnusedHouseID());
+                    house = new NewbieHouse();
                 } else if (line.startsWith("[M]")) {
                     line = line.substring(3);
-                    house = new MercHouse(data.getUnusedHouseID());
+                    house = new MercHouse();
                 } else {
-                    house = new SHouse(data.getUnusedHouseID());
+                    house = new SHouse();
                 }
                 house.fromString(line, r);
                 if (isUsingIncreasedTechs()) {
@@ -3977,7 +3981,6 @@ public final class CampaignMain implements Serializable {
     }
 
     public void loadPlanetData() {
-
         loadPlanetOpFlags();
 
         File planetFile = new File("./campaign/planets");

@@ -164,9 +164,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         result.append(getLogo());
 
         if (getAnnouncement().equals("")) {
-        	result.append(" ");
+            result.append(" ");
         } else {
-        	result.append(stripReturns(getAnnouncement()));
+            result.append(stripReturns(getAnnouncement()));
         }
 
         // Write the Components / BuildingPP's
@@ -317,10 +317,10 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
      * @return sanitized String
      */
     private String stripReturns(String motd) {
-		return motd.replaceAll("[\\r\\n]", "");
-	}
+        return motd.replaceAll("[\\r\\n]", "");
+    }
 
-	public Hashtable<Integer, Vector<Integer>> getComponents() {
+    public Hashtable<Integer, Vector<Integer>> getComponents() {
         return Components;
     }
 
@@ -704,23 +704,15 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         }
     }
 
-    public SHouse(int id) {
-        super(id);
-    }
-
     /**
      * Constructor used for serialization
      */
     public SHouse() {
+        super();
         reservePlayers = new ConcurrentHashMap<String, SPlayer>();
         activePlayers = new ConcurrentHashMap<String, SPlayer>();
         fightingPlayers = new ConcurrentHashMap<String, SPlayer>();
         SmallPlayers = new Hashtable<String, SmallPlayer>();
-        for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
-            setBaseGunner(4, pos);
-            setBasePilot(5, pos);
-        }
-
     }
 
     /*
@@ -758,13 +750,11 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         pilotQueues = q;
     }
 
-    public SHouse(int id, String name, String HouseColor, int BaseGunner, int BasePilot, String abbreviation) {
-        super(id);
+    public SHouse(String name, String houseColor, int baseGunner, int basePilot, String abbreviation) {
+        super();
         setAbbreviation(abbreviation);
-        setHouseColor(HouseColor);
+        setHouseColor(houseColor);
         setName(name);
-
-		MWLogger.infoLog(getName());
         // Vehicles = new Vector();
 
         for (int j = 0; j < 5; j++) // Type
@@ -1055,22 +1045,22 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                     SUnit randUnit;
                     
                     if (CampaignMain.cm.getBooleanConfig("ScrapOldestUnitsFirst")) {
-                    	Collections.sort(v);
-                    	// Crap.  This could loop, if every unit is on the BM already.
-                    	// So, find the first unit thatis not already for sale
-                    	int unitToGet = -1;
-                    	for (int j = 0; j < v.size(); j++ ) {
-                    		if (unitToGet == -1 && v.elementAt(j).getStatus() != Unit.STATUS_FORSALE) {
-                    			unitToGet = j;
-                    		}
-                    	}
-                    	if (unitToGet == -1) {
-                    		// Nothing to see here, move along
-                    		continue;
-                    	}
-                    	randUnit = v.elementAt(unitToGet);
+                        Collections.sort(v);
+                        // Crap.  This could loop, if every unit is on the BM already.
+                        // So, find the first unit thatis not already for sale
+                        int unitToGet = -1;
+                        for (int j = 0; j < v.size(); j++ ) {
+                            if (unitToGet == -1 && v.elementAt(j).getStatus() != Unit.STATUS_FORSALE) {
+                                unitToGet = j;
+                            }
+                        }
+                        if (unitToGet == -1) {
+                            // Nothing to see here, move along
+                            continue;
+                        }
+                        randUnit = v.elementAt(unitToGet);
                     } else {
-                    	randUnit = v.elementAt(CampaignMain.cm.getRandomNumber(v.size()));
+                        randUnit = v.elementAt(CampaignMain.cm.getRandomNumber(v.size()));
                     }
 
                     if (randUnit.getStatus() == Unit.STATUS_FORSALE) {
@@ -1083,7 +1073,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                         // Use standard factory pricing for the unit, and
                         // configured ticks.
                         //int minPrice = getPriceForUnit(i, type_id);
-                    	int minPrice = getBMPriceForUnit(i, type_id);
+                        int minPrice = getBMPriceForUnit(i, type_id);
                         String saleTicksString = Unit.getWeightClassDesc(randUnit.getWeightclass()) + "SaleTicks";
                         // add 1 to the sale tick due to a quirk with the BM
                         // autoupdate.
@@ -1095,7 +1085,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                         // Add the unit to the market, and tell the faction
                         CampaignMain.cm.getMarket().addListing(getName(), randUnit, minPrice, saleTicks);
                         if (!Boolean.parseBoolean(CampaignMain.cm.getConfig("HiddenBMUnits"))) {
-                        	marketAdditions.append(StringUtils.aOrAn(randUnit.getModelName(), false) + " was added to the black market.<br>");
+                            marketAdditions.append(StringUtils.aOrAn(randUnit.getModelName(), false) + " was added to the black market.<br>");
                         }
                         hsUpdates.append(getHSUnitRemovalString(randUnit));// "remove"
                         // unit
@@ -1144,9 +1134,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                     SUnitFactory m = getNativeFactoryForProduction(type_id, weight, CampaignMain.cm.getBooleanConfig("OnlyUseOriginalFactoriesForAutoprod"));
                     int failureRateToUse;
                     if(Boolean.parseBoolean(this.getConfig("UseAutoProdClassic"))) {
-                    	failureRateToUse = Integer.parseInt(this.getConfig("AutoProductionFailureRate"));
+                        failureRateToUse = Integer.parseInt(this.getConfig("AutoProductionFailureRate"));
                     } else {
-                    	failureRateToUse = Integer.parseInt(this.getConfig("APFailureRate" + Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type_id)));
+                        failureRateToUse = Integer.parseInt(this.getConfig("APFailureRate" + Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type_id)));
                     }
                     if (CampaignMain.cm.getRandomNumber(100) + 1 <= failureRateToUse) {
                         accident = true;
@@ -1489,13 +1479,13 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
     }
     
     public int getMaxAllowedPP(int weight, int type_id) {
-    	String unitAPMax = "";
+        String unitAPMax = "";
         if(CampaignMain.cm.getBooleanConfig("UseAutoProdNew")) {
-        	unitAPMax = "APAtMax" + Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type_id);
+            unitAPMax = "APAtMax" + Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type_id);
         } else {
-        	unitAPMax = "APAtMax" + Unit.getWeightClassDesc(weight) + "Units";        	
+            unitAPMax = "APAtMax" + Unit.getWeightClassDesc(weight) + "Units";            
         }
-    	int maxUnits = Integer.parseInt(this.getConfig(unitAPMax));
+        int maxUnits = Integer.parseInt(this.getConfig(unitAPMax));
         return maxUnits * getPPCost(weight, type_id);
     }
 
@@ -1533,12 +1523,12 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
      * @param armyWeight
      */
     public void addActivityPP(Double armyWeight) {
-    	activityPP += armyWeight;
-    	MWLogger.debugLog("Adding " + armyWeight + " in production. " + getName() + " total now " + activityPP);
+        activityPP += armyWeight;
+        MWLogger.debugLog("Adding " + armyWeight + " in production. " + getName() + " total now " + activityPP);
     }
     
     public void resetActivityPP() {
-    	activityPP = 0;
+        activityPP = 0;
     }
     
     public void calcActivityPP(Double armyWeight) {
@@ -1558,7 +1548,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             // has territory on
             SPlanet p = e.next();
             if (equals(p.getOwner())) {
-            	MWLogger.debugLog("Calling tick on " + p.getName() + " to add " + refreshToAdd + " refresh");
+                MWLogger.debugLog("Calling tick on " + p.getName() + " to add " + refreshToAdd + " refresh");
                 hsUpdates.append(p.tick(refreshToAdd));// call the planetary
                 // tick
             }
@@ -1589,7 +1579,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             if (useInfantryPP) {
                 MWLogger.debugLog("Updating House Infantry: " + i);
                 if (!Boolean.parseBoolean(this.getConfig("UseOnlyLightInfantry")) || i == Unit.LIGHT) {
-                	hsUpdates.append(addPP(i, Unit.INFANTRY, componentsToAdd, true));
+                    hsUpdates.append(addPP(i, Unit.INFANTRY, componentsToAdd, true));
                 }
                 addComponentsProduced(Unit.INFANTRY, componentsToAdd);
             }
@@ -1884,10 +1874,10 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
     }
 
     private int getBMPriceForUnit(int weight, int type) {
-    	int price = getPriceForUnit(weight, type);
-    	double multiplier = CampaignMain.cm.getDoubleConfig("BMPriceMultiplier_" + Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type));
-    	int finalPrice = (int)(price * multiplier);
-    	return finalPrice;
+        int price = getPriceForUnit(weight, type);
+        double multiplier = CampaignMain.cm.getDoubleConfig("BMPriceMultiplier_" + Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type));
+        int finalPrice = (int)(price * multiplier);
+        return finalPrice;
     }
     
     private void parseSupportFile(String fileName, boolean addUnits) {
@@ -2190,17 +2180,17 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         tsBans.append("SBT|");
        
         for (int ban : CampaignMain.cm.getData().getBannedTargetingSystems()) {
-        	tsBans.append(ban);
-        	tsBans.append("|");
+            tsBans.append(ban);
+            tsBans.append("|");
         }
         tsBans.append("|");
         CampaignMain.cm.toUser(tsBans.toString(), realName, false);
         
         // Send default player flags if it's an admin or mod
         if (CampaignMain.cm.getServer().isModerator(p.getName()) || CampaignMain.cm.getServer().isAdmin(p.getName())) {
-        	if(!CampaignMain.cm.getDefaultPlayerFlags().isEmpty()) {
-        		CampaignMain.cm.toUser("PF|SDF|" + CampaignMain.cm.getDefaultPlayerFlags().export(), p.getName(), false);
-        	}
+            if(!CampaignMain.cm.getDefaultPlayerFlags().isEmpty()) {
+                CampaignMain.cm.toUser("PF|SDF|" + CampaignMain.cm.getDefaultPlayerFlags().export(), p.getName(), false);
+            }
         }
         
         
@@ -2385,23 +2375,23 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
          */
         
         if (!(this.isNewbieHouse() && Boolean.parseBoolean(CampaignMain.cm.getConfig("HiddenBMUnits")))) {
-			for (int type_id = 0; type_id < Unit.TOTALTYPES; type_id++) {
+            for (int type_id = 0; type_id < Unit.TOTALTYPES; type_id++) {
 
-				for (int weight = Unit.LIGHT; weight <= Unit.ASSAULT; weight++) {
+                for (int weight = Unit.LIGHT; weight <= Unit.ASSAULT; weight++) {
 
-					// skip units that are for sale. send all others.
-					Vector<SUnit> unitSet = this.getHangar(type_id).elementAt(
-							weight);
-					for (SUnit currU : unitSet) {
-						if (currU.getStatus() == Unit.STATUS_FORSALE) {
-							continue;
-						}
-						result.append(getHSUnitAdditionString(currU));
-					}
-				}
-			}
-		}
-		return result.toString();
+                    // skip units that are for sale. send all others.
+                    Vector<SUnit> unitSet = this.getHangar(type_id).elementAt(
+                            weight);
+                    for (SUnit currU : unitSet) {
+                        if (currU.getStatus() == Unit.STATUS_FORSALE) {
+                            continue;
+                        }
+                        result.append(getHSUnitAdditionString(currU));
+                    }
+                }
+            }
+        }
+        return result.toString();
     }
 
     /**
@@ -2814,11 +2804,11 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
         
     public boolean canBuyFromBM(int unitType, int unitWeight) {
-    	return bmLimits[unitType][unitWeight];
+        return bmLimits[unitType][unitWeight];
     }
     
     public void setCanBuyFromBM(int unitType, int unitWeight, boolean canBuy) {
-    	bmLimits[unitType][unitWeight] = canBuy;
+        bmLimits[unitType][unitWeight] = canBuy;
     }
 
     public void sendMessageToHouseLeaders(String msg) {
@@ -2899,14 +2889,14 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
     }
 
     public String getAnnouncement() {
-		return announcement;
-	}
+        return announcement;
+    }
 
-	public void setAnnouncement(String announcement) {
-		this.announcement = announcement;
-	}
+    public void setAnnouncement(String announcement) {
+        this.announcement = announcement;
+    }
 
-	public void createNoneHouse() {
+    public void createNoneHouse() {
         setName("None");
         setId(-1);
         setConquerable(false);
@@ -2916,7 +2906,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         setHouseColor(CampaignMain.cm.getConfig("DisputedPlanetColor"));
         setHousePlayerColors(CampaignMain.cm.getConfig("DisputedPlanetColor"));
 
-		MWLogger.debugLog(getName());
+        MWLogger.debugLog(getName());
         // Vehicles = new Vector();
 
         for (int j = 0; j < 5; j++) // Type
@@ -3076,7 +3066,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         return amount;
     }
 
-	public void addComponentConverter(ComponentToCritsConverter converter) {
+    public void addComponentConverter(ComponentToCritsConverter converter) {
         componentConverter.put(converter.getCritName(), converter);
     }
 
@@ -3085,7 +3075,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
     }
 
     private void produceCrits() {
-    	
+        
         if (!CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
             return;
         }
@@ -3189,35 +3179,35 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
     }
     
     public void populateBMLimits() {
-    	bmLimits[Unit.MEK][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightMeks");
-    	bmLimits[Unit.MEK][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumMeks");
-    	bmLimits[Unit.MEK][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyMeks");
-    	bmLimits[Unit.MEK][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultMeks");
+        bmLimits[Unit.MEK][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightMeks");
+        bmLimits[Unit.MEK][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumMeks");
+        bmLimits[Unit.MEK][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyMeks");
+        bmLimits[Unit.MEK][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultMeks");
 
-    	bmLimits[Unit.VEHICLE][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightVehicles");
-    	bmLimits[Unit.VEHICLE][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumVehicles");
-    	bmLimits[Unit.VEHICLE][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyVehicles");
-    	bmLimits[Unit.VEHICLE][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultVehicles");
+        bmLimits[Unit.VEHICLE][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightVehicles");
+        bmLimits[Unit.VEHICLE][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumVehicles");
+        bmLimits[Unit.VEHICLE][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyVehicles");
+        bmLimits[Unit.VEHICLE][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultVehicles");
 
-    	bmLimits[Unit.INFANTRY][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightInfantry");
-    	bmLimits[Unit.INFANTRY][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumInfantry");
-    	bmLimits[Unit.INFANTRY][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyInfantry");
-    	bmLimits[Unit.INFANTRY][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultInfantry");
+        bmLimits[Unit.INFANTRY][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightInfantry");
+        bmLimits[Unit.INFANTRY][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumInfantry");
+        bmLimits[Unit.INFANTRY][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyInfantry");
+        bmLimits[Unit.INFANTRY][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultInfantry");
 
-    	bmLimits[Unit.BATTLEARMOR][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightBA");
-    	bmLimits[Unit.BATTLEARMOR][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumBA");
-    	bmLimits[Unit.BATTLEARMOR][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyBA");
-    	bmLimits[Unit.BATTLEARMOR][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultBA");
+        bmLimits[Unit.BATTLEARMOR][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightBA");
+        bmLimits[Unit.BATTLEARMOR][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumBA");
+        bmLimits[Unit.BATTLEARMOR][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyBA");
+        bmLimits[Unit.BATTLEARMOR][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultBA");
 
-    	bmLimits[Unit.PROTOMEK][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightProtomeks");
-    	bmLimits[Unit.PROTOMEK][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumProtomeks");
-    	bmLimits[Unit.PROTOMEK][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyProtomeks");
-    	bmLimits[Unit.PROTOMEK][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultProtomeks");
+        bmLimits[Unit.PROTOMEK][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightProtomeks");
+        bmLimits[Unit.PROTOMEK][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumProtomeks");
+        bmLimits[Unit.PROTOMEK][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyProtomeks");
+        bmLimits[Unit.PROTOMEK][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultProtomeks");
 
-    	bmLimits[Unit.AERO][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightAero");
-    	bmLimits[Unit.AERO][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumAero");
-    	bmLimits[Unit.AERO][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyAero");
-    	bmLimits[Unit.AERO][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultAero");
+        bmLimits[Unit.AERO][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightAero");
+        bmLimits[Unit.AERO][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumAero");
+        bmLimits[Unit.AERO][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyAero");
+        bmLimits[Unit.AERO][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultAero");
 
     }
     

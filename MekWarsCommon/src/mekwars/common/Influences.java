@@ -75,9 +75,9 @@ public class Influences implements MutableSerializable {
      * Return the influence of a specific faction.
      */
     public int getInfluence(int factionID) {
-
-        if (!influences.containsKey(factionID))
+        if (!influences.containsKey(factionID)) {
             return 0;
+        }
         int i = influences.get(factionID);
         return i;
     }
@@ -94,11 +94,13 @@ public class Influences implements MutableSerializable {
                         int i1 = -1;
                         int i2 = -1;
                         
-                        if ( o1 != null )
+                        if (o1 != null) {
                             i1 = ((House) o1).getId();
+                        }
                         
-                        if ( o2 != null )
+                        if (o2 != null) {
                             i2 = ((House) o2).getId();
+                        }
                         
                         return (i1 < i2) ? -1 : (i1 == i2 ? 0 : 1);
                     } catch (Exception ex) {
@@ -110,18 +112,21 @@ public class Influences implements MutableSerializable {
             House[] factions = new House[sset.size()];
 
             int i = 0;
-            for (Iterator<House> it = sset.iterator(); it.hasNext();)
+            for (Iterator<House> it = sset.iterator(); it.hasNext();) {
                 factions[i++] = it.next();
+            }
             Arrays.sort(factions, new Comparator<Object>() {
                 public int compare(Object o1, Object o2) {
                     int h1Id = -1;
                     int h2Id = -2;
                     
-                    if ( o1 != null )
+                    if (o1 != null) {
                         h1Id = ((House) o1).getId();
+                    }
                     
-                    if ( o2 != null )
+                    if (o2 != null) {
                         h2Id = ((House) o2).getId();
+                    }
                     
                     int i1 = getInfluence(h1Id);
                     int i2 = getInfluence(h2Id);
@@ -129,21 +134,25 @@ public class Influences implements MutableSerializable {
                 }
             });
 
-            if ( factions.length < 1)
+            if (factions.length < 1) {
                 return null;
+            }
             
             House faction = factions[0];
-            if (faction == null)
+            if (faction == null) {
                 return null;
+            }
 
             // only one owner don't need to see whoes the boss.
-            if (factions.length <= 1)
+            if (factions.length <= 1) {
                 return faction.getId();
+            }
 
             House faction2 = factions[1];
 
-            if (faction2 != null && getInfluence((faction2.getId())) == getInfluence((faction.getId())))
+            if (faction2 != null && getInfluence((faction2.getId())) == getInfluence((faction.getId()))) {
                 return null;
+            }
 
             return faction.getId();
         } catch (Exception ex) {

@@ -20,22 +20,17 @@ import java.util.Date;
 
 import common.House;
 
-
-
 /**
  * Adds the ability to trace the last change time to a planet.
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class TimeUpdateHouse extends House {
 
-    public TimeUpdateHouse(int id) {
-        super(id);
-    }
-
     /**
      * Constructor used for serialization
      */
     public TimeUpdateHouse() {
+		super();
     }
     
     /**

@@ -24,6 +24,9 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import common.Influences;
 import common.UnitFactory;
+import java.util.HashMap;
+import server.campaign.SHouse;
+import server.campaign.CampaignMain;
 
 public class InfluencesConverter implements Converter {
     public boolean canConvert(Class clazz) {
@@ -35,19 +38,41 @@ public class InfluencesConverter implements Converter {
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        HashMap<Integer, Integer> influences = new HashMap<Integer, Integer>();
+
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
+            String nodeName = reader.getNodeName();
+
+            if (nodeName.equals("inf")) {
+                addInfluence(reader, influences);
+            }
+            reader.moveUp();
+        }
+        return new Influences(influences);
+    }
+
+    public void addInfluence(HierarchicalStreamReader reader, HashMap<Integer, Integer> influences) {
         String factionName = null;
         int influence = 0;
 
         while (reader.hasMoreChildren()) {
+            reader.moveDown();
             String nodeName = reader.getNodeName();
             if (nodeName.equals("faction")) {
+                factionName = reader.getValue();
             } else if (nodeName.equals("amount")) {
+                influence = Integer.parseInt(reader.getValue());
             }
-            reader.moveDown();
             reader.moveUp();
         }
-        if (factionName == null) throw new ConversionException("factionName expected");
-        return new Influences();
+        if (factionName == null) {
+            throw new ConversionException("faction expected");
+        }
+    	SHouse house = CampaignMain.cm.getHouseFromPartialString(factionName, null);
+        if (house == null) {
+            throw new ConversionException("unable to find faction '" + factionName + "'");
+        }
+        influences.put(house.getId(), influence);
     }
 }
-

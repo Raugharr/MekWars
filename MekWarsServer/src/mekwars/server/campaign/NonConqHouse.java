@@ -18,34 +18,31 @@ package server.campaign;
 
 
 public class NonConqHouse extends SHouse {
-	
-	/**
+    
+    /**
      * 
      */
     private static final long serialVersionUID = 7378173181135107451L;
 
-    public NonConqHouse (int id, String name, String HouseColor, int BaseGunner, int BasePilot, String abbreviation) {
-		super(id,name,HouseColor,BaseGunner,BasePilot,abbreviation);
-		setConquerable(false);
-	}
-	
-	public NonConqHouse(int id) {
-        super(id);
-	}
+    public NonConqHouse(String name, String houseColor, int baseGunner, int basePilot, String abbreviation) {
+        super(name, houseColor, baseGunner, basePilot, abbreviation);
+        setConquerable(false);
+    }
+    
     
     /**
      * Used for serialization
      */
     public NonConqHouse() {
-    	super();
+        super();
     }
 
     @Override
-	public String toString() {
-		StringBuilder result = new StringBuilder();
-		result.append("[C]");
-		result.append(super.toString());
-		return result.toString();
-	}
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("[C]");
+        result.append(super.toString());
+        return result.toString();
+    }
 }
-	
+    

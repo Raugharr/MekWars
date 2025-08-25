@@ -179,6 +179,7 @@ public class CampaignData implements TerrainProvider {
      * @see You should use XStream to initialize CampaignData
      */
     public void addPlanet(Planet planet) {
+        logger.info("Adding Planet: '{}'", planet.getName());
         if (planet.getId() == -1) {
             planet.setId(getUnusedPlanetID());
         }
@@ -248,9 +249,6 @@ public class CampaignData implements TerrainProvider {
      */
     public void addHouse(House faction) {
         logger.info("Adding House: '{}'", faction.getName());
-        if (faction.getId() == -1 && !faction.getName().equalsIgnoreCase("None")) {
-            faction.setId(getUnusedHouseID());
-        }
         factions.put(faction.getId(), faction);
         factionid.put(faction.getName().toLowerCase(), faction.getId());
     }
@@ -300,27 +298,6 @@ public class CampaignData implements TerrainProvider {
      */
     public void clearHouses() {
         factions.clear();
-    }
-
-    /**
-     * Retrieve an unused id for factions.
-     * 
-     * @TODO There should be no need for such function, since ID's should
-     *       extracted from ressource files. This function will vanish if ids
-     *       are part of the ressource.
-     * @return An House id not used yet.
-     */
-    public int getUnusedHouseID() {
-        int id = -1;
-        int hid = 0;
-        for (House e : factions.values()) {
-            hid = e.getId();
-            if (hid > id) {
-                id = hid;
-            }
-        }
-        id++;
-        return id;
     }
 
     /**

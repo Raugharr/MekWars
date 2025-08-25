@@ -32,40 +32,40 @@ import server.campaign.commands.Command;
  * @author Helge Richter
  */
 public class AdminCreateFactionCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "name#color(hex)#basegunner#basePilot#Abbreviation";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		try{
-			String name = command.nextToken();
-			String color = command.nextToken();
-			int baseGunner = Integer.parseInt(command.nextToken());
-			int basePilot = Integer.parseInt(command.nextToken());
-			String Abb = command.nextToken();
-			
-			SHouse newfaction = new SHouse(CampaignMain.cm.getData().getUnusedHouseID(),name,"#" + color,baseGunner,basePilot,Abb); 
-			newfaction.updated();
-			
-			CampaignMain.cm.addHouse(newfaction);
-	        CampaignMain.cm.doSendToAllOnlinePlayers("PL|ANH|" + newfaction.addNewHouse(), false);
-			CampaignMain.cm.toUser("Faction created!",Username,true);
-			CampaignMain.cm.doSendModMail("NOTE",Username + " has created faction " + newfaction.getName());
-		}
-		catch(Exception ex){
-			CampaignMain.cm.toUser("Invalid Syntax: /AdminCreateFaction Name#Color(hex)#BaseGunner#BasePilot#Abberviation",Username,true);
-			return;
-		}
-	}
+    
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "name#color(hex)#basegunner#basePilot#Abbreviation";
+    public int getExecutionLevel(){return accessLevel;}
+    public void setExecutionLevel(int i) {accessLevel = i;}
+    public String getSyntax() { return syntax;}
+    
+    public void process(StringTokenizer command,String Username) {
+        
+        //access level check
+        int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+        if(userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
+            return;
+        }
+        
+        try{
+            String name = command.nextToken();
+            String color = command.nextToken();
+            int baseGunner = Integer.parseInt(command.nextToken());
+            int basePilot = Integer.parseInt(command.nextToken());
+            String Abb = command.nextToken();
+            
+            SHouse newfaction = new SHouse(name, "#" + color, baseGunner, basePilot, Abb); 
+            newfaction.updated();
+            
+            CampaignMain.cm.addHouse(newfaction);
+            CampaignMain.cm.doSendToAllOnlinePlayers("PL|ANH|" + newfaction.addNewHouse(), false);
+            CampaignMain.cm.toUser("Faction created!",Username,true);
+            CampaignMain.cm.doSendModMail("NOTE",Username + " has created faction " + newfaction.getName());
+        }
+        catch(Exception ex){
+            CampaignMain.cm.toUser("Invalid Syntax: /AdminCreateFaction Name#Color(hex)#BaseGunner#BasePilot#Abberviation",Username,true);
+            return;
+        }
+    }
 }

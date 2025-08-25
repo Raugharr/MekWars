@@ -46,8 +46,6 @@ public class MMNetXStream extends XStream {
         // you may add shortcuts here, so XStream will not 
         // write the whole class name each time ;-)
         alias("advancedTerrain", AdvancedTerrain.class);
-        alias("faction", House.class);
-        alias("planet", Planet.class);
         // Enables reference marshalling.
         setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
     }

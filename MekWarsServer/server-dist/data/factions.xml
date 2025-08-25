@@ -19,7 +19,6 @@
 	</faction>
 	<faction>
 		<name>Steiner</name>
-		<money>180</money>
 		<color>#0000ff</color>
 		<abbreviation>S</abbreviation>
 		<type>House</type>
@@ -35,7 +34,6 @@
 	</faction>
 	<faction>
 		<name>Liao</name>
-		<money>180</money>
 		<color>#004000</color>
 		<abbreviation>L</abbreviation>
 		<type>House</type>
@@ -51,7 +49,6 @@
 	</faction>
 	<faction>
 		<name>Marik</name>
-		<money>180</money>
 		<color>#800080</color>
 		<abbreviation>M</abbreviation>
 		<type>House</type>
@@ -67,7 +64,6 @@
 	</faction>
 	<faction>
 		<name>Kurita</name>
-		<money>180</money>
 		<color>#ff0000</color>
 		<abbreviation>K</abbreviation>
 		<type>House</type>
@@ -83,7 +79,6 @@
 	</faction>
 	<faction>
 		<name>Periphery</name>
-		<money>180</money>
 		<color>#333333</color>
 		<abbreviation>P</abbreviation>
 		<type>House</type>
@@ -99,7 +94,6 @@
 	</faction>
 	<faction>
 		<name>Northwind Highlanders</name>
-		<money>180</money>
 		<color>#008000</color>
 		<abbreviation>HL</abbreviation>
 		<type>Mercenary</type>
@@ -115,7 +109,6 @@
 	</faction>
 	<faction>
 		<name>Wolfs Dragoons</name>
-		<money>180</money>
 		<color>#800000</color>
 		<abbreviation>WD</abbreviation>
 		<type>Mercenary</type>
@@ -131,7 +124,6 @@
 	</faction>
 	<faction>
 		<name>Hansens Roughriders</name>
-		<money>180</money>
 		<color>#b0c4de</color>
 		<abbreviation>HRR</abbreviation>
 		<type>Mercenary</type>
@@ -147,7 +139,6 @@
 	</faction>
 	<faction>
 		<name>Kell Hounds</name>
-		<money>180</money>
 		<color>#990000</color>
 		<abbreviation>KH</abbreviation>
 		<type>Mercenary</type>
@@ -163,7 +154,6 @@
 	</faction>
 	<faction>
 		<name>Gray Death Legion</name>
-		<money>180</money>
 		<color>#990000</color>
 		<abbreviation>GDL</abbreviation>
 		<type>Mercenary</type>
@@ -179,7 +169,6 @@
 	</faction>
 	<faction>
 		<name>Comstar</name>
-		<money>180</money>
 		<color>#663300</color>
 		<abbreviation>COM</abbreviation>
 		<type>House</type>
@@ -195,7 +184,6 @@
 	</faction>
 	<faction>
 		<name>Solaris Training Company</name>
-		<money>180</money>
 		<color>#33CCCC</color>
 		<abbreviation>SOL</abbreviation>
 		<type>Newbie</type>

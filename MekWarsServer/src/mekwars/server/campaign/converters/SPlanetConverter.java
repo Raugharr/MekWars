@@ -16,12 +16,14 @@
 
 package server.campaign.converters;
 
+import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import common.Continent;
+import common.Influences;
 import common.PlanetEnvironments;
 import java.util.Vector;
 import server.campaign.SPlanet;
@@ -43,6 +45,7 @@ public class SPlanetConverter implements Converter {
         String ycoord = null;
         String name = null;
         int componentProduction = 0;
+        Influences influences = null;
         Vector<SUnitFactory> unitFactoryList = new Vector<SUnitFactory>();
 
         while (reader.hasMoreChildren()) {
@@ -51,19 +54,30 @@ public class SPlanetConverter implements Converter {
             if (nodeName.equals("continent")) {
                 Continent continent = (Continent) context.convertAnother(null, Continent.class);
                 planetEnvironments.add(continent);
+            } else if (nodeName.equals("name")) {
+                name = reader.getValue();
             } else if (nodeName.equals("yCoord")) {
                 ycoord = reader.getValue();
             } else if (nodeName.equals("xCoord")) {
                 xcoord = reader.getValue();
             } else if (nodeName.equals("componentProduction")) {
                 componentProduction = Integer.valueOf(reader.getValue());
+            } else if (nodeName.equals("influence")) {
+                influences = (Influences) context.convertAnother(null, Influences.class);
             } else if (nodeName.equals("unitFactory")) {
-                SUnitFactory unitFactory = (SUnitFactory) context.convertAnother(null, SUnitFactory.class);
+                SUnitFactory unitFactory = (SUnitFactory) 
+                    context.convertAnother(
+                            null,
+                            SUnitFactory.class
+                    );
                 unitFactoryList.add(unitFactory);
             }
             reader.moveUp();
         }
-        SPlanet planet = new SPlanet(name, null, componentProduction, Double.parseDouble(xcoord), Double.parseDouble(ycoord));
+        if (name == null) {
+            throw new ConversionException("name is null");
+        }
+        SPlanet planet = new SPlanet(name, influences, componentProduction, Double.parseDouble(xcoord), Double.parseDouble(ycoord));
         for (SUnitFactory unitFactory : unitFactoryList) {
             unitFactory.setPlanet(planet);
         }
