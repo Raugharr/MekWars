@@ -31,11 +31,14 @@ import server.campaign.SUnitFactory;
 
 public class SPlanetConverter implements Converter {
     private static final Logger logger = LogManager.getLogger(SPlanetConverter.class);
+
     public boolean canConvert(Class clazz) {
+		logger.debug(clazz.toString());
         return clazz.equals(SPlanet.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+    public void marshal(Object source, HierarchicalStreamWriter writer,
+            MarshallingContext context) {
         // TODO: Implement
     }
 
@@ -47,7 +50,6 @@ public class SPlanetConverter implements Converter {
         int componentProduction = 0;
         Vector<SUnitFactory> unitFactoryList = new Vector<SUnitFactory>();
 
-		logger.info("Enter");
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String nodeName = reader.getNodeName();
@@ -66,7 +68,6 @@ public class SPlanetConverter implements Converter {
             }
             reader.moveUp();
         }
-		logger.info(name);
         SPlanet planet = new SPlanet(name, null, componentProduction, Double.parseDouble(xcoord), Double.parseDouble(ycoord));
         for (SUnitFactory unitFactory : unitFactoryList) {
             unitFactory.setPlanet(planet);

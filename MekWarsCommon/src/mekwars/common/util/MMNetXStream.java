@@ -34,21 +34,21 @@ import common.Planet;
 public class MMNetXStream extends XStream {
     public MMNetXStream() {
         super(new PureJavaReflectionProvider());
-		setup();
+        setup();
     }
     
-    public MMNetXStream(HierarchicalStreamDriver hierarchicalStreamDriver){
-    	super(hierarchicalStreamDriver);
-		setup();
+    public MMNetXStream(HierarchicalStreamDriver hierarchicalStreamDriver) {
+        super(hierarchicalStreamDriver);
+        setup();
     }
 
-	protected void setup() {
+    protected void setup() {
         // you may add shortcuts here, so XStream will not 
         // write the whole class name each time ;-)
-        alias("advancedTerrain",AdvancedTerrain.class);
-        alias("faction",House.class);
-        alias("planet",Planet.class);
+        alias("advancedTerrain", AdvancedTerrain.class);
+        alias("faction", House.class);
+        alias("planet", Planet.class);
         // Enables reference marshalling.
         setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
-	}
+    }
 }

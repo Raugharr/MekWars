@@ -16,54 +16,53 @@
 
 package server.campaign.converters;
 
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import common.AdvancedTerrain;
 import common.Continent;
 import common.Terrain;
 
 import server.campaign.CampaignMain;
 
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-
 public class ContinentConverter implements Converter {
-	public boolean canConvert(Class clazz) {
-		return clazz.equals(Continent.class);
-	}
+    public boolean canConvert(Class clazz) {
+        return clazz.equals(Continent.class);
+    }
 
-	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-		// TODO: Implement
-	}
+    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        // TODO: Implement
+    }
 
-	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-		int size = 0;
-		String terrainName = null;
-		String advancedTerrainName = null;
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        int size = 0;
+        String terrainName = null;
+        String advancedTerrainName = null;
 
-		while (reader.hasMoreChildren()) {
-			reader.moveDown();
-			String nodeName = reader.getNodeName();
-			if(nodeName.equals("size")) {
-				size = Integer.valueOf(reader.getValue());
-			} else if(nodeName.equals("terrian")) {
-				terrainName = reader.getValue();
-			} else if(nodeName.equals("advancedTerrain")) {
-				advancedTerrainName = reader.getValue();
-			}
-			reader.moveUp();
-		}
-		
-		Terrain terrain = CampaignMain.cm.getData().getTerrainByName(terrainName);
-		if(terrain == null) {
-			throw new ConversionException("terrain not found");	
-		}
-		AdvancedTerrain advancedTerrain = CampaignMain.cm.getData().getAdvancedTerrainByName(advancedTerrainName);
-		if(advancedTerrain == null) {
-			throw new ConversionException("advancedTerrain not found");	
-		}
-		return new Continent(size, terrain, advancedTerrain);
-	}
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
+            String nodeName = reader.getNodeName();
+            if (nodeName.equals("size")) {
+                size = Integer.parseInt(reader.getValue());
+            } else if (nodeName.equals("terrian")) {
+                terrainName = reader.getValue();
+            } else if (nodeName.equals("advancedTerrain")) {
+                advancedTerrainName = reader.getValue();
+            }
+            reader.moveUp();
+        }
+        
+        Terrain terrain = CampaignMain.cm.getData().getTerrainByName(terrainName);
+        if (terrain == null) {
+            throw new ConversionException("terrain not found");    
+        }
+        AdvancedTerrain advancedTerrain = CampaignMain.cm.getData().getAdvancedTerrainByName(advancedTerrainName);
+        if (advancedTerrain == null) {
+            throw new ConversionException("advancedTerrain not found");    
+        }
+        return new Continent(size, terrain, advancedTerrain);
+    }
 }

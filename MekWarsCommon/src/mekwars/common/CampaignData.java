@@ -602,8 +602,8 @@ public class CampaignData implements TerrainProvider {
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
     public void addAdvancedTerrain(AdvancedTerrain newAdvTerrain) {
-		logger.info("Adding AdvancedTerrain: '{}'", newAdvTerrain.getName());
-    	newAdvTerrain.setId(getUnusedAdvTerrainID());
+        logger.info("Adding AdvancedTerrain: '{}'", newAdvTerrain.getName());
+        newAdvTerrain.setId(getUnusedAdvTerrainID());
         advTerrains.add(newAdvTerrain);
         advTerrains.trimToSize();
     }
@@ -877,12 +877,10 @@ public class CampaignData implements TerrainProvider {
         serverConfigs = configs;
     }
 
-	public boolean targetSystemIsBanned(int id) {
-		if(bannedTargetingSystems.contains(id)) {
-			return true;
-		}
-		return false;
-	}
-
-
+    public boolean targetSystemIsBanned(int id) {
+        if(bannedTargetingSystems.contains(id)) {
+            return true;
+        }
+        return false;
+    }
 }

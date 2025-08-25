@@ -1,6 +1,10 @@
 rootProject.name = 'MekWarsRoot'
 
-include 'MekWars'
+include 'MekWarsServer'
+include 'MekWarsClient'
+include 'MekWarsHPGNet'
+include 'MekWarsDedicatedHost'
+include 'MekWarsCommon'
 
 
 // includeBuild('../megamek')
