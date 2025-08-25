@@ -140,10 +140,10 @@ public class PlanetEnvironments {
                 
                 probs = pe.getEnvironment().getTotalEnvironmentProbabilities();
                 for ( PlanetEnvironment env : pe.getEnvironment().getEnvironments() ){
-                    if (r.nextInt(probs) < env.getEnvironmentalProb()){
+                    if (r.nextInt(probs) < env.getEnvironmentalProbability()){
                         return pe;
                     }
-                    probs -= env.getEnvironmentalProb();
+                    probs -= env.getEnvironmentalProbability();
                 }
             }
             probs -= pe.getSize();

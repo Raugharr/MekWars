@@ -35,93 +35,93 @@ import common.util.BinWriter;
 final public class PlanetEnvironment{
     // id
     private int id = -1;
-    private String Name = "";
+    private String name = "";
     
     //Crater
-    private int CraterProb = 0;
-    private int CraterMinNum = 0;
-    private int CraterMaxNum = 0;
-    private int CraterMinRadius = 0;
-    private int CraterMaxRadius = 0;
+    private int craterProbability = 0;
+    private int craterMinNum = 0;
+    private int craterMaxNum = 0;
+    private int craterMinRadius = 0;
+    private int craterMaxRadius = 0;
     
     //Hills
-    private int Hillyness = 100;
-    private int HillElevationRange = 3;
-    private int HillInvertProb = 0;
+    private int hillyness = 100;
+    private int hillElevationRange = 3;
+    private int hillInvertProbability = 0;
     
     //Water
-    private int WaterMinSpots = 3;
-    private int WaterMaxSpots = 8;
-    private int WaterMinHexes = 2;
-    private int WaterMaxHexes = 10;
-    private int WaterDeepProb = 20;
+    private int waterMinSpots = 3;
+    private int waterMaxSpots = 8;
+    private int waterMinHexes = 2;
+    private int waterMaxHexes = 10;
+    private int waterDeepProbability = 20;
     
     //Forest
-    private int ForestMinSpots = 4;
-    private int ForestMaxSpots = 8;
-    private int ForestMinHexes = 2;
-    private int ForestMaxHexes = 6;
-    private int ForestHeavyProb = 20;
+    private int forestMinSpots = 4;
+    private int forestMaxSpots = 8;
+    private int forestMinHexes = 2;
+    private int forestMaxHexes = 6;
+    private int forestHeavyProbability = 20;
     
     //Rough
-    private int RoughMinSpots = 0;
-    private int RoughMaxSpots = 5;
-    private int RoughMinHexes = 1;
-    private int RoughMaxHexes = 2;
+    private int roughMinSpots = 0;
+    private int roughMaxSpots = 5;
+    private int roughMinHexes = 1;
+    private int roughMaxHexes = 2;
     
     //Swamp
-    private int SwampMinSpots = 0;
-    private int SwampMaxSpots = 0;
-    private int SwampMinHexes = 0;
-    private int SwampMaxHexes = 0;
+    private int swampMinSpots = 0;
+    private int swampMaxSpots = 0;
+    private int swampMinHexes = 0;
+    private int swampMaxHexes = 0;
     
     //Pavement
-    private int PavementMinSpots = 0;
-    private int PavementMaxSpots = 0;
-    private int PavementMinHexes = 0;
-    private int PavementMaxHexes = 0;
+    private int pavementMinSpots = 0;
+    private int pavementMaxSpots = 0;
+    private int pavementMinHexes = 0;
+    private int pavementMaxHexes = 0;
     
     //Ice
-    private int IceMinSpots = 0;
-    private int IceMaxSpots = 0;
-    private int IceMinHexes = 0;
-    private int IceMaxHexes = 0;
+    private int iceMinSpots = 0;
+    private int iceMaxSpots = 0;
+    private int iceMinHexes = 0;
+    private int iceMaxHexes = 0;
 
     //Rubble
-    private int RubbleMinSpots = 0;
-    private int RubbleMaxSpots = 0;
-    private int RubbleMinHexes = 0;
-    private int RubbleMaxHexes = 0;
+    private int rubbleMinSpots = 0;
+    private int rubbleMaxSpots = 0;
+    private int rubbleMinHexes = 0;
+    private int rubbleMaxHexes = 0;
 
     //Fortified
-    private int FortifiedMinSpots = 0;
-    private int FortifiedMaxSpots = 0;
-    private int FortifiedMinHexes = 0;
-    private int FortifiedMaxHexes = 0;
+    private int fortifiedMinSpots = 0;
+    private int fortifiedMaxSpots = 0;
+    private int fortifiedMinHexes = 0;
+    private int fortifiedMaxHexes = 0;
 
     //Sand 
-    private int SandMinSpots = 0;
-    private int SandMaxSpots = 0;
-    private int SandMinHexes = 0;
-    private int SandMaxHexes = 0;
+    private int sandMinSpots = 0;
+    private int sandMaxSpots = 0;
+    private int sandMinHexes = 0;
+    private int sandMaxHexes = 0;
     
     //Planted Field 
-    private int PlantedFieldMinSpots = 0;
-    private int PlantedFieldMaxSpots = 0;
-    private int PlantedFieldMinHexes = 0;
-    private int PlantedFieldMaxHexes = 0;
+    private int plantedFieldMinSpots = 0;
+    private int plantedFieldMaxSpots = 0;
+    private int plantedFieldMinHexes = 0;
+    private int plantedFieldMaxHexes = 0;
     
     //Buildings
-    private int MinBuildings = 0;
-    private int MaxBuildings = 0;
-    private int MinCF = 0;
-    private int MaxCF = 0;
-    private int MinFloors = 0;
-    private int MaxFloors = 0;
-    private int CityDensity = 50;
-    private String CityType = "NONE";
-    private int Roads = 4;
-    private int TownSize = 0;
+    private int minBuildings = 0;
+    private int maxBuildings = 0;
+    private int minCF = 0;
+    private int maxCF = 0;
+    private int minFloors = 0;
+    private int maxFloors = 0;
+    private int cityDensity = 50;
+    private String cityType = "NONE";
+    private int roads = 4;
+    private int townSize = 0;
     
     //Special Effects
     private int fxMod = 0;
@@ -129,23 +129,23 @@ final public class PlanetEnvironment{
     private int probFreeze = 0;
     private int probFlood = 0;
     private int probDrought = 0;
-    private String Theme = "";
+    private String theme = "";
     
     //Mountains
-    private int MountPeaks = 0;
-    private int MountWidthMin = 0;
-    private int MountWidthMax = 0;
-    private int MountHeightMin = 0;
-    private int MountHeightMax = 0; 
-    private int MountStyle = 0; 
+    private int mountPeaks = 0;
+    private int mountWidthMin = 0;
+    private int mountWidthMax = 0;
+    private int mountHeightMin = 0;
+    private int mountHeightMax = 0; 
+    private int mountStyle = 0; 
     
     //Misc
-    private int RoadProb = 25;
-    private int RiverProb = 25;
-    private int Algorithm = 0;
-    private int CliffProb = 0;
-    private int InvertNegativeTerrain = 0;
-    private int EnvironmentProb = 1;
+    private int roadProbability = 25;
+    private int riverProbability = 25;
+    private int algorithm = 0;
+    private int cliffProbability = 0;
+    private int invertNegativeTerrain = 0;
+    private int environmentProbability = 1;
  
     //static maps support
     private String staticMapName = "surprise";
@@ -168,50 +168,50 @@ final public class PlanetEnvironment{
         ST.nextToken();
         //Read the Data
         
-        Name = ST.nextToken();
-        CraterProb = Integer.parseInt(ST.nextToken());
-        CraterMinNum = Integer.parseInt(ST.nextToken());
-        CraterMaxNum = Integer.parseInt(ST.nextToken());
-        CraterMinRadius = Integer.parseInt(ST.nextToken());
-        CraterMaxRadius = Integer.parseInt(ST.nextToken());
-        Hillyness = Integer.parseInt(ST.nextToken());
-        HillElevationRange = Integer.parseInt(ST.nextToken());
-        HillInvertProb = Integer.parseInt(ST.nextToken());
-        WaterMinSpots = Integer.parseInt(ST.nextToken());
-        WaterMaxSpots = Integer.parseInt(ST.nextToken());
-        WaterMinHexes = Integer.parseInt(ST.nextToken());
-        WaterMaxHexes = Integer.parseInt(ST.nextToken());
-        WaterDeepProb = Integer.parseInt(ST.nextToken());
-        ForestMinSpots = Integer.parseInt(ST.nextToken());
-        ForestMaxSpots = Integer.parseInt(ST.nextToken());
-        ForestMinHexes = Integer.parseInt(ST.nextToken());
-        ForestMaxHexes = Integer.parseInt(ST.nextToken());
-        ForestHeavyProb = Integer.parseInt(ST.nextToken());
-        RoughMinSpots = Integer.parseInt(ST.nextToken());
-        RoughMaxSpots = Integer.parseInt(ST.nextToken());
-        RoughMinHexes = Integer.parseInt(ST.nextToken());
-        RoughMaxHexes = Integer.parseInt(ST.nextToken());
-        RoadProb = Integer.parseInt(ST.nextToken());
-        RiverProb = Integer.parseInt(ST.nextToken());
-        Algorithm = Integer.parseInt(ST.nextToken());
+        name = ST.nextToken();
+        craterProbability = Integer.parseInt(ST.nextToken());
+        craterMinNum = Integer.parseInt(ST.nextToken());
+        craterMaxNum = Integer.parseInt(ST.nextToken());
+        craterMinRadius = Integer.parseInt(ST.nextToken());
+        craterMaxRadius = Integer.parseInt(ST.nextToken());
+        hillyness = Integer.parseInt(ST.nextToken());
+        hillElevationRange = Integer.parseInt(ST.nextToken());
+        hillInvertProbability = Integer.parseInt(ST.nextToken());
+        waterMinSpots = Integer.parseInt(ST.nextToken());
+        waterMaxSpots = Integer.parseInt(ST.nextToken());
+        waterMinHexes = Integer.parseInt(ST.nextToken());
+        waterMaxHexes = Integer.parseInt(ST.nextToken());
+        waterDeepProbability = Integer.parseInt(ST.nextToken());
+        forestMinSpots = Integer.parseInt(ST.nextToken());
+        forestMaxSpots = Integer.parseInt(ST.nextToken());
+        forestMinHexes = Integer.parseInt(ST.nextToken());
+        forestMaxHexes = Integer.parseInt(ST.nextToken());
+        forestHeavyProbability = Integer.parseInt(ST.nextToken());
+        roughMinSpots = Integer.parseInt(ST.nextToken());
+        roughMaxSpots = Integer.parseInt(ST.nextToken());
+        roughMinHexes = Integer.parseInt(ST.nextToken());
+        roughMaxHexes = Integer.parseInt(ST.nextToken());
+        roadProbability = Integer.parseInt(ST.nextToken());
+        riverProbability = Integer.parseInt(ST.nextToken());
+        algorithm = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
             id = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            SwampMinSpots = Integer.parseInt(ST.nextToken());
+            swampMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            SwampMaxSpots = Integer.parseInt(ST.nextToken());
+            swampMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            SwampMinHexes = Integer.parseInt(ST.nextToken());
+            swampMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            SwampMaxHexes = Integer.parseInt(ST.nextToken());
+            swampMaxHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            PavementMinSpots = Integer.parseInt(ST.nextToken());
+            pavementMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            PavementMaxSpots = Integer.parseInt(ST.nextToken());
+            pavementMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            PavementMinHexes = Integer.parseInt(ST.nextToken());
+            pavementMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            PavementMaxHexes = Integer.parseInt(ST.nextToken());
+            pavementMaxHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
             fxMod = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
@@ -223,102 +223,102 @@ final public class PlanetEnvironment{
         if (ST.hasMoreTokens())
             probDrought = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            Theme = ST.nextToken();
+            theme = ST.nextToken();
         if (ST.hasMoreTokens())
-            IceMinSpots = Integer.parseInt(ST.nextToken());
+            iceMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            IceMaxSpots = Integer.parseInt(ST.nextToken());
+            iceMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            IceMinHexes = Integer.parseInt(ST.nextToken());
+            iceMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            IceMaxHexes = Integer.parseInt(ST.nextToken());
+            iceMaxHexes = Integer.parseInt(ST.nextToken());
 
         if (ST.hasMoreTokens())
-            RubbleMinSpots = Integer.parseInt(ST.nextToken());
+            rubbleMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            RubbleMaxSpots = Integer.parseInt(ST.nextToken());
+            rubbleMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            RubbleMinHexes = Integer.parseInt(ST.nextToken());
+            rubbleMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            RubbleMaxHexes = Integer.parseInt(ST.nextToken());
+            rubbleMaxHexes = Integer.parseInt(ST.nextToken());
 
         if (ST.hasMoreTokens())
-            FortifiedMinSpots = Integer.parseInt(ST.nextToken());
+            fortifiedMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            FortifiedMaxSpots = Integer.parseInt(ST.nextToken());
+            fortifiedMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            FortifiedMinHexes = Integer.parseInt(ST.nextToken());
+            fortifiedMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            FortifiedMaxHexes = Integer.parseInt(ST.nextToken());
+            fortifiedMaxHexes = Integer.parseInt(ST.nextToken());
 
         if (ST.hasMoreTokens())
-            MinBuildings = Integer.parseInt(ST.nextToken());
+            minBuildings = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MaxBuildings = Integer.parseInt(ST.nextToken());
+            maxBuildings = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MinCF = Integer.parseInt(ST.nextToken());
+            minCF = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MaxCF = Integer.parseInt(ST.nextToken());
+            maxCF = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MinFloors = Integer.parseInt(ST.nextToken());
+            minFloors = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MaxFloors = Integer.parseInt(ST.nextToken());
+            maxFloors = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            CityDensity = Integer.parseInt(ST.nextToken());
+            cityDensity = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            CityType = ST.nextToken();
+            cityType = ST.nextToken();
         if (ST.hasMoreTokens())
-            Roads = Integer.parseInt(ST.nextToken());
+            roads = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements())
-            CliffProb = Integer.parseInt(ST.nextToken());
+            cliffProbability = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements())
-            InvertNegativeTerrain = Integer.parseInt(ST.nextToken());
+            invertNegativeTerrain = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            TownSize = Integer.parseInt(ST.nextToken());
+            townSize = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountPeaks = Integer.parseInt(ST.nextToken());
+            mountPeaks = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountWidthMin = Integer.parseInt(ST.nextToken());
+            mountWidthMin = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountWidthMax = Integer.parseInt(ST.nextToken());
+            mountWidthMax = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountHeightMin = Integer.parseInt(ST.nextToken());
+            mountHeightMin = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountHeightMax = Integer.parseInt(ST.nextToken());
+            mountHeightMax = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountStyle = Integer.parseInt(ST.nextToken());
+            mountStyle = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            EnvironmentProb = Integer.parseInt(ST.nextToken());
+            environmentProbability = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	setStaticMap(Boolean.parseBoolean(ST.nextToken()));
+            setStaticMap(Boolean.parseBoolean(ST.nextToken()));
         if ( ST.hasMoreElements() )
-        	staticMapName = ST.nextToken();        
+            staticMapName = ST.nextToken();        
         if ( ST.hasMoreElements() )
-        	xSize = Integer.parseInt(ST.nextToken());
+            xSize = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	ySize = Integer.parseInt(ST.nextToken());
+            ySize = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	xBoardSize = Integer.parseInt(ST.nextToken());
+            xBoardSize = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	yBoardSize = Integer.parseInt(ST.nextToken());
+            yBoardSize = Integer.parseInt(ST.nextToken());
 
         if ( ST.hasMoreElements() )
-        	SandMinSpots = Integer.parseInt(ST.nextToken());
+            sandMinSpots = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	SandMaxSpots = Integer.parseInt(ST.nextToken());
+            sandMaxSpots = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	SandMinHexes = Integer.parseInt(ST.nextToken());
+            sandMinHexes = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	SandMaxHexes = Integer.parseInt(ST.nextToken());
+            sandMaxHexes = Integer.parseInt(ST.nextToken());
         
         if ( ST.hasMoreElements() )
-        	PlantedFieldMinSpots = Integer.parseInt(ST.nextToken());
+            plantedFieldMinSpots = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	PlantedFieldMaxSpots = Integer.parseInt(ST.nextToken());
+            plantedFieldMaxSpots = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	PlantedFieldMinHexes = Integer.parseInt(ST.nextToken());
+            plantedFieldMinHexes = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	PlantedFieldMaxHexes = Integer.parseInt(ST.nextToken());
+            plantedFieldMaxHexes = Integer.parseInt(ST.nextToken());
     }
 
     public PlanetEnvironment(StringTokenizer ST) {
@@ -326,50 +326,50 @@ final public class PlanetEnvironment{
         ST.nextToken();
         //Read the Data
         
-        Name = ST.nextToken();
-        CraterProb = Integer.parseInt(ST.nextToken());
-        CraterMinNum = Integer.parseInt(ST.nextToken());
-        CraterMaxNum = Integer.parseInt(ST.nextToken());
-        CraterMinRadius = Integer.parseInt(ST.nextToken());
-        CraterMaxRadius = Integer.parseInt(ST.nextToken());
-        Hillyness = Integer.parseInt(ST.nextToken());
-        HillElevationRange = Integer.parseInt(ST.nextToken());
-        HillInvertProb = Integer.parseInt(ST.nextToken());
-        WaterMinSpots = Integer.parseInt(ST.nextToken());
-        WaterMaxSpots = Integer.parseInt(ST.nextToken());
-        WaterMinHexes = Integer.parseInt(ST.nextToken());
-        WaterMaxHexes = Integer.parseInt(ST.nextToken());
-        WaterDeepProb = Integer.parseInt(ST.nextToken());
-        ForestMinSpots = Integer.parseInt(ST.nextToken());
-        ForestMaxSpots = Integer.parseInt(ST.nextToken());
-        ForestMinHexes = Integer.parseInt(ST.nextToken());
-        ForestMaxHexes = Integer.parseInt(ST.nextToken());
-        ForestHeavyProb = Integer.parseInt(ST.nextToken());
-        RoughMinSpots = Integer.parseInt(ST.nextToken());
-        RoughMaxSpots = Integer.parseInt(ST.nextToken());
-        RoughMinHexes = Integer.parseInt(ST.nextToken());
-        RoughMaxHexes = Integer.parseInt(ST.nextToken());
-        RoadProb = Integer.parseInt(ST.nextToken());
-        RiverProb = Integer.parseInt(ST.nextToken());
-        Algorithm = Integer.parseInt(ST.nextToken());
+        name = ST.nextToken();
+        craterProbability = Integer.parseInt(ST.nextToken());
+        craterMinNum = Integer.parseInt(ST.nextToken());
+        craterMaxNum = Integer.parseInt(ST.nextToken());
+        craterMinRadius = Integer.parseInt(ST.nextToken());
+        craterMaxRadius = Integer.parseInt(ST.nextToken());
+        hillyness = Integer.parseInt(ST.nextToken());
+        hillElevationRange = Integer.parseInt(ST.nextToken());
+        hillInvertProbability = Integer.parseInt(ST.nextToken());
+        waterMinSpots = Integer.parseInt(ST.nextToken());
+        waterMaxSpots = Integer.parseInt(ST.nextToken());
+        waterMinHexes = Integer.parseInt(ST.nextToken());
+        waterMaxHexes = Integer.parseInt(ST.nextToken());
+        waterDeepProbability = Integer.parseInt(ST.nextToken());
+        forestMinSpots = Integer.parseInt(ST.nextToken());
+        forestMaxSpots = Integer.parseInt(ST.nextToken());
+        forestMinHexes = Integer.parseInt(ST.nextToken());
+        forestMaxHexes = Integer.parseInt(ST.nextToken());
+        forestHeavyProbability = Integer.parseInt(ST.nextToken());
+        roughMinSpots = Integer.parseInt(ST.nextToken());
+        roughMaxSpots = Integer.parseInt(ST.nextToken());
+        roughMinHexes = Integer.parseInt(ST.nextToken());
+        roughMaxHexes = Integer.parseInt(ST.nextToken());
+        roadProbability = Integer.parseInt(ST.nextToken());
+        riverProbability = Integer.parseInt(ST.nextToken());
+        algorithm = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
             id = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            SwampMinSpots = Integer.parseInt(ST.nextToken());
+            swampMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            SwampMaxSpots = Integer.parseInt(ST.nextToken());
+            swampMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            SwampMinHexes = Integer.parseInt(ST.nextToken());
+            swampMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            SwampMaxHexes = Integer.parseInt(ST.nextToken());
+            swampMaxHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            PavementMinSpots = Integer.parseInt(ST.nextToken());
+            pavementMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            PavementMaxSpots = Integer.parseInt(ST.nextToken());
+            pavementMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            PavementMinHexes = Integer.parseInt(ST.nextToken());
+            pavementMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            PavementMaxHexes = Integer.parseInt(ST.nextToken());
+            pavementMaxHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
             fxMod = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
@@ -381,130 +381,130 @@ final public class PlanetEnvironment{
         if (ST.hasMoreTokens())
             probDrought = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            Theme = ST.nextToken();
+            theme = ST.nextToken();
         if (ST.hasMoreTokens())
-            IceMinSpots = Integer.parseInt(ST.nextToken());
+            iceMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            IceMaxSpots = Integer.parseInt(ST.nextToken());
+            iceMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            IceMinHexes = Integer.parseInt(ST.nextToken());
+            iceMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            IceMaxHexes = Integer.parseInt(ST.nextToken());
+            iceMaxHexes = Integer.parseInt(ST.nextToken());
 
         if (ST.hasMoreTokens())
-            RubbleMinSpots = Integer.parseInt(ST.nextToken());
+            rubbleMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            RubbleMaxSpots = Integer.parseInt(ST.nextToken());
+            rubbleMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            RubbleMinHexes = Integer.parseInt(ST.nextToken());
+            rubbleMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            RubbleMaxHexes = Integer.parseInt(ST.nextToken());
+            rubbleMaxHexes = Integer.parseInt(ST.nextToken());
 
         if (ST.hasMoreTokens())
-            FortifiedMinSpots = Integer.parseInt(ST.nextToken());
+            fortifiedMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            FortifiedMaxSpots = Integer.parseInt(ST.nextToken());
+            fortifiedMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            FortifiedMinHexes = Integer.parseInt(ST.nextToken());
+            fortifiedMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            FortifiedMaxHexes = Integer.parseInt(ST.nextToken());
+            fortifiedMaxHexes = Integer.parseInt(ST.nextToken());
 
         if (ST.hasMoreTokens())
-            MinBuildings = Integer.parseInt(ST.nextToken());
+            minBuildings = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MaxBuildings = Integer.parseInt(ST.nextToken());
+            maxBuildings = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MinCF = Integer.parseInt(ST.nextToken());
+            minCF = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MaxCF = Integer.parseInt(ST.nextToken());
+            maxCF = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MinFloors = Integer.parseInt(ST.nextToken());
+            minFloors = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            MaxFloors = Integer.parseInt(ST.nextToken());
+            maxFloors = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            CityDensity = Integer.parseInt(ST.nextToken());
+            cityDensity = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            CityType = ST.nextToken();
+            cityType = ST.nextToken();
         if (ST.hasMoreTokens())
-            Roads = Integer.parseInt(ST.nextToken());
+            roads = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements())
-            CliffProb = Integer.parseInt(ST.nextToken());
+            cliffProbability = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements())
-            InvertNegativeTerrain = Integer.parseInt(ST.nextToken());
+            invertNegativeTerrain = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            TownSize = Integer.parseInt(ST.nextToken());
+            townSize = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountPeaks = Integer.parseInt(ST.nextToken());
+            mountPeaks = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountWidthMin = Integer.parseInt(ST.nextToken());
+            mountWidthMin = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountWidthMax = Integer.parseInt(ST.nextToken());
+            mountWidthMax = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountHeightMin = Integer.parseInt(ST.nextToken());
+            mountHeightMin = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountHeightMax = Integer.parseInt(ST.nextToken());
+            mountHeightMax = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            MountStyle = Integer.parseInt(ST.nextToken());
+            mountStyle = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-            EnvironmentProb = Integer.parseInt(ST.nextToken());
+            environmentProbability = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	setStaticMap(Boolean.parseBoolean(ST.nextToken()));
+            setStaticMap(Boolean.parseBoolean(ST.nextToken()));
         if ( ST.hasMoreElements() )
-        	staticMapName = ST.nextToken();        
+            staticMapName = ST.nextToken();        
         if ( ST.hasMoreElements() )
-        	xSize = Integer.parseInt(ST.nextToken());
+            xSize = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	ySize = Integer.parseInt(ST.nextToken());
+            ySize = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	xBoardSize = Integer.parseInt(ST.nextToken());
+            xBoardSize = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	yBoardSize = Integer.parseInt(ST.nextToken());
+            yBoardSize = Integer.parseInt(ST.nextToken());
 
         if ( ST.hasMoreElements() )
-        	SandMinSpots = Integer.parseInt(ST.nextToken());
+            sandMinSpots = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	SandMaxSpots = Integer.parseInt(ST.nextToken());
+            sandMaxSpots = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	SandMinHexes = Integer.parseInt(ST.nextToken());
+            sandMinHexes = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	SandMaxHexes = Integer.parseInt(ST.nextToken());
+            sandMaxHexes = Integer.parseInt(ST.nextToken());
         
         if ( ST.hasMoreElements() )
-        	PlantedFieldMinSpots = Integer.parseInt(ST.nextToken());
+            plantedFieldMinSpots = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	PlantedFieldMaxSpots = Integer.parseInt(ST.nextToken());
+            plantedFieldMaxSpots = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	PlantedFieldMinHexes = Integer.parseInt(ST.nextToken());
+            plantedFieldMinHexes = Integer.parseInt(ST.nextToken());
         if ( ST.hasMoreElements() )
-        	PlantedFieldMaxHexes = Integer.parseInt(ST.nextToken());
+            plantedFieldMaxHexes = Integer.parseInt(ST.nextToken());
     }
     
 
-	public String toDescription() {
+    public String toDescription() {
         String result="";
         
-        int water=(((WaterMaxSpots+WaterMinSpots)/2)*
-                (WaterMinHexes+WaterMaxSpots)/2)+RiverProb/10;
-        int rough=(((RoughMaxSpots+RoughMinSpots)/2)*
-                (RoughMinHexes+RoughMaxSpots)/2);
-        int forest=(((ForestMaxSpots+ForestMinSpots)/2)*
-                (ForestMinHexes+ForestMaxSpots)/2);
-        /*int swamp=(((SwampMaxSpots+SwampMinSpots)/2)*
-                (SwampMinHexes+SwampMaxSpots)/2);
-        int pavement=(((PavementMaxSpots+PavementMinSpots)/2)*
-                (PavementMinHexes+PavementMaxSpots)/2);
+        int water=(((waterMaxSpots+waterMinSpots)/2)*
+                (waterMinHexes+waterMaxSpots)/2)+riverProbability/10;
+        int rough=(((roughMaxSpots+roughMinSpots)/2)*
+                (roughMinHexes+roughMaxSpots)/2);
+        int forest=(((forestMaxSpots+forestMinSpots)/2)*
+                (forestMinHexes+forestMaxSpots)/2);
+        /*int swamp=(((swampMaxSpots+swampMinSpots)/2)*
+                (swampMinHexes+swampMaxSpots)/2);
+        int pavement=(((pavementMaxSpots+pavementMinSpots)/2)*
+                (pavementMinHexes+pavementMaxSpots)/2);
         */
         /* generate the hilliness/crater description */
         result+="The landscape is ";
-        if (Hillyness < 200)
+        if (hillyness < 200)
             result+="plain";
-        if ((Hillyness < 500) && (Hillyness >=200))
+        if ((hillyness < 500) && (hillyness >=200))
             result+="uneven";
-        if ((Hillyness >= 500) && (Hillyness <= 800))
+        if ((hillyness >= 500) && (hillyness <= 800))
             result+="hilly";
-        if (Hillyness > 800)
+        if (hillyness > 800)
             result+="mountainous";
-        if (CraterProb==0) {
+        if (craterProbability==0) {
             result+=". <br> ";
             if (rough>0) {
                 result+="Through tectonic activity of this continent, rough terrain is appearing";
@@ -515,13 +515,13 @@ final public class PlanetEnvironment{
             }
         }
         else {
-            if (CraterProb<30)
+            if (craterProbability<30)
                 result+=", which is seldom coverd with";
-            if ((CraterProb>=30) && (CraterProb<60))
+            if ((craterProbability>=30) && (craterProbability<60))
                 result+=", which is covered with";
-            if (CraterProb>=60)
+            if (craterProbability>=60)
                 result+=", often coverd with";
-            int avgCraterSize=(CraterMinRadius+CraterMaxRadius)/2;
+            int avgCraterSize=(craterMinRadius+craterMaxRadius)/2;
             if (avgCraterSize < 4)
                 result+=" small craters";
             if ((avgCraterSize >=4) && (avgCraterSize<7))
@@ -542,7 +542,7 @@ final public class PlanetEnvironment{
         result+="Most facitlities on this continent are lying";
         if (forest>50) {
             result+=" deep in the ";
-            result+=(ForestHeavyProb < 30)? "woods": "jungle";
+            result+=(forestHeavyProbability < 30)? "woods": "jungle";
             if (water > 20)
                 result+=" mixed up with much water, because of heavy rain due too monsoon period";
             result+=".";
@@ -567,29 +567,29 @@ final public class PlanetEnvironment{
     public String toImageDescription()
     {
         String result ="";
-        int water=(((WaterMaxSpots+WaterMinSpots)/2)*
-                (WaterMinHexes+WaterMaxSpots)/2)+RiverProb/10;
-        int rough=(((RoughMaxSpots+RoughMinSpots)/2)*
-                (RoughMinHexes+RoughMaxSpots)/2);
-        int forest=(((ForestMaxSpots+ForestMinSpots)/2)*
-                (ForestMinHexes+ForestMaxSpots)/2);
-        /*int swamp=(((SwampMaxSpots+SwampMinSpots)/2)*
-                (SwampMinHexes+SwampMaxSpots)/2);
-        int pavement=(((PavementMaxSpots+PavementMinSpots)/2)*
-                (PavementMinHexes+PavementMaxSpots)/2);
+        int water=(((waterMaxSpots+waterMinSpots)/2)*
+                (waterMinHexes+waterMaxSpots)/2)+riverProbability/10;
+        int rough=(((roughMaxSpots+roughMinSpots)/2)*
+                (roughMinHexes+roughMaxSpots)/2);
+        int forest=(((forestMaxSpots+forestMinSpots)/2)*
+                (forestMinHexes+forestMaxSpots)/2);
+        /*int swamp=(((swampMaxSpots+swampMinSpots)/2)*
+                (swampMinHexes+swampMaxSpots)/2);
+        int pavement=(((pavementMaxSpots+pavementMinSpots)/2)*
+                (pavementMinHexes+pavementMaxSpots)/2);
         */
         /* generate the hilliness/crater description */
-        if (Hillyness < 200)
+        if (hillyness < 200)
             result+="<img src=\"data/images/hill0.gif\">";
-        if ((Hillyness < 500) && (Hillyness >=200))
+        if ((hillyness < 500) && (hillyness >=200))
             result+="<img src=\"data/images/hill1.gif\">";
-        if ((Hillyness >= 500) && (Hillyness <= 800))
+        if ((hillyness >= 500) && (hillyness <= 800))
             result+="<img src=\"data/images/hill2.gif\">";
-        if (Hillyness > 800)
+        if (hillyness > 800)
             result+="<img src=\"data/images/hill3.gif\">";
         if (rough > 8)
             result+="<img src=\"data/images/roug1.gif\">";
-        if (CraterProb>30)
+        if (craterProbability>30)
             result+="<img src=\"data/images/crtr1.gif\">";
         
         /* woods */
@@ -605,9 +605,9 @@ final public class PlanetEnvironment{
             result+="<img src=\"data/images/watr1.gif\">";
         else if (water >= 20)
             result+="<img src=\"data/images/watr2.gif\">";
-        if (getRiverProb() > 50)
+        if (getRiverProbability() > 50)
             result+="<img src=\"data/images/rivr1.gif\">";
-        if (getRoadProb() > 50)
+        if (getRoadProbability() > 50)
             result+="<img src=\"data/images/road1.gif\">";
         
         return result;
@@ -620,32 +620,32 @@ final public class PlanetEnvironment{
     public String toImageAbsolutePathDescription()
     {
         String result ="";
-        int water=(((WaterMaxSpots+WaterMinSpots)/2)*
-                (WaterMinHexes+WaterMaxSpots)/2)+RiverProb/10;
-        int rough=(((RoughMaxSpots+RoughMinSpots)/2)*
-                (RoughMinHexes+RoughMaxSpots)/2);
-        int forest=(((ForestMaxSpots+ForestMinSpots)/2)*
-                (ForestMinHexes+ForestMaxSpots)/2);
-        /*int swamp=(((SwampMaxSpots+SwampMinSpots)/2)*
-                (SwampMinHexes+SwampMaxSpots)/2);
-        int pavement=(((PavementMaxSpots+PavementMinSpots)/2)*
-                (PavementMinHexes+PavementMaxSpots)/2);
+        int water=(((waterMaxSpots+waterMinSpots)/2)*
+                (waterMinHexes+waterMaxSpots)/2)+riverProbability/10;
+        int rough=(((roughMaxSpots+roughMinSpots)/2)*
+                (roughMinHexes+roughMaxSpots)/2);
+        int forest=(((forestMaxSpots+forestMinSpots)/2)*
+                (forestMinHexes+forestMaxSpots)/2);
+        /*int swamp=(((swampMaxSpots+swampMinSpots)/2)*
+                (swampMinHexes+swampMaxSpots)/2);
+        int pavement=(((pavementMaxSpots+pavementMinSpots)/2)*
+                (pavementMinHexes+pavementMaxSpots)/2);
           */      
         /* generate the hilliness/crater description */
         String path = "file:///"+new File(".").getAbsolutePath();
         
-        if (HillElevationRange  < 2)
+        if (hillElevationRange  < 2)
             result+="<img src=\""+path+"/data/images/hill0.gif\">";
             //result+="<img src=\"file:///"+path+"/data/images/hill0.gif\">";
-        if ((HillElevationRange  < 5) && (HillElevationRange   >=2))
+        if ((hillElevationRange  < 5) && (hillElevationRange   >=2))
             result+="<img src=\""+path+"/data/images/hill1.gif\">";
-        if ((HillElevationRange   >= 5) && (HillElevationRange  <= 8))
+        if ((hillElevationRange   >= 5) && (hillElevationRange  <= 8))
             result+="<img src=\""+path+"/data/images/hill2.gif\">";
-        if (HillElevationRange  > 8)
+        if (hillElevationRange  > 8)
             result+="<img src=\""+path+"/data/images/hill3.gif\">";
         if (rough > 8)
             result+="<img src=\""+path+"/data/images/roug1.gif\">";
-        if (CraterProb>30)
+        if (craterProbability>30)
             result+="<img src=\""+path+"/data/images/crtr1.gif\">";
 
         /* woods */
@@ -657,97 +657,95 @@ final public class PlanetEnvironment{
             result+="<img src=\""+path+"/data/images/wood3.gif\">";
 
         /*water */
-        if (water >5 && water < 20)
-            result+="<img src=\""+path+"/data/images/watr1.gif\">";
+        if (water > 5 && water < 20)
+            result += "<img src=\"" + path + "/data/images/watr1.gif\">";
         else if (water >= 20)
-            result+="<img src=\""+path+"/data/images/watr2.gif\">";
-        if (getRiverProb() > 50)
-            result+="<img src=\""+path+"/data/images/rivr1.gif\">";
-        if (getRoadProb() > 50)
-            result+="<img src=\""+path+"/data/images/road1.gif\">";
+            result += "<img src=\"" + path + "/data/images/watr2.gif\">";
+        if (getRiverProbability() > 50)
+            result += "<img src=\"" + path + "/data/images/rivr1.gif\">";
+        if (getRoadProbability() > 50)
+            result +="<img src=\"" + path + "/data/images/road1.gif\">";
         
         return result;
-        
     }
 
-    public String toString()
-    {
+    public String toString() {
         String result = "PE$";
-        result += Name + "$";
-        result += CraterProb + "$";
-        result += CraterMinNum + "$";
-        result += CraterMaxNum + "$";
-        result += CraterMinRadius + "$";
-        result += CraterMaxRadius + "$";
-        result += Hillyness + "$";
-        result += HillElevationRange + "$";
-        result += HillInvertProb + "$";
-        result += WaterMinSpots + "$";
-        result += WaterMaxSpots + "$";
-        result += WaterMinHexes + "$";
-        result += WaterMaxHexes + "$";
-        result += WaterDeepProb + "$";
-        result += ForestMinSpots + "$";
-        result += ForestMaxSpots + "$";
-        result += ForestMinHexes + "$";
-        result += ForestMaxHexes + "$";
-        result += ForestHeavyProb + "$";
-        result += RoughMinSpots + "$";
-        result += RoughMaxSpots + "$";
-        result += RoughMinHexes + "$";
-        result += RoughMaxHexes + "$";
-        result += RoadProb + "$";
-        result += RiverProb + "$";
-        result += Algorithm + "$";
-        result += id+"$";
-        result += SwampMinSpots + "$";
-        result += SwampMaxSpots + "$";
-        result += SwampMinHexes + "$";
-        result += SwampMaxHexes + "$";
-        result += PavementMinSpots + "$";
-        result += PavementMaxSpots + "$";
-        result += PavementMinHexes + "$";
-        result += PavementMaxHexes + "$";
-        result += fxMod+ "$";
+        result += name + "$";
+        result += craterProbability + "$";
+        result += craterMinNum + "$";
+        result += craterMaxNum + "$";
+        result += craterMinRadius + "$";
+        result += craterMaxRadius + "$";
+        result += hillyness + "$";
+        result += hillElevationRange + "$";
+        result += hillInvertProbability + "$";
+        result += waterMinSpots + "$";
+        result += waterMaxSpots + "$";
+        result += waterMinHexes + "$";
+        result += waterMaxHexes + "$";
+        result += waterDeepProbability + "$";
+        result += forestMinSpots + "$";
+        result += forestMaxSpots + "$";
+        result += forestMinHexes + "$";
+        result += forestMaxHexes + "$";
+        result += forestHeavyProbability + "$";
+        result += roughMinSpots + "$";
+        result += roughMaxSpots + "$";
+        result += roughMinHexes + "$";
+        result += roughMaxHexes + "$";
+        result += roadProbability + "$";
+        result += riverProbability + "$";
+        result += algorithm + "$";
+        result += id + "$";
+        result += swampMinSpots + "$";
+        result += swampMaxSpots + "$";
+        result += swampMinHexes + "$";
+        result += swampMaxHexes + "$";
+        result += pavementMinSpots + "$";
+        result += pavementMaxSpots + "$";
+        result += pavementMinHexes + "$";
+        result += pavementMaxHexes + "$";
+        result += fxMod + "$";
         result += probForestFire + "$";
         result += probFreeze + "$";
         result += probFlood + "$";
         result += probDrought + "$";
-        result += Theme + "$";
-        result += IceMinSpots + "$";
-        result += IceMaxSpots + "$";
-        result += IceMinHexes + "$";
-        result += IceMaxHexes + "$";
+        result += theme + "$";
+        result += iceMinSpots + "$";
+        result += iceMaxSpots + "$";
+        result += iceMinHexes + "$";
+        result += iceMaxHexes + "$";
 
-        result += RubbleMinSpots + "$";
-        result += RubbleMaxSpots + "$";
-        result += RubbleMinHexes + "$";
-        result += RubbleMaxHexes + "$";
+        result += rubbleMinSpots + "$";
+        result += rubbleMaxSpots + "$";
+        result += rubbleMinHexes + "$";
+        result += rubbleMaxHexes + "$";
 
-        result += FortifiedMinSpots + "$";
-        result += FortifiedMaxSpots + "$";
-        result += FortifiedMinHexes + "$";
-        result += FortifiedMaxHexes + "$";
+        result += fortifiedMinSpots + "$";
+        result += fortifiedMaxSpots + "$";
+        result += fortifiedMinHexes + "$";
+        result += fortifiedMaxHexes + "$";
         
-        result += MinBuildings+ "$";
-        result += MaxBuildings+ "$";
-        result += MinCF + "$";
-        result += MaxCF + "$";
-        result += MinFloors + "$";
-        result += MaxFloors + "$";
-        result += CityDensity+"$";
-        result += CityType+"$";
-        result += Roads+"$";
-        result += CliffProb+"$";
-        result += InvertNegativeTerrain+"$";
-        result += TownSize+"$";
-        result += MountPeaks+"$";
-        result += MountWidthMin+"$";
-        result += MountWidthMax+"$";
-        result += MountHeightMin+"$";
-        result += MountHeightMax+"$";
-        result += MountStyle+"$";
-        result += EnvironmentProb+"$";
+        result += minBuildings + "$";
+        result += maxBuildings + "$";
+        result += minCF + "$";
+        result += maxCF + "$";
+        result += minFloors + "$";
+        result += maxFloors + "$";
+        result += cityDensity + "$";
+        result += cityType + "$";
+        result += roads + "$";
+        result += cliffProbability + "$";
+        result += invertNegativeTerrain + "$";
+        result += townSize + "$";
+        result += mountPeaks + "$";
+        result += mountWidthMin + "$";
+        result += mountWidthMax + "$";
+        result += mountHeightMin + "$";
+        result += mountHeightMax + "$";
+        result += mountStyle + "$";
+        result += environmentProbability + "$";
         result += staticMap;
         result += "$";
         result += staticMapName;
@@ -761,16 +759,16 @@ final public class PlanetEnvironment{
         result += yBoardSize;
         result += "$";
 
-        result += SandMinSpots + "$";
-        result += SandMaxSpots + "$";
-        result += SandMinHexes + "$";
-        result += SandMaxHexes + "$";
+        result += sandMinSpots + "$";
+        result += sandMaxSpots + "$";
+        result += sandMinHexes + "$";
+        result += sandMaxHexes + "$";
 
 
-        result += PlantedFieldMinSpots + "$";
-        result += PlantedFieldMaxSpots + "$";
-        result += PlantedFieldMinHexes + "$";
-        result += PlantedFieldMaxHexes + "$";
+        result += plantedFieldMinSpots + "$";
+        result += plantedFieldMaxSpots + "$";
+        result += plantedFieldMinHexes + "$";
+        result += plantedFieldMaxHexes + "$";
 
 
         return result;
@@ -785,74 +783,74 @@ final public class PlanetEnvironment{
         
         //else 
         String result = "PE$";
-        result += Name + "$";
-        result += CraterProb + "$";
-        result += CraterMinNum + "$";
-        result += CraterMaxNum + "$";
-        result += CraterMinRadius + "$";
-        result += CraterMaxRadius + "$";
-        result += Hillyness + "$";
-        result += HillElevationRange + "$";
-        result += HillInvertProb + "$";
-        result += WaterMinSpots + "$";
-        result += WaterMaxSpots + "$";
-        result += WaterMinHexes + "$";
-        result += WaterMaxHexes + "$";
-        result += WaterDeepProb + "$";
-        result += ForestMinSpots + "$";
-        result += ForestMaxSpots + "$";
-        result += ForestMinHexes + "$";
-        result += ForestMaxHexes + "$";
-        result += ForestHeavyProb + "$";
-        result += RoughMinSpots + "$";
-        result += RoughMaxSpots + "$";
-        result += RoughMinHexes + "$";
-        result += RoughMaxHexes + "$";
-        result += RoadProb + "$";
-        result += RiverProb + "$";
-        result += Algorithm + "$";
-        result += id+"$";
-        result += SwampMinSpots + "$";
-        result += SwampMaxSpots + "$";
-        result += SwampMinHexes + "$";
-        result += SwampMaxHexes + "$";
-        result += PavementMinSpots + "$";
-        result += PavementMaxSpots + "$";
-        result += PavementMinHexes + "$";
-        result += PavementMaxHexes + "$";
-        result += fxMod+ "$";
+        result += name + "$";
+        result += craterProbability + "$";
+        result += craterMinNum + "$";
+        result += craterMaxNum + "$";
+        result += craterMinRadius + "$";
+        result += craterMaxRadius + "$";
+        result += hillyness + "$";
+        result += hillElevationRange + "$";
+        result += hillInvertProbability + "$";
+        result += waterMinSpots + "$";
+        result += waterMaxSpots + "$";
+        result += waterMinHexes + "$";
+        result += waterMaxHexes + "$";
+        result += waterDeepProbability + "$";
+        result += forestMinSpots + "$";
+        result += forestMaxSpots + "$";
+        result += forestMinHexes + "$";
+        result += forestMaxHexes + "$";
+        result += forestHeavyProbability + "$";
+        result += roughMinSpots + "$";
+        result += roughMaxSpots + "$";
+        result += roughMinHexes + "$";
+        result += roughMaxHexes + "$";
+        result += roadProbability + "$";
+        result += riverProbability + "$";
+        result += algorithm + "$";
+        result += id + "$";
+        result += swampMinSpots + "$";
+        result += swampMaxSpots + "$";
+        result += swampMinHexes + "$";
+        result += swampMaxHexes + "$";
+        result += pavementMinSpots + "$";
+        result += pavementMaxSpots + "$";
+        result += pavementMinHexes + "$";
+        result += pavementMaxHexes + "$";
+        result += fxMod + "$";
         result += probForestFire + "$";
         result += probFreeze + "$";
         result += probFlood + "$";
         result += probDrought + "$";
-        result += Theme + "$";
-        result += IceMinSpots + "$";
-        result += IceMaxSpots + "$";
-        result += IceMinHexes + "$";
-        result += IceMaxHexes + "$";
+        result += theme + "$";
+        result += iceMinSpots + "$";
+        result += iceMaxSpots + "$";
+        result += iceMinHexes + "$";
+        result += iceMaxHexes + "$";
 
-        result += RubbleMinSpots + "$";
-        result += RubbleMaxSpots + "$";
-        result += RubbleMinHexes + "$";
-        result += RubbleMaxHexes + "$";
+        result += rubbleMinSpots + "$";
+        result += rubbleMaxSpots + "$";
+        result += rubbleMinHexes + "$";
+        result += rubbleMaxHexes + "$";
 
-        result += FortifiedMinSpots + "$";
-        result += FortifiedMaxSpots + "$";
-        result += FortifiedMinHexes + "$";
-        result += FortifiedMaxHexes + "$";
+        result += fortifiedMinSpots + "$";
+        result += fortifiedMaxSpots + "$";
+        result += fortifiedMinHexes + "$";
+        result += fortifiedMaxHexes + "$";
         
-        result += city+"$";
+        result += city + "$";
         
-        result += CliffProb+"$";
-        result += InvertNegativeTerrain+"$";
-        result += TownSize+"$";
-        result += MountPeaks+"$";
-        result += MountWidthMin+"$";
-        result += MountWidthMax+"$";
-        result += MountHeightMin+"$";
-        result += MountHeightMax+"$";
-        result += MountStyle+"$";
-        result += EnvironmentProb+"$";
+        result += cliffProbability + "$";
+        result += invertNegativeTerrain + "$";
+        result += townSize + "$";
+        result += mountPeaks + "$";
+        result += mountWidthMin + "$";
+        result += mountWidthMax + "$";
+        result += mountHeightMin + "$";
+        result += mountHeightMax + "$";
+        result += mountStyle + "$";
+        result += environmentProbability + "$";
         result += staticMap;
         result += "$";
         result += staticMapName;
@@ -866,461 +864,566 @@ final public class PlanetEnvironment{
         result += yBoardSize;
         result += "$";
 
-        result += SandMinSpots + "$";
-        result += SandMaxSpots + "$";
-        result += SandMinHexes + "$";
-        result += SandMaxHexes + "$";
+        result += sandMinSpots + "$";
+        result += sandMaxSpots + "$";
+        result += sandMinHexes + "$";
+        result += sandMaxHexes + "$";
 
 
-        result += PlantedFieldMinSpots + "$";
-        result += PlantedFieldMaxSpots + "$";
-        result += PlantedFieldMinHexes + "$";
-        result += PlantedFieldMaxHexes + "$";
+        result += plantedFieldMinSpots + "$";
+        result += plantedFieldMaxSpots + "$";
+        result += plantedFieldMinHexes + "$";
+        result += plantedFieldMaxHexes + "$";
         
         return result;
     }
     //Getter and Setter
     public int getWaterMinSpots() {
-        return WaterMinSpots;
+        return waterMinSpots;
     }
+
     public int getWaterMinHexes() {
-        return WaterMinHexes;
+        return waterMinHexes;
     }
+
     public int getWaterMaxHexes() {
-        return WaterMaxHexes;
+        return waterMaxHexes;
     }
+
     public int getWaterMaxSpots() {
-        return WaterMaxSpots;
+        return waterMaxSpots;
     }
-    public int getWaterDeepProb() {
-        return WaterDeepProb;
+
+    public int getWaterDeepProbability() {
+        return waterDeepProbability;
     }
+
     public int getRoughMinSpots() {
-        return RoughMinSpots;
+        return roughMinSpots;
     }
+
     public int getRoughMinHexes() {
-        return RoughMinHexes;
+        return roughMinHexes;
     }
+
     public int getRoughMaxSpots() {
-        return RoughMaxSpots;
+        return roughMaxSpots;
     }
+
     public int getRoughMaxHexes() {
-        return RoughMaxHexes;
+        return roughMaxHexes;
     }
+
     public int getSwampMinSpots() {
-        return SwampMinSpots;
+        return swampMinSpots;
     }
+
     public int getSwampMinHexes() {
-        return SwampMinHexes;
+        return swampMinHexes;
     }
+
     public int getSwampMaxSpots() {
-        return SwampMaxSpots;
+        return swampMaxSpots;
     }
+
     public int getSwampMaxHexes() {
-        return SwampMaxHexes;
+        return swampMaxHexes;
     }
+
     public int getPavementMinSpots() {
-        return PavementMinSpots;
+        return pavementMinSpots;
     }
+
     public int getPavementMinHexes() {
-        return PavementMinHexes;
+        return pavementMinHexes;
     }
+
     public int getPavementMaxSpots() {
-        return PavementMaxSpots;
+        return pavementMaxSpots;
     }
+
     public int getPavementMaxHexes() {
-        return PavementMaxHexes;
+        return pavementMaxHexes;
     }
+
     public int getIceMinSpots() {
-        return IceMinSpots;
+        return iceMinSpots;
     }
+
     public int getIceMinHexes() {
-        return IceMinHexes;
+        return iceMinHexes;
     }
+
     public int getIceMaxSpots() {
-        return IceMaxSpots;
+        return iceMaxSpots;
     }
+
     public int getIceMaxHexes() {
-        return IceMaxHexes;
+        return iceMaxHexes;
     }
 
     public int getRubbleMinSpots() {
-        return RubbleMinSpots;
-    }
-    public int getRubbleMinHexes() {
-        return RubbleMinHexes;
-    }
-    public int getRubbleMaxSpots() {
-        return RubbleMaxSpots;
-    }
-    public int getRubbleMaxHexes() {
-        return RubbleMaxHexes;
+        return rubbleMinSpots;
     }
 
-    public int getFortifiedMinSpots() {
-        return FortifiedMinSpots;
+    public int getRubbleMinHexes() {
+        return rubbleMinHexes;
     }
-    public int getFortifiedMinHexes() {
-        return FortifiedMinHexes;
+
+    public int getRubbleMaxSpots() {
+        return rubbleMaxSpots;
     }
-    public int getFortifiedMaxSpots() {
-        return FortifiedMaxSpots;
+
+    public int getRubbleMaxHexes() {
+        return rubbleMaxHexes;
     }
-    public int getFortifiedMaxHexes() {
-        return FortifiedMaxHexes;
+
+    public int getfortifiedMinSpots() {
+        return fortifiedMinSpots;
+    }
+
+    public int getfortifiedMinHexes() {
+        return fortifiedMinHexes;
+    }
+
+    public int getfortifiedMaxSpots() {
+        return fortifiedMaxSpots;
+    }
+
+    public int getfortifiedMaxHexes() {
+        return fortifiedMaxHexes;
     }
 
     public int getMaxBuildings() {
-        return MaxBuildings;
+        return maxBuildings;
     }
+
     public int getMinBuildings() {
-        return MinBuildings;
+        return minBuildings;
     }
+
     public int getMaxCF() {
-        return MaxCF;
+        return maxCF;
     }
+
     public int getMinCF() {
-        return MinCF;
+        return minCF;
     }
+
     public int getMaxFloors() {
-        return MaxFloors;
+        return maxFloors;
     }
+
     public int getMinFloors() {
-        return MinFloors;
+        return minFloors;
     }
+
     public int getCityDensity() {
-        return CityDensity;
+        return cityDensity;
     }
+
     public int getRoads() {
-        return Roads;
+        return roads;
     }
+
     public String getCityType() {
-        return CityType;
+        return cityType;
     }
 
-    public int getRoadProb() {
-        return RoadProb;
+
+    public int getRoadProbability() {
+        return roadProbability;
     }
-    public int getRiverProb() {
-        return RiverProb;
+
+    public int getRiverProbability() {
+        return riverProbability;
     }
+
     public int getHillyness() {
-        return Hillyness;
+        return hillyness;
     }
+
     public int getForestMinSpots() {
-        return ForestMinSpots;
+        return forestMinSpots;
     }
+
     public int getHillElevationRange() {
-        return HillElevationRange;
+        return hillElevationRange;
     }
+
     public int getForestMinHexes() {
-        return ForestMinHexes;
+        return forestMinHexes;
     }
+
     public int getForestMaxSpots() {
-        return ForestMaxSpots;
+        return forestMaxSpots;
     }
+
     public int getForestMaxHexes() {
-        return ForestMaxHexes;
+        return forestMaxHexes;
     }
-    public int getForestHeavyProb() {
-        return ForestHeavyProb;
+
+    public int getForestHeavyProbability() {
+        return forestHeavyProbability;
     }
-    public int getCraterProb() {
-        return CraterProb;
+
+    public int getCraterProbability() {
+        return craterProbability;
     }
+
     public int getCraterMinRadius() {
-        return CraterMinRadius;
+        return craterMinRadius;
     }
+
     public int getCraterMaxRadius() {
-        return CraterMaxRadius;
+        return craterMaxRadius;
     }
+
     public int getCraterMinNum() {
-        return CraterMinNum;
+        return craterMinNum;
     }
+
     public int getCraterMaxNum() {
-        return CraterMaxNum;
+        return craterMaxNum;
     }
+
     public int getAlgorithm() {
-        return Algorithm;
+        return algorithm;
     }
-    public int getCliffProb() {
-        return CliffProb;
+
+    public int getCliffProbability() {
+        return cliffProbability;
     }
+
     public int getInvertNegativeTerrain() {
-        return InvertNegativeTerrain;
+        return invertNegativeTerrain;
     }
 
-    public int getTownSize(){
-        return TownSize;
+    public int getTownSize() {
+        return townSize;
     }
 
-    public int getMountPeaks(){
-        return MountPeaks;
+    public int getmountPeaks() {
+        return mountPeaks;
     }
 
-    public int getMountWidthMin(){
-        return MountWidthMin;
+    public int getmountWidthMin() {
+        return mountWidthMin;
     }
 
-    public int getMountWidthMax(){
-        return MountWidthMax;
+    public int getmountWidthMax() {
+        return mountWidthMax;
     }
 
-    public int getMountHeightMin(){
-        return MountHeightMin;
+    public int getmountHeightMin() {
+        return mountHeightMin;
     }
 
-    public int getMountHeightMax(){
-        return MountHeightMax;
+    public int getmountHeightMax() {
+        return mountHeightMax;
     }
 
-    public int getMountStyle(){
-        return MountStyle;
+    public int getmountStyle() {
+        return mountStyle;
     }
 
-    public int getEnvironmentalProb(){
-        return EnvironmentProb;
+    public int getEnvironmentalProbability() {
+        return environmentProbability;
     }
 
-    public void setEnvironmentalProb(int prob){
-        EnvironmentProb = prob;
+    public void setEnvironmentalProbability(int prob) {
+        environmentProbability = prob;
     }
 
-    public void setAlgorithm(int Algorithm) {
-        this.Algorithm = Algorithm;
-    }
-    public void setCraterMaxNum(int CraterMaxNum) {
-        this.CraterMaxNum = CraterMaxNum;
-    }
-    public void setCraterMaxRadius(int CraterMaxRadius) {
-        this.CraterMaxRadius = CraterMaxRadius;
-    }
-    public void setCraterMinNum(int CraterMinNum) {
-        this.CraterMinNum = CraterMinNum;
-    }
-    public void setCraterMinRadius(int CraterMinRadius) {
-        this.CraterMinRadius = CraterMinRadius;
-    }
-    public void setCraterProb(int CraterProb) {
-        this.CraterProb = CraterProb;
-    }
-    public void setForestHeavyProb(int ForestHeavyProb) {
-        this.ForestHeavyProb = ForestHeavyProb;
-    }
-    public void setForestMaxHexes(int ForestMaxHexes) {
-        this.ForestMaxHexes = ForestMaxHexes;
-    }
-    public void setForestMaxSpots(int ForestMaxSpots) {
-        this.ForestMaxSpots = ForestMaxSpots;
-    }
-    public void setForestMinHexes(int ForestMinHexes) {
-        this.ForestMinHexes = ForestMinHexes;
-    }
-    public void setForestMinSpots(int ForestMinSpots) {
-        this.ForestMinSpots = ForestMinSpots;
-    }
-    public void setHillElevationRange(int HillElevationRange) {
-        this.HillElevationRange = HillElevationRange;
-    }
-    public void setHillyness(int Hillyness) {
-        this.Hillyness = Hillyness;
-    }
-    public void setRoadProb(int RoadProb) {
-        this.RoadProb = RoadProb;
-    }
-    public void setRiverProb(int RiverProb) {
-        this.RiverProb = RiverProb;
-    }
-    public void setRoughMaxHexes(int RoughMaxHexes) {
-        this.RoughMaxHexes = RoughMaxHexes;
-    }
-    public void setRoughMaxSpots(int RoughMaxSpots) {
-        this.RoughMaxSpots = RoughMaxSpots;
-    }
-    public void setRoughMinSpots(int RoughMinSpots) {
-        this.RoughMinSpots = RoughMinSpots;
-    }
-    public void setRoughMinHexes(int RoughMinHexes) {
-        this.RoughMinHexes = RoughMinHexes;
-    }
-    public void setWaterDeepProb(int WaterDeepProb) {
-        this.WaterDeepProb = WaterDeepProb;
-    }
-    public void setWaterMaxHexes(int WaterMaxHexes) {
-        this.WaterMaxHexes = WaterMaxHexes;
-    }
-    public void setWaterMaxSpots(int WaterMaxSpots) {
-        this.WaterMaxSpots = WaterMaxSpots;
-    }
-    public void setWaterMinHexes(int WaterMinHexes) {
-        this.WaterMinHexes = WaterMinHexes;
-    }
-    public void setWaterMinSpots(int WaterMinSpots) {
-        this.WaterMinSpots = WaterMinSpots;
-    }
-    public int getHillInvertProb() {
-        return HillInvertProb;
-    }
-    public void setHillInvertProb(int HillInvertProb) {
-        this.HillInvertProb = HillInvertProb;
+    public void setAlgorithm(int algorithm) {
+        this.algorithm = algorithm;
     }
 
-    public void setSwampMaxHexes(int SwampMaxHexes) {
-        this.SwampMaxHexes = SwampMaxHexes;
-    }
-    public void setSwampMaxSpots(int SwampMaxSpots) {
-        this.SwampMaxSpots = SwampMaxSpots;
-    }
-    public void setSwampMinSpots(int SwampMinSpots) {
-        this.SwampMinSpots = SwampMinSpots;
-    }
-    public void setSwampMinHexes(int SwampMinHexes) {
-        this.SwampMinHexes = SwampMinHexes;
+    public void setCraterMaxNum(int craterMaxNum) {
+        this.craterMaxNum = craterMaxNum;
     }
 
-    public void setPavementMaxHexes(int PavementMaxHexes) {
-        this.PavementMaxHexes = PavementMaxHexes;
+    public void setCraterMaxRadius(int craterMaxRadius) {
+        this.craterMaxRadius = craterMaxRadius;
     }
-    public void setPavementMaxSpots(int PavementMaxSpots) {
-        this.PavementMaxSpots = PavementMaxSpots;
+
+    public void setCraterMinNum(int craterMinNum) {
+        this.craterMinNum = craterMinNum;
     }
-    public void setPavementMinSpots(int PavementMinSpots) {
-        this.PavementMinSpots = PavementMinSpots;
+
+    public void setCraterMinRadius(int craterMinRadius) {
+        this.craterMinRadius = craterMinRadius;
     }
-    public void setPavementMinHexes(int PavementMinHexes) {
-        this.PavementMinHexes = PavementMinHexes;
+
+    public void setCraterProbability(int craterProbability) {
+        this.craterProbability = craterProbability;
+    }
+
+    public void setForestHeavyProbability(int forestHeavyProbability) {
+        this.forestHeavyProbability = forestHeavyProbability;
+    }
+
+    public void setForestMaxHexes(int forestMaxHexes) {
+        this.forestMaxHexes = forestMaxHexes;
+    }
+
+    public void setForestMaxSpots(int forestMaxSpots) {
+        this.forestMaxSpots = forestMaxSpots;
+    }
+
+    public void setForestMinHexes(int forestMinHexes) {
+        this.forestMinHexes = forestMinHexes;
+    }
+
+    public void setForestMinSpots(int forestMinSpots) {
+        this.forestMinSpots = forestMinSpots;
+    }
+
+    public void setHillElevationRange(int hillElevationRange) {
+        this.hillElevationRange = hillElevationRange;
+    }
+
+    public void setHillyness(int hillyness) {
+        this.hillyness = hillyness;
+    }
+
+    public void setRoadProbability(int roadProbability) {
+        this.roadProbability = roadProbability;
+    }
+
+    public void setRiverProbability(int riverProbability) {
+        this.riverProbability = riverProbability;
+    }
+
+    public void setRoughMaxHexes(int roughMaxHexes) {
+        this.roughMaxHexes = roughMaxHexes;
+    }
+
+    public void setRoughMaxSpots(int roughMaxSpots) {
+        this.roughMaxSpots = roughMaxSpots;
+    }
+
+    public void setRoughMinSpots(int roughMinSpots) {
+        this.roughMinSpots = roughMinSpots;
+    }
+
+    public void setRoughMinHexes(int roughMinHexes) {
+        this.roughMinHexes = roughMinHexes;
+    }
+
+    public void setWaterDeepProbability(int waterDeepProbability) {
+        this.waterDeepProbability = waterDeepProbability;
+    }
+
+    public void setWaterMaxHexes(int waterMaxHexes) {
+        this.waterMaxHexes = waterMaxHexes;
+    }
+
+    public void setWaterMaxSpots(int waterMaxSpots) {
+        this.waterMaxSpots = waterMaxSpots;
+    }
+
+    public void setWaterMinHexes(int waterMinHexes) {
+        this.waterMinHexes = waterMinHexes;
+    }
+
+    public void setWaterMinSpots(int waterMinSpots) {
+        this.waterMinSpots = waterMinSpots;
+    }
+
+    public int getHillInvertProbability() {
+        return hillInvertProbability;
+    }
+
+    public void setHillInvertProbability(int hillInvertProbability) {
+        this.hillInvertProbability = hillInvertProbability;
+    }
+
+    public void setSwampMaxHexes(int swampMaxHexes) {
+        this.swampMaxHexes = swampMaxHexes;
+    }
+
+    public void setSwampMaxSpots(int swampMaxSpots) {
+        this.swampMaxSpots = swampMaxSpots;
+    }
+
+    public void setSwampMinSpots(int swampMinSpots) {
+        this.swampMinSpots = swampMinSpots;
+    }
+
+    public void setSwampMinHexes(int swampMinHexes) {
+        this.swampMinHexes = swampMinHexes;
+    }
+
+    public void setPavementMaxHexes(int pavementMaxHexes) {
+        this.pavementMaxHexes = pavementMaxHexes;
+    } 
+
+    public void setPavementMaxSpots(int pavementMaxSpots) {
+        this.pavementMaxSpots = pavementMaxSpots;
+    }
+
+    public void setPavementMinSpots(int pavementMinSpots) {
+        this.pavementMinSpots = pavementMinSpots;
+    }
+
+    public void setPavementMinHexes(int pavementMinHexes) {
+        this.pavementMinHexes = pavementMinHexes;
     }
     
-    public void setIceMaxHexes(int IceMaxHexes) {
-        this.IceMaxHexes = IceMaxHexes;
+    public void setIceMaxHexes(int iceMaxHexes) {
+        this.iceMaxHexes = iceMaxHexes;
     }
-    public void setIceMaxSpots(int IceMaxSpots) {
-        this.IceMaxSpots = IceMaxSpots;
+
+    public void setIceMaxSpots(int iceMaxSpots) {
+        this.iceMaxSpots = iceMaxSpots;
     }
-    public void setIceMinSpots(int IceMinSpots) {
-        this.IceMinSpots = IceMinSpots;
+
+    public void setIceMinSpots(int iceMinSpots) {
+        this.iceMinSpots = iceMinSpots;
     }
-    public void setIceMinHexes(int IceMinHexes) {
-        this.IceMinHexes = IceMinHexes;
+
+    public void setIceMinHexes(int iceMinHexes) {
+        this.iceMinHexes = iceMinHexes;
     }
     
-    public void setRubbleMaxHexes(int RubbleMaxHexes) {
-        this.RubbleMaxHexes = RubbleMaxHexes;
+    public void setRubbleMaxHexes(int rubbleMaxHexes) {
+        this.rubbleMaxHexes = rubbleMaxHexes;
+    } 
+
+    public void setRubbleMaxSpots(int rubbleMaxSpots) {
+        this.rubbleMaxSpots = rubbleMaxSpots;
     }
-    public void setRubbleMaxSpots(int RubbleMaxSpots) {
-        this.RubbleMaxSpots = RubbleMaxSpots;
+
+    public void setRubbleMinSpots(int rubbleMinSpots) {
+        this.rubbleMinSpots = rubbleMinSpots;
     }
-    public void setRubbleMinSpots(int RubbleMinSpots) {
-        this.RubbleMinSpots = RubbleMinSpots;
-    }
-    public void setRubbleMinHexes(int RubbleMinHexes) {
-        this.RubbleMinHexes = RubbleMinHexes;
+
+    public void setRubbleMinHexes(int rubbleMinHexes) {
+        this.rubbleMinHexes = rubbleMinHexes;
     }
   
-    public void setFortifiedMaxHexes(int FortifiedMaxHexes) {
-        this.FortifiedMaxHexes = FortifiedMaxHexes;
+    public void setFortifiedMaxHexes(int fortifiedMaxHexes) {
+        this.fortifiedMaxHexes = fortifiedMaxHexes;
     }
-    public void setFortifiedMaxSpots(int FortifiedMaxSpots) {
-        this.FortifiedMaxSpots = FortifiedMaxSpots;
+
+    public void setFortifiedMaxSpots(int fortifiedMaxSpots) {
+        this.fortifiedMaxSpots = fortifiedMaxSpots;
     }
-    public void setFortifiedMinSpots(int FortifiedMinSpots) {
-        this.FortifiedMinSpots = FortifiedMinSpots;
+
+    public void setFortifiedMinSpots(int fortifiedMinSpots) {
+        this.fortifiedMinSpots = fortifiedMinSpots;
     }
-    public void setFortifiedMinHexes(int FortifiedMinHexes) {
-        this.FortifiedMinHexes = FortifiedMinHexes;
+
+    public void setFortifiedMinHexes(int fortifiedMinHexes) {
+        this.fortifiedMinHexes = fortifiedMinHexes;
     }
   
     public void setMaxBuildings(int Buildings) {
-        this.MaxBuildings = Buildings;
+        this.maxBuildings = Buildings;
     }
+
     public void setMinBuildings(int Buildings) {
-        this.MinBuildings = Buildings;
+        this.minBuildings = Buildings;
     }
+
     public void setMaxCF(int CF) {
-        this.MaxCF = CF;
+        this.maxCF = CF;
     }
+
     public void setMinCF(int CF) {
-        this.MinCF = CF;
+        this.minCF = CF;
     }
+
     public void setMinFloors(int Floors) {
-        this.MinFloors = Floors;
+        this.minFloors = Floors;
     }
+
     public void setMaxFloors(int Floors) {
-        this.MaxFloors = Floors;
+        this.maxFloors = Floors;
     }
+
     public void setCityDensity(int types) {
-        this.CityDensity = types;
+        this.cityDensity = types;
     }
+
     public void setCityType(String types) {
-        this.CityType = types;
+        this.cityType = types;
     }
-    public void setRoads(int Roads) {
-        this.Roads = Roads;
+
+    public void setRoads(int roads) {
+        this.roads = roads;
     }
 
     public void setFxMod(int mod) {
         this.fxMod = mod;
     }
-    public void setProbForestFire(int prob) {
+
+    public void setProbabilityForestFire(int prob) {
         this.probForestFire = prob;
     }
-    public void setProbFreeze(int prob) {
+
+    public void setProbabilityFreeze(int prob) {
         this.probFreeze = prob;
     }
-    public void setProbFlood(int prob) {
+
+    public void setProbabilityFlood(int prob) {
         this.probFlood = prob;
     }
-    public void setProbDrought(int prob) {
+
+    public void setProbabilityDrought(int prob) {
         this.probDrought = prob;
     }
-    public void setCliffProb(int prob) {
-        this.CliffProb = prob;
+
+    public void setCliffProbability(int prob) {
+        this.cliffProbability = prob;
     }
+
     public void setInvertNegativeTerrain(int invert) {
-        this.InvertNegativeTerrain = invert;
+        this.invertNegativeTerrain = invert;
     }
 
-    public void setTownSize(int amount){
-        this.TownSize = amount;
+    public void setTownSize(int amount) {
+        this.townSize = amount;
     }
 
-    public void setMountPeaks(int amount){
-        this.MountPeaks = amount;
+    public void setMountPeaks(int amount) {
+        this.mountPeaks = amount;
     }
 
-    public void setMountWidthMin(int amount){
-        this.MountWidthMin = amount;
+    public void setMountWidthMin(int amount) {
+        this.mountWidthMin = amount;
     }
 
-    public void setMountWidthMax(int amount){
-        this.MountWidthMax = amount;
+    public void setMountWidthMax(int amount) {
+        this.mountWidthMax = amount;
     }
 
-    public void setMountHeightMin(int amount){
-        this.MountHeightMin = amount;
+    public void setMountHeightMin(int amount) {
+        this.mountHeightMin = amount;
     }
 
-    public void setMountHeightMax(int amount){
-        this.MountHeightMax = amount;
+    public void setMountHeightMax(int amount) {
+        this.mountHeightMax = amount;
     }
 
-    public void setMountStyle(int amount){
-        this.MountStyle = amount;
+    public void setMountStyle(int amount) {
+        this.mountStyle = amount;
     }
 
     public int getFxMod() {
         return fxMod;
     }
-    public int getProbForestFire() {
+    public int getProbabilityForestFire() {
         return probForestFire;
     }
-    public int getProbFreeze() {
+    public int getProbabilityFreeze() {
         return probFreeze;
     }
-    public int getProbFlood() {
+    public int getProbabilityFlood() {
         return probFlood;
     }
-    public int getProbDrought() {
+    public int getProbabilityDrought() {
         return probDrought;
     }
     /**
@@ -1328,95 +1431,95 @@ final public class PlanetEnvironment{
      */
     public void binOut(BinWriter out) throws IOException {
         out.println(id, "id");
-        out.println(Name,"name");
-        out.println(CraterProb, "CraterProb");
-        out.println(CraterMinNum, "CraterMinNum");
-        out.println(CraterMaxNum, "CraterMaxNum");
-        out.println(CraterMinRadius, "CraterMinRadius");
-        out.println(CraterMaxRadius, "CraterMaxRadius");
-        out.println(Hillyness, "Hillyness");
-        out.println(HillElevationRange, "HillElevationRange");
-        out.println(HillInvertProb, "HillInvertProb");
-        out.println(WaterMinSpots, "WaterMinSpots");
-        out.println(WaterMaxSpots, "WaterMaxSpots");
-        out.println(WaterMinHexes, "WaterMinHexes");
-        out.println(WaterMaxHexes, "WaterMaxHexes");
-        out.println(WaterDeepProb, "WaterDeepProb");
-        out.println(ForestMinSpots, "ForestMinSpots");
-        out.println(ForestMaxSpots, "ForestMaxSpots");
-        out.println(ForestMinHexes, "ForestMinHexes");
-        out.println(ForestMaxHexes, "ForestMaxHexes");
-        out.println(ForestHeavyProb, "ForestHeavyProb");
-        out.println(RoughMinSpots, "RoughMinSpots");
-        out.println(RoughMaxSpots, "RoughMaxSpots");
-        out.println(RoughMinHexes, "RoughMinHexes");
-        out.println(RoughMaxHexes, "RoughMaxHexes");
-        out.println(SwampMinSpots, "SwampMinSpots");
-        out.println(SwampMaxSpots, "SwampMaxSpots");
-        out.println(SwampMinHexes, "SwampMinHexes");
-        out.println(SwampMaxHexes, "SwampMaxHexes");
-        out.println(PavementMinSpots, "PavementMinSpots");
-        out.println(PavementMaxSpots, "PavementMaxSpots");
-        out.println(PavementMinHexes, "PavementMinHexes");
-        out.println(PavementMaxHexes, "PavementMaxHexes");
+        out.println(name, "name");
+        out.println(craterProbability, "craterProbability");
+        out.println(craterMinNum, "craterMinNum");
+        out.println(craterMaxNum, "craterMaxNum");
+        out.println(craterMinRadius, "craterMinRadius");
+        out.println(craterMaxRadius, "craterMaxRadius");
+        out.println(hillyness, "hillyness");
+        out.println(hillElevationRange, "hillElevationRange");
+        out.println(hillInvertProbability, "hillInvertProbability");
+        out.println(waterMinSpots, "waterMinSpots");
+        out.println(waterMaxSpots, "waterMaxSpots");
+        out.println(waterMinHexes, "waterMinHexes");
+        out.println(waterMaxHexes, "waterMaxHexes");
+        out.println(waterDeepProbability, "waterDeepProbability");
+        out.println(forestMinSpots, "forestMinSpots");
+        out.println(forestMaxSpots, "forestMaxSpots");
+        out.println(forestMinHexes, "forestMinHexes");
+        out.println(forestMaxHexes, "forestMaxHexes");
+        out.println(forestHeavyProbability, "forestHeavyProbability");
+        out.println(roughMinSpots, "roughMinSpots");
+        out.println(roughMaxSpots, "roughMaxSpots");
+        out.println(roughMinHexes, "roughMinHexes");
+        out.println(roughMaxHexes, "roughMaxHexes");
+        out.println(swampMinSpots, "swampMinSpots");
+        out.println(swampMaxSpots, "swampMaxSpots");
+        out.println(swampMinHexes, "swampMinHexes");
+        out.println(swampMaxHexes, "swampMaxHexes");
+        out.println(pavementMinSpots, "pavementMinSpots");
+        out.println(pavementMaxSpots, "pavementMaxSpots");
+        out.println(pavementMinHexes, "pavementMinHexes");
+        out.println(pavementMaxHexes, "pavementMaxHexes");
         out.println(fxMod, "fxMod");
         out.println(probForestFire, "probForestFire");
         out.println(probFreeze, "probFreeze");
         out.println(probFlood, "probFlood");
         out.println(probDrought, "probDrought");
-        out.println(CliffProb, "CliffProb");
-        out.println(InvertNegativeTerrain, "InvertNegativeTerrain");
-        out.println(RoadProb, "RoadProb");
-        out.println(RiverProb, "RiverProb");
-        out.println(Algorithm, "Algorithm");
-        out.println(Theme,"Theme");
-        out.println(IceMinSpots, "IceMinSpots");
-        out.println(IceMaxSpots, "IceMaxSpots");
-        out.println(IceMinHexes, "IceMinHexes");
-        out.println(IceMaxHexes, "IceMaxHexes");
+        out.println(cliffProbability, "cliffProbability");
+        out.println(invertNegativeTerrain, "invertNegativeTerrain");
+        out.println(roadProbability, "roadProbability");
+        out.println(riverProbability, "riverProbability");
+        out.println(algorithm, "algorithm");
+        out.println(theme, "theme");
+        out.println(iceMinSpots, "iceMinSpots");
+        out.println(iceMaxSpots, "iceMaxSpots");
+        out.println(iceMinHexes, "iceMinHexes");
+        out.println(iceMaxHexes, "iceMaxHexes");
 
-        out.println(RubbleMinSpots, "RubbleMinSpots");
-        out.println(RubbleMaxSpots, "RubbleMaxSpots");
-        out.println(RubbleMinHexes, "RubbleMinHexes");
-        out.println(RubbleMaxHexes, "RubbleMaxHexes");
+        out.println(rubbleMinSpots, "rubbleMinSpots");
+        out.println(rubbleMaxSpots, "rubbleMaxSpots");
+        out.println(rubbleMinHexes, "rubbleMinHexes");
+        out.println(rubbleMaxHexes, "rubbleMaxHexes");
 
-        out.println(SandMinSpots, "SandMinSpots");
-        out.println(SandMaxSpots, "SandMaxSpots");
-        out.println(SandMinHexes, "SandMinHexes");
-        out.println(SandMaxHexes, "SandMaxHexes");
+        out.println(sandMinSpots, "sandMinSpots");
+        out.println(sandMaxSpots, "sandMaxSpots");
+        out.println(sandMinHexes, "sandMinHexes");
+        out.println(sandMaxHexes, "sandMaxHexes");
 
-        out.println(PlantedFieldMinSpots, "PlantedFieldMinSpots");
-        out.println(PlantedFieldMaxSpots, "PlantedFieldMaxSpots");
-        out.println(PlantedFieldMinHexes, "PlantedFieldMinHexes");
-        out.println(PlantedFieldMaxHexes, "PlantedFieldMaxHexes");
+        out.println(plantedFieldMinSpots, "plantedFieldMinSpots");
+        out.println(plantedFieldMaxSpots, "plantedFieldMaxSpots");
+        out.println(plantedFieldMinHexes, "plantedFieldMinHexes");
+        out.println(plantedFieldMaxHexes, "plantedFieldMaxHexes");
                 
-        out.println(FortifiedMinSpots, "FortifiedMinSpots");
-        out.println(FortifiedMaxSpots, "FortifiedMaxSpots");
-        out.println(FortifiedMinHexes, "FortifiedMinHexes");
-        out.println(FortifiedMaxHexes, "FortifiedMaxHexes");
+        out.println(fortifiedMinSpots, "fortifiedMinSpots");
+        out.println(fortifiedMaxSpots, "fortifiedMaxSpots");
+        out.println(fortifiedMinHexes, "fortifiedMinHexes");
+        out.println(fortifiedMaxHexes, "fortifiedMaxHexes");
 
-        out.println(MinBuildings, "MinBuildings");
-        out.println(MaxBuildings, "MaxBuildings");
-        out.println(MinCF, "MinCF");
-        out.println(MaxCF, "MaxCF");
-        out.println(MinFloors, "MinFloors");
-        out.println(MaxFloors, "MaxFloors");
-        out.println(CityDensity, "CityDensity");
-        out.println(CityType, "CityType");
-        out.println(Roads, "Roads");
-        out.println(TownSize,"TownSize");
-        out.println(MountPeaks,"MountPeaks");
-        out.println(MountWidthMin,"MountWidthMin");
-        out.println(MountWidthMax,"MountWidthMax");
-        out.println(MountHeightMin,"MountHeightMin");
-        out.println(MountHeightMax,"MountHeightMax");
-        out.println(MountStyle,"MountStyle");
+        out.println(minBuildings, "minBuildings");
+        out.println(maxBuildings, "maxBuildings");
+        out.println(minCF, "minCF");
+        out.println(maxCF, "maxCF");
+        out.println(minFloors, "minFloors");
+        out.println(maxFloors, "maxFloors");
+        out.println(cityDensity, "cityDensity");
+        out.println(cityType, "cityType");
+        out.println(roads, "roads");
+        out.println(townSize, "townSize");
+        out.println(mountPeaks, "mountPeaks");
+        out.println(mountWidthMin, "mountWidthMin");
+        out.println(mountWidthMax, "mountWidthMax");
+        out.println(mountHeightMin, "mountHeightMin");
+        out.println(mountHeightMax, "mountHeightMax");
+        out.println(mountStyle, "mountStyle");
         out.println(staticMap, "staticMap");
-        out.println(staticMapName,"staticMapName");
-        out.println(xSize,"xSize");
-        out.println(ySize,"ySize");
-        out.println(xBoardSize,"xBoardSize");
-        out.println(yBoardSize,"yBoardSize");
+        out.println(staticMapName, "staticMapName");
+        out.println(xSize, "xSize");
+        out.println(ySize, "ySize");
+        out.println(xBoardSize, "xBoardSize");
+        out.println(yBoardSize, "yBoardSize");
         
     }
     
@@ -1425,89 +1528,89 @@ final public class PlanetEnvironment{
      */
     public void binIn(BinReader in, CampaignData data) throws IOException {
         id = in.readInt("id");
-        Name = in.readLine("name");
-        CraterProb = in.readInt("CraterProb");
-        CraterMinNum = in.readInt("CraterMinNum");
-        CraterMaxNum = in.readInt("CraterMaxNum");
-        CraterMinRadius = in.readInt("CraterMinRadius");
-        CraterMaxRadius = in.readInt("CraterMaxRadius");
-        Hillyness = in.readInt("Hillyness");
-        HillElevationRange = in.readInt("HillElevationRange");
-        HillInvertProb = in.readInt("HillInvertProb");
-        WaterMinSpots = in.readInt("WaterMinSpots");
-        WaterMaxSpots = in.readInt("WaterMaxSpots");
-        WaterMinHexes = in.readInt("WaterMinHexes");
-        WaterMaxHexes = in.readInt("WaterMaxHexes");
-        WaterDeepProb = in.readInt("WaterDeepProb");
-        ForestMinSpots = in.readInt("ForestMinSpots");
-        ForestMaxSpots = in.readInt("ForestMaxSpots");
-        ForestMinHexes = in.readInt("ForestMinHexes");
-        ForestMaxHexes = in.readInt("ForestMaxHexes");
-        ForestHeavyProb = in.readInt("ForestHeavyProb");
-        RoughMinSpots = in.readInt("RoughMinSpots");
-        RoughMaxSpots = in.readInt("RoughMaxSpots");
-        RoughMinHexes = in.readInt("RoughMinHexes");
-        RoughMaxHexes = in.readInt("RoughMaxHexes");
-        SwampMinSpots = in.readInt("SwampMinSpots");
-        SwampMaxSpots = in.readInt("SwampMaxSpots");
-        SwampMinHexes = in.readInt("SwampMinHexes");
-        SwampMaxHexes = in.readInt("SwampMaxHexes");
-        PavementMinSpots = in.readInt("PavementMinSpots");
-        PavementMaxSpots = in.readInt("PavementMaxSpots");
-        PavementMinHexes = in.readInt("PavementMinHexes");
-        PavementMaxHexes = in.readInt("PavementMaxHexes");
+        name = in.readLine("name");
+        craterProbability = in.readInt("craterProbability");
+        craterMinNum = in.readInt("craterMinNum");
+        craterMaxNum = in.readInt("craterMaxNum");
+        craterMinRadius = in.readInt("craterMinRadius");
+        craterMaxRadius = in.readInt("craterMaxRadius");
+        hillyness = in.readInt("hillyness");
+        hillElevationRange = in.readInt("hillElevationRange");
+        hillInvertProbability = in.readInt("hillInvertProbability");
+        waterMinSpots = in.readInt("waterMinSpots");
+        waterMaxSpots = in.readInt("waterMaxSpots");
+        waterMinHexes = in.readInt("waterMinHexes");
+        waterMaxHexes = in.readInt("waterMaxHexes");
+        waterDeepProbability = in.readInt("waterDeepProbability");
+        forestMinSpots = in.readInt("forestMinSpots");
+        forestMaxSpots = in.readInt("forestMaxSpots");
+        forestMinHexes = in.readInt("forestMinHexes");
+        forestMaxHexes = in.readInt("forestMaxHexes");
+        forestHeavyProbability = in.readInt("forestHeavyProbability");
+        roughMinSpots = in.readInt("roughMinSpots");
+        roughMaxSpots = in.readInt("roughMaxSpots");
+        roughMinHexes = in.readInt("roughMinHexes");
+        roughMaxHexes = in.readInt("roughMaxHexes");
+        swampMinSpots = in.readInt("swampMinSpots");
+        swampMaxSpots = in.readInt("swampMaxSpots");
+        swampMinHexes = in.readInt("swampMinHexes");
+        swampMaxHexes = in.readInt("swampMaxHexes");
+        pavementMinSpots = in.readInt("pavementMinSpots");
+        pavementMaxSpots = in.readInt("pavementMaxSpots");
+        pavementMinHexes = in.readInt("pavementMinHexes");
+        pavementMaxHexes = in.readInt("pavementMaxHexes");
         fxMod = in.readInt("fxMod");
         probForestFire = in.readInt("probForestFire");
         probFreeze = in.readInt("probFreeze");
         probFlood = in.readInt("probFlood");
         probDrought = in.readInt("probDrought");
-        CliffProb = in.readInt("CliffProb");
-        InvertNegativeTerrain = in.readInt("InvertNegativeTerrain");
-        RoadProb = in.readInt("RoadProb");
-        RiverProb = in.readInt("RiverProb");
-        Algorithm = in.readInt("Algorithm");
-        Theme = in.readLine("Theme"); 
-        IceMinSpots = in.readInt("IceMinSpots");
-        IceMaxSpots = in.readInt("IceMaxSpots");
-        IceMinHexes = in.readInt("IceMinHexes");
-        IceMaxHexes = in.readInt("IceMaxHexes");
+        cliffProbability = in.readInt("cliffProbability");
+        invertNegativeTerrain = in.readInt("invertNegativeTerrain");
+        roadProbability = in.readInt("roadProbability");
+        riverProbability = in.readInt("riverProbability");
+        algorithm = in.readInt("algorithm");
+        theme = in.readLine("theme"); 
+        iceMinSpots = in.readInt("iceMinSpots");
+        iceMaxSpots = in.readInt("iceMaxSpots");
+        iceMinHexes = in.readInt("iceMinHexes");
+        iceMaxHexes = in.readInt("iceMaxHexes");
 
-        RubbleMinSpots = in.readInt("RubbleMinSpots");
-        RubbleMaxSpots = in.readInt("RubbleMaxSpots");
-        RubbleMinHexes = in.readInt("RubbleMinHexes");
-        RubbleMaxHexes = in.readInt("RubbleMaxHexes");
+        rubbleMinSpots = in.readInt("rubbleMinSpots");
+        rubbleMaxSpots = in.readInt("rubbleMaxSpots");
+        rubbleMinHexes = in.readInt("rubbleMinHexes");
+        rubbleMaxHexes = in.readInt("rubbleMaxHexes");
 
-        SandMinSpots = in.readInt("SandMinSpots");
-        SandMaxSpots = in.readInt("SandMaxSpots");
-        SandMinHexes = in.readInt("SandMinHexes");
-        SandMaxHexes = in.readInt("SandMaxHexes");
+        sandMinSpots = in.readInt("sandMinSpots");
+        sandMaxSpots = in.readInt("sandMaxSpots");
+        sandMinHexes = in.readInt("sandMinHexes");
+        sandMaxHexes = in.readInt("sandMaxHexes");
 
-        PlantedFieldMinSpots = in.readInt("PlantedFieldMinSpots");
-        PlantedFieldMaxSpots = in.readInt("PlantedFieldMaxSpots");
-        PlantedFieldMinHexes = in.readInt("PlantedFieldMinHexes");
-        PlantedFieldMaxHexes = in.readInt("PlantedFieldMaxHexes");
+        plantedFieldMinSpots = in.readInt("plantedFieldMinSpots");
+        plantedFieldMaxSpots = in.readInt("plantedFieldMaxSpots");
+        plantedFieldMinHexes = in.readInt("plantedFieldMinHexes");
+        plantedFieldMaxHexes = in.readInt("plantedFieldMaxHexes");
 
-        FortifiedMinSpots = in.readInt("FortifiedMinSpots");
-        FortifiedMaxSpots = in.readInt("FortifiedMaxSpots");
-        FortifiedMinHexes = in.readInt("FortifiedMinHexes");
-        FortifiedMaxHexes = in.readInt("FortifiedMaxHexes");
+        fortifiedMinSpots = in.readInt("fortifiedMinSpots");
+        fortifiedMaxSpots = in.readInt("fortifiedMaxSpots");
+        fortifiedMinHexes = in.readInt("fortifiedMinHexes");
+        fortifiedMaxHexes = in.readInt("fortifiedMaxHexes");
 
-        MinBuildings = in.readInt("MinBuildings");
-        MaxBuildings = in.readInt("MaxBuildings");
-        MinCF = in.readInt("MinCF");
-        MaxCF = in.readInt("MaxCF");
-        MinFloors = in.readInt("MinFloors");
-        MaxFloors = in.readInt("MaxFloors");
-        CityDensity = in.readInt("CityDensity");
-        CityType = in.readLine("CityType");
-        Roads = in.readInt("Roads");
-        TownSize = in.readInt("TownSize");
-        MountPeaks = in.readInt("MountPeaks");
-        MountWidthMin = in.readInt("MountWidthMin");
-        MountWidthMax = in.readInt("MountWidthMax");
-        MountHeightMin = in.readInt("MountHeightMin");
-        MountHeightMax = in.readInt("MountHeightMax");
-        MountStyle = in.readInt("MountStyle");
+        minBuildings = in.readInt("minBuildings");
+        maxBuildings = in.readInt("maxBuildings");
+        minCF = in.readInt("minCF");
+        maxCF = in.readInt("maxCF");
+        minFloors = in.readInt("minFloors");
+        maxFloors = in.readInt("maxFloors");
+        cityDensity = in.readInt("cityDensity");
+        cityType = in.readLine("cityType");
+        roads = in.readInt("roads");
+        townSize = in.readInt("townSize");
+        mountPeaks = in.readInt("mountPeaks");
+        mountWidthMin = in.readInt("mountWidthMin");
+        mountWidthMax = in.readInt("mountWidthMax");
+        mountHeightMin = in.readInt("mountHeightMin");
+        mountHeightMax = in.readInt("mountHeightMax");
+        mountStyle = in.readInt("mountStyle");
         staticMap = in.readBoolean("staticMap");
         staticMapName = in.readLine("staticMapName");
         xSize = in.readInt("xSize");
@@ -1533,27 +1636,28 @@ final public class PlanetEnvironment{
     public void setId(int id) {
         this.id = id;
     }
-	/**
-	 * @return Returns the name.
-	 */
-	public String getName() {
-		return Name;
-	}
-	/**
-	 * @param name The name to set.
-	 */
-	public void setName(String name) {
-		Name = name;
-	}
+    /**
+     * @return Returns the name.
+     */
+    public String getName() {
+        return name;
+    }
+    /**
+     * @param name The name to set.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getTheme() {
-		return Theme;
-	}
-	public void setTheme(String theme) {
-	    if ( theme.length() <=1 )
-	        theme = " ";
-		Theme = theme;
-	}
+    public String getTheme() {
+        return theme;
+    }
+    public void settheme(String theme) {
+        if (theme.length() <= 1) {
+            theme = " ";
+        }
+        this.theme = theme;
+    }
     public boolean isStaticMap() {
         return staticMap;
     }
@@ -1601,68 +1705,68 @@ final public class PlanetEnvironment{
         yBoardSize = size;
     }
 
-	public int getSandMinSpots() {
-		return SandMinSpots;
-	}
+    public int getsandMinSpots() {
+        return sandMinSpots;
+    }
 
-	public void setSandMinSpots(int sandMinSpots) {
-		SandMinSpots = sandMinSpots;
-	}
+    public void setsandMinSpots(int sandMinSpots) {
+        sandMinSpots = sandMinSpots;
+    }
 
-	public int getSandMaxSpots() {
-		return SandMaxSpots;
-	}
+    public int getsandMaxSpots() {
+        return sandMaxSpots;
+    }
 
-	public void setSandMaxSpots(int sandMaxSpots) {
-		SandMaxSpots = sandMaxSpots;
-	}
+    public void setsandMaxSpots(int sandMaxSpots) {
+        sandMaxSpots = sandMaxSpots;
+    }
 
-	public int getSandMinHexes() {
-		return SandMinHexes;
-	}
+    public int getsandMinHexes() {
+        return sandMinHexes;
+    }
 
-	public void setSandMinHexes(int sandMinHexes) {
-		SandMinHexes = sandMinHexes;
-	}
+    public void setsandMinHexes(int sandMinHexes) {
+        sandMinHexes = sandMinHexes;
+    }
 
-	public int getSandMaxHexes() {
-		return SandMaxHexes;
-	}
+    public int getsandMaxHexes() {
+        return sandMaxHexes;
+    }
 
-	public void setSandMaxHexes(int sandMaxHexes) {
-		SandMaxHexes = sandMaxHexes;
-	}
+    public void setsandMaxHexes(int sandMaxHexes) {
+        sandMaxHexes = sandMaxHexes;
+    }
 
-	public int getPlantedFieldMinSpots() {
-		return PlantedFieldMinSpots;
-	}
+    public int getplantedFieldMinSpots() {
+        return plantedFieldMinSpots;
+    }
 
-	public void setPlantedFieldMinSpots(int plantedFieldMinSpots) {
-		PlantedFieldMinSpots = plantedFieldMinSpots;
-	}
+    public void setplantedFieldMinSpots(int plantedFieldMinSpots) {
+        plantedFieldMinSpots = plantedFieldMinSpots;
+    }
 
-	public int getPlantedFieldMinHexes() {
-		return PlantedFieldMinHexes;
-	}
+    public int getplantedFieldMinHexes() {
+        return plantedFieldMinHexes;
+    }
 
-	public void setPlantedFieldMinHexes(int plantedFieldMinHexes) {
-		PlantedFieldMinHexes = plantedFieldMinHexes;
-	}
+    public void setplantedFieldMinHexes(int plantedFieldMinHexes) {
+        plantedFieldMinHexes = plantedFieldMinHexes;
+    }
 
-	public int getPlantedFieldMaxSpots() {
-		return PlantedFieldMaxSpots;
-	}
+    public int getplantedFieldMaxSpots() {
+        return plantedFieldMaxSpots;
+    }
 
-	public void setPlantedFieldMaxSpots(int plantedFieldMaxSpots) {
-		PlantedFieldMaxSpots = plantedFieldMaxSpots;
-	}
+    public void setplantedFieldMaxSpots(int plantedFieldMaxSpots) {
+        plantedFieldMaxSpots = plantedFieldMaxSpots;
+    }
 
-	public int getPlantedFieldMaxHexes() {
-		return PlantedFieldMaxHexes;
-	}
+    public int getplantedFieldMaxHexes() {
+        return plantedFieldMaxHexes;
+    }
 
-	public void setPlantedFieldMaxHexes(int plantedFieldMaxHexes) {
-		PlantedFieldMaxHexes = plantedFieldMaxHexes;
-	}
+    public void setplantedFieldMaxHexes(int plantedFieldMaxHexes) {
+        plantedFieldMaxHexes = plantedFieldMaxHexes;
+    }
 
 }

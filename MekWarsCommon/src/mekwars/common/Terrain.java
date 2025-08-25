@@ -154,7 +154,7 @@ final public class Terrain {
     public int getTotalEnvironmentProbabilities() {
         int result = 0;
         for (PlanetEnvironment pe : environments )
-            result += pe.getEnvironmentalProb();
+            result += pe.getEnvironmentalProbability();
         return result;
     }
 
