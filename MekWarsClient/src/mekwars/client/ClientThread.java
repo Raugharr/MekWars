@@ -234,20 +234,20 @@ public class ClientThread extends Thread implements CloseClientListener {
                     } else if (pe.getStaticMapName().toLowerCase().endsWith("generated")) {
                         PlanetEnvironment env = mwclient.getCurrentEnvironment();
                         /* Set the map-gen values */
-                        mySettings.setElevationParams(env.getHillyness(), env.getHillElevationRange(), env.getHillInvertProb());
-                        mySettings.setWaterParams(env.getWaterMinSpots(), env.getWaterMaxSpots(), env.getWaterMinHexes(), env.getWaterMaxHexes(), env.getWaterDeepProb());
-                        mySettings.setForestParams(env.getForestMinSpots(), env.getForestMaxSpots(), env.getForestMinHexes(), env.getForestMaxHexes(), env.getForestHeavyProb());
+                        mySettings.setElevationParams(env.getHillyness(), env.getHillElevationRange(), env.getHillInvertProbability());
+                        mySettings.setWaterParams(env.getWaterMinSpots(), env.getWaterMaxSpots(), env.getWaterMinHexes(), env.getWaterMaxHexes(), env.getWaterDeepProbability());
+                        mySettings.setForestParams(env.getForestMinSpots(), env.getForestMaxSpots(), env.getForestMinHexes(), env.getForestMaxHexes(), env.getForestHeavyProbability());
                         mySettings.setRoughParams(env.getRoughMinSpots(), env.getRoughMaxSpots(), env.getRoughMinHexes(), env.getRoughMaxHexes());
                         mySettings.setSwampParams(env.getSwampMinSpots(), env.getSwampMaxSpots(), env.getSwampMinHexes(), env.getSwampMaxHexes());
                         mySettings.setPavementParams(env.getPavementMinSpots(), env.getPavementMaxSpots(), env.getPavementMinHexes(), env.getPavementMaxHexes());
                         mySettings.setIceParams(env.getIceMinSpots(), env.getIceMaxSpots(), env.getIceMinHexes(), env.getIceMaxHexes());
                         mySettings.setRubbleParams(env.getRubbleMinSpots(), env.getRubbleMaxSpots(), env.getRubbleMinHexes(), env.getRubbleMaxHexes());
                         mySettings.setFortifiedParams(env.getFortifiedMinSpots(), env.getFortifiedMaxSpots(), env.getFortifiedMinHexes(), env.getFortifiedMaxHexes());
-                        mySettings.setSpecialFX(env.getFxMod(), env.getProbForestFire(), env.getProbFreeze(), env.getProbFlood(), env.getProbDrought());
-                        mySettings.setRiverParam(env.getRiverProb());
-                        mySettings.setCliffParam(env.getCliffProb());
-                        mySettings.setRoadParam(env.getRoadProb());
-                        mySettings.setCraterParam(env.getCraterProb(), env.getCraterMinNum(), env.getCraterMaxNum(), env.getCraterMinRadius(), env.getCraterMaxRadius());
+                        mySettings.setSpecialFX(env.getFxMod(), env.getProbabilityForestFire(), env.getProbabilityFreeze(), env.getProbabilityFlood(), env.getProbabilityDrought());
+                        mySettings.setRiverParam(env.getRiverProbability());
+                        mySettings.setCliffParam(env.getCliffProbability());
+                        mySettings.setRoadParam(env.getRoadProbability());
+                        mySettings.setCraterParam(env.getCraterProbability(), env.getCraterMinNum(), env.getCraterMaxNum(), env.getCraterMinRadius(), env.getCraterMaxRadius());
                         mySettings.setAlgorithmToUse(env.getAlgorithm());
                         mySettings.setInvertNegativeTerrain(env.getInvertNegativeTerrain());
                         mySettings.setMountainParams(env.getMountPeaks(), env.getMountWidthMin(), env.getMountWidthMax(), env.getMountHeightMin(), env.getMountHeightMax(), env.getMountStyle());
@@ -326,20 +326,20 @@ public class ClientThread extends Thread implements CloseClientListener {
                 } else {
                     PlanetEnvironment env = mwclient.getCurrentEnvironment();
                     /* Set the map-gen values */
-                    mySettings.setElevationParams(env.getHillyness(), env.getHillElevationRange(), env.getHillInvertProb());
-                    mySettings.setWaterParams(env.getWaterMinSpots(), env.getWaterMaxSpots(), env.getWaterMinHexes(), env.getWaterMaxHexes(), env.getWaterDeepProb());
-                    mySettings.setForestParams(env.getForestMinSpots(), env.getForestMaxSpots(), env.getForestMinHexes(), env.getForestMaxHexes(), env.getForestHeavyProb());
+                    mySettings.setElevationParams(env.getHillyness(), env.getHillElevationRange(), env.getHillInvertProbability());
+                    mySettings.setWaterParams(env.getWaterMinSpots(), env.getWaterMaxSpots(), env.getWaterMinHexes(), env.getWaterMaxHexes(), env.getWaterDeepProbability());
+                    mySettings.setForestParams(env.getForestMinSpots(), env.getForestMaxSpots(), env.getForestMinHexes(), env.getForestMaxHexes(), env.getForestHeavyProbability());
                     mySettings.setRoughParams(env.getRoughMinSpots(), env.getRoughMaxSpots(), env.getRoughMinHexes(), env.getRoughMaxHexes());
                     mySettings.setSwampParams(env.getSwampMinSpots(), env.getSwampMaxSpots(), env.getSwampMinHexes(), env.getSwampMaxHexes());
                     mySettings.setPavementParams(env.getPavementMinSpots(), env.getPavementMaxSpots(), env.getPavementMinHexes(), env.getPavementMaxHexes());
                     mySettings.setIceParams(env.getIceMinSpots(), env.getIceMaxSpots(), env.getIceMinHexes(), env.getIceMaxHexes());
                     mySettings.setRubbleParams(env.getRubbleMinSpots(), env.getRubbleMaxSpots(), env.getRubbleMinHexes(), env.getRubbleMaxHexes());
                     mySettings.setFortifiedParams(env.getFortifiedMinSpots(), env.getFortifiedMaxSpots(), env.getFortifiedMinHexes(), env.getFortifiedMaxHexes());
-                    mySettings.setSpecialFX(env.getFxMod(), env.getProbForestFire(), env.getProbFreeze(), env.getProbFlood(), env.getProbDrought());
-                    mySettings.setRiverParam(env.getRiverProb());
-                    mySettings.setCliffParam(env.getCliffProb());
-                    mySettings.setRoadParam(env.getRoadProb());
-                    mySettings.setCraterParam(env.getCraterProb(), env.getCraterMinNum(), env.getCraterMaxNum(), env.getCraterMinRadius(), env.getCraterMaxRadius());
+                    mySettings.setSpecialFX(env.getFxMod(), env.getProbabilityForestFire(), env.getProbabilityFreeze(), env.getProbabilityFlood(), env.getProbabilityDrought());
+                    mySettings.setRiverParam(env.getRiverProbability());
+                    mySettings.setCliffParam(env.getCliffProbability());
+                    mySettings.setRoadParam(env.getRoadProbability());
+                    mySettings.setCraterParam(env.getCraterProbability(), env.getCraterMinNum(), env.getCraterMaxNum(), env.getCraterMinRadius(), env.getCraterMaxRadius());
                     mySettings.setAlgorithmToUse(env.getAlgorithm());
                     mySettings.setInvertNegativeTerrain(env.getInvertNegativeTerrain());
                     mySettings.setMountainParams(env.getMountPeaks(), env.getMountWidthMin(), env.getMountWidthMax(), env.getMountHeightMin(), env.getMountHeightMax(), env.getMountStyle());

@@ -978,19 +978,19 @@ final public class PlanetEnvironment{
         return rubbleMaxHexes;
     }
 
-    public int getfortifiedMinSpots() {
+    public int getFortifiedMinSpots() {
         return fortifiedMinSpots;
     }
 
-    public int getfortifiedMinHexes() {
+    public int getFortifiedMinHexes() {
         return fortifiedMinHexes;
     }
 
-    public int getfortifiedMaxSpots() {
+    public int getFortifiedMaxSpots() {
         return fortifiedMaxSpots;
     }
 
-    public int getfortifiedMaxHexes() {
+    public int getFortifiedMaxHexes() {
         return fortifiedMaxHexes;
     }
 
@@ -1103,27 +1103,27 @@ final public class PlanetEnvironment{
         return townSize;
     }
 
-    public int getmountPeaks() {
+    public int getMountPeaks() {
         return mountPeaks;
     }
 
-    public int getmountWidthMin() {
+    public int getMountWidthMin() {
         return mountWidthMin;
     }
 
-    public int getmountWidthMax() {
+    public int getMountWidthMax() {
         return mountWidthMax;
     }
 
-    public int getmountHeightMin() {
+    public int getMountHeightMin() {
         return mountHeightMin;
     }
 
-    public int getmountHeightMax() {
+    public int getMountHeightMax() {
         return mountHeightMax;
     }
 
-    public int getmountStyle() {
+    public int getMountStyle() {
         return mountStyle;
     }
 
@@ -1705,7 +1705,7 @@ final public class PlanetEnvironment{
         yBoardSize = size;
     }
 
-    public int getsandMinSpots() {
+    public int getSandMinSpots() {
         return sandMinSpots;
     }
 
@@ -1713,7 +1713,7 @@ final public class PlanetEnvironment{
         sandMinSpots = sandMinSpots;
     }
 
-    public int getsandMaxSpots() {
+    public int getSandMaxSpots() {
         return sandMaxSpots;
     }
 
@@ -1721,7 +1721,7 @@ final public class PlanetEnvironment{
         sandMaxSpots = sandMaxSpots;
     }
 
-    public int getsandMinHexes() {
+    public int getSandMinHexes() {
         return sandMinHexes;
     }
 
@@ -1729,7 +1729,7 @@ final public class PlanetEnvironment{
         sandMinHexes = sandMinHexes;
     }
 
-    public int getsandMaxHexes() {
+    public int getSandMaxHexes() {
         return sandMaxHexes;
     }
 
@@ -1737,7 +1737,7 @@ final public class PlanetEnvironment{
         sandMaxHexes = sandMaxHexes;
     }
 
-    public int getplantedFieldMinSpots() {
+    public int getPlantedFieldMinSpots() {
         return plantedFieldMinSpots;
     }
 
@@ -1745,7 +1745,7 @@ final public class PlanetEnvironment{
         plantedFieldMinSpots = plantedFieldMinSpots;
     }
 
-    public int getplantedFieldMinHexes() {
+    public int getPlantedFieldMinHexes() {
         return plantedFieldMinHexes;
     }
 
@@ -1753,7 +1753,7 @@ final public class PlanetEnvironment{
         plantedFieldMinHexes = plantedFieldMinHexes;
     }
 
-    public int getplantedFieldMaxSpots() {
+    public int getPlantedFieldMaxSpots() {
         return plantedFieldMaxSpots;
     }
 
@@ -1761,7 +1761,7 @@ final public class PlanetEnvironment{
         plantedFieldMaxSpots = plantedFieldMaxSpots;
     }
 
-    public int getplantedFieldMaxHexes() {
+    public int getPlantedFieldMaxHexes() {
         return plantedFieldMaxHexes;
     }
 
