@@ -47,7 +47,7 @@ public class ContinentConverter implements Converter {
             String nodeName = reader.getNodeName();
             if (nodeName.equals("size")) {
                 size = Integer.parseInt(reader.getValue());
-            } else if (nodeName.equals("terrian")) {
+            } else if (nodeName.equals("terrain")) {
                 terrainName = reader.getValue();
             } else if (nodeName.equals("advancedTerrain")) {
                 advancedTerrainName = reader.getValue();
@@ -57,11 +57,11 @@ public class ContinentConverter implements Converter {
         
         Terrain terrain = CampaignMain.cm.getData().getTerrainByName(terrainName);
         if (terrain == null) {
-            throw new ConversionException("terrain not found");    
+            throw new ConversionException("terrain '" + terrainName + "' not found");
         }
         AdvancedTerrain advancedTerrain = CampaignMain.cm.getData().getAdvancedTerrainByName(advancedTerrainName);
         if (advancedTerrain == null) {
-            throw new ConversionException("advancedTerrain not found");    
+            throw new ConversionException("advancedTerrain '" + advancedTerrainName + "' not found");
         }
         return new Continent(size, terrain, advancedTerrain);
     }

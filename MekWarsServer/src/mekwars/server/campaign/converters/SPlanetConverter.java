@@ -24,16 +24,11 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import common.Continent;
 import common.PlanetEnvironments;
 import java.util.Vector;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import server.campaign.SPlanet;
 import server.campaign.SUnitFactory;
 
 public class SPlanetConverter implements Converter {
-    private static final Logger logger = LogManager.getLogger(SPlanetConverter.class);
-
     public boolean canConvert(Class clazz) {
-		logger.debug(clazz.toString());
         return clazz.equals(SPlanet.class);
     }
 

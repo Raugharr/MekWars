@@ -29,7 +29,7 @@ import common.util.BinWriter;
 final public class Terrain {
     // id
     private int id = -1;
-    private String Name = "";
+    private String name = "";
     private Vector<PlanetEnvironment> environments = new Vector<PlanetEnvironment>(10, 1);
 
     /**
@@ -44,7 +44,7 @@ final public class Terrain {
         ST.nextToken();
         // Read the Data
 
-        Name = ST.nextToken();
+        name = ST.nextToken();
 
         while (ST.hasMoreElements()) {
             PlanetEnvironment PE = new PlanetEnvironment(ST);
@@ -54,7 +54,7 @@ final public class Terrain {
 
     public String toString() {
         String result = "TE$";
-        result += Name + "$";
+        result += name + "$";
 
         for (PlanetEnvironment env : environments) {
             result += env.toString();
@@ -67,7 +67,7 @@ final public class Terrain {
      */
     public void binOut(BinWriter out) throws IOException {
         out.println(id, "id");
-        out.println(Name, "name");
+        out.println(name, "name");
 
         out.println(environments.size(), "environmentsize");
 
@@ -82,7 +82,7 @@ final public class Terrain {
      */
     public void binIn(BinReader in, CampaignData data) throws IOException {
         id = in.readInt("id");
-        Name = in.readLine("name");
+        name = in.readLine("name");
 
         int environments = in.readInt("environmentsize");
 
@@ -116,7 +116,7 @@ final public class Terrain {
      * @return Returns the name.
      */
     public String getName() {
-        return Name;
+        return name;
     }
 
     /**
@@ -124,7 +124,7 @@ final public class Terrain {
      *            The name to set.
      */
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     /**

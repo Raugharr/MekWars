@@ -563,6 +563,7 @@ public class CampaignData implements TerrainProvider {
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
     public void addTerrain(Terrain terrain) {
+        logger.info("Adding Terrain: '{}'", terrain.getName());
         terrain.setId(getUnusedTerrainID());
         terrains.add(terrain);
         terrains.trimToSize();
@@ -588,7 +589,6 @@ public class CampaignData implements TerrainProvider {
             }
         }
         return new AdvancedTerrain();
-
     }
 
     /**

@@ -39,8 +39,8 @@ final public class PlanetEnvironment{
     
     //Crater
     private int craterProbability = 0;
-    private int craterMinNum = 0;
-    private int craterMaxNum = 0;
+    private int craterMinimum = 0;
+    private int craterMaximum = 0;
     private int craterMinRadius = 0;
     private int craterMaxRadius = 0;
     
@@ -125,10 +125,10 @@ final public class PlanetEnvironment{
     
     //Special Effects
     private int fxMod = 0;
-    private int probForestFire = 0;
-    private int probFreeze = 0;
-    private int probFlood = 0;
-    private int probDrought = 0;
+    private int forestFireProbability = 0;
+    private int freezeProbability = 0;
+    private int floodProbability = 0;
+    private int droughtProbability = 0;
     private String theme = "";
     
     //Mountains
@@ -170,8 +170,8 @@ final public class PlanetEnvironment{
         
         name = ST.nextToken();
         craterProbability = Integer.parseInt(ST.nextToken());
-        craterMinNum = Integer.parseInt(ST.nextToken());
-        craterMaxNum = Integer.parseInt(ST.nextToken());
+        craterMinimum = Integer.parseInt(ST.nextToken());
+        craterMaximum = Integer.parseInt(ST.nextToken());
         craterMinRadius = Integer.parseInt(ST.nextToken());
         craterMaxRadius = Integer.parseInt(ST.nextToken());
         hillyness = Integer.parseInt(ST.nextToken());
@@ -215,13 +215,13 @@ final public class PlanetEnvironment{
         if (ST.hasMoreTokens())
             fxMod = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            probForestFire = Integer.parseInt(ST.nextToken());
+            forestFireProbability = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            probFreeze = Integer.parseInt(ST.nextToken());
+            freezeProbability = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            probFlood = Integer.parseInt(ST.nextToken());
+            floodProbability = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            probDrought = Integer.parseInt(ST.nextToken());
+            droughtProbability = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
             theme = ST.nextToken();
         if (ST.hasMoreTokens())
@@ -328,8 +328,8 @@ final public class PlanetEnvironment{
         
         name = ST.nextToken();
         craterProbability = Integer.parseInt(ST.nextToken());
-        craterMinNum = Integer.parseInt(ST.nextToken());
-        craterMaxNum = Integer.parseInt(ST.nextToken());
+        craterMinimum = Integer.parseInt(ST.nextToken());
+        craterMaximum = Integer.parseInt(ST.nextToken());
         craterMinRadius = Integer.parseInt(ST.nextToken());
         craterMaxRadius = Integer.parseInt(ST.nextToken());
         hillyness = Integer.parseInt(ST.nextToken());
@@ -373,13 +373,13 @@ final public class PlanetEnvironment{
         if (ST.hasMoreTokens())
             fxMod = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            probForestFire = Integer.parseInt(ST.nextToken());
+            forestFireProbability = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            probFreeze = Integer.parseInt(ST.nextToken());
+            freezeProbability = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            probFlood = Integer.parseInt(ST.nextToken());
+            floodProbability = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
-            probDrought = Integer.parseInt(ST.nextToken());
+            droughtProbability = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
             theme = ST.nextToken();
         if (ST.hasMoreTokens())
@@ -673,8 +673,8 @@ final public class PlanetEnvironment{
         String result = "PE$";
         result += name + "$";
         result += craterProbability + "$";
-        result += craterMinNum + "$";
-        result += craterMaxNum + "$";
+        result += craterMinimum + "$";
+        result += craterMaximum + "$";
         result += craterMinRadius + "$";
         result += craterMaxRadius + "$";
         result += hillyness + "$";
@@ -707,10 +707,10 @@ final public class PlanetEnvironment{
         result += pavementMinHexes + "$";
         result += pavementMaxHexes + "$";
         result += fxMod + "$";
-        result += probForestFire + "$";
-        result += probFreeze + "$";
-        result += probFlood + "$";
-        result += probDrought + "$";
+        result += forestFireProbability + "$";
+        result += freezeProbability + "$";
+        result += floodProbability + "$";
+        result += droughtProbability + "$";
         result += theme + "$";
         result += iceMinSpots + "$";
         result += iceMaxSpots + "$";
@@ -785,8 +785,8 @@ final public class PlanetEnvironment{
         String result = "PE$";
         result += name + "$";
         result += craterProbability + "$";
-        result += craterMinNum + "$";
-        result += craterMaxNum + "$";
+        result += craterMinimum + "$";
+        result += craterMaximum + "$";
         result += craterMinRadius + "$";
         result += craterMaxRadius + "$";
         result += hillyness + "$";
@@ -819,10 +819,10 @@ final public class PlanetEnvironment{
         result += pavementMinHexes + "$";
         result += pavementMaxHexes + "$";
         result += fxMod + "$";
-        result += probForestFire + "$";
-        result += probFreeze + "$";
-        result += probFlood + "$";
-        result += probDrought + "$";
+        result += forestFireProbability + "$";
+        result += freezeProbability + "$";
+        result += floodProbability + "$";
+        result += droughtProbability + "$";
         result += theme + "$";
         result += iceMinSpots + "$";
         result += iceMaxSpots + "$";
@@ -1080,11 +1080,11 @@ final public class PlanetEnvironment{
     }
 
     public int getCraterMinNum() {
-        return craterMinNum;
+        return craterMinimum;
     }
 
     public int getCraterMaxNum() {
-        return craterMaxNum;
+        return craterMaximum;
     }
 
     public int getAlgorithm() {
@@ -1139,16 +1139,16 @@ final public class PlanetEnvironment{
         this.algorithm = algorithm;
     }
 
-    public void setCraterMaxNum(int craterMaxNum) {
-        this.craterMaxNum = craterMaxNum;
+    public void setCraterMaxNum(int craterMaximum) {
+        this.craterMaximum = craterMaximum;
     }
 
     public void setCraterMaxRadius(int craterMaxRadius) {
         this.craterMaxRadius = craterMaxRadius;
     }
 
-    public void setCraterMinNum(int craterMinNum) {
-        this.craterMinNum = craterMinNum;
+    public void setCraterMinNum(int craterMinimum) {
+        this.craterMinimum = craterMinimum;
     }
 
     public void setCraterMinRadius(int craterMinRadius) {
@@ -1360,19 +1360,19 @@ final public class PlanetEnvironment{
     }
 
     public void setProbabilityForestFire(int prob) {
-        this.probForestFire = prob;
+        this.forestFireProbability = prob;
     }
 
     public void setProbabilityFreeze(int prob) {
-        this.probFreeze = prob;
+        this.freezeProbability = prob;
     }
 
     public void setProbabilityFlood(int prob) {
-        this.probFlood = prob;
+        this.floodProbability = prob;
     }
 
     public void setProbabilityDrought(int prob) {
-        this.probDrought = prob;
+        this.droughtProbability = prob;
     }
 
     public void setCliffProbability(int prob) {
@@ -1415,16 +1415,16 @@ final public class PlanetEnvironment{
         return fxMod;
     }
     public int getProbabilityForestFire() {
-        return probForestFire;
+        return forestFireProbability;
     }
     public int getProbabilityFreeze() {
-        return probFreeze;
+        return freezeProbability;
     }
     public int getProbabilityFlood() {
-        return probFlood;
+        return floodProbability;
     }
     public int getProbabilityDrought() {
-        return probDrought;
+        return droughtProbability;
     }
     /**
      * Writes as binary stream
@@ -1433,8 +1433,8 @@ final public class PlanetEnvironment{
         out.println(id, "id");
         out.println(name, "name");
         out.println(craterProbability, "craterProbability");
-        out.println(craterMinNum, "craterMinNum");
-        out.println(craterMaxNum, "craterMaxNum");
+        out.println(craterMinimum, "craterMinimum");
+        out.println(craterMaximum, "craterMaximum");
         out.println(craterMinRadius, "craterMinRadius");
         out.println(craterMaxRadius, "craterMaxRadius");
         out.println(hillyness, "hillyness");
@@ -1463,10 +1463,10 @@ final public class PlanetEnvironment{
         out.println(pavementMinHexes, "pavementMinHexes");
         out.println(pavementMaxHexes, "pavementMaxHexes");
         out.println(fxMod, "fxMod");
-        out.println(probForestFire, "probForestFire");
-        out.println(probFreeze, "probFreeze");
-        out.println(probFlood, "probFlood");
-        out.println(probDrought, "probDrought");
+        out.println(forestFireProbability, "forestFireProbability");
+        out.println(freezeProbability, "freezeProbability");
+        out.println(floodProbability, "floodProbability");
+        out.println(droughtProbability, "droughtProbability");
         out.println(cliffProbability, "cliffProbability");
         out.println(invertNegativeTerrain, "invertNegativeTerrain");
         out.println(roadProbability, "roadProbability");
@@ -1530,8 +1530,8 @@ final public class PlanetEnvironment{
         id = in.readInt("id");
         name = in.readLine("name");
         craterProbability = in.readInt("craterProbability");
-        craterMinNum = in.readInt("craterMinNum");
-        craterMaxNum = in.readInt("craterMaxNum");
+        craterMinimum = in.readInt("craterMinimum");
+        craterMaximum = in.readInt("craterMaximum");
         craterMinRadius = in.readInt("craterMinRadius");
         craterMaxRadius = in.readInt("craterMaxRadius");
         hillyness = in.readInt("hillyness");
@@ -1560,10 +1560,10 @@ final public class PlanetEnvironment{
         pavementMinHexes = in.readInt("pavementMinHexes");
         pavementMaxHexes = in.readInt("pavementMaxHexes");
         fxMod = in.readInt("fxMod");
-        probForestFire = in.readInt("probForestFire");
-        probFreeze = in.readInt("probFreeze");
-        probFlood = in.readInt("probFlood");
-        probDrought = in.readInt("probDrought");
+        forestFireProbability = in.readInt("forestFireProbability");
+        freezeProbability = in.readInt("freezeProbability");
+        floodProbability = in.readInt("floodProbability");
+        droughtProbability = in.readInt("droughtProbability");
         cliffProbability = in.readInt("cliffProbability");
         invertNegativeTerrain = in.readInt("invertNegativeTerrain");
         roadProbability = in.readInt("roadProbability");

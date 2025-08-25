@@ -64,7 +64,9 @@ import megamek.common.options.IOption;
 import server.MWServ;
 import server.campaign.converters.ContinentConverter;
 import server.campaign.converters.SPlanetConverter;
+import server.campaign.converters.SUnitFactoryConverter;
 import server.campaign.converters.SHouseConverter;
+import server.campaign.converters.TerrainConverter;
 import server.campaign.commands.*;
 import server.campaign.commands.admin.*;
 import server.campaign.commands.helpers.HireAndMaintainHelper;
@@ -363,8 +365,11 @@ public final class CampaignMain implements Serializable {
         xstream.registerConverter(new ContinentConverter());
         xstream.registerConverter(new SPlanetConverter());
         xstream.registerConverter(new SHouseConverter());
+        xstream.registerConverter(new SUnitFactoryConverter());
+        xstream.registerConverter(new TerrainConverter());
         xstream.alias("planet", SPlanet.class);
         xstream.alias("terrain", Terrain.class);
+        xstream.alias("unitFactory", SUnitFactory.class);
 
         File terrainFile = new File("./data/terrain.xml");
         Terrain[] terrainList = (Terrain[]) getXStream().fromXML(terrainFile);
