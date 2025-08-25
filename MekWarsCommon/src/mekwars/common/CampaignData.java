@@ -54,7 +54,7 @@ import megamek.common.AmmoType;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class CampaignData implements TerrainProvider {
-	private static final Logger logger = LogManager.getLogger(CampaignData.class);
+    private static final Logger logger = LogManager.getLogger(CampaignData.class);
 
     public static CampaignData cd;
 
@@ -247,7 +247,7 @@ public class CampaignData implements TerrainProvider {
      * @TODO You should use XStream to initialize CampaignData
      */
     public void addHouse(House faction) {
-		logger.info("Adding House: '{}'", faction.getName());
+        logger.info("Adding House: '{}'", faction.getName());
         if (faction.getId() == -1 && !faction.getName().equalsIgnoreCase("None")) {
             faction.setId(getUnusedHouseID());
         }

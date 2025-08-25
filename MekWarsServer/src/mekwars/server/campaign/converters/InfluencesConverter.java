@@ -16,39 +16,38 @@
 
 package server.campaign.converters;
 
-import common.UnitFactory;
-import common.Influences;
-
-import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import common.Influences;
+import common.UnitFactory;
 
 public class InfluencesConverter implements Converter {
-	public boolean canConvert(Class clazz) {
-		return clazz.equals(Influences.class);
-	}
+    public boolean canConvert(Class clazz) {
+        return clazz.equals(Influences.class);
+    }
 
-	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-		// TODO: Implement
-	}
+    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        // TODO: Implement
+    }
 
-	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-		String factionName = null;
-		int influence = 0;
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        String factionName = null;
+        int influence = 0;
 
-		while (reader.hasMoreChildren()) {
-			String nodeName = reader.getNodeName();
-			if(nodeName.equals("faction")) {
-			} else if(nodeName.equals("amount")) {
-			}
-			reader.moveDown();
-			reader.moveUp();
-		}
-		if(factionName == null) throw new ConversionException("factionName expected");
+        while (reader.hasMoreChildren()) {
+            String nodeName = reader.getNodeName();
+            if (nodeName.equals("faction")) {
+            } else if (nodeName.equals("amount")) {
+            }
+            reader.moveDown();
+            reader.moveUp();
+        }
+        if (factionName == null) throw new ConversionException("factionName expected");
         return new Influences();
-	}
+    }
 }
 
