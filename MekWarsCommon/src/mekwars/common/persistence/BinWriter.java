@@ -16,8 +16,8 @@
 
 package common.persistence;
 
+import common.util.HTMLConverter;
 import java.io.PrintWriter;
-
 
 /**
  * BinWriter is a minimal textual based writer optimized to output as few 
@@ -69,9 +69,7 @@ public class BinWriter {
     public void write(String v, String name) {
         // TODO: This encoding is not safe. If there are <br> in the 
         // string, they will be converted back in BinReader.
-		// NOTE: Deprecating this 8/21/25
-        // out.println(HTML.cr2br(v));
-        out.println(v);
+        out.println(HTMLConverter.cr2br(v));
     }
 
     /**

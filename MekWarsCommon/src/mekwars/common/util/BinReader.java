@@ -16,6 +16,7 @@
 
 package common.util;
 
+import common.util.HTMLConverter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -93,9 +94,7 @@ public class BinReader {
      * Reads an string
      */
     public String readLine(String debugName) throws IOException {
-		// NOTE: Removed 8/21/25
-        // return HTML.br2cr(read(debugName));
-        return read(debugName);
+        return HTMLConverter.br2cr(read(debugName));
     }
 
     /**

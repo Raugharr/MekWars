@@ -16,18 +16,16 @@
 
 package common.util;
 
+import common.util.HTMLConverter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-
 
 /**
  * Used to write the data fields of common data classes
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class BinWriter {
-	
     private PrintWriter out;
     private boolean debug;
     private BinWriter dataBlock = null;
@@ -41,9 +39,9 @@ public class BinWriter {
     public BinWriter(PrintWriter out, String debugFilename) {
         try {
             String ls = System.getProperty("line.seperator");
-            System.setProperty("line.seperator",String.valueOf((char)13));
-            this.out = new PrintWriter(new TeePrinter(out,new FileWriter(debugFilename)));
-            System.setProperty("line.seperator",ls);
+            System.setProperty("line.seperator", String.valueOf((char) 13));
+            this.out = new PrintWriter(new TeePrinter(out, new FileWriter(debugFilename)));
+            System.setProperty("line.seperator", ls);
         } catch (IOException e) {
             MWLogger.errLog(e);
             this.out = new PrintWriter(out);
@@ -54,29 +52,37 @@ public class BinWriter {
     
     
     public void println(int v, String debugName) {
-        if (debug) out.print(debugName+"=");
+        if (debug) {
+            out.print(debugName + "=");
+        }
         out.println(v);
     }
     
     public void println(double v, String debugName) {
-        if (debug) out.print(debugName+"=");
+        if (debug) {
+            out.print(debugName + "=");
+        }
         out.println(v);
     }
     
     public void println(String v, String debugName) {
-        if (debug) out.print(debugName+"=");
-		// NOTE: Deprecating this 8/21/25
-        // out.println(HTML.cr2br(v));
-        out.println(v);
+        if (debug) {
+            out.print(debugName + "=");
+        }
+        out.println(HTMLConverter.cr2br(v));
     }
     
     public void println(boolean v, String debugName) {
-        if (debug) out.print(debugName+"=");
+        if (debug) {
+            out.print(debugName + "=");
+        }
         out.println(v);
     }
     
     public void printStringln(String v, String debugName) {
-        if (debug) out.print(debugName+"=");
+        if (debug) {
+            out.print(debugName + "=");
+        }
         out.println(v);
     }
     
@@ -111,5 +117,4 @@ public class BinWriter {
     public BinWriter newBlock(String name) {
         return new BinWriter(out);
     }
-    
 }
