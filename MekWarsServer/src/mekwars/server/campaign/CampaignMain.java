@@ -11,11 +11,21 @@
 
 package server.campaign;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.thoughtworks.xstream.XStream;
-
+import common.AdvancedTerrain;
+import common.CampaignData;
+import common.Continent;
+import common.Equipment;
+import common.House;
+import common.Influences;
+import common.Planet;
+import common.Terrain;
+import common.campaign.operations.Operation;
+import common.flags.PlayerFlags;
+import common.util.MMNetXStream;
+import common.util.MWLogger;
+import common.util.MekwarsFileReader;
+import common.util.UnitUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,21 +49,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
-
-import common.AdvancedTerrain;
-import common.CampaignData;
-import common.Continent;
-import common.Equipment;
-import common.House;
-import common.Influences;
-import common.Planet;
-import common.Terrain;
-import common.campaign.operations.Operation;
-import common.flags.PlayerFlags;
-import common.util.MMNetXStream;
-import common.util.MWLogger;
-import common.util.MekwarsFileReader;
-import common.util.UnitUtils;
 import megamek.MegaMek;
 import megamek.client.Client;
 import megamek.common.CriticalSlot;
@@ -62,6 +57,8 @@ import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
 import megamek.common.options.IOption;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import server.MWServ;
 import server.campaign.converters.ContinentConverter;
 import server.campaign.converters.SPlanetConverter;
@@ -1910,7 +1907,7 @@ public final class CampaignMain implements Serializable {
                     }
                 }
             } catch (Exception ex) {
-                logger.error("Error while reading Planet Data: {}", ex.getMessage());
+                logger.error("Error while reading Planet Data: {}", ex.toString());
                 System.exit(1);
             }
 
@@ -4111,7 +4108,6 @@ public final class CampaignMain implements Serializable {
             MWLogger.errLog("Unable to save Mega Mek Game Options!");
             MWLogger.errLog(ex);
         }
-
     }
 
     public String getMegaMekOptionsToString() {
