@@ -117,7 +117,7 @@ public class House {
      */
     public void setBaseGunner(int baseGunner) {
         synchronized(this.baseGunner) {
-        	this.baseGunner.set(0, baseGunner);
+            this.baseGunner.set(0, baseGunner);
         }
     }
 
@@ -127,7 +127,7 @@ public class House {
      */
     public void setBasePilotSkill(String basePilotSkill, int type) {
         synchronized(this.basePilotSkills) {
-        	this.basePilotSkills.set(type, basePilotSkill);
+            this.basePilotSkills.set(type, basePilotSkill);
         }
     }
 
@@ -137,7 +137,7 @@ public class House {
      */
     public void setBaseGunner(int baseGunner, int type) {
         synchronized(this.baseGunner) {
-        	this.baseGunner.set(type, baseGunner);
+            this.baseGunner.set(type, baseGunner);
         }
     }
 
@@ -168,7 +168,7 @@ public class House {
      */
     public void setBasePilot(int basePilot) {
         synchronized(this.basePilot) {
-        	this.basePilot.set(0, basePilot);
+            this.basePilot.set(0, basePilot);
         }
     }
 
@@ -178,7 +178,7 @@ public class House {
      */
     public void setBasePilot(int basePilot, int type) {
         synchronized(this.basePilot) {
-        	this.basePilot.set(type, basePilot);
+            this.basePilot.set(type, basePilot);
         }
     }
 
@@ -307,7 +307,6 @@ public class House {
      * Write itself to an binary stream.
      */
     public void binOut(BinWriter out) throws IOException {
-
         out.println(id.intValue(), "id");
         out.println(name, "name");
         out.println(logo, "logo");
@@ -374,7 +373,7 @@ public class House {
         }
 
         id = in.readInt("id");
-		// NOTE: Removed 8/21/25
+        // NOTE: Removed 8/21/25
         // name = HTML.br2cr(in.readLine("name"));
         // logo = HTML.br2cr(in.readLine("logo"));
         name = in.readLine("name");
