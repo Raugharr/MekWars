@@ -2650,8 +2650,6 @@ public final class CampaignMain implements Serializable {
 
         for (House currH : data.getAllHouses()) {
             SHouse shouse = (SHouse) currH;
-			logger.info("checking house {}", shouse.getName());
-
             // exact match
             if (shouse.getName().equals(houseString)) {
                 return shouse;

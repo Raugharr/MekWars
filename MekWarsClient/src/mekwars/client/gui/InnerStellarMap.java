@@ -17,6 +17,7 @@
 
 package client.gui;
 
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -48,7 +49,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -58,9 +58,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-
-import com.thoughtworks.xstream.io.xml.DomDriver;
-
 import client.MWClient;
 import client.campaign.CArmy;
 import client.gui.dialog.PlanetSearchDialog;
@@ -404,13 +401,9 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             }
 
             popup.show(this, e.getX() + 10, e.getY() + 10);
-        }
-
         // normal left click
-        else if (e.getButton() == MouseEvent.BUTTON1) {
-
+        } else if (e.getButton() == MouseEvent.BUTTON1) {
             if (e.getClickCount() >= 2) {
-
                 JEditorPane label;
                 if (Boolean.parseBoolean(mwclient.getserverConfigs("UseStaticMaps"))) {
                     House h = mwclient.getData().getHouseByName(mp.getPPanel().getPlanet().getOriginalOwner());
@@ -532,21 +525,21 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         });
 
         changesSinceLastRefresh = client.getChangesSinceLastRefresh();
-        new Thread() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                    }
-                    blinkPhase = !blinkPhase;
-                    if (changesSinceLastRefresh.size() > 0) {
-                        mp.repaint();
-                    }
-                }
-            }
-        }.start();
+        // new Thread() {
+        //     @Override
+        //     public void run() {
+        //         while (true) {
+        //             try {
+        //                 Thread.sleep(1000);
+        //             } catch (InterruptedException e) {
+        //             }
+        //             blinkPhase = !blinkPhase;
+        //             if (changesSinceLastRefresh.size() > 0) {
+        //                 mp.repaint();
+        //             }
+        //         }
+        //     }
+        // }.start();
 
         // restore previous zoom level
         Double storedZoom = Double.parseDouble(client.getConfigParam("MAPZOOMLEVEL"));
@@ -692,9 +685,8 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
 
         // For each through the collection of Planets
         for (Planet p : planets) {
-
             /*
-             * check the visibility of the planet. TODO: Checking on every pait is slow. We should cache the visibility data in a map of some kind and clear it on refresh or viewing option change.
+             * check the visibility of the planet. TODO: Checking on every paint is slow. We should cache the visibility data in a map of some kind and clear it on refresh or viewing option change.
              */
             if (!planetIsVisible(p)) {
                 continue;
@@ -964,7 +956,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
 
     int mouseMod = 0;
 
-	private URLClassLoader loader;
+    private URLClassLoader loader;
 
     public void mouseDragged(MouseEvent e) {
         if (mouseMod != MouseEvent.BUTTON3) {
@@ -1162,7 +1154,6 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
      * Method which saves current map properties. Called when a new planet is selected. The settings are restored when a client is loaded, preserving map selections between user sessions.
      */
     public void saveMapSelection(Planet p) {
-
         // save the config
         mwclient.getConfig().setParam("SELECTEDPLANET", p.getName());
         mwclient.getConfig().setParam("MAPZOOMLEVEL", "" + conf.scale);
@@ -1171,7 +1162,6 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
 
         mwclient.getConfig().saveConfig();
         mwclient.setConfig();
-
     }
 
     /**
@@ -1180,12 +1170,11 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
      * @param p
      * @return
      */
-    private boolean planetIsVisible(Planet p) {
-
-    	if ( null == p){
-    		return false;
-    	}
-    	
+    private boolean planetIsVisible(Planet planet) {
+        if (null == planet) {
+            return false;
+        }
+        
         // first, make sure its not "All"
         if (filterSettings[FILTER_ALL]) {
             return true;
@@ -1194,17 +1183,17 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         /*
          * Not showing all, so do check all relevant server options and determine whether this particular world should be visible @ this time.
          */
-        if (filterSettings[FILTER_FACTORIES] && p.getFactoryCount() > 0) {
+        if (filterSettings[FILTER_FACTORIES] && planet.getFactoryCount() > 0) {
             return true;
         }
 
-        if (filterSettings[FILTER_FACILITIES] && p.getBaysProvided() > 0) {
+        if (filterSettings[FILTER_FACILITIES] && planet.getBaysProvided() > 0) {
             return true;
         }
 
         if (filterSettings[FILTER_DISPUTED]) {
 
-            Integer houseID = p.getInfluence().getOwner();
+            Integer houseID = planet.getInfluence().getOwner();
 
             // no owner means disputed
             if (houseID == null) {
@@ -1212,21 +1201,19 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             }
 
             // there's a high ID, but it doesn't own enough of the world to be undisputed
-            if (p.getInfluence().getInfluence(houseID) < mwclient.getMinPlanetOwnerShip(p)) {
+            if (planet.getInfluence().getInfluence(houseID) < mwclient.getMinPlanetOwnerShip(planet)) {
                 return true;
             }
         }
 
-        if (filterSettings[FILTER_CONTESTED] && p.getInfluence().getHouses().size() > 1) {
+        if (filterSettings[FILTER_CONTESTED] && planet.getInfluence().getHouses().size() > 1) {
             return true;
         }
 
-        if (filterSettings[FILTER_FACTION] && p.getInfluence().getInfluence(mwclient.getPlayer().getMyHouse().getId()) > 0) {
+        if (filterSettings[FILTER_FACTION] && planet.getInfluence().getInfluence(mwclient.getPlayer().getMyHouse().getId()) > 0) {
             return true;
         }
-
         // no qualifiers. we shouldn't see the world.
         return false;
     }
-
 }
