@@ -137,7 +137,7 @@ public class BlackMarketPartsModel extends AbstractTableModel {
             DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
             return df.format(bme.getCost());
         case TECH:
-            return bme.getTech(Integer.parseInt(mwclient.getserverConfigs("CampaignYear")));
+            return bme.getTech(Integer.parseInt(mwclient.getServerConfigs("CampaignYear")));
         case AMOUNT:
             if (mwclient.getPlayer().getPartsCache().getPartsCritCount(bme.getEquipmentInternalName()) < 1) {
                 return bme.getAmount();
@@ -166,7 +166,7 @@ public class BlackMarketPartsModel extends AbstractTableModel {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component d = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            int year = Integer.parseInt(mwclient.getserverConfigs("CampaignYear"));
+            int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
             JLabel c = new JLabel(); // use a new label for everything (should
                                      // be made better later)
             c.setOpaque(true);

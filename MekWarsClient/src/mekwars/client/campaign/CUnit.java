@@ -253,10 +253,10 @@ public class CUnit extends Unit {
         setChristmasUnit(TokenReader.readBoolean(ST));
         
         //@salient Quirks - set unit quirks, or drop data if quirks have been turned off
-        if(ST.hasMoreTokens() && Boolean.parseBoolean(mwclient.getserverConfigs("EnableQuirks")))
-        	setUnitQuirks(TokenReader.readString(ST));
+        if(ST.hasMoreTokens() && Boolean.parseBoolean(mwclient.getServerConfigs("EnableQuirks")))
+            setUnitQuirks(TokenReader.readString(ST));
         else if (ST.hasMoreTokens())
-        	TokenReader.readString(ST);
+            TokenReader.readString(ST);
         
         unitEntity.setExternalId(getId());
 
@@ -272,42 +272,42 @@ public class CUnit extends Unit {
     //@salient this method is only accessible when quirks are enabled.
     private void setUnitQuirks(String data) 
     {
-		StringTokenizer st = new StringTokenizer(data, "!");
-		if(st.hasMoreTokens())
-		{
-			htmlQuirkList = TokenReader.readString(st);
-			quirkList = TokenReader.readString(st);
-		}
-		
-		if(quirkList != null)
-		{
-			st = new StringTokenizer(quirkList, "&");
-			while(st.hasMoreTokens())
-			{
-				String quirk = TokenReader.readString(st);
-				if(quirk.equalsIgnoreCase("none") == false)
-					unitEntity.getQuirks().getOption(quirk).setValue(true);
-				//mwclient.sendChat(quirk); //debug
-			}   		
-		}   		
-			
-	}
+        StringTokenizer st = new StringTokenizer(data, "!");
+        if(st.hasMoreTokens())
+        {
+            htmlQuirkList = TokenReader.readString(st);
+            quirkList = TokenReader.readString(st);
+        }
+        
+        if(quirkList != null)
+        {
+            st = new StringTokenizer(quirkList, "&");
+            while(st.hasMoreTokens())
+            {
+                String quirk = TokenReader.readString(st);
+                if(quirk.equalsIgnoreCase("none") == false)
+                    unitEntity.getQuirks().getOption(quirk).setValue(true);
+                //mwclient.sendChat(quirk); //debug
+            }           
+        }           
+            
+    }
     
     public String getHtmlQuirksList()
     {
-    	return htmlQuirkList;
+        return htmlQuirkList;
     }
     
     public String getQuirksList()
     {
-    	return quirkList;
+        return quirkList;
     }
     
     //@salient debug method, i really just used this once to make sure the quirks were being set
     //but i'll leave it in case one day someone needs it.
     public String quirkCheck()
     {
-		StringJoiner quirksList = new StringJoiner("&");
+        StringJoiner quirksList = new StringJoiner("&");
         
         for (Enumeration<IOptionGroup> optionGroups = unitEntity.getQuirks().getGroups(); optionGroups.hasMoreElements();) 
         {
@@ -324,12 +324,12 @@ public class CUnit extends Unit {
             }
           }
         }
-		return quirksList.toString();
+        return quirksList.toString();
     }
     
     public boolean hasQuirks()
     {
-		//StringJoiner quirksList = new StringJoiner("&");
+        //StringJoiner quirksList = new StringJoiner("&");
         
         for (Enumeration<IOptionGroup> optionGroups = unitEntity.getQuirks().getGroups(); optionGroups.hasMoreElements();) 
         {
@@ -346,10 +346,10 @@ public class CUnit extends Unit {
             }
           }
         }
-		return false;
+        return false;
     }
 
-	/**
+    /**
      * Method which generates data for an auto unit. Since auto units have no
      * unique properties this can be assembled client side rather than sent from
      * the server.
@@ -428,13 +428,13 @@ public class CUnit extends Unit {
         tinfo += "BV: ";
 
         if (Boolean.parseBoolean(mwclient
-                .getserverConfigs("UseBaseBVForMatching"))) {
+                .getServerConfigs("UseBaseBVForMatching"))) {
             tinfo += getBaseBV();
         } else {
             tinfo += BV;
         }
 
-        // if (Boolean.parseBoolean(mwclient.getserverConfigs("RIGHTHERE")))
+        // if (Boolean.parseBoolean(mwclient.getServerConfigs("RIGHTHERE")))
         if (Boolean.parseBoolean(mwclient.getConfigParam("ShowUnitBaseBV"))) {
             if (getBV() != getBaseBV()) {
                 tinfo += " (" + getBaseBV() + ")";
@@ -470,7 +470,7 @@ public class CUnit extends Unit {
 
         if ((capacity != null) && (capacity.trim().length() > 0)) {
             if (Boolean.parseBoolean(mwclient
-                    .getserverConfigs("UseFullCapacityDescription"))) {
+                    .getServerConfigs("UseFullCapacityDescription"))) {
                 if (capacity.endsWith("<br>")) {
                     capacity = capacity.substring(0, capacity.length() - 4);
                 }
@@ -495,9 +495,9 @@ public class CUnit extends Unit {
 
         if ((scrappableFor > 0)
                 && !Boolean.parseBoolean(mwclient
-                        .getserverConfigs("UseAdvanceRepair"))
+                        .getServerConfigs("UseAdvanceRepair"))
                 && !Boolean.parseBoolean(mwclient
-                        .getserverConfigs("UseSimpleRepair"))) {
+                        .getServerConfigs("UseSimpleRepair"))) {
             tinfo += "<br><br><b>Scrap Value: "
                     + mwclient.moneyOrFluMessage(true, false, scrappableFor)
                     + "</b>";
@@ -543,7 +543,7 @@ public class CUnit extends Unit {
 
     public int getBVForMatch() {
         if (Boolean.parseBoolean(mwclient
-                .getserverConfigs("UseBaseBVForMatching"))) {
+                .getServerConfigs("UseBaseBVForMatching"))) {
             return getBaseBV();
         }
         return getBV();
@@ -632,10 +632,10 @@ public class CUnit extends Unit {
                     + Unit.getTypeClassDesc(type_id) + "Price";
 
             if (type_id == Unit.MEK) {
-                result = Integer.parseInt(mwclient.getserverConfigs(Unit
+                result = Integer.parseInt(mwclient.getServerConfigs(Unit
                         .getWeightClassDesc(weightclass) + "Price"));
             } else {
-                result = Integer.parseInt(mwclient.getserverConfigs(classtype));
+                result = Integer.parseInt(mwclient.getServerConfigs(classtype));
             }
 
             // modify the result by the faction price modifier
@@ -665,10 +665,10 @@ public class CUnit extends Unit {
                 + Unit.getTypeClassDesc(type_id) + "Inf";
 
         if (type_id == Unit.MEK) {
-            result = Integer.parseInt(mwclient.getserverConfigs(Unit
+            result = Integer.parseInt(mwclient.getServerConfigs(Unit
                     .getWeightClassDesc(weightclass) + "Inf"));
         } else {
-            result = Integer.parseInt(mwclient.getserverConfigs(classtype));
+            result = Integer.parseInt(mwclient.getServerConfigs(classtype));
         }
 
         // modify the result by the faction price modifier
@@ -697,10 +697,10 @@ public class CUnit extends Unit {
                 + Unit.getTypeClassDesc(type_id) + "PP";
 
         if (type_id == Unit.MEK) {
-            result = Integer.parseInt(mwclient.getserverConfigs(Unit
+            result = Integer.parseInt(mwclient.getServerConfigs(Unit
                     .getWeightClassDesc(weightclass) + "PP"));
         } else {
-            result = Integer.parseInt(mwclient.getserverConfigs(classtype));
+            result = Integer.parseInt(mwclient.getServerConfigs(classtype));
         }
 
         // adjust PP cost by faction specific mod
@@ -717,13 +717,13 @@ public class CUnit extends Unit {
     public static double getArmorCost(Entity unit, MWClient client, int location) {
         double cost = 0.0;
 
-        if (Boolean.parseBoolean(client.getserverConfigs("UsePartsRepair"))) {
+        if (Boolean.parseBoolean(client.getServerConfigs("UsePartsRepair"))) {
             return 0;
         }
 
         String armorCost = "CostPoint"
                 + UnitUtils.getArmorShortName(unit, location);
-        cost = Double.parseDouble(client.getserverConfigs(armorCost));
+        cost = Double.parseDouble(client.getServerConfigs(armorCost));
 
         return cost;
     }
@@ -731,13 +731,13 @@ public class CUnit extends Unit {
     public static double getStructureCost(Entity unit, MWClient client) {
         double cost = 0.0;
 
-        if (Boolean.parseBoolean(client.getserverConfigs("UsePartsRepair"))) {
+        if (Boolean.parseBoolean(client.getServerConfigs("UsePartsRepair"))) {
             return 0;
         }
 
         String armorCost = "CostPoint" + UnitUtils.getInternalShortName(unit)
                 + "IS";
-        cost = Double.parseDouble(client.getserverConfigs(armorCost));
+        cost = Double.parseDouble(client.getServerConfigs(armorCost));
 
         return cost;
     }
@@ -763,7 +763,7 @@ public class CUnit extends Unit {
             CriticalSlot crit) {
         double cost = 0.0;
 
-        if (Boolean.parseBoolean(client.getserverConfigs("UsePartsRepair"))) {
+        if (Boolean.parseBoolean(client.getServerConfigs("UsePartsRepair"))) {
             return 0;
         }
 
@@ -777,14 +777,14 @@ public class CUnit extends Unit {
         // else
         if (UnitUtils.isEngineCrit(crit)) {
             cost = Double.parseDouble(client
-                    .getserverConfigs("EngineCritRepairCost"));
+                    .getServerConfigs("EngineCritRepairCost"));
         } else if (crit.getType() == CriticalSlot.TYPE_SYSTEM) {
             if (crit.isMissing()) {
                 cost = Double.parseDouble(client
-                        .getserverConfigs("SystemCritReplaceCost"));
+                        .getServerConfigs("SystemCritReplaceCost"));
             } else {
                 cost = Double.parseDouble(client
-                        .getserverConfigs("SystemCritRepairCost"));
+                        .getServerConfigs("SystemCritRepairCost"));
             }
         } else {
             Mounted mounted = crit.getMount();
@@ -795,43 +795,43 @@ public class CUnit extends Unit {
                     if (crit.isMissing()) {
                         cost = Double
                                 .parseDouble(client
-                                        .getserverConfigs("EnergyWeaponCritReplaceCost"));
+                                        .getServerConfigs("EnergyWeaponCritReplaceCost"));
                     } else {
                         cost = Double
                                 .parseDouble(client
-                                        .getserverConfigs("EnergyWeaponCritRepairCost"));
+                                        .getServerConfigs("EnergyWeaponCritRepairCost"));
                     }
                 } else if (weapon.hasFlag(WeaponType.F_BALLISTIC)) {
                     if (crit.isMissing()) {
                         cost = Double.parseDouble(client
-                                .getserverConfigs("BallisticCritReplaceCost"));
+                                .getServerConfigs("BallisticCritReplaceCost"));
                     } else {
                         cost = Double.parseDouble(client
-                                .getserverConfigs("BallisticCritRepairCost"));
+                                .getServerConfigs("BallisticCritRepairCost"));
                     }
                 } else if (weapon.hasFlag(WeaponType.F_MISSILE)) {
                     if (crit.isMissing()) {
                         cost = Double.parseDouble(client
-                                .getserverConfigs("MissileCritReplaceCost"));
+                                .getServerConfigs("MissileCritReplaceCost"));
                     } else {
                         cost = Double.parseDouble(client
-                                .getserverConfigs("MissileCritRepairCost"));
+                                .getServerConfigs("MissileCritRepairCost"));
                     }
                 } else // use the misc eq costs.
                 if (crit.isMissing()) {
                     cost = Double.parseDouble(client
-                            .getserverConfigs("EquipmentCritReplaceCost"));
+                            .getServerConfigs("EquipmentCritReplaceCost"));
                 } else {
                     cost = Double.parseDouble(client
-                            .getserverConfigs("EquipmentCritRepairCost"));
+                            .getServerConfigs("EquipmentCritRepairCost"));
                 }
             } else // use the misc eq costs.
             if (crit.isMissing()) {
                 cost = Double.parseDouble(client
-                        .getserverConfigs("EquipmentCritReplaceCost"));
+                        .getServerConfigs("EquipmentCritReplaceCost"));
             } else {
                 cost = Double.parseDouble(client
-                        .getserverConfigs("EquipmentCritRepairCost"));
+                        .getServerConfigs("EquipmentCritRepairCost"));
             }
         }
 

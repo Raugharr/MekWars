@@ -83,9 +83,9 @@ public class CPlayerPanel extends JScrollPane {
 
     public CPlayerPanel(MWClient client)
     {
-        PP_REWARD = client.getserverConfigs("RPLongName") + ":";
+        PP_REWARD = client.getServerConfigs("RPLongName") + ":";
 
-    	Insets insets = new Insets(0, 0, 0, 0);
+        Insets insets = new Insets(0, 0, 0, 0);
         //int west = GridBagConstraints.WEST;
         int center = GridBagConstraints.CENTER;
         int none = GridBagConstraints.NONE;
@@ -139,8 +139,8 @@ public class CPlayerPanel extends JScrollPane {
         lblStatus.setText(tag + PP_STATUS + endtag);
         lblExp.setText(tag + PP_EXP + endtag);
         lblRating.setText(tag + PP_ELO + endtag);
-        lblMoney.setText(tag + client.getserverConfigs("MoneyLongName")+": "+ endtag);
-        lblInfluence.setText(tag + client.getserverConfigs("FluLongName")+ endtag);
+        lblMoney.setText(tag + client.getServerConfigs("MoneyLongName")+": "+ endtag);
+        lblInfluence.setText(tag + client.getServerConfigs("FluLongName")+ endtag);
         if ( mwclient.isUsingAdvanceRepairs() ){
             lblMekbay.setText(tag + PP_BAYS + endtag);
             lblTechs.setText(tag + PP_IDLETECHS + endtag);
@@ -161,16 +161,16 @@ public class CPlayerPanel extends JScrollPane {
 
         InfoPanel.add(lblStatus);
         InfoPanel.add(lblExp);
-        if (!Boolean.parseBoolean(client.getserverConfigs("HideELO")))
+        if (!Boolean.parseBoolean(client.getServerConfigs("HideELO")))
             InfoPanel.add(lblRating);
         InfoPanel.add(lblMoney);
         InfoPanel.add(lblInfluence);
         InfoPanel.add(lblMekbay);
         InfoPanel.add(lblTechs);
-        if (Boolean.parseBoolean(client.getserverConfigs("ShowReward")))
+        if (Boolean.parseBoolean(client.getServerConfigs("ShowReward")))
             InfoPanel.add(lblRewardPoints);
-        if (Integer.parseInt(client.getserverConfigs("FreeBuild_Limit")) > 0) //@Salient for free build
-        	InfoPanel.add(lblFreeMeks);
+        if (Integer.parseInt(client.getServerConfigs("FreeBuild_Limit")) > 0) //@Salient for free build
+            InfoPanel.add(lblFreeMeks);
         InfoPanel.add(lblNextTick);
         if (logo) {PlayerPanel.add(InfoPanel, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, center, none, insets, 0, 0));}
         else {PlayerPanel.add(InfoPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, center, none, insets, 0, 0));}
@@ -210,9 +210,9 @@ public class CPlayerPanel extends JScrollPane {
         lblName.setText(player.getName());
         lblStatus.setText(PP_STATUS + " " + mwclient.getStatus());
         lblExp.setText(PP_EXP + " " + player.getExp());
-		DecimalFormat myFormatter = new DecimalFormat("###.##");
-		String ratingStr = myFormatter.format(player.getRating());
-		lblRating.setText(PP_ELO + " " + ratingStr);
+        DecimalFormat myFormatter = new DecimalFormat("###.##");
+        String ratingStr = myFormatter.format(player.getRating());
+        lblRating.setText(PP_ELO + " " + ratingStr);
         if ( player.getMoney() ==  0 )
             lblMoney.setText(mwclient.moneyOrFluMessage(true,false,-2)+": " + player.getMoney());
         else
@@ -235,8 +235,8 @@ public class CPlayerPanel extends JScrollPane {
             lblTechs.setText(PP_PAIDTECHS + " " + player.getTechs() + " (" +mwclient.moneyOrFluMessage(true,true,player.getTechCost())+")");
         }
 
-        lblRewardPoints.setText(PP_REWARD + " " + player.getRewardPoints() + "/" + mwclient.getserverConfigs("XPRewardCap"));
-        lblFreeMeks.setText(PP_FREEUNITS + " " + (Integer.parseInt(mwclient.getserverConfigs("FreeBuild_Limit")) - mwclient.getPlayer().getMekToken()) + " Remain"); //@Salient for free build
+        lblRewardPoints.setText(PP_REWARD + " " + player.getRewardPoints() + "/" + mwclient.getServerConfigs("XPRewardCap"));
+        lblFreeMeks.setText(PP_FREEUNITS + " " + (Integer.parseInt(mwclient.getServerConfigs("FreeBuild_Limit")) - mwclient.getPlayer().getMekToken()) + " Remain"); //@Salient for free build
     }
 
     public void setNextTick(long nextTick) {
@@ -255,7 +255,7 @@ public class CPlayerPanel extends JScrollPane {
         }
 
         @Override
-		public synchronized void run(){
+        public synchronized void run(){
             while (true) {
                 myPanel.updateClock();
                 try {

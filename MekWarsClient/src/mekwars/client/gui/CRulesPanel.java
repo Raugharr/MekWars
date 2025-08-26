@@ -40,28 +40,27 @@ public class CRulesPanel extends JPanel
 
     MWClient mwclient;
 
-	public CRulesPanel(MWClient client)
-	{
-		mwclient = client;
+    public CRulesPanel(MWClient client)
+    {
+        mwclient = client;
 
-		setLayout(new BorderLayout());
-		JEditorPane editorPane = new JEditorPane();
-		editorPane.setEditable(false);
-		String rulesLocation = mwclient.getserverConfigs("Rules_Location");
-		URL rulesURL = CRulesPanel.class.getResource(rulesLocation);
+        setLayout(new BorderLayout());
+        JEditorPane editorPane = new JEditorPane();
+        editorPane.setEditable(false);
+        String rulesLocation = mwclient.getServerConfigs("Rules_Location");
+        URL rulesURL = CRulesPanel.class.getResource(rulesLocation);
 
-		if (rulesURL != null)
-		{
-		    try { editorPane.setPage(rulesURL); }
-		    catch (IOException e)  { System.err.println("Bad URL: " + rulesURL); }
-		}
-		else { System.err.println("Couldn't find: ServerRules.html"); }
+        if (rulesURL != null) {
+            try { editorPane.setPage(rulesURL); }
+            catch (IOException e)  { System.err.println("Bad URL: " + rulesURL); }
+        }
+        else { System.err.println("Couldn't find: ServerRules.html"); }
 
-		JScrollPane editorScrollPane = new JScrollPane(editorPane);
-		editorScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		editorScrollPane.setPreferredSize(new Dimension(250, 145));
-		editorScrollPane.setMinimumSize(new Dimension(10, 10));
+        JScrollPane editorScrollPane = new JScrollPane(editorPane);
+        editorScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        editorScrollPane.setPreferredSize(new Dimension(250, 145));
+        editorScrollPane.setMinimumSize(new Dimension(10, 10));
 
-		add(editorScrollPane);
-	}
+        add(editorScrollPane);
+    }
 }

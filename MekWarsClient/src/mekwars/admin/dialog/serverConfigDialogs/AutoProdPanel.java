@@ -34,16 +34,16 @@ import common.VerticalLayout;
  */
 public class AutoProdPanel extends JPanel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2593134010133363970L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2593134010133363970L;
 
     private JTextField baseTextField = new JTextField(5);
     private JCheckBox BaseCheckBox = new JCheckBox();
-	
-	public AutoProdPanel(MWClient mwclient) {
-		super();
+    
+    public AutoProdPanel(MWClient mwclient) {
+        super();
         /*
          * AutoProduction Panel
          */
@@ -69,12 +69,12 @@ public class AutoProdPanel extends JPanel {
         selectionPanel.add(apTypeClassic);
         selectionPanel.add(apTypeNew);
         
-        if(Boolean.parseBoolean(mwclient.getserverConfigs("UseAutoProdNew"))) {
-        	apTypeClassic.setSelected(false);
-        	apTypeNew.setSelected(true);
+        if(Boolean.parseBoolean(mwclient.getServerConfigs("UseAutoProdNew"))) {
+            apTypeClassic.setSelected(false);
+            apTypeNew.setSelected(true);
         } else {
-        	apTypeNew.setSelected(false);
-        	apTypeClassic.setSelected(true);
+            apTypeNew.setSelected(false);
+            apTypeClassic.setSelected(true);
         }
         
         //selectionPanel.setPreferredSize(new Dimension(selectionPanel.getMinimumSize()));
@@ -157,20 +157,20 @@ public class AutoProdPanel extends JPanel {
         apNewBoxPanel.add(new JLabel("Failure"));
         
         for (int i = 0; i < Unit.MAXBUILD; i++) {
-        	for (int j = 0; j <= Unit.ASSAULT; j++) {
-        		if (j == 0) {
-        			apNewBoxPanel.add(new JLabel(Unit.getTypeClassDesc(i)));
-        		}
-        		baseTextField = new JTextField();
-        		baseTextField.setName("APAtMax" + Unit.getWeightClassDesc(j) + Unit.getTypeClassDesc(i));
-        		baseTextField.setToolTipText("Number of units worth of stored components to trigger an AP attempt for " + Unit.getWeightClassDesc(j) + " " + Unit.getTypeClassDesc(i));
-        		apNewBoxPanel.add(baseTextField);
-        		
-        		baseTextField = new JTextField();
-        		baseTextField.setName("APFailureRate" + Unit.getWeightClassDesc(j) + Unit.getTypeClassDesc(i));
-        		baseTextField.setToolTipText("Percent failure rate for " + Unit.getWeightClassDesc(j) + " " + Unit.getTypeClassDesc(i));
-        		apNewBoxPanel.add(baseTextField);
-        	}
+            for (int j = 0; j <= Unit.ASSAULT; j++) {
+                if (j == 0) {
+                    apNewBoxPanel.add(new JLabel(Unit.getTypeClassDesc(i)));
+                }
+                baseTextField = new JTextField();
+                baseTextField.setName("APAtMax" + Unit.getWeightClassDesc(j) + Unit.getTypeClassDesc(i));
+                baseTextField.setToolTipText("Number of units worth of stored components to trigger an AP attempt for " + Unit.getWeightClassDesc(j) + " " + Unit.getTypeClassDesc(i));
+                apNewBoxPanel.add(baseTextField);
+                
+                baseTextField = new JTextField();
+                baseTextField.setName("APFailureRate" + Unit.getWeightClassDesc(j) + Unit.getTypeClassDesc(i));
+                baseTextField.setToolTipText("Percent failure rate for " + Unit.getWeightClassDesc(j) + " " + Unit.getTypeClassDesc(i));
+                apNewBoxPanel.add(baseTextField);
+            }
         }
         
         apNewPanel.add(apNewBoxPanel);
@@ -196,5 +196,5 @@ public class AutoProdPanel extends JPanel {
         add(apMiddlePanel);
         add(apBottomPanel);
         add(checkBoxPanel);
-	}
+    }
 }

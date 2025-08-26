@@ -16,6 +16,17 @@
 
 package client.gui.dialog;
 
+import client.MWClient;
+import client.campaign.CUnit;
+import client.gui.MWUnitDisplay;
+import client.gui.TableSorter;
+import client.util.CUnitComparator;
+import common.House;
+import common.Unit;
+import common.campaign.pilot.Pilot;
+import common.util.MWLogger;
+import common.util.SpringLayoutHelper;
+import common.util.UnitUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -41,7 +52,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;

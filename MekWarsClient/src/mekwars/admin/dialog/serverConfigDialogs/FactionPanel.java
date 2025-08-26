@@ -31,16 +31,16 @@ import common.util.SpringLayoutHelper;
 
 public class FactionPanel extends JPanel {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 6005564512507419589L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 6005564512507419589L;
 
     private JTextField baseTextField = new JTextField(5);
     private JCheckBox baseCheckBox = new JCheckBox();
 
     public FactionPanel(MWClient mwclient) {
-		super();
+        super();
 
         /*
          * FACTION TAB CONSTRUCTION
@@ -55,19 +55,19 @@ public class FactionPanel extends JPanel {
         baseTextField.setName("PlayerBaseMoney");
         factionSpring1.add(baseTextField);
 
-		//@Salient adding option to give new player starting RP
-		baseTextField = new JTextField(5);
-		factionSpring1.add(new JLabel("Starting "+ mwclient.getserverConfigs("RPShortName") + ":", SwingConstants.TRAILING));
-		baseTextField.setToolTipText("Number of "+ mwclient.getserverConfigs("RPLongName") +" given to a new SOL player.");
-		baseTextField.setName("PlayerBaseRP");
-		factionSpring1.add(baseTextField);
-		
-		//@Salient adding option to give new player starting Flu
-		baseTextField = new JTextField(5);
-		factionSpring1.add(new JLabel("Starting "+ mwclient.getserverConfigs("FluShortName") + ":", SwingConstants.TRAILING));
-		baseTextField.setToolTipText("Number of "+ mwclient.getserverConfigs("FluLongName") +" given to a new SOL player.");
-		baseTextField.setName("PlayerBaseFlu");
-		factionSpring1.add(baseTextField);
+        //@Salient adding option to give new player starting RP
+        baseTextField = new JTextField(5);
+        factionSpring1.add(new JLabel("Starting "+ mwclient.getServerConfigs("RPShortName") + ":", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Number of "+ mwclient.getServerConfigs("RPLongName") +" given to a new SOL player.");
+        baseTextField.setName("PlayerBaseRP");
+        factionSpring1.add(baseTextField);
+        
+        //@Salient adding option to give new player starting Flu
+        baseTextField = new JTextField(5);
+        factionSpring1.add(new JLabel("Starting "+ mwclient.getServerConfigs("FluShortName") + ":", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Number of "+ mwclient.getServerConfigs("FluLongName") +" given to a new SOL player.");
+        baseTextField.setName("PlayerBaseFlu");
+        factionSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
         factionSpring1.add(new JLabel("Max SOL XP:", SwingConstants.TRAILING));
@@ -139,11 +139,11 @@ public class FactionPanel extends JPanel {
         SpringLayoutHelper.setupSpringGrid(factionSpring1, 2);
 
         // faction spring #2
-		baseTextField = new JTextField(5);
-		factionSpring2.add(new JLabel("Light XP:", SwingConstants.TRAILING));
-		baseTextField.setToolTipText("XP required to buy light units");
-		baseTextField.setName("MinEXPforLight");
-		factionSpring2.add(baseTextField);
+        baseTextField = new JTextField(5);
+        factionSpring2.add(new JLabel("Light XP:", SwingConstants.TRAILING));
+        baseTextField.setToolTipText("XP required to buy light units");
+        baseTextField.setName("MinEXPforLight");
+        factionSpring2.add(baseTextField);
 
         baseTextField = new JTextField(5);
         factionSpring2.add(new JLabel("Medium XP:", SwingConstants.TRAILING));
@@ -320,5 +320,5 @@ public class FactionPanel extends JPanel {
         factionBox.add(subFactionMain);
 
         add(factionBox);
-	}
+    }
 }

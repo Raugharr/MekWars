@@ -139,14 +139,14 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         this.playerUnit = playerUnit;
         this.unit = unit;
         mwclient = c;
-        year = Integer.parseInt(mwclient.getserverConfigs("CampaignYear"));
+        year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
         tablocation = c.getPlayer().getRepairLocation();
         techs.addAll(c.getPlayer().getAvailableTechs());
         techType = c.getPlayer().getRepairTechType();
         retries = c.getPlayer().getRepairRetries();
         this.salvage = salvage;
 
-        if (!Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsRepair"))) {
+        if (!Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsRepair"))) {
             this.salvage = false;
         }
 
@@ -465,7 +465,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                                 } else {
                                     int refillShots = at.getShots();
                                     if (m.byShot()) {
-                                    	refillShots = m.getOriginalShots();
+                                        refillShots = m.getOriginalShots();
                                     }
                                     int shotsLeft = m.getUsableShotsLeft();
                                     if (!atCheck.getInternalName().equalsIgnoreCase(at.getInternalName())) {
@@ -930,7 +930,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             techString.add(UnitUtils.techDescription(UnitUtils.TECH_PILOT));
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowCritRepairsForRewards")) && !salvage) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowCritRepairsForRewards")) && !salvage) {
             techString.add(UnitUtils.techDescription(UnitUtils.TECH_REWARD_POINTS));
         }
 
@@ -1010,21 +1010,21 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         critSlot = selectedSlot;
 
         if (techComboBox.getSelectedIndex() < UnitUtils.TECH_PILOT) {
-            techCost = Integer.parseInt(mwclient.getserverConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
+            techCost = Integer.parseInt(mwclient.getServerConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
             techCostWorkMod = techWorkMod;
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseRealRepairCosts"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseRealRepairCosts"))) {
             armor = false;
             if (critSlot >= UnitUtils.LOC_FRONT_ARMOR) {
                 armor = true;
             }
             double cost = UnitUtils.getPartCost(unit, critLocation, critSlot, armor, year);
-            if (Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsRepair"))) {
+            if (Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsRepair"))) {
                 cost = 0;
             }
 
-            double costMod = Double.parseDouble(mwclient.getserverConfigs("RealRepairCostMod"));
+            double costMod = Double.parseDouble(mwclient.getServerConfigs("RealRepairCostMod"));
             // modify the cost
             if (costMod > 0) {
                 cost *= costMod;
@@ -1111,8 +1111,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             }// end Else
         }// end real repair cost else
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowCritRepairsForRewards")) && (UnitUtils.techType((String) techComboBox.getSelectedItem()) == UnitUtils.TECH_REWARD_POINTS)) {
-            double cost = totalCrits * Double.parseDouble(mwclient.getserverConfigs("RewardPointsForCritRepair"));
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowCritRepairsForRewards")) && (UnitUtils.techType((String) techComboBox.getSelectedItem()) == UnitUtils.TECH_REWARD_POINTS)) {
+            double cost = totalCrits * Double.parseDouble(mwclient.getServerConfigs("RewardPointsForCritRepair"));
 
             cost = Math.ceil(cost);
             cost = Math.max(cost, 1);
@@ -1179,7 +1179,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             return;
         }
 
-        int baseLine = Integer.parseInt(mwclient.getserverConfigs("TimeForEachRepairPoint"));
+        int baseLine = Integer.parseInt(mwclient.getServerConfigs("TimeForEachRepairPoint"));
 
         if (!armor) {
             CriticalSlot cs = unit.getCritical(critLocation, critSlot);

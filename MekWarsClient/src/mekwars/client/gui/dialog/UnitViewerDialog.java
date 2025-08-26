@@ -521,7 +521,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
     }
 
     private void populateWeaponsAndEquipmentChoices() {
-    	int year = Integer.parseInt(mwclient.getserverConfigs("CampaignYear"));
+    	int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
         m_cWeapons1.removeAllItems();
         m_cWeapons2.removeAllItems();
         m_cEquipment.removeAllItems();
@@ -599,7 +599,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         String result = "";
         result = makeLength(ms.getModel(), 12) + " " + makeLength(ms.getChassis(), 10) + " " + makeLength(Double.toString(ms.getTons()), 3) + " " + makeLength(Integer.toString(ms.getBV()), 5);
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseCalculatedCosts"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseCalculatedCosts"))) {
             result += makeLength(NumberFormat.getInstance().format(ms.getCost()), 10);
         }
 

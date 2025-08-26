@@ -225,8 +225,8 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         setResizable(false);
 
         // set button usability based on server settings
-        bRandom.setEnabled(Boolean.parseBoolean(mwclient.getserverConfigs("RandomRepodAllowed")));
-        bRepod.setEnabled(!Boolean.parseBoolean(mwclient.getserverConfigs("RandomRepodOnly")));
+        bRandom.setEnabled(Boolean.parseBoolean(mwclient.getServerConfigs("RandomRepodAllowed")));
+        bRepod.setEnabled(!Boolean.parseBoolean(mwclient.getServerConfigs("RandomRepodOnly")));
 
         // add all the listeners
         mechList.addListSelectionListener(this);

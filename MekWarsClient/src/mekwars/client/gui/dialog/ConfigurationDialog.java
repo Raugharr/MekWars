@@ -896,7 +896,7 @@ public final class ConfigurationDialog implements ActionListener {
         tabVisibilitySpring.add(bmTabVisBox);
         tabVisibilitySpring.add(bmTabonTopBox);
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsBlackMarket"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsBlackMarket"))) {
             tabVisibilitySpring.add(new JLabel("Parts Market:", SwingConstants.TRAILING));
             bmeTabVisBox.setHorizontalAlignment(SwingConstants.CENTER);
             bmeTabonTopBox.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1070,7 +1070,7 @@ public final class ConfigurationDialog implements ActionListener {
         tabNamingSpring.add(RPGTabNameField);
         tabNamingSpring.add(RPGTabMnemonicField);
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsBlackMarket"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsBlackMarket"))) {
             tabNamingSpring.add(new JLabel("Parts Market:", SwingConstants.TRAILING));
             tabNamingSpring.add(bmeTabNameField);
             tabNamingSpring.add(bmeTabMnemonicField);

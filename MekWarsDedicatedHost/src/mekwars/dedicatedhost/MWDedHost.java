@@ -1170,8 +1170,8 @@ public final class MWDedHost extends GameHost implements IClient {
             }
         }
 
-        String MMVersion = getserverConfigs("AllowedMegaMekVersion");
-        if (!MMVersion.equals("-1") && !MMVersion.equalsIgnoreCase(MegaMek.VERSION.toString())) {
+        String MMVersion = getServerConfigs("AllowedMegaMekVersion");
+        if (!MMVersion.equals("-1") && !MMVersion.equalsIgnoreCase(megamek.MMConstants.VERSION.toString())) {
             MWLogger.errLog("You are using an invalid version of MegaMek. Please use version " + MMVersion);
             stopHost();
             updateDed();
@@ -1222,7 +1222,7 @@ public final class MWDedHost extends GameHost implements IClient {
         clearSavedGames();
         purgeOldLogs();
         IClientPreferences cs = PreferenceManager.getClientPreferences();
-        cs.setStampFilenames(Boolean.parseBoolean(getserverConfigs("MMTimeStampLogFile")));
+        cs.setStampFilenames(Boolean.parseBoolean(getServerConfigs("MMTimeStampLogFile")));
     }
 
     // Stop & send the close game event to the Server
@@ -1522,7 +1522,7 @@ public final class MWDedHost extends GameHost implements IClient {
     }
 
     public boolean isUsingAdvanceRepairs() {
-        return Boolean.parseBoolean(getserverConfigs("UseAdvanceRepair")) || Boolean.parseBoolean(getserverConfigs("UseSimpleRepair"));
+        return Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair")) || Boolean.parseBoolean(getServerConfigs("UseSimpleRepair"));
     }
 
     /*
@@ -1587,7 +1587,7 @@ public final class MWDedHost extends GameHost implements IClient {
         }
     }
 
-    public String getserverConfigs(String key) {
+    public String getServerConfigs(String key) {
         if (serverConfigs.getProperty(key) == null) {
             return "-1";
         }
@@ -1666,8 +1666,8 @@ public final class MWDedHost extends GameHost implements IClient {
         }
     }
 
-	public static StringBuilder prepareReport(GameInterface myGame, boolean usingAdvancedRepairs, Buildings buildingTemplate) {
-		StringBuilder result = new StringBuilder();
+    public static StringBuilder prepareReport(GameInterface myGame, boolean usingAdvancedRepairs, Buildings buildingTemplate) {
+        StringBuilder result = new StringBuilder();
         String name = "";
         // Parse the real playername from the Modified In game one..
         String winnerName = "";
@@ -1751,8 +1751,8 @@ public final class MWDedHost extends GameHost implements IClient {
             result.append("BL*" + buildingTemplate);
         }
         MWLogger.infoLog("CR|" + result);
-		return result;
-	}
+        return result;
+    }
 
     protected void sendGameReport() {
         if (myServer == null) {
@@ -1872,9 +1872,9 @@ public final class MWDedHost extends GameHost implements IClient {
         }
     }
 
-	@Override
-	public void gameClientFeedbackRequest(GameCFREvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void gameClientFeedbackRequest(GameCFREvent arg0) {
+        // TODO Auto-generated method stub
+        
+    }
 }

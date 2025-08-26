@@ -46,156 +46,156 @@ import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 
 public final class SubFactionConfigurationDialog implements ActionListener {
-	
-	private final static String okayCommand = "okay";
-	private final static String cancelCommand = "cancel";
-	private String windowName = "";
-	
-	private JTextField baseTextField = new JTextField(5);
+    
+    private final static String okayCommand = "okay";
+    private final static String cancelCommand = "cancel";
+    private String windowName = "";
+    
+    private JTextField baseTextField = new JTextField(5);
     private JCheckBox  BaseCheckBox = new JCheckBox();
     
     private final JButton okayButton = new JButton("OK");
-	private final JButton cancelButton = new JButton("Cancel");
-	
-	private JDialog dialog;
-	private JOptionPane pane;
-	
-	private String houseName = "";
-	
-	private SubFaction subFactionConfig = null;
-	private House faction = null;
-
-	private Hashtable<String, String> configChanges = new Hashtable<String, String>();
-	
-	JTabbedPane ConfigPane = new JTabbedPane(SwingConstants.TOP);
-	
-    MWClient mwclient = null;
-	/**
-	 * @author jtighe
-	 * 
-	 * Opens the server config page in the client.
-	 * @param client
-	 */
+    private final JButton cancelButton = new JButton("Cancel");
     
-	public SubFactionConfigurationDialog(MWClient mwclient, String houseName, String subFactionName) {
-		
+    private JDialog dialog;
+    private JOptionPane pane;
+    
+    private String houseName = "";
+    
+    private SubFaction subFactionConfig = null;
+    private House faction = null;
+
+    private Hashtable<String, String> configChanges = new Hashtable<String, String>();
+    
+    JTabbedPane ConfigPane = new JTabbedPane(SwingConstants.TOP);
+    
+    MWClient mwclient = null;
+    /**
+     * @author jtighe
+     * 
+     * Opens the server config page in the client.
+     * @param client
+     */
+    
+    public SubFactionConfigurationDialog(MWClient mwclient, String houseName, String subFactionName) {
+        
         this.mwclient = mwclient;
         this.houseName = houseName;
         this.windowName = "MekWars SubFaction Configuration";
         this.faction = mwclient.getData().getHouseByName(houseName);
         
         if ( faction == null )
-        	return;
+            return;
         
         if ( faction.getSubFactionList().containsKey(subFactionName) ) 
-        	this.subFactionConfig = faction.getSubFactionList().get(subFactionName);
+            this.subFactionConfig = faction.getSubFactionList().get(subFactionName);
         else{
-        	this.subFactionConfig = new SubFaction(subFactionName,"0");
-        	this.subFactionConfig.setConfig("MinELO", "0");
-        	this.subFactionConfig.setConfig("MinExp", "0");
-        	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c CreateSubFaction#"+this.subFactionConfig.getConfig("Name")+"#0#"+this.houseName);
+            this.subFactionConfig = new SubFaction(subFactionName,"0");
+            this.subFactionConfig.setConfig("MinELO", "0");
+            this.subFactionConfig.setConfig("MinExp", "0");
+            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c CreateSubFaction#"+this.subFactionConfig.getConfig("Name")+"#0#"+this.houseName);
         }
         
-		//TAB PANELS (these are added to the root pane as tabs)
-		JPanel mainPanel = new JPanel();
-		
-		/* 
-		 * REPOD PANEL CONSTRUCTION
-		 * 
-		 * Repod contols. Costs, factory usage, table options, etc.
-		 * 
-		 * Use nested layouts. A Box containing a Flow and 3 Springs.
-		 */
-		JPanel mainBoxPanel = new JPanel();
-		JPanel mainCBoxGridPanel = new JPanel(new SpringLayout());
-		JPanel mainTextBoxSpring = new JPanel(new SpringLayout());
-		mainBoxPanel.setLayout(new BoxLayout(mainBoxPanel, BoxLayout.Y_AXIS));
-		mainBoxPanel.add(mainCBoxGridPanel);
-		mainBoxPanel.add(mainTextBoxSpring);
-		
-		//set up the flow panel
-		
-		//and then the various springs. MU first.
+        //TAB PANELS (these are added to the root pane as tabs)
+        JPanel mainPanel = new JPanel();
+        
+        /* 
+         * REPOD PANEL CONSTRUCTION
+         * 
+         * Repod contols. Costs, factory usage, table options, etc.
+         * 
+         * Use nested layouts. A Box containing a Flow and 3 Springs.
+         */
+        JPanel mainBoxPanel = new JPanel();
+        JPanel mainCBoxGridPanel = new JPanel(new SpringLayout());
+        JPanel mainTextBoxSpring = new JPanel(new SpringLayout());
+        mainBoxPanel.setLayout(new BoxLayout(mainBoxPanel, BoxLayout.Y_AXIS));
+        mainBoxPanel.add(mainCBoxGridPanel);
+        mainBoxPanel.add(mainTextBoxSpring);
+        
+        //set up the flow panel
+        
+        //and then the various springs. MU first.
         baseTextField = new JTextField(5);
         mainTextBoxSpring.add(new JLabel("Name:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("Sub faction name.");
         baseTextField.setName("Name");
         mainTextBoxSpring.add(baseTextField);
-		
+        
         baseTextField = new JTextField(5);
         mainTextBoxSpring.add(new JLabel("Access Level:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("<html>Sub faciton access level<br>This is used to determine what ops can be accessed</html>");
         baseTextField.setName("AccessLevel");
         mainTextBoxSpring.add(baseTextField);
-		
+        
         baseTextField = new JTextField(5);
         mainTextBoxSpring.add(new JLabel("Min Elo:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("Min ELO needed to join this subfaction");
         baseTextField.setName("MinELO");
         mainTextBoxSpring.add(baseTextField);
-		
+        
         baseTextField = new JTextField(5);
         mainTextBoxSpring.add(new JLabel("Min Exp:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("Min Exp required to join this subfaciton");
         baseTextField.setName("MinExp");
         mainTextBoxSpring.add(baseTextField);
-		
-		for (int type = 0; type < CUnit.MAXBUILD; type++) {
-			for (int weight = 0; weight <= CUnit.ASSAULT; weight++) {
-				BaseCheckBox = new JCheckBox("Can buy new "+CUnit.getWeightClassDesc(weight)+" "+CUnit.getTypeClassDesc(type));
-				BaseCheckBox.setToolTipText("<html>Check to allow subfaction memebers to buy new<br>"+CUnit.getWeightClassDesc(weight)+" "+CUnit.getTypeClassDesc(type)+"</html>");
-				BaseCheckBox.setName("CanBuyNew"+CUnit.getWeightClassDesc(weight)+CUnit.getTypeClassDesc(type));
-				mainCBoxGridPanel.add(BaseCheckBox);
-			}
-		}
-		
-		for (int type = 0; type < CUnit.MAXBUILD; type++) {
-			for (int weight = 0; weight <= CUnit.ASSAULT; weight++) {
-				BaseCheckBox = new JCheckBox("Can buy used "+CUnit.getWeightClassDesc(weight)+" "+CUnit.getTypeClassDesc(type));
-				BaseCheckBox.setToolTipText("<html>Check to allow subfaction memebers to buy used<br>"+CUnit.getWeightClassDesc(weight)+" "+CUnit.getTypeClassDesc(type)+"</html>");
-				BaseCheckBox.setName("CanBuyUsed"+CUnit.getWeightClassDesc(weight)+CUnit.getTypeClassDesc(type));
-				mainCBoxGridPanel.add(BaseCheckBox);
-			}
-		}
-		
+        
+        for (int type = 0; type < CUnit.MAXBUILD; type++) {
+            for (int weight = 0; weight <= CUnit.ASSAULT; weight++) {
+                BaseCheckBox = new JCheckBox("Can buy new "+CUnit.getWeightClassDesc(weight)+" "+CUnit.getTypeClassDesc(type));
+                BaseCheckBox.setToolTipText("<html>Check to allow subfaction memebers to buy new<br>"+CUnit.getWeightClassDesc(weight)+" "+CUnit.getTypeClassDesc(type)+"</html>");
+                BaseCheckBox.setName("CanBuyNew"+CUnit.getWeightClassDesc(weight)+CUnit.getTypeClassDesc(type));
+                mainCBoxGridPanel.add(BaseCheckBox);
+            }
+        }
+        
+        for (int type = 0; type < CUnit.MAXBUILD; type++) {
+            for (int weight = 0; weight <= CUnit.ASSAULT; weight++) {
+                BaseCheckBox = new JCheckBox("Can buy used "+CUnit.getWeightClassDesc(weight)+" "+CUnit.getTypeClassDesc(type));
+                BaseCheckBox.setToolTipText("<html>Check to allow subfaction memebers to buy used<br>"+CUnit.getWeightClassDesc(weight)+" "+CUnit.getTypeClassDesc(type)+"</html>");
+                BaseCheckBox.setName("CanBuyUsed"+CUnit.getWeightClassDesc(weight)+CUnit.getTypeClassDesc(type));
+                mainCBoxGridPanel.add(BaseCheckBox);
+            }
+        }
+        
         //finalize the layout.
         SpringLayoutHelper.setupSpringGrid(mainTextBoxSpring,4);
         SpringLayoutHelper.setupSpringGrid(mainCBoxGridPanel,4);
         mainBoxPanel.add(mainTextBoxSpring);
         mainBoxPanel.add(mainCBoxGridPanel);
         mainPanel.add(mainBoxPanel);
-		
-		// Set the actions to generate
-		okayButton.setActionCommand(okayCommand);
-		cancelButton.setActionCommand(cancelCommand);
-		okayButton.addActionListener(this);
-		cancelButton.addActionListener(this);
-		
-		/*
-		 * NEW OPTIONS - need to be sorted into proper menus.
-		 */
-		
-		// Set tool tips (balloon help)	
-		okayButton.setToolTipText("Save Options");
-		cancelButton.setToolTipText("Exit without saving options");
-	
-		ConfigPane.addTab("Configs",null,mainBoxPanel,"Configs");
-		
-		//Create the panel that will hold the entire UI
-		JPanel mainConfigPanel = new JPanel();
-		
-		// Set the user's options
-		Object[] options = { okayButton, cancelButton };
-		
-		// Create the pane containing the buttons
-		pane = new JOptionPane(ConfigPane, JOptionPane.PLAIN_MESSAGE,
-				JOptionPane.DEFAULT_OPTION, null, options, null);
-		
-		// Create the main dialog and set the default button
-		dialog = pane.createDialog(mainConfigPanel, windowName);
-		dialog.getRootPane().setDefaultButton(cancelButton);
-		
-		
+        
+        // Set the actions to generate
+        okayButton.setActionCommand(okayCommand);
+        cancelButton.setActionCommand(cancelCommand);
+        okayButton.addActionListener(this);
+        cancelButton.addActionListener(this);
+        
+        /*
+         * NEW OPTIONS - need to be sorted into proper menus.
+         */
+        
+        // Set tool tips (balloon help)    
+        okayButton.setToolTipText("Save Options");
+        cancelButton.setToolTipText("Exit without saving options");
+    
+        ConfigPane.addTab("Configs",null,mainBoxPanel,"Configs");
+        
+        //Create the panel that will hold the entire UI
+        JPanel mainConfigPanel = new JPanel();
+        
+        // Set the user's options
+        Object[] options = { okayButton, cancelButton };
+        
+        // Create the pane containing the buttons
+        pane = new JOptionPane(ConfigPane, JOptionPane.PLAIN_MESSAGE,
+                JOptionPane.DEFAULT_OPTION, null, options, null);
+        
+        // Create the main dialog and set the default button
+        dialog = pane.createDialog(mainConfigPanel, windowName);
+        dialog.getRootPane().setDefaultButton(cancelButton);
+        
+        
         for ( int pos = ConfigPane.getComponentCount()-1; pos >= 0; pos-- ){
             JPanel panel = (JPanel) ConfigPane.getComponent(pos);
             findAndPopulateTextAndCheckBoxes(panel);
@@ -205,12 +205,12 @@ public final class SubFactionConfigurationDialog implements ActionListener {
 
         //Show the dialog and get the user's input
         dialog.setLocationRelativeTo(mwclient.getMainFrame());
-		dialog.setModal(true);
-		dialog.pack();
-		dialog.setVisible(true);
-		
-		if (pane.getValue() == okayButton)
-		{
+        dialog.setModal(true);
+        dialog.pack();
+        dialog.setVisible(true);
+        
+        if (pane.getValue() == okayButton)
+        {
             
             for ( int pos = ConfigPane.getComponentCount()-1; pos >= 0; pos-- ){
                 JPanel panel = (JPanel) ConfigPane.getComponent(pos);
@@ -218,30 +218,30 @@ public final class SubFactionConfigurationDialog implements ActionListener {
             }
             
             if ( configChanges.size() > 0){
-		        StringBuffer configPairs = new StringBuffer();
-		        
-		        for (String key : configChanges.keySet() ){
-		        	configPairs.append(key);
-		        	configPairs.append("#");
-		        	configPairs.append(configChanges.get(key));
-		        	configPairs.append("#");
-		        }
+                StringBuffer configPairs = new StringBuffer();
+                
+                for (String key : configChanges.keySet() ){
+                    configPairs.append(key);
+                    configPairs.append("#");
+                    configPairs.append(configChanges.get(key));
+                    configPairs.append("#");
+                }
             
-            	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c SetSubFactionConfig#"+this.subFactionConfig.getConfig("Name")+"#"+houseName+"#"+configPairs.toString());
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c SetSubFactionConfig#"+this.subFactionConfig.getConfig("Name")+"#"+houseName+"#"+configPairs.toString());
             }
             mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c adminsave");
-			mwclient.refreshData();
-			
-		}
-		else 
-			dialog.dispose();
-	}
+            mwclient.refreshData();
+            
+        }
+        else 
+            dialog.dispose();
+    }
 
     /**
      * This Method tunnels through all of the panels to find the textfields
      * and checkboxes. Once it find one it grabs the Name() param of the object
      * and uses that to find out what the setting should be from the
-     * mwclient.getserverConfigs() method.
+     * mwclient.getServerConfigs() method.
      * @param panel
      */
     public void findAndPopulateTextAndCheckBoxes(JPanel panel){
@@ -346,14 +346,14 @@ public final class SubFactionConfigurationDialog implements ActionListener {
 
     }
     
-	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand();
-		if (command.equals(okayCommand)) {
-			pane.setValue(okayButton);
-			dialog.dispose();
-		} else if (command.equals(cancelCommand)) {
-			pane.setValue(cancelButton);
-			dialog.dispose();
-		}
-	}
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        if (command.equals(okayCommand)) {
+            pane.setValue(okayButton);
+            dialog.dispose();
+        } else if (command.equals(cancelCommand)) {
+            pane.setValue(cancelButton);
+            dialog.dispose();
+        }
+    }
 }

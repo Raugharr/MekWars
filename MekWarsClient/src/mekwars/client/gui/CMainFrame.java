@@ -251,7 +251,7 @@ public class CMainFrame extends JFrame {
         MainPanel = new CMainPanel(mwclient, this);
 
         useAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
-        usePersonalPilotQueues = Boolean.parseBoolean(mwclient.getserverConfigs("AllowPersonalPilotQueues"));
+        usePersonalPilotQueues = Boolean.parseBoolean(mwclient.getServerConfigs("AllowPersonalPilotQueues"));
         sound = new menuSound(mwclient);
         popupSound = new menuPopupSound(mwclient);
 
@@ -270,7 +270,7 @@ public class CMainFrame extends JFrame {
         contentPane = (JPanel) getContentPane();
         contentPane.setLayout(new BorderLayout());
         useAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
-        usePersonalPilotQueues = Boolean.parseBoolean(mwclient.getserverConfigs("AllowPersonalPilotQueues"));
+        usePersonalPilotQueues = Boolean.parseBoolean(mwclient.getServerConfigs("AllowPersonalPilotQueues"));
         try {
             // factored out to reduce bloat
             createMenu();
@@ -553,7 +553,7 @@ public class CMainFrame extends JFrame {
         jMenuCampaignPersonalPilotQueue.setVisible(usePersonalPilotQueues);
         jMenuCampaignTransferPilot.setVisible(usePersonalPilotQueues);
         jMenuCampaignDonatePersonalPilot.setVisible(usePersonalPilotQueues);
-        jMenuCampaignDirectSell.setVisible(Boolean.parseBoolean(mwclient.getserverConfigs("UseDirectSell")));
+        jMenuCampaignDirectSell.setVisible(Boolean.parseBoolean(mwclient.getServerConfigs("UseDirectSell")));
 
         addMenuListener(jMenuBar1.getComponents());
         this.repaint();
@@ -634,10 +634,10 @@ public class CMainFrame extends JFrame {
         jMenuCampaignActivate.setText("Activate");
         // jMenuCampaignActivate.setMnemonic('A');
         jMenuCampaignActivate.addActionListener(new ActionListener() 
-        { 	
+        {     
             public void actionPerformed(ActionEvent e) 
             {
-            	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c activate#" + MWClient.CLIENT_VERSION);            		
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c activate#" + MWClient.CLIENT_VERSION);                    
             }
         });
 
@@ -812,24 +812,24 @@ public class CMainFrame extends JFrame {
                 jMenuCommanderDefect_actionPerformed();
             }
         });
- 	
-    	jMenuCampaignSelfPromote.setText("Self Promote"); //@salient
-    	//jMenuCampaignDefect.setMnemonic('D');
-    	jMenuCampaignSelfPromote.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			jMenuCommanderSelfPromote_actionPerformed();
-    		}
-    	});
-    	
-    	jMenuCampaignReportStatusMC.setText("Check MiniCampaign Status"); //@salient for mini campaign
-    	//jMenuCampaignDefect.setMnemonic('D');
-    	jMenuCampaignReportStatusMC.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			jMenuCommanderReportStatusMC_actionPerformed();
-    		}
-    	});
+     
+        jMenuCampaignSelfPromote.setText("Self Promote"); //@salient
+        //jMenuCampaignDefect.setMnemonic('D');
+        jMenuCampaignSelfPromote.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jMenuCommanderSelfPromote_actionPerformed();
+            }
+        });
         
-        jMenuCampaignRewardPoints.setText("Use " + mwclient.getserverConfigs("RPLongName"));
+        jMenuCampaignReportStatusMC.setText("Check MiniCampaign Status"); //@salient for mini campaign
+        //jMenuCampaignDefect.setMnemonic('D');
+        jMenuCampaignReportStatusMC.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jMenuCommanderReportStatusMC_actionPerformed();
+            }
+        });
+        
+        jMenuCampaignRewardPoints.setText("Use " + mwclient.getServerConfigs("RPLongName"));
         jMenuCampaignRewardPoints.setMnemonic('P');
         jMenuCampaignRewardPoints.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -838,7 +838,7 @@ public class CMainFrame extends JFrame {
         });
 
         //@Salient
-        jMenuCampaignInfluencePoints.setText("Use " + mwclient.getserverConfigs("FluLongName"));
+        jMenuCampaignInfluencePoints.setText("Use " + mwclient.getServerConfigs("FluLongName"));
         //jMenuCampaignRewardPoints.setMnemonic('P');
         jMenuCampaignInfluencePoints.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -1167,9 +1167,9 @@ public class CMainFrame extends JFrame {
 
         jMenuHelpOpViewer.setText("Operation Viewer");
         jMenuHelpOpViewer.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "getops md5");
-        	}
+            public void actionPerformed(ActionEvent e) {
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "getops md5");
+            }
         });
 
         /*
@@ -1228,69 +1228,69 @@ public class CMainFrame extends JFrame {
 
         jMenuEmoji.setText("Emojis");
 
-        if(Boolean.parseBoolean(mwclient.getserverConfigs("AllowEmoji")))
+        if(Boolean.parseBoolean(mwclient.getServerConfigs("AllowEmoji")))
         {
-        	jMenuEmojiFlip.setText("(╯°□°)╯︵ ┻━┻");
-        	jMenuEmojiFlip.addActionListener(new ActionListener()
+            jMenuEmojiFlip.setText("(╯°□°)╯︵ ┻━┻");
+            jMenuEmojiFlip.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e)
-            	{
-            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fl");
-            	}
+                public void actionPerformed(ActionEvent e)
+                {
+                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fl");
+                }
             });
 
-//        	jMenuEmojiBear.setText("ʕ •ᴥ•ʔ");
-//        	jMenuEmojiBear.addActionListener(new ActionListener()
+//            jMenuEmojiBear.setText("ʕ •ᴥ•ʔ");
+//            jMenuEmojiBear.addActionListener(new ActionListener()
 //            {
-//            	public void actionPerformed(ActionEvent e)
-//            	{
-//            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#be");
-//            	}
+//                public void actionPerformed(ActionEvent e)
+//                {
+//                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#be");
+//                }
 //            });
 
-        	jMenuEmojiShrug.setText("¯\\_(ツ)_/¯");
-        	jMenuEmojiShrug.addActionListener(new ActionListener()
+            jMenuEmojiShrug.setText("¯\\_(ツ)_/¯");
+            jMenuEmojiShrug.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e)
-            	{
-            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sh");
-            	}
+                public void actionPerformed(ActionEvent e)
+                {
+                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sh");
+                }
             });
 
-        	jMenuEmojiFingers.setText("t(-.-t)");
-        	jMenuEmojiFingers.addActionListener(new ActionListener()
+            jMenuEmojiFingers.setText("t(-.-t)");
+            jMenuEmojiFingers.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e)
-            	{
-            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fi");
-            	}
+                public void actionPerformed(ActionEvent e)
+                {
+                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fi");
+                }
             });
 
-        	jMenuEmojiKiss.setText("( ˘ ³˘)♥");
-        	jMenuEmojiKiss.addActionListener(new ActionListener()
+            jMenuEmojiKiss.setText("( ˘ ³˘)♥");
+            jMenuEmojiKiss.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e)
-            	{
-            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#ki");
-            	}
+                public void actionPerformed(ActionEvent e)
+                {
+                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#ki");
+                }
             });
 
-        	jMenuEmojiSmile.setText("◉‿◉");
-        	jMenuEmojiSmile.addActionListener(new ActionListener()
+            jMenuEmojiSmile.setText("◉‿◉");
+            jMenuEmojiSmile.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e)
-            	{
-            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sm");
-            	}
+                public void actionPerformed(ActionEvent e)
+                {
+                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sm");
+                }
             });
 
-        	jMenuEmojiDeal.setText("•_•) ( •_•)>⌐■-■ (⌐■_■)");
-        	jMenuEmojiDeal.addActionListener(new ActionListener()
+            jMenuEmojiDeal.setText("•_•) ( •_•)>⌐■-■ (⌐■_■)");
+            jMenuEmojiDeal.addActionListener(new ActionListener()
             {
-            	public void actionPerformed(ActionEvent e)
-            	{
-            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#de");
-            	}
+                public void actionPerformed(ActionEvent e)
+                {
+                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#de");
+                }
             });
         }
 
@@ -1355,17 +1355,17 @@ public class CMainFrame extends JFrame {
         // other sub menu
         jMenuCampaignSubOther.add(jMenuCampaignLogo);
         jMenuCampaignSubOther.add(jMenuCampaignDefect);
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("Self_Promote_Subfaction"))) //@salient
-        {        	
-        	jMenuCampaignSubOther.add(jMenuCampaignSelfPromote);
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("Self_Promote_Subfaction"))) //@salient
+        {            
+            jMenuCampaignSubOther.add(jMenuCampaignSelfPromote);
         }
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("Enable_MiniCampaign"))) //@salient
-        {        	
-        	jMenuCampaignSubOther.add(jMenuCampaignReportStatusMC);
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("Enable_MiniCampaign"))) //@salient
+        {            
+            jMenuCampaignSubOther.add(jMenuCampaignReportStatusMC);
         }
         jMenuCampaignSubOther.add(jMenuCampaignRewardPoints);
         jMenuCampaignSubOther.add(jMenuCampaignInfluencePoints);
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsBlackMarket"))) 
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsBlackMarket"))) 
         {
             jMenuCampaignSubOther.add(jMenuCampaignPartsCache);
         }
@@ -1428,7 +1428,7 @@ public class CMainFrame extends JFrame {
          * BattleMech traits as a proxy for ALL trait types when deciding
          * whether or not to show.
          */
-        if (Integer.parseInt(mwclient.getserverConfigs("chanceforTNforMek")) > 0) {
+        if (Integer.parseInt(mwclient.getServerConfigs("chanceforTNforMek")) > 0) {
             jMenuHelp.add(jMenuHelpViewTraits);
         }
 
@@ -1469,9 +1469,9 @@ public class CMainFrame extends JFrame {
         jMenuBar1.add(jMenuLeaderShip);
         jMenuBar1.add(jMenuHelp);
 
-        if(Boolean.parseBoolean(mwclient.getserverConfigs("AllowEmoji")))
+        if(Boolean.parseBoolean(mwclient.getServerConfigs("AllowEmoji")))
         {
-        	jMenuBar1.add(jMenuEmoji);
+            jMenuBar1.add(jMenuEmoji);
         }
         /*
          * jMenuBar1.add(jMenuMod); jMenuBar1.add(jMenuAdmin);
@@ -1615,9 +1615,9 @@ public class CMainFrame extends JFrame {
     }
 
     public void jMenuFindContestedPlanets_actionPerformed() { //BarukKhazad 20151129 - start 2
-    	String h1=thePlayer.getHouse();
-    	String h2="";
-    	String Perc = "20";
+        String h1=thePlayer.getHouse();
+        String h2="";
+        String Perc = "20";
         Perc = (String)JOptionPane.showInputDialog(getContentPane(),(Object)"Minimum Attacker Planet Percentage? (1 to 100)","",  JOptionPane.PLAIN_MESSAGE, null, null, Perc);
         if ((Perc == null) || (Perc.length() < 1)) {
             return;
@@ -1668,59 +1668,59 @@ public class CMainFrame extends JFrame {
 
     public void jMenuCommanderTransferRewardPoints_actionPerformed(String name)
     {
-    	String targetPlayer;
-    	String Amount;
+        String targetPlayer;
+        String Amount;
 
-    	if ((name == null) || name.trim().equals(""))
-    	{
-    		PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
-    		pnd.setVisible(true);
-    		targetPlayer = pnd.getPlayerName();
-    		pnd.dispose();
-    	} else {
+        if ((name == null) || name.trim().equals(""))
+        {
+            PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
+            pnd.setVisible(true);
+            targetPlayer = pnd.getPlayerName();
+            pnd.dispose();
+        } else {
             targetPlayer = name;
         }
 
-    	if (targetPlayer == null) {
+        if (targetPlayer == null) {
             return;
         }
 
-    	Amount = JOptionPane.showInputDialog(getContentPane(), "Amount", "Send " + mwclient.getserverConfigs("RPShortName") + " to " + targetPlayer, JOptionPane.PLAIN_MESSAGE);
+        Amount = JOptionPane.showInputDialog(getContentPane(), "Amount", "Send " + mwclient.getServerConfigs("RPShortName") + " to " + targetPlayer, JOptionPane.PLAIN_MESSAGE);
 
-    	if (Amount == null) {
+        if (Amount == null) {
             return;
         }
 
-    	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferrewardpoints#" + targetPlayer + "#" + Amount);
+        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferrewardpoints#" + targetPlayer + "#" + Amount);
     }
 
     //@Salient
     public void jMenuCommanderTransferInfluence_actionPerformed(String name)
     {
-    	String targetPlayer;
-    	String Amount;
+        String targetPlayer;
+        String Amount;
 
-    	if ((name == null) || name.trim().equals(""))
-    	{
-    		PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
-    		pnd.setVisible(true);
-    		targetPlayer = pnd.getPlayerName();
-    		pnd.dispose();
-    	} else {
+        if ((name == null) || name.trim().equals(""))
+        {
+            PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
+            pnd.setVisible(true);
+            targetPlayer = pnd.getPlayerName();
+            pnd.dispose();
+        } else {
             targetPlayer = name;
         }
 
-    	if (targetPlayer == null) {
+        if (targetPlayer == null) {
             return;
         }
 
-    	Amount = JOptionPane.showInputDialog(getContentPane(), "Amount", "Send " + mwclient.getserverConfigs("FluShortName") + " to " + targetPlayer, JOptionPane.PLAIN_MESSAGE);
+        Amount = JOptionPane.showInputDialog(getContentPane(), "Amount", "Send " + mwclient.getServerConfigs("FluShortName") + " to " + targetPlayer, JOptionPane.PLAIN_MESSAGE);
 
-    	if (Amount == null) {
+        if (Amount == null) {
             return;
         }
 
-    	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferinfluence#" + targetPlayer + "#" + Amount);
+        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferinfluence#" + targetPlayer + "#" + Amount);
     }
 
 
@@ -1896,7 +1896,7 @@ public class CMainFrame extends JFrame {
         // generate an example string.
         String example = "" + "This is the force size you expect to face when you request a match";
 
-        String force = JOptionPane.showInputDialog(getContentPane(), "<HTML>" + "Force Size To Face	? [-1 to disable the limit]<i><br><br>" + example + "<br></i></HTML>", Float.toString(selectedArmy.getOpForceSize()), JOptionPane.PLAIN_MESSAGE);
+        String force = JOptionPane.showInputDialog(getContentPane(), "<HTML>" + "Force Size To Face    ? [-1 to disable the limit]<i><br><br>" + example + "<br></i></HTML>", Float.toString(selectedArmy.getOpForceSize()), JOptionPane.PLAIN_MESSAGE);
 
         if (force == null) {
             return;
@@ -2005,7 +2005,7 @@ public class CMainFrame extends JFrame {
     }
 
     public void jMenuCommanderDonatePersonalPilot_actionPerformed() {
-        boolean allowProto = Boolean.parseBoolean(mwclient.getserverConfigs("UseProtoMek"));
+        boolean allowProto = Boolean.parseBoolean(mwclient.getServerConfigs("UseProtoMek"));
 
         Object[] pWeightClass = { "Light", "Medium", "Heavy", "Assault" };
         Object[] pUnitType;
@@ -2111,7 +2111,7 @@ public class CMainFrame extends JFrame {
         CUnit unit = mwclient.getPlayer().getUnit(Integer.parseInt(unitID));
 
         String serviceFee = "SellDirect" + Unit.getWeightClassDesc(unit.getWeightclass()) + Unit.getTypeClassDesc(unit.getType()) + "Price";
-        price = JOptionPane.showInputDialog(getContentPane(), "How much do you wish to offer? (" + mwclient.moneyOrFluMessage(true, true, -2) + ")\n\r" + "Please note a service charge of " + mwclient.moneyOrFluMessage(true, true, Integer.parseInt(mwclient.getserverConfigs(serviceFee))) + " will be added.");
+        price = JOptionPane.showInputDialog(getContentPane(), "How much do you wish to offer? (" + mwclient.moneyOrFluMessage(true, true, -2) + ")\n\r" + "Please note a service charge of " + mwclient.moneyOrFluMessage(true, true, Integer.parseInt(mwclient.getServerConfigs(serviceFee))) + " will be added.");
 
         if ((price == null) || (price.length() < 1)) {
             return;
@@ -2173,7 +2173,7 @@ public class CMainFrame extends JFrame {
         // String Confirmation;
         String House = "";
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowSinglePlayerFactions"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowSinglePlayerFactions"))) {
             House = JOptionPane.showInputDialog(getContentPane(), "Name of your new Faction?", "New Faction Name?", JOptionPane.QUESTION_MESSAGE);
             if (House == null) {
                 return;
@@ -2274,12 +2274,12 @@ public class CMainFrame extends JFrame {
     }
 
     public void jMenuCommanderHireTechs_actionPerformed() {
-        boolean allowRegTechs = Boolean.parseBoolean(mwclient.getserverConfigs("AllowRegTechsToBeHired"));
+        boolean allowRegTechs = Boolean.parseBoolean(mwclient.getServerConfigs("AllowRegTechsToBeHired"));
 
         String techsToHire = "";
 
         if (useAdvanceRepairs && !allowRegTechs) {
-            techsToHire = JOptionPane.showInputDialog(getContentPane(), "How many green techs do you want to hire?(" + Integer.parseInt(mwclient.getserverConfigs("GreenTechHireCost")) + mwclient.moneyOrFluMessage(true, true, -2) + ")");
+            techsToHire = JOptionPane.showInputDialog(getContentPane(), "How many green techs do you want to hire?(" + Integer.parseInt(mwclient.getServerConfigs("GreenTechHireCost")) + mwclient.moneyOrFluMessage(true, true, -2) + ")");
         } else {
             techsToHire = JOptionPane.showInputDialog(getContentPane(), "How many techs do you want to hire?");
         }
@@ -2297,8 +2297,8 @@ public class CMainFrame extends JFrame {
         if (useAdvanceRepairs && allowRegTechs) {
 
             Vector<String> techTypes = new Vector<String>(2, 1);
-            techTypes.add("Green " + Integer.parseInt(mwclient.getserverConfigs("GreenTechHireCost")) + mwclient.moneyOrFluMessage(true, true, -2));
-            techTypes.add("Regular " + Integer.parseInt(mwclient.getserverConfigs("RegTechHireCost")) + mwclient.moneyOrFluMessage(true, true, -2));
+            techTypes.add("Green " + Integer.parseInt(mwclient.getServerConfigs("GreenTechHireCost")) + mwclient.moneyOrFluMessage(true, true, -2));
+            techTypes.add("Regular " + Integer.parseInt(mwclient.getServerConfigs("RegTechHireCost")) + mwclient.moneyOrFluMessage(true, true, -2));
             JComboBox<String> combo = new JComboBox<String>(techTypes);
             combo.setEditable(false);
             JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
@@ -2328,8 +2328,8 @@ public class CMainFrame extends JFrame {
     }
 
     public void jMenuCampaignSubOtherBuyPilots_actionPerformed() {
-        boolean allowProto = Boolean.parseBoolean(mwclient.getserverConfigs("UseProtoMek"));
-        boolean allowAero = Boolean.parseBoolean(mwclient.getserverConfigs("UseAero"));
+        boolean allowProto = Boolean.parseBoolean(mwclient.getServerConfigs("UseProtoMek"));
+        boolean allowAero = Boolean.parseBoolean(mwclient.getServerConfigs("UseAero"));
         int unitType = Unit.MEK;
         int unitClass = Unit.LIGHT;
 
@@ -2395,14 +2395,14 @@ public class CMainFrame extends JFrame {
     public void jMenuCampaignPartsCache_actionPerformed() {
         CPlayer p = mwclient.getPlayer();
         StringBuilder result = new StringBuilder();
-        int year = Integer.parseInt(mwclient.getserverConfigs("CampaignYear"));
+        int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
 
         result.append(p.getPartsCache().tableizeComponents(year));
         mwclient.doParseDataInput("SM|" + result.toString());
     }
 
     public void jMenuCommanderBuyBays_actionPerformed() {
-        String baysToHire = JOptionPane.showInputDialog(getContentPane(), "How many bays do you want to lease?(" + Integer.parseInt(mwclient.getserverConfigs("CostToBuyNewBay")) + mwclient.moneyOrFluMessage(true, true, -2) + ")");
+        String baysToHire = JOptionPane.showInputDialog(getContentPane(), "How many bays do you want to lease?(" + Integer.parseInt(mwclient.getServerConfigs("CostToBuyNewBay")) + mwclient.moneyOrFluMessage(true, true, -2) + ")");
 
         if ((baysToHire == null) || (baysToHire.length() == 0)) {
             return;
@@ -2421,10 +2421,10 @@ public class CMainFrame extends JFrame {
          * Show the client side GUI if the requisite file is available.
          * Otherwise, make use of server commands.
          */
-    	// User the new BuildTableViewer
+        // User the new BuildTableViewer
         if ((userLevel >= mwclient.getData().getAccessLevel("AdminRequestBuildTable")) || (userLevel >= mwclient.getData().getAccessLevel("RequestBuildTable"))) {
-            	BuildTableViewer btv = new BuildTableViewer(this, mwclient);
-            	btv.run();
+                BuildTableViewer btv = new BuildTableViewer(this, mwclient);
+                btv.run();
         } else {
             mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c buildtablelist");
         }
@@ -2642,7 +2642,7 @@ public class CMainFrame extends JFrame {
 
         // set the text up.
         JLabel mekwars = new JLabel("MekWars Client Version: " + MWClient.CLIENT_VERSION);
-        JLabel version = new JLabel("MegaMek Version: " + megamek.MegaMek.VERSION);
+        JLabel version = new JLabel("MegaMek Version: " + megamek.MMConstants.VERSION);
         JLabel license1 = new JLabel("MekWars Client software is under GPL. See");
         JLabel license2 = new JLabel("license.txt in ./MekWars Docs/ for details.");
         JLabel license3 = new JLabel("Project Info and Server Packages:");
@@ -2743,7 +2743,7 @@ public class CMainFrame extends JFrame {
 
     public void jMenuHelpHelp_actionPerformed() {
         CPlayer p = mwclient.getPlayer();
-        boolean trueCost = Boolean.parseBoolean(mwclient.getserverConfigs("UseCalculatedCosts"));
+        boolean trueCost = Boolean.parseBoolean(mwclient.getServerConfigs("UseCalculatedCosts"));
         StringBuilder result = new StringBuilder();
         result.append("<font color=\"black\">");
         result.append("MEKWARS ONLINE HELP<br>");
@@ -2760,7 +2760,7 @@ public class CMainFrame extends JFrame {
         for (int type = 0; type < typeamount; type++) {
             String useIt = "Use" + Unit.getTypeClassDesc(type);
 
-            if (!Boolean.parseBoolean(mwclient.getserverConfigs(useIt))) {
+            if (!Boolean.parseBoolean(mwclient.getServerConfigs(useIt))) {
                 continue;
             }
 
@@ -2768,12 +2768,12 @@ public class CMainFrame extends JFrame {
 
                 // No reason to cycle through med-assault infantry if you are
                 // only using light
-                if (Boolean.parseBoolean(mwclient.getserverConfigs("UseOnlyLightInfantry")) && (type == Unit.INFANTRY) && (weight != Unit.LIGHT)) {
+                if (Boolean.parseBoolean(mwclient.getServerConfigs("UseOnlyLightInfantry")) && (type == Unit.INFANTRY) && (weight != Unit.LIGHT)) {
                     break;
                 }
                 // only using one vee size means only lights are used. so no
                 // reason to keep cycling if we are past the lights.
-                if (Boolean.parseBoolean(mwclient.getserverConfigs("UseOnlyOneVehicleSize")) && (type == Unit.VEHICLE) && (weight != Unit.LIGHT)) {
+                if (Boolean.parseBoolean(mwclient.getServerConfigs("UseOnlyOneVehicleSize")) && (type == Unit.VEHICLE) && (weight != Unit.LIGHT)) {
                     break;
                 }
 
@@ -2786,7 +2786,7 @@ public class CMainFrame extends JFrame {
                 result.append("</td><td>" + CUnit.getInfluenceForUnit(mwclient, weight, type, p.getMyHouse()) + "</td>");
                 result.append("<td>" + CUnit.getPPForUnit(mwclient, weight, type, p.getMyHouse()) + "</td><td>");
                 if (type == Unit.PROTOMEK) {
-                    result.append(mwclient.getserverConfigs("TechsToProtoPointRatio") + " per 5");
+                    result.append(mwclient.getServerConfigs("TechsToProtoPointRatio") + " per 5");
                 } else {
                     result.append(p.getHangarSpaceRequired(type, weight, 0, ""));
                 }
@@ -2805,17 +2805,17 @@ public class CMainFrame extends JFrame {
                 String repodCost = "RepodCost" + Unit.getWeightClassDesc(weight);
                 String repodComponents = "RepodComp" + Unit.getWeightClassDesc(weight);
 
-                int repodCostInt = Integer.parseInt(mwclient.getserverConfigs(repodCost));
-                int repodComponentsInt = Integer.parseInt(mwclient.getserverConfigs(repodComponents));
+                int repodCostInt = Integer.parseInt(mwclient.getServerConfigs(repodCost));
+                int repodComponentsInt = Integer.parseInt(mwclient.getServerConfigs(repodComponents));
 
-                if (!Boolean.parseBoolean(mwclient.getserverConfigs("DoesRepodCost"))) {
+                if (!Boolean.parseBoolean(mwclient.getServerConfigs("DoesRepodCost"))) {
                     repodCostInt = 0;
                 }
-                if (!Boolean.parseBoolean(mwclient.getserverConfigs("RepodUsesComp"))) {
+                if (!Boolean.parseBoolean(mwclient.getServerConfigs("RepodUsesComp"))) {
                     repodComponentsInt = 0;
                 }
 
-                result.append("<tr><td>" + Unit.getWeightClassDesc(weight) + "</td><td>" + repodCostInt + "</td><td>" + mwclient.getserverConfigs(repodFlu) + "</td><td>" + repodComponentsInt + "</td></tr>");
+                result.append("<tr><td>" + Unit.getWeightClassDesc(weight) + "</td><td>" + repodCostInt + "</td><td>" + mwclient.getServerConfigs(repodFlu) + "</td><td>" + repodComponentsInt + "</td></tr>");
             }
         }
 
@@ -2823,23 +2823,23 @@ public class CMainFrame extends JFrame {
         if (useAdvanceRepairs) {
             result.append("<br><b><i>Tech/BayCosts:</b></i>");
             result.append("<table><tr><th>Type</th><th>" + mwclient.moneyOrFluMessage(true, false, -2) + "</th>");
-            result.append("<tr><td>Bay Cost</td><td>" + Integer.parseInt(mwclient.getserverConfigs("CostToBuyNewBay")) + "</td></tr>");
-            result.append("<tr><td>Bay Sale</td><td>" + Integer.parseInt(mwclient.getserverConfigs("BaySellBackPrice")) + "</td></tr>");
-            result.append("<tr><td>Green Tech</td><td>" + Integer.parseInt(mwclient.getserverConfigs("GreenTechHireCost")) + "</td></tr>");
+            result.append("<tr><td>Bay Cost</td><td>" + Integer.parseInt(mwclient.getServerConfigs("CostToBuyNewBay")) + "</td></tr>");
+            result.append("<tr><td>Bay Sale</td><td>" + Integer.parseInt(mwclient.getServerConfigs("BaySellBackPrice")) + "</td></tr>");
+            result.append("<tr><td>Green Tech</td><td>" + Integer.parseInt(mwclient.getServerConfigs("GreenTechHireCost")) + "</td></tr>");
 
-            if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowRegTechsToBeHired"))) {
-                result.append("<tr><td>Reg Tech</td><td>" + Integer.parseInt(mwclient.getserverConfigs("RegTechHireCost")) + "</td></tr>");
+            if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowRegTechsToBeHired"))) {
+                result.append("<tr><td>Reg Tech</td><td>" + Integer.parseInt(mwclient.getServerConfigs("RegTechHireCost")) + "</td></tr>");
             }
             result.append("</table>");
         }
         result.append("<table><tr><th>Size of Unit</th><th>EXP needed</th></tr>");
-        result.append("<tr><td>Light</td><td>" + mwclient.getserverConfigs("MinEXPforLight") + "</td></tr>"); //@salient
-        result.append("<tr><td>Medium</td><td>" + mwclient.getserverConfigs("MinEXPforMedium") + "</td></tr>");
-        result.append("<tr><td>Heavy</td><td>" + mwclient.getserverConfigs("MinEXPforHeavy") + "</td></tr>");
-        result.append("<tr><td>Assault</td><td>" + mwclient.getserverConfigs("MinEXPforAssault") + "</td></tr>");
+        result.append("<tr><td>Light</td><td>" + mwclient.getServerConfigs("MinEXPforLight") + "</td></tr>"); //@salient
+        result.append("<tr><td>Medium</td><td>" + mwclient.getServerConfigs("MinEXPforMedium") + "</td></tr>");
+        result.append("<tr><td>Heavy</td><td>" + mwclient.getServerConfigs("MinEXPforHeavy") + "</td></tr>");
+        result.append("<tr><td>Assault</td><td>" + mwclient.getServerConfigs("MinEXPforAssault") + "</td></tr>");
         result.append("</table>");
-        result.append("EXP needed to Buy/Sell on the Black Market: " + mwclient.getserverConfigs("MinEXPforBMBuying") + "/" + mwclient.getserverConfigs("MinEXPforBMSelling") + "<br>");
-        result.append("EXP needed to defect from " + mwclient.getserverConfigs("NewbieHouseName") + " to a Faction: " + mwclient.getserverConfigs("MinEXPforDefecting") + "<br>");
+        result.append("EXP needed to Buy/Sell on the Black Market: " + mwclient.getServerConfigs("MinEXPforBMBuying") + "/" + mwclient.getServerConfigs("MinEXPforBMSelling") + "<br>");
+        result.append("EXP needed to defect from " + mwclient.getServerConfigs("NewbieHouseName") + " to a Faction: " + mwclient.getServerConfigs("MinEXPforDefecting") + "<br>");
 
         result.append("</table><br>");
 
@@ -2903,7 +2903,7 @@ public class CMainFrame extends JFrame {
 
     private String sPSB(String a, String b) {//BK added
         // builds help menu's pilot skill bv blurb, wants a and b to build serverconfig lookup and get the value
-	Integer i = Integer.parseInt(mwclient.getserverConfigs("chancefor" + a + "for" + b));
+    Integer i = Integer.parseInt(mwclient.getServerConfigs("chancefor" + a + "for" + b));
         if (i > 0) {
             return " " + b + " xp cost: " + i;
         } else {
@@ -2913,7 +2913,7 @@ public class CMainFrame extends JFrame {
 
     private String sPSBL(String a, String b, String c) {//BK added
         // builds help menu's pilot skill blurb line, wants a and b and c as skillfullname and
-    	//skillshortname and description, e.g. "Astech" and "AT" and "does this..."
+        //skillshortname and description, e.g. "Astech" and "AT" and "does this..."
         String s = " ";
         //find if there is any chance for this skill, and if yes, create entry
         s += sPSB(b, "Mek") + sPSB(b, "Vehicle") + sPSB(b, "Infantry") + sPSB(b, "ProtoMek") + sPSB(b, "BattleArmor") + sPSB(b, "Aero");//not sure where to get a reiterable list for unit types
@@ -2925,9 +2925,9 @@ public class CMainFrame extends JFrame {
 
     public void jMenuHelpPilotSkills_actionPerformed() {
         //BK;  would prefer to have this Help Menu list built using a reiteration of the pilot
-    	//skills by pulling the info from those classes
+        //skills by pulling the info from those classes
         //step one was adding pilot xp costs to the help menu,
-    	//step two will be adding bv costs, drawn via the skill
+        //step two will be adding bv costs, drawn via the skill
         String result = "";
         Integer i;
         String s;
@@ -2943,7 +2943,7 @@ public class CMainFrame extends JFrame {
         result += sPSBL("Dodge Maneuver", "DM", "Enables the unit to make a dodge maneuver instead of a physical attack.<br>This maneuver adds +2 to the BTH to physical attacks against the unit.");
         result += sPSBL("Edge", "ED", "Allows Pilot to reroll 1 roll(per level) per game.");
         result += sPSBL("Enhanced Interface", "EI", "Neural interface to the clan enhanced imaging system<br>-1 To PSR<br>+2 when targeting with TC instead of +3<br>Can Target without TC at +6<br>Reduces all forest and Smoke mods to 1<br>Pilot receives 1 point of damage every time Units IS is hit,<br>If you fail a roll of 7+<br>BA's recieve 1 extra point of damage every time they are hit.");
-        result += sPSBL("Gifted", "GT", "Pilots receive an extra " + mwclient.getserverConfigs("GiftedPercent") + "% chance to gain a skill when they fail<br>to level Piloting or Gunnery after a win.");
+        result += sPSBL("Gifted", "GT", "Pilots receive an extra " + mwclient.getServerConfigs("GiftedPercent") + "% chance to gain a skill when they fail<br>to level Piloting or Gunnery after a win.");
         result += sPSBL("Gunnery Ballistic", "GB", "NOTE: This is an unofficial rule. Pilot gets a -1 to-hit bonus on all<br>ballistic weapons (MGs, all ACs, Gaussrifles).");
         result += sPSBL("Gunnery Laser", "GL", "NOTE: This is an unofficial rule. Pilot gets a -1 to-hit bonus on all<br>energy-based weapons (Laser, PPC, and Flamer).");
         result += sPSBL("Gunnery Missile", "GM", "NOTE: This is an unofficial rule. Pilot gets a -1 to-hit bonus on all<br>missile weapons (LRM, MRM, SRM).");
@@ -3189,9 +3189,9 @@ public class CMainFrame extends JFrame {
 
         for (File opFile : opFiles.listFiles()) {
             try {
-            	if(!opFile.getName().endsWith(".txt")) {
-            		continue;
-            	}
+                if(!opFile.getName().endsWith(".txt")) {
+                    continue;
+                }
                 FileInputStream fis = new FileInputStream(opFile);
                 BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
                 opData.append(opFile.getName().substring(0, opFile.getName().lastIndexOf(".txt")) + "#");
@@ -3253,7 +3253,7 @@ public class CMainFrame extends JFrame {
     }
 
     public void jMenuRetrieveOperationFile_actionPerformed(ActionEvent e) {
-    	JComboBox<String> opCombo = new JComboBox<String>(mwclient.getAllOps().keySet().toArray(new String[0]));
+        JComboBox<String> opCombo = new JComboBox<String>(mwclient.getAllOps().keySet().toArray(new String[0]));
         opCombo.setEditable(false);
 
         JOptionPane jop = new JOptionPane(opCombo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);

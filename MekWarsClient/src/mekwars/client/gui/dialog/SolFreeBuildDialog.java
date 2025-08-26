@@ -27,6 +27,17 @@
 
 package client.gui.dialog;
 
+import client.MWClient;
+import client.campaign.CUnit;
+import client.gui.MWUnitDisplay;
+import client.gui.TableSorter;
+import client.util.CUnitComparator;
+import common.House;
+import common.Unit;
+import common.campaign.pilot.Pilot;
+import common.util.MWLogger;
+import common.util.SpringLayoutHelper;
+import common.util.UnitUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -53,7 +64,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -68,22 +78,8 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-
-//import server.campaign.CampaignMain;
-import client.MWClient;
-import client.campaign.CUnit;
-import client.gui.MWUnitDisplay;
-import client.gui.TableSorter;
-import client.util.CUnitComparator;
-import common.House;
-//import common.House;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
-import megamek.common.Entity;
+import megamek.common.MULParser;
 import megamek.common.EntityListFile;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
@@ -145,36 +141,36 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         TreeSet<String> factionNames = new TreeSet<String>();// tree to alpha
         
         // if freebuild use all option is checked, and player is in SOL, all houses are loaded into the dialog
-        if( mwclient.getserverConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true") &&
-        	mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName")))
+        if( mwclient.getServerConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true") &&
+            mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName")))
         {
-        	Iterator<House> i = mwclient.getData().getAllHouses().iterator();
-        	while (i.hasNext()) 
-        	{
-        		House house = i.next();
+            Iterator<House> i = mwclient.getData().getAllHouses().iterator();
+            while (i.hasNext()) 
+            {
+                House house = i.next();
         
-        		if (house.getId() > -1) 
-        		{
-        			factionNames.add(house.getName());
-        		}
-        	}
-        	
-        	//check if build table is set to common, if not add it
-        	if(!mwclient.getserverConfigs("Sol_FreeBuild_BuildTable").equalsIgnoreCase("Common"))
-        	{
-        		factionNames.add("Common");
-        	}
+                if (house.getId() > -1) 
+                {
+                    factionNames.add(house.getName());
+                }
+            }
+            
+            //check if build table is set to common, if not add it
+            if(!mwclient.getServerConfigs("Sol_FreeBuild_BuildTable").equalsIgnoreCase("Common"))
+            {
+                factionNames.add("Common");
+            }
         }
         
         // Only going to allow SOL to build from a table defined by DSO
-        factionNames.add(mwclient.getserverConfigs("Sol_FreeBuild_BuildTable"));
+        factionNames.add(mwclient.getServerConfigs("Sol_FreeBuild_BuildTable"));
         
         // If player is not in newbie house AND post defection is true add only their house to list
-        if(!mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName")) &&
-        	mwclient.getserverConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true"))
+        if(!mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName")) &&
+            mwclient.getServerConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true"))
         {
-        	factionNames.clear();
-        	factionNames.add(mwclient.getPlayer().getHouse().trim());
+            factionNames.clear();
+            factionNames.add(mwclient.getPlayer().getHouse().trim());
         }
         
         factionArray = factionNames.toArray(factionArray);
@@ -240,7 +236,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         } catch (Exception e) {
             weightClassCombo.setSelectedIndex(-1);
         }
-		*/
+        */
         weightClassCombo.setSelectedIndex(0);
         unitTypeCombo.setSelectedIndex(0);
         factionCombo.setSelectedItem(0);
@@ -256,7 +252,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         closeButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         closeButton.addActionListener(new ActionListener() {
             @Override
-			public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
@@ -265,7 +261,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         refreshButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         refreshButton.addActionListener(new ActionListener() {
             @Override
-			public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 refreshButton_ActionPerformed();
             }
         });
@@ -275,8 +271,8 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         createButton.setMnemonic(KeyEvent.VK_C);
         createButton.addActionListener(new ActionListener() {
             @Override
-			public void actionPerformed(ActionEvent e) {
-            	createUnit_ActionPerformed();
+            public void actionPerformed(ActionEvent e) {
+                createUnit_ActionPerformed();
             }
         });
 
@@ -412,14 +408,14 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
      * boxes and triggers table loads.
      */
     @Override
-	public void itemStateChanged(ItemEvent i) {
+    public void itemStateChanged(ItemEvent i) {
 
         /*
          * Do not re-load tables and units if there is no actual change in the
          * selection.
          */
         @SuppressWarnings("unchecked")
-		JComboBox<String> source = (JComboBox<String>) i.getSource();
+        JComboBox<String> source = (JComboBox<String>) i.getSource();
         if ((source == unitTypeCombo) && (unitSort == unitTypeCombo.getSelectedIndex())) {
             return;
         } else if ((source == weightClassCombo) && (weightSort == weightClassCombo.getSelectedIndex())) {
@@ -734,7 +730,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
      * selections. This is the beef of the class ...
      */
     @SuppressWarnings("unused")
-	public void loadTables() {
+    public void loadTables() {
 
         // System.out.println("loadTables() called");
 
@@ -923,13 +919,13 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
         // column count, for AbstractModel
         @Override
-		public int getColumnCount() {
+        public int getColumnCount() {
             return columnNames.length;
         }
 
         // rowcount, for AbstractModel
         @Override
-		public int getRowCount() {
+        public int getRowCount() {
             return sortedUnits.length;
         }
 
@@ -969,7 +965,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
         // getValueAt, for AbstractModel
         @Override
-		public Object getValueAt(int row, int col) {
+        public Object getValueAt(int row, int col) {
 
             // invalid row
             if ((row < 0) || (row >= sortedUnits.length)) {
@@ -1009,12 +1005,12 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                 //Double returnVal = Double.parseDouble(val);
                 Double returnVal = 0.0;
                 try {
-						returnVal = NumberFormat.getNumberInstance().parse(val).doubleValue();
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
+                        returnVal = NumberFormat.getNumberInstance().parse(val).doubleValue();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
-            	return returnVal;
+                return returnVal;
 
             case FILENAME:
                 return currU.getRealFilename();
@@ -1024,10 +1020,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
             return "";
         }
 
-		@Override
-		public Class<? extends Object> getColumnClass(int c) {
-			return getValueAt(0, c).getClass();
-		}
+        @Override
+        public Class<? extends Object> getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
 
         /*
          * Method which sorts the units in currentUnits.
@@ -1064,7 +1060,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                 sortedUnits = currentUnits.values().toArray(sortedUnits);
                 Arrays.sort(sortedUnits, new Comparator<TableUnit>() {
                     @Override
-					public int compare(TableUnit o1, TableUnit o2) {
+                    public int compare(TableUnit o1, TableUnit o2) {
 
                         try {
                             TableUnit t1 = o1;
@@ -1322,7 +1318,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     }
     
     public void createButton_ActionPerformed() {
-    	
+        
 
         int userLevel = mwclient.getUserLevel();
 
@@ -1349,34 +1345,34 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     
     //@Salient
     public void createUnit_ActionPerformed() {
-    	
-    	selectedUnit = getUnitAtRow(generalTable.getSelectedRow());
-    	Entity tempEntity = selectedUnit.getEntity();
-    	//why does mekwars use 0-3 and megamek uses 1-4 for weight classes? ... :(
-    	
+        
+        selectedUnit = getUnitAtRow(generalTable.getSelectedRow());
+        Entity tempEntity = selectedUnit.getEntity();
+        //why does mekwars use 0-3 and megamek uses 1-4 for weight classes? ... :(
+        
         if (selectedUnit != null) 
         {
-        	createButton.setEnabled(false);
-        	
-        	if(mwclient.getserverConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true") ||
-        	   mwclient.getserverConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true")) //may not need this, command will always check house table if postdefection is enabled.
-        	{
-        		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + factionCombo.getSelectedItem().toString());
-        	}
-        	// else if this isn't a sol player, but post defection free build is enabled
-        	/*else if(!mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName")) &&
-                	mwclient.getserverConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true"))
-        	{
-        		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
-        	} ... dont need this?*/
-        	else 
-        	{
-        		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity));
-        	}
-       	
-        	createButton.setEnabled(true);
-        	loadTables();
-        	refresh();
+            createButton.setEnabled(false);
+            
+            if(mwclient.getServerConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true") ||
+               mwclient.getServerConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true")) //may not need this, command will always check house table if postdefection is enabled.
+            {
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + factionCombo.getSelectedItem().toString());
+            }
+            // else if this isn't a sol player, but post defection free build is enabled
+            /*else if(!mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName")) &&
+                    mwclient.getServerConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true"))
+            {
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
+            } ... dont need this?*/
+            else 
+            {
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity));
+            }
+           
+            createButton.setEnabled(true);
+            loadTables();
+            refresh();
 
         }
     }

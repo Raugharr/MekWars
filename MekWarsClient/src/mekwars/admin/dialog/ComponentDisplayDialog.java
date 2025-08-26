@@ -79,7 +79,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
     JTabbedPane ConfigPane = new JTabbedPane();
 
     public ComponentDisplayDialog(MWClient c, int type) {
-    	
+        
         super(c.getMainFrame(), "Component Display Dialog", true);
 
         // save the client
@@ -88,8 +88,8 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         // stored values.
         displayType = type;
 
-        MWLogger.errLog("Year: " + mwclient.getserverConfigs("CampaignYear"));
-        int year = Integer.parseInt(mwclient.getserverConfigs("CampaignYear"));
+        MWLogger.errLog("Year: " + mwclient.getServerConfigs("CampaignYear"));
+        int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
 
         
         // Set the tooltips and actions for dialouge buttons
@@ -883,7 +883,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
      * This Method tunnels through all of the panels to find the textfields and
      * checkboxes. Once it find one it grabs the Name() param of the object and
      * uses that to find out what the setting should be from the
-     * mwclient.getserverConfigs() method.
+     * mwclient.getServerConfigs() method.
      * 
      * @param panel
      */
@@ -1016,7 +1016,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
 
                 // reduce bandwidth only send things that have changed.
                 /*
-                 * if ( !mwclient.getserverConfigs(key).equalsIgnoreCase(value)
+                 * if ( !mwclient.getServerConfigs(key).equalsIgnoreCase(value)
                  * ) mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+
                  * "c AdminChangeBlackMarketConfig#"+key+"#"+value+"#CONFIRM");
                  */

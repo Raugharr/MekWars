@@ -128,7 +128,7 @@ import common.util.MWLogger;
 import common.util.ThreadManager;
 import common.util.TokenReader;
 import common.util.UnitUtils;
-import megamek.MegaMek;
+import megamek.Version;
 import megamek.client.ui.swing.GameOptionsDialog;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -157,7 +157,7 @@ public final class MWClient extends GameHost implements IClient {
     DataFetchClient dataFetcher;
     Thread updateDataFetcher;
 
-    public static final String CLIENT_VERSION = "0.8.0.0"; // change this with
+    public static final Version CLIENT_VERSION = new Version("0.8.0.0"); // change this with
 
     // all client
     // changes @Torren
@@ -699,15 +699,15 @@ public final class MWClient extends GameHost implements IClient {
             sendChat("/getsavedmail");
 
             // Lets start the repair thread
-            if (Boolean.parseBoolean(getserverConfigs("UseAdvanceRepair"))) {
+            if (Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair"))) {
                 RMT = new RepairManagmentThread(
-                        Long.parseLong(getserverConfigs("TimeForEachRepairPoint")) * 1000,
+                        Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
                         this);
                 RMT.start();
             }
-            if (Boolean.parseBoolean(getserverConfigs("UsePartsRepair"))) {
+            if (Boolean.parseBoolean(getServerConfigs("UsePartsRepair"))) {
                 SMT = new SalvageManagmentThread(
-                        Long.parseLong(getserverConfigs("TimeForEachRepairPoint")) * 1000,
+                        Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
                         this);
                 SMT.start();
             }
@@ -1379,7 +1379,7 @@ public final class MWClient extends GameHost implements IClient {
                     String filename = "autosave.sav";
                     if (myServer != null) {
                         if (Boolean.parseBoolean(this
-                                .getserverConfigs("MMTimeStampLogFile"))) {
+                                .getServerConfigs("MMTimeStampLogFile"))) {
                             filename = getParanoidAutoSave();
                         }
 
@@ -2424,13 +2424,13 @@ public final class MWClient extends GameHost implements IClient {
         ArrayList<CUnit> autoArmy;
         
         //@salient - check quirk xml file sizes with server
-        if(Boolean.parseBoolean(getserverConfigs("EnableQuirks")))
+        if(Boolean.parseBoolean(getServerConfigs("EnableQuirks")))
         {
-			File canon = new File("data" + File.separator + "canonUnitQuirks.xml");
-			File custom = new File("data" + File.separator + "mmconf" + File.separator + "unitQuirksOverride.xml");
-			long canonFileLength = canon.length(); // returns 0L if does not exist
-			long customFileLength = custom.length();		
-			sendChat(MWClient.CAMPAIGN_PREFIX + "c QUIRKCHECK#" + canonFileLength + "#" + customFileLength); 
+            File canon = new File("data" + File.separator + "canonUnitQuirks.xml");
+            File custom = new File("data" + File.separator + "mmconf" + File.separator + "unitQuirksOverride.xml");
+            long canonFileLength = canon.length(); // returns 0L if does not exist
+            long customFileLength = custom.length();        
+            sendChat(MWClient.CAMPAIGN_PREFIX + "c QUIRKCHECK#" + canonFileLength + "#" + customFileLength); 
         }
 
         // reread the config to allow the user to change setting during runtime
@@ -2448,9 +2448,9 @@ public final class MWClient extends GameHost implements IClient {
             }
         }
 
-        String MMVersion = getserverConfigs("AllowedMegaMekVersion");
+        Version MMVersion = new Version(getServerConfigs("AllowedMegaMekVersion"));
         if (!MMVersion.equals("-1")
-                && !MMVersion.equalsIgnoreCase(MegaMek.VERSION)) {
+                && !MMVersion.equalsIgnoreCase(megamek.MMConstants.VERSION)) {
             if (isDedicated()) {
                 MWLogger.errLog("You are using an invalid version of MegaMek. Please use version "
                                 + MMVersion);
@@ -2543,7 +2543,7 @@ public final class MWClient extends GameHost implements IClient {
             purgeOldLogs();
             IClientPreferences cs = PreferenceManager.getClientPreferences();
             cs.setStampFilenames(Boolean
-                    .parseBoolean(getserverConfigs("MMTimeStampLogFile")));
+                    .parseBoolean(getServerConfigs("MMTimeStampLogFile")));
         }
     }
 
@@ -2939,7 +2939,7 @@ public final class MWClient extends GameHost implements IClient {
 
 
         if (eq == null) {
-			return -1;
+            return -1;
         }
 
         if (!getCampaign().getBlackMarketParts().containsKey(
@@ -3086,7 +3086,7 @@ public final class MWClient extends GameHost implements IClient {
         refreshGUI(REFRESH_PLAYERPANEL);
     }
 
-    public String getserverConfigs(String key) {
+    public String getServerConfigs(String key) {
         if (CampaignData.cd.getServerConfigs().getProperty(key) == null) {
             MWLogger.infoLog("You're missing the config variable: "
                     + key + " in serverconfig!");
@@ -3098,19 +3098,19 @@ public final class MWClient extends GameHost implements IClient {
     //@Salient ... ugh... how can i get to the damn house configs
 //    public String getHouseConfigs(String key)
 //    {
-//    	//CampaignData.cd.ge
-//    	SHouse house = CampaignData.cd.getHouseByName(this.getPlayer().getHouse());
+//        //CampaignData.cd.ge
+//        SHouse house = CampaignData.cd.getHouseByName(this.getPlayer().getHouse());
 //
-//    	return CampaignData.cd.getServerConfigs().getProperty(key).trim();
+//        return CampaignData.cd.getServerConfigs().getProperty(key).trim();
 //    }
 
-    public Properties getserverConfigs() {
+    public Properties getServerConfigs() {
         return CampaignData.cd.getServerConfigs();
     }
 
     public boolean isLeader() {
         return getUserLevel() >= Integer
-                .parseInt(getserverConfigs("factionLeaderLevel"));
+                .parseInt(getServerConfigs("factionLeaderLevel"));
     }
 
     public int getUserLevel() {
@@ -3328,12 +3328,12 @@ public final class MWClient extends GameHost implements IClient {
             int amount, boolean showSign) {
         String result = NumberFormat.getInstance().format(amount);
 
-        String moneyShort = getserverConfigs("MoneyShortName");
-        String moneyLong = getserverConfigs("MoneyLongName");
-        String fluShort = getserverConfigs("FluShortName");
-        String fluLong = getserverConfigs("FluLongName");
-        // String RPLong = getserverConfigs("RPLongName");
-        // String RPShort = getserverConfigs("RPShortName");
+        String moneyShort = getServerConfigs("MoneyShortName");
+        String moneyLong = getServerConfigs("MoneyLongName");
+        String fluShort = getServerConfigs("FluShortName");
+        String fluLong = getServerConfigs("FluLongName");
+        // String RPLong = getServerConfigs("RPLongName");
+        // String RPShort = getServerConfigs("RPShortName");
 
         String sign = "+";
 
@@ -3411,7 +3411,7 @@ public final class MWClient extends GameHost implements IClient {
     public int getMinPlanetOwnerShip(Planet p) {
 
         if (p.getMinPlanetOwnerShip() == -1) {
-            return Integer.parseInt(getserverConfigs("MinPlanetOwnerShip"));
+            return Integer.parseInt(getServerConfigs("MinPlanetOwnerShip"));
         }
 
         return p.getMinPlanetOwnerShip();
@@ -3489,9 +3489,9 @@ public final class MWClient extends GameHost implements IClient {
             }// end slot for
         }// end location for
 
-        cost += Integer.parseInt(this.getserverConfigs("SystemCritRepairCost"))
+        cost += Integer.parseInt(this.getServerConfigs("SystemCritRepairCost"))
                 * systemCrits;
-        cost += Integer.parseInt(this.getserverConfigs("EngineCritRepairCost"))
+        cost += Integer.parseInt(this.getServerConfigs("EngineCritRepairCost"))
                 * engineCrits;
 
         return cost;
@@ -3512,7 +3512,7 @@ public final class MWClient extends GameHost implements IClient {
 
     public int getTechLaborCosts(Entity unit, int techType) {
         int cost = 0;
-        int techCost = Integer.parseInt(getserverConfigs(UnitUtils
+        int techCost = Integer.parseInt(getServerConfigs(UnitUtils
                 .techDescription(techType) + "TechRepairCost"));
         int totalCrits = 0;
         boolean damagedEngine = false;
@@ -3638,8 +3638,8 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public boolean isUsingAdvanceRepairs() {
-        return Boolean.parseBoolean(getserverConfigs("UseAdvanceRepair"))
-                || Boolean.parseBoolean(getserverConfigs("UseSimpleRepair"));
+        return Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair"))
+                || Boolean.parseBoolean(getServerConfigs("UseSimpleRepair"));
     }
 
     public boolean isDedicated() {
@@ -3689,7 +3689,7 @@ public final class MWClient extends GameHost implements IClient {
 
         StringTokenizer ST = new StringTokenizer(data, "#");
         boolean allowTechCrossOver = Boolean.parseBoolean(this
-                .getserverConfigs("AllowCrossOverTech"));
+                .getServerConfigs("AllowCrossOverTech"));
         int houseTechLevel = getData().getHouseByName(getPlayer().getHouse())
                 .getTechLevel();
 
@@ -3701,29 +3701,29 @@ public final class MWClient extends GameHost implements IClient {
             boolean error = false;
             boolean disallowed = false;
             try {
-            	error = false;
-            	disallowed = false;
-				bme.setEquipmentInternalName(ST.nextToken());
-				bme.setAmount(Integer.parseInt(ST.nextToken()));
-				bme.setCost(Double.parseDouble(ST.nextToken()));
-				bme.setCostUp(Boolean.parseBoolean(ST.nextToken()));
+                error = false;
+                disallowed = false;
+                bme.setEquipmentInternalName(ST.nextToken());
+                bme.setAmount(Integer.parseInt(ST.nextToken()));
+                bme.setCost(Double.parseDouble(ST.nextToken()));
+                bme.setCostUp(Boolean.parseBoolean(ST.nextToken()));
 
-				bme.getTech(year);
+                bme.getTech(year);
 
-				if (!allowTechCrossOver
-				        && !UnitUtils
-				                .isSameTech(bme.getTechLevel(), houseTechLevel)) {
-					disallowed = true;
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				MWLogger.errLog("Exception in Parts BM");
-				MWLogger.errLog(e.getLocalizedMessage());
-				error = true;
-			}
+                if (!allowTechCrossOver
+                        && !UnitUtils
+                                .isSameTech(bme.getTechLevel(), houseTechLevel)) {
+                    disallowed = true;
+                }
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                MWLogger.errLog("Exception in Parts BM");
+                MWLogger.errLog(e.getLocalizedMessage());
+                error = true;
+            }
 
             if(!error && !disallowed) {
-            	getCampaign().getBlackMarketParts().put(
+                getCampaign().getBlackMarketParts().put(
                     bme.getEquipmentInternalName(), bme);
             }
         }
@@ -3908,32 +3908,32 @@ public final class MWClient extends GameHost implements IClient {
 
     private void chatCaptureForBot(String username, String addon, String input) //@salient
     {
-		if(!Boolean.parseBoolean(getserverConfigs("Enable_Bot_Chat")))
-			return;
+        if(!Boolean.parseBoolean(getServerConfigs("Enable_Bot_Chat")))
+            return;
 
         String temp = getShortTime().trim() + username.trim() + addon.trim() + ":" + input;
         temp = String.format("%s%n", temp);
 
-//		if(channel !=0)
-//			return;
+//        if(channel !=0)
+//            return;
 
-		//call a new command to capture chat server side
-		sendChat(MWClient.CAMPAIGN_PREFIX + "CHATBOT " + temp);
+        //call a new command to capture chat server side
+        sendChat(MWClient.CAMPAIGN_PREFIX + "CHATBOT " + temp);
     }
 
-	@Override
-	public void gameClientFeedbackRequest(GameCFREvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void gameClientFeedbackRequest(GameCFREvent arg0) {
+        // TODO Auto-generated method stub
+        
+    }
 
-	public Game getGame() {
-		return game;
-	}
+    public Game getGame() {
+        return game;
+    }
 
-	public void setGame(Game game) {
-		this.game = game;
-	}
+    public void setGame(Game game) {
+        this.game = game;
+    }
 
     
 }

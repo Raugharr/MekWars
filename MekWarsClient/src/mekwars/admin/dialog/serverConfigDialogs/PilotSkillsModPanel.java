@@ -28,12 +28,12 @@ import common.util.SpringLayoutHelper;
  */
 public class PilotSkillsModPanel extends JPanel {
 
-	private static final long serialVersionUID = 677126097682711286L;
-	private PilotSkillTextField baseTextField = null;
-	private JCheckBox BaseCheckBox = new JCheckBox();
-	
-	public PilotSkillsModPanel(MWClient mwclient) {
-		super();
+    private static final long serialVersionUID = 677126097682711286L;
+    private PilotSkillTextField baseTextField = null;
+    private JCheckBox BaseCheckBox = new JCheckBox();
+    
+    public PilotSkillsModPanel(MWClient mwclient) {
+        super();
 
         
         /*
@@ -128,7 +128,7 @@ public class PilotSkillsModPanel extends JPanel {
 
         baseTextField = new PilotSkillTextField(5);
         SkillModSpring.add(new JLabel("Gifted % Mod", SwingConstants.TRAILING));
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("PlayersCanBuyPilotUpgrades"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("PlayersCanBuyPilotUpgrades"))) {
             baseTextField.setToolTipText("<html><body>Note Double Field<br>The amount off the cost of other upgrades a Gifted Pilot gets.<br>Example .05 for 5% off</body></html>");
         } else {
             baseTextField.setToolTipText("<html><body>Pilots receive an extra x% chance to gain a skill when they fail<br>to level Piloting or Gunnery after a win</body></html>");
@@ -142,12 +142,12 @@ public class PilotSkillsModPanel extends JPanel {
         BaseCheckBox = new JCheckBox("MS SpeedRating");
         BaseCheckBox.setName("MeleeSpecialistUseSpeedFactor");
         BaseCheckBox.setToolTipText(
-        		"<html>If checked, the MS BV mod will be calculated using the following formula:<br />"
-        		+ "<br />"
-        		+ "<b>&nbsp;&nbsp;&nbsp;&nbsp;Math.pow(1 + ((((double) unit.getRunMP() + (Math.round(Math.max(unit.getJumpMP(), unit.getActiveUMUCount()) / 2.0))) - 5) / 10), 1.2);<br />"
-        		+ "&nbsp;&nbsp;&nbsp;&nbsp;double total = baseBV * ((tonnage / 10) * speedFactor) + (hatchetMod * numberOfHatchets);<br/>"
-        		+ "</b><br />"
-        		+ "If unchecked, the SpeedRating will be set to 1.0, effectively ignoring it.</html>");
+                "<html>If checked, the MS BV mod will be calculated using the following formula:<br />"
+                + "<br />"
+                + "<b>&nbsp;&nbsp;&nbsp;&nbsp;Math.pow(1 + ((((double) unit.getRunMP() + (Math.round(Math.max(unit.getJumpMP(), unit.getActiveUMUCount()) / 2.0))) - 5) / 10), 1.2);<br />"
+                + "&nbsp;&nbsp;&nbsp;&nbsp;double total = baseBV * ((tonnage / 10) * speedFactor) + (hatchetMod * numberOfHatchets);<br/>"
+                + "</b><br />"
+                + "If unchecked, the SpeedRating will be set to 1.0, effectively ignoring it.</html>");
         SkillModSpring.add(new JLabel(" "));
         SkillModSpring.add(BaseCheckBox);
 
@@ -192,6 +192,6 @@ public class PilotSkillsModPanel extends JPanel {
         add(GunneryModPanel);
         
         setBorder(BorderFactory.createTitledBorder("BV Mods"));
-	}
+    }
 
 }

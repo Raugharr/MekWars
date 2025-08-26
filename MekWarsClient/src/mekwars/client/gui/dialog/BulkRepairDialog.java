@@ -879,7 +879,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         }
 
         if (techType != UnitUtils.TECH_PILOT) {
-            techCost = Integer.parseInt(mwclient.getserverConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
+            techCost = Integer.parseInt(mwclient.getServerConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
             techWorkMod = UnitUtils.getTechRoll(unit, 0, UnitUtils.LOC_FRONT_ARMOR, techType, true, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getTechLevel()) - baseRoll;
         } else {
             techType = playerUnit.getPilot().getSkills().getPilotSkill(PilotSkill.AstechSkillID).getLevel();
@@ -951,7 +951,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         }
 
         if (techType != UnitUtils.TECH_PILOT) {
-            techCost = Integer.parseInt(mwclient.getserverConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
+            techCost = Integer.parseInt(mwclient.getServerConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
         }
 
         for (int location = 0; location < unit.locations(); location++) {
@@ -1006,7 +1006,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         }
 
         if (techType != UnitUtils.TECH_PILOT) {
-            techCost = Integer.parseInt(mwclient.getserverConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
+            techCost = Integer.parseInt(mwclient.getServerConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
         }
 
         for (int location = 0; location < unit.locations(); location++) {
@@ -1082,7 +1082,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         }
 
         if (techType != UnitUtils.TECH_PILOT) {
-            techCost = Integer.parseInt(mwclient.getserverConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
+            techCost = Integer.parseInt(mwclient.getServerConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
         }
 
         Mounted lastWeapon = null;
@@ -1164,7 +1164,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         }
 
         if (techType != UnitUtils.TECH_PILOT) {
-            techCost = Integer.parseInt(mwclient.getserverConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
+            techCost = Integer.parseInt(mwclient.getServerConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
         }
 
         for (int location = 0; location < unit.locations(); location++) {
@@ -1246,7 +1246,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         }
 
         if (techType != UnitUtils.TECH_PILOT) {
-            techCost = Integer.parseInt(mwclient.getserverConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
+            techCost = Integer.parseInt(mwclient.getServerConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
         }
 
         top_loop: for (int x = UnitUtils.LOC_CT; x <= UnitUtils.LOC_LT; x++) {
@@ -1335,7 +1335,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
             return;
         }
 
-        int baseLine = Integer.parseInt(mwclient.getserverConfigs("TimeForEachRepairPoint"));
+        int baseLine = Integer.parseInt(mwclient.getServerConfigs("TimeForEachRepairPoint"));
 
         if (!armor) {
             CriticalSlot cs = unit.getCritical(critLocation, critSlot);

@@ -65,7 +65,7 @@ class PlanetPanel extends JPanel {
     //private JLabel warehouses;
     
     PlanetPanel(CMapPanel panel, MWClient client) {
-    	mwclient = client;
+        mwclient = client;
         setForeground(Color.WHITE);
         this.map = panel;
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -106,7 +106,7 @@ class PlanetPanel extends JPanel {
         String planetOwner = "Disputed";
         if ( faction == null ||
                 planet.getInfluence().getInfluence(faction.getId()) < mwclient.getMinPlanetOwnerShip(planet) ){
-            c = StringUtils.html2Color(mwclient.getserverConfigs("DisputedPlanetColor"));
+            c = StringUtils.html2Color(mwclient.getServerConfigs("DisputedPlanetColor"));
             planetOwner = "Disputed";
         }
         else{    

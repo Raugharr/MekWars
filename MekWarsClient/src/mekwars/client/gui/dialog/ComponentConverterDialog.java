@@ -322,7 +322,7 @@ public final class ComponentConverterDialog implements ActionListener {
             mainPanel.removeAll();
             for (BMEquipment eq : mwclient.getCampaign().getBlackMarketParts().values()) {
 
-                if ( (Boolean.parseBoolean(mwclient.getserverConfigs("AllowCrossOverTech"))
+                if ( (Boolean.parseBoolean(mwclient.getServerConfigs("AllowCrossOverTech"))
                         || mwclient.getPlayer().getHouseFightingFor().getTechLevel() == TechConstants.T_ALL
                         || eq.getTechLevel() == TechConstants.T_ALL
                         || mwclient.getPlayer().getHouseFightingFor().getTechLevel() >= eq.getTechLevel())

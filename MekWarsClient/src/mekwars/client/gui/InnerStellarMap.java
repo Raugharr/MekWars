@@ -255,9 +255,9 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             info.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent ae) {
                     JEditorPane label;
-                    if (Boolean.parseBoolean(mwclient.getserverConfigs("UseStaticMaps"))) {
+                    if (Boolean.parseBoolean(mwclient.getServerConfigs("UseStaticMaps"))) {
                         House h = mwclient.getData().getHouseByName(mp.getPPanel().getPlanet().getOriginalOwner());
-                        String color = mwclient.getserverConfigs("DisputedPlanetColor");
+                        String color = mwclient.getServerConfigs("DisputedPlanetColor");
                         String name = "None";
 
                         if (h != null) {
@@ -272,7 +272,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                         JOptionPane.showMessageDialog(InnerStellarMap.this, new JScrollPane(label), "Information for " + mp.getPPanel().getPlanet().getName(), JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         House h = mwclient.getData().getHouseByName(mp.getPPanel().getPlanet().getOriginalOwner());
-                        String color = mwclient.getserverConfigs("DisputedPlanetColor");
+                        String color = mwclient.getServerConfigs("DisputedPlanetColor");
                         String name = "None";
 
                         if (h != null) {
@@ -405,9 +405,9 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         } else if (e.getButton() == MouseEvent.BUTTON1) {
             if (e.getClickCount() >= 2) {
                 JEditorPane label;
-                if (Boolean.parseBoolean(mwclient.getserverConfigs("UseStaticMaps"))) {
+                if (Boolean.parseBoolean(mwclient.getServerConfigs("UseStaticMaps"))) {
                     House h = mwclient.getData().getHouseByName(mp.getPPanel().getPlanet().getOriginalOwner());
-                    String color = mwclient.getserverConfigs("DisputedPlanetColor");
+                    String color = mwclient.getServerConfigs("DisputedPlanetColor");
                     String name = "None";
 
                     if (h != null) {
@@ -422,7 +422,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                     JOptionPane.showMessageDialog(InnerStellarMap.this, new JScrollPane(label), "Information for " + mp.getPPanel().getPlanet().getName(), JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     House h = mwclient.getData().getHouseByName(mp.getPPanel().getPlanet().getOriginalOwner());
-                    String color = mwclient.getserverConfigs("DisputedPlanetColor");
+                    String color = mwclient.getServerConfigs("DisputedPlanetColor");
                     String name = "None";
 
                     if (h != null) {
@@ -697,7 +697,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             String houseColor = "";
 
             if (houseID == null || houseID == -1 || p.getInfluence().getInfluence(houseID) < mwclient.getMinPlanetOwnerShip(p)) {
-                houseColor = mwclient.getserverConfigs("DisputedPlanetColor");
+                houseColor = mwclient.getServerConfigs("DisputedPlanetColor");
             } else {
                 houseColor = mwclient.getData().getHouse(houseID).getHouseColor();
             }
@@ -761,7 +761,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                 Iterator<House> infIt = p.getInfluence().getHouses().iterator();
                 while (infIt.hasNext()) {
                     House h = infIt.next();
-                    String color = mwclient.getserverConfigs("DisputedPlanetColor");
+                    String color = mwclient.getServerConfigs("DisputedPlanetColor");
                     int id = -1;
 
                     if (h != null) {
@@ -1010,7 +1010,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             Iterator<House> it = planet.getInfluence().getHouses().iterator();
             while (it.hasNext()) {
                 House h = it.next();
-                String color = mwclient.getserverConfigs("DisputedPlanetColor");
+                String color = mwclient.getServerConfigs("DisputedPlanetColor");
                 String name = "None";
                 int id = -1;
 

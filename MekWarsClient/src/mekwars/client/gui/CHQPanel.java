@@ -197,7 +197,7 @@ public class CHQPanel extends JPanel {
         gridBagConstraints.weighty = 1.0;
         add(pnlMeks, gridBagConstraints);
         useAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
-        useUnitLocking = Boolean.parseBoolean(mwclient.getserverConfigs("LockUnits"));
+        useUnitLocking = Boolean.parseBoolean(mwclient.getServerConfigs("LockUnits"));
     }
 
     private void createMeksPanel() {
@@ -265,13 +265,13 @@ public class CHQPanel extends JPanel {
 
     // try to remove all armies
     private void btnRemoveAllArmiesActionPerformed(ActionEvent evt) {
-    	//no armies... don't bother   		//Baruk Khazad! 20151204 - start block 1
+        //no armies... don't bother           //Baruk Khazad! 20151204 - start block 1
         if (mwclient.getPlayer().getArmies().size() == 0)
-        	return;
+            return;
         //get confirm
         int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to remove all of your armies?", "Remove all armies?", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.NO_OPTION)
-          	return;		//Baruk Khazad! 20151204 - end block 1
+              return;        //Baruk Khazad! 20151204 - end block 1
         // only remove all if he's logged in, not fighting/active/logout/discon
         if (mwclient.getMyStatus() != MWClient.STATUS_RESERVE) {
             return;
@@ -299,13 +299,13 @@ public class CHQPanel extends JPanel {
             int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to reload all the ammo on all your units?", "Reload all units?", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
-        		for (CUnit unit : mwclient.getPlayer().getHangar()) {
-                	if (!UnitUtils.hasAllAmmo(unit.getEntity())) {
-                		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RELOADALLAMMO#" + unit.getId());
-                	}
-        		}
+                for (CUnit unit : mwclient.getPlayer().getHangar()) {
+                    if (!UnitUtils.hasAllAmmo(unit.getEntity())) {
+                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RELOADALLAMMO#" + unit.getId());
+                    }
+                }
 
-            	refresh();
+                refresh();
             }
         }
     };
@@ -352,7 +352,7 @@ public class CHQPanel extends JPanel {
         int numButtons = 3;
         CPlayer player = mwclient.getPlayer();
         if (player != null) {
-            if (player.getMyHouse().getName().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName"))) {
+            if (player.getMyHouse().getName().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName"))) {
                 newbieResetUnitsButton.setText("Reset Units");
                 newbieResetUnitsButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
@@ -394,20 +394,20 @@ public class CHQPanel extends JPanel {
 
         //@Salient add sol free build button
         if (player != null) {
-            if (player.getMyHouse().getName().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName"))
-            		&& mwclient.getserverConfigs("Sol_FreeBuild").equalsIgnoreCase("true")) {
+            if (player.getMyHouse().getName().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName"))
+                    && mwclient.getServerConfigs("Sol_FreeBuild").equalsIgnoreCase("true")) {
                 solFreeBuildButton.setText("Create Unit");
                 solFreeBuildButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                    	solFreeBuildButtonActionPerformed(evt);
+                        solFreeBuildButtonActionPerformed(evt);
                     }
                 });
                 hqButtonSpring.add(solFreeBuildButton);
                 numButtons++;
             }
             //also spawn button if post defection option is set
-            if (!player.getMyHouse().getName().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName"))
-                    && mwclient.getserverConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true")) {
+            if (!player.getMyHouse().getName().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName"))
+                    && mwclient.getServerConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true")) {
                 solFreeBuildButton.setText("Create Unit");
                 solFreeBuildButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
@@ -620,7 +620,7 @@ public class CHQPanel extends JPanel {
 
                         if (mwclient.getMyStatus() != MWClient.STATUS_RESERVE) {
                             tblMeks.setCursor(notAllowedCursor);
-                        } else if (Player.getAmountOfTimesUnitExistsInArmies(dragUnit.getId()) >= Integer.parseInt(mwclient.getserverConfigs("UnitsInMultipleArmiesAmount"))) {
+                        } else if (Player.getAmountOfTimesUnitExistsInArmies(dragUnit.getId()) >= Integer.parseInt(mwclient.getServerConfigs("UnitsInMultipleArmiesAmount"))) {
                             tblMeks.setCursor(maxCursor);
                         } else if (currArmy.getUnit(dragUnit.getId()) != null) {
                             tblMeks.setCursor(dupeCursor);
@@ -782,7 +782,7 @@ public class CHQPanel extends JPanel {
                             menuItem = new JMenuItem("Attack Options");
                             menuItem.setActionCommand("AO|" + lid);
                             menuItem.addActionListener(this);
-                            boolean canCheckFromReserve = Boolean.parseBoolean(mwclient.getserverConfigs("ProbeInReserve"));
+                            boolean canCheckFromReserve = Boolean.parseBoolean(mwclient.getServerConfigs("ProbeInReserve"));
                             if ((mwclient.getMyStatus() != MWClient.STATUS_ACTIVE) && !canCheckFromReserve) {
                                 menuItem.setEnabled(false);
                             }
@@ -794,7 +794,7 @@ public class CHQPanel extends JPanel {
                             popup.add(menuItem);
 
                             // only show "Limits" option if limits allowed
-                            boolean limitsAllowed = Boolean.parseBoolean(mwclient.getserverConfigs("AllowLimiters"));
+                            boolean limitsAllowed = Boolean.parseBoolean(mwclient.getServerConfigs("AllowLimiters"));
                             if (limitsAllowed) {
                                 JMenu limitmenu = new JMenu("Limits");
                                 popup.add(limitmenu);
@@ -809,7 +809,7 @@ public class CHQPanel extends JPanel {
                             }
 
                             // Only show when Force Size is used.
-                            if (Boolean.parseBoolean(mwclient.getserverConfigs("UseOperationsRule"))) {
+                            if (Boolean.parseBoolean(mwclient.getServerConfigs("UseOperationsRule"))) {
                                 menuItem = new JMenuItem("Force Size To Face");
                                 popup.add(menuItem);
                                 menuItem.setActionCommand("SFS|" + lid);
@@ -1219,7 +1219,7 @@ public class CHQPanel extends JPanel {
                                 if ((mm.getStatus() == Unit.STATUS_UNMAINTAINED) || (mm.getStatus() == Unit.STATUS_FORSALE)) {
                                     continue;
                                 }
-                                if (Player.getAmountOfTimesUnitExistsInArmies(mm.getId()) >= Integer.parseInt(mwclient.getserverConfigs("UnitsInMultipleArmiesAmount"))) {
+                                if (Player.getAmountOfTimesUnitExistsInArmies(mm.getId()) >= Integer.parseInt(mwclient.getServerConfigs("UnitsInMultipleArmiesAmount"))) {
                                     continue;
                                 }
                                 if (l.getUnit(mm.getId()) == null) {// only add
@@ -1452,7 +1452,7 @@ public class CHQPanel extends JPanel {
                                     if ((mm.getStatus() == Unit.STATUS_UNMAINTAINED) || (mm.getStatus() == Unit.STATUS_FORSALE)) {
                                         continue;
                                     }
-                                    if (Player.getAmountOfTimesUnitExistsInArmies(mm.getId()) >= Integer.parseInt(mwclient.getserverConfigs("UnitsInMultipleArmiesAmount"))) {
+                                    if (Player.getAmountOfTimesUnitExistsInArmies(mm.getId()) >= Integer.parseInt(mwclient.getServerConfigs("UnitsInMultipleArmiesAmount"))) {
                                         continue;
                                     }
                                     if (l.getUnit(mm.getId()) == null) {// only
@@ -1715,7 +1715,7 @@ public class CHQPanel extends JPanel {
 
                             JMenu repairs = new JMenu("Repairs");
                             if (UnitUtils.hasArmorDamage(cm.getEntity()) || UnitUtils.hasCriticalDamage(cm.getEntity())) {
-                                if (!Boolean.parseBoolean(mwclient.getserverConfigs("UseSimpleRepair"))) {
+                                if (!Boolean.parseBoolean(mwclient.getServerConfigs("UseSimpleRepair"))) {
                                     // Add repair unit option
                                     menuItem = new JMenuItem("Repair Unit");
                                     menuItem.setActionCommand("ARU|" + row + "|" + col);
@@ -1734,7 +1734,7 @@ public class CHQPanel extends JPanel {
 
                             }
 
-                            if (Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsRepair")) && ((cm.getType() == Unit.MEK) || (cm.getType() == Unit.VEHICLE))) {
+                            if (Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsRepair")) && ((cm.getType() == Unit.MEK) || (cm.getType() == Unit.VEHICLE))) {
                                 menuItem = new JMenuItem("Salvage Unit Crits");
                                 menuItem.setActionCommand("SUC|" + row + "|" + col);
                                 menuItem.addActionListener(this);
@@ -1817,30 +1817,30 @@ public class CHQPanel extends JPanel {
 
                         JMenu hm = new JMenu("Transactions");
                         int numItems = 0;
-                        if(!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getserverConfigs("Christmas_AllowDonate"))) {
-                        	menuItem = new JMenuItem("Donate Unit");
-                        	menuItem.setActionCommand("DO|" + cm.getId());
-                        	menuItem.addActionListener(this);
-                        	hm.add(menuItem);
-                        	numItems++;
+                        if(!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getServerConfigs("Christmas_AllowDonate"))) {
+                            menuItem = new JMenuItem("Donate Unit");
+                            menuItem.setActionCommand("DO|" + cm.getId());
+                            menuItem.addActionListener(this);
+                            hm.add(menuItem);
+                            numItems++;
                         }
-                        if(!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getserverConfigs("Christmas_AllowScrap"))) {
-                        	menuItem = new JMenuItem("Scrap Unit");
-                        	menuItem.setActionCommand("S|" + cm.getId());
-                        	menuItem.addActionListener(this);
-                        	hm.add(menuItem);
-                        	numItems++;
+                        if(!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getServerConfigs("Christmas_AllowScrap"))) {
+                            menuItem = new JMenuItem("Scrap Unit");
+                            menuItem.setActionCommand("S|" + cm.getId());
+                            menuItem.addActionListener(this);
+                            hm.add(menuItem);
+                            numItems++;
                         }
                         //@Salient for SOL free build
-                        if(Player.getHouse().equalsIgnoreCase(mwclient.getserverConfigs("NewbieHouseName")) && Boolean.parseBoolean(mwclient.getserverConfigs("Sol_FreeBuild"))) {
-                        	menuItem = new JMenuItem("Delete Unit");
-                        	menuItem.setActionCommand("DL|" + cm.getId());
-                        	menuItem.addActionListener(this);
-                        	hm.add(menuItem);
-                        	numItems++;
+                        if(Player.getHouse().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName")) && Boolean.parseBoolean(mwclient.getServerConfigs("Sol_FreeBuild"))) {
+                            menuItem = new JMenuItem("Delete Unit");
+                            menuItem.setActionCommand("DL|" + cm.getId());
+                            menuItem.addActionListener(this);
+                            hm.add(menuItem);
+                            numItems++;
                         }
-                        if (!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getserverConfigs("Christmas_AllowTransfer"))) {
-                        	menuItem = new JMenuItem("Transfer Unit");
+                        if (!cm.isChristmasUnit() || Boolean.parseBoolean(mwclient.getServerConfigs("Christmas_AllowTransfer"))) {
+                            menuItem = new JMenuItem("Transfer Unit");
                             menuItem.setActionCommand("TM|" + cm.getId());
                             menuItem.addActionListener(this);
                             hm.add(menuItem);
@@ -1851,27 +1851,27 @@ public class CHQPanel extends JPanel {
                         }
                         // Test unit for BM access
                         boolean canSellUnit = true;
-                        if (cm.isChristmasUnit() && !Boolean.parseBoolean(mwclient.getserverConfigs("Christmas_AllowBM"))) {
-                        	canSellUnit = false;
+                        if (cm.isChristmasUnit() && !Boolean.parseBoolean(mwclient.getServerConfigs("Christmas_AllowBM"))) {
+                            canSellUnit = false;
                         }
-                        if ((cm.getType() == Unit.MEK) && !Boolean.parseBoolean(mwclient.getserverConfigs("MeksMayBeSoldOnBM"))) {
+                        if ((cm.getType() == Unit.MEK) && !Boolean.parseBoolean(mwclient.getServerConfigs("MeksMayBeSoldOnBM"))) {
                             canSellUnit = false;
-                        } else if ((cm.getType() == Unit.VEHICLE) && !Boolean.parseBoolean(mwclient.getserverConfigs("VehsMayBeSoldOnBM"))) {
+                        } else if ((cm.getType() == Unit.VEHICLE) && !Boolean.parseBoolean(mwclient.getServerConfigs("VehsMayBeSoldOnBM"))) {
                             canSellUnit = false;
-                        } else if ((cm.getType() == Unit.BATTLEARMOR) && !Boolean.parseBoolean(mwclient.getserverConfigs("BAMayBeSoldOnBM"))) {
+                        } else if ((cm.getType() == Unit.BATTLEARMOR) && !Boolean.parseBoolean(mwclient.getServerConfigs("BAMayBeSoldOnBM"))) {
                             canSellUnit = false;
-                        } else if ((cm.getType() == Unit.AERO) && !Boolean.parseBoolean(mwclient.getserverConfigs("AerosMayBeSoldOnBM"))) {
+                        } else if ((cm.getType() == Unit.AERO) && !Boolean.parseBoolean(mwclient.getServerConfigs("AerosMayBeSoldOnBM"))) {
                             canSellUnit = false;
-                        } else if ((cm.getType() == Unit.PROTOMEK) && !Boolean.parseBoolean(mwclient.getserverConfigs("ProtosMayBeSoldOnBM"))) {
+                        } else if ((cm.getType() == Unit.PROTOMEK) && !Boolean.parseBoolean(mwclient.getServerConfigs("ProtosMayBeSoldOnBM"))) {
                             canSellUnit = false;
-                        } else if ((cm.getType() == Unit.INFANTRY) && !Boolean.parseBoolean(mwclient.getserverConfigs("InfantryMayBeSoldOnBM"))) {
+                        } else if ((cm.getType() == Unit.INFANTRY) && !Boolean.parseBoolean(mwclient.getServerConfigs("InfantryMayBeSoldOnBM"))) {
                             canSellUnit = false;
-                        } else if (Boolean.parseBoolean(mwclient.getserverConfigs("BMNoClan")) && cm.getEntity().isClan()) {
+                        } else if (Boolean.parseBoolean(mwclient.getServerConfigs("BMNoClan")) && cm.getEntity().isClan()) {
                             canSellUnit = false;
                         }
 
                         // Test for faction BM access
-                        StringTokenizer blockedFactions = new StringTokenizer(mwclient.getserverConfigs("BMNoSell"), "$");
+                        StringTokenizer blockedFactions = new StringTokenizer(mwclient.getServerConfigs("BMNoSell"), "$");
                         while (blockedFactions.hasMoreTokens()) {
                             if (Player.getMyHouse().getName().equals(blockedFactions.nextToken())) {
                                 canSellUnit = false;
@@ -1892,7 +1892,7 @@ public class CHQPanel extends JPanel {
                             hm.add(menuItem);
                         }
 
-                        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseDirectSell")) && (cm.getStatus() != Unit.STATUS_FORSALE)) {
+                        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseDirectSell")) && (cm.getStatus() != Unit.STATUS_FORSALE)) {
                             menuItem = new JMenuItem("Direct Sell Unit");
                             menuItem.setActionCommand("DSU|" + cm.getId());
                             menuItem.addActionListener(this);
@@ -1911,12 +1911,12 @@ public class CHQPanel extends JPanel {
                             menuItem.setActionCommand("RP|" + cm.getId());
                             menuItem.addActionListener(this);
                             pm.add(menuItem);
-                            if (Boolean.parseBoolean(mwclient.getserverConfigs("PlayersCanBuyPilotUpgrades"))) {
+                            if (Boolean.parseBoolean(mwclient.getServerConfigs("PlayersCanBuyPilotUpgrades"))) {
                                 menuItem = new JMenuItem("Promote Pilot");
                                 menuItem.setActionCommand("PP|" + cm.getId());
                                 menuItem.addActionListener(this);
                                 pm.add(menuItem);
-                                if (Boolean.parseBoolean(mwclient.getserverConfigs("PlayersCanSellPilotUpgrades"))) {
+                                if (Boolean.parseBoolean(mwclient.getServerConfigs("PlayersCanSellPilotUpgrades"))) {
                                     menuItem = new JMenuItem("Demote Pilot");
                                     menuItem.setActionCommand("DP|" + cm.getId());
                                     menuItem.addActionListener(this);
@@ -1926,7 +1926,7 @@ public class CHQPanel extends JPanel {
                         }
 
                         // Pilot Queues Block
-                        boolean ppqsEnabled = Boolean.parseBoolean(mwclient.getserverConfigs("AllowPersonalPilotQueues"));
+                        boolean ppqsEnabled = Boolean.parseBoolean(mwclient.getServerConfigs("AllowPersonalPilotQueues"));
                         if (ppqsEnabled && (cm.isSinglePilotUnit())) {
 
                             // load possible pilots
@@ -2156,7 +2156,7 @@ public class CHQPanel extends JPanel {
 
                 int mode = Integer.parseInt(st.nextToken());
                 int lid = Integer.parseInt(st.nextToken());
-                boolean useForceSize = Boolean.parseBoolean(mwclient.getserverConfigs("UseOperationsRule"));
+                boolean useForceSize = Boolean.parseBoolean(mwclient.getServerConfigs("UseOperationsRule"));
                 float opForceSize = Army.NO_LIMIT;
                 double forceSizeMod = 1;
 
@@ -2222,7 +2222,7 @@ public class CHQPanel extends JPanel {
                         int lightV = 0;
                         int inf = 0;
 
-                        boolean showVeeWeights = Boolean.parseBoolean(mwclient.getserverConfigs("ShowVehWeightclassInChallenges"));
+                        boolean showVeeWeights = Boolean.parseBoolean(mwclient.getServerConfigs("ShowVehWeightclassInChallenges"));
 
                         Enumeration<Unit> e = currArmy.getUnits().elements();
                         // boolean firstUnit = true;
@@ -2685,7 +2685,7 @@ public class CHQPanel extends JPanel {
             else if (command.equalsIgnoreCase("EUR")) {
                 int row = Integer.parseInt(st.nextToken());
                 int col = Integer.parseInt(st.nextToken());
-                int year = Integer.parseInt(mwclient.getserverConfigs("CampaignYear"));
+                int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
                 CUnit mek = MekTable.getMekAt(row, col);
                 int greenTechCost = 0;
                 int regTechCost = 0;
@@ -2693,9 +2693,9 @@ public class CHQPanel extends JPanel {
                 int eliteTechCost = 0;
 
                 double repairCost = 0;
-                if (Boolean.parseBoolean(mwclient.getserverConfigs("UseRealRepairCosts"))) {
+                if (Boolean.parseBoolean(mwclient.getServerConfigs("UseRealRepairCosts"))) {
                     repairCost = UnitUtils.getTotalDamagedPartCost(mek.getEntity(), year);
-                    repairCost *= Double.parseDouble(mwclient.getserverConfigs("RealRepairCostMod"));
+                    repairCost *= Double.parseDouble(mwclient.getServerConfigs("RealRepairCostMod"));
                     greenTechCost = mwclient.getTechLaborCosts(mek.getEntity(), UnitUtils.TECH_GREEN);
                     regTechCost = mwclient.getTechLaborCosts(mek.getEntity(), UnitUtils.TECH_REG);
                     vetTechCost = mwclient.getTechLaborCosts(mek.getEntity(), UnitUtils.TECH_VET);
@@ -3031,7 +3031,7 @@ public class CHQPanel extends JPanel {
                     int lid = army.getID();
                     String range = "";
 
-                    boolean limitsAllowed = Boolean.parseBoolean(mwclient.getserverConfigs("AllowLimiters"));
+                    boolean limitsAllowed = Boolean.parseBoolean(mwclient.getServerConfigs("AllowLimiters"));
                     if (limitsAllowed) {
 
                         // lower limit
@@ -3095,7 +3095,7 @@ public class CHQPanel extends JPanel {
                         }
                     }
 
-                    boolean useOpRule = Boolean.parseBoolean(mwclient.getserverConfigs("UseOperationsRule"));
+                    boolean useOpRule = Boolean.parseBoolean(mwclient.getServerConfigs("UseOperationsRule"));
                     String modifiedBV = "";
                     if (useOpRule && (army.getOpForceSize() < army.getUnits().size()) && (army.getOpForceSize() > 0)) {
                         modifiedBV = "(" + Long.toString(Math.round((army.getBV() * army.forceSizeModifier(army.getOpForceSize())))) + ")";
@@ -3269,7 +3269,7 @@ public class CHQPanel extends JPanel {
                         }
 
                         String techAmount = "TechsFor" + Unit.getWeightClassDesc(cm.getWeightclass()) + Unit.getTypeClassDesc(cm.getType());
-                        int numTechs = (int) (Integer.parseInt(mwclient.getserverConfigs(techAmount)) * (mwclient.getPlayer().getMyHouse().houseSupportsUnit(cm.getUnitFilename()) ? 1 : Float.parseFloat(mwclient.getserverConfigs("NonFactionUnitsIncreasedTechs"))));
+                        int numTechs = (int) (Integer.parseInt(mwclient.getServerConfigs(techAmount)) * (mwclient.getPlayer().getMyHouse().houseSupportsUnit(cm.getUnitFilename()) ? 1 : Float.parseFloat(mwclient.getServerConfigs("NonFactionUnitsIncreasedTechs"))));
 
                         techCostString += "Techs required: " + numTechs;
                         C3Text.setLength(0);
@@ -3287,74 +3287,74 @@ public class CHQPanel extends JPanel {
                     }
                     C3Text.append("Targeting: " + cm.getTargetSystemTypeDesc() + "<br>");
                     if (cm.isSupportUnit()) {
-                    	C3Text.append("[Support]<br>");
+                        C3Text.append("[Support]<br>");
                     }
 
                     //@salient EXPANDEDUNITTOOLTIP
                     if(Boolean.parseBoolean(mwclient.getConfig().getParam("EXPANDEDUNITTOOLTIP")))
-                    {      	
-                    	C3Text.append("<font color=\"purple\">");
-                    	C3Text.append("<b>[General]</b><br>");
-                    	C3Text.append("Weight: "+cm.getEntity().getWeight()+" Tons ("+ cm.getEntity().getWeightClassName() +")<br>");
-                    	C3Text.append("Armor: "+cm.getEntity().getArmorWeight()+" Tons ("+ cm.getEntity().getTotalArmor() + " Pts)<br>");
-                    	int walk = cm.getEntity().getWalkMP();
-                    	int run = cm.getEntity().getRunMPwithoutMASC();
-                    	int jump = cm.getEntity().getJumpMP();
-                    	int masc = cm.getEntity().getRunMP();
-                    	C3Text.append("Movement: "+walk+"/"+run); 
-                    	
-                    	if(cm.getEntity().getMASC() != null)
-                    		C3Text.append("("+masc+")"); 
-                    	
-                    	if(jump != 0)
-                    		C3Text.append("/"+jump+"<br>");
-                    	else
-                    		C3Text.append("<br>");
-                                	
-                    	C3Text.append("Heat Capacity: "+cm.getEntity().getHeatCapacity()+"<br>");
-                    	                   	
-//                    	if(cm.getEntity().hasQuirk("no_twist"))
-//                    		C3Text.append("Torso Twist: <font color=\"green\">NO</font><br>");
-//                    	else
-//                    		C3Text.append("Torso Twist: <font color=\"red\">YES</font><br>");
-                    	
-                    	if(cm.getEntity().canFlipArms())
-                    		C3Text.append("Arms Flip: <font color=\"green\">YES</font><br>");
-                    	else
-                    		C3Text.append("Arms Flip: <font color=\"red\">NO</font><br>");
-                    	       
-                    	C3Text.append("</font>"); 
-                    	//End General (purple)
-                    	
-                    	C3Text.append("<font color=\"blue\">");
-                    	C3Text.append("<b>[Weapons]</b><br>");
-                    	cm.getEntity().getWeaponList().forEach(weapon -> {
-                    		C3Text.append(weapon.getName() + " (");
-                    		if(weapon.isRearMounted())
-                    			C3Text.append(cm.getEntity().getLocationAbbr(weapon.getLocation()) + ") (R)<br>"); 
-                    		else                  			
-                    			C3Text.append(cm.getEntity().getLocationAbbr(weapon.getLocation()) + ")<br>"); 
-                    		
-                    		});
-                		C3Text.append("</font>"); 
-                		//End Weapons (blue)
-                    	
-                		//Quirks...
-                		if(Boolean.parseBoolean(mwclient.getserverConfigs("EnableQuirks")))
-                		{
-                			C3Text.append("<font color=\"teal\">");
-                			C3Text.append("<b>[Quirks]</b><br>");
+                    {          
+                        C3Text.append("<font color=\"purple\">");
+                        C3Text.append("<b>[General]</b><br>");
+                        C3Text.append("Weight: "+cm.getEntity().getWeight()+" Tons ("+ cm.getEntity().getWeightClassName() +")<br>");
+                        C3Text.append("Armor: "+cm.getEntity().getArmorWeight()+" Tons ("+ cm.getEntity().getTotalArmor() + " Pts)<br>");
+                        int walk = cm.getEntity().getWalkMP();
+                        int run = cm.getEntity().getRunMPwithoutMASC();
+                        int jump = cm.getEntity().getJumpMP();
+                        int masc = cm.getEntity().getRunMP();
+                        C3Text.append("Movement: "+walk+"/"+run); 
+                        
+                        if(cm.getEntity().getMASC() != null)
+                            C3Text.append("("+masc+")"); 
+                        
+                        if(jump != 0)
+                            C3Text.append("/"+jump+"<br>");
+                        else
+                            C3Text.append("<br>");
+                                    
+                        C3Text.append("Heat Capacity: "+cm.getEntity().getHeatCapacity()+"<br>");
+                                               
+//                        if(cm.getEntity().hasQuirk("no_twist"))
+//                            C3Text.append("Torso Twist: <font color=\"green\">NO</font><br>");
+//                        else
+//                            C3Text.append("Torso Twist: <font color=\"red\">YES</font><br>");
+                        
+                        if(cm.getEntity().canFlipArms())
+                            C3Text.append("Arms Flip: <font color=\"green\">YES</font><br>");
+                        else
+                            C3Text.append("Arms Flip: <font color=\"red\">NO</font><br>");
+                               
+                        C3Text.append("</font>"); 
+                        //End General (purple)
+                        
+                        C3Text.append("<font color=\"blue\">");
+                        C3Text.append("<b>[Weapons]</b><br>");
+                        cm.getEntity().getWeaponList().forEach(weapon -> {
+                            C3Text.append(weapon.getName() + " (");
+                            if(weapon.isRearMounted())
+                                C3Text.append(cm.getEntity().getLocationAbbr(weapon.getLocation()) + ") (R)<br>"); 
+                            else                              
+                                C3Text.append(cm.getEntity().getLocationAbbr(weapon.getLocation()) + ")<br>"); 
+                            
+                            });
+                        C3Text.append("</font>"); 
+                        //End Weapons (blue)
+                        
+                        //Quirks...
+                        if(Boolean.parseBoolean(mwclient.getServerConfigs("EnableQuirks")))
+                        {
+                            C3Text.append("<font color=\"teal\">");
+                            C3Text.append("<b>[Quirks]</b><br>");
 
-                			StringTokenizer st = new StringTokenizer(cm.getHtmlQuirksList(), "*");
-              				
-            				while(st.hasMoreTokens())
-            					C3Text.append(TokenReader.readString(st));                				
+                            StringTokenizer st = new StringTokenizer(cm.getHtmlQuirksList(), "*");
+                              
+                            while(st.hasMoreTokens())
+                                C3Text.append(TokenReader.readString(st));                                
 
-                			
-                			//C3Text.append(cm.quirkCheck());
-                			C3Text.append("</font>"); 
-                			//End Quirks (teal)                			
-                		}
+                            
+                            //C3Text.append(cm.quirkCheck());
+                            C3Text.append("</font>"); 
+                            //End Quirks (teal)                            
+                        }
                     }
 
                     // If you have a unit in more then one army, list all the
@@ -3385,7 +3385,7 @@ public class CHQPanel extends JPanel {
                     } else if (!mwclient.getConfig().isUsingStatusIcons()) {
 
                         if (cm.getPilot().getName().equals("Vacant")) {
-                        	// RFE 1545928 -Color for pilotless units
+                            // RFE 1545928 -Color for pilotless units
                             c.setBackground(new Color(160, 190, 115));
                         } else if (useAdvanceRepairs && UnitUtils.isRepairing(cm.getEntity())) {
                             c.setBackground(new Color(0, 255, 127));

@@ -89,7 +89,7 @@ public class CBMPanel extends JPanel {
     public CBMPanel(MWClient client) {
         setLayout(new GridBagLayout());
         mwclient = client;
-        hideBMUnits = Boolean.parseBoolean(mwclient.getserverConfigs("HiddenBMUnits"));
+        hideBMUnits = Boolean.parseBoolean(mwclient.getServerConfigs("HiddenBMUnits"));
 
         pnlMekIconHolder = new JPanel();
         pnlMekIconHolder.setMaximumSize(new Dimension(84,72));
@@ -346,7 +346,7 @@ public class CBMPanel extends JPanel {
      * @param evt
      */
     private void btnShowMekActionPerformed(ActionEvent evt) {
-    	if (hideBMUnits) {
+        if (hideBMUnits) {
             return;
         }
         mm = getMarketMechAtRow(tblMarket.getSelectedRow());
@@ -481,7 +481,7 @@ public class CBMPanel extends JPanel {
 
         //check to see if selling is forbidden for the player's faction
         boolean sellingEnabled = true;
-        StringTokenizer blockedFactions = new StringTokenizer(mwclient.getserverConfigs("BMNoSell"), "$");
+        StringTokenizer blockedFactions = new StringTokenizer(mwclient.getServerConfigs("BMNoSell"), "$");
         while (blockedFactions.hasMoreTokens()) {
             if (Player.getMyHouse().getName().equals(blockedFactions.nextToken())) {
                 sellingEnabled = false;
@@ -496,7 +496,7 @@ public class CBMPanel extends JPanel {
 
         //check to see if buying is forbidds, and save boolean.
         boolean buyingEnabled = true;
-        blockedFactions = new StringTokenizer(mwclient.getserverConfigs("BMNoBuy"), "$");
+        blockedFactions = new StringTokenizer(mwclient.getServerConfigs("BMNoBuy"), "$");
         while (blockedFactions.hasMoreTokens()) {
             if (Player.getMyHouse().getName().equals(blockedFactions.nextToken())) {
                 buyingEnabled = false;

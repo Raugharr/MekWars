@@ -164,7 +164,7 @@ public class PL extends Command {
         } else if (cmd.equals("FC")) {
             player.setFactionConfigs(TokenReader.readString(st));
         } else if (cmd.equals("UPBM")) {
-            mwclient.updatePartsBlackMarket(TokenReader.readString(st), Integer.parseInt(mwclient.getserverConfigs("CampaignYear")));
+            mwclient.updatePartsBlackMarket(TokenReader.readString(st), Integer.parseInt(mwclient.getServerConfigs("CampaignYear")));
         } else if (cmd.equals("UPPC")) {
             mwclient.updatePlayerPartsCache(TokenReader.readString(st));
         } else if (cmd.equals("RPPC")) {
@@ -226,7 +226,7 @@ public class PL extends Command {
             // clear supported units
             MWLogger.infoLog("Clearing Supported Units");
             player.getMyHouse().supportedUnits.clear();
-            player.getMyHouse().setNonFactionUnitsCostMore(Boolean.parseBoolean(mwclient.getserverConfigs("UseNonFactionUnitsIncreasedTechs")));
+            player.getMyHouse().setNonFactionUnitsCostMore(Boolean.parseBoolean(mwclient.getServerConfigs("UseNonFactionUnitsIncreasedTechs")));
         } else if (cmd.equals("SMA")) {
             mwclient.getPlayer().setMULCreatedArmy(st);
         } else if (cmd.equals("ANH")) {
@@ -263,11 +263,11 @@ public class PL extends Command {
         } else if (cmd.equals("SHP")) {
             player.parseHangarPenaltyString(TokenReader.readString(st));
         } else if (cmd.equals("STS")) {
-        	int unitID = TokenReader.readInt(st);
-        	int targetType = TokenReader.readInt(st);
-        	//MWLogger.errLog("Setting Targeting for Unit " + unitID + " to " + targetType);
-        	player.getUnit(unitID).setTargetSystem(targetType);
-        	mwclient.doParseDataInput("CH|AM: Targeting for unit " + unitID + " set to " + player.getUnit(unitID).getTargetSystemTypeDesc());
+            int unitID = TokenReader.readInt(st);
+            int targetType = TokenReader.readInt(st);
+            //MWLogger.errLog("Setting Targeting for Unit " + unitID + " to " + targetType);
+            player.getUnit(unitID).setTargetSystem(targetType);
+            mwclient.doParseDataInput("CH|AM: Targeting for unit " + unitID + " set to " + player.getUnit(unitID).getTargetSystemTypeDesc());
         } else {
             return;
         }

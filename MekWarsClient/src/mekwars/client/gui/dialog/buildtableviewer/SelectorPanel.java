@@ -41,78 +41,78 @@ import common.util.SpringLayoutHelper;
  */
 public class SelectorPanel extends JPanel implements ActionListener {
 
-	private static final long serialVersionUID = -7776384437283951081L;
+    private static final long serialVersionUID = -7776384437283951081L;
 
-	private MWClient client;
-	
-	private JLabel factionLabel = new JLabel("Faction: ", SwingConstants.TRAILING);
-	private JLabel typeLabel = new JLabel("Type: ", SwingConstants.TRAILING);
-	private JLabel weightLabel = new JLabel("Weight: ", SwingConstants.TRAILING);
-	
-	private String[] factionArray = {};
-	private String[] typeArray = {};
-	private String[] weightArray = {};
-	
-	private JComboBox<String> weightCombo;
-	private JComboBox<String> typeCombo;
-	private JComboBox<String> factionCombo;
-	
-	private Vector<ActionListener> listeners = new Vector<ActionListener>();
-	
-	/**
-	 * Constructor
-	 * @param c client
-	 */
-	public SelectorPanel(MWClient c) {
-		this.client = c;
-		
-		prepComponents();
-		
-		//this.setBorder(BorderFactory.createLineBorder(Color.black));
-		setLayout (new SpringLayout());
-		add(factionLabel);
-		add(factionCombo);
-		add(typeLabel);
+    private MWClient client;
+    
+    private JLabel factionLabel = new JLabel("Faction: ", SwingConstants.TRAILING);
+    private JLabel typeLabel = new JLabel("Type: ", SwingConstants.TRAILING);
+    private JLabel weightLabel = new JLabel("Weight: ", SwingConstants.TRAILING);
+    
+    private String[] factionArray = {};
+    private String[] typeArray = {};
+    private String[] weightArray = {};
+    
+    private JComboBox<String> weightCombo;
+    private JComboBox<String> typeCombo;
+    private JComboBox<String> factionCombo;
+    
+    private Vector<ActionListener> listeners = new Vector<ActionListener>();
+    
+    /**
+     * Constructor
+     * @param c client
+     */
+    public SelectorPanel(MWClient c) {
+        this.client = c;
+        
+        prepComponents();
+        
+        //this.setBorder(BorderFactory.createLineBorder(Color.black));
+        setLayout (new SpringLayout());
+        add(factionLabel);
+        add(factionCombo);
+        add(typeLabel);
         add(typeCombo);
         add(weightLabel);
         add(weightCombo);
         SpringLayoutHelper.setupSpringGrid(this, 2);
-	}
-	
-	/**
-	 * Creates all the combos, depending on what units the server allows
-	 */
-	private void prepComponents() {
-		TreeSet<String> typeNames = new TreeSet<String>();
-		for(int i = 0; i < Unit.MAXBUILD; i++) {
-			if ( (i == Unit.VEHICLE) && !(Boolean.parseBoolean(client.getserverConfigs("UseVehicle"))) ) {
-				continue;
-			}
-			if ( (i == Unit.INFANTRY) && !(Boolean.parseBoolean(client.getserverConfigs("UseInfantry"))) ) {
-				continue;
-			}
-			if ( (i == Unit.BATTLEARMOR) && !(Boolean.parseBoolean(client.getserverConfigs("UseBattleArmor"))) ) {
-				continue;
-			}
-			if ( (i == Unit.PROTOMEK) && !(Boolean.parseBoolean(client.getserverConfigs("UseProtoMek"))) ) {
-				continue;
-			}
-			if ( (i == Unit.AERO) && !(Boolean.parseBoolean(client.getserverConfigs("UseAero"))) ) {
-				continue;
-			}
+    }
+    
+    /**
+     * Creates all the combos, depending on what units the server allows
+     */
+    private void prepComponents() {
+        TreeSet<String> typeNames = new TreeSet<String>();
+        for(int i = 0; i < Unit.MAXBUILD; i++) {
+            if ( (i == Unit.VEHICLE) && !(Boolean.parseBoolean(client.getServerConfigs("UseVehicle"))) ) {
+                continue;
+            }
+            if ( (i == Unit.INFANTRY) && !(Boolean.parseBoolean(client.getServerConfigs("UseInfantry"))) ) {
+                continue;
+            }
+            if ( (i == Unit.BATTLEARMOR) && !(Boolean.parseBoolean(client.getServerConfigs("UseBattleArmor"))) ) {
+                continue;
+            }
+            if ( (i == Unit.PROTOMEK) && !(Boolean.parseBoolean(client.getServerConfigs("UseProtoMek"))) ) {
+                continue;
+            }
+            if ( (i == Unit.AERO) && !(Boolean.parseBoolean(client.getServerConfigs("UseAero"))) ) {
+                continue;
+            }
 
-			typeNames.add(Unit.getTypeClassDesc(i));
-		}
-		typeArray = typeNames.toArray(typeArray);
-		
-		LinkedHashSet<String> weightNames = new LinkedHashSet<String>();
-		for(int i = Unit.LIGHT; i <= Unit.ASSAULT; i++) {
-			weightNames.add(Unit.getWeightClassDesc(i));
-		}
-		weightArray = weightNames.toArray(weightArray);
-		
-		TreeSet<String> factionNamesOrdered = new TreeSet<String>();
-		Iterator<House> i = client.getData().getAllHouses().iterator();
+            typeNames.add(Unit.getTypeClassDesc(i));
+        }
+        typeArray = typeNames.toArray(typeArray);
+        
+        LinkedHashSet<String> weightNames = new LinkedHashSet<String>();
+        for(int i = Unit.LIGHT; i <= Unit.ASSAULT; i++) {
+            weightNames.add(Unit.getWeightClassDesc(i));
+        }
+        weightArray = weightNames.toArray(weightArray);
+        
+        TreeSet<String> factionNamesOrdered = new TreeSet<String>();
+        Iterator<House> i = client.getData().getAllHouses().iterator();
         while (i.hasNext()) {
             House house = i.next();
 
@@ -132,67 +132,67 @@ public class SelectorPanel extends JPanel implements ActionListener {
         typeCombo.addActionListener(this);
         factionCombo.addActionListener(this);
         
-	}
-	
-	/**
-	 * Combines the JComboBoxes into a String that can be used to pick a build table
-	 * @return the build table to display
-	 */
-	public String getSelectionString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(factionCombo.getSelectedItem());
-		sb.append("_");
-		sb.append(weightCombo.getSelectedItem());
-		
-		String type = (String)typeCombo.getSelectedItem();
-		if(!type.equalsIgnoreCase("Mek")) {
-			sb.append(typeCombo.getSelectedItem());
-		}
-		sb.append(".txt");
-		return sb.toString();
-	}
+    }
+    
+    /**
+     * Combines the JComboBoxes into a String that can be used to pick a build table
+     * @return the build table to display
+     */
+    public String getSelectionString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(factionCombo.getSelectedItem());
+        sb.append("_");
+        sb.append(weightCombo.getSelectedItem());
+        
+        String type = (String)typeCombo.getSelectedItem();
+        if(!type.equalsIgnoreCase("Mek")) {
+            sb.append(typeCombo.getSelectedItem());
+        }
+        sb.append(".txt");
+        return sb.toString();
+    }
 
-	/**
-	 * A change was made to a combo
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		for (ActionListener listener : listeners) {
-			listener.actionPerformed(e);
-		}
-	}
-	
-	/**
-	 * Add an Object listening for changes
-	 * @param listener the ActionListener to add
-	 */
-	public void addActionListener(ActionListener listener) {
-		listeners.add(listener);
-	}
-	
-	/**
-	 * Remove a listening Object
-	 * @param listener the ActionListener to remove
-	 */
-	public void removeActionListener(ActionListener listener) {
-		listeners.remove(listener);
-	}
+    /**
+     * A change was made to a combo
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        for (ActionListener listener : listeners) {
+            listener.actionPerformed(e);
+        }
+    }
+    
+    /**
+     * Add an Object listening for changes
+     * @param listener the ActionListener to add
+     */
+    public void addActionListener(ActionListener listener) {
+        listeners.add(listener);
+    }
+    
+    /**
+     * Remove a listening Object
+     * @param listener the ActionListener to remove
+     */
+    public void removeActionListener(ActionListener listener) {
+        listeners.remove(listener);
+    }
 
-	/**
-	 * Called by {@link TablePanel} when a table cell is double-clicked 
-	 * @param house the faction to change to
-	 */
-	public void setSelectedFaction(String house) {
-		factionCombo.setSelectedItem(house);
-	}
-	
-	/**
-	 * Called by {@link TablePanel} when the tables are first built.  Sets
-	 * the selected table to the user's faction
-	 * @param house the faction to change to
-	 */
-	public void setDefaultSelectedFaction(String house) {
-		factionCombo.setSelectedItem(house);
-		typeCombo.setSelectedItem("Mek");
-	}
+    /**
+     * Called by {@link TablePanel} when a table cell is double-clicked 
+     * @param house the faction to change to
+     */
+    public void setSelectedFaction(String house) {
+        factionCombo.setSelectedItem(house);
+    }
+    
+    /**
+     * Called by {@link TablePanel} when the tables are first built.  Sets
+     * the selected table to the user's faction
+     * @param house the faction to change to
+     */
+    public void setDefaultSelectedFaction(String house) {
+        factionCombo.setSelectedItem(house);
+        typeCombo.setSelectedItem("Mek");
+    }
 }

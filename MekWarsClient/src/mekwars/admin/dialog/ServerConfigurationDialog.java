@@ -127,9 +127,9 @@ public final class ServerConfigurationDialog implements ActionListener {
         screenSize = toolkit.getScreenSize();
         
         // @salient adding tooltip settings
-		ToolTipManager.sharedInstance().setDismissDelay(7000);
-		ToolTipManager.sharedInstance().setInitialDelay(400);
-		//ToolTipManager.sharedInstance().setReshowDelay(100);
+        ToolTipManager.sharedInstance().setDismissDelay(7000);
+        ToolTipManager.sharedInstance().setInitialDelay(400);
+        //ToolTipManager.sharedInstance().setReshowDelay(100);
 
         // TAB PANELS (these are added to the root pane as tabs)
         JPanel unitsPanel;
@@ -139,11 +139,11 @@ public final class ServerConfigurationDialog implements ActionListener {
         RepodPanel repodPanel = new RepodPanel(mwclient);
         TechnicianPanel technicianPanel = new TechnicianPanel(mwclient);
         if (screenSize.height >= 1024) {
-        	unitsPanel = new UnitsPanel(mwclient);
-        	pilotSkillsPanel = new PilotSkillsPanel(mwclient);
+            unitsPanel = new UnitsPanel(mwclient);
+            pilotSkillsPanel = new PilotSkillsPanel(mwclient);
         } else {
-        	unitsPanel = new UnitsCardPanel(mwclient);
-        	pilotSkillsPanel = new PilotSkillsCardPanel(mwclient);
+            unitsPanel = new UnitsCardPanel(mwclient);
+            pilotSkillsPanel = new PilotSkillsCardPanel(mwclient);
         }
         FactionPanel factionPanel = new FactionPanel(mwclient);
         DirectSellPanel directSellPanel = new DirectSellPanel();
@@ -175,7 +175,7 @@ public final class ServerConfigurationDialog implements ActionListener {
         LinksPanel linksPanel = new LinksPanel(); // @salient
         FreebuildPanel freebuildPanel = new FreebuildPanel(mwclient); // @salient
         MiniCampaignPanel miniCampaignPanel = new MiniCampaignPanel(mwclient); // @salient
-        TrackerPanel trackerPanel = new TrackerPanel(mwclient.getserverConfigs("TrackerUUID"));
+        TrackerPanel trackerPanel = new TrackerPanel(mwclient.getServerConfigs("TrackerUUID"));
 
         // Set the actions to generate
         okayButton.setActionCommand(okayCommand);
@@ -274,7 +274,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
     /**
      * This Method tunnels through all of the panels to find the textfields and checkboxes. Once it find one it grabs the Name() param of the object and uses
-     * that to find out what the setting should be from the mwclient.getserverConfigs() method.
+     * that to find out what the setting should be from the mwclient.getServerConfigs() method.
      *
      * @param panel
      */
@@ -301,10 +301,10 @@ public final class ServerConfigurationDialog implements ActionListener {
                     // backup happened
                     if (key.equals("LastAutomatedBackup")) {
                         SimpleDateFormat sDF = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
-                        Date date = new Date(Long.parseLong(mwclient.getserverConfigs(key)));
+                        Date date = new Date(Long.parseLong(mwclient.getServerConfigs(key)));
                         textBox.setText(sDF.format(date));
                     } else {
-                        textBox.setText(mwclient.getserverConfigs(key));
+                        textBox.setText(mwclient.getServerConfigs(key));
                     }
                 } catch (Exception ex) {
                     textBox.setText("N/A");
@@ -317,7 +317,7 @@ public final class ServerConfigurationDialog implements ActionListener {
                     MWLogger.errLog("Null Checkbox: " + checkBox.getToolTipText());
                     continue;
                 }
-                checkBox.setSelected(Boolean.parseBoolean(mwclient.getserverConfigs(key)));
+                checkBox.setSelected(Boolean.parseBoolean(mwclient.getServerConfigs(key)));
 
             } else if (field instanceof JRadioButton) {
                 JRadioButton radioButton = (JRadioButton) field;
@@ -327,46 +327,46 @@ public final class ServerConfigurationDialog implements ActionListener {
                     MWLogger.errLog("Null RadioButton: " + radioButton.getToolTipText());
                     continue;
                 }
-                radioButton.setSelected(Boolean.parseBoolean(mwclient.getserverConfigs(key)));
+                radioButton.setSelected(Boolean.parseBoolean(mwclient.getServerConfigs(key)));
 
             } else if (field instanceof JDatePickerImpl) {
-            	JDatePickerImpl picker = (JDatePickerImpl) field;
+                JDatePickerImpl picker = (JDatePickerImpl) field;
 
-            	key = picker.getName();
-            	if (key == null) {
-            		MWLogger.errLog("Null JDatePickerImpl: " + picker.getToolTipText());
-            		continue;
-            	}
-            	String s = mwclient.getserverConfigs(key);
-            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            	Date date = new Date();
-				try {
-					date = sdf.parse(s);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	Calendar cal = Calendar.getInstance();
-            	cal.setTime(date);
-            	int year = cal.get(Calendar.YEAR);
-            	int month = cal.get(Calendar.MONTH);
-            	int day = cal.get(Calendar.DAY_OF_MONTH);
+                key = picker.getName();
+                if (key == null) {
+                    MWLogger.errLog("Null JDatePickerImpl: " + picker.getToolTipText());
+                    continue;
+                }
+                String s = mwclient.getServerConfigs(key);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date();
+                try {
+                    date = sdf.parse(s);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
 
-            	picker.getModel().setYear(year);
-            	picker.getModel().setMonth(month);
-            	picker.getModel().setDay(day);
-            	picker.getModel().setSelected(true);
+                picker.getModel().setYear(year);
+                picker.getModel().setMonth(month);
+                picker.getModel().setDay(day);
+                picker.getModel().setSelected(true);
 
             } else if (field instanceof JScrollPane) {
-            	JScrollPane pane = (JScrollPane) field;
-            	JTextArea area = (JTextArea)pane.getViewport().getView();
-            	key = area.getName();
-            	if(key == null) {
-            		continue;
-            	}
-            	String s = mwclient.getserverConfigs(key);
-            	String text = s.replace('$', '\n');
-            	area.setText(text);
+                JScrollPane pane = (JScrollPane) field;
+                JTextArea area = (JTextArea)pane.getViewport().getView();
+                key = area.getName();
+                if(key == null) {
+                    continue;
+                }
+                String s = mwclient.getServerConfigs(key);
+                String text = s.replace('$', '\n');
+                area.setText(text);
             } // else continue
         }
     }
@@ -404,7 +404,7 @@ public final class ServerConfigurationDialog implements ActionListener {
                 }
 
                 // reduce bandwidth only send things that have changed.
-                if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
+                if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
                     mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }
             } else if (field instanceof JCheckBox) {
@@ -417,7 +417,7 @@ public final class ServerConfigurationDialog implements ActionListener {
                     continue;
                 }
                 // reduce bandwidth only send things that have changed.
-                if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
+                if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
                     mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }
             } else if (field instanceof JRadioButton) {
@@ -430,26 +430,26 @@ public final class ServerConfigurationDialog implements ActionListener {
                     continue;
                 }
                 // reduce bandwidth only send things that have changed.
-                if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
+                if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
                     mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }
             } else if (field instanceof JDatePickerImpl) {
-            	JDatePickerImpl picker = (JDatePickerImpl) field;
-            	value = picker.getJFormattedTextField().getText();
-            	key = picker.getName();
-            	// reduce bandwidth only send things that have changed.
-                if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
+                JDatePickerImpl picker = (JDatePickerImpl) field;
+                value = picker.getJFormattedTextField().getText();
+                key = picker.getName();
+                // reduce bandwidth only send things that have changed.
+                if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
                     mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }
             } else if (field instanceof JScrollPane) {
-            	JScrollPane pane = (JScrollPane) field;
-            	JTextArea area = (JTextArea)pane.getViewport().getView();
-            	value = area.getText();
-            	key = area.getName();
-            	if (!mwclient.getserverConfigs(key).equalsIgnoreCase(value)) {
-            		String toSend = value.replace('\n', '$');
-            		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + toSend + "#CONFIRM");
-            	}
+                JScrollPane pane = (JScrollPane) field;
+                JTextArea area = (JTextArea)pane.getViewport().getView();
+                value = area.getText();
+                key = area.getName();
+                if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
+                    String toSend = value.replace('\n', '$');
+                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + toSend + "#CONFIRM");
+                }
             } // else continue
         }
     }

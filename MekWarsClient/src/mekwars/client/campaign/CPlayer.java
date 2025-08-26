@@ -212,13 +212,13 @@ public class CPlayer extends Player {
         doPayTechniciansMath();
         RewardPoints = TokenReader.readInt(ST);
         String string = TokenReader.readString(ST);
-       	setMekToken(Integer.parseInt(string));
+           setMekToken(Integer.parseInt(string));
         House = TokenReader.readString(ST);
         setHouseFightingFor(TokenReader.readString(ST));
         setLogo(TokenReader.readString(ST));
         setInvisible(TokenReader.readBoolean(ST));
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsRepair"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsRepair"))) {
             partsCache.fromString(TokenReader.readString(ST), "|");
         } else {
             TokenReader.readString(ST);
@@ -364,7 +364,7 @@ public class CPlayer extends Player {
          * Get the faction configs before starting anything else. I could pause
          * the client and wait for the configs but I'll let it go. --Torren
          */
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getfactionconfigs#0" + mwclient.getserverConfigs("TIMESTAMP"));
+        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getfactionconfigs#0" + mwclient.getServerConfigs("TIMESTAMP"));
 
         /*
          * Now that we have a house set, we can check for BM access properly. Do
@@ -513,7 +513,7 @@ public class CPlayer extends Player {
             }
 
             // get the distance
-            int distInBoards = Integer.parseInt(mwclient.getserverConfigs("DistanceFromMap"));
+            int distInBoards = Integer.parseInt(mwclient.getServerConfigs("DistanceFromMap"));
             int distInHexes = distInBoards * 17;// 17 hexes per board.
 
             CUnit currUnit = new CUnit(mwclient);
@@ -624,24 +624,24 @@ public class CPlayer extends Player {
     // which are already set by the server anyway....
 //    public String getAllQuirkInfoForActivation()
 //    {
-//    	StringJoiner quirksList = new StringJoiner("*");
-//    	List<Integer> idList = new ArrayList<Integer>();
-//    	
+//        StringJoiner quirksList = new StringJoiner("*");
+//        List<Integer> idList = new ArrayList<Integer>();
+//        
 //        for (CArmy currA : Armies) 
 //        {
-//        	for (Unit currU : currA.getUnits())
-//        	{
-//        		CUnit currCU = (CUnit) currU;
-//        		if(currCU.hasQuirks())
-//        		{
-//        			int ID = currCU.getId();
-//        			if(idList.contains(ID)) //skip dupes
-//        				continue;
-//        			idList.add(ID);
-//        			quirksList.add(String.valueOf(ID));
-//        			quirksList.add(currCU.getQuirksList());        			
-//        		}
-//        	}
+//            for (Unit currU : currA.getUnits())
+//            {
+//                CUnit currCU = (CUnit) currU;
+//                if(currCU.hasQuirks())
+//                {
+//                    int ID = currCU.getId();
+//                    if(idList.contains(ID)) //skip dupes
+//                        continue;
+//                    idList.add(ID);
+//                    quirksList.add(String.valueOf(ID));
+//                    quirksList.add(currCU.getQuirksList());                    
+//                }
+//            }
 //        }
 //        MWLogger.debugLog(quirksList.toString());
 //        return quirksList.toString();
@@ -700,8 +700,8 @@ public class CPlayer extends Player {
         float amountToPay = 0;
 
         // load config variables needed to do the math ...
-        float additive = Float.parseFloat(mwclient.getserverConfigs("AdditivePerTech"));
-        float ceiling = Float.parseFloat(mwclient.getserverConfigs("AdditiveCostCeiling"));
+        float additive = Float.parseFloat(mwclient.getServerConfigs("AdditivePerTech"));
+        float ceiling = Float.parseFloat(mwclient.getServerConfigs("AdditiveCostCeiling"));
 
         /*
          * divide the ceiling by the addiive. techs past this number are all
@@ -1185,7 +1185,7 @@ public class CPlayer extends Player {
             return 0;
         }
 
-        if ((typeid == Unit.INFANTRY) && Boolean.parseBoolean(mwclient.getserverConfigs("FootInfTakeNoBays"))) {
+        if ((typeid == Unit.INFANTRY) && Boolean.parseBoolean(mwclient.getServerConfigs("FootInfTakeNoBays"))) {
 
             // check types
             boolean isFoot = model.startsWith("Foot");
@@ -1198,7 +1198,7 @@ public class CPlayer extends Player {
 
         int result = 1;
         String techAmount = "TechsFor" + Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(typeid);
-        result = Integer.parseInt(mwclient.getserverConfigs(techAmount));
+        result = Integer.parseInt(mwclient.getServerConfigs(techAmount));
 
         // Apply Pilot Mods (Astech skill)
         if (!mwclient.isUsingAdvanceRepairs()) {
@@ -1318,13 +1318,13 @@ public class CPlayer extends Player {
         }
 
         StringTokenizer ST = new StringTokenizer(data, DELIMITER);
-        // mwclient.getserverConfigs().clear();
+        // mwclient.getServerConfigs().clear();
         // mwclient.getServerConfigData();
         while (ST.hasMoreTokens()) {
             String key = TokenReader.readString(ST);
             String value = TokenReader.readString(ST);
 
-            mwclient.getserverConfigs().setProperty(key, value);
+            mwclient.getServerConfigs().setProperty(key, value);
         }
         mwclient.setWaiting(false);
     }
@@ -1363,29 +1363,29 @@ public class CPlayer extends Player {
     }
 
     public int getHangarPenalty() {
-    	return hangarPenalty;
+        return hangarPenalty;
     }
 
     public int getHangarPurchasePenalty(int type, int weight) {
-    	return hangarPurchasePenalties[type][weight];
+        return hangarPurchasePenalties[type][weight];
     }
 
     public void setHangarPenalty(int p) {
-    	hangarPenalty = p;
+        hangarPenalty = p;
     }
 
     public void setHangarPurchasePenalty(int type, int weight, int p) {
-    	hangarPurchasePenalties[type][weight] = p;
+        hangarPurchasePenalties[type][weight] = p;
     }
 
-	public void parseHangarPenaltyString(String readString) {
-		StringTokenizer st = new StringTokenizer(readString, "*");
-		setHangarPenalty(Integer.parseInt(st.nextToken()));
-		for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
-			for (int weight = Unit.LIGHT; weight <= Unit.ASSAULT; weight++) {
-				setHangarPurchasePenalty(type, weight, Integer.parseInt(st.nextToken()));
-			}
-		}
-		mwclient.getMainFrame().getMainPanel().getHSPanel().updateDisplay();
-	}
+    public void parseHangarPenaltyString(String readString) {
+        StringTokenizer st = new StringTokenizer(readString, "*");
+        setHangarPenalty(Integer.parseInt(st.nextToken()));
+        for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
+            for (int weight = Unit.LIGHT; weight <= Unit.ASSAULT; weight++) {
+                setHangarPurchasePenalty(type, weight, Integer.parseInt(st.nextToken()));
+            }
+        }
+        mwclient.getMainFrame().getMainPanel().getHSPanel().updateDisplay();
+    }
 }

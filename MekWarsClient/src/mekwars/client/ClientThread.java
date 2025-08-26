@@ -123,10 +123,10 @@ public class ClientThread extends Thread implements CloseClientListener {
         client = new Client(myname, serverip, serverport);
         client.addCloseClientListener(this);
         /*
-         * mwclient.getserverConfigs("MMTimeStampLogFile");
-         * mwclient.getserverConfigs("MMShowUnitId");
-         * mwclient.getserverConfigs("MMKeepGameLog");
-         * mwclient.getserverConfigs("MMGameLogName");
+         * mwclient.getServerConfigs("MMTimeStampLogFile");
+         * mwclient.getServerConfigs("MMShowUnitId");
+         * mwclient.getServerConfigs("MMKeepGameLog");
+         * mwclient.getServerConfigs("MMGameLogName");
          */
 
         try {
@@ -208,10 +208,10 @@ public class ClientThread extends Thread implements CloseClientListener {
                 
                 PlanetEnvironment pe = mwclient.getCurrentEnvironment();
                 if ((pe != null) && pe.isStaticMap()) {
-                	mySettings = MapSettings.getInstance();
-                	mySettings.setBoardSize((int)pe.getXBoardSize(), (int)pe.getYBoardSize());
-                	mySettings.setMapSize((int) pe.getXSize(), (int) pe.getYSize());
-                	//mySettings = new MapSettings(pe.getXSize(), pe.getYSize(), pe.getXBoardSize(), pe.getYBoardSize());
+                    mySettings = MapSettings.getInstance();
+                    mySettings.setBoardSize((int)pe.getXBoardSize(), (int)pe.getYBoardSize());
+                    mySettings.setMapSize((int) pe.getXSize(), (int) pe.getYSize());
+                    //mySettings = new MapSettings(pe.getXSize(), pe.getYSize(), pe.getXBoardSize(), pe.getYBoardSize());
 
                     ArrayList<String> boardvec = new ArrayList<String>();
                     if (pe.getStaticMapName().toLowerCase().endsWith("surprise")) {
@@ -450,16 +450,16 @@ public class ClientThread extends Thread implements CloseClientListener {
                 }
 
                 IClientPreferences cs = PreferenceManager.getClientPreferences();
-                cs.setStampFilenames(Boolean.parseBoolean(mwclient.getserverConfigs("MMTimeStampLogFile")));
-                cs.setShowUnitId(Boolean.parseBoolean(mwclient.getserverConfigs("MMShowUnitId")));
-                cs.setKeepGameLog(Boolean.parseBoolean(mwclient.getserverConfigs("MMKeepGameLog")));
-                cs.setGameLogFilename(mwclient.getserverConfigs("MMGameLogName"));
+                cs.setStampFilenames(Boolean.parseBoolean(mwclient.getServerConfigs("MMTimeStampLogFile")));
+                cs.setShowUnitId(Boolean.parseBoolean(mwclient.getServerConfigs("MMShowUnitId")));
+                cs.setKeepGameLog(Boolean.parseBoolean(mwclient.getServerConfigs("MMKeepGameLog")));
+                cs.setGameLogFilename(mwclient.getServerConfigs("MMGameLogName"));
                 /*the cs object ref is no longer needed, so release the ref to it- BarukKhazad!
                  */
                  cs = null;
 
                 if (!mwclient.getConfig().getParam("UNITCAMO").equals(Camouflage.NO_CAMOUFLAGE)) {
-					client.getLocalPlayer().setCamouflage(new Camouflage(Camouflage.ROOT_CATEGORY, mwclient.getConfig().getParam("UNITCAMO")));
+                    client.getLocalPlayer().setCamouflage(new Camouflage(Camouflage.ROOT_CATEGORY, mwclient.getConfig().getParam("UNITCAMO")));
                     playerUpdate = true;
                 }
 
@@ -546,7 +546,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                     Entity entity = autoUnit.getEntity();
 
                     // Set slights based on games light conditions.
-                   	entity.setExternalSearchlight(nightGame);
+                       entity.setExternalSearchlight(nightGame);
                     entity.setSearchlightState(nightGame);
 
                     // Had issues with Id's so we are now setting them.
@@ -636,7 +636,7 @@ public class ClientThread extends Thread implements CloseClientListener {
      * adding the listener. And to MMNet for the poorly documented code change.
      */
     @Override
-	public void clientClosed() {
+    public void clientClosed() {
 
         PreferenceManager.getInstance().save();
 
@@ -736,7 +736,7 @@ public class ClientThread extends Thread implements CloseClientListener {
     public static Comparator<? super Object> stringComparator() {
         return new Comparator<Object>() {
             @Override
-			public int compare(Object o1, Object o2) {
+            public int compare(Object o1, Object o2) {
                 String s1 = ((String) o1).toLowerCase();
                 String s2 = ((String) o2).toLowerCase();
                 return s1.compareTo(s2);

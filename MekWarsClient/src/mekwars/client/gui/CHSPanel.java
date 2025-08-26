@@ -539,21 +539,21 @@ public class CHSPanel extends JPanel {
         StringBuilder result = new StringBuilder("<BODY  TEXT=\"" + mwclient.getConfigParam("CHATFONTCOLOR") + "\" BGCOLOR=\"" + mwclient.getConfigParam("BACKGROUNDCOLOR") + "\">");
         boolean usingAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
         int playerAccessLevel = mwclient.getPlayer().getSubFactionAccess();
-        result.append("<TABLE Border=\"1\"><TR><TH>" + HouseName + "</TH><TH>" + mwclient.getserverConfigs("LightFactoryTypeTitle") + "</TH><TH>" + mwclient.getserverConfigs("MediumFactoryTypeTitle") + "</TH><TH>" + mwclient.getserverConfigs("HeavyFactoryTypeTitle") + "</TH><TH>" + mwclient.getserverConfigs("AssaultFactoryTypeTitle") + "</TH></TR>");
+        result.append("<TABLE Border=\"1\"><TR><TH>" + HouseName + "</TH><TH>" + mwclient.getServerConfigs("LightFactoryTypeTitle") + "</TH><TH>" + mwclient.getServerConfigs("MediumFactoryTypeTitle") + "</TH><TH>" + mwclient.getServerConfigs("HeavyFactoryTypeTitle") + "</TH><TH>" + mwclient.getServerConfigs("AssaultFactoryTypeTitle") + "</TH></TR>");
         int factoryGifCounter;
         for (int type_id = 0; type_id < Unit.TOTALTYPES; type_id++) {
-        	
+            
             // hide unit types that aren't in use on the server
             String useIt = "Use" + Unit.getTypeClassDesc(type_id);
 
-            if (!Boolean.parseBoolean(mwclient.getserverConfigs(useIt))) {
+            if (!Boolean.parseBoolean(mwclient.getServerConfigs(useIt))) {
                 continue;
             }
             if (!hasFactories(type_id)) {
                 continue;
             }
 
-            String factoryTitle = mwclient.getserverConfigs(Unit.getTypeClassDesc(type_id) + "FactoryClassTitle");
+            String factoryTitle = mwclient.getServerConfigs(Unit.getTypeClassDesc(type_id) + "FactoryClassTitle");
             result.append("<TR><TD VALIGN=MIDDLE><b>" + factoryTitle + "</b></TD>");
 
             for (int weight = 0; weight < 4; weight++) {
@@ -604,9 +604,9 @@ public class CHSPanel extends JPanel {
                             }
                             factoryGifCounter++; 
                             if (factoryGifCounter == 11) {
-                            	result.append("<br>");
-                            	factoryGifCounter = 1;
-                            			}
+                                result.append("<br>");
+                                factoryGifCounter = 1;
+                                        }
                             if (refreshTime == 0) {
 
                                 House foundH = mwclient.getData().getHouseByName(founder);
@@ -615,9 +615,9 @@ public class CHSPanel extends JPanel {
                                 int ppCost = CUnit.getPPForUnit(mwclient, weight, type_id, foundH);
 
                                 if (!mwclient.getPlayer().getMyHouse().getName().equalsIgnoreCase(foundH.getName())) {
-                                    cbillCost = Math.round(cbillCost * Float.parseFloat(mwclient.getserverConfigs("NonOriginalCBillMultiplier"))) + mwclient.getPlayer().getHangarPurchasePenalty(type_id, weight);
-                                    fluCost = Math.round(fluCost * Float.parseFloat(mwclient.getserverConfigs("NonOriginalInfluenceMultiplier")));
-                                    ppCost = Math.round(ppCost * Float.parseFloat(mwclient.getserverConfigs("NonOriginalComponentMultiplier")));
+                                    cbillCost = Math.round(cbillCost * Float.parseFloat(mwclient.getServerConfigs("NonOriginalCBillMultiplier"))) + mwclient.getPlayer().getHangarPurchasePenalty(type_id, weight);
+                                    fluCost = Math.round(fluCost * Float.parseFloat(mwclient.getServerConfigs("NonOriginalInfluenceMultiplier")));
+                                    ppCost = Math.round(ppCost * Float.parseFloat(mwclient.getServerConfigs("NonOriginalComponentMultiplier")));
                                 }
 
                                 String costString = "(Cost: " + mwclient.moneyOrFluMessage(true, true, cbillCost, false) + ", " + mwclient.moneyOrFluMessage(false, true, fluCost, false) + ", " + ppCost + " Components)";
@@ -654,7 +654,7 @@ public class CHSPanel extends JPanel {
 
             // is not using units of the type, skip the listings
             String useIt = "Use" + Unit.getTypeClassDesc(type);
-            if (!Boolean.parseBoolean(mwclient.getserverConfigs(useIt))) {
+            if (!Boolean.parseBoolean(mwclient.getServerConfigs(useIt))) {
                 continue;
             }
 
@@ -666,7 +666,7 @@ public class CHSPanel extends JPanel {
                 }
             }
             if (hasUnits) {
-                String factoryTitle = mwclient.getserverConfigs(Unit.getTypeClassDesc(type) + "FactoryClassTitle");
+                String factoryTitle = mwclient.getServerConfigs(Unit.getTypeClassDesc(type) + "FactoryClassTitle");
                 result.append("<b>" + factoryTitle + " Bays</b><br>");
             }
 
@@ -907,7 +907,7 @@ public class CHSPanel extends JPanel {
         menuItem.addActionListener(myPopup);
         tmenu.add(menuItem);
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseVehicle"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseVehicle"))) {
             tmenu = new JMenu("Vehicle");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light Vehicle");
@@ -928,7 +928,7 @@ public class CHSPanel extends JPanel {
             tmenu.add(menuItem);
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseInfantry"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseInfantry"))) {
             tmenu = new JMenu("Infantry");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light Infantry");
@@ -949,7 +949,7 @@ public class CHSPanel extends JPanel {
             tmenu.add(menuItem);
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseProtoMek"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseProtoMek"))) {
             tmenu = new JMenu("ProtoMek");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light ProtoMek");
@@ -970,7 +970,7 @@ public class CHSPanel extends JPanel {
             tmenu.add(menuItem);
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseBattleArmor"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseBattleArmor"))) {
             tmenu = new JMenu("Battle Armor");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light Battle Armor");
@@ -991,7 +991,7 @@ public class CHSPanel extends JPanel {
             tmenu.add(menuItem);
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseAero"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseAero"))) {
             tmenu = new JMenu("Aero");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light Aero");
@@ -1012,7 +1012,7 @@ public class CHSPanel extends JPanel {
             tmenu.add(menuItem);
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("AllowPersonalPilotQueues"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowPersonalPilotQueues"))) {
             tmenu = new JMenu("Pilots");
             buy.add(tmenu);
             JMenu smenu = new JMenu("Mek");
@@ -1034,7 +1034,7 @@ public class CHSPanel extends JPanel {
             smenu.add(menuItem);
             tmenu.add(smenu);
 
-            if (Boolean.parseBoolean(mwclient.getserverConfigs("UseProtoMek"))) {
+            if (Boolean.parseBoolean(mwclient.getServerConfigs("UseProtoMek"))) {
                 smenu = new JMenu("Proto");
                 menuItem = new JMenuItem("Light Pilot");
                 menuItem.setActionCommand("BUYP|" + Unit.PROTOMEK + "|" + Unit.LIGHT);
@@ -1083,7 +1083,7 @@ public class CHSPanel extends JPanel {
         menuItem.addActionListener(myPopup);
         tmenu.add(menuItem);
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseVehicle"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseVehicle"))) {
             tmenu = new JMenu("Vehicle");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light Vehicle");
@@ -1103,7 +1103,7 @@ public class CHSPanel extends JPanel {
             menuItem.addActionListener(myPopup);
             tmenu.add(menuItem);
         }
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseInfantry"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseInfantry"))) {
             tmenu = new JMenu("Infantry");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light Infantry");
@@ -1124,7 +1124,7 @@ public class CHSPanel extends JPanel {
             tmenu.add(menuItem);
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseProtoMek"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseProtoMek"))) {
             tmenu = new JMenu("ProtoMek");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light ProtoMek");
@@ -1145,7 +1145,7 @@ public class CHSPanel extends JPanel {
             tmenu.add(menuItem);
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseBattleArmor"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseBattleArmor"))) {
             tmenu = new JMenu("Battle Armor");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light Battle Armor");
@@ -1166,7 +1166,7 @@ public class CHSPanel extends JPanel {
             tmenu.add(menuItem);
         }
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseAero"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseAero"))) {
             tmenu = new JMenu("Aero");
             buy.add(tmenu);
             menuItem = new JMenuItem("Light Aero");

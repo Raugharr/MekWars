@@ -152,20 +152,20 @@ public class CArmy extends Army {
     /*
      * public int getOperationsBV() { //if not using the operations rules,
      * return a normal undamaged BV. boolean useingOpRules =
-     * Boolean.parseBoolean(mwclient.getserverConfigs("UseOperationsRule")); if
+     * Boolean.parseBoolean(mwclient.getServerConfigs("UseOperationsRule")); if
      * (!useingOpRules) return this.getBV();
      * 
      * double thisRawSize = this.getRawForceSize();//use getter in case it's 0
      * //get the base force size. should be 4 for IS and 5 for Clans. double
      * opForceRawSize =
-     * Double.parseDouble(mwclient.getserverConfigs("BaseForceSize"));
+     * Double.parseDouble(mwclient.getServerConfigs("BaseForceSize"));
      * 
      * if (opForceRawSize >= thisRawSize) return this.getBV();//this force is
      * smaller. no modification.
      * 
      * //else - calcualte an op BV. //load the base force multiplier from config
      * ... double baseForcePenalty =
-     * Double.parseDouble(mwclient.getserverConfigs("BaseForcePenalty"));
+     * Double.parseDouble(mwclient.getServerConfigs("BaseForcePenalty"));
      * 
      * //calculate the force size different double forceDifference = thisRawSize -
      * opForceRawSize;
@@ -197,18 +197,18 @@ public class CArmy extends Army {
         // no break, generate a raw force size
         for (Unit u : this.getUnits()) {
             if (u.getType() == Unit.INFANTRY)
-                rawForceSize += Float.parseFloat(mwclient.getserverConfigs("InfantryOperationsBVMod"));
+                rawForceSize += Float.parseFloat(mwclient.getServerConfigs("InfantryOperationsBVMod"));
             else if (u.getType() == Unit.VEHICLE)
-                rawForceSize += Float.parseFloat(mwclient.getserverConfigs("VehicleOperationsBVMod"));
+                rawForceSize += Float.parseFloat(mwclient.getServerConfigs("VehicleOperationsBVMod"));
             else if (u.getType() == Unit.BATTLEARMOR)
-                rawForceSize += Float.parseFloat(mwclient.getserverConfigs("BAOperationsBVMod"));
+                rawForceSize += Float.parseFloat(mwclient.getServerConfigs("BAOperationsBVMod"));
             else if (u.getType() == Unit.AERO)
-                rawForceSize += Float.parseFloat(mwclient.getserverConfigs("AeroOperationsBVMod"));
+                rawForceSize += Float.parseFloat(mwclient.getServerConfigs("AeroOperationsBVMod"));
             else if (u.getType() == Unit.PROTOMEK)
-                rawForceSize += Float.parseFloat(mwclient.getserverConfigs("ProtoOperationsBVMod"));
+                rawForceSize += Float.parseFloat(mwclient.getServerConfigs("ProtoOperationsBVMod"));
             else
                 // all other allowed types have a 1.0 weight
-                rawForceSize += Float.parseFloat(mwclient.getserverConfigs("MekOperationsBVMod"));
+                rawForceSize += Float.parseFloat(mwclient.getServerConfigs("MekOperationsBVMod"));
         }
 
         return rawForceSize;
@@ -226,15 +226,15 @@ public class CArmy extends Army {
 
         /*
          * double myForceSize = 0; double mekSize =
-         * Double.parseDouble(mwclient.getserverConfigs("MekOperationsBVMod"));
+         * Double.parseDouble(mwclient.getServerConfigs("MekOperationsBVMod"));
          * double veeSize =
-         * Double.parseDouble(mwclient.getserverConfigs("VehicleOperationsBVMod"));
+         * Double.parseDouble(mwclient.getServerConfigs("VehicleOperationsBVMod"));
          * double baSize =
-         * Double.parseDouble(mwclient.getserverConfigs("BAOperationsBVMod"));
+         * Double.parseDouble(mwclient.getServerConfigs("BAOperationsBVMod"));
          * double protoSize =
-         * Double.parseDouble(mwclient.getserverConfigs("ProtoOperationsBVMod"));
+         * Double.parseDouble(mwclient.getServerConfigs("ProtoOperationsBVMod"));
          * double infSize =
-         * Double.parseDouble(mwclient.getserverConfigs("InfantryOperationsBVMod"));
+         * Double.parseDouble(mwclient.getServerConfigs("InfantryOperationsBVMod"));
          * 
          * for ( Unit unit : this.getUnits() ){
          * 
@@ -306,57 +306,57 @@ public class CArmy extends Army {
     }
     
     public String getSkillInfoForDisplay() {
-    	if (this.getUnits().size() < 1) {
-    		return " ";
-    	}
-    	
-    	String avgSkills = "0.0";
-    	String avgGunnery = "0.0";
-    	String avgPiloting = "0.0";
-    	int maxSkill = 0;
-    	int maxGunnery = 0;
-    	int maxPiloting = 0;
-    	int minSkill = 99;
-    	int minGunnery = 99;
-    	int minPiloting = 99;
-    	int numunits = 0;
-    	int totalGunnery = 0;
-    	int totalPiloting = 0;
-    	StringBuilder toReturn = new StringBuilder();
-    	for (Unit un : this.getUnits()) {
-    		CUnit unit = (CUnit) un;
-    		int gunnery = unit.getPilot().getGunnery();
-    		int piloting = unit.getPilot().getPiloting();
-    		maxSkill = Math.max(maxSkill, (gunnery + piloting));
-    		maxGunnery = Math.max(maxGunnery, gunnery);
-    		maxPiloting = Math.max(maxPiloting, piloting);
-    		minSkill = Math.min(minSkill, (gunnery + piloting));
-    		minGunnery = Math.min(minGunnery, gunnery);
-    		minPiloting = Math.min(minPiloting, piloting);
-    		totalGunnery += gunnery;
-    		totalPiloting += piloting;
-    		numunits++;
-    	}
-    	// Need to use a DecimalFormat so we don't get just whole integer averages
-    	
-    	double avgS = (double) (totalGunnery + totalPiloting) / (double) numunits;
-    	double avgG = (double) (totalGunnery) / (double) numunits;
-    	double avgP = (double) (totalPiloting) / (double) numunits;
-    	DecimalFormat twoDForm = (DecimalFormat)NumberFormat.getNumberInstance();
-    	twoDForm.applyPattern("0.00");
-    	
-    	avgSkills = twoDForm.format(avgS);
-    	avgGunnery = twoDForm.format(avgG);
-    	avgPiloting = twoDForm.format(avgP);
-    	
-    	
-    	toReturn.append("<html><table><tr><td colspan=4>Skillsums</td></tr>");
-    	toReturn.append("<tr><td>&nbsp;</td><td>Total</td><td>Gunnery</td><td>Piloting</td></tr>");
-    	toReturn.append("<tr><td>Average:</td><td>" + avgSkills + "</td><td>" + avgGunnery + "</td><td>" + avgPiloting + "</td></tr>");
-    	toReturn.append("<tr><td>Maximum:</td><td>" + maxSkill + "</td><td>" + maxGunnery + "</td><td>" + maxPiloting + "</td></tr>");
-    	toReturn.append("<tr><td>Minimum:</td><td>" + minSkill + "</td><td>" + minGunnery + "</td><td>" + minPiloting + "</td></tr>");
-    	toReturn.append("</table></html>");
-    	return toReturn.toString();
+        if (this.getUnits().size() < 1) {
+            return " ";
+        }
+        
+        String avgSkills = "0.0";
+        String avgGunnery = "0.0";
+        String avgPiloting = "0.0";
+        int maxSkill = 0;
+        int maxGunnery = 0;
+        int maxPiloting = 0;
+        int minSkill = 99;
+        int minGunnery = 99;
+        int minPiloting = 99;
+        int numunits = 0;
+        int totalGunnery = 0;
+        int totalPiloting = 0;
+        StringBuilder toReturn = new StringBuilder();
+        for (Unit un : this.getUnits()) {
+            CUnit unit = (CUnit) un;
+            int gunnery = unit.getPilot().getGunnery();
+            int piloting = unit.getPilot().getPiloting();
+            maxSkill = Math.max(maxSkill, (gunnery + piloting));
+            maxGunnery = Math.max(maxGunnery, gunnery);
+            maxPiloting = Math.max(maxPiloting, piloting);
+            minSkill = Math.min(minSkill, (gunnery + piloting));
+            minGunnery = Math.min(minGunnery, gunnery);
+            minPiloting = Math.min(minPiloting, piloting);
+            totalGunnery += gunnery;
+            totalPiloting += piloting;
+            numunits++;
+        }
+        // Need to use a DecimalFormat so we don't get just whole integer averages
+        
+        double avgS = (double) (totalGunnery + totalPiloting) / (double) numunits;
+        double avgG = (double) (totalGunnery) / (double) numunits;
+        double avgP = (double) (totalPiloting) / (double) numunits;
+        DecimalFormat twoDForm = (DecimalFormat)NumberFormat.getNumberInstance();
+        twoDForm.applyPattern("0.00");
+        
+        avgSkills = twoDForm.format(avgS);
+        avgGunnery = twoDForm.format(avgG);
+        avgPiloting = twoDForm.format(avgP);
+        
+        
+        toReturn.append("<html><table><tr><td colspan=4>Skillsums</td></tr>");
+        toReturn.append("<tr><td>&nbsp;</td><td>Total</td><td>Gunnery</td><td>Piloting</td></tr>");
+        toReturn.append("<tr><td>Average:</td><td>" + avgSkills + "</td><td>" + avgGunnery + "</td><td>" + avgPiloting + "</td></tr>");
+        toReturn.append("<tr><td>Maximum:</td><td>" + maxSkill + "</td><td>" + maxGunnery + "</td><td>" + maxPiloting + "</td></tr>");
+        toReturn.append("<tr><td>Minimum:</td><td>" + minSkill + "</td><td>" + minGunnery + "</td><td>" + minPiloting + "</td></tr>");
+        toReturn.append("</table></html>");
+        return toReturn.toString();
     }
 
 }

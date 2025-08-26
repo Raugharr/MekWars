@@ -118,17 +118,17 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("GrantEXP"))
             grantMenu.add(item);
-        item = new JMenuItem(client.getserverConfigs("FluLongName"));
+        item = new JMenuItem(client.getServerConfigs("FluLongName"));
         item.setActionCommand("GI|" + userName);
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("GrantInfluence"))
             grantMenu.add(item);
-        item = new JMenuItem(client.getserverConfigs("MoneyLongName"));
+        item = new JMenuItem(client.getServerConfigs("MoneyLongName"));
         item.setActionCommand("GM|" + userName);
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("GrantMoney"))
             grantMenu.add(item);
-        item = new JMenuItem(client.getserverConfigs("RPLongName"));
+        item = new JMenuItem(client.getServerConfigs("RPLongName"));
         item.setActionCommand("GRP|" + userName);
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("GrantReward"))
@@ -154,21 +154,21 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         item.setActionCommand("RFUL|" + userName);
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("ResetFreeMeks") 
-        && Integer.parseInt(mwclient.getserverConfigs("FreeBuild_Limit")) > 0)
-        	unitsMen.add(item);        	
+        && Integer.parseInt(mwclient.getServerConfigs("FreeBuild_Limit")) > 0)
+            unitsMen.add(item);            
         //@Salient added for locked units
         item = new JMenuItem("Unlock Units [MC]");
         item.setActionCommand("UUM|" + userName);
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("ADMINUNLOCKUNITSMC") 
-        && Boolean.parseBoolean(mwclient.getserverConfigs("LockUnits")))       
+        && Boolean.parseBoolean(mwclient.getServerConfigs("LockUnits")))       
             unitsMen.add(item);
         //@Salient added for mini campaigns
         item = new JMenuItem("Recalc Hangar BV [MC]");
         item.setActionCommand("RBM|" + userName);
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("ADMINRECALCHANGARBVMC") 
-        && Boolean.parseBoolean(mwclient.getserverConfigs("Enable_MiniCampaign")))       
+        && Boolean.parseBoolean(mwclient.getServerConfigs("Enable_MiniCampaign")))       
             unitsMen.add(item);
         item = new JMenuItem("Donate");
         item.setActionCommand("DU|" + userName);
@@ -185,7 +185,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("AdminTransFer"))
             unitsMen.add(item);
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseAdvanceRepair"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseAdvanceRepair"))) {
             item = new JMenuItem("Repair");
             item.setActionCommand("FRU|" + userName);
             item.addActionListener(this);
@@ -254,7 +254,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         if (userLevel >= mwclient.getData().getAccessLevel("CreatePilot"))
             pilotsMen.add(item);
 
-        if (pilotsMen.getItemCount() > 0 && Boolean.parseBoolean(mwclient.getserverConfigs("AllowPersonalPilotQueues")))
+        if (pilotsMen.getItemCount() > 0 && Boolean.parseBoolean(mwclient.getServerConfigs("AllowPersonalPilotQueues")))
             this.add(pilotsMen);
 
         // Parts submenu
@@ -290,10 +290,10 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         item.setActionCommand("PF|" + userName);
         item.addActionListener(this);
         if (userLevel >= mwclient.getData().getAccessLevel("SetPlayerFlags")) {
-        	flagsMen.add(item);
+            flagsMen.add(item);
         }
         if (flagsMen.getItemCount() > 0) {
-        	this.add(flagsMen);
+            this.add(flagsMen);
         }
     }
 
@@ -307,11 +307,11 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
         // mod commands
         if (command.equals("PF") && st.hasMoreElements()) {
-        	userName = st.nextToken();
+            userName = st.nextToken();
 
-        	// Build a picklist of flags
-        	String fName = (String)JOptionPane.showInputDialog(mwclient.getMainFrame(),"Select a Flag", "Player Flags", JOptionPane.INFORMATION_MESSAGE, null, mwclient.getPlayer().getFlags().getFlagNames().toArray(), null);
-        	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SetPlayerFlags#" + userName + "#" + fName + "#toggle");
+            // Build a picklist of flags
+            String fName = (String)JOptionPane.showInputDialog(mwclient.getMainFrame(),"Select a Flag", "Player Flags", JOptionPane.INFORMATION_MESSAGE, null, mwclient.getPlayer().getFlags().getFlagNames().toArray(), null);
+            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SetPlayerFlags#" + userName + "#" + fName + "#toggle");
         }
         if (command.equals("KK") && st.hasMoreElements()) {
 

@@ -137,10 +137,10 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
         this.mwclient = mwclient;
         this.pilot = pilot;
         this.unit = unit;
-        usingCrits = Boolean.parseBoolean(mwclient.getserverConfigs("UsePartsRepair"));
+        usingCrits = Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsRepair"));
 
         if(entity instanceof Aero) {
-        	unitIsAero = true;
+            unitIsAero = true;
         }
 
         mmClient.getGame().getOptions().loadOptions();
@@ -288,25 +288,25 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
     }
 
     private void setupTargetSystems() {
-    	String names[] = unit.getTargetSystem().getNonBannedNameArray(mwclient.getData().getBannedTargetingSystems());
+        String names[] = unit.getTargetSystem().getNonBannedNameArray(mwclient.getData().getBannedTargetingSystems());
 
-    	targetSelection = new JComboBox(names);
-    	String currentTargetSystemName = unit.getTargetSystemTypeDesc();
-    	for (int i = 0; i < names.length; i++) {
-    		if (targetSelection.getItemAt(i).toString().equalsIgnoreCase(currentTargetSystemName)) {
-    			targetSelection.setSelectedIndex(i);
-    		}
-    	}
-    	panTargeting.add(new JLabel("Targeting System:"));
-    	panTargeting.add(targetSelection);
-	}
+        targetSelection = new JComboBox(names);
+        String currentTargetSystemName = unit.getTargetSystemTypeDesc();
+        for (int i = 0; i < names.length; i++) {
+            if (targetSelection.getItemAt(i).toString().equalsIgnoreCase(currentTargetSystemName)) {
+                targetSelection.setSelectedIndex(i);
+            }
+        }
+        panTargeting.add(new JLabel("Targeting System:"));
+        panTargeting.add(targetSelection);
+    }
 
-	private void setupMunitions() {
+    private void setupMunitions() {
 
         int munitionsRows = 0;
         panMunitions.setLayout(new SpringLayout());
         MunitionChoicePanel mcp = null;// replaced repeatedly w/i while loop
-        int year = Integer.parseInt(mwclient.getserverConfigs("CampaignYear"));
+        int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
         MWLogger.errLog("Year: " + year);
         // int row = 0;
         int location = -1;// also repeatedly replaced
@@ -369,19 +369,19 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 // MWLogger.errLog("Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
                 // check banned ammo
                 if (mwclient.getData().getServerBannedAmmo().containsKey(munition) || faction.getBannedAmmo().containsKey(munition) || ((mwclient.getAmmoCost(atCheck.getInternalName()) < 0) && !usingCrits)) {
-                	//if(mwclient.getData().getServerBannedAmmo().containsKey(munition))
-                		//MWLogger.debugLog("Banned at the server level");
-                	//if(faction.getBannedAmmo().containsKey(munition))
-                		//MWLogger.debugLog("Banned at the Faction level");
-                	//MWLogger.debugLog("Ammo cost: " + mwclient.getAmmoCost(atCheck.getInternalName()));
-                	continue;
+                    //if(mwclient.getData().getServerBannedAmmo().containsKey(munition))
+                        //MWLogger.debugLog("Banned at the server level");
+                    //if(faction.getBannedAmmo().containsKey(munition))
+                        //MWLogger.debugLog("Banned at the Faction level");
+                    //MWLogger.debugLog("Ammo cost: " + mwclient.getAmmoCost(atCheck.getInternalName()));
+                    continue;
                 }
 
                 if (usingCrits && (mwclient.getPlayer().getPartsCache().getPartsCritCount(atCheck.getInternalName()) < 1) && !ammoAlreadyLoaded(atCheck) && (// !mwclient.getPlayer().getAutoReorder()
                         // &&
                         mwclient.getBlackMarketEquipmentList().get(atCheck.getInternalName()) == null)) {
-                	//MWLogger.debugLog("Player out of ammo.");
-                	continue;
+                    //MWLogger.debugLog("Player out of ammo.");
+                    continue;
                 }
 
                 // allow all lvl2 IS units to use level 1 ammo
@@ -389,8 +389,8 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 // because there is no special lvl1 ammo, therefore it doesn't
                 // need to show up in this display.
                 if (!bTechMatch && ((entity.getTechLevel() == TechConstants.T_IS_ADVANCED) || (entity.getTechLevel() == TechConstants.T_IS_EXPERIMENTAL)) && (atCheck.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)) {
-                	bTechMatch = true;
-                	//MWLogger.debugLog("bTechMatch now true, because all L2 units can use L1 ammo");
+                    bTechMatch = true;
+                    //MWLogger.debugLog("bTechMatch now true, because all L2 units can use L1 ammo");
                 }
 
                 // if is_eq_limits is unchecked allow L1 units to use L2
@@ -398,14 +398,14 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
 //                MWLogger.debugLog("Entity Tech Level: " + entity.getTechLevel());
 //                MWLogger.debugLog("Ammo tech level: " + atCheck.getTechLevel(year));
 //                if (!entity.isClan() && entity.getTechLevel() == TechConstants.T_INTRO_BOXSET && (atCheck.getTechLevel(year) == TechConstants.T_IS_TW_NON_BOX || atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED)) {
-//                	bTechMatch = true;
-//                	MWLogger.debugLog("bTechMatch is true, because I said so");
+//                    bTechMatch = true;
+//                    MWLogger.debugLog("bTechMatch is true, because I said so");
 //                }
 
                 // Possibly allow level 3 ammos, possibly not.
 //                if ((((atCheck.getTechLevel(year) == TechConstants.T_IS_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_IS_UNOFFICIAL)) && (entity.getTechLevel() != TechConstants.T_IS_EXPERIMENTAL) && (entity.getTechLevel() != TechConstants.T_IS_ADVANCED)) || (((atCheck.getTechLevel(year) == TechConstants.T_CLAN_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_ADVANCED) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_UNOFFICIAL)) && (entity.getTechLevel() != TechConstants.T_CLAN_EXPERIMENTAL) && (entity.getTechLevel() != TechConstants.T_CLAN_ADVANCED))) {
 //                    
-//                	bTechMatch = false;
+//                    bTechMatch = false;
 //                }
 
                 
@@ -425,8 +425,8 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 }
 
                 if (!mmClient.getGame().getOptions().booleanOption("minefields") && AmmoType.canDeliverMinefield(atCheck)) {
-                	MWLogger.debugLog("Minefields disabled");
-                	continue;
+                    MWLogger.debugLog("Minefields disabled");
+                    continue;
                 }
                 // MWLogger.errLog("4.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
 
@@ -445,7 +445,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
 
                 // Restrict Aero to ATM
                 if ((entity instanceof Aero) && !(atCheck.getAmmoType() == AmmoType.T_ATM)) {
-                	continue;
+                    continue;
                 }
 
                 // All other ammo types need to match on rack size and tech.
@@ -462,14 +462,14 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
             } else if (!(entity instanceof Aero)) {
                 mcp = new MunitionChoicePanel(m, vTypes, location);
             } else {
-            	// Aero.  We can only give them default ammos, unless it's an ATM
+                // Aero.  We can only give them default ammos, unless it's an ATM
 
-            	// Sweet.  Erroring out on Aeros, because they're specifically
-            	// being excluded.  Why?
-            	mcp = new MunitionChoicePanel(m, vTypes, location);
-            	// NOTE: This is a straight copy for testing purposes.  If this
-            	// Works, we'll just get rid of the "if (!(entity instanceof Aero))
-            	// above
+                // Sweet.  Erroring out on Aeros, because they're specifically
+                // being excluded.  Why?
+                mcp = new MunitionChoicePanel(m, vTypes, location);
+                // NOTE: This is a straight copy for testing purposes.  If this
+                // Works, we'll just get rid of the "if (!(entity instanceof Aero))
+                // above
             }
 
             // get a location name
@@ -622,8 +622,8 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 } else {
                     int refillShots = at.getShots();
                     if(m.byShot()) {
-                    	// Capital Weapon
-                    	refillShots = m.getOriginalShots();
+                        // Capital Weapon
+                        refillShots = m.getOriginalShots();
                     }
                     if (!curType.getInternalName().equalsIgnoreCase(at.getInternalName())) {
                         shotsLeft = 0;
@@ -919,8 +919,8 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
             int newTargetSystem = unit.getTargetSystem().getTypeByName(targetSelection.getSelectedItem().toString());
             MWLogger.errLog("Targeting Selected: " + newTargetSystem);
             if (newTargetSystem != unit.getTargetSystem().getCurrentType()) {
-            	// Change in targeting - send server notification
-            	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setTargetSystem#" + unit.getId() + "#" + newTargetSystem);
+                // Change in targeting - send server notification
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setTargetSystem#" + unit.getId() + "#" + newTargetSystem);
             }
         }
 

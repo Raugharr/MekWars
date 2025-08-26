@@ -121,7 +121,7 @@ public class DataFetchClient {
                 timestampMatch = true;
                 try {
                     FileInputStream configFile = new FileInputStream(cacheDir + "/campaignconfig.txt");
-                    mwclient.getserverConfigs().load(configFile);
+                    mwclient.getServerConfigs().load(configFile);
                     configFile.close();
                 } catch (Exception ex) {
                     timestampMatch = false;
@@ -163,7 +163,7 @@ public class DataFetchClient {
                     // read in the "complete" config
                     try {
                         FileInputStream configFile = new FileInputStream(cacheDir + "/campaignconfig.txt");
-                        mwclient.getserverConfigs().load(configFile);
+                        mwclient.getServerConfigs().load(configFile);
                         configFile.close();
                     } catch (Exception ex) {
                         MWLogger.errLog(ex);

@@ -34,13 +34,13 @@ import common.util.SpringLayoutHelper;
 public class RewardPanel extends JPanel {
 
 
-	private static final long serialVersionUID = 3402880281077089882L;
+    private static final long serialVersionUID = 3402880281077089882L;
 
-	private JTextField baseTextField = new JTextField(5);
+    private JTextField baseTextField = new JTextField(5);
     private JCheckBox BaseCheckBox = new JCheckBox();
 
     public RewardPanel(MWClient mwclient) {
-		super();
+        super();
         /*
          * REWARD MENU CONSTRUCTION
          */
@@ -66,12 +66,12 @@ public class RewardPanel extends JPanel {
         BaseCheckBox.setName("AllowInfluenceForRewards");
         rewardCBoxGrid.add(BaseCheckBox);
 
-		// @Author Salient (mwosux@gmail.com) , Add RP for CBills
-		BaseCheckBox = new JCheckBox(mwclient.moneyOrFluMessage(true, true, -1));
+        // @Author Salient (mwosux@gmail.com) , Add RP for CBills
+        BaseCheckBox = new JCheckBox(mwclient.moneyOrFluMessage(true, true, -1));
 
-		BaseCheckBox.setToolTipText("Check to allow players to exchange RP for CBills");
-		BaseCheckBox.setName("AllowCBillsForRewards");
-		rewardCBoxGrid.add(BaseCheckBox);
+        BaseCheckBox.setToolTipText("Check to allow players to exchange RP for CBills");
+        BaseCheckBox.setName("AllowCBillsForRewards");
+        rewardCBoxGrid.add(BaseCheckBox);
 
         BaseCheckBox = new JCheckBox("Techs");
 
@@ -130,23 +130,23 @@ public class RewardPanel extends JPanel {
         rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
-        rewardSpring1.add(new JLabel("Techs per " + mwclient.getserverConfigs("RPShortName"), SwingConstants.TRAILING));
+        rewardSpring1.add(new JLabel("Techs per " + mwclient.getServerConfigs("RPShortName"), SwingConstants.TRAILING));
         baseTextField.setToolTipText("Number of techs hired with 1 RP");
         baseTextField.setName("TechsForARewardPoint");
         rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
-        rewardSpring1.add(new JLabel(mwclient.moneyOrFluMessage(false, true, -1) + " per " + mwclient.getserverConfigs("RPShortName"), SwingConstants.TRAILING));
+        rewardSpring1.add(new JLabel(mwclient.moneyOrFluMessage(false, true, -1) + " per " + mwclient.getServerConfigs("RPShortName"), SwingConstants.TRAILING));
         baseTextField.setToolTipText("Amount of flu given in exhcange for 1 RP");
         baseTextField.setName("InfluenceForARewardPoint");
         rewardSpring1.add(baseTextField);
 
-		// @Author Salient (mwosux@gmail.com) , Add RP for CBills
-		baseTextField = new JTextField(5);
-		rewardSpring1.add(new JLabel(mwclient.moneyOrFluMessage(true, true, -1) + " per " + mwclient.getserverConfigs("RPShortName"), SwingConstants.TRAILING));
-		baseTextField.setToolTipText("Amount of CBills given in exhcange for 1 RP");
-		baseTextField.setName("CBillsForARewardPoint");
-		rewardSpring1.add(baseTextField);
+        // @Author Salient (mwosux@gmail.com) , Add RP for CBills
+        baseTextField = new JTextField(5);
+        rewardSpring1.add(new JLabel(mwclient.moneyOrFluMessage(true, true, -1) + " per " + mwclient.getServerConfigs("RPShortName"), SwingConstants.TRAILING));
+        baseTextField.setToolTipText("Amount of CBills given in exhcange for 1 RP");
+        baseTextField.setName("CBillsForARewardPoint");
+        rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
         rewardSpring1.add(new JLabel("Rare Multiplier:", SwingConstants.TRAILING));
@@ -160,7 +160,7 @@ public class RewardPanel extends JPanel {
         baseTextField.setName("RewardPointNonHouseMultiplier");
         rewardSpring1.add(baseTextField);
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseAdvanceRepair"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseAdvanceRepair"))) {
             baseTextField = new JTextField(5);
             rewardSpring1.add(new JLabel("RP to buy Green Tech:", SwingConstants.TRAILING));
             baseTextField.setToolTipText("RP to buy 1 green tech.");
@@ -196,7 +196,7 @@ public class RewardPanel extends JPanel {
         baseTextField.setName("RewardPointToRefreshFactory");
         rewardSpring2.add(baseTextField);
 
-        if (Boolean.parseBoolean(mwclient.getserverConfigs("UseAdvanceRepair"))) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseAdvanceRepair"))) {
             baseTextField = new JTextField(5);
             rewardSpring2.add(new JLabel("RP to buy Reg Tech:", SwingConstants.TRAILING));
             baseTextField.setToolTipText("RP to buy 1 reg tech.");
@@ -238,5 +238,5 @@ public class RewardPanel extends JPanel {
         rewardBox.add(rewardCBoxGrid);
         rewardBox.add(rewardGrid);
         add(rewardBox);
-	}
+    }
 }

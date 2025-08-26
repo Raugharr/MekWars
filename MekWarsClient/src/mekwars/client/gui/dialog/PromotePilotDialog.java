@@ -166,27 +166,27 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
         expCost.setMaximumSize(dim);
         MasterPanel.add(expCost);
 
-        if (pilot.getGunnery() > Integer.parseInt(mwclient.getserverConfigs("BestGunnerySkill")) && !demoting) {
+        if (pilot.getGunnery() > Integer.parseInt(mwclient.getServerConfigs("BestGunnerySkill")) && !demoting) {
             masterCB = new JCheckBox("Gunnery " + (pilot.getGunnery() - 1));
             masterCB.setName("gunnery");
             masterCB.addActionListener(this);
             MasterPanel.add(masterCB);
         }
 
-        if (pilot.getPiloting() > Integer.parseInt(mwclient.getserverConfigs("BestPilotingSkill")) && !demoting) {
+        if (pilot.getPiloting() > Integer.parseInt(mwclient.getServerConfigs("BestPilotingSkill")) && !demoting) {
             masterCB = new JCheckBox("Piloting " + (pilot.getPiloting() - 1));
             masterCB.setName("piloting");
             masterCB.addActionListener(this);
             MasterPanel.add(masterCB);
         }
 
-        int maxSkills = Integer.parseInt(mwclient.getserverConfigs("MaxPilotUpgrades"));
+        int maxSkills = Integer.parseInt(mwclient.getServerConfigs("MaxPilotUpgrades"));
         if (maxSkills > -1 && pilot.getSkills().size() >= maxSkills && !demoting) {
             return;
         }
 
         if (demoting) {
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (pilot.getSkills().has(PilotSkill.AstechSkillID))) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (pilot.getSkills().has(PilotSkill.AstechSkillID))) {
                 masterCB = new JCheckBox("Astech");
                 masterCB.setName("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -194,7 +194,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.DodgeManeuverSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.DodgeManeuverSkillID)) {
                 masterCB = new JCheckBox("Dodge Maneuver");
                 masterCB.setName("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -202,7 +202,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.MeleeSpecialistSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.MeleeSpecialistSkillID)) {
                 masterCB = new JCheckBox("Melee Specialist");
                 masterCB.setName("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -210,7 +210,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.PainResistanceSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.PainResistanceSkillID)) {
                 masterCB = new JCheckBox("Pain Resistance");
                 masterCB.setName("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -218,7 +218,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.SurvivalistSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.SurvivalistSkillID)) {
                 masterCB = new JCheckBox("Survivalist");
                 masterCB.setName("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -226,7 +226,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.IronManSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.IronManSkillID)) {
                 masterCB = new JCheckBox("Iron Man");
                 masterCB.setName("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -234,7 +234,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (pilot.getSkills().has(PilotSkill.EdgeSkillID))) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (pilot.getSkills().has(PilotSkill.EdgeSkillID))) {
                 masterCB = new JCheckBox("Edge");
                 masterCB.setName("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -242,7 +242,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.ManeuveringAceSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.ManeuveringAceSkillID)) {
                 masterCB = new JCheckBox("Maneuvering Ace");
                 masterCB.setName("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -250,7 +250,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.NaturalAptitudePilotingSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.NaturalAptitudePilotingSkillID)) {
                 masterCB = new JCheckBox("Natural Aptitude Piloting");
                 masterCB.setName("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -258,7 +258,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.NaturalAptitudeGunnerySkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.NaturalAptitudeGunnerySkillID)) {
                 masterCB = new JCheckBox("Natural Aptitude Gunnery");
                 masterCB.setName("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -266,7 +266,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.WeaponSpecialistSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.WeaponSpecialistSkillID)) {
                 masterCB = new JCheckBox("Weapon Specialist");
                 masterCB.setName("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -274,7 +274,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.TacticalGeniusSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.TacticalGeniusSkillID)) {
                 masterCB = new JCheckBox("Tactical Genius");
                 masterCB.setName("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -282,7 +282,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GunneryMissileSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GunneryMissileSkillID)) {
                 masterCB = new JCheckBox("Gunnery Missile");
                 masterCB.addActionListener(this);
                 masterCB.setName("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
@@ -290,7 +290,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GunneryBallisticSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GunneryBallisticSkillID)) {
                 masterCB = new JCheckBox("Gunnery Ballistic");
                 masterCB.setName("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -298,7 +298,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GunneryLaserSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GunneryLaserSkillID)) {
                 masterCB = new JCheckBox("Gunnery Laser");
                 masterCB.setName("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -306,7 +306,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.TraitID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.TraitID)) {
                 masterCB = new JCheckBox("Trait");
                 masterCB.setName("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -314,7 +314,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.EnhancedInterfaceID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.EnhancedInterfaceID)) {
                 masterCB = new JCheckBox("Enhanced Interface");
                 masterCB.setName("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -322,7 +322,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GiftedID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GiftedID)) {
                 masterCB = new JCheckBox("Gifted");
                 masterCB.setName("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -330,7 +330,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.QuickStudyID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.QuickStudyID)) {
                 masterCB = new JCheckBox("Quick Study");
                 masterCB.setName("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -338,7 +338,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.MedTechID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.MedTechID)) {
                 masterCB = new JCheckBox("Med Tech");
                 masterCB.setName("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -346,7 +346,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.VDNIID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.VDNIID)) {
                 masterCB = new JCheckBox("VDNI");
                 masterCB.setName("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -354,7 +354,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.BufferedVDNIID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.BufferedVDNIID)) {
                 masterCB = new JCheckBox("Buffered VDNI");
                 masterCB.setName("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -362,7 +362,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.PainShuntID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.PainShuntID)) {
                 masterCB = new JCheckBox("Pain Shunt");
                 masterCB.setName("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -372,7 +372,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
         } else {
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (!pilot.getSkills().has(PilotSkill.AstechSkillID) || pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID).getLevel() < 2)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (!pilot.getSkills().has(PilotSkill.AstechSkillID) || pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID).getLevel() < 2)) {
                 masterCB = new JCheckBox("Astech");
                 masterCB.setName("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -380,7 +380,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.DodgeManeuverSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.DodgeManeuverSkillID)) {
                 masterCB = new JCheckBox("Dodge Maneuver");
                 masterCB.setName("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -388,7 +388,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.MeleeSpecialistSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.MeleeSpecialistSkillID)) {
                 masterCB = new JCheckBox("Melee Specialist");
                 masterCB.setName("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -396,7 +396,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.PainResistanceSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.PainResistanceSkillID)) {
                 masterCB = new JCheckBox("Pain Resistance");
                 masterCB.setName("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -404,7 +404,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.SurvivalistSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.SurvivalistSkillID)) {
                 masterCB = new JCheckBox("Survivalist");
                 masterCB.setName("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -412,7 +412,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.IronManSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.IronManSkillID)) {
                 masterCB = new JCheckBox("Iron Man");
                 masterCB.setName("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -420,7 +420,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (!pilot.getSkills().has(PilotSkill.EdgeSkillID) || pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel() < Integer.parseInt(mwclient.getserverConfigs("MaxEdgeChanges")))) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (!pilot.getSkills().has(PilotSkill.EdgeSkillID) || pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel() < Integer.parseInt(mwclient.getServerConfigs("MaxEdgeChanges")))) {
                 masterCB = new JCheckBox("Edge");
                 masterCB.setName("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -428,7 +428,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.ManeuveringAceSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.ManeuveringAceSkillID)) {
                 masterCB = new JCheckBox("Maneuvering Ace");
                 masterCB.setName("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -436,7 +436,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.NaturalAptitudePilotingSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.NaturalAptitudePilotingSkillID)) {
                 masterCB = new JCheckBox("Natural Aptitude Piloting");
                 masterCB.setName("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -444,7 +444,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.NaturalAptitudeGunnerySkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.NaturalAptitudeGunnerySkillID)) {
                 masterCB = new JCheckBox("Natural Aptitude Gunnery");
                 masterCB.setName("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -452,7 +452,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.WeaponSpecialistSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.WeaponSpecialistSkillID)) {
                 masterCB = new JCheckBox("Weapon Specialist");
                 masterCB.setName("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -460,7 +460,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.TacticalGeniusSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.TacticalGeniusSkillID)) {
                 masterCB = new JCheckBox("Tactical Genius");
                 masterCB.setName("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -468,7 +468,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GunneryMissileSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GunneryMissileSkillID)) {
                 masterCB = new JCheckBox("Gunnery Missile");
                 masterCB.addActionListener(this);
                 masterCB.setName("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
@@ -476,7 +476,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GunneryBallisticSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GunneryBallisticSkillID)) {
                 masterCB = new JCheckBox("Gunnery Ballistic");
                 masterCB.setName("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -484,7 +484,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GunneryLaserSkillID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GunneryLaserSkillID)) {
                 masterCB = new JCheckBox("Gunnery Laser");
                 masterCB.setName("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -492,7 +492,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.TraitID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.TraitID)) {
                 masterCB = new JCheckBox("Trait");
                 masterCB.setName("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -500,7 +500,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.EnhancedInterfaceID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.EnhancedInterfaceID)) {
                 masterCB = new JCheckBox("Enhanced Interface");
                 masterCB.setName("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -508,7 +508,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GiftedID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GiftedID)) {
                 masterCB = new JCheckBox("Gifted");
                 masterCB.setName("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -516,7 +516,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.QuickStudyID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.QuickStudyID)) {
                 masterCB = new JCheckBox("Quick Study");
                 masterCB.setName("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -524,7 +524,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.MedTechID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.MedTechID)) {
                 masterCB = new JCheckBox("Med Tech");
                 masterCB.setName("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -532,7 +532,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.VDNIID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.VDNIID)) {
                 masterCB = new JCheckBox("VDNI");
                 masterCB.setName("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -540,7 +540,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.BufferedVDNIID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.BufferedVDNIID)) {
                 masterCB = new JCheckBox("Buffered VDNI");
                 masterCB.setName("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -548,7 +548,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
             }
 
-            if (Integer.parseInt(mwclient.getserverConfigs("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.PainShuntID)) {
+            if (Integer.parseInt(mwclient.getServerConfigs("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.PainShuntID)) {
                 masterCB = new JCheckBox("Pain Shunt");
                 masterCB.setName("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
@@ -596,34 +596,34 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
                     if (checkBox.getName().equalsIgnoreCase("gunnery") || checkBox.getName().equalsIgnoreCase("piloting")) {
                         int totalSkill = Math.min(9, gun + piloting);
-                        pilotCost = Integer.parseInt(mwclient.getserverConfigs("BaseRollToLevel"));
-                        pilotCost *= Integer.parseInt(mwclient.getserverConfigs("MultiplierPerPreviousLevel"));
+                        pilotCost = Integer.parseInt(mwclient.getServerConfigs("BaseRollToLevel"));
+                        pilotCost *= Integer.parseInt(mwclient.getServerConfigs("MultiplierPerPreviousLevel"));
                         pilotCost *= 10 - totalSkill;
 
                     } else if (checkBox.getName().startsWith("chanceforATfor")) {
                         if (pilot.getSkills().has(PilotSkill.AstechSkillID)) {
                             int level = pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID).getLevel();
 
-                            pilotCost = Integer.parseInt(mwclient.getserverConfigs(checkBox.getName()));
+                            pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                             pilotCost *= level + 2;
                         } else {
-                            pilotCost = Integer.parseInt(mwclient.getserverConfigs(checkBox.getName()));
+                            pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                         }
                     } else if (checkBox.getName().startsWith("chanceforEDfor")) {
                         if (pilot.getSkills().has(PilotSkill.EdgeSkillID)) {
                             int level = pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel();
 
-                            pilotCost = Integer.parseInt(mwclient.getserverConfigs(checkBox.getName()));
+                            pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                             pilotCost *= level + 1;
                         } else {
-                            pilotCost = Integer.parseInt(mwclient.getserverConfigs(checkBox.getName()));
+                            pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                         }
                     } else {
-                        pilotCost = Integer.parseInt(mwclient.getserverConfigs(checkBox.getName()));
+                        pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                     }
 
                     if (demoting) {
-                        pilotCost = (int) Math.round(((double) pilotCost) * Double.parseDouble(mwclient.getserverConfigs("PilotUpgradeSellBackPercent")));
+                        pilotCost = (int) Math.round(((double) pilotCost) * Double.parseDouble(mwclient.getServerConfigs("PilotUpgradeSellBackPercent")));
                     }
                     cost += pilotCost;
                 }
@@ -631,7 +631,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
         }
 
         if (pilot.getSkills().has(PilotSkill.GiftedID) && !demoting) {
-            cost *= (1 - Double.parseDouble(mwclient.getserverConfigs("GiftedPercent")));
+            cost *= (1 - Double.parseDouble(mwclient.getServerConfigs("GiftedPercent")));
         }
 
         expCost.setText(Integer.toString(cost));
