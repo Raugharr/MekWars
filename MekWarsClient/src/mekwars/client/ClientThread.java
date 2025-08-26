@@ -44,7 +44,7 @@ import megamek.common.Crew;
 import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.IGame;
-import megamek.common.IGame.Phase;
+import megamek.common.enums.GamePhase;
 import megamek.common.IPlayer;
 import megamek.common.KeyBindParser;
 import megamek.common.logging.LogLevel;
@@ -192,13 +192,13 @@ public class ClientThread extends Thread implements CloseClientListener {
 
             // if game is running, shouldn't do the following, so detect the
             // phase
-            for (int i = 0; (i < 1000) && (client.getGame().getPhase() == IGame.Phase.PHASE_UNKNOWN); i++) {
+            for (int i = 0; (i < 1000) && (client.getGame().getPhase() == GamePhase.UNKNOWN); i++) {
                 Thread.sleep(50);
             }
 
             // Lets start with the environment set first then do everything
             // else.
-            if ((mwclient.getCurrentEnvironment() != null) && (client.getGame().getPhase() == IGame.Phase.PHASE_LOUNGE)) {
+            if ((mwclient.getCurrentEnvironment() != null) && (client.getGame().getPhase() == GamePhase.LOUNGE)) {
                 // creates the playboard*/
                 MapSettings mySettings = MapSettings.getInstance();
                 mySettings.setBoardSize((int)mwclient.getMapSize().getWidth(), (int)mwclient.getMapSize().getHeight());
@@ -420,7 +420,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                     }
                     // if game is running, shouldn't do the following, so detect
                     // the phase
-                    for (int i = 0; (i < 1000) && (bot.getGame().getPhase() == IGame.Phase.PHASE_UNKNOWN); i++) {
+                    for (int i = 0; (i < 1000) && (bot.getGame().getPhase() == GamePhase.UNKNOWN); i++) {
                         Thread.sleep(50);
                     }
                 } catch (Exception ex) {
@@ -442,7 +442,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                 Thread.sleep(125);
             }
 
-            if (((client.getGame() != null) && (client.getGame().getPhase() == IGame.Phase.PHASE_LOUNGE))) {
+            if (((client.getGame() != null) && (client.getGame().getPhase() == GamePhase.LOUNGE))) {
 
                 client.getGame().getOptions().loadOptions();
                 if ((mechs.size() > 0) && (xmlGameOptions.size() > 0)) {

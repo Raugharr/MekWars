@@ -56,21 +56,9 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-
-import client.MWClient;
-import client.campaign.CUnit;
-import client.gui.MWUnitDisplay;
-import client.gui.TableSorter;
-import client.util.CUnitComparator;
-import common.House;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
-import megamek.common.EntityListFile;
+import megamek.common.MULParser;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
@@ -572,7 +560,7 @@ public class TableViewerDialog extends JFrame implements ItemListener {
                                 File entityFile = new File("data/armies/" + Filename);
 
                                 try {
-                                    loadedUnits = EntityListFile.loadFrom(entityFile);
+									loadedUnits = new MULParser(entityFile, null).getEntities();
                                     loadedUnits.trimToSize();
                                     frequency /= loadedUnits.size();
                                 } catch (Exception ex) {

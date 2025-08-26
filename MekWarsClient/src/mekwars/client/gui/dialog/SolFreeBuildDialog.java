@@ -627,7 +627,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                                 File entityFile = new File("data/armies/" + Filename);
 
                                 try {
-									loadedUnits = EntityListFile.loadFrom(entityFile);
+                                    loadedUnits = new MULParser(entityFile, null).getEntities();
                                     loadedUnits.trimToSize();
                                     frequency /= loadedUnits.size();
                                 } catch (Exception ex) {

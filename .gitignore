@@ -7,3 +7,5 @@ MekWarsClient/build
 MekWarsCommon/build
 MekWarsDedicatedHost/build
 MekWarsHPGNet/build
+buildSrc/build
+buildSrc/.gradle

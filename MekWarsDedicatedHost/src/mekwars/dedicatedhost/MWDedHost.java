@@ -65,7 +65,7 @@ import megamek.common.Game;
 import megamek.common.Mech;
 import megamek.common.MechWarrior;
 import megamek.common.IGame;
-import megamek.common.IGame.Phase;
+import megamek.common.enums.GamePhase;
 import megamek.common.event.GameCFREvent;
 import megamek.common.options.IOption;
 import megamek.common.preference.IClientPreferences;
@@ -104,7 +104,7 @@ public final class MWDedHost extends GameHost implements IClient {
     long LastPing = 0;
     int Status = 0;
 
-    private Phase currentPhase = IGame.Phase.PHASE_DEPLOYMENT;
+    private GamePhase currentPhase = GamePhase.DEPLOYMENT;
     private int turn = 0;
 
     Dimension MapSize;
