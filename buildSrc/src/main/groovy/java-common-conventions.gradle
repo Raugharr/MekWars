@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation 'org.megamek:megamek-HEAD:0.49.0'
+    implementation 'org.megamek:megamek-HEAD:0.49.9'
 
 	implementation 'com.google.guava:guava:24.0-jre'
     implementation 'org.quartz-scheduler:quartz:2.2.3'
