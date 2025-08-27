@@ -732,6 +732,7 @@ public class Browser {
      *
      * @since ostermillerutils 1.00.00
      */
+	@Deprecated
     public static boolean dialogConfiguration(Frame owner, Properties props){
         if (Browser.dialog == null){
             Browser.dialog = new BrowserDialog(owner);
@@ -942,6 +943,7 @@ public class Browser {
          *
          * @since ostermillerutils 1.00.00
          */
+		@Deprecated
         private void setProps(Properties props){
             if (props.containsKey("MegaMekNETClient.GUI.BrowserDialog.title")){
                 setTitle(props.getProperty("MegaMekNETClient.GUI.BrowserDialog.title"));

@@ -30,6 +30,7 @@ import common.Planet;
 import common.util.BinReader;
 import common.util.BinWriter;
 import common.util.MWLogger;
+import megamek.Version;
 
 /**
  * Calls to the data retrieving server and gets data for planets and factions
@@ -38,8 +39,7 @@ import common.util.MWLogger;
  */
 
 public class DataFetchClient {
-
-    private String hostAddr;
+	private String hostAddr;
     private String cacheDir;
     private CampaignData data;
     private Map<Integer, Influences> changesSinceLastRefresh;
@@ -355,17 +355,14 @@ public class DataFetchClient {
     public void checkServerVersion(MWClient mwclient) throws IOException {
 
         boolean mustUpdate = false;
-        String clientVersion = MWClient.CLIENT_VERSION;
+        Version clientVersion = MWClient.CLIENT_VERSION;
 
-        clientVersion = clientVersion.substring(0, clientVersion.lastIndexOf("."));
 
         BinReader binreader = openConnection("ServerVersion");
-        String serverVersion = binreader.readLine("ServerVersion");
-
-        serverVersion = serverVersion.substring(0, serverVersion.lastIndexOf("."));
+        Version serverVersion = new Version(binreader.readLine("ServerVersion"));
 
         MWLogger.errLog("Client Version: " + clientVersion + " Server Version: " + serverVersion);
-        mustUpdate = !serverVersion.equalsIgnoreCase(clientVersion);
+        mustUpdate = !serverVersion.is(clientVersion);
 
         // If the versions dont match then the client has to update anyways
         if (!mustUpdate) {

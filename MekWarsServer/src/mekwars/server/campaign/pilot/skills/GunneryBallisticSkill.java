@@ -27,6 +27,7 @@ import megamek.common.Crew;
 import megamek.common.Entity;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
+import megamek.common.battlevalue.BvMultiplier;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.pilot.SPilot;
@@ -73,28 +74,28 @@ public class GunneryBallisticSkill extends SPilotSkill {
 
     @Override
     public int getBVMod(Entity unit) {
-    	if (CampaignMain.cm.getBooleanConfig("USEFLATGUNNERYBALLISTICMODIFIER")) {
-    		return getBVModFlat(unit);
-    	}
-    	//new bv cost for GunneryX and Weapon Specialist skills, 
-    	//also known as "if it gets a 1 better gunnery with all its weapons then it should pay for the full level of gunnery" 
-    	//the formula applies the "PilotBVSkillMultiplier" delta to (bv% of effected weapons verse all weapons) 
-    	//parallel code is used in GunneryLaserSkill.java, GunneryMissileSkill.java, GunneryBallisticsSkill.java, and WeaponSpecialistSkill.java  
-    	double sumWeaponBV = 0;
-    	double effectedWeaponBV = 0;
-		final Crew crew = unit.getCrew();
+        if (CampaignMain.cm.getBooleanConfig("USEFLATGUNNERYBALLISTICMODIFIER")) {
+            return getBVModFlat(unit);
+        }
+        //new bv cost for GunneryX and Weapon Specialist skills, 
+        //also known as "if it gets a 1 better gunnery with all its weapons then it should pay for the full level of gunnery" 
+        //the formula applies the "PilotBVSkillMultiplier" delta to (bv% of effected weapons verse all weapons) 
+        //parallel code is used in GunneryLaserSkill.java, GunneryMissileSkill.java, GunneryBallisticsSkill.java, and WeaponSpecialistSkill.java  
+        double sumWeaponBV = 0;
+        double effectedWeaponBV = 0;
+        final Crew crew = unit.getCrew();
         double bvSkillDelta = 
-        		Crew.getBVSkillMultiplier(crew.getGunnery() - 1, crew.getPiloting())
-        		/ Crew.getBVSkillMultiplier(crew.getGunnery(), crew.getPiloting())
-        		;
+                BvMultiplier.bvSkillMultiplier(crew.getGunnery() - 1, crew.getPiloting())
+                / BvMultiplier.bvSkillMultiplier(crew.getGunnery(), crew.getPiloting())
+                ;
         for (Mounted weapon : unit.getWeaponList()) {
-        	sumWeaponBV += weapon.getType().getBV(unit);
-        	if (weapon.getType().hasFlag(WeaponType.F_BALLISTIC) && !weapon.getType().hasFlag(WeaponType.F_AMS)) {
-        		effectedWeaponBV += weapon.getType().getBV(unit);
+            sumWeaponBV += weapon.getType().getBV(unit);
+            if (weapon.getType().hasFlag(WeaponType.F_BALLISTIC) && !weapon.getType().hasFlag(WeaponType.F_AMS)) {
+                effectedWeaponBV += weapon.getType().getBV(unit);
             }
         }
         //MWLogger.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
-        //		" sumWeaponBV=" + sumWeaponBV);
+        //        " sumWeaponBV=" + sumWeaponBV);
         return (int) (unit.calculateBattleValue(false, true) *  (effectedWeaponBV /sumWeaponBV) * (bvSkillDelta - 1));
     }
     
@@ -103,7 +104,7 @@ public class GunneryBallisticSkill extends SPilotSkill {
         return getBVMod(unit);
     }
 
-	public int getBVModFlat(Entity unit){
+    public int getBVModFlat(Entity unit){
         int numberOfGuns = 0;
         int gunneryBallisticBVBaseMod = CampaignMain.cm.getIntegerConfig("GunneryBallisticBaseBVMod");
 

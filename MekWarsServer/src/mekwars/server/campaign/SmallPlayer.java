@@ -30,107 +30,107 @@ package server.campaign;
 import java.math.BigDecimal;
 
 public final class SmallPlayer implements Comparable<Object>{
-	
+    
     //VARIABLES
-	private int experience = 0;
-	private long lastonline = 0;
-	private double rating = 0;
-	private String name = "";
-	private String fluff = "";
-	private SHouse faction = null;
-	
-	//CONSTRUCTORS
-	public SmallPlayer() {
-		//empty
-	}
-	
-	public SmallPlayer(int i, long l, double d, String s, String f, SHouse h) {
-		experience = i;
-		lastonline = l;
-		rating = d;
-		name = s;
-		fluff = f;
-		faction = h;
-	}
-	
-	//METHODS
-	public int getExperience() {
-		return experience;
-	}
-	
-	public void setExperience(int i) {
-		experience = i;
-	}
-	
-	public long getLastOnline() {
-		return lastonline;
-	}
-	
-	public void setLastOnline(long l) {
-		lastonline = l;
-	}
-	
-	public double getRating() {
-		return rating;
-	}
-	
-	public void setRating(double d) {
-		rating = d;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String s) {
-		name = s;
-	}
-	
-	public SHouse getMyHouse() {
-		return faction;
-	}
-	
-	public String getFluffText() {
-		return fluff;
-	}
-	
-	public void setFluffText(String s) {
-		fluff = s;
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-		try {
-			SmallPlayer smallp = (SmallPlayer)o;
-			if (smallp.getName().equals(this.getName()))
-				return true;
-			return false;
-		} catch (Exception ex) {
-			return false;
-		}
-	}//end equals(Object o)
-	
-	/*
-	 * Comparable - used in Statistics to construct ranking
-	 * pages. If ratings are equal, sort in alpha order.
-	 */
-	public int compareTo(Object o) {
-		SmallPlayer p = (SmallPlayer)o;
-		if (this.getRating() > p.getRating())
-			return 1;
-		else if (this.getRating() < p.getRating())
-			return -1;
-		return p.getName().compareTo(this.getName());	
-	}
-	
-	//rounded rating for HTML output. copied from splayer.
-	public double getRatingRounded() {
-		double r = getRating();
-		BigDecimal bd = new BigDecimal(r);
-		bd = bd.setScale(2,BigDecimal.ROUND_HALF_UP);
-		r = bd.doubleValue();
-		return r;
-	}
-	
-	
+    private int experience = 0;
+    private long lastonline = 0;
+    private double rating = 0;
+    private String name = "";
+    private String fluff = "";
+    private SHouse faction = null;
+    
+    //CONSTRUCTORS
+    public SmallPlayer() {
+        //empty
+    }
+    
+    public SmallPlayer(int i, long l, double d, String s, String f, SHouse h) {
+        experience = i;
+        lastonline = l;
+        rating = d;
+        name = s;
+        fluff = f;
+        faction = h;
+    }
+    
+    //METHODS
+    public int getExperience() {
+        return experience;
+    }
+    
+    public void setExperience(int i) {
+        experience = i;
+    }
+    
+    public long getLastOnline() {
+        return lastonline;
+    }
+    
+    public void setLastOnline(long l) {
+        lastonline = l;
+    }
+    
+    public double getRating() {
+        return rating;
+    }
+    
+    public void setRating(double d) {
+        rating = d;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String s) {
+        name = s;
+    }
+    
+    public SHouse getMyHouse() {
+        return faction;
+    }
+    
+    public String getFluffText() {
+        return fluff;
+    }
+    
+    public void setFluffText(String s) {
+        fluff = s;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        try {
+            SmallPlayer smallp = (SmallPlayer)o;
+            if (smallp.getName().equals(this.getName()))
+                return true;
+            return false;
+        } catch (Exception ex) {
+            return false;
+        }
+    }//end equals(Object o)
+    
+    /*
+     * Comparable - used in Statistics to construct ranking
+     * pages. If ratings are equal, sort in alpha order.
+     */
+    public int compareTo(Object o) {
+        SmallPlayer p = (SmallPlayer)o;
+        if (this.getRating() > p.getRating())
+            return 1;
+        else if (this.getRating() < p.getRating())
+            return -1;
+        return p.getName().compareTo(this.getName());    
+    }
+    
+    //rounded rating for HTML output. copied from splayer.
+    public double getRatingRounded() {
+        double r = getRating();
+        BigDecimal bd = new BigDecimal(r);
+        bd = bd.setScale(2,BigDecimal.ROUND_HALF_UP);
+        r = bd.doubleValue();
+        return r;
+    }
+    
+    
 }//end SmallPlayer class

@@ -45,19 +45,14 @@ import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.IGame;
 import megamek.common.enums.GamePhase;
-import megamek.common.IPlayer;
 import megamek.common.KeyBindParser;
-import megamek.common.logging.LogLevel;
 import megamek.common.MapSettings;
 import megamek.common.OffBoardDirection;
 import megamek.common.PlanetaryConditions;
 import megamek.common.icons.Camouflage;
 
-// import org.apache.log4j.lf5.LogLevel;
-// import org.apache.logging.log4j.Level;
-// import org.apache.logging.log4j.LogManager;
 import megamek.common.options.IBasicOption;
-import megamek.common.preference.IClientPreferences;
+import megamek.common.preference.ClientPreferences;
 import megamek.common.preference.PreferenceManager;
 import megamek.common.util.BuildingTemplate;
 
@@ -410,7 +405,7 @@ public class ClientThread extends Thread implements CloseClientListener {
              */
             if (mwclient.isUsingBots()) {
                 String name = "War Bot" + client.getLocalPlayer().getId();
-                bot = new Princess(name, client.getHost(), client.getPort(), LogLevel.ERROR);
+                bot = new Princess(name, client.getHost(), client.getPort());
                 bot.getGame().addGameListener(new BotGUI(bot));
                 try {
                     bot.connect();
@@ -449,7 +444,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                     client.sendGameOptions("", xmlGameOptions);
                 }
 
-                IClientPreferences cs = PreferenceManager.getClientPreferences();
+                ClientPreferences cs = PreferenceManager.getClientPreferences();
                 cs.setStampFilenames(Boolean.parseBoolean(mwclient.getServerConfigs("MMTimeStampLogFile")));
                 cs.setShowUnitId(Boolean.parseBoolean(mwclient.getServerConfigs("MMShowUnitId")));
                 cs.setKeepGameLog(Boolean.parseBoolean(mwclient.getServerConfigs("MMKeepGameLog")));

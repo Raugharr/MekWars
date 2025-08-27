@@ -338,7 +338,7 @@ public final class CampaignMain implements Serializable {
         }
 
         if (!getConfig("AllowedMegaMekVersion").equals("-1")) {
-            getConfig().setProperty("AllowedMegaMekVersion", megamek.MegaMek.VERSION);
+            getConfig().setProperty("AllowedMegaMekVersion", megamek.MMConstants.VERSION.toString());
         }
 
         dso.createConfig(); // save the cofig file so any missed defaults are

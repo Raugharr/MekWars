@@ -59,7 +59,7 @@ import common.util.MWLogger;
 import common.util.UnitUtils;
 import dedicatedhost.cmd.Command;
 import dedicatedhost.protocol.DataFetchClient;
-import megamek.MegaMek;
+import megamek.MMConstants;
 import megamek.common.Entity;
 import megamek.common.Game;
 import megamek.common.Mech;
@@ -68,9 +68,10 @@ import megamek.common.IGame;
 import megamek.common.enums.GamePhase;
 import megamek.common.event.GameCFREvent;
 import megamek.common.options.IOption;
-import megamek.common.preference.IClientPreferences;
+import megamek.common.preference.ClientPreferences;
 import megamek.common.preference.PreferenceManager;
 import megamek.server.Server;
+import megamek.server.GameManager;
 
 
 // This is the Client used for connecting to the master server.
@@ -184,8 +185,8 @@ public final class MWDedHost extends GameHost implements IClient {
 
     public MWDedHost(DedConfig config) {
 
-    	ProtCommands = new TreeMap<String, IProtCommand>();
-    	
+        ProtCommands = new TreeMap<String, IProtCommand>();
+        
         Config = config;
 
         Connector = new CConnector(this);
@@ -1197,7 +1198,7 @@ public final class MWDedHost extends GameHost implements IClient {
             gpassword = "";
         }
         try {
-            myServer = new Server(gpassword, myPort);
+            myServer = new Server(gpassword, myPort, new GameManager());
         } catch (Exception ex) {
             try {
                 if (myServer == null) {
@@ -1218,10 +1219,10 @@ public final class MWDedHost extends GameHost implements IClient {
 
         ((Game)myServer.getGame()).addGameListener(this);
         // Send the new game info to the Server
-        serverSend("NG|" + new MMGame(myUsername, ip, myPort, MaxPlayers, MegaMek.VERSION, comment).toString());
+        serverSend("NG|" + new MMGame(myUsername, ip, myPort, MaxPlayers, MMConstants.VERSION, comment).toString());
         clearSavedGames();
         purgeOldLogs();
-        IClientPreferences cs = PreferenceManager.getClientPreferences();
+        ClientPreferences cs = PreferenceManager.getClientPreferences();
         cs.setStampFilenames(Boolean.parseBoolean(getServerConfigs("MMTimeStampLogFile")));
     }
 

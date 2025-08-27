@@ -36,6 +36,7 @@ import megamek.common.Mounted;
 import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.VTOL;
+import megamek.common.battlevalue.BvMultiplier;
 
 /**
  * @author Helge Richter
@@ -290,15 +291,15 @@ public class SArmy extends Army {
 
             // Arrow IV adjustments
             if (hasTAGHomingCombo) {
-				final Crew crew = u.getEntity().getCrew();
-                double temp = subTotal / Crew.getBVSkillMultiplier(crew.getGunnery(), crew.getPiloting());
+                final Crew crew = u.getEntity().getCrew();
+                double temp = subTotal / BvMultiplier.bvSkillMultiplier(crew.getGunnery(), crew.getPiloting());
                 if (u.hasTAG()) {
                     temp += 200;
                 }
                 if (u.hasHoming()) {
                     temp += 200;
                 }
-                temp *= Crew.getBVSkillMultiplier(crew.getGunnery(), crew.getPiloting());
+                temp *= BvMultiplier.bvSkillMultiplier(crew.getGunnery(), crew.getPiloting());
                 subTotal = (int) temp;
             }
             total += subTotal;
@@ -426,79 +427,79 @@ public class SArmy extends Army {
     }
 
     public String getInaccurateDescription() {
-    	if (CampaignMain.cm.getBooleanConfig("ShowUnitTypeCounts")) {
-    		StringBuilder toReturn = new StringBuilder("(Units: ");
-    		int numMechs = 0, numVees=0, numVTOLs=0, numInf=0, numProtos=0, numBA=0, numAero=0;
-    		for (Unit unit : getUnits()) {
-    			Entity e = CampaignMain.cm.getPlayer(playerName).getUnit(unit.getId()).getEntity();
-    			if (e instanceof Mech) {
-    				numMechs++;
-    			} else if (e instanceof VTOL) {
-    				numVTOLs++;
-    			} else if (e instanceof Tank) {
-    				numVees++;
-    			} else if (e instanceof Infantry) {
-    				numInf++;
-    			} else if (e instanceof Aero) {
-    				numAero++;
-    			} else if (e instanceof BattleArmor) {
-    				numBA++;
-    			} else if (e instanceof Protomech) {
-    				numProtos++;
-    			}
-    		}
-    		int items = 0;
-    		if (numMechs > 0) {
-    			toReturn.append(numMechs + " Meks");
-    			items++;
-    		}
-    		if (numVees > 0) {
-    			if (items > 0) {
-    				toReturn.append(", ");
-    			}
-    			toReturn.append(numVees + " Vees");
-    			items++;
-    		}
-    		if (numVTOLs > 0) {
-    			if (items > 0) {
-    				toReturn.append(", ");
-    			}
-    			toReturn.append(numVTOLs + " VTOLs");
-    			items++;
-    		}
-    		if (numInf > 0) {
-    			if (items > 0) {
-    				toReturn.append(", ");
-    			}
-    			toReturn.append(numInf + " Inf");
-    			items++;
-    		}
-    		if (numBA > 0) {
-    			if (items > 0) {
-    				toReturn.append(", ");
-    			}
-    			toReturn.append(numBA + " BA");
-    			items++;
-    		}
-    		if (numProtos > 0) {
-    			if (items > 0) {
-    				toReturn.append(", ");
-    			}
-    			toReturn.append(numProtos + " Protomechs");
-    			items++;
-    		}
-    		if (numAero > 0) {
-    			if (items > 0) {
-    				toReturn.append(", ");
-    			}
-    			toReturn.append(numAero + " Aero");
-    			items++;
-    		}
-    		toReturn.append(" / BV: " + getBV() + ")");
-    		return toReturn.toString();
-    	} else {
-    		return "(Units: " + getAmountOfUnits() + " / BV: " + getBV() + ")";
-    	}
+        if (CampaignMain.cm.getBooleanConfig("ShowUnitTypeCounts")) {
+            StringBuilder toReturn = new StringBuilder("(Units: ");
+            int numMechs = 0, numVees=0, numVTOLs=0, numInf=0, numProtos=0, numBA=0, numAero=0;
+            for (Unit unit : getUnits()) {
+                Entity e = CampaignMain.cm.getPlayer(playerName).getUnit(unit.getId()).getEntity();
+                if (e instanceof Mech) {
+                    numMechs++;
+                } else if (e instanceof VTOL) {
+                    numVTOLs++;
+                } else if (e instanceof Tank) {
+                    numVees++;
+                } else if (e instanceof Infantry) {
+                    numInf++;
+                } else if (e instanceof Aero) {
+                    numAero++;
+                } else if (e instanceof BattleArmor) {
+                    numBA++;
+                } else if (e instanceof Protomech) {
+                    numProtos++;
+                }
+            }
+            int items = 0;
+            if (numMechs > 0) {
+                toReturn.append(numMechs + " Meks");
+                items++;
+            }
+            if (numVees > 0) {
+                if (items > 0) {
+                    toReturn.append(", ");
+                }
+                toReturn.append(numVees + " Vees");
+                items++;
+            }
+            if (numVTOLs > 0) {
+                if (items > 0) {
+                    toReturn.append(", ");
+                }
+                toReturn.append(numVTOLs + " VTOLs");
+                items++;
+            }
+            if (numInf > 0) {
+                if (items > 0) {
+                    toReturn.append(", ");
+                }
+                toReturn.append(numInf + " Inf");
+                items++;
+            }
+            if (numBA > 0) {
+                if (items > 0) {
+                    toReturn.append(", ");
+                }
+                toReturn.append(numBA + " BA");
+                items++;
+            }
+            if (numProtos > 0) {
+                if (items > 0) {
+                    toReturn.append(", ");
+                }
+                toReturn.append(numProtos + " Protomechs");
+                items++;
+            }
+            if (numAero > 0) {
+                if (items > 0) {
+                    toReturn.append(", ");
+                }
+                toReturn.append(numAero + " Aero");
+                items++;
+            }
+            toReturn.append(" / BV: " + getBV() + ")");
+            return toReturn.toString();
+        } else {
+            return "(Units: " + getAmountOfUnits() + " / BV: " + getBV() + ")";
+        }
     }
 
     /**

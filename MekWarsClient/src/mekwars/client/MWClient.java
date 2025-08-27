@@ -129,6 +129,7 @@ import common.util.ThreadManager;
 import common.util.TokenReader;
 import common.util.UnitUtils;
 import megamek.Version;
+import megamek.MMConstants;
 import megamek.client.ui.swing.GameOptionsDialog;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -140,9 +141,10 @@ import megamek.common.event.GameCFREvent;
 import megamek.common.event.GameEvent;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
-import megamek.common.preference.IClientPreferences;
+import megamek.common.preference.ClientPreferences;
 import megamek.common.preference.PreferenceManager;
 import megamek.server.Server;
+import megamek.server.GameManager;
 
 
 public final class MWClient extends GameHost implements IClient {
@@ -1302,7 +1304,7 @@ public final class MWClient extends GameHost implements IClient {
 
                     MWLogger.infoLog("Ping command received from "
                             + name);
-                    String version = MWClient.CLIENT_VERSION;
+                    Version version = MWClient.CLIENT_VERSION;
                     sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
                             + ", I'm active with version " + version + ".");
                     sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
@@ -2450,7 +2452,7 @@ public final class MWClient extends GameHost implements IClient {
 
         Version MMVersion = new Version(getServerConfigs("AllowedMegaMekVersion"));
         if (!MMVersion.equals("-1")
-                && !MMVersion.equalsIgnoreCase(megamek.MMConstants.VERSION)) {
+                && !MMVersion.is(megamek.MMConstants.VERSION)) {
             if (isDedicated()) {
                 MWLogger.errLog("You are using an invalid version of MegaMek. Please use version "
                                 + MMVersion);
@@ -2491,7 +2493,7 @@ public final class MWClient extends GameHost implements IClient {
             gpassword = "";
         }
         try {
-            myServer = new Server(gpassword, myPort);
+            myServer = new Server(gpassword, myPort, new GameManager());
             if (loadSavegame) {
                 FileDialog f = new FileDialog(MainFrame, "Load Savegame");
                 f.setDirectory(System.getProperty("user.dir") + "/savegames");
@@ -2520,7 +2522,7 @@ public final class MWClient extends GameHost implements IClient {
         // Send the new game info to the Server
         serverSend("NG|"
                 + new MMGame(myUsername, ip, myPort, MaxPlayers,
-                        MegaMek.VERSION , comment)
+                        MMConstants.VERSION, comment)
                         .toString());
         if (!dedicated) {
 
@@ -2541,7 +2543,7 @@ public final class MWClient extends GameHost implements IClient {
         } else {
             clearSavedGames();
             purgeOldLogs();
-            IClientPreferences cs = PreferenceManager.getClientPreferences();
+            ClientPreferences cs = PreferenceManager.getClientPreferences();
             cs.setStampFilenames(Boolean
                     .parseBoolean(getServerConfigs("MMTimeStampLogFile")));
         }

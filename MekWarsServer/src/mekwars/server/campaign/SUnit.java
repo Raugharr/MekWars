@@ -44,7 +44,7 @@ import megamek.common.Crew;
 import megamek.common.CrewType;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
-import megamek.common.EntityListFile;
+import megamek.common.MULParser;
 import megamek.common.Infantry;
 import megamek.common.MULParser;
 import megamek.common.Mech;
@@ -206,9 +206,9 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                     if ((currType.getTechLevel(year) <= en.getTechLevel()) && (currType.getMunitionType() == AmmoType.M_STANDARD) && (currType.getRackSize() == at.getRackSize())) {
                         mAmmo.changeAmmoType(currType);
                         if(mAmmo.byShot()) {
-                        	mAmmo.setShotsLeft(mAmmo.getOriginalShots());
+                            mAmmo.setShotsLeft(mAmmo.getOriginalShots());
                         } else {
-                        	mAmmo.setShotsLeft(at.getShots());
+                            mAmmo.setShotsLeft(at.getShots());
                         }
                         defaultFound = true;
                         wasChanged = true;
@@ -439,7 +439,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
      */
     public String toString(boolean toPlayer) {
 
-    	SerializedMessage msg = new SerializedMessage("$");
+        SerializedMessage msg = new SerializedMessage("$");
         // Recalculate the unit's bv. There is a reason we are sending new data
         // to the player
         if (toPlayer) {
@@ -526,7 +526,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                 }
             }
         } else {
-        	msg.append(0);
+            msg.append(0);
         }
 
         msg.append(0);
@@ -535,16 +535,16 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         msg.append(getScrappableFor());
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
             // do not need to save ammo twice so set sendAmmo to False
-        	msg.append(UnitUtils.unitBattleDamage(getEntity(), false));
+            msg.append(UnitUtils.unitBattleDamage(getEntity(), false));
         } else {
-        	msg.append("%%-%%-%%-");
+            msg.append("%%-%%-%%-");
         }
 
         if (toPlayer) {
-        	msg.append(getPilotIsReparing());
+            msg.append(getPilotIsReparing());
         }
         if (!toPlayer) {
-        	msg.append(getLastCombatPilot());
+            msg.append(getLastCombatPilot());
         }
 
         msg.append(getCurrentRepairCost());
@@ -676,7 +676,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             TokenReader.readString(ST);// unused
             int tsType = TokenReader.readInt(ST);
             if ((tsType != TargetSystem.TS_TYPE_STANDARD) && CampaignData.cd.targetSystemIsBanned(tsType)) {
-            	tsType = TargetSystem.TS_TYPE_STANDARD;
+                tsType = TargetSystem.TS_TYPE_STANDARD;
             }
             targetSystem.setTargetSystem(tsType);
 
@@ -685,9 +685,9 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             // so we don't need to keep a list of all support units client-side
             // but should be dynamic server-side.
             if (CampaignMain.cm.getSupportUnits().contains(getUnitFilename().trim().toLowerCase())) {
-            	setSupportUnit(true);
+                setSupportUnit(true);
             } else {
-            	setSupportUnit(false);
+                setSupportUnit(false);
             }
 
 
@@ -706,7 +706,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             
             // quirks might be changed by SO, drop old quirks, then reset them.
             if(ST.hasMoreTokens())
-            	TokenReader.readString(ST); 
+                TokenReader.readString(ST); 
             QuirkHandler.getInstance().setQuirks(this); //checks if quirks are enabled, if not does nothing
 
             return s;
@@ -907,8 +907,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
         // Lazy Bug report. non Anti-Mek BA should not have a Piloting skill
         // better/worse then 5
-		if ((getEntity() instanceof BattleArmor)
-				&& !((BattleArmor) getEntity()).canMakeAntiMekAttacks() && !hasVacantPilot()) {
+        if ((getEntity() instanceof BattleArmor)
+                && !((BattleArmor) getEntity()).canMakeAntiMekAttacks() && !hasVacantPilot()) {
             mPilot.setPiloting(5);
         }
 
@@ -1004,10 +1004,10 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     // GETTER AND SETTER
 
     public int getBVForMatch() {
-    	if (CampaignMain.cm.getBooleanConfig("UseBaseBVForMatching")) {
-    		return getBaseBV();
-    	}
-    	return getBV();
+        if (CampaignMain.cm.getBooleanConfig("UseBaseBVForMatching")) {
+            return getBaseBV();
+        }
+        return getBV();
     }
 
     public int getBV() {
@@ -1225,7 +1225,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     }
 
     public int getBaseBV() {
-    	return getEntity().calculateBattleValue(false, true);
+        return getEntity().calculateBattleValue(false, true);
     }
 
     public int getPilotSkillBV() {
@@ -1278,7 +1278,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         File entityFile = new File("data/armies/" + filename);
 
         try {
-            loadedUnits = EntityListFile.loadFrom(entityFile);
+            loadedUnits = new MULParser(entityFile, null).getEntities();
             loadedUnits.trimToSize();
         } catch (Exception ex) {
             MWLogger.errLog("Unable to load file " + entityFile.getName());
@@ -1357,114 +1357,113 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
      * Compares SUnit IDs to support sorting of collections
      * @author Spork
      */
-	public int compareTo(SUnit u) {
-		return Integer.valueOf(getId()).compareTo(Integer.valueOf(u.getId()));
-	}
+    public int compareTo(SUnit u) {
+        return Integer.valueOf(getId()).compareTo(Integer.valueOf(u.getId()));
+    }
 
     public void setTargetSystem(int type) {
-    	if ((type != TargetSystem.TS_TYPE_STANDARD) && CampaignData.cd.targetSystemIsBanned(type)) {
-    		setTargetSystem(TargetSystem.TS_TYPE_STANDARD);
-    	}
-    	try {
-			targetSystem.setTargetSystem(type);
-		} catch (TargetTypeOutOfBoundsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TargetTypeNotImplementedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        if ((type != TargetSystem.TS_TYPE_STANDARD) && CampaignData.cd.targetSystemIsBanned(type)) {
+            setTargetSystem(TargetSystem.TS_TYPE_STANDARD);
+        }
+        try {
+            targetSystem.setTargetSystem(type);
+        } catch (TargetTypeOutOfBoundsException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (TargetTypeNotImplementedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
     public boolean isSupportUnit() {
-    	return CampaignMain.cm.getSupportUnits().contains(getUnitFilename().toLowerCase());
+        return CampaignMain.cm.getSupportUnits().contains(getUnitFilename().toLowerCase());
     }
 
     public void reportStateToPlayer(SPlayer player){
-    	CampaignMain.cm.toUser("PL|UU|" + getId() + "|" + toString(true), player.getName(), false);
+        CampaignMain.cm.toUser("PL|UU|" + getId() + "|" + toString(true), player.getName(), false);
     }
     public boolean isOMGUnit() {
-    	return getModelName().equals("OMG-UR-FD");
+        return getModelName().equals("OMG-UR-FD");
     }
 
-	public boolean canBeCapturedInOperation(Operation o) {
-    	switch (getType()) {
-		case Unit.MEK:
-			return o.getBooleanValue("ForceProduceAndCaptureMeks");
-		case Unit.VEHICLE:
-			return o.getBooleanValue("ForceProduceAndCaptureVees");
-		case Unit.INFANTRY:
-			return o.getBooleanValue("ForceProduceAndCaptureInfs");
-		case Unit.PROTOMEK:
-			return o.getBooleanValue("ForceProduceAndCaptureProtos");
-		case Unit.BATTLEARMOR:
-			return o.getBooleanValue("ForceProduceAndCaptureBAs");
-		case Unit.AERO:
-			return o.getBooleanValue("ForceProduceAndCaptureAeros");
-    	}
+    public boolean canBeCapturedInOperation(Operation o) {
+        switch (getType()) {
+        case Unit.MEK:
+            return o.getBooleanValue("ForceProduceAndCaptureMeks");
+        case Unit.VEHICLE:
+            return o.getBooleanValue("ForceProduceAndCaptureVees");
+        case Unit.INFANTRY:
+            return o.getBooleanValue("ForceProduceAndCaptureInfs");
+        case Unit.PROTOMEK:
+            return o.getBooleanValue("ForceProduceAndCaptureProtos");
+        case Unit.BATTLEARMOR:
+            return o.getBooleanValue("ForceProduceAndCaptureBAs");
+        case Unit.AERO:
+            return o.getBooleanValue("ForceProduceAndCaptureAeros");
+        }
 
-		return false;
-	}
-	
-	/**
-	 * Creates a unit
-	 * <p>
-	 * create() takes a number of variables and creates a unit.  This is called by both the Christmas code
-	 * and the /CreateUnit command.
-	 * @param filename     The file name of the unit
-	 * @param fluff        Any flavor text
-	 * @param gunnery      Gunnery skill of the pilot
-	 * @param piloting     Piloting skill of the pilot
-	 * @param weight       Weight class to be used (note: why?  Why can't we get rid of this?)
-	 * @param skillTokens  Pilot skills
-	 * @return             the created unit
-	 */
-	public static SUnit create(String filename, String fluff, int gunnery, int piloting, Integer weight, String skillTokens) {
-		boolean refigureWeightClass = false;
-		
-		if (weight == null) {
-			weight = SUnit.LIGHT;
-			// This is stupid.  We should not have to specify weight classes.  So now we do not.
-			refigureWeightClass = true;
-		}
-		
-		SUnit cm = new SUnit(fluff,filename,weight);
-		
-		if (refigureWeightClass) {
-			cm.setWeightclass(cm.getEntity().getWeightClass());
-			MWLogger.debugLog("Setting " + cm.getEntity().getModel() + " to weight class " + cm.getEntity().getWeightClass());
-		}
-		
-		SPilot pilot = null;
-		if ( gunnery == 99 || piloting == 99 )
-		    pilot = new SPilot("Vacant",99,99);
-		else
-		    pilot = new SPilot(SPilot.getRandomPilotName(CampaignMain.cm.getR()),gunnery,piloting);
-		
+        return false;
+    }
+    
+    /**
+     * Creates a unit
+     * <p>
+     * create() takes a number of variables and creates a unit.  This is called by both the Christmas code
+     * and the /CreateUnit command.
+     * @param filename     The file name of the unit
+     * @param fluff        Any flavor text
+     * @param gunnery      Gunnery skill of the pilot
+     * @param piloting     Piloting skill of the pilot
+     * @param weight       Weight class to be used (note: why?  Why can't we get rid of this?)
+     * @param skillTokens  Pilot skills
+     * @return             the created unit
+     */
+    public static SUnit create(String filename, String fluff, int gunnery, int piloting, Integer weight, String skillTokens) {
+        boolean refigureWeightClass = false;
+        
+        if (weight == null) {
+            weight = SUnit.LIGHT;
+            // This is stupid.  We should not have to specify weight classes.  So now we do not.
+            refigureWeightClass = true;
+        }
+        
+        SUnit cm = new SUnit(fluff,filename,weight);
+        
+        if (refigureWeightClass) {
+            cm.setWeightclass(cm.getEntity().getWeightClass());
+            MWLogger.debugLog("Setting " + cm.getEntity().getModel() + " to weight class " + cm.getEntity().getWeightClass());
+        }
+        
+        SPilot pilot = null;
+        if ( gunnery == 99 || piloting == 99 )
+            pilot = new SPilot("Vacant",99,99);
+        else
+            pilot = new SPilot(SPilot.getRandomPilotName(CampaignMain.cm.getR()),gunnery,piloting);
+        
         pilot.setCurrentFaction("Common");
 
-		if(skillTokens != null) {
-			StringTokenizer skillList = new StringTokenizer(skillTokens,",");
-			while (skillList.hasMoreTokens()){
-				String skill = skillList.nextToken();
-				SPilotSkill pSkill = null; 
-				if ( skill.equalsIgnoreCase("random") )
-					pSkill = SPilotSkills.getRandomSkill(pilot, cm.getType() );
-				else					
-					pSkill = SPilotSkills.getPilotSkill(skill);
-				
-				if ( pSkill != null ){
-	                if ( pSkill instanceof TraitSkill){
-	                    ((TraitSkill)pSkill).assignTrait(pilot);
-	                }
-	                pSkill.addToPilot(pilot);
-	                pSkill.modifyPilot(pilot);
-	            }
-			}
-		}
-			
-		cm.setPilot(pilot);
-		return cm;
-	}
+        if(skillTokens != null) {
+            StringTokenizer skillList = new StringTokenizer(skillTokens,",");
+            while (skillList.hasMoreTokens()){
+                String skill = skillList.nextToken();
+                SPilotSkill pSkill = null; 
+                if ( skill.equalsIgnoreCase("random") )
+                    pSkill = SPilotSkills.getRandomSkill(pilot, cm.getType() );
+                else                    
+                    pSkill = SPilotSkills.getPilotSkill(skill);
+                
+                if ( pSkill != null ){
+                    if ( pSkill instanceof TraitSkill){
+                        ((TraitSkill)pSkill).assignTrait(pilot);
+                    }
+                    pSkill.addToPilot(pilot);
+                    pSkill.modifyPilot(pilot);
+                }
+            }
+        }
+        cm.setPilot(pilot);
+        return cm;
+    }
 }
