@@ -18,6 +18,7 @@ dependencies {
 application {
 	mainClassName = 'server.MWServ'
     applicationDefaultJvmArgs = [
+			'-Dlog4j2.configurationFile=log4j2.xml',
             '-Xmx4096m',
             '-Dsun.awt.disablegrab=true'
     ]

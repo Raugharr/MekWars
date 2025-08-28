@@ -248,7 +248,7 @@ public class CampaignData implements TerrainProvider {
      * @TODO You should use XStream to initialize CampaignData
      */
     public void addHouse(House faction) {
-        logger.info("Adding House: '{}' {}", faction.getName());
+        logger.info("Adding House: '{}'", faction.getName());
         factions.put(faction.getId(), faction);
         factionid.put(faction.getName().toLowerCase(), faction.getId());
     }

@@ -11,6 +11,14 @@ sourceSets {
 	}
 }
 
+application {
+    applicationDefaultJvmArgs = [
+		'-Dlog4j2.configurationFile=log4j2.xml',
+		'-Xmx4096m',
+		'-Dsun.awt.disablegrab=true'
+    ]
+}
+
 ext {
 	data = "data"
 	docs = "docs"

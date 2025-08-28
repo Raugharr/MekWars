@@ -17,10 +17,6 @@ dependencies {
 
 application {
 	mainClassName = 'client.MWClient'
-    applicationDefaultJvmArgs = [
-            '-Xmx4096m',
-            '-Dsun.awt.disablegrab=true'
-    ]
 }
 
 ext {
