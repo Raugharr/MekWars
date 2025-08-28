@@ -62,12 +62,14 @@ final public class PlanetEnvironment{
     private int forestMinHexes = 2;
     private int forestMaxHexes = 6;
     private int forestHeavyProbability = 20;
+    private int forestUltraProbability = 0;
     
     //Rough
     private int roughMinSpots = 0;
     private int roughMaxSpots = 5;
     private int roughMinHexes = 1;
     private int roughMaxHexes = 2;
+    private int roughUltraProbability = 0;
     
     //Swamp
     private int swampMinSpots = 0;
@@ -92,6 +94,7 @@ final public class PlanetEnvironment{
     private int rubbleMaxSpots = 0;
     private int rubbleMinHexes = 0;
     private int rubbleMaxHexes = 0;
+    private int rubbleUltraProbability = 0;
 
     //Fortified
     private int fortifiedMinSpots = 0;
@@ -187,10 +190,12 @@ final public class PlanetEnvironment{
         forestMinHexes = Integer.parseInt(ST.nextToken());
         forestMaxHexes = Integer.parseInt(ST.nextToken());
         forestHeavyProbability = Integer.parseInt(ST.nextToken());
+        forestUltraProbability = Integer.parseInt(ST.nextToken());
         roughMinSpots = Integer.parseInt(ST.nextToken());
         roughMaxSpots = Integer.parseInt(ST.nextToken());
         roughMinHexes = Integer.parseInt(ST.nextToken());
         roughMaxHexes = Integer.parseInt(ST.nextToken());
+        roughUltraProbability = Integer.parseInt(ST.nextToken());
         roadProbability = Integer.parseInt(ST.nextToken());
         riverProbability = Integer.parseInt(ST.nextToken());
         algorithm = Integer.parseInt(ST.nextToken());
@@ -241,6 +246,8 @@ final public class PlanetEnvironment{
             rubbleMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
             rubbleMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens())
+            rubbleUltraProbability = Integer.parseInt(ST.nextToken());
 
         if (ST.hasMoreTokens())
             fortifiedMinSpots = Integer.parseInt(ST.nextToken());
@@ -345,10 +352,12 @@ final public class PlanetEnvironment{
         forestMinHexes = Integer.parseInt(ST.nextToken());
         forestMaxHexes = Integer.parseInt(ST.nextToken());
         forestHeavyProbability = Integer.parseInt(ST.nextToken());
+        forestUltraProbability = Integer.parseInt(ST.nextToken());
         roughMinSpots = Integer.parseInt(ST.nextToken());
         roughMaxSpots = Integer.parseInt(ST.nextToken());
         roughMinHexes = Integer.parseInt(ST.nextToken());
         roughMaxHexes = Integer.parseInt(ST.nextToken());
+        roughUltraProbability = Integer.parseInt(ST.nextToken());
         roadProbability = Integer.parseInt(ST.nextToken());
         riverProbability = Integer.parseInt(ST.nextToken());
         algorithm = Integer.parseInt(ST.nextToken());
@@ -399,6 +408,8 @@ final public class PlanetEnvironment{
             rubbleMinHexes = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens())
             rubbleMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens())
+            rubbleUltraProbability = Integer.parseInt(ST.nextToken());
 
         if (ST.hasMoreTokens())
             fortifiedMinSpots = Integer.parseInt(ST.nextToken());
@@ -495,30 +506,37 @@ final public class PlanetEnvironment{
                 (pavementMinHexes+pavementMaxSpots)/2);
         */
         /* generate the hilliness/crater description */
-        result+="The landscape is ";
-        if (hillyness < 200)
-            result+="plain";
-        if ((hillyness < 500) && (hillyness >=200))
-            result+="uneven";
-        if ((hillyness >= 500) && (hillyness <= 800))
-            result+="hilly";
-        if (hillyness > 800)
-            result+="mountainous";
-        if (craterProbability==0) {
-            result+=". <br> ";
-            if (rough>0) {
-                result+="Through tectonic activity of this continent, rough terrain is appearing";
-                if (rough > 8)
-                    result+=" everywhere";
-                else
-                    result+=" sometimes";
+        result += "The landscape is ";
+        if (hillyness < 200) {
+            result += "plain";
+        }
+        if ((hillyness < 500) && (hillyness >=200)) {
+            result += "uneven";
+        }
+        if ((hillyness >= 500) && (hillyness <= 800)) {
+            result += "hilly";
+        }
+        if (hillyness > 800) {
+            result += "mountainous";
+        }
+        if (craterProbability ==0 ) {
+            result += ". <br> ";
+            if (rough > 0) {
+                result += "Through tectonic activity of this continent, rough terrain is appearing";
+                if (rough > 8) {
+                    result += " everywhere";
+                } else {
+                    result += " sometimes";
+                }
             }
         }
         else {
-            if (craterProbability<30)
-                result+=", which is seldom coverd with";
-            if ((craterProbability>=30) && (craterProbability<60))
-                result+=", which is covered with";
+            if (craterProbability < 30) {
+                result += ", which is seldom coverd with";
+            }
+            if ((craterProbability >= 30) && (craterProbability < 60)) {
+                result += ", which is covered with";
+            }
             if (craterProbability>=60)
                 result+=", often coverd with";
             int avgCraterSize=(craterMinRadius+craterMaxRadius)/2;
@@ -690,10 +708,12 @@ final public class PlanetEnvironment{
         result += forestMinHexes + "$";
         result += forestMaxHexes + "$";
         result += forestHeavyProbability + "$";
+        result += forestUltraProbability + "$";
         result += roughMinSpots + "$";
         result += roughMaxSpots + "$";
         result += roughMinHexes + "$";
         result += roughMaxHexes + "$";
+        result += roughUltraProbability + "$";
         result += roadProbability + "$";
         result += riverProbability + "$";
         result += algorithm + "$";
@@ -721,6 +741,7 @@ final public class PlanetEnvironment{
         result += rubbleMaxSpots + "$";
         result += rubbleMinHexes + "$";
         result += rubbleMaxHexes + "$";
+        result += rubbleUltraProbability + "$";
 
         result += fortifiedMinSpots + "$";
         result += fortifiedMaxSpots + "$";
@@ -802,10 +823,12 @@ final public class PlanetEnvironment{
         result += forestMinHexes + "$";
         result += forestMaxHexes + "$";
         result += forestHeavyProbability + "$";
+        result += forestUltraProbability + "$";
         result += roughMinSpots + "$";
         result += roughMaxSpots + "$";
         result += roughMinHexes + "$";
         result += roughMaxHexes + "$";
+        result += roughUltraProbability + "$";
         result += roadProbability + "$";
         result += riverProbability + "$";
         result += algorithm + "$";
@@ -833,6 +856,7 @@ final public class PlanetEnvironment{
         result += rubbleMaxSpots + "$";
         result += rubbleMinHexes + "$";
         result += rubbleMaxHexes + "$";
+        result += rubbleUltraProbability + "$";
 
         result += fortifiedMinSpots + "$";
         result += fortifiedMaxSpots + "$";
@@ -914,6 +938,10 @@ final public class PlanetEnvironment{
         return roughMaxHexes;
     }
 
+    public int getRoughUltraProbability() {
+        return roughUltraProbability;
+    }
+
     public int getSwampMinSpots() {
         return swampMinSpots;
     }
@@ -976,6 +1004,10 @@ final public class PlanetEnvironment{
 
     public int getRubbleMaxHexes() {
         return rubbleMaxHexes;
+    }
+
+    public int getRubbleUltraProbability() {
+        return rubbleUltraProbability;
     }
 
     public int getFortifiedMinSpots() {
@@ -1065,6 +1097,10 @@ final public class PlanetEnvironment{
 
     public int getForestHeavyProbability() {
         return forestHeavyProbability;
+    }
+
+    public int getForestUltraProbability() {
+        return forestUltraProbability;
     }
 
     public int getCraterProbability() {
@@ -1163,6 +1199,10 @@ final public class PlanetEnvironment{
         this.forestHeavyProbability = forestHeavyProbability;
     }
 
+    public void setForestUltraProbability(int forestUltraProbability) {
+        this.forestUltraProbability = forestUltraProbability;
+    }
+
     public void setForestMaxHexes(int forestMaxHexes) {
         this.forestMaxHexes = forestMaxHexes;
     }
@@ -1197,6 +1237,10 @@ final public class PlanetEnvironment{
 
     public void setRoughMaxHexes(int roughMaxHexes) {
         this.roughMaxHexes = roughMaxHexes;
+    }
+
+    public void setRoughUltraProbability(int roughUltraProbability) {
+        this.roughUltraProbability = roughUltraProbability;
     }
 
     public void setRoughMaxSpots(int roughMaxSpots) {
@@ -1286,17 +1330,13 @@ final public class PlanetEnvironment{
     public void setIceMinHexes(int iceMinHexes) {
         this.iceMinHexes = iceMinHexes;
     }
-    
-    public void setRubbleMaxHexes(int rubbleMaxHexes) {
-        this.rubbleMaxHexes = rubbleMaxHexes;
-    } 
-
-    public void setRubbleMaxSpots(int rubbleMaxSpots) {
-        this.rubbleMaxSpots = rubbleMaxSpots;
-    }
 
     public void setRubbleMinSpots(int rubbleMinSpots) {
         this.rubbleMinSpots = rubbleMinSpots;
+    }
+
+    public void setRubbleMaxSpots(int rubbleMaxSpots) {
+        this.rubbleMaxSpots = rubbleMaxSpots;
     }
 
     public void setRubbleMinHexes(int rubbleMinHexes) {
@@ -1306,6 +1346,14 @@ final public class PlanetEnvironment{
     public void setFortifiedMaxHexes(int fortifiedMaxHexes) {
         this.fortifiedMaxHexes = fortifiedMaxHexes;
     }
+    
+    public void setRubbleMaxHexes(int rubbleMaxHexes) {
+        this.rubbleMaxHexes = rubbleMaxHexes;
+    } 
+
+    public void setRubbleUltraProbability(int rubbleUltraProbability) {
+        this.rubbleUltraProbability = rubbleUltraProbability;
+    } 
 
     public void setFortifiedMaxSpots(int fortifiedMaxSpots) {
         this.fortifiedMaxSpots = fortifiedMaxSpots;

@@ -12,6 +12,7 @@
 package server.campaign;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import common.AdvancedTerrain;
 import common.CampaignData;
 import common.Continent;
@@ -366,12 +367,15 @@ public final class CampaignMain implements Serializable {
         xstream.registerConverter(new SUnitFactoryConverter());
         xstream.registerConverter(new TerrainConverter());
         xstream.registerConverter(new InfluencesConverter());
+
         xstream.alias("continent", Continent.class);
         xstream.alias("planet", SPlanet.class);
         xstream.alias("faction", SHouse.class);
         xstream.alias("unitFactory", SUnitFactory.class);
         xstream.alias("terrain", Terrain.class);
         xstream.alias("influences", Influences.class);
+
+        xstream.addPermission(AnyTypePermission.ANY);
 
         File terrainFile = new File("./data/terrain.xml");
         Terrain[] terrainList = (Terrain[]) getXStream().fromXML(terrainFile);

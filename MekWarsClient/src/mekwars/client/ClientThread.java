@@ -136,18 +136,16 @@ public class ClientThread extends Thread implements CloseClientListener {
             mwclient.setPlayerStartingEdge(Buildings.EDGE_UNKNOWN);
             mwclient.getGameOptions().clear();
             // get rid of any and all bots.
-
-        }// end try
-        catch (Exception ex) {
+        } catch (Exception ex) {
             MWLogger.errLog("Error reporting game!");
             MWLogger.errLog(ex);
         }
 
         if (swingGui != null) {
-                for (Client client2 : swingGui.getBots().values()) {
+                for (Client client2 : swingGui.getLocalBots().values()) {
                     client2.die();
                 }
-                swingGui.getBots().clear();
+                swingGui.getLocalBots().clear();
             }
 
             swingGui = new megamek.client.ui.swing.ClientGUI(client, controller);
@@ -159,16 +157,15 @@ public class ClientThread extends Thread implements CloseClientListener {
 
             mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RequestOperationSettings");
             while (mwclient.isWaiting()) {
+                mwclient.addToChat("Retrieving Operation Data Please Wait..");
                 try {
-                    mwclient.addToChat("Retrieving Operation Data Please Wait..");
-                    Thread.sleep(1000);
-                } catch (Exception ex) {
-
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    // Thread has been interrupted so just exist early
+                    return;
                 }
             }
         }
-
-        // client.game.getOptions().
         Vector<IBasicOption> xmlGameOptions = mwclient.getGameOptions();
 
         try {
@@ -231,12 +228,12 @@ public class ClientThread extends Thread implements CloseClientListener {
                         /* Set the map-gen values */
                         mySettings.setElevationParams(env.getHillyness(), env.getHillElevationRange(), env.getHillInvertProbability());
                         mySettings.setWaterParams(env.getWaterMinSpots(), env.getWaterMaxSpots(), env.getWaterMinHexes(), env.getWaterMaxHexes(), env.getWaterDeepProbability());
-                        mySettings.setForestParams(env.getForestMinSpots(), env.getForestMaxSpots(), env.getForestMinHexes(), env.getForestMaxHexes(), env.getForestHeavyProbability());
-                        mySettings.setRoughParams(env.getRoughMinSpots(), env.getRoughMaxSpots(), env.getRoughMinHexes(), env.getRoughMaxHexes());
+                        mySettings.setForestParams(env.getForestMinSpots(), env.getForestMaxSpots(), env.getForestMinHexes(), env.getForestMaxHexes(), env.getForestHeavyProbability(), env.getForestUltraProbability());
+                        mySettings.setRoughParams(env.getRoughMinSpots(), env.getRoughMaxSpots(), env.getRoughMinHexes(), env.getRoughMaxHexes(), env.getRoughUltraProbability());
                         mySettings.setSwampParams(env.getSwampMinSpots(), env.getSwampMaxSpots(), env.getSwampMinHexes(), env.getSwampMaxHexes());
                         mySettings.setPavementParams(env.getPavementMinSpots(), env.getPavementMaxSpots(), env.getPavementMinHexes(), env.getPavementMaxHexes());
                         mySettings.setIceParams(env.getIceMinSpots(), env.getIceMaxSpots(), env.getIceMinHexes(), env.getIceMaxHexes());
-                        mySettings.setRubbleParams(env.getRubbleMinSpots(), env.getRubbleMaxSpots(), env.getRubbleMinHexes(), env.getRubbleMaxHexes());
+                        mySettings.setRubbleParams(env.getRubbleMinSpots(), env.getRubbleMaxSpots(), env.getRubbleMinHexes(), env.getRubbleMaxHexes(), env.getRubbleUltraProbability());
                         mySettings.setFortifiedParams(env.getFortifiedMinSpots(), env.getFortifiedMaxSpots(), env.getFortifiedMinHexes(), env.getFortifiedMaxHexes());
                         mySettings.setSpecialFX(env.getFxMod(), env.getProbabilityForestFire(), env.getProbabilityFreeze(), env.getProbabilityFlood(), env.getProbabilityDrought());
                         mySettings.setRiverParam(env.getRiverProbability());
@@ -323,12 +320,12 @@ public class ClientThread extends Thread implements CloseClientListener {
                     /* Set the map-gen values */
                     mySettings.setElevationParams(env.getHillyness(), env.getHillElevationRange(), env.getHillInvertProbability());
                     mySettings.setWaterParams(env.getWaterMinSpots(), env.getWaterMaxSpots(), env.getWaterMinHexes(), env.getWaterMaxHexes(), env.getWaterDeepProbability());
-                    mySettings.setForestParams(env.getForestMinSpots(), env.getForestMaxSpots(), env.getForestMinHexes(), env.getForestMaxHexes(), env.getForestHeavyProbability());
-                    mySettings.setRoughParams(env.getRoughMinSpots(), env.getRoughMaxSpots(), env.getRoughMinHexes(), env.getRoughMaxHexes());
+                    mySettings.setForestParams(env.getForestMinSpots(), env.getForestMaxSpots(), env.getForestMinHexes(), env.getForestMaxHexes(), env.getForestHeavyProbability(), env.getForestUltraProbability());
+                    mySettings.setRoughParams(env.getRoughMinSpots(), env.getRoughMaxSpots(), env.getRoughMinHexes(), env.getRoughMaxHexes(), env.getRoughUltraProbability());
                     mySettings.setSwampParams(env.getSwampMinSpots(), env.getSwampMaxSpots(), env.getSwampMinHexes(), env.getSwampMaxHexes());
                     mySettings.setPavementParams(env.getPavementMinSpots(), env.getPavementMaxSpots(), env.getPavementMinHexes(), env.getPavementMaxHexes());
                     mySettings.setIceParams(env.getIceMinSpots(), env.getIceMaxSpots(), env.getIceMinHexes(), env.getIceMaxHexes());
-                    mySettings.setRubbleParams(env.getRubbleMinSpots(), env.getRubbleMaxSpots(), env.getRubbleMinHexes(), env.getRubbleMaxHexes());
+                    mySettings.setRubbleParams(env.getRubbleMinSpots(), env.getRubbleMaxSpots(), env.getRubbleMinHexes(), env.getRubbleMaxHexes(), env.getRubbleUltraProbability());
                     mySettings.setFortifiedParams(env.getFortifiedMinSpots(), env.getFortifiedMaxSpots(), env.getFortifiedMinHexes(), env.getFortifiedMaxHexes());
                     mySettings.setSpecialFX(env.getFxMod(), env.getProbabilityForestFire(), env.getProbabilityFreeze(), env.getProbabilityFlood(), env.getProbabilityDrought());
                     mySettings.setRiverParam(env.getRiverProbability());
@@ -406,7 +403,8 @@ public class ClientThread extends Thread implements CloseClientListener {
             if (mwclient.isUsingBots()) {
                 String name = "War Bot" + client.getLocalPlayer().getId();
                 bot = new Princess(name, client.getHost(), client.getPort());
-                bot.getGame().addGameListener(new BotGUI(bot));
+				// NOTE: I'm not sure but I don't think this does anything.
+                // bot.getGame().addGameListener(new BotGUI(bot));
                 try {
                     bot.connect();
                     Thread.sleep(125);
@@ -422,10 +420,9 @@ public class ClientThread extends Thread implements CloseClientListener {
                     MWLogger.errLog("Bot Error!");
                     MWLogger.errLog(ex);
                 }
-//                bot.retrieveServerInfo();
                 Thread.sleep(125);
 
-                swingGui.getBots().put(name, bot);
+                swingGui.getLocalBots().put(name, bot);
 
                 if (mwclient.isBotsOnSameTeam()) {
                     bot.getLocalPlayer().setTeam(5);
@@ -480,7 +477,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                     entity.setCommander(currA.isCommander(mek.getId()));
 
                     // Set slights based on games light conditions.
-                    if ( !entity.hasSearchlight()){
+                    if (!entity.hasSearchlight()) {
                         entity.getQuirks().getOption("searchlight").setValue(nightGame);
                     }
                     entity.setSearchlightState(nightGame);
@@ -578,7 +575,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                      * some concern that this "entity" is a keyword of some sort, expect it to puke on conplie if yes
                      */
                     entity = null;
-                }// end while(more autoarty)
+                } // end while(more autoarty)
 
                 if (mwclient.getPlayerStartingEdge() != Buildings.EDGE_UNKNOWN) {
                     client.getLocalPlayer().setStartingPos(mwclient.getPlayerStartingEdge());

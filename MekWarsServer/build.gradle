@@ -28,16 +28,19 @@ ext {
 	fileStagingDir = "${buildDir}/files"
 	serverdist = "server-dist"
 	data = "${serverdist}/data"
-	mmconf = "mmconf"
+	mmconf = "${serverdist}/mmconf"
 }
 
-task copyFiles(type: Copy) {
+task stageFiles(type: Copy) {
 	description = 'Stages files that are to be copied into the distribution.'
+
+	dependsOn gradle.includedBuild('megamek').task(':megamek:generateDynamicFiles')
 
 	from projectDir
 	into fileStagingDir
 
 	include "${data}/**"
+	include "${mmconf}/**"
 	inputs.dir "${data}"
 	outputs.dir fileStagingDir
 }
@@ -56,13 +59,17 @@ tasks.named('run') {
 }
 
 task assembleDist (overwrite: true) {
-	dependsOn copyFiles
+	dependsOn stageFiles
+    // dependsOn stageMM
 }
 
 distributions {
 	main {
 		contents {
-			from "${fileStagingDir}/${serverdist}"
+			// from "${fileStagingDir}/${serverdist}"
+			// from mmJar
+            from ("${mmDir}/megamek/build/files")
+            duplicatesStrategy = 'exclude'
 		}
 	}
 }

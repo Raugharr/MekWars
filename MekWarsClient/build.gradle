@@ -22,6 +22,7 @@ application {
 ext {
 	fileStagingDir = "${buildDir}/files"
 	clientdist = "client-dist"
+	lib = "lib"
 	data = "data"
 	docs = "docs"
 	mmconf = "mmconf"

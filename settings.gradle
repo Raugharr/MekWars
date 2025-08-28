@@ -7,7 +7,7 @@ include 'MekWarsDedicatedHost'
 include 'MekWarsCommon'
 
 
-// includeBuild('../megamek')
+includeBuild('../megamek')
 // includeBuild('../megameklab')
 // includeBuild('../mekhq')
 

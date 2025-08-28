@@ -91,7 +91,7 @@ public class IronManSkill extends SPilotSkill {
         boolean b = false;
         if (unit instanceof Mech) { //BK - this section of code is tested! ty STK9A
         	Mech m = (Mech)unit; 
-        	b = m.hasCASEIIAnywhere(); 
+        	b = m.hasCASEII(); 
         }
         if(unit.hasCase() || b) {
         	return (int) (unit.calculateBattleValue(false, true) *  IronManBVBaseMod/100);
