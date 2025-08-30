@@ -36,7 +36,6 @@ import common.campaign.pilot.skills.PilotSkills;
  */
 
 public class Pilot {
-
 	private int gunnery = 4;
 	private int piloting = 5;
 	private String name = "John Doe";
@@ -64,7 +63,7 @@ public class Pilot {
 	
 
 
-	public Pilot(String name,int gunnery, int piloting) {
+	public Pilot(String name, int gunnery, int piloting) {
 		setName(name);
 		setGunnery(gunnery);
 		setPiloting(piloting);

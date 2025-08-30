@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.StringTokenizer;
@@ -57,6 +58,7 @@ import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
+import megamek.common.equipment.WeaponMounted;
 import megamek.common.options.IOption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -158,7 +160,6 @@ import server.campaign.votes.VoteManager;
 import server.dataProvider.Server;
 import server.util.AutomaticBackup;
 import server.util.MWPasswd;
-import server.util.QuirkHandler;
 import server.util.RepairTrackingThread;
 import server.util.StringUtil;
 import server.util.discord.DiscordMessageHandler;
@@ -259,8 +260,6 @@ public final class CampaignMain implements Serializable {
 
     private ChristmasHandler christmas;
     
-    private QuirkHandler quirkHandler;
-
     private MMNetXStream xstream;
 
     // CONSTRUCTOR
@@ -473,9 +472,6 @@ public final class CampaignMain implements Serializable {
         // Load the Christmas Handler and set the start and end dates
         christmas = ChristmasHandler.getInstance();
         christmas.schedule();
-        
-        //@Salient for quirks
-        quirkHandler = QuirkHandler.getInstance();
 
         // create & start a data provider
         int dataport = -1;
@@ -495,7 +491,7 @@ public final class CampaignMain implements Serializable {
         TThread = new TickThread(this, Integer.parseInt(getConfig("TickTime")));
         TThread.start();
         SThread = new SliceThread(this, Integer.parseInt(getConfig("SliceTime")));
-        SThread.start();// it slices, it dices, it chops!
+        SThread.start(); // it slices, it dices, it chops!
         IThread = new ImmunityThread();
         IThread.start();
 
@@ -2915,7 +2911,7 @@ public final class CampaignMain implements Serializable {
         return gamesCompleted;
     }
 
-    public int getMachineGunCount(ArrayList<Mounted> weaponList) {
+    public int getMachineGunCount(List<WeaponMounted> weaponList) {
         int count = 0;
 
         for (Mounted weapons : weaponList) {

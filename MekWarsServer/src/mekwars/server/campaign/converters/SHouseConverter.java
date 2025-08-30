@@ -22,6 +22,8 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import common.universe.FactionTag;
+import java.util.EnumSet;
 import server.campaign.CampaignMain;
 import server.campaign.NewbieHouse;
 import server.campaign.SHouse;
@@ -51,6 +53,12 @@ public class SHouseConverter implements Converter {
         boolean inHouseAttacks = false;
         boolean canDefectFrom = true;
         boolean canDefectTo = true;
+        /*
+         *  TODO: This is IS to keep this backwords compatible with the current data. Once a
+         *  version has been released this should be set to noneOf and checked explicitly.
+         */
+        EnumSet<FactionTag> tags = EnumSet.of(FactionTag.IS);
+
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String nodeName = reader.getNodeName();
@@ -78,6 +86,8 @@ public class SHouseConverter implements Converter {
                 canDefectFrom = Boolean.parseBoolean(reader.getValue());
             } else if (nodeName.equals("canDefectTo")) {
                 canDefectTo = Boolean.parseBoolean(reader.getValue());
+            } else if (nodeName.equals("tags")) {
+                tags = (EnumSet<FactionTag>) context.convertAnother(null, EnumSet.class);
             }
             reader.moveUp();
         }
@@ -97,6 +107,7 @@ public class SHouseConverter implements Converter {
         house.setInHouseAttacks(inHouseAttacks);
         house.setConquerable(conquerable);
         house.setHousePlayerColors(housePlayerColor);
+        house.setTags(tags);
         return house;
     }
 }

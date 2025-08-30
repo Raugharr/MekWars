@@ -10,6 +10,7 @@ import megamek.common.Entity;
 import megamek.common.IArmorState;
 import megamek.common.Mounted;
 import megamek.common.Tank;
+import megamek.common.equipment.AmmoMounted;
 
 public class VehicleDamageHandler extends AbstractUnitDamageHandler {
 
@@ -271,7 +272,7 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
 
         if ((ammo != null) && ammo.hasMoreTokens()) {
             int locationCount = 0;
-            Iterator<Mounted> munitions = unit.getAmmo().iterator();
+            Iterator<AmmoMounted> munitions = unit.getAmmo().iterator();
 
             // make sure the unit actually has ammo.
             if (munitions.hasNext()) {

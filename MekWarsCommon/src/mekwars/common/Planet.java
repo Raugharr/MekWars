@@ -30,7 +30,7 @@ import java.util.Vector;
 import common.util.BinReader;
 import common.util.BinWriter;
 import common.util.Position;
-import megamek.common.PlanetaryConditions;
+import megamek.common.planetaryconditions.PlanetaryConditions;
 
 /**
  * @author Helge Richter
@@ -502,7 +502,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
                 result.append("<br>");
 
                 result.append("  Atmosphere: ");
-                result.append(PlanetaryConditions.getAtmosphereDisplayableName(pe.getAdvancedTerrain().getAtmosphere()));
+                result.append(pe.getAdvancedTerrain().getAtmosphere().toString());
                 result.append("<br>");
                 
                 result.append("  Gravity: " + pe.getAdvancedTerrain().getGravity() + "<br>");
@@ -511,8 +511,6 @@ public class Planet implements Comparable<Object>, MutableSerializable {
                 result.append("<br>");
                 result.append(pe.getAdvancedTerrain().WeatherForcast());
                 result.append("<br>");
-                
-                
                 
             }
         }
@@ -680,7 +678,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
                 result.append(" " + pe.getEnvironment().getName());
                 result.append(" - " + pe.getAdvancedTerrain().getName());
                 result.append("<br>Atmosphere: ");
-                result.append(PlanetaryConditions.getAtmosphereDisplayableName(pe.getAdvancedTerrain().getAtmosphere()));
+                result.append(pe.getAdvancedTerrain().getAtmosphere().toString());
                 result.append("<br>");
                 result.append("Gravity: " + pe.getAdvancedTerrain().getGravity());
                 result.append("<br>Average Low: " + pe.getAdvancedTerrain().getLowTemp());

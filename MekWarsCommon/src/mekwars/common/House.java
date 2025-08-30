@@ -23,8 +23,11 @@ package common;
 import common.util.BinReader;
 import common.util.BinWriter;
 import common.util.HTMLConverter;
+import common.universe.FactionTag;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import megamek.common.TechConstants;
@@ -74,6 +77,8 @@ public class House {
     public ConcurrentHashMap<String, Integer> supportedUnits = new ConcurrentHashMap<String, Integer>();
 
     private boolean nonFactionUnitsCostMore = false;
+    // NOTE: Once MekWars uses MegaMek version 50.04 this should use megamek.common.universe.FactionTag.
+    private Set<FactionTag> tags = EnumSet.noneOf(FactionTag.class);
 
     /**
      * @return Returns the baseGunner.
@@ -342,6 +347,10 @@ public class House {
         out.println(this.getHouseDefectionTo(), "defectTo");
         out.println(this.getUsedMekBayMultiplier(), "usedMekBayMultiplier");
 
+        out.println(this.tags.size(), "tagsize");
+        for(FactionTag tag : tags) {
+            out.println(tag.ordinal(), "value");
+        }
         out.println(this.getSubFactionList().size(), "subfactionsize");
 
         for (SubFaction subFaction : this.getSubFactionList().values()) {
@@ -364,7 +373,6 @@ public class House {
      * Read itself from a stream.
      */
     public House(BinReader in) throws IOException {
-
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
             baseGunner.add(4);
             basePilot.add(5);
@@ -383,15 +391,23 @@ public class House {
         abbreviation = in.readLine("abbreviation");
         conquerable = in.readBoolean("conquerable");
 
-        for (int type = 0; type < Unit.MAXBUILD; type++)
-            for (int weight = 0; weight < 4; weight++)
+        for (int type = 0; type < Unit.MAXBUILD; type++) {
+            for (int weight = 0; weight < 4; weight++) {
                 this.setHouseUnitComponentMod(type, weight, in.readInt("componentMod" + type + weight));
-        for (int type = 0; type < Unit.MAXBUILD; type++)
-            for (int weight = 0; weight < 4; weight++)
+            }
+        }
+
+        for (int type = 0; type < Unit.MAXBUILD; type++) {
+            for (int weight = 0; weight < 4; weight++) {
                 this.setHouseUnitPriceMod(type, weight, in.readInt("priceMod" + type + weight));
-        for (int type = 0; type < Unit.MAXBUILD; type++)
-            for (int weight = 0; weight < 4; weight++)
+            }
+        }
+
+        for (int type = 0; type < Unit.MAXBUILD; type++) {
+            for (int weight = 0; weight < 4; weight++) {
                 this.setHouseUnitFluMod(type, weight, in.readInt("fluMod" + type + weight));
+            }
+        }
 
         int size = in.readInt("factionbannedammosize");
         for (; size > 0; size--)
@@ -405,6 +421,14 @@ public class House {
         this.setHouseDefectionFrom(in.readBoolean("defectFrom"));
         this.setHouseDefectionTo(in.readBoolean("defectTo"));
         this.setUsedMekBayMultiplier((float) in.readDouble("usedMekBayMultiplier"));
+
+
+        int tagSize = in.readInt("tagsize");
+        for (; tagSize > 0; tagSize--) {
+            int value = in.readInt("value");
+            FactionTag tag = FactionTag.values()[value];
+            this.tags.add(tag); 
+        }
 
         size = in.readInt("subfactionsize");
 
@@ -696,5 +720,21 @@ public class House {
         result.append("|");
 
         return result.toString();
+    }
+
+    public void setTags(Set<FactionTag> tags) {
+        this.tags = tags;
+    }
+
+    public boolean is(FactionTag tag) {
+        return tags.contains(tag);
+    }
+
+    public boolean isInnerSphere() {
+        return is(FactionTag.IS);
+    }
+
+    public boolean isClan() {
+        return is(FactionTag.CLAN);
     }
 }

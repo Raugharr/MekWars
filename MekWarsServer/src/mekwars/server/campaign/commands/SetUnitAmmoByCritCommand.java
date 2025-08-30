@@ -16,13 +16,16 @@
 
 package server.campaign.commands;
 
+import java.util.EnumSet;
 import java.util.StringTokenizer;
 
 import megamek.common.AmmoType;
+import megamek.common.AmmoType.Munitions;
 import megamek.common.BattleArmor;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mounted;
+import megamek.common.equipment.AmmoMounted;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
@@ -85,17 +88,21 @@ public class SetUnitAmmoByCritCommand implements Command {
 
         cs = en.getCritical(weaponLocation, weaponSlot);
         mWeapon = cs.getMount();
+        if(!(mWeapon.getType() instanceof AmmoType)) {
+            CampaignMain.cm.toUser("AM:SetUnitAmmo command failed. Weapon has no ammo types", Username, true);
+            return;
+        }
+        AmmoMounted ammoMounted = (AmmoMounted) mWeapon;
         AmmoType currAmmo = (AmmoType) mWeapon.getType();
-        AmmoType at = unit.getEntityAmmo(weaponType, ammoName);
+        AmmoType ammoType = unit.getEntityAmmo(weaponType, ammoName);
 
-        if (shots == 0) {// dumping ammo
-
+        if (shots == 0) { // dumping ammo
             if (usingCrits) {
-                p.updatePartsCache(currAmmo.getInternalName(), mWeapon.getUsableShotsLeft());
+                p.updatePartsCache(currAmmo.getInternalName(), ammoMounted.getUsableShotsLeft());
             }
 
-            mWeapon.changeAmmoType(at);
-            mWeapon.setShotsLeft(0);
+            ammoMounted.changeAmmoType(ammoType);
+            ammoMounted.setShotsLeft(0);
 
             unit.setEntity(en);
 
@@ -107,13 +114,13 @@ public class SetUnitAmmoByCritCommand implements Command {
             return;
         }
 
-        String munitionType = Long.toString(at.getMunitionType());
+        EnumSet<Munitions> munitionType = ammoType.getMunitionType();
         // dont make players confirm the command on a server which doesnt charge
         // for ammo
         double ammoCharge = CampaignMain.cm.getAmmoCost(currAmmo.getInternalName());
 
         if ((CampaignMain.cm.getData().getServerBannedAmmo().get(munitionType) != null) || (faction.getBannedAmmo().get(munitionType) != null) || ((ammoCharge < 0) && !usingCrits)) {
-            CampaignMain.cm.toUser("AM:<font color=green>Quartermaster Command regretfully informs you that " + at.getName() + " is out of stock.</font>", Username, true);
+            CampaignMain.cm.toUser("AM:<font color=green>Quartermaster Command regretfully informs you that " + ammoType.getName() + " is out of stock.</font>", Username, true);
             return;
         }
 
@@ -124,18 +131,18 @@ public class SetUnitAmmoByCritCommand implements Command {
 
         if ((ammoCharge > 0) || usingCrits) {
 
-            int refillShots = at.getShots();
+            int refillShots = ammoType.getShots();
 
             if (unit.getEntity() instanceof BattleArmor) {
                 refillShots = getWeaponRefillShots(unit, mWeapon);
             }
             
             if (mWeapon.byShot()) {
-            	refillShots = mWeapon.getOriginalShots();
+                refillShots = mWeapon.getOriginalShots();
             }
 
             int shotsLeft = mWeapon.getUsableShotsLeft();
-            if (!currAmmo.getInternalName().equalsIgnoreCase(at.getInternalName())) {
+            if (!currAmmo.getInternalName().equalsIgnoreCase(ammoType.getInternalName())) {
                 shotsLeft = 0;
             }
 
@@ -171,27 +178,27 @@ public class SetUnitAmmoByCritCommand implements Command {
                 
                 // unload all of old ammo
                 p.getUnitParts().add(currAmmo.getInternalName(), mWeapon.getUsableShotsLeft());
-                int newAmmoAmount = p.getPartsAmount(at.getInternalName());
+                int newAmmoAmount = p.getPartsAmount(ammoType.getInternalName());
 
                 if (p.getAutoReorder() && (newAmmoAmount < refillShots)) {
-                    String newCommand = at.getInternalName() + "#" + (refillShots - newAmmoAmount);
+                    String newCommand = ammoType.getInternalName() + "#" + (refillShots - newAmmoAmount);
                     CampaignMain.cm.getServerCommands().get("BUYPARTS").process(new StringTokenizer(newCommand, "#"), Username);
-                    newAmmoAmount = p.getPartsAmount(at.getInternalName());
+                    newAmmoAmount = p.getPartsAmount(ammoType.getInternalName());
                 }
                 if (newAmmoAmount == 0) {
-                    String result = "AM:After unloading " + currAmmo.getDesc() + "(" + en.getLocationAbbr(loc) + ") from unit #" + unit.getId() + " " + unit.getModelName() + " your techs realize you do not have any " + at.getDesc() + " to reload with!";
+                    String result = "AM:After unloading " + currAmmo.getDesc() + "(" + en.getLocationAbbr(loc) + ") from unit #" + unit.getId() + " " + unit.getModelName() + " your techs realize you do not have any " + ammoType.getDesc() + " to reload with!";
                     CampaignMain.cm.toUser(result, Username);
                 } else if (newAmmoAmount < fullMagazine) {
-                    String result = "AM:After unloading " + currAmmo.getDesc() + "(" + en.getLocationAbbr(loc) + ") from unit #" + unit.getId() + " " + unit.getModelName() + " your techs realize you only had " + newAmmoAmount + " rounds of " + at.getDesc() + " to reload with!";
+                    String result = "AM:After unloading " + currAmmo.getDesc() + "(" + en.getLocationAbbr(loc) + ") from unit #" + unit.getId() + " " + unit.getModelName() + " your techs realize you only had " + newAmmoAmount + " rounds of " + ammoType.getDesc() + " to reload with!";
                     CampaignMain.cm.toUser(result, Username);
                 } else {
                     CampaignMain.cm.toUser("AM:Ammo set for " + unit.getModelName() + " (#" + unit.getId() + ").", Username, true);
                     newAmmoAmount = refillShots;
                 }
                 p.updatePartsCache(currAmmo.getInternalName(), mWeapon.getUsableShotsLeft());
-                p.updatePartsCache(at.getInternalName(), -newAmmoAmount);
-                mWeapon.changeAmmoType(at);
-                mWeapon.setShotsLeft(newAmmoAmount);
+                p.updatePartsCache(ammoType.getInternalName(), -newAmmoAmount);
+                ammoMounted.changeAmmoType(ammoType);
+                ammoMounted.setShotsLeft(newAmmoAmount);
                 unit.setEntity(en);
                 p.checkAndUpdateArmies(unit);
                 CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), Username, false);
@@ -204,7 +211,7 @@ public class SetUnitAmmoByCritCommand implements Command {
 
             // check the confirmation
             if (!strConfirm.equals("CONFIRM")) {
-                String result = "AM:Quartermaster command will charge you " + CampaignMain.cm.moneyOrFluMessage(true, false, cost) + " to change the load out on #" + unit.getId() + " " + unit.getModelName() + "<br>from " + currAmmo.getDesc() + "(" + en.getLocationAbbr(loc) + " " + mWeapon.getUsableShotsLeft() + "/" + fullMagazine + ") to " + at.getDesc() + "(" + refillShots + "/" + refillShots + ").";
+                String result = "AM:Quartermaster command will charge you " + CampaignMain.cm.moneyOrFluMessage(true, false, cost) + " to change the load out on #" + unit.getId() + " " + unit.getModelName() + "<br>from " + currAmmo.getDesc() + "(" + en.getLocationAbbr(loc) + " " + mWeapon.getUsableShotsLeft() + "/" + fullMagazine + ") to " + ammoType.getDesc() + "(" + refillShots + "/" + refillShots + ").";
                 result += "AM:<br><a href=\"MEKWARS/c setunitammobyCrit#" + unitid + "#" + weaponLocation + "#" + weaponSlot + "#" + weaponType + "#" + ammoName + "#" + fullMagazine + "#CONFIRM";
                 result += "AM:\">Click here to change the ammo.</a>";
                 CampaignMain.cm.toUser(result, Username, true);
@@ -219,7 +226,7 @@ public class SetUnitAmmoByCritCommand implements Command {
             p.addMoney(-cost);
         }// end else(check for confirmation)
 
-        mWeapon.changeAmmoType(at);
+        ammoMounted.changeAmmoType(ammoType);
         unit.setEntity(en);
         p.checkAndUpdateArmies(unit);
         CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), Username, false);

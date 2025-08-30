@@ -12,13 +12,13 @@ import megamek.common.IArmorState;
 import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.Mounted;
-
+import megamek.common.equipment.AmmoMounted;
+import megamek.common.equipment.MiscMounted;
 
 public class MekDamageHandler extends AbstractUnitDamageHandler {
-
-	@Override
-	public String buildDamageString(Entity unit, boolean sendAmmo) {
-		StringBuilder result = new StringBuilder();
+    @Override
+    public String buildDamageString(Entity unit, boolean sendAmmo) {
+        StringBuilder result = new StringBuilder();
         String delimiter = "-";
         String delimiter2 = "%";
         boolean hasData = false;
@@ -112,12 +112,11 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                 // of a blown-off arm or what have you should not be marked missing for
                 // MW purposes.  If it's missing, and there is IS left, it should
                 // be unmarked instead.
-                boolean hasISLeft = (unit.getInternal(x)>0);
+                boolean hasISLeft = (unit.getInternal(x) > 0);
                 
                 for (int y = 0; y < unit.getNumberOfCriticals(x); y++) {
                     CriticalSlot cs = unit.getCritical(x, y);
 
-                    
                     if (cs == null) {
                         continue;
                     }
@@ -126,19 +125,27 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                         continue;
                     }
 
-                    Mounted m = cs.getMount();
-                    if ((m != null) && (m.getType() instanceof MiscType) && ((MiscType) m.getType()).isShield() && (m.getBaseDamageCapacity() != m.getCurrentDamageCapacity(unit, x)) && (shieldHitsLeft == -1) && ((x == Mech.LOC_LARM) || (x == Mech.LOC_RARM))) {
-                        float shieldcrits = Math.max(1, UnitUtils.getNumberOfCrits(unit, cs));
-                        float basePoints = m.getBaseDamageCapacity();
-                        float currentPoints = m.getCurrentDamageCapacity(unit, x);
-                        float tempHits = 0;
+                    Mounted mounted = cs.getMount();
+                    if ((mounted != null) && (mounted.getType() instanceof MiscType)) {
+                        MiscMounted miscMounted = (MiscMounted) mounted;
 
-                        tempHits = shieldcrits / basePoints;
-                        tempHits *= currentPoints;
+                           if (miscMounted.getType().isShield()
+                               && (miscMounted.getBaseDamageCapacity() != miscMounted.getCurrentDamageCapacity(unit, x))
+                               && (shieldHitsLeft == -1)
+                               && ((x == Mech.LOC_LARM) || (x == Mech.LOC_RARM))) {
 
-                        tempHits = Math.abs(tempHits - shieldcrits);
+                            float shieldcrits = Math.max(1, UnitUtils.getNumberOfCrits(unit, cs));
+                            float basePoints = miscMounted.getBaseDamageCapacity();
+                            float currentPoints = miscMounted.getCurrentDamageCapacity(unit, x);
+                            float tempHits = 0;
 
-                        shieldHitsLeft = Math.max(1, Math.round(tempHits));
+                            tempHits = shieldcrits / basePoints;
+                            tempHits *= currentPoints;
+
+                            tempHits = Math.abs(tempHits - shieldcrits);
+
+                            shieldHitsLeft = Math.max(1, Math.round(tempHits));
+                        }
                     }
 
                     if (cs.isRepairing()) {
@@ -183,15 +190,21 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                         result.append("X");
                         result.append(delimiter2);
                         hasData = true;
-                    } else if ((m != null) && (m.getType() instanceof MiscType) && ((MiscType) m.getType()).isShield() && ((x == Mech.LOC_LARM) || (x == Mech.LOC_RARM)) && (shieldHitsLeft > 0)) {
-                        result.append(x);
-                        result.append(delimiter2);
-                        result.append(y);
-                        result.append(delimiter2);
-                        result.append("^");
-                        result.append(delimiter2);
-                        hasData = true;
-                        shieldHitsLeft--;
+                    } else if ((mounted != null) && mounted.getType() instanceof MiscType) {
+                        MiscMounted miscMounted = (MiscMounted) mounted;
+
+                        if (miscMounted.getType().isShield()
+                                && ((x == Mech.LOC_LARM) || (x == Mech.LOC_RARM))
+                                && (shieldHitsLeft > 0)) {
+                            result.append(x);
+                            result.append(delimiter2);
+                            result.append(y);
+                            result.append(delimiter2);
+                            result.append("^");
+                            result.append(delimiter2);
+                            hasData = true;
+                            shieldHitsLeft--;
+                        }
                     }
                 }
             }
@@ -207,9 +220,9 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                 for (Mounted weap : unit.getAmmo()) {
                     int shots = 0;
                     if (weap.byShot()) {
-                    	shots = weap.getOriginalShots();
+                        shots = weap.getOriginalShots();
                     } else {
-                    	shots = ((AmmoType) weap.getType()).getShots();
+                        shots = ((AmmoType) weap.getType()).getShots();
                     }
                     if (weap.isDestroyed()) {
                         hasData = true;
@@ -242,11 +255,11 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
         }
         return result.toString();
 
-	}
+    }
 
-	@Override
-	public void applyDamageString(Entity unit, String report, boolean isRepairing) {
-		
+    @Override
+    public void applyDamageString(Entity unit, String report, boolean isRepairing) {
+        
         StringTokenizer entry = new StringTokenizer(report, "-");
 
         StringTokenizer externalArmor = new StringTokenizer(entry.nextToken(), "%");
@@ -350,7 +363,7 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
 
         if ((ammo != null) && ammo.hasMoreTokens()) {
             int locationCount = 0;
-            Iterator<Mounted> munitions = unit.getAmmo().iterator();
+            Iterator<AmmoMounted> munitions = unit.getAmmo().iterator();
 
             // make sure the unit actually has ammo.
             if (munitions.hasNext()) {
@@ -374,6 +387,5 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                 }
             }
         }
-	}
-
+    }
 }

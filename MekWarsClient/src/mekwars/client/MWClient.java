@@ -2551,7 +2551,6 @@ public final class MWClient extends GameHost implements IClient {
 
     // Stop & send the close game event to the Server
     public void stopHost() {
-
         serverSend("CG");// send close game to server
         try {
             myServer.die();
@@ -2565,7 +2564,7 @@ public final class MWClient extends GameHost implements IClient {
     public void resetGame() { // reset hosted game
         if (myServer != null) {
             myServer.resetGame();
-            ((Game)myServer.getGame()).purgeGameListeners();
+            ((Game)myServer.getGame()).getGameListeners().clear();
             ((Game)myServer.getGame()).addGameListener(this);
         }
     }

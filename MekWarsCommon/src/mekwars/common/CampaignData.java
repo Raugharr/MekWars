@@ -640,71 +640,71 @@ public class CampaignData implements TerrainProvider {
      *         using the Name of the munition as the key
      * @return Hashtable
      */
-    public Hashtable<String, Long> getMunitionsByName() {
-        Hashtable<String, Long> munitions = new Hashtable<String, Long>();
+    public Hashtable<String, AmmoType.Munitions> getMunitionsByName() {
+        Hashtable<String, AmmoType.Munitions> munitions = new Hashtable<String, AmmoType.Munitions>();
 
-        munitions.put("Standard", AmmoType.M_STANDARD);
+        munitions.put("Standard", AmmoType.Munitions.M_STANDARD);
 
         // AC Munition Types
-        munitions.put("LBX Cluster", AmmoType.M_CLUSTER);
-        munitions.put("AC Armor Piercing", AmmoType.M_ARMOR_PIERCING);
-        munitions.put("AC Flechette", AmmoType.M_FLECHETTE);
-        munitions.put("AC Incendiary", AmmoType.M_INCENDIARY_AC);
-        munitions.put("AC Precision", AmmoType.M_PRECISION);
-        munitions.put("AC Tracer", AmmoType.M_TRACER);
+        munitions.put("LBX Cluster", AmmoType.Munitions.M_CLUSTER);
+        munitions.put("AC Armor Piercing", AmmoType.Munitions.M_ARMOR_PIERCING);
+        munitions.put("AC Flechette", AmmoType.Munitions.M_FLECHETTE);
+        munitions.put("AC Incendiary", AmmoType.Munitions.M_INCENDIARY_AC);
+        munitions.put("AC Precision", AmmoType.Munitions.M_PRECISION);
+        munitions.put("AC Tracer", AmmoType.Munitions.M_TRACER);
 
         // ATM Munition Types
-        munitions.put("ATM Extended Range", AmmoType.M_EXTENDED_RANGE);
-        munitions.put("ATM High Explosive", AmmoType.M_HIGH_EXPLOSIVE);
+        munitions.put("ATM Extended Range", AmmoType.Munitions.M_EXTENDED_RANGE);
+        munitions.put("ATM High Explosive", AmmoType.Munitions.M_HIGH_EXPLOSIVE);
 
         // LRM & SRM Munition Types
-        munitions.put("LRM/SRM Fragmentation", AmmoType.M_FRAGMENTATION);
-        munitions.put("LRM/SRM Listen Kill", AmmoType.M_LISTEN_KILL);
-        munitions.put("LRM/SRM Anti-TSM", AmmoType.M_ANTI_TSM);
-        munitions.put("LRM/SRM Narc", AmmoType.M_NARC_CAPABLE);
-        munitions.put("LRM/SRM Artemis", AmmoType.M_ARTEMIS_CAPABLE);
-        munitions.put("LRM/SRM Heat-Seeking", AmmoType.M_HEAT_SEEKING);
-        munitions.put("LRM/SRM Dead-Fire", AmmoType.M_DEAD_FIRE);
-        munitions.put("LRM/SRM Tandem-Charge", AmmoType.M_TANDEM_CHARGE);
+        munitions.put("LRM/SRM Fragmentation", AmmoType.Munitions.M_FRAGMENTATION);
+        munitions.put("LRM/SRM Listen Kill", AmmoType.Munitions.M_LISTEN_KILL);
+        munitions.put("LRM/SRM Anti-TSM", AmmoType.Munitions.M_ANTI_TSM);
+        munitions.put("LRM/SRM Narc", AmmoType.Munitions.M_NARC_CAPABLE);
+        munitions.put("LRM/SRM Artemis", AmmoType.Munitions.M_ARTEMIS_CAPABLE);
+        munitions.put("LRM/SRM Heat-Seeking", AmmoType.Munitions.M_HEAT_SEEKING);
+        munitions.put("LRM/SRM Dead-Fire", AmmoType.Munitions.M_DEAD_FIRE);
+        munitions.put("LRM/SRM Tandem-Charge", AmmoType.Munitions.M_TANDEM_CHARGE);
 
         // LRM Munition Types
         // Incendiary is special, though...
-        munitions.put("LRM Incendiary", AmmoType.M_INCENDIARY_LRM);
-        munitions.put("LRM Flare", AmmoType.M_FLARE);
-        munitions.put("LRM SemiGuided", AmmoType.M_SEMIGUIDED);
-        munitions.put("LRM Swarm", AmmoType.M_SWARM);
-        munitions.put("LRM Swarm I", AmmoType.M_SWARM_I);
-        munitions.put("LRM Thunder", AmmoType.M_THUNDER);
-        munitions.put("LRM Thunder Augmented", AmmoType.M_THUNDER_AUGMENTED);
-        munitions.put("LRM Thunder Inferno", AmmoType.M_THUNDER_INFERNO);
-        munitions.put("LRM Thunder VibraBomb", AmmoType.M_THUNDER_VIBRABOMB);
-        munitions.put("LRM Thunder Active", AmmoType.M_THUNDER_ACTIVE);
-        munitions.put("LRM Follow The Leader", AmmoType.M_FOLLOW_THE_LEADER);
-        munitions.put("Multi Purpose", AmmoType.M_MULTI_PURPOSE);
+        munitions.put("LRM Incendiary", AmmoType.Munitions.M_INCENDIARY_LRM);
+        munitions.put("LRM Flare", AmmoType.Munitions.M_FLARE);
+        munitions.put("LRM SemiGuided", AmmoType.Munitions.M_SEMIGUIDED);
+        munitions.put("LRM Swarm", AmmoType.Munitions.M_SWARM);
+        munitions.put("LRM Swarm I", AmmoType.Munitions.M_SWARM_I);
+        munitions.put("LRM Thunder", AmmoType.Munitions.M_THUNDER);
+        munitions.put("LRM Thunder Augmented", AmmoType.Munitions.M_THUNDER_AUGMENTED);
+        munitions.put("LRM Thunder Inferno", AmmoType.Munitions.M_THUNDER_INFERNO);
+        munitions.put("LRM Thunder VibraBomb", AmmoType.Munitions.M_THUNDER_VIBRABOMB);
+        munitions.put("LRM Thunder Active", AmmoType.Munitions.M_THUNDER_ACTIVE);
+        munitions.put("LRM Follow The Leader", AmmoType.Munitions.M_FOLLOW_THE_LEADER);
+        munitions.put("Multi Purpose", AmmoType.Munitions.M_MULTI_PURPOSE);
 
         // SRM Munition Types
-        munitions.put("SRM Inferno", AmmoType.M_INFERNO);
-        munitions.put("SRM Acid", AmmoType.M_AX_HEAD);
+        munitions.put("SRM Inferno", AmmoType.Munitions.M_INFERNO);
+        munitions.put("SRM Acid", AmmoType.Munitions.M_AX_HEAD);
 
         // Torps
-        munitions.put("LRT/SRT", AmmoType.M_TORPEDO);
+        munitions.put("LRT/SRT", AmmoType.Munitions.M_TORPEDO);
 
         // iNarc Munition Types
-        munitions.put("iNarc Explosive", AmmoType.M_EXPLOSIVE);
-        munitions.put("iNarc ECM", AmmoType.M_ECM);
-        munitions.put("iNarc HayWire", AmmoType.M_HAYWIRE);
-        munitions.put("iNarc Nemesis", AmmoType.M_NEMESIS);
+        munitions.put("iNarc Explosive", AmmoType.Munitions.M_EXPLOSIVE);
+        munitions.put("iNarc ECM", AmmoType.Munitions.M_ECM);
+        munitions.put("iNarc HayWire", AmmoType.Munitions.M_HAYWIRE);
+        munitions.put("iNarc Nemesis", AmmoType.Munitions.M_NEMESIS);
 
         // Narc Munition Types
-        munitions.put("Narc Explosive", AmmoType.M_NARC_EX);
+        munitions.put("Narc Explosive", AmmoType.Munitions.M_NARC_EX);
 
         // Arrow IV Munition Types
-        munitions.put("Arrow IV Homing", AmmoType.M_HOMING);
-        munitions.put("Arrow IV FASCAM", AmmoType.M_FASCAM);
-        munitions.put("Arrow IV Inferno", AmmoType.M_INFERNO_IV);
-        munitions.put("Arrow IV VibraBomb", AmmoType.M_VIBRABOMB_IV);
-        munitions.put("Arrow IV Smoke", AmmoType.M_SMOKE);
-        munitions.put("Arrow IV Davy Crockett", AmmoType.M_DAVY_CROCKETT_M);
+        munitions.put("Arrow IV Homing", AmmoType.Munitions.M_HOMING);
+        munitions.put("Arrow IV FASCAM", AmmoType.Munitions.M_FASCAM);
+        munitions.put("Arrow IV Inferno", AmmoType.Munitions.M_INFERNO_IV);
+        munitions.put("Arrow IV VibraBomb", AmmoType.Munitions.M_VIBRABOMB_IV);
+        munitions.put("Arrow IV Smoke", AmmoType.Munitions.M_SMOKE);
+        munitions.put("Arrow IV Davy Crockett", AmmoType.Munitions.M_DAVY_CROCKETT_M);
         return munitions;
     }
 
@@ -715,71 +715,71 @@ public class CampaignData implements TerrainProvider {
      *         using the Number of the munition as the key
      * @return Hashtable
      */
-    public Hashtable<Long, String> getMunitionsByNumber() {
-        Hashtable<Long, String> munitions = new Hashtable<Long, String>();
+    public Hashtable<AmmoType.Munitions, String> getMunitionsByNumber() {
+        Hashtable<AmmoType.Munitions, String> munitions = new Hashtable<AmmoType.Munitions, String>();
 
-        munitions.put(AmmoType.M_STANDARD, "Standard");
+        munitions.put(AmmoType.Munitions.M_STANDARD, "Standard");
 
         // AC Munition Types
-        munitions.put(AmmoType.M_CLUSTER, "LBX Cluster");
-        munitions.put(AmmoType.M_ARMOR_PIERCING, "AC Armor Piercing");
-        munitions.put(AmmoType.M_FLECHETTE, "AC Flechette");
-        munitions.put(AmmoType.M_INCENDIARY_AC, "AC Incendiary");
-        munitions.put(AmmoType.M_PRECISION, "AC Precision");
-        munitions.put(AmmoType.M_TRACER, "AC Tracer");
+        munitions.put(AmmoType.Munitions.M_CLUSTER, "LBX Cluster");
+        munitions.put(AmmoType.Munitions.M_ARMOR_PIERCING, "AC Armor Piercing");
+        munitions.put(AmmoType.Munitions.M_FLECHETTE, "AC Flechette");
+        munitions.put(AmmoType.Munitions.M_INCENDIARY_AC, "AC Incendiary");
+        munitions.put(AmmoType.Munitions.M_PRECISION, "AC Precision");
+        munitions.put(AmmoType.Munitions.M_TRACER, "AC Tracer");
 
         // ATM Munition Types
-        munitions.put(AmmoType.M_EXTENDED_RANGE, "ATM Extended Range");
-        munitions.put(AmmoType.M_HIGH_EXPLOSIVE, "ATM High Explosive");
+        munitions.put(AmmoType.Munitions.M_EXTENDED_RANGE, "ATM Extended Range");
+        munitions.put(AmmoType.Munitions.M_HIGH_EXPLOSIVE, "ATM High Explosive");
 
         // LRM & SRM Munition Types
-        munitions.put(AmmoType.M_FRAGMENTATION, "LRM/SRM Fragmentation");
-        munitions.put(AmmoType.M_LISTEN_KILL, "LRM/SRM Listen Kill");
-        munitions.put(AmmoType.M_ANTI_TSM, "LRM/SRM Anti-TSM");
-        munitions.put(AmmoType.M_NARC_CAPABLE, "LRM/SRM Narc");
-        munitions.put(AmmoType.M_ARTEMIS_CAPABLE, "LRM/SRM Artemis");
-        munitions.put(AmmoType.M_HEAT_SEEKING, "LRM/SRM Heat-Seeking");
-        munitions.put(AmmoType.M_TANDEM_CHARGE, "LRM/SRM Tandem-Charge");
-        munitions.put(AmmoType.M_DEAD_FIRE, "LRM/SRM Dead-Fire");
+        munitions.put(AmmoType.Munitions.M_FRAGMENTATION, "LRM/SRM Fragmentation");
+        munitions.put(AmmoType.Munitions.M_LISTEN_KILL, "LRM/SRM Listen Kill");
+        munitions.put(AmmoType.Munitions.M_ANTI_TSM, "LRM/SRM Anti-TSM");
+        munitions.put(AmmoType.Munitions.M_NARC_CAPABLE, "LRM/SRM Narc");
+        munitions.put(AmmoType.Munitions.M_ARTEMIS_CAPABLE, "LRM/SRM Artemis");
+        munitions.put(AmmoType.Munitions.M_HEAT_SEEKING, "LRM/SRM Heat-Seeking");
+        munitions.put(AmmoType.Munitions.M_TANDEM_CHARGE, "LRM/SRM Tandem-Charge");
+        munitions.put(AmmoType.Munitions.M_DEAD_FIRE, "LRM/SRM Dead-Fire");
 
         // LRM Munition Types
         // Incendiary is special though...
-        munitions.put(AmmoType.M_INCENDIARY_LRM, "LRM Incendiary");
-        munitions.put(AmmoType.M_FLARE, "LRM Flare");
-        munitions.put(AmmoType.M_SEMIGUIDED, "LRM SemiGuided");
-        munitions.put(AmmoType.M_SWARM, "LRM Swarm");
-        munitions.put(AmmoType.M_SWARM_I, "LRM Swarm I");
-        munitions.put(AmmoType.M_THUNDER, "LRM Thunder");
-        munitions.put(AmmoType.M_THUNDER_AUGMENTED, "LRM Thunder Augmented");
-        munitions.put(AmmoType.M_THUNDER_INFERNO, "LRM Thunder Inferno");
-        munitions.put(AmmoType.M_THUNDER_VIBRABOMB, "LRM Thunder VibraBomb");
-        munitions.put(AmmoType.M_THUNDER_ACTIVE, "LRM Thunder Active");
-        munitions.put(AmmoType.M_FOLLOW_THE_LEADER, "LRM Follow The Leader");
-        munitions.put(AmmoType.M_MULTI_PURPOSE, "Multi Purpose");
+        munitions.put(AmmoType.Munitions.M_INCENDIARY_LRM, "LRM Incendiary");
+        munitions.put(AmmoType.Munitions.M_FLARE, "LRM Flare");
+        munitions.put(AmmoType.Munitions.M_SEMIGUIDED, "LRM SemiGuided");
+        munitions.put(AmmoType.Munitions.M_SWARM, "LRM Swarm");
+        munitions.put(AmmoType.Munitions.M_SWARM_I, "LRM Swarm I");
+        munitions.put(AmmoType.Munitions.M_THUNDER, "LRM Thunder");
+        munitions.put(AmmoType.Munitions.M_THUNDER_AUGMENTED, "LRM Thunder Augmented");
+        munitions.put(AmmoType.Munitions.M_THUNDER_INFERNO, "LRM Thunder Inferno");
+        munitions.put(AmmoType.Munitions.M_THUNDER_VIBRABOMB, "LRM Thunder VibraBomb");
+        munitions.put(AmmoType.Munitions.M_THUNDER_ACTIVE, "LRM Thunder Active");
+        munitions.put(AmmoType.Munitions.M_FOLLOW_THE_LEADER, "LRM Follow The Leader");
+        munitions.put(AmmoType.Munitions.M_MULTI_PURPOSE, "Multi Purpose");
 
         // SRM Munition Types
-        munitions.put(AmmoType.M_INFERNO, "SRM Inferno");
-        munitions.put(AmmoType.M_AX_HEAD, "SRM Acid");
+        munitions.put(AmmoType.Munitions.M_INFERNO, "SRM Inferno");
+        munitions.put(AmmoType.Munitions.M_AX_HEAD, "SRM Acid");
 
         // Torps
-        munitions.put(AmmoType.M_TORPEDO, "LRT/SRT");
+        munitions.put(AmmoType.Munitions.M_TORPEDO, "LRT/SRT");
 
         // iNarc Munition Types
-        munitions.put(AmmoType.M_EXPLOSIVE, "iNarc Explosive");
-        munitions.put(AmmoType.M_ECM, "iNarc ECM");
-        munitions.put(AmmoType.M_HAYWIRE, "iNarc HayWire");
-        munitions.put(AmmoType.M_NEMESIS, "iNarc Nemesis");
+        munitions.put(AmmoType.Munitions.M_EXPLOSIVE, "iNarc Explosive");
+        munitions.put(AmmoType.Munitions.M_ECM, "iNarc ECM");
+        munitions.put(AmmoType.Munitions.M_HAYWIRE, "iNarc HayWire");
+        munitions.put(AmmoType.Munitions.M_NEMESIS, "iNarc Nemesis");
 
         // Narc Munition Types
-        munitions.put(AmmoType.M_NARC_EX, "Narc Explosive");
+        munitions.put(AmmoType.Munitions.M_NARC_EX, "Narc Explosive");
 
         // Arrow IV Munition Types
-        munitions.put(AmmoType.M_HOMING, "Arrow IV Homing");
-        munitions.put(AmmoType.M_FASCAM, "Arrow IV FASCAM");
-        munitions.put(AmmoType.M_INFERNO_IV, "Arrow IV Inferno");
-        munitions.put(AmmoType.M_VIBRABOMB_IV, "Arrow IV VibraBomb");
-        munitions.put(AmmoType.M_SMOKE, "Arrow IV Smoke");
-        munitions.put(AmmoType.M_DAVY_CROCKETT_M, "Arrow IV Davy Crockett");
+        munitions.put(AmmoType.Munitions.M_HOMING, "Arrow IV Homing");
+        munitions.put(AmmoType.Munitions.M_FASCAM, "Arrow IV FASCAM");
+        munitions.put(AmmoType.Munitions.M_INFERNO_IV, "Arrow IV Inferno");
+        munitions.put(AmmoType.Munitions.M_VIBRABOMB_IV, "Arrow IV VibraBomb");
+        munitions.put(AmmoType.Munitions.M_SMOKE, "Arrow IV Smoke");
+        munitions.put(AmmoType.Munitions.M_DAVY_CROCKETT_M, "Arrow IV Davy Crockett");
         return munitions;
     }
 

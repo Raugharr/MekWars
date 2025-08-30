@@ -32,6 +32,7 @@ import megamek.common.EquipmentType;
 import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.TechConstants;
+import megamek.common.equipment.ArmorType;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
@@ -96,8 +97,10 @@ public class AutoFillBlackMarketSettingCommand implements Command {
 
             if (eq instanceof AmmoType) {
                 crits = ((AmmoType) eq).getRackSize();
-            } else if (isArmor(eq)) {
-                crits = 16.0 * EquipmentType.getArmorPointMultiplier(EquipmentType.getArmorType(eq));
+            } else if (eq instanceof ArmorType) {
+                //TODO: Test this.
+                // crits = 16.0 * EquipmentType.getArmorPointMultiplier(EquipmentType.getArmorType(eq));
+                crits = 16.0 * ArmorType.of(eq.getArmorType(eq), eq.isClan()).getPointsPerTon();
             } else if (isStructure(eq)) {
                 crits = 8;
             } else {
@@ -111,8 +114,8 @@ public class AutoFillBlackMarketSettingCommand implements Command {
             crits = Math.max(crits, 1);
             baseCost = eq.getCost(ent, false, -1);
 
-            if (isArmor(eq)) {
-                baseCost = EquipmentType.getArmorCost(EquipmentType.getArmorType(eq));
+            if (eq instanceof ArmorType) {
+                baseCost = ((ArmorType) eq).getCost(); //EquipmentType.getCost(EquipmentType.getArmorType(eq));
             } else if (isStructure(eq)) {
                 baseCost = EquipmentType.getStructureCost(EquipmentType.getStructureType(eq));
             } else if (eq instanceof MiscType) {
@@ -418,16 +421,7 @@ public class AutoFillBlackMarketSettingCommand implements Command {
         CampaignMain.cm.getBlackMarketEquipmentTable().put(bme.getEquipmentInternalName(), bme);
 
         CampaignMain.cm.toUser("AM:Done setting equipment costs for the black market.", Username);
-    }// end process
-
-    private boolean isArmor(EquipmentType eq) {
-        for (String armor : EquipmentType.armorNames) {
-            if (eq.getName().equalsIgnoreCase(armor)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    } // end process
 
     private boolean isStructure(EquipmentType eq) {
         for (String IS : EquipmentType.structureNames) {

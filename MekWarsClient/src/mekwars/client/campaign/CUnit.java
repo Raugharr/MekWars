@@ -20,7 +20,7 @@ package client.campaign;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Enumeration;
 import java.util.StringJoiner;
 import java.util.StringTokenizer;
@@ -46,6 +46,8 @@ import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.OffBoardDirection;
 import megamek.common.WeaponType;
+import megamek.common.enums.Gender;
+import megamek.common.equipment.AmmoMounted;
 import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
@@ -170,8 +172,16 @@ public class CUnit extends Unit {
         if (getModelName().startsWith("Error")
                 || getModelName().startsWith("OMG")) {
             unitEntity.setExternalId(getId());
-            unitEntity.setCrew(new megamek.common.Crew(CrewType.SINGLE, p.getName(), 1, p
-                    .getGunnery(), p.getPiloting()));
+            unitEntity.setCrew(new megamek.common.Crew(
+						CrewType.SINGLE,
+						p.getName(),
+						1,
+					   	p.getGunnery(),
+						p.getPiloting(),
+						Gender.RANDOMIZE,
+						unitEntity.isClan(),
+						null
+					));
             return true;
         }
 
@@ -185,14 +195,14 @@ public class CUnit extends Unit {
         {
             try {
                 int maxCrits = TokenReader.readInt(ST);
-                ArrayList<Mounted> e = unitEntity.getAmmo();
+                List<AmmoMounted> ammoMountedList = unitEntity.getAmmo();
                 for (int count = 0; count < maxCrits; count++) {
                     int weaponType = TokenReader.readInt(ST);
                     String ammoName = TokenReader.readString(ST);
                     int shots = TokenReader.readInt(ST);
                     boolean hotloaded = TokenReader.readBoolean(ST);
 
-                    Mounted mWeapon = e.get(count);
+                    AmmoMounted mWeapon = ammoMountedList.get(count);
 
                     AmmoType at = getEntityAmmo(weaponType, ammoName);
                     mWeapon.changeAmmoType(at);

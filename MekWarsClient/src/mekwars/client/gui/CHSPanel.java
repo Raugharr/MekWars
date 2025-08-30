@@ -60,6 +60,7 @@ import common.util.SpringLayoutHelper;
 import common.util.UnitUtils;
 import megamek.client.generator.RandomGenderGenerator;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
+import megamek.common.Crew;
 import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.Infantry;
@@ -829,7 +830,19 @@ public class CHSPanel extends JPanel {
         JFrame InfoWindow = new JFrame();
         UnitDisplay unitDetailInfo = new MWUnitDisplay(null, mwclient);
         unitEntity.loadAllWeapons();
-        unitEntity.setCrew(new megamek.common.Crew(CrewType.SINGLE, "", 1, gunnery, gunnery, gunnery, piloting, RandomGenderGenerator.generate(), null));
+        Crew newCrew = new Crew(
+                CrewType.SINGLE,
+                "",
+                1,
+                gunnery,
+                gunnery,
+                gunnery,
+                piloting,
+                RandomGenderGenerator.generate(),
+                embeddedUnit.getEntity().isClan(),
+                null
+            );
+        unitEntity.setCrew(newCrew);
         if (battleDamage.trim().length() > 1) {
             UnitUtils.applyBattleDamage(unitEntity, battleDamage, false);
         }

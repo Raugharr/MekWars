@@ -26,6 +26,7 @@ import common.campaign.pilot.Pilot;
 import common.util.TokenReader;
 import megamek.client.generator.RandomGenderGenerator;
 import megamek.common.BattleArmor;
+import megamek.common.Crew;
 import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.Infantry;
@@ -35,19 +36,19 @@ import megamek.common.QuadMech;
 
 public class HSMek {
 
-	String MekFile;
-	int unitID;
+    String MekFile;
+    int unitID;
 
-	String name;
-	String type;
-	String battleDamage = "";
+    String name;
+    String type;
+    String battleDamage = "";
 
-	CUnit embeddedUnit;//bury a CUnit in HSMek, a la BMUnit
+    CUnit embeddedUnit;//bury a CUnit in HSMek, a la BMUnit
 
-	public HSMek(MWClient mwclient, StringTokenizer tokenizer) {
+    public HSMek(MWClient mwclient, StringTokenizer tokenizer) {
 
-		MekFile = TokenReader.readString(tokenizer);
-		unitID =  TokenReader.readInt(tokenizer);
+        MekFile = TokenReader.readString(tokenizer);
+        unitID =  TokenReader.readInt(tokenizer);
 
         int factionGunnery = TokenReader.readInt(tokenizer);
         int factionPiloting = TokenReader.readInt(tokenizer);
@@ -56,40 +57,53 @@ public class HSMek {
             battleDamage = TokenReader.readString(tokenizer);
         }
 
-		//bury a CUnit
-		embeddedUnit = new CUnit();
-		embeddedUnit.setUnitFilename(MekFile);
-		embeddedUnit.createEntity();
+        //bury a CUnit
+        embeddedUnit = new CUnit();
+        embeddedUnit.setUnitFilename(MekFile);
+        embeddedUnit.createEntity();
 
         /*
-		 * CUnit.createEntity sets type. Now that we've bootstrapped the
-		 * type in, we know if we need to set piloting and gunnery (meks,
-		 * vehicles) or just gunnery (misc. infantry types).
-		 */
-		if (embeddedUnit.getType() != Unit.PROTOMEK ) {
-            if ( embeddedUnit.getType() == Unit.INFANTRY  ){
-		        if ( ((Infantry)embeddedUnit.getEntity()).canMakeAntiMekAttacks() ) {
-                    embeddedUnit.setPilot(new Pilot("BM Unit",factionGunnery,factionPiloting));
+         * CUnit.createEntity sets type. Now that we've bootstrapped the
+         * type in, we know if we need to set piloting and gunnery (meks,
+         * vehicles) or just gunnery (misc. infantry types).
+         */
+        if (embeddedUnit.getType() != Unit.PROTOMEK) {
+            if (embeddedUnit.getType() == Unit.INFANTRY) {
+                if (((Infantry)embeddedUnit.getEntity()).canMakeAntiMekAttacks() ) {
+                    embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, factionPiloting));
                 } else {
-                    embeddedUnit.setPilot(new Pilot("BM Unit",factionGunnery,5));
+                    embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, 5));
                 }
-		    } else {
-                embeddedUnit.setPilot(new Pilot("BM Unit",factionGunnery,factionPiloting));
+            } else {
+                embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, factionPiloting));
             }
         } else {
-            embeddedUnit.setPilot(new Pilot("BM Unit",factionGunnery,5));
+            embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, 5));
         }
 
-		/*
-		 * HSMek.getBV() uses MegaMek's calculateBV() function instead of pulling the
-		 * stringed CUnit BV. The server sends over units without pilot data, so we set
-		 * a faction-default crew. See CHSPanel.java for usage.
-		 */
-		embeddedUnit.getEntity().setCrew(new megamek.common.Crew(CrewType.SINGLE, "Generic Pilot", 1, factionGunnery, factionGunnery, factionGunnery, factionPiloting, RandomGenderGenerator.generate(), null));
+        /*
+         * HSMek.getBV() uses MegaMek's calculateBV() function instead of pulling the
+         * stringed CUnit BV. The server sends over units without pilot data, so we set
+         * a faction-default crew. See CHSPanel.java for usage.
+         */
+		//FIXME: Properly set clan flag.
+        Crew newCrew = new Crew(
+                CrewType.SINGLE,
+                "Generic Pilot",
+                1,
+                factionGunnery,
+                factionGunnery,
+                factionGunnery,
+                factionPiloting,
+                RandomGenderGenerator.generate(),
+				false,
+                null
+            );
+        embeddedUnit.getEntity().setCrew(newCrew);
 
-		//set type
-		Entity e = embeddedUnit.getEntity();
-		if ((e instanceof Mech) || (e instanceof QuadMech)) {
+        //set type
+        Entity e = embeddedUnit.getEntity();
+        if ((e instanceof Mech) || (e instanceof QuadMech)) {
             type = "Mek";
         } else if (e instanceof Protomech) {
             type = "Protomek";
@@ -101,50 +115,50 @@ public class HSMek {
             type = "Vehicle";
         }
 
-		//vehicles and inf prepend chassis
-		if (type.equalsIgnoreCase("Mek")) {
+        //vehicles and inf prepend chassis
+        if (type.equalsIgnoreCase("Mek")) {
             if (e.isOmni()) {
-		        name = e.getChassis() + " " +  e.getModel();
-		    }
-		    else {
-	            if ( e.getModel().trim().length() > 0 ){
-	                name = e.getModel().trim();
-	            }
-	            else{
-	                name = e.getChassis().trim();
-	            }
-		    }
+                name = e.getChassis() + " " +  e.getModel();
+            }
+            else {
+                if ( e.getModel().trim().length() > 0 ){
+                    name = e.getModel().trim();
+                }
+                else{
+                    name = e.getChassis().trim();
+                }
+            }
         } else {
             name = e.getShortNameRaw();
         }
-	}
+    }
 
-	public Entity getEntity() {
-		return embeddedUnit.getEntity();
-	}
+    public Entity getEntity() {
+        return embeddedUnit.getEntity();
+    }
 
-	public String getMekFile() {
-		return MekFile;
-	}
+    public String getMekFile() {
+        return MekFile;
+    }
 
-	public String getName() {
-		return name.toString();
-	}
+    public String getName() {
+        return name.toString();
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public int getUnitID() {
-		return unitID;
-	}
+    public int getUnitID() {
+        return unitID;
+    }
 
     public String getBattleDamage() {
         return battleDamage;
     }
 
     public int getBV() {
-    	return embeddedUnit.getEntity().calculateBattleValue();
+        return embeddedUnit.getEntity().calculateBattleValue();
     }
 
 }

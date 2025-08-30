@@ -31,6 +31,7 @@ import common.Unit;
 import common.campaign.Buildings;
 import common.util.MWLogger;
 import common.util.UnitUtils;
+import megamek.client.AbstractClient;
 import megamek.client.Client;
 import megamek.client.CloseClientListener;
 import megamek.client.bot.BotClient;
@@ -45,10 +46,12 @@ import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.IGame;
 import megamek.common.enums.GamePhase;
+import megamek.common.enums.Gender;
 import megamek.common.KeyBindParser;
 import megamek.common.MapSettings;
 import megamek.common.OffBoardDirection;
-import megamek.common.PlanetaryConditions;
+import megamek.common.planetaryconditions.Light;
+import megamek.common.planetaryconditions.PlanetaryConditions;
 import megamek.common.icons.Camouflage;
 
 import megamek.common.options.IBasicOption;
@@ -142,7 +145,7 @@ public class ClientThread extends Thread implements CloseClientListener {
         }
 
         if (swingGui != null) {
-                for (Client client2 : swingGui.getLocalBots().values()) {
+                for (AbstractClient client2 : swingGui.getLocalBots().values()) {
                     client2.die();
                 }
                 swingGui.getLocalBots().clear();
@@ -294,8 +297,8 @@ public class ClientThread extends Thread implements CloseClientListener {
                     planetCondition.setTerrainAffected(aTerrain.isTerrainAffected());
                     planetCondition.setWeather(aTerrain.getWeatherConditions());
                     planetCondition.setWindDirection(aTerrain.getWindDirection());
-                    planetCondition.setWindStrength(aTerrain.getWindStrength());
-                    planetCondition.setMaxWindStrength(aTerrain.getMaxWindStrength());
+                    planetCondition.setWind(aTerrain.getWindStrength());
+                    planetCondition.setWindMax(aTerrain.getMaxWindStrength());
 
                     // Check for a night game and set nightGame Variable.
                     // This is needed to be done since it was possible that a
@@ -303,7 +306,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                     // would keep the client from getting an update from the
                     // server before the
                     // entities where added to the game.
-                    nightGame = aTerrain.getLightConditions() > PlanetaryConditions.L_DUSK;
+                    nightGame = aTerrain.getLightConditions().compareTo(Light.DUSK) > 0;
 
                     client.sendPlanetaryConditions(planetCondition);
 
@@ -375,8 +378,8 @@ public class ClientThread extends Thread implements CloseClientListener {
                         planetCondition.setTerrainAffected(aTerrain.isTerrainAffected());
                         planetCondition.setWeather(aTerrain.getWeatherConditions());
                         planetCondition.setWindDirection(aTerrain.getWindDirection());
-                        planetCondition.setWindStrength(aTerrain.getWindStrength());
-                        planetCondition.setMaxWindStrength(aTerrain.getMaxWindStrength());
+                        planetCondition.setWind(aTerrain.getWindStrength());
+                        planetCondition.setWindMax(aTerrain.getMaxWindStrength());
 
                         // Check for a night game and set nightGame Variable.
                         // This is needed to be done since it was possible that
@@ -384,7 +387,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                         // would keep the client from getting an update from the
                         // server before the
                         // entities where added to the game.
-                        nightGame = aTerrain.getLightConditions() > PlanetaryConditions.L_DUSK;
+                        nightGame = aTerrain.getLightConditions().compareTo(Light.DUSK) > 0;
 
                         client.sendPlanetaryConditions(planetCondition);
                         /*the mysettings and planetCondition object refs were
@@ -394,7 +397,6 @@ public class ClientThread extends Thread implements CloseClientListener {
                         planetCondition = null;
                     }
                 }
-
             }
 
             /*
@@ -403,7 +405,7 @@ public class ClientThread extends Thread implements CloseClientListener {
             if (mwclient.isUsingBots()) {
                 String name = "War Bot" + client.getLocalPlayer().getId();
                 bot = new Princess(name, client.getHost(), client.getPort());
-				// NOTE: I'm not sure but I don't think this does anything.
+                // NOTE: I'm not sure but I don't think this does anything.
                 // bot.getGame().addGameListener(new BotGUI(bot));
                 try {
                     bot.connect();
@@ -554,7 +556,7 @@ public class ClientThread extends Thread implements CloseClientListener {
 
                     if (entity.getCrew().getName().equalsIgnoreCase("Unnamed") || entity.getCrew().getName().equalsIgnoreCase("vacant")) {
                         // set the pilot
-                        Crew pilot = new Crew(CrewType.SINGLE, "AutoArtillery", 1, 4, 5);
+                        Crew pilot = new Crew(CrewType.SINGLE, "AutoArtillery", 1, 4, 5, Gender.RANDOMIZE, entity.isClan(), null);
                         entity.setCrew(pilot);
                     } else {
                         entity.setCrew(UnitUtils.createEntityPilot(autoUnit));

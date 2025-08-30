@@ -16,13 +16,13 @@
 
 package server.campaign.commands.mod;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import common.util.StringUtils;
 import megamek.common.AmmoType;
 import megamek.common.Entity;
-import megamek.common.Mounted;
+import megamek.common.equipment.AmmoMounted;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
@@ -96,8 +96,8 @@ public class FixAmmoCommand implements Command {
 		
 		baseLine = SUnit.loadMech(unit.getUnitFilename());
 		
-		ArrayList<Mounted> baseLineAmmo = baseLine.getAmmo();
-		ArrayList<Mounted> currentAmmo = en.getAmmo();
+		List<AmmoMounted> baseLineAmmo = baseLine.getAmmo();
+		List<AmmoMounted> currentAmmo = en.getAmmo();
 		
 		if ( baseLineAmmo.size() < 1)
 			unit.getEntity().getAmmo().clear();

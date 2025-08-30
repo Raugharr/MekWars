@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -53,7 +54,8 @@ import common.Terrain;
 import common.UnitFactory;
 import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
-import megamek.common.PlanetaryConditions;
+import megamek.common.planetaryconditions.Atmosphere;
+import megamek.common.planetaryconditions.PlanetaryConditions;
 
 public final class PlanetEditorDialog implements ActionListener, KeyListener {
 
@@ -188,7 +190,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
     private JComboBox factoryType = new JComboBox(factoryTypes);
     private JComboBox factoryOwners;
     private JComboBox ownerNames;
-    private JComboBox atmosphere = new JComboBox(PlanetaryConditions.atmoNames);
+    private JComboBox atmosphere = new JComboBox(Arrays.stream(Atmosphere.values()).map(value -> value.toString()).toArray());
 
     public PlanetEditorDialog(MWClient c, String planetName, int planetID) {
 

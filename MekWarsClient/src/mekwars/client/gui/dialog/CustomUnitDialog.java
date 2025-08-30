@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.EnumSet;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -58,9 +59,11 @@ import common.campaign.pilot.Pilot;
 import common.campaign.pilot.skills.PilotSkill;
 import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
+import common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.common.Aero;
 import megamek.common.AmmoType;
+import megamek.common.AmmoType.Munitions;
 import megamek.common.BattleArmor;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -72,6 +75,7 @@ import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
+import megamek.common.equipment.AmmoMounted;
 
 /**
  * A dialog that a player can use to customize his mech before battle.
@@ -314,10 +318,8 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
         /*
          * Loop through all ammo?
          */
-        Iterator<Mounted> e = entity.getAmmo().iterator();
-        while (e.hasNext()) {
+        for (AmmoMounted m : entity.getAmmo()) {
 
-            Mounted m = e.next();
             AmmoType at = (AmmoType) m.getType();
             
             Vector<AmmoType> vTypes = new Vector<AmmoType>(1, 1);
@@ -363,7 +365,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                
                 // ==
                 // atCheck.getTechLevel());
-                String munition = Long.toString(atCheck.getMunitionType());
+                EnumSet<Munitions> munition = atCheck.getMunitionType();
                 House faction = mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse());
 
                 // MWLogger.errLog("Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
@@ -418,9 +420,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 // do NOT allow Clans to use IS-only ammo.
                 // N.B. play bit-shifting games to allow "incendiary"
                 // to be combined to other munition types.
-                long muniType = atCheck.getMunitionType();
-                muniType &= ~AmmoType.M_INCENDIARY_LRM;
-                if (!mmClient.getGame().getOptions().booleanOption("clan_ignore_eq_limits") && entity.isClan() && ((muniType == AmmoType.M_SEMIGUIDED) || (muniType == AmmoType.M_THUNDER_AUGMENTED) || (muniType == AmmoType.M_THUNDER_INFERNO) || (muniType == AmmoType.M_THUNDER_VIBRABOMB) || (muniType == AmmoType.M_THUNDER_ACTIVE) || (muniType == AmmoType.M_INFERNO_IV) || (muniType == AmmoType.M_VIBRABOMB_IV))) {
+				if (!mmClient.getGame().getOptions().booleanOption("clan_ignore_eq_limits") && unit.getEntity().isClan() && UnitUtils.isInnerSphereOnlyAmmo(at.getMunitionType())) {
                     bTechMatch = false;
                 }
 

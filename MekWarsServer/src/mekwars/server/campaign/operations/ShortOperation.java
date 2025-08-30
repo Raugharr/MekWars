@@ -47,7 +47,13 @@ import common.campaign.operations.Operation;
 import common.util.MWLogger;
 import common.util.StringUtils;
 import common.util.UnitUtils;
-import megamek.common.PlanetaryConditions;
+import megamek.common.planetaryconditions.Atmosphere;
+import megamek.common.planetaryconditions.EMI;
+import megamek.common.planetaryconditions.Fog;
+import megamek.common.planetaryconditions.Light;
+import megamek.common.planetaryconditions.PlanetaryConditions;
+import megamek.common.planetaryconditions.Weather;
+import megamek.common.planetaryconditions.Wind;
 import server.campaign.AutoArmy;
 import server.campaign.CampaignMain;
 import server.campaign.SArmy;
@@ -115,10 +121,10 @@ public class ShortOperation implements Comparable<Object> {
     private boolean doubleBlind = false;
     private double intelGravity = 0;
     private int intelTemp = 0;
-    private int intelTimeFrame = PlanetaryConditions.L_DAY;
+    private Light intelTimeFrame = Light.DAY;
     private int intelVisibility = 999;
-    private int intelWeather = PlanetaryConditions.WE_NONE;
-    private int intelWind = PlanetaryConditions.WI_NONE;
+    private Weather intelWeather = Weather.CLEAR;
+    private Wind intelWind = Wind.CALM;
 
     private TreeSet<String> cancellingPlayers = new TreeSet<String>();
     /*
@@ -309,31 +315,31 @@ public class ShortOperation implements Comparable<Object> {
     }
 
     private void submitPlayerList() {
-    	ShortOpPlayers sop = new ShortOpPlayers();
-    	HashMap<Integer, Vector<SPlayer>> teams = new HashMap<Integer, Vector<SPlayer>>();
+        ShortOpPlayers sop = new ShortOpPlayers();
+        HashMap<Integer, Vector<SPlayer>> teams = new HashMap<Integer, Vector<SPlayer>>();
 
-    	for(String pName : getAllPlayerNames()) {
-    		SPlayer p = CampaignMain.cm.getPlayer(pName);
-    		int teamID = p.getTeamNumber();
+        for(String pName : getAllPlayerNames()) {
+            SPlayer p = CampaignMain.cm.getPlayer(pName);
+            int teamID = p.getTeamNumber();
 
-    		if (teams.containsKey(teamID)) {
-    			teams.get(teamID).add(p);
-    		} else {
-    			 Vector<SPlayer> v = new Vector<SPlayer>();
-    			 v.add(p);
-    			 teams.put(teamID, v);
-    		}
-    	}
+            if (teams.containsKey(teamID)) {
+                teams.get(teamID).add(p);
+            } else {
+                 Vector<SPlayer> v = new Vector<SPlayer>();
+                 v.add(p);
+                 teams.put(teamID, v);
+            }
+        }
 
-    	// Now, add the teams to sop
-    	for (int teamID : teams.keySet()) {
-    		sop.addTeam(teamID, teams.get(teamID));
-    	}
+        // Now, add the teams to sop
+        for (int teamID : teams.keySet()) {
+            sop.addTeam(teamID, teams.get(teamID));
+        }
 
-    	resolver = new NewShortResolver(shortID, targetWorld, this, sop);
+        resolver = new NewShortResolver(shortID, targetWorld, this, sop);
 
 
-    	sop.reportTeams();
+        sop.reportTeams();
     }
 
     /**
@@ -469,7 +475,7 @@ public class ShortOperation implements Comparable<Object> {
      */
     public void changeStatus(int newStatus) {
 
-    	Random r = CampaignMain.cm.getR();
+        Random r = CampaignMain.cm.getR();
 
         /*
          * Never change to waiting mode. First actual switch is to INPROGRESS.
@@ -498,10 +504,10 @@ public class ShortOperation implements Comparable<Object> {
 
             //Should the battle be autoresolved?
             if (o.getBooleanValue("AutoresolveBattle")){
-            	currentStatus = STATUS_INPROGRESS;
-            	switchPlayerStatusToFighting();
-            	BattleResolver.getInstance().resolve(this);
-            	return;
+                currentStatus = STATUS_INPROGRESS;
+                switchPlayerStatusToFighting();
+                BattleResolver.getInstance().resolve(this);
+                return;
             }
 
             isBuildingOperation = o.getIntValue("TotalBuildings") > 0;
@@ -1109,135 +1115,135 @@ public class ShortOperation implements Comparable<Object> {
 
             // set the temp gravity and vacuum from the terrain configs
             if (useWeather) {
-            	aTerrain = playContinent.getAdvancedTerrain().clone();
+                aTerrain = playContinent.getAdvancedTerrain().clone();
             } else {
-            	aTerrain = new AdvancedTerrain();
+                aTerrain = new AdvancedTerrain();
             }
 
             if (useWeather) {
             // determine temp. Add a random number from 0-(Diff b/w Max
             // and Min Temp) to the low temperature
-            	int highTemp = aTerrain.getHighTemp();
-            	int lowTemp = aTerrain.getLowTemp();
-            	int tempdiff = highTemp - lowTemp;
-            	int tempToSet = lowTemp;
+                int highTemp = aTerrain.getHighTemp();
+                int lowTemp = aTerrain.getLowTemp();
+                int tempdiff = highTemp - lowTemp;
+                int tempToSet = lowTemp;
 
-            	// only get random if there's an actual temp diff
-            	if (tempdiff > 0) {
-            		tempToSet = CampaignMain.cm.getRandomNumber(tempdiff) + lowTemp;
-            	}
+                // only get random if there's an actual temp diff
+                if (tempdiff > 0) {
+                    tempToSet = CampaignMain.cm.getRandomNumber(tempdiff) + lowTemp;
+                }
 
-            	if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getDuskChance()) {
-            		tempToSet -= Math.abs(aTerrain.getNightTempMod()) / 2;
-            		intelTimeFrame = PlanetaryConditions.L_DUSK;
-            		aTerrain.setLightConditions(PlanetaryConditions.L_DUSK);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getNightChance()) {
-            		tempToSet -= Math.abs(aTerrain.getNightTempMod());
-            		intelTimeFrame = PlanetaryConditions.L_FULL_MOON;
-            		aTerrain.setLightConditions(PlanetaryConditions.L_FULL_MOON);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getMoonlessNightChance()) {
-            		tempToSet -= Math.abs(aTerrain.getNightTempMod());
-            		intelTimeFrame = PlanetaryConditions.L_MOONLESS;
-            		aTerrain.setLightConditions(PlanetaryConditions.L_MOONLESS);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getPitchBlackNightChance()) {
-            		tempToSet -= Math.abs(aTerrain.getNightTempMod());
-            		intelTimeFrame = PlanetaryConditions.L_PITCH_BLACK;
-            		aTerrain.setLightConditions(PlanetaryConditions.L_PITCH_BLACK);
-            	}
-            	// else normal daylight conditions
-            	else {
-            		intelTimeFrame = PlanetaryConditions.L_DAY;
-            	}
+                if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getDuskChance()) {
+                    tempToSet -= Math.abs(aTerrain.getNightTempMod()) / 2;
+                    intelTimeFrame = Light.DUSK;
+                    aTerrain.setLightConditions(Light.DUSK);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getNightChance()) {
+                    tempToSet -= Math.abs(aTerrain.getNightTempMod());
+                    intelTimeFrame = Light.FULL_MOON;
+                    aTerrain.setLightConditions(Light.FULL_MOON);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getMoonlessNightChance()) {
+                    tempToSet -= Math.abs(aTerrain.getNightTempMod());
+                    intelTimeFrame = Light.MOONLESS;
+                    aTerrain.setLightConditions(Light.MOONLESS);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getPitchBlackNightChance()) {
+                    tempToSet -= Math.abs(aTerrain.getNightTempMod());
+                    intelTimeFrame = Light.PITCH_BLACK;
+                    aTerrain.setLightConditions(Light.PITCH_BLACK);
+                }
+                // else normal daylight conditions
+                else {
+                    intelTimeFrame = Light.DAY;
+                }
 
-            	if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightRainfallChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_LIGHT_RAIN);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getModerateRainFallChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_MOD_RAIN);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getHeavyRainfallChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_HEAVY_RAIN);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getDownPourChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_DOWNPOUR);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightSnowfallChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_LIGHT_SNOW);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getModerateSnowFallChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_MOD_SNOW);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getHeavySnowfallChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_HEAVY_SNOW);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getSleetChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_SLEET);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getIceStormChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_ICE_STORM);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightHailChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_LIGHT_HAIL);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getHeavyHailChance()) {
-            		aTerrain.setWeatherConditions(PlanetaryConditions.WE_HEAVY_HAIL);
-            	}
+                if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightRainfallChance()) {
+                    aTerrain.setWeatherConditions(Weather.LIGHT_RAIN);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getModerateRainFallChance()) {
+                    aTerrain.setWeatherConditions(Weather.MOD_RAIN);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getHeavyRainfallChance()) {
+                    aTerrain.setWeatherConditions(Weather.HEAVY_RAIN);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getDownPourChance()) {
+                    aTerrain.setWeatherConditions(Weather.DOWNPOUR);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightSnowfallChance()) {
+                    aTerrain.setWeatherConditions(Weather.LIGHT_SNOW);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getModerateSnowFallChance()) {
+                    aTerrain.setWeatherConditions(Weather.MOD_SNOW);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getHeavySnowfallChance()) {
+                    aTerrain.setWeatherConditions(Weather.HEAVY_SNOW);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getSleetChance()) {
+                    aTerrain.setWeatherConditions(Weather.SLEET);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getIceStormChance()) {
+                    aTerrain.setWeatherConditions(Weather.ICE_STORM);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightHailChance()) {
+                    aTerrain.setWeatherConditions(Weather.LIGHT_HAIL);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getHeavyHailChance()) {
+                    aTerrain.setWeatherConditions(Weather.HEAVY_HAIL);
+                }
 
-            	if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightWindChance()) {
-            		aTerrain.setWindStrength(PlanetaryConditions.WI_LIGHT_GALE);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getModerateWindChance()) {
-            		aTerrain.setWindStrength(PlanetaryConditions.WI_MOD_GALE);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getStrongWindChance()) {
-            		aTerrain.setWindStrength(PlanetaryConditions.WI_STRONG_GALE);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getStormWindChance()) {
-            		aTerrain.setWindStrength(PlanetaryConditions.WI_STORM);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getTornadoF13WindChance()) {
-            		aTerrain.setWindStrength(PlanetaryConditions.WI_TORNADO_F13);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getTornadoF4WindChance()) {
-            		aTerrain.setWindStrength(PlanetaryConditions.WI_TORNADO_F4);
-            	}
+                if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightWindChance()) {
+                    aTerrain.setWindStrength(Wind.LIGHT_GALE);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getModerateWindChance()) {
+                    aTerrain.setWindStrength(Wind.MOD_GALE);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getStrongWindChance()) {
+                    aTerrain.setWindStrength(Wind.STRONG_GALE);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getStormWindChance()) {
+                    aTerrain.setWindStrength(Wind.STORM);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getTornadoF13WindChance()) {
+                    aTerrain.setWindStrength(Wind.TORNADO_F1_TO_F3);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getTornadoF4WindChance()) {
+                    aTerrain.setWindStrength(Wind.TORNADO_F4);
+                }
 
-            	boolean wind = false;
+                boolean wind = false;
 
-            	if (aTerrain.getLightWindChance() > 0) {
-            		wind = true;
-            		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_LIGHT_GALE);
-            	}
+                if (aTerrain.getLightWindChance() > 0) {
+                    wind = true;
+                    aTerrain.setMaxWindStrength(Wind.LIGHT_GALE);
+                }
 
-            	if (aTerrain.getModerateWindChance() > 0) {
-            		wind = true;
-            		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_MOD_GALE);
-            	}
-            	if (aTerrain.getStrongWindChance() > 0) {
-            		wind = true;
-            		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_STRONG_GALE);
-            	}
-            	if (aTerrain.getStormWindChance() > 0) {
-            		wind = true;
-            		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_STORM);
-            	}
-            	if (aTerrain.getTornadoF13WindChance() > 0) {
-            		wind = true;
-            		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_TORNADO_F13);
-            	}
-            	if (aTerrain.getTornadoF4WindChance() > 0) {
-            		wind = true;
-            		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_TORNADO_F4);
-            	}
+                if (aTerrain.getModerateWindChance() > 0) {
+                    wind = true;
+                    aTerrain.setMaxWindStrength(Wind.MOD_GALE);
+                }
+                if (aTerrain.getStrongWindChance() > 0) {
+                    wind = true;
+                    aTerrain.setMaxWindStrength(Wind.STRONG_GALE);
+                }
+                if (aTerrain.getStormWindChance() > 0) {
+                    wind = true;
+                    aTerrain.setMaxWindStrength(Wind.STORM);
+                }
+                if (aTerrain.getTornadoF13WindChance() > 0) {
+                    wind = true;
+                    aTerrain.setMaxWindStrength(Wind.TORNADO_F1_TO_F3);
+                }
+                if (aTerrain.getTornadoF4WindChance() > 0) {
+                    wind = true;
+                    aTerrain.setMaxWindStrength(Wind.TORNADO_F4);
+                }
 
-            	if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightFogChance()) {
-            		aTerrain.setFog(PlanetaryConditions.FOG_LIGHT);
-            	} else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getHeavyFogChance()) {
-            		aTerrain.setFog(PlanetaryConditions.FOG_HEAVY);
-            	}
+                if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getLightFogChance()) {
+                    aTerrain.setFog(Fog.FOG_LIGHT);
+                } else if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getHeavyFogChance()) {
+                    aTerrain.setFog(Fog.FOG_HEAVY);
+                }
 
-            	if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getEMIChance()) {
-            		aTerrain.setEMI(true);
-            	}
+                if ((CampaignMain.cm.getRandomNumber(1000) + 1) <= aTerrain.getEMIChance()) {
+                    aTerrain.setEMI(EMI.EMI);
+                }
 
-            	if (aTerrain.getAtmosphere() <= PlanetaryConditions.ATMO_TRACE) {
-            		gameOptions.append("|fire|false");
-            		aTerrain.setShiftingWindDirection(false);
-            		aTerrain.setShiftingWindStrength(false);
-            	} else if (CampaignMain.cm.getMegaMekClient().getGame().getOptions().booleanOption("tacops_start_fire") && !wind) {
-            		aTerrain.setShiftingWindDirection(true);
-            		aTerrain.setShiftingWindStrength(true);
-            		aTerrain.setMaxWindStrength(PlanetaryConditions.WI_LIGHT_GALE);
-            	}
+                if (aTerrain.getAtmosphere().compareTo(Atmosphere.TRACE) <= 0) {
+                    gameOptions.append("|fire|false");
+                    aTerrain.setShiftingWindDirection(false);
+                    aTerrain.setShiftingWindStrength(false);
+                } else if (CampaignMain.cm.getMegaMekClient().getGame().getOptions().booleanOption("tacops_start_fire") && !wind) {
+                    aTerrain.setShiftingWindDirection(true);
+                    aTerrain.setShiftingWindStrength(true);
+                    aTerrain.setMaxWindStrength(Wind.LIGHT_GALE);
+                }
 
 
 
-            	aTerrain.setTemperature(tempToSet);
+                aTerrain.setTemperature(tempToSet);
 
             }
 
@@ -1246,14 +1252,15 @@ public class ShortOperation implements Comparable<Object> {
             pc.setAtmosphere(aTerrain.getAtmosphere());
             pc.setFog(aTerrain.getFog());
             pc.setLight(aTerrain.getLightConditions());
-            pc.setWindStrength(aTerrain.getWindStrength());
+            pc.setWind(aTerrain.getWindStrength());
             pc.setWeather(aTerrain.getWeatherConditions());
 
             intelWeather = aTerrain.getWeatherConditions();
             intelWind = aTerrain.getWindStrength();
-        	intelTemp = aTerrain.getTemperature();
-        	intelGravity = aTerrain.getGravity();
-        	intelVacuum = aTerrain.getAtmosphere() <= PlanetaryConditions.ATMO_TRACE;
+            intelTemp = aTerrain.getTemperature();
+            intelGravity = aTerrain.getGravity();
+            //TODO: Test me
+            intelVacuum = (aTerrain.getAtmosphere().compareTo(Atmosphere.TRACE) <= 0);
             intelVisibility = pc.getVisualRange(null, false);
 
 
@@ -1535,27 +1542,27 @@ public class ShortOperation implements Comparable<Object> {
 
     }
 
-	public void switchPlayerStatusToFighting() {
-		Operation o = CampaignMain.cm.getOpsManager().getOperation(opName);
-		for (String currN : getAllPlayerNames()) {
-		    SPlayer currP = CampaignMain.cm.getPlayer(currN);
+    public void switchPlayerStatusToFighting() {
+        Operation o = CampaignMain.cm.getOpsManager().getOperation(opName);
+        for (String currN : getAllPlayerNames()) {
+            SPlayer currP = CampaignMain.cm.getPlayer(currN);
 
-		    currP.setFighting(true);
-		    CampaignMain.cm.sendPlayerStatusUpdate(currP, true);// send
-		    // fighting
-		    // info to
-		    // all
-		    CampaignMain.cm.toUser("TL|" + getInfo(true, false), currN, false);
+            currP.setFighting(true);
+            CampaignMain.cm.sendPlayerStatusUpdate(currP, true);// send
+            // fighting
+            // info to
+            // all
+            CampaignMain.cm.toUser("TL|" + getInfo(true, false), currN, false);
 
-		    CampaignMain.cm.getOpsManager().removePlayerFromAllPossibleDefenderLists(currN, false);
-		    CampaignMain.cm.getOpsManager().removePlayerFromAllDefenderLists(currP, this, true);
-		    CampaignMain.cm.getOpsManager().removePlayerFromAllAttackerLists(currP, this, true);
-		}
+            CampaignMain.cm.getOpsManager().removePlayerFromAllPossibleDefenderLists(currN, false);
+            CampaignMain.cm.getOpsManager().removePlayerFromAllDefenderLists(currP, this, true);
+            CampaignMain.cm.getOpsManager().removePlayerFromAllAttackerLists(currP, this, true);
+        }
 
-		// Do not let people get chickened anymore - stop all the threads.
-		terminateChickenThreads();
+        // Do not let people get chickened anymore - stop all the threads.
+        terminateChickenThreads();
 
-		/*
+        /*
          * Now that the Operation is actually running, it will return
          * nifty/useful info. We want to show that info to the houses of all
          * attacking/defending players, but don't want to spam housechannels
@@ -1574,12 +1581,12 @@ public class ShortOperation implements Comparable<Object> {
             CampaignMain.cm.doSendHouseMail(currH, "New Game:", getInfo(true, false));
         }
 
-	}
+    }
 
     public void SendIntelReports() {
-		Operation o = CampaignMain.cm.getOpsManager().getOperation(opName);
+        Operation o = CampaignMain.cm.getOpsManager().getOperation(opName);
 
-    	/*
+        /*
          * Send logos, intel reports and detailed game info to the invovled
          * players. Logos are those of the first player in the attacker and
          * defender maps, respectively.
@@ -1724,7 +1731,7 @@ public class ShortOperation implements Comparable<Object> {
         }
 
 
-	}
+    }
 
     /**
      * Method which sends all game information - autoarty, map info, planet info, game options, etc. Used when a participant disconnects and then returns to the
@@ -2588,25 +2595,23 @@ public class ShortOperation implements Comparable<Object> {
         if (((intelTemp > 50) || (intelTemp < -30)) && (factionOwnerShip >= chanceTemp)) {
             result += "<b>Current Temp:</b> " + intelTemp + "<br>";
         }
-        if ((intelTimeFrame != PlanetaryConditions.L_DAY) && (factionOwnerShip >= chanceTime)) {
-            result += "<b>Current Time of Day:</b> " + PlanetaryConditions.getLightDisplayableName(intelTimeFrame) + "<br>";
+        if ((intelTimeFrame != Light.DAY) && (factionOwnerShip >= chanceTime)) {
+            result += "<b>Current Time of Day:</b> " + intelTimeFrame.toString() + "<br>";
         }
         if (doubleBlind && (factionOwnerShip >= chanceTime)) {
             result += "<b>Visibility is :</b> " + (intelVisibility * 30) + " meters<br>";
         }
 
-        if (intelWeather != PlanetaryConditions.WE_NONE) {
+        if (intelWeather != Weather.CLEAR) {
             result += ("<b>Weather Condition: </b>");
-            result += (PlanetaryConditions.getWeatherDisplayableName(intelWeather));
+            result += (intelWeather.toString());
         }
 
-        if (intelWind != PlanetaryConditions.WI_NONE) {
+        if (intelWind != Wind.CALM) {
             result += ("<b>Wind Condition: </b>");
-            result += (PlanetaryConditions.getWindDisplayableName(intelWind));
+            result += (intelWind.toString());
         }
-
         return result;
-
     }
 
     public void setAutoReport(String report) {
@@ -2879,23 +2884,23 @@ public class ShortOperation implements Comparable<Object> {
 
                 // skip if the operation doesn't allow capturing of this unit type
                 if (!currFacility.canBeRaided(type, o)) {
-                	MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
-                	continue;
+                    MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
+                    continue;
                 }
 
                 // skip if the operation doesn't allow capturing of this unit type
                 if (!currFacility.canBeRaided(type, o)) {
-                	MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
-                	continue;
+                    MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
+                    continue;
                 }
 
-            	// Check if there are enough PPs
-            	int ppAvailable = losingHouse.getPP(currFacility.getWeightclass(), type);
-            	int ppNeed = currFacility.getPPCost(currFacility.getWeightclass(), type);
-            	if (ppNeed > ppAvailable) {
-            		MWLogger.debugLog("Not enough PP to capture a unit.  Needed: " + ppNeed + ", available: " + ppAvailable);
-            		continue;
-            	}
+                // Check if there are enough PPs
+                int ppAvailable = losingHouse.getPP(currFacility.getWeightclass(), type);
+                int ppNeed = currFacility.getPPCost(currFacility.getWeightclass(), type);
+                if (ppNeed > ppAvailable) {
+                    MWLogger.debugLog("Not enough PP to capture a unit.  Needed: " + ppNeed + ", available: " + ppAvailable);
+                    continue;
+                }
 
                 boolean noUnits = false;
                 while (!noUnits && (numCaptured < unitsToCapture)) {
@@ -2916,15 +2921,15 @@ public class ShortOperation implements Comparable<Object> {
                     //that makes multiple unit types
                     //13 Sept 2011 - Cord Awtry
                     for (int i = captured.size() - 1; i >= 0; i--) {
-                    	SUnit unit = captured.get(i);
+                        SUnit unit = captured.get(i);
 
-                    	if (unit.isOMGUnit()) {
-                    		MWLogger.debugLog("Removing an OMG-UR-FD from captured units for operation '" + o.getName() + "'.");
-                    		captured.remove(i);
-                    	} else if (!unit.canBeCapturedInOperation(o)) {
-                    		MWLogger.debugLog("Removing an '" + unit.getModelName() + "' from captured units for operation '" + o.getName() + "'.");
-                    		captured.remove(i);
-                    	}
+                        if (unit.isOMGUnit()) {
+                            MWLogger.debugLog("Removing an OMG-UR-FD from captured units for operation '" + o.getName() + "'.");
+                            captured.remove(i);
+                        } else if (!unit.canBeCapturedInOperation(o)) {
+                            MWLogger.debugLog("Removing an '" + unit.getModelName() + "' from captured units for operation '" + o.getName() + "'.");
+                            captured.remove(i);
+                        }
                     }
 
                     if (captured.size() < 1) {
@@ -2942,7 +2947,7 @@ public class ShortOperation implements Comparable<Object> {
         return capturedUnits;
     }
 
-	public Vector<SUnit> getPreOperationUnits(Operation o) {
+    public Vector<SUnit> getPreOperationUnits(Operation o) {
         Vector<SUnit> units = new Vector<SUnit>(1, 1);
 
         int unitCaptureCap = o.getIntValue("UnitCaptureCap");

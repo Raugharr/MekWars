@@ -21,6 +21,7 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
+import megamek.common.AmmoType.Munitions;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.commands.Command;
@@ -46,7 +47,7 @@ public class AdminListServerBannedAmmoCommand implements Command {
 			CampaignMain.cm.toUser("The server is not currently banning any ammo.",Username,true);
 		else {
 			TreeSet<String> ammoBan = new TreeSet<String>(CampaignMain.cm.getServerBannedAmmo().keySet());
-			Hashtable<Long,String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
+			Hashtable<Munitions, String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
 			for (String ammoName : ammoBan) {
                // MWLogger.errLog("Munition: "+ammoName);
 				CampaignMain.cm.toUser(munitions.get(Long.parseLong(ammoName)),Username,true);

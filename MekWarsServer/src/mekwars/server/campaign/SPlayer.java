@@ -50,11 +50,6 @@ import server.campaign.util.SerializedMessage;
 import server.campaign.util.scheduler.UserActivityComponentsJob;
 import server.campaign.util.scheduler.UserActivityInfluenceJob;
 import server.util.MWPasswdRecord;
-import server.util.QuirkHandler;
-
-
-
-//import org.json.simple.JSONObject;
 
 /**
  * A class representing a Player DOCU is not finished
@@ -291,18 +286,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         // strip illegal ammo
         SUnit.checkAmmoForUnit(m, myHouse);
         
-        //@salient add quirks to entity
-        //as seen recently, an improperly setup quirks xml can cause a npe here.
-        //so i'll add a try/catch
-        try {
-        	QuirkHandler.getInstance().setQuirks(m);        				
-		} catch (Exception e) {
-			MWLogger.errLog(e);
-			MWLogger.errLog(m.getUnitFilename() + " " + m.getVerboseModelName() 
-				+ " quirk error, check the XML files for this unit, likely xml error" );
-		}
-
-
         m.setPosId(getFreeID());
         synchronized(units) 
         {   

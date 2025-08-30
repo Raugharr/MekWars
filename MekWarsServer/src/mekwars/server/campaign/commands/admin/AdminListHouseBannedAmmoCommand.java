@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
+import megamek.common.AmmoType.Munitions;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
@@ -58,7 +59,7 @@ public class AdminListHouseBannedAmmoCommand implements Command {
 		else {
 		    CampaignMain.cm.toUser("Banned ammo for Faction "+h.getName(),Username,true);
 			Enumeration<String> ammoBan = h.getBannedAmmo().keys();
-			Hashtable<Long,String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
+			Hashtable<Munitions, String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
 			while (ammoBan.hasMoreElements()) {
 				String ammoName = ammoBan.nextElement();
 				CampaignMain.cm.toUser(munitions.get(Long.parseLong(ammoName)),Username,true);

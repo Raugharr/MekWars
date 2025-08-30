@@ -20,7 +20,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -39,6 +40,7 @@ import common.util.MWLogger;
 import common.util.TokenReader;
 import common.util.UnitUtils;
 import megamek.common.AmmoType;
+import megamek.common.AmmoType.Munitions;
 import megamek.common.BattleArmor;
 import megamek.common.Crew;
 import megamek.common.CrewType;
@@ -52,16 +54,17 @@ import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
 import megamek.common.Mounted;
+import megamek.common.equipment.AmmoMounted;
 import megamek.common.Tank;
 import megamek.common.WeaponType;
 import megamek.common.options.PilotOptions;
+import megamek.common.enums.Gender;
 import server.campaign.pilot.SPilot;
 import server.campaign.pilot.SPilotSkills;
 import server.campaign.pilot.skills.SPilotSkill;
 import server.campaign.pilot.skills.TraitSkill;
 import server.campaign.pilot.skills.WeaponSpecialistSkill;
 import server.campaign.util.SerializedMessage;
-import server.util.QuirkHandler;
 
 /**
  * A class representing an MM.Net Entity
@@ -169,52 +172,52 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
         boolean wasChanged = false;
 
-        for (Mounted mAmmo : en.getAmmo()) {
+        for (AmmoMounted mAmmo : en.getAmmo()) {
+            AmmoType ammoType = (AmmoType) mAmmo.getType();
+            EnumSet<Munitions> munition = ammoType.getMunitionType();
 
-            AmmoType at = (AmmoType) mAmmo.getType();
-            String munition = Long.toString(at.getMunitionType());
-
-            if (at.getAmmoType() == AmmoType.T_ATM) {
+            if (ammoType.getAmmoType() == AmmoType.T_ATM) {
                 continue;
             }
 
-            if (at.getAmmoType() == AmmoType.T_AC_LBX) {
+            if (ammoType.getAmmoType() == AmmoType.T_AC_LBX) {
                 continue;
             }
 
-            if (at.getAmmoType() == AmmoType.T_SRM_STREAK) {
+            if (ammoType.getAmmoType() == AmmoType.T_SRM_STREAK) {
                 continue;
             }
 
-            if (at.getAmmoType() == AmmoType.T_LRM_STREAK) {
+            if (ammoType.getAmmoType() == AmmoType.T_LRM_STREAK) {
                 continue;
             }
 
-            if (at.getAmmoType() == AmmoType.M_STANDARD) {
+            //TODO: This change is correct?
+            if (ammoType.getMunitionType().contains(AmmoType.Munitions.M_STANDARD)) {
                 continue;
             }
 
             if (CampaignMain.cm.getData().getServerBannedAmmo().containsKey(munition) || h.getBannedAmmo().containsKey(munition)) {
 
-                Vector<AmmoType> types = AmmoType.getMunitionsFor(at.getAmmoType());
+                Vector<AmmoType> types = AmmoType.getMunitionsFor(ammoType.getAmmoType());
                 Enumeration<AmmoType> allTypes = types.elements();
 
                 boolean defaultFound = false;
                 while (allTypes.hasMoreElements() && !defaultFound) {
                     AmmoType currType = allTypes.nextElement();
 
-                    if ((currType.getTechLevel(year) <= en.getTechLevel()) && (currType.getMunitionType() == AmmoType.M_STANDARD) && (currType.getRackSize() == at.getRackSize())) {
+                    if ((currType.getTechLevel(year) <= en.getTechLevel()) && (currType.getMunitionType().contains(AmmoType.Munitions.M_STANDARD)) && (currType.getRackSize() == ammoType.getRackSize())) {
                         mAmmo.changeAmmoType(currType);
-                        if(mAmmo.byShot()) {
+                        if (mAmmo.byShot()) {
                             mAmmo.setShotsLeft(mAmmo.getOriginalShots());
                         } else {
-                            mAmmo.setShotsLeft(at.getShots());
+                            mAmmo.setShotsLeft(ammoType.getShots());
                         }
                         defaultFound = true;
                         wasChanged = true;
                     }
-                }// end while
-            }// end if(is banned)
+                } // end while
+            } // end if(is banned)
 
         }
         if (wasChanged) {
@@ -228,7 +231,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
      * player sales.
      */
     public static boolean mayBeSoldOnMarket(SUnit u) {
-
         if ((u.getType() == Unit.BATTLEARMOR) && !CampaignMain.cm.getBooleanConfig("BAMayBeSoldOnBM")) {
             return false;
         } else if ((u.getType() == Unit.PROTOMEK) && !CampaignMain.cm.getBooleanConfig("ProtosMayBeSoldOnBM")) {
@@ -477,7 +479,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             unitEntity = getEntity();
             msg.append(((Mech) unitEntity).isAutoEject());
         }
-        ArrayList<Mounted> en_Ammo = unitEntity.getAmmo();
+        List<AmmoMounted> en_Ammo = unitEntity.getAmmo();
         msg.append(en_Ammo.size());
         for (Mounted mAmmo : en_Ammo) {
 
@@ -486,9 +488,9 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                 hotloaded = false;
             }
 
-            AmmoType at = (AmmoType) mAmmo.getType();
-            msg.append(at.getAmmoType());
-            msg.append(at.getInternalName());
+            AmmoType ammoType = (AmmoType) mAmmo.getType();
+            msg.append(ammoType.getAmmoType());
+            msg.append(ammoType.getInternalName());
             msg.append(mAmmo.getUsableShotsLeft());
             msg.append(hotloaded);
         }
@@ -550,9 +552,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         msg.append(getCurrentRepairCost());
         msg.append(getLifeTimeRepairCost());
         msg.append(this.isChristmasUnit());
-        //@salient
-        msg.append(QuirkHandler.getInstance().returnQuirkSave(this));
-        
         return msg.getMessage();
     }
 
@@ -619,7 +618,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                 Entity en = getEntity();
                 int maxCrits = TokenReader.readInt(ST);
                 defaultField = TokenReader.readString(ST);
-                ArrayList<Mounted> e = en.getAmmo();
+                List<AmmoMounted> e = en.getAmmo();
                 for (int count = 0; count < maxCrits; count++) {
                     int weaponType = Integer.parseInt(defaultField);
                     String ammoName = TokenReader.readString(ST);
@@ -638,21 +637,21 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                         hotloaded = false;
                     }
 
-                    Mounted mWeapon = e.get(count);
+                    AmmoMounted mWeapon = e.get(count);
 
-                    AmmoType at = getEntityAmmo(weaponType, ammoName);
-                    if (at == null) {
+                    AmmoType ammoType = getEntityAmmo(weaponType, ammoName);
+                    if (ammoType == null) {
                         // loaded --Torren.
                         continue;
                     }
-                    String munition = Long.toString(at.getMunitionType());
+                    EnumSet<Munitions> munition = ammoType.getMunitionType();
 
                     // check banned ammo
                     if (CampaignMain.cm.getData().getServerBannedAmmo().get(munition) != null) {
                         continue;
                     }
 
-                    mWeapon.changeAmmoType(at);
+                    mWeapon.changeAmmoType(ammoType);
                     mWeapon.setShotsLeft(shots);
                     mWeapon.setHotLoad(hotloaded);
                 }
@@ -705,10 +704,9 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             setChristmasUnit(TokenReader.readBoolean(ST));
             
             // quirks might be changed by SO, drop old quirks, then reset them.
-            if(ST.hasMoreTokens())
+            if (ST.hasMoreTokens()) {
                 TokenReader.readString(ST); 
-            QuirkHandler.getInstance().setQuirks(this); //checks if quirks are enabled, if not does nothing
-
+            }
             return s;
         } catch (Exception ex) {
             MWLogger.errLog(ex);
@@ -902,7 +900,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         }
 
         // any time the pilot changes set the unit commander flag to false.
-        Crew mPilot = new Crew(CrewType.SINGLE, p.getName(), 1, p.getGunnery(), p.getPiloting());
+        Crew mPilot = new Crew(CrewType.SINGLE, p.getName(), 1, p.getGunnery(), p.getPiloting(), Gender.RANDOMIZE, false, null);
         Entity entity = getEntity();
 
         // Lazy Bug report. non Anti-Mek BA should not have a Piloting skill
@@ -1203,9 +1201,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     }
 
     public boolean hasHoming() {
-
         for (Mounted ammo : getEntity().getAmmo()) {
-            if (((AmmoType) ammo.getType()).getMunitionType() == AmmoType.M_HOMING) {
+            if (((AmmoType) ammo.getType()).getMunitionType().contains(AmmoType.Munitions.M_HOMING)) {
                 return true;
             }
         }
@@ -1216,7 +1213,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         for (Mounted ammo : getEntity().getAmmo()) {
             // MWLogger.errLog("ammo type:
             // "+((AmmoType)ammo.getType()).getMunitionType());
-            if (((AmmoType) ammo.getType()).getMunitionType() == AmmoType.M_SEMIGUIDED) {
+            if (((AmmoType) ammo.getType()).getMunitionType().contains(AmmoType.Munitions.M_SEMIGUIDED)) {
                 return true;
             }
         }

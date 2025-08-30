@@ -102,7 +102,7 @@ public class CBMUnit {
 			 *
 			 * As such, we need to set the crew. See BlackMarketModel.java for usage.
 			 */
-			embeddedUnit.getEntity().setCrew(new megamek.common.Crew(CrewType.SINGLE, "Generic Pilot", 1, factionGunnery, factionGunnery, factionGunnery, factionPiloting, RandomGenderGenerator.generate(), null));
+			embeddedUnit.getEntity().setCrew(new megamek.common.Crew(CrewType.SINGLE, "Generic Pilot", 1, factionGunnery, factionGunnery, factionGunnery, factionPiloting, RandomGenderGenerator.generate(), embeddedUnit.getEntity().isClan(), null));
 		}
 	}
 

@@ -28,6 +28,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
+import java.util.EnumSet;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -59,6 +60,7 @@ import common.util.SpringLayoutHelper;
 import common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.common.AmmoType;
+import megamek.common.AmmoType.Munitions;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
@@ -323,7 +325,6 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
     }
 
     public void mousePressed(MouseEvent arg0) {
-
         if (arg0.getComponent() instanceof JList) {
             JList<String> templist = (JList<String>) arg0.getComponent();
             if (arg0.getButton() == MouseEvent.BUTTON3) {
@@ -382,7 +383,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                                                                                                                     // ==
                                                                                                                     // atCheck.getTechLevel());
 
-                            String munition = Long.toString(atCheck.getMunitionType());
+                            EnumSet<Munitions> munition = atCheck.getMunitionType();
                             House faction = mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse());
 
                             // check banned ammo
@@ -431,9 +432,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                             // N.B. play bit-shifting games to allow
                             // "incendiary"
                             // to be combined to other munition types.
-                            long muniType = atCheck.getMunitionType();
-                            muniType &= ~AmmoType.M_INCENDIARY_LRM;
-                            if (!mmClient.getGame().getOptions().booleanOption("clan_ignore_eq_limits") && unit.isClan() && ((muniType == AmmoType.M_SEMIGUIDED) || (muniType == AmmoType.M_THUNDER_AUGMENTED) || (muniType == AmmoType.M_THUNDER_INFERNO) || (muniType == AmmoType.M_THUNDER_VIBRABOMB) || (muniType == AmmoType.M_THUNDER_ACTIVE) || (muniType == AmmoType.M_INFERNO_IV) || (muniType == AmmoType.M_VIBRABOMB_IV))) {
+                            if (!mmClient.getGame().getOptions().booleanOption("clan_ignore_eq_limits") && unit.isClan() && UnitUtils.isInnerSphereOnlyAmmo(atCheck.getMunitionType())) {
                                 bTechMatch = false;
                             }
 
@@ -1006,7 +1005,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         int totalCost = 1;
         int techCost = 0;
         int techCostWorkMod = 0;
-        double totalCrits = 1;// For Armor
+        double totalCrits = 1; // For Armor
         critSlot = selectedSlot;
 
         if (techComboBox.getSelectedIndex() < UnitUtils.TECH_PILOT) {
@@ -1032,9 +1031,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
             cost += (techCost * Math.abs(techCostWorkMod)) + techCost;
             costField.setText(Integer.toString((int) cost));
-        }// Use Crit based Repairs!
-        else {
-
+        // Use Crit based Repairs!
+        } else {
             if (critSlot == UnitUtils.LOC_FRONT_ARMOR) {
                 armor = true;
                 double cost = CUnit.getArmorCost(unit, mwclient, critSlot);
@@ -1143,7 +1141,6 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
     }
 
     public void keyReleased(KeyEvent arg0) {
-
         if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
             mwclient.getPlayer().resetRepairs();
             super.dispose();

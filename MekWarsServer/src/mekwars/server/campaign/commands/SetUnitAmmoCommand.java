@@ -17,11 +17,14 @@
 package server.campaign.commands;
 
 import java.util.StringTokenizer;
+import java.util.EnumSet;
 
 import megamek.common.AmmoType;
+import megamek.common.AmmoType.Munitions;
 import megamek.common.BattleArmor;
 import megamek.common.Entity;
 import megamek.common.Mounted;
+import megamek.common.equipment.AmmoMounted;
 import server.campaign.CampaignMain;
 import server.campaign.SHouse;
 import server.campaign.SPlayer;
@@ -86,11 +89,11 @@ public class SetUnitAmmoCommand implements Command {
         }
 
         int location = 0;
-        Mounted mWeapon = null;
+        AmmoMounted mWeapon = null;
 
-        for (Mounted Weapon : en.getAmmo()) {
+        for (AmmoMounted weapon : en.getAmmo()) {
             if (location == weaponLocation) {
-                mWeapon = Weapon;
+                mWeapon = weapon;
                 break;
             }
             location++;
@@ -122,8 +125,7 @@ public class SetUnitAmmoCommand implements Command {
             return;
         }
 
-        if (shots == 0) {// dumping ammo
-
+        if (shots == 0) { // dumping ammo
             if (usingCrits) {
                 p.updatePartsCache(currAmmo.getInternalName(), mWeapon.getUsableShotsLeft());
             }
@@ -141,7 +143,7 @@ public class SetUnitAmmoCommand implements Command {
             return;
         }
 
-        String munitionType = Long.toString(at.getMunitionType());
+        EnumSet<Munitions> munitionType = at.getMunitionType();
 
         // dont make players confirm the command on a server which doesnt charge
         // for ammo

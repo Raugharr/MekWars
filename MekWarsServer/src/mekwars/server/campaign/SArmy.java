@@ -230,7 +230,7 @@ public class SArmy extends Army {
         for (Unit currU : getUnits()) {
             SUnit unit = (SUnit) currU;
             for (Mounted ammo : unit.getEntity().getAmmo()) {
-                if (((AmmoType) ammo.getType()).getMunitionType() == AmmoType.M_SEMIGUIDED) {
+                if (((AmmoType) ammo.getType()).getMunitionType().contains(AmmoType.Munitions.M_SEMIGUIDED)) {
                     bv += ((AmmoType) ammo.getType()).getBV(unit.getEntity());
                 }
             }

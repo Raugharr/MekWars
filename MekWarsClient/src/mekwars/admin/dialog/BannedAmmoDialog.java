@@ -37,6 +37,8 @@ import common.House;
 import common.util.MWLogger;
 import common.util.SpringLayoutHelper;
 
+import megamek.common.AmmoType.Munitions;
+
 public final class BannedAmmoDialog implements ActionListener{
 	
 	//store the client backlink for other things to use
@@ -125,41 +127,39 @@ public final class BannedAmmoDialog implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-        Hashtable<String,Long> munitionTypes = mwclient.getData().getMunitionsByName();
+        Hashtable<String, Munitions> munitionTypes = mwclient.getData().getMunitionsByName();
         
-        if ( command.equals(okayCommand)){
-            if ( house == null ){
+        if (command.equals(okayCommand)) {
+            if (house == null) {
                 Hashtable<String,String> bannedAmmo = mwclient.getData().getServerBannedAmmo();
-                for ( JCheckBox tempBox : cBoxArrayList ){
-                    String ammo = Long.toString(munitionTypes.get(tempBox.getText()));
+                for (JCheckBox tempBox : cBoxArrayList) {
+                    Munitions ammo = munitionTypes.get(tempBox.getText());
                     
                     //Check box has been selected and should be updated to the server
-                    if ( tempBox.isSelected() && !bannedAmmo.containsKey(ammo) )
+                    if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo))
                         mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetserverammoban#"
                         + munitionTypes.get(tempBox.getText()));
                     //Checkbox has been unselected and should be updated to the server
-                    else if ( !tempBox.isSelected() && bannedAmmo.containsKey(ammo) )
+                    else if (!tempBox.isSelected() && bannedAmmo.containsKey(ammo))
                         mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetserverammoban#"
                                 + munitionTypes.get(tempBox.getText()));
                 }
-            }
-            else{
-                Hashtable<String,String> bannedAmmo = house.getBannedAmmo();
-                for ( JCheckBox tempBox : cBoxArrayList ){
-                    String ammo = Long.toString(munitionTypes.get(tempBox.getText()));
+			} else {
+                Hashtable<String, String> bannedAmmo = house.getBannedAmmo();
+                for (JCheckBox tempBox : cBoxArrayList) {
+                    Munitions ammo = munitionTypes.get(tempBox.getText());
                     
                     //Check box has been selected and should be updated to the server
-                    if ( tempBox.isSelected() && !bannedAmmo.containsKey(ammo) )
+                    if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo))
                         mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsethouseammoban#"
                                 +house.getName()+"#"+ munitionTypes.get(tempBox.getText()));
                     //Checkbox has been unselected and should be updated to the server
-                    else if ( !tempBox.isSelected() && bannedAmmo.containsKey(ammo) )
+                    else if (!tempBox.isSelected() && bannedAmmo.containsKey(ammo))
                         mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsethouseammoban#"
                                 +house.getName()+"#"+ munitionTypes.get(tempBox.getText()));
                     
                 }
             }
-            
             dialog.dispose();
             return;
         }
@@ -173,33 +173,31 @@ public final class BannedAmmoDialog implements ActionListener{
             mwclient.loadBannedAmmo();
     }
     
+	/*
+	 * @return false if the ammo is banned by the player's house or the server, otherwise true.
+	 */
     public boolean checkAmmoBan(String ammo){
-        
-        if ( house == null ){
-            try{
-                
-                //I did this for some silly reason. and now I'm paying for it. 
-                //But I don't want to change all the code to long,string hashes
-                //Generics would make it easy but I'm lazy and it works. --Torren.
-                String munition = Long.toString(mwclient.getData().getMunitionsByName().get(ammo));
-                if (  mwclient.getData().getServerBannedAmmo().containsKey(munition) )
-                    return true;
-                return false;
-            }catch(Exception ex){
-                MWLogger.errLog("Unable to find ammo "+ammo);
+        if (house == null) {
+            try {
+                Munitions munition = mwclient.getData().getMunitionsByName().get(ammo);
+                if (!mwclient.getData().getServerBannedAmmo().containsKey(munition)) {
+					return false;
+				}
+            } catch (Exception ex) {
+                MWLogger.errLog("Unable to find ammo " + ammo);
                 return false;
             }
         }
-        try{
-            String munition = Long.toString(mwclient.getData().getMunitionsByName().get(ammo));
-            if (  house.getBannedAmmo().containsKey(munition) )
-                return true;
-            return false;
-        }catch(Exception ex){
-            MWLogger.errLog("Unable to find ammo "+ammo);
+        try {
+            Munitions munition = mwclient.getData().getMunitionsByName().get(ammo);
+            if (!house.getBannedAmmo().containsKey(munition)) {
+				return false;
+			}
+        } catch (Exception ex) {
+            MWLogger.errLog("Unable to find ammo " + ammo);
             return false;
         }
-
+		return true;
     }
 	
 }//end BannedAmmoDialog.java

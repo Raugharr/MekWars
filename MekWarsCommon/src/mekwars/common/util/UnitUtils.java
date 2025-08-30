@@ -17,6 +17,7 @@
 package common.util;
 
 import java.util.Iterator;
+import java.util.EnumSet;
 
 import common.CampaignData;
 import common.MegaMekPilotOption;
@@ -24,6 +25,7 @@ import common.Unit;
 import common.campaign.pilot.skills.PilotSkill;
 import common.util.unitdamage.UnitDamageHandlerFactory;
 import megamek.common.AmmoType;
+import megamek.common.AmmoType.Munitions;
 import megamek.common.BipedMech;
 import megamek.common.Crew;
 import megamek.common.CrewType;
@@ -40,9 +42,10 @@ import megamek.common.MiscType;
 import megamek.common.Mounted;
 import megamek.common.Tank;
 import megamek.common.TechConstants;
+import megamek.common.enums.Gender;
+import megamek.common.equipment.ArmorType;
 
 public class UnitUtils {
-
     // Engines
     public static final int STANDARD_ENGINE = 0;
     public static final int IS_LIGHT_ENGINE = 1;
@@ -1500,10 +1503,10 @@ public class UnitUtils {
 
             // External Armor
             if (slot < LOC_INTERNAL_ARMOR) {
-                double points = 16.0 * EquipmentType.getArmorPointMultiplier(
-                        unit.getArmorType(slot), unit.getArmorTechLevel(slot));
-                double costPerTon = EquipmentType.getArmorCost(unit
-                        .getArmorType(slot));
+                // TODO; Test this.
+                double points = 16.0 * ArmorType.forEntity(unit, slot).getPointsPerTon(unit);
+                double costPerTon = ArmorType.forEntity(unit, slot).getCost();
+
 
                 // just in case
                 if (points == 0) {
@@ -2655,12 +2658,12 @@ public class UnitUtils {
         // get and set the options
         Crew pilot = null;
         if (mek.getPilot() == null) {
-			//when looking at a pilotless mek - we need a default pilot
-		    pilot = new Crew(CrewType.SINGLE, "No Pilot", 1, 4, 4, 4, 5, null, null);
-		    return pilot;
-		} else {
+            //when looking at a pilotless mek - we need a default pilot
+            pilot = new Crew(CrewType.SINGLE, "No Pilot", 1, 4, 4, 4, 5, Gender.RANDOMIZE, false, null);
+            return pilot;
+        } else {
             pilot = new Crew(CrewType.SINGLE, mek.getPilot().getName(), 1, mek.getPilot()
-                .getGunnery(), mek.getPilot().getPiloting());
+                .getGunnery(), mek.getPilot().getPiloting(), Gender.RANDOMIZE, false, null);
         }
         // Hits defaults to 0 so no reason to keep checking over and over again.
         pilot.setHits(mek.getPilot().getHits(), 0);
@@ -2715,5 +2718,19 @@ public class UnitUtils {
             boolean isRepairing) {
         UnitDamageHandlerFactory.getHandler(unit).applyDamageString(unit,
                 report, isRepairing);
+    }
+
+    public static boolean isInnerSphereOnlyAmmo(EnumSet<Munitions> munitionType) {
+        EnumSet<Munitions> innersphereMunitions = EnumSet.of(
+            Munitions.M_INCENDIARY_LRM,
+            Munitions.M_SEMIGUIDED,
+            Munitions.M_THUNDER_AUGMENTED,
+            Munitions.M_THUNDER_INFERNO,
+            Munitions.M_THUNDER_VIBRABOMB,
+            Munitions.M_THUNDER_ACTIVE,
+            Munitions.M_INFERNO_IV,
+            Munitions.M_VIBRABOMB_IV
+        );
+        return !innersphereMunitions.retainAll(munitionType);
     }
 }
