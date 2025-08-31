@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 
 import server.campaign.CampaignMain;
 import server.campaign.SPlayer;
+import megamek.Version;
 
 public class SetClientVersionCommand implements Command {
 	
@@ -33,7 +34,7 @@ public class SetClientVersionCommand implements Command {
 		
 		SPlayer p = CampaignMain.cm.getPlayer(command.nextToken());
 		if ( p != null ){
-			String version = command.nextToken();
+			Version version = new Version(command.nextToken());
 			p.setPlayerClientVersion(version);
 		}
 	}

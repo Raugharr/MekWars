@@ -52,11 +52,12 @@ import server.campaign.DefaultServerOptions;
 import server.campaign.SPlayer;
 import server.util.IpCountry;
 import server.util.TrackerThread;
+import megamek.Version;
 
 public class MWServ {
 
 	// Static logging engine, and static version info.
-    public static final String SERVER_VERSION = "0.8.0.0";
+    public static final Version SERVER_VERSION = new Version("9.0.0");
 
 
     private ServerWrapper myCommunicator;
@@ -391,8 +392,7 @@ public class MWServ {
 			iphelp.put(newUser, hisip);
 		}
 
-		String clientVersion = "any " + SERVER_VERSION.substring(0, SERVER_VERSION.lastIndexOf(".")) + ".x";
-		clientSend("CH|Welcome to " + getCampaign().getConfig("ServerName") + " (Server Version: " + SERVER_VERSION + ", Compatible Clients: " + clientVersion + ")", name);
+		clientSend("CH|Welcome to " + getCampaign().getConfig("ServerName") + " (Server Version: " + SERVER_VERSION + ", Compatible Clients: " + SERVER_VERSION.toString() + ")", name);
 		clientSend("CH|" + getConfigParam("INFOMESSAGE"), name);
 
 		// send MMGame info for currently open hosts. future updates

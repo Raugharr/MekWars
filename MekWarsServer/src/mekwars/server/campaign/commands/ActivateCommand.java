@@ -20,6 +20,7 @@ import common.Unit;
 import common.campaign.operations.Operation;
 import common.util.MWLogger;
 import common.util.UnitUtils;
+import megamek.Version;
 import megamek.common.Mech;
 import server.MWServ;
 import server.campaign.CampaignMain;
@@ -65,12 +66,13 @@ public class ActivateCommand implements Command {
         }
 
         if (command.hasMoreTokens()) {
-            p.setPlayerClientVersion(command.nextToken());
+            p.setPlayerClientVersion(new Version(command.nextToken()));
         }
         
         // Put it into a try block. One user was causing FormatExceptions
         try {
-            if (!(MWServ.SERVER_VERSION).substring(0, server.MWServ.SERVER_VERSION.lastIndexOf(".")).equals(p.getPlayerClientVersion().substring(0, p.getPlayerClientVersion().lastIndexOf(".")))) {
+            // if (!(MWServ.SERVER_VERSION).substring(0, server.MWServ.SERVER_VERSION.lastIndexOf(".")).equals(p.getPlayerClientVersion().substring(0, p.getPlayerClientVersion().lastIndexOf(".")))) {
+			if (!MWServ.SERVER_VERSION.is(p.getPlayerClientVersion())) {
                 // server.MWLogger.modLog(Username + " failed to activate. Was using version " + p.getPlayerClientVersion()+" Server Version: "+
                 // MWServ.SERVER_VERSION);
                 CampaignMain.cm.doSendModMail("NOTE", Username + " failed to activate. Was using version " + p.getPlayerClientVersion() + " Server Version: " + MWServ.SERVER_VERSION);

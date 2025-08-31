@@ -25,6 +25,8 @@ import server.campaign.SHouse;
 import server.campaign.SPlayer;
 import server.campaign.commands.Command;
 
+import megamek.Version;
+
 public class ForcedDefectCommand implements Command {
 	
 	int accessLevel = IAuthenticator.ADMIN;
@@ -73,7 +75,7 @@ public class ForcedDefectCommand implements Command {
 		}
 		
 		//make the move
-		String clientVersion = p.getPlayerClientVersion();
+		Version clientVersion = p.getPlayerClientVersion();
 		p.getMyHouse().removeLeader(p.getName());
 		p.getMyHouse().removePlayer(p,false);
 		p.setMyHouse(h);

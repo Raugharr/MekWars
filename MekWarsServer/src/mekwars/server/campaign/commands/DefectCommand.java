@@ -27,6 +27,7 @@ import common.Planet;
 import common.UnitFactory;
 import common.util.MWLogger;
 import common.util.UnitUtils;
+import megamek.Version;
 import megamek.common.TechConstants;
 import server.campaign.BuildTable;
 import server.campaign.CampaignMain;
@@ -561,7 +562,7 @@ public class DefectCommand implements Command {
              */
             p.getMyHouse().removeLeader(p.getName());
 
-            String clientVersion = p.getPlayerClientVersion();
+            Version clientVersion = p.getPlayerClientVersion();
 
             p.getMyHouse().removePlayer(p, false);
             p.setMyHouse(newHouse);

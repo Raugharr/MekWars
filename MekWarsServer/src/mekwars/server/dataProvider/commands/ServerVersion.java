@@ -30,6 +30,6 @@ import server.dataProvider.ServerCommand;
  */
 public class ServerVersion implements ServerCommand {
     public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
-        out.println(MWServ.SERVER_VERSION, "ServerVersion");
+        out.println(MWServ.SERVER_VERSION.toString(), "ServerVersion");
     }
 }

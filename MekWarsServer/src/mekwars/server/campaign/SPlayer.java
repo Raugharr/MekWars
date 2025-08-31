@@ -38,6 +38,7 @@ import common.util.TokenReader;
 import common.util.UnitComponents;
 import common.util.UnitUtils;
 import megamek.common.Protomech;
+import megamek.Version;
 import server.MWChatServer.auth.IAuthenticator;
 import server.campaign.market2.IBuyer;
 import server.campaign.market2.ISeller;
@@ -126,7 +127,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
     private String sellingto = "";
     private String lastSentStatus = "";
-    private String clientVersion = "";// version gets sent by the player and
+    private Version clientVersion; // version gets sent by the player and
     // set
 
     private SHouse myHouse;
@@ -2844,11 +2845,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         return sellingto;
     }
 
-    public void setPlayerClientVersion(String version) {
+    public void setPlayerClientVersion(Version version) {
         clientVersion = version;
     }
 
-    public String getPlayerClientVersion() {
+    public Version getPlayerClientVersion() {
         return clientVersion;
     }
 
