@@ -21,6 +21,14 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.11.0'
 }
 
+application {
+    applicationDefaultJvmArgs = [
+			'-Dlog4j2.configurationFile=log4j2.xml',
+            '-Xmx4096m',
+            '-Dsun.awt.disablegrab=true'
+    ]
+}
+
 checkstyle {
     toolVersion = '10.25.0'
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
