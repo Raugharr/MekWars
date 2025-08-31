@@ -43,7 +43,7 @@
     <emiChance>0</emiChance>
     <lightFogChance>0</lightFogChance>
     <heavyFogChance>0</heavyFogChance>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
   </advancedTerrain>
   <advancedTerrain>
@@ -56,9 +56,9 @@
 	<temperature>25</temperature>
     <gravity>1.0</gravity>
     <vacuum>false</vacuum>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
-	<lightConditions>0</lightConditions>
+	<lightConditions>day</lightConditions>
     <nightTempMod>0</nightTempMod>
 
     <!-- all chances are in tenth of a percent -->
@@ -83,11 +83,11 @@
     <heavyHailChance>0</heavyHailChance>
 
 
-	<windStrength>0</windStrength>
-	<windDirection>0</windDirection>
+	<windStrength>calm</windStrength>
+	<windDirection>random</windDirection>
 	<shiftingWindStrength>false</shiftingWindStrength>
     <shiftingWindDirection>true</shiftingWindDirection>
-	<maxWindStrength>0</maxWindStrength>
+	<maxWindStrength>calm</maxWindStrength>
 
     <!-- only one of these wind conditions will happen -->
     <lightWindChance>0</lightWindChance>
@@ -102,7 +102,7 @@
     <!-- most things except meks die here -->
 
     <emiChance>0</emiChance>
-	<emi>false</emi>
+	<emi>emi_none</emi>
 
     <lightFogChance>0</lightFogChance>
     <heavyFogChance>0</heavyFogChance>
@@ -115,7 +115,7 @@
     <lowTemp>12</lowTemp>
     <highTemp>28</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
     <fullMoonChance>50</fullMoonChance>
     <duskChance>35</duskChance>
     <nightTempMod>10</nightTempMod>
@@ -167,7 +167,7 @@
     <lowTemp>-10</lowTemp>
     <highTemp>10</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
     <fullMoonChance>50</fullMoonChance>
     <duskChance>35</duskChance>
     <nightTempMod>20</nightTempMod>
@@ -219,7 +219,7 @@
     <lowTemp>12</lowTemp>
     <highTemp>28</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
     <fullMoonChance>50</fullMoonChance>
     <duskChance>35</duskChance>
 	<nightTempMod>10</nightTempMod>
@@ -272,7 +272,7 @@
     <lowTemp>-10</lowTemp>
     <highTemp>10</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
     <nightTempMod>20</nightTempMod>
 
     <fullMoonChance>50</fullMoonChance>
@@ -318,7 +318,7 @@
     <lowTemp>30</lowTemp>
     <highTemp>45</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>50</nightTempMod>
 
@@ -352,7 +352,7 @@
     <lowTemp>50</lowTemp>
     <highTemp>75</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
     <nightTempMod>30</nightTempMod>
 
     <fullMoonChance>50</fullMoonChance>
@@ -385,7 +385,7 @@
     <lowTemp>-10</lowTemp>
     <highTemp>15</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
     <nightTempMod>80</nightTempMod>
 
     <fullMoonChance>50</fullMoonChance>
@@ -419,7 +419,7 @@
     <lowTemp>30</lowTemp>
     <highTemp>55</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
     <nightTempMod>50</nightTempMod>
 
     <fullMoonChance>50</fullMoonChance>
@@ -453,7 +453,7 @@
     <lowTemp>50</lowTemp>
     <highTemp>75</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
     <nightTempMod>30</nightTempMod>
 
     <fullMoonChance>50</fullMoonChance>
@@ -485,7 +485,7 @@
     <lowTemp>-10</lowTemp>
     <highTemp>15</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>80</nightTempMod>
 
@@ -520,7 +520,7 @@
     <lowTemp>22</lowTemp>
     <highTemp>35</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>8</nightTempMod>
 
@@ -555,7 +555,7 @@
     <lowTemp>50</lowTemp>
     <highTemp>75</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>15</nightTempMod>
 
@@ -589,7 +589,7 @@
     <lowTemp>22</lowTemp>
     <highTemp>35</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>8</nightTempMod>
 
@@ -623,7 +623,7 @@
     <lowTemp>50</lowTemp>
     <highTemp>75</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>15</nightTempMod>
 
@@ -657,7 +657,7 @@
     <lowTemp>70</lowTemp>
     <highTemp>80</highTemp>
     <gravity>0.8</gravity>
-    <atmosphere>2</atmosphere>
+    <atmosphere>thin</atmosphere>
 
     <nightTempMod>160</nightTempMod>
 
@@ -681,7 +681,7 @@
     <lowTemp>110</lowTemp>
     <highTemp>120</highTemp>
     <gravity>0.8</gravity>
-    <atmosphere>1</atmosphere>
+    <atmosphere>trace</atmosphere>
 
 	<nightTempMod>240</nightTempMod>
 
@@ -705,7 +705,7 @@
     <lowTemp>120</lowTemp>
     <highTemp>130</highTemp>
     <gravity>0.8</gravity>
-    <atmosphere>0</atmosphere>
+    <atmosphere>vacuum</atmosphere>
 
     <nightTempMod>240</nightTempMod>
 
@@ -728,7 +728,7 @@
     <lowTemp>70</lowTemp>
     <highTemp>80</highTemp>
     <gravity>0.5</gravity>
-    <atmosphere>2</atmosphere>
+    <atmosphere>thin</atmosphere>
 
     <nightTempMod>160</nightTempMod>
 
@@ -750,7 +750,7 @@
     <lowTemp>110</lowTemp>
     <highTemp>120</highTemp>
     <gravity>0.5</gravity>
-    <atmosphere>1</atmosphere>
+    <atmosphere>trace</atmosphere>
 
     <nightTempMod>240</nightTempMod>
 
@@ -771,7 +771,7 @@
     <lowTemp>120</lowTemp>
     <highTemp>130</highTemp>
     <gravity>0.5</gravity>
-    <atmosphere>0</atmosphere>
+    <atmosphere>vacuum</atmosphere>
 
     <nightTempMod>240</nightTempMod>
 
@@ -791,7 +791,7 @@
     <lowTemp>0</lowTemp>
     <highTemp>5</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>20</nightTempMod>
 
@@ -827,7 +827,7 @@
     <lowTemp>-40</lowTemp>
     <highTemp>-10</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>80</nightTempMod>
 
@@ -862,7 +862,7 @@
     <lowTemp>-40</lowTemp>
     <highTemp>-10</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>80</nightTempMod>
 
@@ -898,7 +898,7 @@
     <lowTemp>25</lowTemp>
     <highTemp>30</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>15</nightTempMod>
 
@@ -930,7 +930,7 @@
     <lowTemp>25</lowTemp>
     <highTemp>30</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>15</nightTempMod>
 
@@ -963,7 +963,7 @@
     <lowTemp>50</lowTemp>
     <highTemp>70</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>15</nightTempMod>
 
@@ -996,7 +996,7 @@
     <lowTemp>50</lowTemp>
     <highTemp>70</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>15</nightTempMod>
 
@@ -1029,7 +1029,7 @@
     <lowTemp>0</lowTemp>
     <highTemp>-10</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>30</nightTempMod>
 
@@ -1062,7 +1062,7 @@
     <lowTemp>0</lowTemp>
     <highTemp>-10</highTemp>
     <gravity>1.0</gravity>
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>30</nightTempMod>
 
@@ -1098,7 +1098,7 @@
     <lightFogChance>0</lightFogChance>
     <heavyFogChance>0</heavyFogChance>
 
-    <atmosphere>3</atmosphere>
+    <atmosphere>standard</atmosphere>
 
     <nightTempMod>20</nightTempMod>
 
