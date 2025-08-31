@@ -11,4 +11,4 @@
 5 Mongoose MON-67.mtf
 5 Thorn THE-S.mtf
 5 Wasp WSP-1W.mtf
-5 Urbanmech UM-R60M2.mtf
+5 UrbanMech UM-R60M2.mtf
