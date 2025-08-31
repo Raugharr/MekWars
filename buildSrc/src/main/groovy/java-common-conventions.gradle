@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-	implementation 'org.megamek:megamek-HEAD:0.49.15-SNAPSHOT'
+	implementation 'org.megamek:megamek-HEAD:0.50.0-SNAPSHOT'
 
 	implementation 'com.google.guava:guava:24.0-jre'
 	implementation 'org.quartz-scheduler:quartz:2.2.3'
@@ -16,6 +16,9 @@ dependencies {
 	implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
 	implementation 'org.apache.logging.log4j:log4j-api:2.24.3'
 	implementation 'com.thoughtworks.xstream:xstream:1.4.14'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'org.mockito:mockito-core:5.11.0'
 }
 
 checkstyle {
