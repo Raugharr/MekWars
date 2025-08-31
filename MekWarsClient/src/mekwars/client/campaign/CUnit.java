@@ -163,25 +163,11 @@ public class CUnit extends Unit {
         setId(TokenReader.readInt(ST));
 
         createEntity();
-        if (unitEntity == null) {
-            MWLogger.errLog("Cannot load entity!");
-            return (false);
-        }
 
         // don't try to set ammo and eject on an OMG
         if (getModelName().startsWith("Error")
                 || getModelName().startsWith("OMG")) {
             unitEntity.setExternalId(getId());
-            unitEntity.setCrew(new megamek.common.Crew(
-						CrewType.SINGLE,
-						p.getName(),
-						1,
-					   	p.getGunnery(),
-						p.getPiloting(),
-						Gender.RANDOMIZE,
-						unitEntity.isClan(),
-						null
-					));
             return true;
         }
 
@@ -567,9 +553,8 @@ public class CUnit extends Unit {
      * Tries to set UnitEntity from the global MekFileName
      */
     public void createEntity() {
-        // MMClient.mwClientLog.clientErrLog("Filename: " + getUnitFilename());
         unitEntity = UnitUtils.createEntity(getUnitFilename());
-        unitEntity.setCrew(UnitUtils.createEntityPilot(this));
+        unitEntity.setCrew(UnitUtils.createEntityPilot(this, unitEntity.isClan()));
 
         if (unitEntity == null) {
             MWLogger.errLog("Error unit failed to load. Exiting.");
@@ -580,7 +565,6 @@ public class CUnit extends Unit {
             setProducer("Unable to find " + getUnitFilename()
                     + " on clients system!");
         }
-        // setType(getEntityType(UnitEntity));
         getC3Type(unitEntity);
     }
 

@@ -38,6 +38,7 @@ import megamek.client.bot.BotClient;
 import megamek.client.bot.princess.Princess;
 import megamek.client.bot.ui.swing.BotGUI;
 import megamek.client.ui.swing.util.MegaMekController;
+import megamek.client.generator.RandomGenderGenerator;
 import megamek.common.Board;
 import megamek.common.BoardDimensions;
 import megamek.common.Coords;
@@ -512,7 +513,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                     }
 
                     // Add Pilot to entity
-                    entity.setCrew(UnitUtils.createEntityPilot(mek));
+                    entity.setCrew(UnitUtils.createEntityPilot(mek, mwclient.getPlayer().isClan()));
                     // Add Mek to game
                     client.sendAddEntity(entity);
                     // Wait a few secs to not overuse bandwith
@@ -556,10 +557,19 @@ public class ClientThread extends Thread implements CloseClientListener {
 
                     if (entity.getCrew().getName().equalsIgnoreCase("Unnamed") || entity.getCrew().getName().equalsIgnoreCase("vacant")) {
                         // set the pilot
-                        Crew pilot = new Crew(CrewType.SINGLE, "AutoArtillery", 1, 4, 5, Gender.RANDOMIZE, entity.isClan(), null);
+                        Crew pilot = new Crew(
+                                CrewType.SINGLE,
+                                "AutoArtillery",
+                                1,
+                                4,
+                                5,
+                                RandomGenderGenerator.generate(),
+                                entity.isClan(),
+                                null
+                            );
                         entity.setCrew(pilot);
                     } else {
-                        entity.setCrew(UnitUtils.createEntityPilot(autoUnit));
+                        entity.setCrew(UnitUtils.createEntityPilot(autoUnit, mwclient.getPlayer().isClan()));
                     }
 
                     // MWLogger.errLog(entity.getModel()+"

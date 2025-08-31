@@ -16,14 +16,14 @@
 
 package common.util;
 
-import java.util.Iterator;
-import java.util.EnumSet;
-
 import common.CampaignData;
 import common.MegaMekPilotOption;
 import common.Unit;
 import common.campaign.pilot.skills.PilotSkill;
 import common.util.unitdamage.UnitDamageHandlerFactory;
+import java.util.EnumSet;
+import java.util.Iterator;
+import megamek.client.generator.RandomGenderGenerator;
 import megamek.common.AmmoType;
 import megamek.common.AmmoType.Munitions;
 import megamek.common.BipedMech;
@@ -2537,13 +2537,7 @@ public class UnitUtils {
                 if (ms == null) {
                     MechSummary[] units = MechSummaryCache.getInstance()
                             .getAllMechs();
-                    // System.err.println("unit: "+getUnitFilename());
                     for (MechSummary unit : units) {
-                        // System.err.println("Source file:
-                        // "+unit.getSourceFile().getName());
-                        // System.err.println("Model: "+unit.getModel());
-                        // System.err.println("Chassis: "+unit.getChassis());
-                        // System.err.flush();
                         if (unit.getEntryName().equalsIgnoreCase(fileName)
                                 || unit.getModel().trim()
                                         .equalsIgnoreCase(fileName.trim())
@@ -2560,7 +2554,7 @@ public class UnitUtils {
                     ms.getEntryName()).getEntity();
         } catch (Exception exep) {
             try {
-                UnitEntity = UnitUtils.createOMG();// new
+                UnitEntity = UnitUtils.createOMG(); // new
             } catch (Exception exepe) {
                 MWLogger.errLog("Error unit failed to load. Exiting.");
                 return null;
@@ -2654,16 +2648,35 @@ public class UnitUtils {
         }
     }
 
-    public static Crew createEntityPilot(Unit mek) {
+    public static Crew createEntityPilot(Unit mek, boolean isClan) {
         // get and set the options
         Crew pilot = null;
         if (mek.getPilot() == null) {
             //when looking at a pilotless mek - we need a default pilot
-            pilot = new Crew(CrewType.SINGLE, "No Pilot", 1, 4, 4, 4, 5, Gender.RANDOMIZE, false, null);
+            pilot = new Crew(
+                    CrewType.SINGLE,
+                    "No Pilot",
+                    1,
+                    4,
+                    4,
+                    4,
+                    5,
+                    RandomGenderGenerator.generate(),
+                    isClan,
+                    null
+                );
             return pilot;
         } else {
-            pilot = new Crew(CrewType.SINGLE, mek.getPilot().getName(), 1, mek.getPilot()
-                .getGunnery(), mek.getPilot().getPiloting(), Gender.RANDOMIZE, false, null);
+            pilot = new Crew(
+                    CrewType.SINGLE,
+                    mek.getPilot().getName(),
+                    1,
+                    mek.getPilot().getGunnery(),
+                    mek.getPilot().getPiloting(),
+                    Gender.RANDOMIZE,
+                    isClan,
+                    null
+                );
         }
         // Hits defaults to 0 so no reason to keep checking over and over again.
         pilot.setHits(mek.getPilot().getHits(), 0);
@@ -2695,7 +2708,6 @@ public class UnitUtils {
                         .setValue(po.isValue());
             }
         }
-
         return pilot;
     }
 

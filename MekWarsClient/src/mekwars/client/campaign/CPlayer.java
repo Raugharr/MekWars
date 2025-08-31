@@ -1388,4 +1388,8 @@ public class CPlayer extends Player {
         }
         mwclient.getMainFrame().getMainPanel().getHSPanel().updateDisplay();
     }
+
+    public boolean isClan() {
+        return getMyHouse().isClan();
+    }
 }

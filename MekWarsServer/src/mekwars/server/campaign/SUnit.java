@@ -59,6 +59,8 @@ import megamek.common.Tank;
 import megamek.common.WeaponType;
 import megamek.common.options.PilotOptions;
 import megamek.common.enums.Gender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import server.campaign.pilot.SPilot;
 import server.campaign.pilot.SPilotSkills;
 import server.campaign.pilot.skills.SPilotSkill;
@@ -75,6 +77,7 @@ import server.campaign.util.SerializedMessage;
  */
 
 public final class SUnit extends Unit implements Comparable<SUnit> {
+    private static final Logger logger = LogManager.getLogger(SUnit.class);
 
     // VARIABLES
     private Integer BV = 0;
@@ -709,8 +712,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             }
             return s;
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Unable to Load SUnit: " + s);
+            logger.error("Unable to Load SUnit: '{}', '{}'", s, ex.getMessage());
             // the unit should still be good return what did get set
             return s;
         }
@@ -824,7 +826,13 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                 getEntity().getCrew().setGunnery(4);
                 getEntity().getCrew().setPiloting(5);
             } else {
-                getEntity().setCrew(UnitUtils.createEntityPilot(this));
+                /*
+                 * FIXME: This is an unfortunate hack. While we know the entity is clan or not we
+                 * should base if the pilot is a clanner or not based on the faction not the mech.
+                 * It looks like there is no way to get the faction this unit belongs to at the
+                 * moment.
+                 */
+                getEntity().setCrew(UnitUtils.createEntityPilot(this, getEntity().isClan()));
             }
 
             // get a base BV from MegaMek
@@ -1050,7 +1058,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     }
 
     public static Entity loadMech(String Filename) {
-
         if (Filename == null) {
             return null;
         }
@@ -1058,19 +1065,11 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         Entity ent = null;
 
         if (new File("./data/mechfiles").exists()) {
-
             try {
                 MechSummary ms = MechSummaryCache.getInstance().getMech(Filename.trim());
                 if (ms == null) {
                     MechSummary[] units = MechSummaryCache.getInstance().getAllMechs();
-                    // System.err.println("unit: "+getUnitFilename());
                     for (MechSummary unit : units) {
-                        // System.err.println("Source file:
-                        // "+unit.getSourceFile().getName());
-                        // System.err.println("Model: "+unit.getModel());
-                        // System.err.println("Chassis:
-                        // "+unit.getChassis());
-                        // System.err.flush();
                         if (unit.getEntryName().equalsIgnoreCase(Filename) || unit.getModel().trim().equalsIgnoreCase(Filename.trim()) || unit.getChassis().trim().equalsIgnoreCase(Filename.trim())) {
                             ms = unit;
                             break;
@@ -1112,7 +1111,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                      * missing unit. Either way, need to set up and return a
                      * failsafe unit.
                      */
-                    MWLogger.errLog("Error loading: " + Filename);
+                    logger.error("Error loading mek from file '{}'",  Filename);
 
                     try {
                         ent = UnitUtils.createOMG();// new MechFileParser(new

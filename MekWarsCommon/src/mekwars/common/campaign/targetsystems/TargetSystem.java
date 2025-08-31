@@ -5,6 +5,9 @@ import java.util.Vector;
 import common.util.MWLogger;
 import megamek.common.Entity;
 
+/*
+ * NOTE: This looks unused and should be deprecated and/or removed.
+ */
 public class TargetSystem {
 
 	public final static int TS_TYPE_STANDARD = 0;

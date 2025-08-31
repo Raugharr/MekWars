@@ -117,12 +117,12 @@ public class NewbieHouse extends NonConqHouse {
         
         String unitFilename = BuildTable.getUnitFilename(factionName, Unit.getWeightClassDesc(weightClass), unitType, BuildTable.STANDARD);
         
-        Vector<SUnit>newbieUnits = new Vector<SUnit>(1,1);
-        if ( unitFilename.toLowerCase().trim().endsWith(".mul") ){
-            newbieUnits.addAll(SUnit.createMULUnits(unitFilename,"Training Unit"));
-        }else{
+        Vector<SUnit> newbieUnits = new Vector<SUnit>(1, 1);
+        if (unitFilename.toLowerCase().trim().endsWith(".mul")) {
+            newbieUnits.addAll(SUnit.createMULUnits(unitFilename, "Training Unit"));
+        } else {
             //build the new unit
-            SUnit newbieUnit = new SUnit(factionName,unitFilename,weightClass);
+            SUnit newbieUnit = new SUnit(factionName, unitFilename, weightClass);
             newbieUnit.setProducer("Training Unit");
             newbieUnits.add(newbieUnit);
         }

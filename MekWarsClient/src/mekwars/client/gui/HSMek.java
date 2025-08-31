@@ -35,7 +35,6 @@ import megamek.common.Protomech;
 import megamek.common.QuadMech;
 
 public class HSMek {
-
     String MekFile;
     int unitID;
 
@@ -96,7 +95,7 @@ public class HSMek {
                 factionGunnery,
                 factionPiloting,
                 RandomGenderGenerator.generate(),
-				false,
+				mwclient.getPlayer().isClan(),
                 null
             );
         embeddedUnit.getEntity().setCrew(newCrew);
