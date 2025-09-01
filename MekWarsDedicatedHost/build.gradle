@@ -17,7 +17,7 @@ dependencies {
 }
 
 application {
-	mainClassName = 'client.MWClient'
+	mainClassName = 'dedicatedhost.MWDedHost'
     applicationDefaultJvmArgs = [
             '-Xmx4096m',
             '-Dsun.awt.disablegrab=true'
@@ -37,8 +37,4 @@ jar {
       'Main-Class': mainClassName
     )
   }
-}
-
-tasks.named('run') {
-	workingDir = file('./')
 }
