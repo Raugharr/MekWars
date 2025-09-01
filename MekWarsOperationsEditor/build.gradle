@@ -1,0 +1,38 @@
+plugins {
+    id 'application'
+	id 'java-common-conventions'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+	}
+}
+
+dependencies {
+	implementation project(':MekWarsCommon')
+	implementation project(':MekWarsClient')
+}
+
+application {
+	mainClassName = 'OperationsEditor.MainOperations'
+    applicationDefaultJvmArgs = [
+            '-Xmx4096m',
+            '-Dsun.awt.disablegrab=true'
+    ]
+}
+
+ext {
+	data = "data"
+}
+
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+      'Main-Class': mainClassName
+    )
+  }
+}
