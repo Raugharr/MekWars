@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.SUnitFactory;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnitFactory;
 
 //refreshfactory#planet#factory#useflu(true/false)
 public class RefreshFactoryCommand implements Command {

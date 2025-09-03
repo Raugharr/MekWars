@@ -25,7 +25,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
 import java.util.Properties;
 
@@ -35,7 +35,7 @@ import java.util.Properties;
  * init() method that should be called once, early on.
  */
 public class Translator {
-    private static server.MWChatServer.translator.Translator _translator;
+    private static mekwars.server.MWChatServer.translator.Translator _translator;
 
     /**
      * Initialize the "real", underlying Translator object with the
@@ -43,7 +43,7 @@ public class Translator {
      */
     public static void init(Properties p) {
         if (_translator == null) {
-            _translator = new server.MWChatServer.translator.Translator(p);
+            _translator = new mekwars.server.MWChatServer.translator.Translator(p);
         } else {
             System.err.println("Warning:  Translator was initialized more than once");
         }

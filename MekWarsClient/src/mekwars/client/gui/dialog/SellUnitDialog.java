@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -35,12 +35,13 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import client.gui.WholeNumberField;
-import common.Unit;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.gui.WholeNumberField;
+import mekwars.common.Unit;
+import mekwars.common.util.SpringLayoutHelper;
 import megamek.common.Infantry;
+import mekwars.client.common.campaign.clientutils.GameHost;
 
 /*
  * 
@@ -204,7 +205,7 @@ public class SellUnitDialog extends JDialog implements ActionListener {
             if (index < 0)
                 return;
             
-            String result = MWClient.CAMPAIGN_PREFIX + "c sell#";
+            String result = GameHost.CAMPAIGN_PREFIX + "c sell#";
             String mms = (String)possibleSaleUnits.getSelectedItem();
             StringTokenizer st = new StringTokenizer(mms);
             CUnit mm = mwclient.getPlayer().getUnit(Integer.parseInt(st.nextToken()));

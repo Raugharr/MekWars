@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -30,7 +30,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
+import mekwars.client.MWClient;
 
 public final class SignonDialog implements ActionListener {
 	

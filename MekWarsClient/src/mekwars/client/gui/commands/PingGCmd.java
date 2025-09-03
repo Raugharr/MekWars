@@ -15,12 +15,12 @@
  * for more details.
  */
 
-package client.gui.commands;
+package mekwars.client.gui.commands;
 
 import java.awt.event.ActionEvent;
 import java.util.StringTokenizer;
 
-import client.MWClient;
+import mekwars.client.MWClient;
 
 /**
  * Ping command

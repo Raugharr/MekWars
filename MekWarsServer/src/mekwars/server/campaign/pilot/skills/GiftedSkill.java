@@ -17,13 +17,13 @@
  * Torren
  *
  */
-package server.campaign.pilot.skills;
+package mekwars.server.campaign.pilot.skills;
 
-import common.Unit;
-import common.campaign.pilot.Pilot;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
 import megamek.common.Entity;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
 
 /**
  *  Pilots with the gifted Skill recive an extra 5% chance to

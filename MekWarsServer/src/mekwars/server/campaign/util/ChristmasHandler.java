@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,12 +30,12 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.util.scheduler.EndChristmasJob;
-import server.campaign.util.scheduler.StartChristmasJob;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.util.scheduler.EndChristmasJob;
+import mekwars.server.campaign.util.scheduler.StartChristmasJob;
 
 /**
  * A class to handle scheduling of distribution of meks during the Christmas season.  Historically,

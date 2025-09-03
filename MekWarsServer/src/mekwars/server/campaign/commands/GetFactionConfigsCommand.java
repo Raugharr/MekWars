@@ -18,16 +18,16 @@
  * Created on 02.25.2007
  *  
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-import common.util.TokenReader;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
 
 /**
  * @author Torren (Jason Tighe) Send a factions config to the player. Optional

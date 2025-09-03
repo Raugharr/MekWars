@@ -14,12 +14,12 @@
  * for more details.
  */
 
-package common;
+package mekwars.common;
 
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 public class SubFaction{
 	

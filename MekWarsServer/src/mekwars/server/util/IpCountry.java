@@ -1,4 +1,4 @@
-package server.util;
+package mekwars.server.util;
 
 import java.io.BufferedReader;
 import java.io.File;

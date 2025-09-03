@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -48,16 +48,17 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
 
-import client.MWClient;
-import client.campaign.CCampaign;
-import client.campaign.CPlayer;
-import client.campaign.CUnit;
-import common.House;
-import common.Unit;
-import common.UnitFactory;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CCampaign;
+import mekwars.client.campaign.CPlayer;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.UnitFactory;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 import megamek.client.generator.RandomGenderGenerator;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Crew;
@@ -881,15 +882,15 @@ public class CHSPanel extends JPanel {
             String command = st.nextToken();
 
             if (command.equalsIgnoreCase("BUY")) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c request#" + st.nextToken() + "#" + st.nextToken());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c request#" + st.nextToken() + "#" + st.nextToken());
                 // (Client.getMainFrame().getMainPanel().getCommPanel()).
                 // removeHttpLinksFromEditorPane(CCommPanel.CHANNEL_MISC);
             } else if (command.equalsIgnoreCase("BUYU")) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c requestdonated#" + st.nextToken() + "#" + st.nextToken());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c requestdonated#" + st.nextToken() + "#" + st.nextToken());
                 // (Client.getMainFrame().getMainPanel().getCommPanel()).
                 // removeHttpLinksFromEditorPane(CCommPanel.CHANNEL_MISC);
             } else if (command.equalsIgnoreCase("BUYP")) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c buypilotsfromhouse#" + st.nextToken() + "#" + st.nextToken());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c buypilotsfromhouse#" + st.nextToken() + "#" + st.nextToken());
                 // (Client.getMainFrame().getMainPanel().getCommPanel()).
                 // removeHttpLinksFromEditorPane(CCommPanel.CHANNEL_MISC);
             }

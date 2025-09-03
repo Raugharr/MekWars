@@ -13,7 +13,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  */
-package admin;
+package mekwars.admin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,10 +25,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import client.CUser;
-import client.MWClient;
-import client.gui.dialog.HouseNameDialog;
-import client.gui.dialog.PlayerNameDialog;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.CUser;
+import mekwars.client.MWClient;
+import mekwars.client.gui.dialog.HouseNameDialog;
+import mekwars.client.gui.dialog.PlayerNameDialog;
 
 public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
@@ -311,14 +312,14 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
             // Build a picklist of flags
             String fName = (String)JOptionPane.showInputDialog(mwclient.getMainFrame(),"Select a Flag", "Player Flags", JOptionPane.INFORMATION_MESSAGE, null, mwclient.getPlayer().getFlags().getFlagNames().toArray(), null);
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SetPlayerFlags#" + userName + "#" + fName + "#toggle");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SetPlayerFlags#" + userName + "#" + fName + "#toggle");
         }
         if (command.equals("KK") && st.hasMoreElements()) {
 
             userName = st.nextToken();
             {
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "kick " + userName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "kick " + userName);
             }
         }
         if (command.equals("MMUTE") && st.hasMoreElements()) {
@@ -326,7 +327,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             userName = st.nextToken();
             {
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ignore " + userName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "ignore " + userName);
             }
         }
         if (command.equals("CKU") && st.hasMoreElements()) {
@@ -334,7 +335,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             userName = st.nextToken();
             {
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c check#" + userName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c check#" + userName);
             }
         }
         if (command.equals("DAU") && st.hasMoreElements()) {
@@ -342,7 +343,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             userName = st.nextToken();
             {
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c moddeactivate#" + userName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c moddeactivate#" + userName);
             }
         }
         if (command.equals("UUA") && st.hasMoreElements()) {
@@ -350,7 +351,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             userName = st.nextToken();
             {
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c unlocklances#" + userName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c unlocklances#" + userName);
             }
         }
 
@@ -363,7 +364,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
                 if (exp == null || exp.length() == 0)
                     return;
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c grantinfluence#" + userName + "#" + exp);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c grantinfluence#" + userName + "#" + exp);
             }
         }
         if (command.equals("GM") && st.hasMoreElements()) {
@@ -375,7 +376,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
                 if (exp == null || exp.length() == 0)
                     return;
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c grantmoney#" + userName + "#" + exp);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c grantmoney#" + userName + "#" + exp);
             }
         }
         if (command.equals("GE") && st.hasMoreElements()) {
@@ -387,7 +388,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
                 if (exp == null || exp.length() == 0)
                     return;
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c grantexp#" + userName + "#" + exp);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c grantexp#" + userName + "#" + exp);
             }
         }
         if (command.equals("GRP") && st.hasMoreElements()) {
@@ -399,7 +400,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
                 if (exp == null || exp.length() == 0)
                     return;
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c grantreward#" + userName + "#" + exp);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c grantreward#" + userName + "#" + exp);
             }
         }
 
@@ -430,14 +431,14 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             if (amount == null || amount.length() == 0)
                 return;
 
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c granttechs#" + userName + "#" + type + "#" + amount);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c granttechs#" + userName + "#" + type + "#" + amount);
         }
 
         // mod commands
         if (command.equals("PS") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminplayerstatus#" + userName);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminplayerstatus#" + userName);
         }
         if (command.equals("FD") && st.hasMoreElements()) {
 
@@ -448,7 +449,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             String newfaction = factionDialog.getHouseName();
             factionDialog.dispose();
 
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c forceddefect#" + userName + "#" + newfaction);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c forceddefect#" + userName + "#" + newfaction);
         }
         if (command.equals("SF") && st.hasMoreElements()) {
 
@@ -457,7 +458,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             String newfluff = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Fluff? (Leave blank to remove)", user.getFluff());
 
             if (newfluff != null)
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c fluff#" + userName + "#" + newfluff);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c fluff#" + userName + "#" + newfluff);
         }
         if (command.equals("SAU") && st.hasMoreElements()) {
 
@@ -465,7 +466,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             // confirm the strip
             int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to strip " + userName + "'s units?");
             if (result == JOptionPane.YES_OPTION)
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c stripunits#" + userName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c stripunits#" + userName);
         }
         if (command.equals("RFUL") && st.hasMoreElements()) { //@salient
 
@@ -473,7 +474,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             // confirm action
             int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to reset " + userName + "'s free mek limit?");
             if (result == JOptionPane.YES_OPTION)
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c resetfreemeks#" + userName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c resetfreemeks#" + userName);
         }
         if (command.equals("UUM") && st.hasMoreElements()) { //@salient
 
@@ -481,7 +482,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             // confirm action
             int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to unlock " + userName + "'s units?");
             if (result == JOptionPane.YES_OPTION)
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ADMINUNLOCKUNITSMC#" + userName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ADMINUNLOCKUNITSMC#" + userName);
         }
         if (command.equals("RBM") && st.hasMoreElements()) { //@salient
 
@@ -489,32 +490,32 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             // confirm action
             int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to recalc " + userName + "'s hangar bv?");
             if (result == JOptionPane.YES_OPTION)
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ADMINRECALCHANGARBVMC#" + userName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ADMINRECALCHANGARBVMC#" + userName);
         }
         if (command.equals("SU") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#adminscrap");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#adminscrap");
         }
         if (command.equals("DU") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#admindonate");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#admindonate");
         }
         if (command.equals("FUA") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#fixammo");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#fixammo");
         }
         if (command.equals("VPU") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#viewplayerunit#" + false);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#viewplayerunit#" + false);
         }
         if (command.equals("VPUR") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#viewplayerunit#" + true);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#viewplayerunit#" + true);
         }
 
         if (command.equals("TU") && st.hasMoreElements()) {
@@ -529,14 +530,14 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             if (receivingplayer == null || receivingplayer.equals(""))
                 return;
 
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#admintransfer#" + receivingplayer);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#admintransfer#" + receivingplayer);
 
         }
 
         if (command.equals("FRU") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#ModFullRepair");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getplayerunits#" + userName + "#ModFullRepair");
         }
 
         if (command.equals("MPGAU") && st.hasMoreElements()) {
@@ -546,21 +547,21 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             String groupID = JOptionPane.showInputDialog(this, "Group ID?", "0");
 
             if (groupID != null)
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c SetMultiPlayerGroup#" + userName + "#" + groupID);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c SetMultiPlayerGroup#" + userName + "#" + groupID);
         }
         if (command.equals("MPGRU") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c SetMultiPlayerGroup#" + userName + "#0");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c SetMultiPlayerGroup#" + userName + "#0");
         }
         if (command.equals("MPGL") && st.hasMoreElements()) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ListMultiPlayerGroups");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ListMultiPlayerGroups");
         }
 
         if (command.equals("VPPQ") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ViewPlayerPersonalPilotQueue#" + userName);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ViewPlayerPersonalPilotQueue#" + userName);
         }
         if (command.equals("RPPQ") && st.hasMoreElements()) {
 
@@ -584,7 +585,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
                 if (position == null || position.length() == 0)
                     return;
             }
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RemovePilot#" + userName + "#" + Typestr + "#" + Sizestr + "#" + position);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RemovePilot#" + userName + "#" + Typestr + "#" + Sizestr + "#" + position);
         }
         if (command.equals("CPPQ") && st.hasMoreElements()) {
 
@@ -620,12 +621,12 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
                 return;
             }
 
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c createpilot#" + userName + "#" + gunnery + "#" + piloting + "#" + Typestr + "#" + Sizestr + "#" + skills);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c createpilot#" + userName + "#" + gunnery + "#" + piloting + "#" + Typestr + "#" + Sizestr + "#" + skills);
         }
         if (command.equals("VPC") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ViewPlayerParts#" + userName);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ViewPlayerParts#" + userName);
         }
         if (command.equals("RPC") && st.hasMoreElements()) {
 
@@ -637,7 +638,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             String amount = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Amount", "Amount To Remove", JOptionPane.OK_OPTION, null, null, "0");
             if (amount == null || amount.length() == 0)
                 return;
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RemoveParts#" + userName + "#" + partName + "#" + amount);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RemoveParts#" + userName + "#" + partName + "#" + amount);
         }
         if (command.equals("APC") && st.hasMoreElements()) {
 
@@ -649,7 +650,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             String amount = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Amount", "Amount To Add", JOptionPane.OK_OPTION, null, null, "0");
             if (amount == null || amount.length() == 0)
                 return;
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AddParts#" + userName + "#" + partName + "#" + amount);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AddParts#" + userName + "#" + partName + "#" + amount);
         }
         if (command.equals("SAPC") && st.hasMoreElements()) {
 
@@ -657,7 +658,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
             int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to strip " + userName + "'s parts?");
             if (result == JOptionPane.YES_OPTION)
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c StripAllPartsCache#" + userName + "#CONFIRM");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c StripAllPartsCache#" + userName + "#CONFIRM");
         }
 
     }

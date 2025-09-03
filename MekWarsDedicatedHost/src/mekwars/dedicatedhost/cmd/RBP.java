@@ -12,12 +12,12 @@
  * for more details.
  */
 
-package dedicatedhost.cmd;
+package mekwars.dedicatedhost.cmd;
 
 import java.util.StringTokenizer;
 
-import common.campaign.Buildings;
-import dedicatedhost.MWDedHost;
+import mekwars.common.campaign.Buildings;
+import mekwars.dedicatedhost.MWDedHost;
 
 /**
  * @@author Torren (Jason Tighe)

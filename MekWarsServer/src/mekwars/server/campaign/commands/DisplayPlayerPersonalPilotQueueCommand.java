@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
 
 /**
  * Return a human readable string that describes the pilots

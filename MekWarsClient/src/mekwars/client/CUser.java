@@ -15,15 +15,15 @@
  * for more details.
  */
 
-package client;
+package mekwars.client;
 
 import java.awt.Color;
 import java.util.StringTokenizer;
 
-import common.House;
-import common.campaign.clientutils.IClientUser;
-import common.util.MWLogger;
-import common.util.StringUtils;
+import mekwars.common.House;
+import mekwars.common.campaign.clientutils.IClientUser;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
 
 /*
  * Class for User objects held in userlist

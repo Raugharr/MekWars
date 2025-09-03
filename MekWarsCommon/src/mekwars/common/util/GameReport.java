@@ -14,16 +14,16 @@
  * for more details.
  */
 
-package common.util;
+package mekwars.common.util;
 
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import common.GameInterface;
-import common.campaign.Buildings;
-import common.campaign.clientutils.SerializeEntity;
+import mekwars.common.GameInterface;
+import mekwars.common.campaign.Buildings;
+import mekwars.common.campaign.clientutils.SerializeEntity;
 
 import megamek.common.Entity;
 

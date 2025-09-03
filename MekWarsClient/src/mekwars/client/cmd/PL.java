@@ -15,18 +15,19 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import client.campaign.CPlayer;
-import client.campaign.CUnit;
-import client.gui.dialog.AdvancedRepairDialog;
-import common.campaign.pilot.Pilot;
-import common.util.MWLogger;
-import common.util.TokenReader;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CPlayer;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.gui.dialog.AdvancedRepairDialog;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
+import mekwars.common.util.UnitUtils;
+import mekwars.client.common.campaign.clientutils.GameHost;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -240,7 +241,7 @@ public class PL extends Command {
             mwclient.getCampaign().setComponentConverter(st.nextToken());
         } else if (cmd.equals("SUD")) {
             try {
-                StringBuilder userData = new StringBuilder(MWClient.CAMPAIGN_PREFIX + "c sendclientdata#");
+                StringBuilder userData = new StringBuilder(GameHost.CAMPAIGN_PREFIX + "c sendclientdata#");
                 String clientMD5 = mwclient.createFilenameChecksum("./MekWarsClient.jar");
                 String mmMD5 = mwclient.createFilenameChecksum("./MegaMek.jar");
                 userData.append(mwclient.getClass().getProtectionDomain().getCodeSource().getLocation().toURI() + "#");

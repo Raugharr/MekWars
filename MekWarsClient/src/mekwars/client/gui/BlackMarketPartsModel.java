@@ -13,7 +13,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -26,9 +26,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import client.MWClient;
-import client.campaign.CCampaign;
-import common.BMEquipment;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CCampaign;
+import mekwars.common.BMEquipment;
 
 /**
  * Adapted from BlackMarketModel by Steve Hawkins

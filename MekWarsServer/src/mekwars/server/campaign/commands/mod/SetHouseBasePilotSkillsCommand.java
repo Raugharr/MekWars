@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package server.campaign.commands.mod;
+package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
 
-import common.Unit;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.commands.Command;
+import mekwars.common.Unit;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.commands.Command;
 
 //Syntax sethousebasepilotskills house#pilotType#Gunnery#Piloting
 public class SetHouseBasePilotSkillsCommand implements Command {

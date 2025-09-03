@@ -28,7 +28,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package common.campaign.clientutils.protocol;
+package mekwars.client.common.campaign.clientutils.protocol;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -40,7 +40,9 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.zip.Inflater;
 
-import common.util.MWLogger;
+import mekwars.common.campaign.clientutils.protocol.IConnectionHandler;
+import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
+import mekwars.common.util.MWLogger;
 
 /**
  * Constantly read from the socket's input stream

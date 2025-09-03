@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Color;
 
@@ -24,10 +24,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import client.MWClient;
-import common.House;
-import common.Planet;
-import common.util.StringUtils;
+import mekwars.client.MWClient;
+import mekwars.common.House;
+import mekwars.common.Planet;
+import mekwars.common.util.StringUtils;
 
 /**
  * Draws statistic for a specific CPlanet in the stellar map

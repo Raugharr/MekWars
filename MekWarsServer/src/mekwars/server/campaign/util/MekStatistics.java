@@ -14,11 +14,11 @@
  * for more details.
  */
 
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
 import java.util.StringTokenizer;
 
-import server.campaign.SUnit;
+import mekwars.server.campaign.SUnit;
 
 /**
  *

@@ -19,7 +19,7 @@
  * Created on 18.04.2004
  *
  */
-package common.campaign.pilot.skills;
+package mekwars.common.campaign.pilot.skills;
 
 
 /**

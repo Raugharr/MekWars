@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -43,12 +43,12 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import client.GUIClientConfig;
-import client.MWClient;
-import client.campaign.CUnit;
-import client.gui.MechInfo;
-import common.util.MWLogger;
-import common.util.UnitUtils;
+import mekwars.client.GUIClientConfig;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.gui.MechInfo;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.Player;
 import megamek.common.icons.Camouflage;

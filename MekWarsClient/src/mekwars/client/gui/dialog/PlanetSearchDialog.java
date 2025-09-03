@@ -16,7 +16,7 @@
  * See http://www.sourceforge.net/projects/megameknet for more info.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 //awt imports
 import java.awt.Dimension;
@@ -41,10 +41,10 @@ import javax.swing.SpringLayout;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
-import client.MWClient;
-import client.gui.InnerStellarMap;
-import common.Planet;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.gui.InnerStellarMap;
+import mekwars.common.Planet;
+import mekwars.common.util.SpringLayoutHelper;
 //util imports
 //swing imports
 //MekWars imports

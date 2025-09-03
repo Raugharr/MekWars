@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Toolkit;
 import java.text.NumberFormat;
@@ -28,7 +28,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 public class WholeNumberField extends JTextField {
     /**

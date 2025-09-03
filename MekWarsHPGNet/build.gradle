@@ -16,7 +16,7 @@ dependencies {
 }
 
 application {
-	mainClassName = 'hpgnet.HPGNet'
+	mainClassName = 'mekwars.hpgnet.HPGNet'
     applicationDefaultJvmArgs = [
             '-Xmx4096m',
             '-Dsun.awt.disablegrab=true'

@@ -14,12 +14,12 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.SPlanet;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlanet;
 
 public class CalcDistCommand implements Command {
 	

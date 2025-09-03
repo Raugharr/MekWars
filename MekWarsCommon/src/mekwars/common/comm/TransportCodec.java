@@ -4,14 +4,14 @@
  * Created on June 13, 2002, 5:11 PM
  */
 
-package common.comm;
+package mekwars.common.comm;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 /**
  * Provides a method to encode any string into a URL-safe
  * form.

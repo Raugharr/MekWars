@@ -16,7 +16,7 @@ dependencies {
 }
 
 application {
-	mainClassName = 'client.MWClient'
+	mainClassName = 'mekwars.client.MWClient'
 }
 
 ext {

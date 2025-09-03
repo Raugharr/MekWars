@@ -14,11 +14,11 @@
  * for more details.
  */
 
-package server.campaign.market2;
+package mekwars.server.campaign.market2;
 
-import common.BMEquipment;
-import common.Equipment;
-import common.util.MWLogger;
+import mekwars.common.BMEquipment;
+import mekwars.common.Equipment;
+import mekwars.common.util.MWLogger;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,8 +29,8 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
 
 public class PartsMarket {
     

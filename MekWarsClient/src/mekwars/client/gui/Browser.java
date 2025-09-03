@@ -16,7 +16,7 @@
  * See COPYING.TXT for details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -48,7 +48,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 /**
  * Allows URLs to be opened in the system browser on Windows and Unix.

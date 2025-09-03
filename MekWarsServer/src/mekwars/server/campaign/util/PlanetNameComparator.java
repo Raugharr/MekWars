@@ -18,11 +18,11 @@
  * Created on 07.04.2004
  *
  */
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
 import java.util.Comparator;
 
-import server.campaign.SPlanet;
+import mekwars.server.campaign.SPlanet;
 
 /**
  * @author Helge Richter

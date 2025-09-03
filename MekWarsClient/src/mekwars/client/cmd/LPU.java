@@ -13,7 +13,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -22,7 +22,8 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import client.MWClient;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
 
 /**
  * Command that sends a player's unit list.
@@ -79,11 +80,11 @@ public class LPU extends Command {
 		
 		if ( receivingPlayer != null ){
 			if( commandName.equalsIgnoreCase("admintransfer") )
-				mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c "+commandName+"#"+username+"#"+receivingPlayer+unit);
+				mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c "+commandName+"#"+username+"#"+receivingPlayer+unit);
 			else if ( commandName.equalsIgnoreCase("viewplayerunit") )
-				mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c "+commandName+"#"+username+unit+"#"+receivingPlayer);
+				mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c "+commandName+"#"+username+unit+"#"+receivingPlayer);
 		}
 		else
-			mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c "+commandName+"#"+username+unit);
+			mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c "+commandName+"#"+username+unit);
 	}
 }

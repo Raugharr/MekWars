@@ -23,7 +23,7 @@
  *  for more details.
  */
 
-package OperationsEditor.dialog;
+package mekwars.operationseditor.dialog;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -38,7 +38,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import common.util.SpringLayoutHelper;
+import mekwars.common.util.SpringLayoutHelper;
 
 
 /*

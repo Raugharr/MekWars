@@ -14,7 +14,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  */
-package client.gui.dialog.buildtableviewer;
+package mekwars.client.gui.dialog.buildtableviewer;
 
 import javax.swing.table.DefaultTableModel;
 

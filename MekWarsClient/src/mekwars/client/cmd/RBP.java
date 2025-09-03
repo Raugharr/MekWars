@@ -12,12 +12,12 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import common.campaign.Buildings;
+import mekwars.client.MWClient;
+import mekwars.common.campaign.Buildings;
 
 /**
  * @@author Torren (Jason Tighe)

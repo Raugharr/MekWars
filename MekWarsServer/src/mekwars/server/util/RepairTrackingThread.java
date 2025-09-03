@@ -20,26 +20,26 @@
  *
  */
 
-package server.util;
+package mekwars.server.util;
 
 import java.util.Calendar;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.MWLogger;
-import common.util.StringUtils;
-import common.util.UnitUtils;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Mounted;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 /**
  *

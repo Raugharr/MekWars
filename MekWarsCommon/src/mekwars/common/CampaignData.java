@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package common;
+package mekwars.common;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,9 +29,9 @@ import java.util.Properties;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.util.BinReader;
-import common.util.BinWriter;
-import common.util.MWLogger;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
+import mekwars.common.util.MWLogger;
 import megamek.common.AmmoType;
 
 

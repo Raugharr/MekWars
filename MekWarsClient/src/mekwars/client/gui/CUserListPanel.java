@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -61,15 +61,16 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 //import com.sun.jndi.toolkit.url.Uri;
 
-import client.CUser;
-import client.MWClient;
-import common.campaign.clientutils.IClientConfig;
-import common.util.MWLogger;
-import common.util.StringUtils;
+import mekwars.client.CUser;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.campaign.clientutils.IClientConfig;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
 
 
 //admin import. har!
-//import admin.ModeratorPopupMenu;
+//import mekwars.admin.ModeratorPopupMenu;
 
 /**
  * User List panel
@@ -432,7 +433,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == ActivityButton) {
             if(mwclient.getMyStatus() == MWClient.STATUS_RESERVE)//is reserve                        
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c activate#" + MWClient.CLIENT_VERSION);                    
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c activate#" + MWClient.CLIENT_VERSION);                    
             else if (mwclient.getMyStatus() == MWClient.STATUS_ACTIVE)//is active
                 mwclient.sendChat("/c deactivate");
             else if (mwclient.getMyStatus() == MWClient.STATUS_LOGGEDOUT)//is logged out
@@ -925,7 +926,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
                 userName = st.nextToken();
                 if (true) {
 
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c noplay#remove#" + userName);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c noplay#remove#" + userName);
                 }
             }
 
@@ -933,7 +934,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
                 userName = st.nextToken();
                 if (true) {
 
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c noplay#add#" + userName);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c noplay#add#" + userName);
                 }
             }
 

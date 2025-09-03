@@ -26,16 +26,16 @@
  * of all the Operation/ModifyingOperation params. Modification of
  * these files must be done by hand, or with an external utility
  */
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 //IMPORTS
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import common.campaign.operations.DefaultOperation;
-import common.campaign.operations.ModifyingOperation;
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
+import mekwars.common.campaign.operations.DefaultOperation;
+import mekwars.common.campaign.operations.ModifyingOperation;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
 
 
 public class OperationLoader {

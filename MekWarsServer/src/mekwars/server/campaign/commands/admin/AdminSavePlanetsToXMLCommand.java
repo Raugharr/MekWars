@@ -14,25 +14,25 @@
  * for more details.
  */
 
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
 
-import common.Continent;
-import common.House;
-import common.Planet;
-import common.Unit;
-import common.UnitFactory;
-import common.util.MWLogger;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.BuildTable;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SUnitFactory;
-import server.campaign.commands.Command;
+import mekwars.common.Continent;
+import mekwars.common.House;
+import mekwars.common.Planet;
+import mekwars.common.Unit;
+import mekwars.common.UnitFactory;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.BuildTable;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SUnitFactory;
+import mekwars.server.campaign.commands.Command;
 
 public class AdminSavePlanetsToXMLCommand implements Command {
 	int accessLevel = IAuthenticator.ADMIN;

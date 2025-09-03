@@ -14,7 +14,7 @@
  * details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,10 +28,10 @@ import java.io.UnsupportedEncodingException;
 //import java.nio.file.StandardOpenOption;
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-//import server.MWClientInfo;
-import server.campaign.CampaignMain;
-//import server.campaign.SPlayer;
+import mekwars.common.util.MWLogger;
+//import mekwars.server.MWClientInfo;
+import mekwars.server.campaign.CampaignMain;
+//import mekwars.server.campaign.SPlayer;
 
 
 /**

@@ -1,6 +1,6 @@
-package common.util.unitdamage;
+package mekwars.common.util.unitdamage;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 import megamek.common.Aero;
 import megamek.common.BattleArmor;
 import megamek.common.Entity;

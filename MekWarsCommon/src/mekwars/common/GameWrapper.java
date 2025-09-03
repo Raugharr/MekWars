@@ -1,11 +1,11 @@
-package common;
+package mekwars.common;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import megamek.common.Game;
 import megamek.common.Player;

@@ -33,7 +33,7 @@
  * From Megamek.client.MechSelectorDialgo.java
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -59,13 +59,14 @@ import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import client.MWClient;
-import client.campaign.CArmy;
-import client.campaign.CPlayer;
-import client.campaign.CUnit;
-import common.Unit;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CArmy;
+import mekwars.client.campaign.CPlayer;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
 import megamek.common.Infantry;
 
 
@@ -279,7 +280,7 @@ public class ArmyViewerDialog extends JDialog implements ActionListener, ListSel
                     mwclient.sendChat("/c defend#" + opID  + "#" + armyID+"#"+team);
                 }
                 else if ( viewerMode == AVD_ATTACK)
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c attack#" + opName + "#" + armyID + "#" + planetName);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c attack#" + opName + "#" + armyID + "#" + planetName);
                 else 
                     mwclient.sendChat("/c attackfromreserve#"+opName+"#"+armyID+"#"+planetName+"#"+defenderName);
 				this.setVisible(false);

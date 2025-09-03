@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,11 +42,12 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.House;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.House;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
 
 public final class TraitDialog implements ActionListener, KeyListener{
 	
@@ -339,7 +340,7 @@ public final class TraitDialog implements ActionListener, KeyListener{
 		    }
 		    
 	    	String result = getResults(faction,trait);
-	    	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c addtrait#"+result);
+	    	mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c addtrait#"+result);
 		    loadAllFiles();
 		    loadFactionTraits(faction);
 		} else if (command.equals(cancelCommand)) {
@@ -355,7 +356,7 @@ public final class TraitDialog implements ActionListener, KeyListener{
 		    }
 		    int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to remove this trait?","Remove it?",JOptionPane.YES_NO_OPTION);
 		    if ( choice == JOptionPane.OK_OPTION ){
-		    	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c removetrait#"+faction+"#"+trait+"#CONFIRM");
+		    	mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c removetrait#"+faction+"#"+trait+"#CONFIRM");
 			    loadAllFiles();
 			    loadFactionTraits(faction);
 		  }

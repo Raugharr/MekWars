@@ -14,18 +14,18 @@
  * for more details.
  */
 
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import common.Influences;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.NewbieHouse;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.commands.Command;
+import mekwars.common.Influences;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.NewbieHouse;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.commands.Command;
 
 public class AdminCreateSolarisCommand implements Command {
 

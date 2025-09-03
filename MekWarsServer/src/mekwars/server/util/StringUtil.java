@@ -1,4 +1,4 @@
-package server.util;
+package mekwars.server.util;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -17,8 +17,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 
 public class StringUtil {
 	

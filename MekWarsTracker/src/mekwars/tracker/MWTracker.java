@@ -13,7 +13,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package tracker;
+package mekwars.tracker;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 /**
  * Starts a server which listens for information

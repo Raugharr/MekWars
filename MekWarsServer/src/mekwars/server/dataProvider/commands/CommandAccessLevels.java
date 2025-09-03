@@ -20,17 +20,17 @@
  * @author Torren (Jason Tighe) 8.15.05 
  * 
  */
-package server.dataProvider.commands;
+package mekwars.server.dataProvider.commands;
 
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import common.CampaignData;
-import common.util.BinWriter;
-import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
-import server.dataProvider.ServerCommand;
+import mekwars.common.CampaignData;
+import mekwars.common.util.BinWriter;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.Command;
+import mekwars.server.dataProvider.ServerCommand;
 
 /**
  * Retrieve all planet information (if the data cache is lost at client side)

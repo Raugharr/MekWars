@@ -12,13 +12,13 @@
  * for more details.
  */
 
-package dedicatedhost.cmd;
+package mekwars.dedicatedhost.cmd;
 
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-import common.util.TokenReader;
-import dedicatedhost.MWDedHost;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
+import mekwars.dedicatedhost.MWDedHost;
 
 public class SSC extends Command {
 	

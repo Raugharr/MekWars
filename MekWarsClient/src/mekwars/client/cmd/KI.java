@@ -15,9 +15,10 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
-import client.MWClient;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
 
 /**
  * @@author jtighe
@@ -37,6 +38,6 @@ public class KI extends Command {
 	 */
 	@Override
 	public void execute(String input) {
-		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c logout");
+		mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c logout");
 	}
 }

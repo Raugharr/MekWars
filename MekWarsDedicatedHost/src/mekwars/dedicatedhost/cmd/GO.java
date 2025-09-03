@@ -15,12 +15,12 @@
  * for more details.
  */
 
-package dedicatedhost.cmd;
+package mekwars.dedicatedhost.cmd;
 
 import java.io.File;
 import java.util.StringTokenizer;
 
-import dedicatedhost.MWDedHost;
+import mekwars.dedicatedhost.MWDedHost;
 import megamek.common.options.GameOptions;
 import megamek.common.options.Option;
 

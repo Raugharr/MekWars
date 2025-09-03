@@ -15,7 +15,7 @@
  * details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -55,31 +55,32 @@ import javax.swing.WindowConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import client.CUser;
-import client.ClientThread;
-import client.MWClient;
-import client.campaign.CArmy;
-import client.campaign.CCampaign;
-import client.campaign.CPlayer;
-import client.campaign.CUnit;
-import client.gui.dialog.ComponentConverterDialog;
-import client.gui.dialog.ConfigurationDialog;
-import client.gui.dialog.HouseNameDialog;
-import client.gui.dialog.NewUnitViewerDialog;
-import client.gui.dialog.PlanetNameDialog;
-import client.gui.dialog.PlayerNameDialog;
-import client.gui.dialog.RegisterNameDialog;
-import client.gui.dialog.SellUnitDialog;
-import client.gui.dialog.SubFactionNameDialog;
-//import client.gui.dialog.TableViewerDialog;
-import client.gui.dialog.TraitDialog;
-import client.gui.dialog.UnitSelectionDialog;
-import client.gui.dialog.buildtableviewer.BuildTableViewer;
-import common.House;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.util.MWLogger;
-import common.util.StringUtils;
+import mekwars.client.CUser;
+import mekwars.client.ClientThread;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CArmy;
+import mekwars.client.campaign.CCampaign;
+import mekwars.client.campaign.CPlayer;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.dialog.ComponentConverterDialog;
+import mekwars.client.gui.dialog.ConfigurationDialog;
+import mekwars.client.gui.dialog.HouseNameDialog;
+import mekwars.client.gui.dialog.NewUnitViewerDialog;
+import mekwars.client.gui.dialog.PlanetNameDialog;
+import mekwars.client.gui.dialog.PlayerNameDialog;
+import mekwars.client.gui.dialog.RegisterNameDialog;
+import mekwars.client.gui.dialog.SellUnitDialog;
+import mekwars.client.gui.dialog.SubFactionNameDialog;
+//import mekwars.client.gui.dialog.TableViewerDialog;
+import mekwars.client.gui.dialog.TraitDialog;
+import mekwars.client.gui.dialog.UnitSelectionDialog;
+import mekwars.client.gui.dialog.buildtableviewer.BuildTableViewer;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
 import megamek.MegaMek;
 import megamek.client.ui.swing.UnitLoadingDialog;
 
@@ -627,7 +628,7 @@ public class CMainFrame extends JFrame {
         jMenuCampaignLogin.setMnemonic('I');
         jMenuCampaignLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c login");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c login");
             }
         });
 
@@ -637,7 +638,7 @@ public class CMainFrame extends JFrame {
         {     
             public void actionPerformed(ActionEvent e) 
             {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c activate#" + MWClient.CLIENT_VERSION);                    
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c activate#" + MWClient.CLIENT_VERSION);                    
             }
         });
 
@@ -645,7 +646,7 @@ public class CMainFrame extends JFrame {
         // jMenuCampaignDeactivate.setMnemonic('R');
         jMenuCampaignDeactivate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c deactivate");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c deactivate");
             }
         });
 
@@ -653,7 +654,7 @@ public class CMainFrame extends JFrame {
         // jMenuCampaignLogout.setMnemonic('O');
         jMenuCampaignLogout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c logout");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c logout");
             }
         });
 
@@ -661,7 +662,7 @@ public class CMainFrame extends JFrame {
         jMenuCampaignPlayers.setMnemonic('P');
         jMenuCampaignPlayers.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c players");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c players");
             }
         });
 
@@ -685,7 +686,7 @@ public class CMainFrame extends JFrame {
         jMenuCampaignHouses.setMnemonic('L');
         jMenuCampaignHouses.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c housestatus");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c housestatus");
             }
         });
 
@@ -712,7 +713,7 @@ public class CMainFrame extends JFrame {
         jMenuCampaignMyStatus.setMnemonic('M');
         jMenuCampaignMyStatus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c mystatus");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c mystatus");
             }
         });
 
@@ -720,7 +721,7 @@ public class CMainFrame extends JFrame {
         // jMenuCampaignHouseStatus.setMnemonic('H');
         // jMenuCampaignHouseStatus.addActionListener(new ActionListener() {
         // public void actionPerformed(ActionEvent e) {
-        // Client.sendChat(MWClient.CAMPAIGN_PREFIX + "c status");
+        // Client.sendChat(GameHost.CAMPAIGN_PREFIX + "c status");
         // }
         // });
 
@@ -920,14 +921,14 @@ public class CMainFrame extends JFrame {
         jMenuMercUnemployed.setMnemonic('U');
         jMenuMercUnemployed.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c unemployedmercs");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c unemployedmercs");
             }
         });
         jMenuMercContracted.setText("Contracted Mercs");
         jMenuMercContracted.setMnemonic('C');
         jMenuMercContracted.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c housecontracts");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c housecontracts");
             }
         });
 
@@ -1082,7 +1083,7 @@ public class CMainFrame extends JFrame {
                     return;
                 }
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c researchtechlevel");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c researchtechlevel");
             }
         });
 
@@ -1103,7 +1104,7 @@ public class CMainFrame extends JFrame {
         jMenuLeaderViewFactionPartsCache.setText("View Faction Cache");
         jMenuLeaderViewFactionPartsCache.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c viewfactionpartscache");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c viewfactionpartscache");
             }
         });
 
@@ -1168,7 +1169,7 @@ public class CMainFrame extends JFrame {
         jMenuHelpOpViewer.setText("Operation Viewer");
         jMenuHelpOpViewer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "getops md5");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "getops md5");
             }
         });
 
@@ -1235,7 +1236,7 @@ public class CMainFrame extends JFrame {
             {
                 public void actionPerformed(ActionEvent e)
                 {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fl");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "ec#fl");
                 }
             });
 
@@ -1244,7 +1245,7 @@ public class CMainFrame extends JFrame {
 //            {
 //                public void actionPerformed(ActionEvent e)
 //                {
-//                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#be");
+//                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "ec#be");
 //                }
 //            });
 
@@ -1253,7 +1254,7 @@ public class CMainFrame extends JFrame {
             {
                 public void actionPerformed(ActionEvent e)
                 {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sh");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "ec#sh");
                 }
             });
 
@@ -1262,7 +1263,7 @@ public class CMainFrame extends JFrame {
             {
                 public void actionPerformed(ActionEvent e)
                 {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#fi");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "ec#fi");
                 }
             });
 
@@ -1271,7 +1272,7 @@ public class CMainFrame extends JFrame {
             {
                 public void actionPerformed(ActionEvent e)
                 {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#ki");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "ec#ki");
                 }
             });
 
@@ -1280,7 +1281,7 @@ public class CMainFrame extends JFrame {
             {
                 public void actionPerformed(ActionEvent e)
                 {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#sm");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "ec#sm");
                 }
             });
 
@@ -1289,7 +1290,7 @@ public class CMainFrame extends JFrame {
             {
                 public void actionPerformed(ActionEvent e)
                 {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "ec#de");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "ec#de");
                 }
             });
         }
@@ -1488,14 +1489,14 @@ public class CMainFrame extends JFrame {
             return;
         }
         Password = JOptionPane.showInputDialog(getContentPane(), "Message");
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "nick " + NewNick + "," + Password);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "nick " + NewNick + "," + Password);
     }
 
     public void jMenuFileConnect_actionPerformed() {
         mwclient.connectToServer();
         // Set Version upon reconnect.
         if (!mwclient.getStatus().equals("Not connected")) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setclientversion#" + mwclient.myUsername.trim() + "#" + MWClient.CLIENT_VERSION);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setclientversion#" + mwclient.myUsername.trim() + "#" + MWClient.CLIENT_VERSION);
         }
     }
 
@@ -1524,7 +1525,7 @@ public class CMainFrame extends JFrame {
         if (Nickname == null) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c lastonline#" + Nickname);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c lastonline#" + Nickname);
     }
 
     public void jMenuFileExit_actionPerformed() {
@@ -1551,9 +1552,9 @@ public class CMainFrame extends JFrame {
             factionDialog.setVisible(true);
             House2 = factionDialog.getHouseName();
             factionDialog.dispose();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c isstatus#" + House + "#" + House2);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c isstatus#" + House + "#" + House2);
         } else {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c isstatus");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c isstatus");
         }
     }
 
@@ -1570,7 +1571,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c faction#" + House);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c faction#" + House);
     }
 
     public void jMenuMercStatus_actionPerformed() {
@@ -1583,14 +1584,14 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c mstatus#" + Merc);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c mstatus#" + Merc);
     }
 
     public void jMenuCommanderCheckAttack_actionPerformed(int lid) {
         if (lid == -1) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ca");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ca");
         } else {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ca#" + lid);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ca#" + lid);
         }
     }
 
@@ -1611,7 +1612,7 @@ public class CMainFrame extends JFrame {
         if ((faction == null) || (faction.length() < 1)) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c range#" + range + "#" + faction);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c range#" + range + "#" + faction);
     }
 
     public void jMenuFindContestedPlanets_actionPerformed() { //BarukKhazad 20151129 - start 2
@@ -1636,7 +1637,7 @@ public class CMainFrame extends JFrame {
             return;
         }
         //mwclient.addToChat("findcp " + h1 + "#" + h2 + "#" + Perc);
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "findcp " + h1 + "#" + h2 + "#" + Perc);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "findcp " + h1 + "#" + h2 + "#" + Perc);
     }  //BarukKhazad 20151129 - end 2
 
     public void jMenuCommanderTransferMoney_actionPerformed(String name) {
@@ -1663,7 +1664,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transfermoney#" + targetPlayer + "#" + Amount);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c transfermoney#" + targetPlayer + "#" + Amount);
     }
 
     public void jMenuCommanderTransferRewardPoints_actionPerformed(String name)
@@ -1691,7 +1692,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferrewardpoints#" + targetPlayer + "#" + Amount);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c transferrewardpoints#" + targetPlayer + "#" + Amount);
     }
 
     //@Salient
@@ -1720,7 +1721,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferinfluence#" + targetPlayer + "#" + Amount);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c transferinfluence#" + targetPlayer + "#" + Amount);
     }
 
 
@@ -1753,7 +1754,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferunit#" + targetPlayer + "#" + mid);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c transferunit#" + targetPlayer + "#" + mid);
     }
 
     public void jMenuCommanderAddToBM_actionPerformed(int mid) {
@@ -1774,7 +1775,7 @@ public class CMainFrame extends JFrame {
             }
             lid = Integer.parseInt(LanceID);
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c rma#" + lid);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c rma#" + lid);
     }
 
     /*
@@ -1786,7 +1787,7 @@ public class CMainFrame extends JFrame {
         if (newName == null) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c namepilot#" + uid + "#" + newName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c namepilot#" + uid + "#" + newName);
     }
 
     /*
@@ -1808,7 +1809,7 @@ public class CMainFrame extends JFrame {
             newName = "clear";
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c namearmy#" + aid + "#" + newName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c namearmy#" + aid + "#" + newName);
     }
 
     public void jMenuCommanderPlayerLockArmy_actionPerformed(int aid) {
@@ -1816,19 +1817,19 @@ public class CMainFrame extends JFrame {
         // CArmy selectedArmy = mwclient.getPlayer().getArmy(aid);
         // if(selectedArmy == null)
         // return;
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c playerlockarmy#" + aid);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c playerlockarmy#" + aid);
     }
 
     public void jMenuCommanderPlayerUnlockArmy_actionPerformed(int aid) {
         // CArmy selectedArmy = mwclient.getPlayer().getArmy(aid);
         // if(selectedArmy == null)
         // return;
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c playerunlockarmy#" + aid);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c playerunlockarmy#" + aid);
     }
 
     public void jMenuCommanderDisableArmy_actionPerformed(int aid) {
         // Toggle armyDisabled
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c togglearmydisabled#" + aid);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c togglearmydisabled#" + aid);
     }
 
     /*
@@ -1853,7 +1854,7 @@ public class CMainFrame extends JFrame {
         }
 
         newLimit = Integer.parseInt(limit);
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c all#" + aid + "#" + newLimit);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c all#" + aid + "#" + newLimit);
     }
 
     /*
@@ -1879,7 +1880,7 @@ public class CMainFrame extends JFrame {
         }
 
         newLimit = Integer.parseInt(limit);
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c aul#" + aid + "#" + newLimit);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c aul#" + aid + "#" + newLimit);
     }
 
     /*
@@ -1902,7 +1903,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c aofs#" + aid + "#" + force);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c aofs#" + aid + "#" + force);
 
     }
 
@@ -1912,11 +1913,11 @@ public class CMainFrame extends JFrame {
         if (LogoURL == null) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setmylogo#" + LogoURL);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setmylogo#" + LogoURL);
     }
 
     public void jMenuCommanderPersonalPilotQueue_actionPerformed() {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c displayplayerpersonalpilotqueue");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c displayplayerpersonalpilotqueue");
     }
 
     public void jMenuCommanderTransferPilot_actionPerformed(String name) {
@@ -2001,7 +2002,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c transferpilot#" + targetPlayer + "#" + unitType + "#" + weightClass + "#" + position);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c transferpilot#" + targetPlayer + "#" + unitType + "#" + weightClass + "#" + position);
     }
 
     public void jMenuCommanderDonatePersonalPilot_actionPerformed() {
@@ -2076,7 +2077,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c donatepilot#" + unitType + "#" + weightClass + "#" + position);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c donatepilot#" + unitType + "#" + weightClass + "#" + position);
     }
 
     public void jMenuCommanderDirectSell_actionPerformed(String name, String id) {
@@ -2117,7 +2118,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c directsellunit#" + buyer + "#" + mwclient.getPlayer().getName() + "#" + unitID + "#" + price);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c directsellunit#" + buyer + "#" + mwclient.getPlayer().getName() + "#" + unitID + "#" + price);
     }
 
     public void jMenuMercOfferContract_actionPerformed() {
@@ -2166,7 +2167,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c offercontract#" + Merc + "#" + Amount + "#" + Duration + "#" + Type);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c offercontract#" + Merc + "#" + Amount + "#" + Duration + "#" + Type);
     }
 
     public void jMenuCommanderDefect_actionPerformed() {
@@ -2182,7 +2183,7 @@ public class CMainFrame extends JFrame {
             if (shortName == null) {
                 return;
             }
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c defect#" + House + "#newfaction#" + shortName);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c defect#" + House + "#newfaction#" + shortName);
 
             return;
         }
@@ -2197,7 +2198,7 @@ public class CMainFrame extends JFrame {
         }
 
         // send unconfirmed defection command
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c defect#" + House);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c defect#" + House);
     }
 
     public void jMenuCommanderSelfPromote_actionPerformed() 
@@ -2212,12 +2213,12 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c selfpromote#"+ subFactionName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c selfpromote#"+ subFactionName);
     } 
     
     public void jMenuCommanderReportStatusMC_actionPerformed() 
     {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c reportstatusmc#");    
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c reportstatusmc#");    
     }
 
     public void jMenuCommanderFireTechs_actionPerformed() {
@@ -2267,9 +2268,9 @@ public class CMainFrame extends JFrame {
                 return;
             }
 
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c firetechs#" + techs + "#" + techType);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c firetechs#" + techs + "#" + techType);
         } else {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c firetechs#" + techs);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c firetechs#" + techs);
         }
     }
 
@@ -2321,9 +2322,9 @@ public class CMainFrame extends JFrame {
                 return;
             }
 
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c hiretechs#" + techs + "#" + techType);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c hiretechs#" + techs + "#" + techType);
         } else {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c hiretechs#" + techs);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c hiretechs#" + techs);
         }
     }
 
@@ -2370,7 +2371,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c buypilotsfromhouse#" + unitType + "#" + unitClass + "#" + numberOfPilots);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c buypilotsfromhouse#" + unitType + "#" + unitClass + "#" + numberOfPilots);
     }
 
     public void jMenuCommanderSellBays_actionPerformed() {
@@ -2389,7 +2390,7 @@ public class CMainFrame extends JFrame {
             mwclient.addToChat("<b>Try picking a number between 1 and " + thePlayer.getFreeBays() + "<b>");
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c sellbays#" + bays);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c sellbays#" + bays);
     }
 
     public void jMenuCampaignPartsCache_actionPerformed() {
@@ -2413,7 +2414,7 @@ public class CMainFrame extends JFrame {
             mwclient.addToChat("Try picking a number greater then 0");
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c buybays#" + bays);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c buybays#" + bays);
     }
 
     public void jMenuHelpViewBuildTables_actionPerformed() {
@@ -2426,7 +2427,7 @@ public class CMainFrame extends JFrame {
                 BuildTableViewer btv = new BuildTableViewer(this, mwclient);
                 btv.run();
         } else {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c buildtablelist");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c buildtablelist");
         }
 
     }
@@ -2463,7 +2464,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c promoteplayer#" + targetPlayer + "#" + subFactionName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c promoteplayer#" + targetPlayer + "#" + subFactionName);
 
     }
 
@@ -2490,7 +2491,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c demoteplayer#" + targetPlayer + "#" + subFactionName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c demoteplayer#" + targetPlayer + "#" + subFactionName);
 
     }
 
@@ -2513,7 +2514,7 @@ public class CMainFrame extends JFrame {
         String newfluff = JOptionPane.showInputDialog(this, "Fluff? (Leave blank to remove)", user.getFluff());
 
         if (newfluff != null) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c FactionLeaderFluff#" + targetPlayer + "#" + newfluff);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c FactionLeaderFluff#" + targetPlayer + "#" + newfluff);
         }
     }
 
@@ -2531,14 +2532,14 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c FactionLeaderMute#" + targetPlayer);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c FactionLeaderMute#" + targetPlayer);
     }
 
     public void jMenuLeaderFactionColor_actionPerformed() {
         String newColor = JOptionPane.showInputDialog(this, "Faction Color?", "Faction Color?", JOptionPane.QUESTION_MESSAGE);
 
         if (newColor != null) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c ChangeHouseColor#" + mwclient.getPlayer().getHouse() + "#" + newColor);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ChangeHouseColor#" + mwclient.getPlayer().getHouse() + "#" + newColor);
         }
     }
 
@@ -2546,7 +2547,7 @@ public class CMainFrame extends JFrame {
         String newColor = JOptionPane.showInputDialog(this, "Player Color?", "Player Color?", JOptionPane.QUESTION_MESSAGE);
 
         if (newColor != null) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminSetHousePlayerColor#" + mwclient.getPlayer().getHouse() + "#" + newColor);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSetHousePlayerColor#" + mwclient.getPlayer().getHouse() + "#" + newColor);
         }
     }
 
@@ -2627,7 +2628,7 @@ public class CMainFrame extends JFrame {
             }
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c purchaseFactory#" + factoryName + "#" + unitType + "#" + unitWeight + "#" + planet);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c purchaseFactory#" + factoryName + "#" + unitType + "#" + unitWeight + "#" + planet);
     }
 
     // Show data about the mek wars client and server
@@ -3004,7 +3005,7 @@ public class CMainFrame extends JFrame {
         }
         String selectedMul = list.elementAt(combo.getSelectedIndex());
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c retrievemul#" + selectedMul);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c retrievemul#" + selectedMul);
     }
 
     /*
@@ -3168,7 +3169,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "createarmyfrommul " + selectedMul + "#" + fluff + "#" + player);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "createarmyfrommul " + selectedMul + "#" + fluff + "#" + player);
     }
 
     public void jMenuSendAllOperationFiles_actionPerformed(ActionEvent e) {
@@ -3205,7 +3206,7 @@ public class CMainFrame extends JFrame {
                 MWLogger.errLog("Unable to read " + opFile);
                 return;
             }
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setoperation#short#" + opData.toString());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setoperation#short#" + opData.toString());
             opData.setLength(0);
             opData.trimToSize();
         }
@@ -3242,13 +3243,13 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setoperation#short#" + opData.toString());
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setoperation#short#" + opData.toString());
     }
 
     public void jMenuUpdateOperations_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminlockcampaign");
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c updateoperations");
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminunlockcampaign");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminlockcampaign");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c updateoperations");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminunlockcampaign");
 
     }
 
@@ -3269,7 +3270,7 @@ public class CMainFrame extends JFrame {
 
         String opName = (String) opCombo.getSelectedItem();
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RETRIEVEOPERATION#short#" + opName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RETRIEVEOPERATION#short#" + opName);
     }
 
     public void jMenuSetOperationFile_actionPerformed(ActionEvent e) {
@@ -3313,7 +3314,7 @@ public class CMainFrame extends JFrame {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setoperation#short#" + opData.toString());
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setoperation#short#" + opData.toString());
     }
 
     private void addMenuListener(Object[] components) {

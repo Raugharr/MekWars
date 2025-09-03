@@ -25,9 +25,9 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package server.MWChatServer.commands;
+package mekwars.server.MWChatServer.commands;
 
-import server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.MWChatClient;
 
 /**
  * An object that can process a message that came from the client side.

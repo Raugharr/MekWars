@@ -15,7 +15,7 @@
 	 */
 
 	
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,9 +24,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import client.gui.CCommPanel;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.CCommPanel;
+import mekwars.common.util.MWLogger;
 
 /**
  * @author Spork
@@ -72,13 +73,13 @@ public class BT extends Command {
 						if ( file.exists() ) {
 						    time = file.lastModified();
 						}
-						mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "AdminRequestBuildTable get#" + dName + "#" + fileName + "#" + time);
+						mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "AdminRequestBuildTable get#" + dName + "#" + fileName + "#" + time);
 					}
 				}
 					
 			}
             if ( viewer ) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "AdminRequestBuildTable view");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "AdminRequestBuildTable view");
             }
 
 		} if(cmd.equalsIgnoreCase("PLS")) {
@@ -101,13 +102,13 @@ public class BT extends Command {
                         if ( file.exists() ) {
                             time = file.lastModified();
                         }
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "RequestBuildTable get#" + dName + "#" + fileName + "#" + time);
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "RequestBuildTable get#" + dName + "#" + fileName + "#" + time);
                     }
                 }
                     
             }
             if ( viewer ) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "RequestBuildTable view");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "RequestBuildTable view");
             }
         } else if (cmd.equalsIgnoreCase("BT")) {
 			String folder = st.nextToken();

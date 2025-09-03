@@ -13,15 +13,15 @@
  * for more details.
  */
 
-package server.dataProvider.commands;
+package mekwars.server.dataProvider.commands;
 
 import java.util.Date;
 
-import common.CampaignData;
-import common.Equipment;
-import common.util.BinWriter;
-import server.campaign.CampaignMain;
-import server.dataProvider.ServerCommand;
+import mekwars.common.CampaignData;
+import mekwars.common.Equipment;
+import mekwars.common.util.BinWriter;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.dataProvider.ServerCommand;
 
 public class BMSetting implements ServerCommand {
 

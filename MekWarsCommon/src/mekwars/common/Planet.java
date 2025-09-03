@@ -18,7 +18,7 @@
  * Created on 23.03.2004
  *
  */
-package common;
+package mekwars.common;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.util.BinReader;
-import common.util.BinWriter;
-import common.util.Position;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
+import mekwars.common.util.Position;
 import megamek.common.planetaryconditions.PlanetaryConditions;
 
 /**

@@ -10,7 +10,7 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -30,12 +30,13 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.SpringLayoutHelper;
 
 public class PromotePilotDialog extends JFrame implements ActionListener, KeyListener {
 
@@ -639,10 +640,10 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
     private void sendPromoteCommands() {
 
-        String baseCommand = MWClient.CAMPAIGN_PREFIX + "c promotepilot#" + playerUnit.getId() + "#";
+        String baseCommand = GameHost.CAMPAIGN_PREFIX + "c promotepilot#" + playerUnit.getId() + "#";
 
         if (demoting) {
-            baseCommand = MWClient.CAMPAIGN_PREFIX + "c demotepilot#" + playerUnit.getId() + "#";
+            baseCommand = GameHost.CAMPAIGN_PREFIX + "c demotepilot#" + playerUnit.getId() + "#";
         }
 
         for (Object object : MasterPanel.getComponents()) {

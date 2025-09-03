@@ -14,11 +14,11 @@
  *
  *         This class loads the default server config options as well as saves the server configs back to the serverconfig file
  */
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.util.Properties;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 /**
  * @author Torren Oct 22, 2004 Loads the default settings for the server config If any configs are added please add them to this function as well as

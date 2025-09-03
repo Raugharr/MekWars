@@ -18,12 +18,12 @@
  * Created on 26.03.2004
  *
  */
-package common;
+package mekwars.common;
 
 import java.util.Vector;
 
-import common.campaign.pilot.Pilot;
-import common.campaign.targetsystems.TargetSystem;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.targetsystems.TargetSystem;
 import megamek.common.Aero;
 import megamek.common.AmmoType;
 import megamek.common.BattleArmor;

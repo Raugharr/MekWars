@@ -1,8 +1,8 @@
-package server.campaign.operations.resolvers;
+package mekwars.server.campaign.operations.resolvers;
 
-import common.UnitFactory;
-import server.campaign.SPlanet;
-import server.campaign.operations.ShortOperation;
+import mekwars.common.UnitFactory;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.operations.ShortOperation;
 
 public class NewShortResolver {
 	int gameID;

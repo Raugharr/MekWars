@@ -46,7 +46,7 @@
  * of ModOp settings. 
  */
 
-package common.campaign.operations;
+package mekwars.common.campaign.operations;
 
 import java.util.Properties;
 

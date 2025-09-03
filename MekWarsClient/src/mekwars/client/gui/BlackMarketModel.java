@@ -21,7 +21,7 @@
  * Created on June 21, 2002, 2:45 PM
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 
 import java.awt.Color;
@@ -34,10 +34,10 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import client.MWClient;
-import client.campaign.CBMUnit;
-import client.campaign.CCampaign;
-import common.Unit;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CBMUnit;
+import mekwars.client.campaign.CCampaign;
+import mekwars.common.Unit;
 
 /**
  *

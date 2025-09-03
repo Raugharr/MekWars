@@ -14,17 +14,17 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 
 import java.util.StringTokenizer;
 
-import common.campaign.pilot.skills.PilotSkill;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.pilot.SPilot;
-import server.campaign.pilot.skills.EdgeSkill;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.pilot.skills.EdgeSkill;
 
 public class SetEdgeSkillsCommand implements Command {
 	

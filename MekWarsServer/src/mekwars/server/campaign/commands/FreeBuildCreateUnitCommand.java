@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,13 +27,13 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
-import common.House;
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.pilot.SPilot;
+import mekwars.common.House;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.pilot.SPilot;
 
 
 /**

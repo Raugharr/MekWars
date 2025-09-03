@@ -7,7 +7,7 @@
  *
  * @author jdumas@zgs.com (http://208.223.9.21/jfd/crypt.html)
  ****************************************************************************/
-package server.MWChatServer.translator;
+package mekwars.server.MWChatServer.translator;
 
 public class jcrypt
 {

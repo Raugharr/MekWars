@@ -14,13 +14,13 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import common.util.MWLogger;
-import server.campaign.util.OpponentListHelper;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.util.OpponentListHelper;
 
 /**
  * @author urgru

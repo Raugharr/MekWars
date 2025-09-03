@@ -19,7 +19,7 @@
  * Basic and advanced dialog for converting components into crits
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -38,11 +38,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-import client.MWClient;
-import common.BMEquipment;
-import common.House;
-import common.Unit;
-import common.util.ComponentToCritsConverter;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.BMEquipment;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.util.ComponentToCritsConverter;
 import megamek.common.TechConstants;
 
 public final class ComponentConverterDialog implements ActionListener {
@@ -151,7 +152,7 @@ public final class ComponentConverterDialog implements ActionListener {
                 JPanel panel = (JPanel) mainPanel.getComponent(pos);
                 findAndSaveConfigs(panel);
             }
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getcomponentconversion");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getcomponentconversion");
         } else {
             dialog.dispose();
         }
@@ -203,9 +204,9 @@ public final class ComponentConverterDialog implements ActionListener {
                 || converter.getMinCritLevel() != Integer.parseInt(amount) ){
 
             if (isMod) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c Setcomponentconversion#" + crit + "#" + weight + "#" + type + "#" + amount + "#" + factionCombo.getSelectedItem().toString());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c Setcomponentconversion#" + crit + "#" + weight + "#" + type + "#" + amount + "#" + factionCombo.getSelectedItem().toString());
             } else {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c Setcomponentconversion#" + crit + "#" + weight + "#" + type + "#" + amount);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c Setcomponentconversion#" + crit + "#" + weight + "#" + type + "#" + amount);
             }
         }
 
@@ -259,7 +260,7 @@ public final class ComponentConverterDialog implements ActionListener {
 
     private void requestComponents(String faction) {
         mwclient.setWaiting(true);
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getcomponentconversion#" + faction);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getcomponentconversion#" + faction);
         while (mwclient.isWaiting()) {
             try {
                 Thread.sleep(100);

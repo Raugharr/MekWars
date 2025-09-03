@@ -10,7 +10,7 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package client;
+package mekwars.client;
 
 // This is the Client used for connecting to the master server.
 // @Author: Helge Richter (McWizard@gmx.de)
@@ -84,50 +84,50 @@ import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.looks.plastic.theme.DesertGreen;
 import com.jgoodies.looks.plastic.theme.SkyBlue;
-import client.campaign.CCampaign;
-import client.campaign.CPlayer;
-import client.campaign.CUnit;
-import client.cmd.Command;
-import client.gui.Browser;
-import client.gui.CCommPanel;
-import client.gui.CMainFrame;
-import client.gui.SplashWindow;
-import client.gui.commands.IGUICommand;
-import client.gui.commands.MailGCmd;
-import client.gui.commands.PingGCmd;
-import client.gui.dialog.InfluencePointsDialog;
-import client.gui.dialog.RewardPointsDialog;
-import client.gui.dialog.SignonDialog;
-import client.protocol.DataFetchClient;
-import client.util.RepairManagmentThread;
-import client.util.SalvageManagmentThread;
-import common.AdvancedTerrain;
-import common.BMEquipment;
-import common.CampaignData;
-import common.Equipment;
-import common.GameInterface;
-import common.GameWrapper;
-import common.House;
-import common.Influences;
-import common.MMGame;
-import common.Planet;
-import common.PlanetEnvironment;
-import common.Unit;
-import common.campaign.Buildings;
-import common.campaign.clientutils.GameHost;
-import common.campaign.clientutils.SerializeEntity;
-import common.campaign.clientutils.protocol.CConnector;
-import common.campaign.clientutils.protocol.IClient;
-import common.campaign.clientutils.protocol.commands.AckSignonPCmd;
-import common.campaign.clientutils.protocol.commands.CommPCmd;
-import common.campaign.clientutils.protocol.commands.IProtCommand;
-import common.campaign.clientutils.protocol.commands.PingPCmd;
-import common.campaign.clientutils.protocol.commands.PongPCmd;
-import common.util.GameReport;
-import common.util.MWLogger;
-import common.util.ThreadManager;
-import common.util.TokenReader;
-import common.util.UnitUtils;
+import mekwars.client.campaign.CCampaign;
+import mekwars.client.campaign.CPlayer;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.cmd.Command;
+import mekwars.client.gui.Browser;
+import mekwars.client.gui.CCommPanel;
+import mekwars.client.gui.CMainFrame;
+import mekwars.client.gui.SplashWindow;
+import mekwars.client.gui.commands.IGUICommand;
+import mekwars.client.gui.commands.MailGCmd;
+import mekwars.client.gui.commands.PingGCmd;
+import mekwars.client.gui.dialog.InfluencePointsDialog;
+import mekwars.client.gui.dialog.RewardPointsDialog;
+import mekwars.client.gui.dialog.SignonDialog;
+import mekwars.client.protocol.DataFetchClient;
+import mekwars.client.util.RepairManagmentThread;
+import mekwars.client.util.SalvageManagmentThread;
+import mekwars.common.AdvancedTerrain;
+import mekwars.common.BMEquipment;
+import mekwars.common.CampaignData;
+import mekwars.common.Equipment;
+import mekwars.common.GameInterface;
+import mekwars.common.GameWrapper;
+import mekwars.common.House;
+import mekwars.common.Influences;
+import mekwars.common.MMGame;
+import mekwars.common.Planet;
+import mekwars.common.PlanetEnvironment;
+import mekwars.common.Unit;
+import mekwars.common.campaign.Buildings;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.campaign.clientutils.SerializeEntity;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
+import mekwars.client.common.campaign.clientutils.protocol.IClient;
+import mekwars.client.common.campaign.clientutils.protocol.commands.AckSignonPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
+import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
+import mekwars.common.util.GameReport;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.ThreadManager;
+import mekwars.common.util.TokenReader;
+import mekwars.common.util.UnitUtils;
 import megamek.Version;
 import megamek.MMConstants;
 import megamek.client.ui.swing.GameOptionsDialog;
@@ -696,7 +696,7 @@ public final class MWClient extends GameHost implements IClient {
              * this after the main frame is build and visible will (I hope) fix
              * the "PM Ping Crash" TT users have with Client 0.1.44.5.
              */
-            sendChat(MWClient.CAMPAIGN_PREFIX + "c setclientversion#"
+            sendChat(GameHost.CAMPAIGN_PREFIX + "c setclientversion#"
                     + myUsername.trim() + "#" + CLIENT_VERSION);
             sendChat("/getsavedmail");
 
@@ -2432,7 +2432,7 @@ public final class MWClient extends GameHost implements IClient {
             File custom = new File("data" + File.separator + "mmconf" + File.separator + "unitQuirksOverride.xml");
             long canonFileLength = canon.length(); // returns 0L if does not exist
             long customFileLength = custom.length();        
-            sendChat(MWClient.CAMPAIGN_PREFIX + "c QUIRKCHECK#" + canonFileLength + "#" + customFileLength); 
+            sendChat(GameHost.CAMPAIGN_PREFIX + "c QUIRKCHECK#" + canonFileLength + "#" + customFileLength); 
         }
 
         // reread the config to allow the user to change setting during runtime
@@ -3041,7 +3041,7 @@ public final class MWClient extends GameHost implements IClient {
 
         if (Status == MWClient.STATUS_RESERVE) {
             // there commands now send as part of the MWClient contructor.
-            // sendChat(MWClient.CAMPAIGN_PREFIX + "c setclientversion#" +
+            // sendChat(GameHost.CAMPAIGN_PREFIX + "c setclientversion#" +
             // this.myUsername+ "#" + CLIENT_VERSION);
             // this.sendChat("/getsavedmail");
         } else if (Status == STATUS_LOGGEDOUT) {
@@ -3919,7 +3919,7 @@ public final class MWClient extends GameHost implements IClient {
 //            return;
 
         //call a new command to capture chat server side
-        sendChat(MWClient.CAMPAIGN_PREFIX + "CHATBOT " + temp);
+        sendChat(GameHost.CAMPAIGN_PREFIX + "CHATBOT " + temp);
     }
 
     @Override

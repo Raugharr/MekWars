@@ -17,11 +17,11 @@
  *  Sort used for Armies
  */
  
- package client.util;
+ package mekwars.client.util;
  
  import java.util.Comparator;
 
-import client.campaign.CArmy;
+import mekwars.client.campaign.CArmy;
 
  public class CArmyComparator implements Comparator<Object> {
 

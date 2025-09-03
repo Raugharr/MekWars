@@ -14,10 +14,10 @@
  * for more details.
  */
 
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
-import server.campaign.SHouse;
-import server.campaign.SmallPlayer;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SmallPlayer;
 
 public class EXPRankingContainer implements Comparable<Object> {
 	

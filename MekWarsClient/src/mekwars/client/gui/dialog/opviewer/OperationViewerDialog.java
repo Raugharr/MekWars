@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui.dialog.opviewer;
+package mekwars.client.gui.dialog.opviewer;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -41,12 +41,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
-import client.MWClient;
-import common.VerticalLayout;
-import common.campaign.operations.DefaultOperation;
-import common.campaign.operations.Operation;
-import common.util.MMNetXStream;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.common.VerticalLayout;
+import mekwars.common.campaign.operations.DefaultOperation;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MMNetXStream;
+import mekwars.common.util.MWLogger;
 
 public class OperationViewerDialog extends JDialog implements Runnable {
     /**

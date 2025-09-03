@@ -20,7 +20,7 @@
  * To this page as well.
  */
 
-package admin.dialog;
+package mekwars.admin.dialog;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -46,11 +46,11 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
-import client.MWClient;
-import common.Unit;
-import common.VerticalLayout;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.common.Unit;
+import mekwars.common.VerticalLayout;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
 
 public final class FactionConfigurationDialog implements ActionListener {
 

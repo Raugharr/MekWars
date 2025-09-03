@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,26 +38,26 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
-import common.BMEquipment;
-import common.Planet;
-import common.SubFaction;
-import common.Unit;
-import common.util.ComponentToCritsConverter;
-import common.util.MWLogger;
-import common.util.StringUtils;
-import common.util.TokenReader;
-import common.util.UnitComponents;
-import common.util.UnitUtils;
+import mekwars.common.BMEquipment;
+import mekwars.common.Planet;
+import mekwars.common.SubFaction;
+import mekwars.common.Unit;
+import mekwars.common.util.ComponentToCritsConverter;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.common.util.TokenReader;
+import mekwars.common.util.UnitComponents;
+import mekwars.common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.TechConstants;
-import server.campaign.commands.Command;
-import server.campaign.data.TimeUpdateHouse;
-import server.campaign.market2.IBuyer;
-import server.campaign.market2.ISeller;
-import server.campaign.mercenaries.ContractInfo;
-import server.campaign.mercenaries.MercHouse;
-import server.campaign.pilot.SPilot;
-import server.campaign.util.SerializedMessage;
+import mekwars.server.campaign.commands.Command;
+import mekwars.server.campaign.data.TimeUpdateHouse;
+import mekwars.server.campaign.market2.IBuyer;
+import mekwars.server.campaign.market2.ISeller;
+import mekwars.server.campaign.mercenaries.ContractInfo;
+import mekwars.server.campaign.mercenaries.MercHouse;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.util.SerializedMessage;
 
 /**
  * A class holding a server-side representation of a House

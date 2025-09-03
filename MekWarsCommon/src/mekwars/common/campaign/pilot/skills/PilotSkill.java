@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package common.campaign.pilot.skills;
+package mekwars.common.campaign.pilot.skills;
 
 /**
  * A description of a pilot skill visible to both, server and client.

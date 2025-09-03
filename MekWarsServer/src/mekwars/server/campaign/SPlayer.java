@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 
 import java.math.BigDecimal;
@@ -27,30 +27,30 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.Player;
-import common.SubFaction;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.flags.PlayerFlags;
-import common.util.MWLogger;
-import common.util.TokenReader;
-import common.util.UnitComponents;
-import common.util.UnitUtils;
+import mekwars.common.Player;
+import mekwars.common.SubFaction;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.flags.PlayerFlags;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
+import mekwars.common.util.UnitComponents;
+import mekwars.common.util.UnitUtils;
 import megamek.common.Protomech;
 import megamek.Version;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.market2.IBuyer;
-import server.campaign.market2.ISeller;
-import server.campaign.mercenaries.ContractInfo;
-import server.campaign.mercenaries.MercHouse;
-import server.campaign.pilot.SPilot;
-import server.campaign.util.ExclusionList;
-import server.campaign.util.OpponentListHelper;
-import server.campaign.util.SerializedMessage;
-import server.campaign.util.scheduler.UserActivityComponentsJob;
-import server.campaign.util.scheduler.UserActivityInfluenceJob;
-import server.util.MWPasswdRecord;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.market2.IBuyer;
+import mekwars.server.campaign.market2.ISeller;
+import mekwars.server.campaign.mercenaries.ContractInfo;
+import mekwars.server.campaign.mercenaries.MercHouse;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.util.ExclusionList;
+import mekwars.server.campaign.util.OpponentListHelper;
+import mekwars.server.campaign.util.SerializedMessage;
+import mekwars.server.campaign.util.scheduler.UserActivityComponentsJob;
+import mekwars.server.campaign.util.scheduler.UserActivityInfluenceJob;
+import mekwars.server.util.MWPasswdRecord;
 
 /**
  * A class representing a Player DOCU is not finished

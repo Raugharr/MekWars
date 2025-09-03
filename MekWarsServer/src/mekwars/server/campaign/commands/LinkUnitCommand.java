@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import common.Unit;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SPlayer;
+import mekwars.common.Unit;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SPlayer;
 
 
 public class LinkUnitCommand implements Command {

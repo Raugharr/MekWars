@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package server.campaign.market2;
+package mekwars.server.campaign.market2;
 
 import java.util.TreeMap;
 
-import common.Unit;
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 /**
  * MarketListing keeps track of all infomation related to a

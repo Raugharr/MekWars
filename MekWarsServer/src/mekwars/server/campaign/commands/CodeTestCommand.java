@@ -14,12 +14,12 @@
  * details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.util.discord.DiscordMessageHandler;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.util.discord.DiscordMessageHandler;
 
 public class CodeTestCommand implements Command {
 	

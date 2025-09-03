@@ -9,7 +9,7 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -22,8 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.common.util.SpringLayoutHelper;
 
 /**
  * @author jtighe

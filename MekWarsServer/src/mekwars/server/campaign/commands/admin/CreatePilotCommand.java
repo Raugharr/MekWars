@@ -14,20 +14,20 @@
  * for more details.
  */
 
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.commands.Command;
-import server.campaign.pilot.SPilot;
-import server.campaign.pilot.SPilotSkills;
-import server.campaign.pilot.skills.SPilotSkill;
-import server.campaign.pilot.skills.TraitSkill;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.commands.Command;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.pilot.SPilotSkills;
+import mekwars.server.campaign.pilot.skills.SPilotSkill;
+import mekwars.server.campaign.pilot.skills.TraitSkill;
 
 // syntanx /c createunit#filename#flavortext#gunnery#pilot#skill1,skill2,skill3
 public class CreatePilotCommand implements Command {

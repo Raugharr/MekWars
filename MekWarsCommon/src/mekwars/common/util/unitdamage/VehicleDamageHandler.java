@@ -1,10 +1,10 @@
-package common.util.unitdamage;
+package mekwars.common.util.unitdamage;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-import common.util.UnitUtils;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.IArmorState;

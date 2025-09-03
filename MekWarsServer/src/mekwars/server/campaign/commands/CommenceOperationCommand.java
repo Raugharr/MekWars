@@ -13,16 +13,16 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.CampaignData;
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.operations.ShortOperation;
+import mekwars.common.CampaignData;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.operations.ShortOperation;
 
 /**
  * This command is used for multi player opertionas. the attacker

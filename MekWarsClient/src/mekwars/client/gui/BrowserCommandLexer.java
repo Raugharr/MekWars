@@ -18,7 +18,7 @@
  * See COPYING.TXT for details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 import java.io.IOException;
 
 /**

@@ -19,9 +19,9 @@
  *
  */
 
-package common;
+package mekwars.common;
 
-import common.flags.PlayerFlags;
+import mekwars.common.flags.PlayerFlags;
 
 
 public class Player {

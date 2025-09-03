@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package admin.dialog;
+package mekwars.admin.dialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,10 +32,11 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 
-import client.MWClient;
-import common.House;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.House;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
 
 import megamek.common.AmmoType.Munitions;
 
@@ -137,11 +138,11 @@ public final class BannedAmmoDialog implements ActionListener{
                     
                     //Check box has been selected and should be updated to the server
                     if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo))
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetserverammoban#"
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetserverammoban#"
                         + munitionTypes.get(tempBox.getText()));
                     //Checkbox has been unselected and should be updated to the server
                     else if (!tempBox.isSelected() && bannedAmmo.containsKey(ammo))
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetserverammoban#"
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetserverammoban#"
                                 + munitionTypes.get(tempBox.getText()));
                 }
 			} else {
@@ -151,11 +152,11 @@ public final class BannedAmmoDialog implements ActionListener{
                     
                     //Check box has been selected and should be updated to the server
                     if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo))
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsethouseammoban#"
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethouseammoban#"
                                 +house.getName()+"#"+ munitionTypes.get(tempBox.getText()));
                     //Checkbox has been unselected and should be updated to the server
                     else if (!tempBox.isSelected() && bannedAmmo.containsKey(ammo))
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsethouseammoban#"
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethouseammoban#"
                                 +house.getName()+"#"+ munitionTypes.get(tempBox.getText()));
                     
                 }

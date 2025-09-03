@@ -1,11 +1,11 @@
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.File;
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
 
 //@salient a command to make sure hosts are using same quirk files
 public class QuirkCheckCommand implements Command 

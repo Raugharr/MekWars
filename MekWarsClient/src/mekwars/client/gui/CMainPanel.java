@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -34,9 +34,9 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import client.MWClient;
-import common.BMEquipment;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.common.BMEquipment;
+import mekwars.common.util.MWLogger;
 
 /**
  * Main panel

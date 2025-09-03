@@ -1,12 +1,12 @@
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.campaign.pilot.Pilot;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.pilot.SPilot;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * @author Torren (Jason Tighe)

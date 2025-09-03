@@ -19,15 +19,15 @@
  * Created on 23.03.2004
  *
  */
-package common;
+package mekwars.common;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import common.campaign.operations.Operation;
-import common.util.BinReader;
-import common.util.BinWriter;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
 
 /**
  * @author Helge Richter

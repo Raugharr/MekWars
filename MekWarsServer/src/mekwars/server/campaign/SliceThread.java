@@ -14,9 +14,10 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 
 /**
  * @author urgru A barebones timing thread which calls slices in CampaignMain.
@@ -27,13 +28,13 @@ import common.util.MWLogger;
  */
 
 public class SliceThread extends Thread {
-    server.campaign.CampaignMain myCampaign;
+    CampaignMain myCampaign;
     long until;
     int Duration;
     int sliceid = 0;
     int lastHouseId = 0;
 
-    public SliceThread(server.campaign.CampaignMain main, int Duration) {
+    public SliceThread(CampaignMain main, int Duration) {
         super("slicethread");
         this.Duration = Duration; // set length when thread is spun
         myCampaign = main;

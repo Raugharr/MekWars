@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -30,8 +30,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.util.StringUtils;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.util.StringUtils;
 
 public final class RegisterNameDialog implements ActionListener {
 
@@ -127,12 +128,12 @@ public final class RegisterNameDialog implements ActionListener {
             }
 
             if (passwordValid) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "register " + usernameField.getText() + "," + String.valueOf(passwordField1.getPassword()));
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "register " + usernameField.getText() + "," + String.valueOf(passwordField1.getPassword()));
             } else {
                 mwclient.doParseDataInput(toUser.toString());
             }
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setclientversion#" + mwclient.myUsername.trim() + "#" + MWClient.CLIENT_VERSION);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setclientversion#" + mwclient.myUsername.trim() + "#" + MWClient.CLIENT_VERSION);
 
         dialog.dispose();
     }

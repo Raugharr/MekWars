@@ -14,12 +14,12 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.Unit;
+import mekwars.common.Unit;
 
 
 public class NewbieHouse extends NonConqHouse {

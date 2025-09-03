@@ -13,7 +13,7 @@
  * details.
  */
 
-package server.campaign.util.scheduler;
+package mekwars.server.campaign.util.scheduler;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -38,11 +38,11 @@ import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 /**
  * A class to handle distribution of Influence due to player activity

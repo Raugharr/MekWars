@@ -18,7 +18,7 @@
  * 
  */
 
-package admin.dialog;
+package mekwars.admin.dialog;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -38,12 +38,12 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import common.House;
-import common.SubFaction;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.common.House;
+import mekwars.common.SubFaction;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
 
 public final class SubFactionConfigurationDialog implements ActionListener {
     

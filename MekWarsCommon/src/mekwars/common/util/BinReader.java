@@ -14,9 +14,9 @@
  * for more details.
  */
 
-package common.util;
+package mekwars.common.util;
 
-import common.util.HTMLConverter;
+import mekwars.common.util.HTMLConverter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;

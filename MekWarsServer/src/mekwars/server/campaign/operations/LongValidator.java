@@ -18,18 +18,18 @@
  * A utility which checks to see whether armies are valid for
  * particular op types @ launch/join.
  */
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 //IMPORTS
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import common.campaign.operations.Operation;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.operations.newopmanager.I_OperationManager;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 //TODO: remove "unused" once longs are running
 public class LongValidator {
 	

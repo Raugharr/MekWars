@@ -14,11 +14,11 @@
  * for more details.
  */
 
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 import java.util.TreeMap;
 
-import server.campaign.CampaignMain;
+import mekwars.server.campaign.CampaignMain;
 
 /**
  * PayoutModifier takes the base payouts and modifies them by ELO, based on 

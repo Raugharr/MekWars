@@ -13,7 +13,7 @@
  * details.
  */
 
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import common.util.SpringLayoutHelper;
+import mekwars.common.util.SpringLayoutHelper;
 
 /**
  * A JPanel for scheduled tasks.  In this panel, admins can set the frequency with which tasks will execute.

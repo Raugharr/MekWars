@@ -10,7 +10,7 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package client;
+package mekwars.client;
 
 import java.awt.KeyboardFocusManager;
 import java.io.File;
@@ -23,42 +23,39 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import client.campaign.CArmy;
-import client.campaign.CUnit;
-import common.AdvancedTerrain;
-import common.PlanetEnvironment;
-import common.Unit;
-import common.campaign.Buildings;
-import common.util.MWLogger;
-import common.util.UnitUtils;
 import megamek.client.AbstractClient;
 import megamek.client.Client;
 import megamek.client.CloseClientListener;
 import megamek.client.bot.BotClient;
 import megamek.client.bot.princess.Princess;
-import megamek.client.bot.ui.swing.BotGUI;
-import megamek.client.ui.swing.util.MegaMekController;
 import megamek.client.generator.RandomGenderGenerator;
+import megamek.client.ui.swing.util.MegaMekController;
 import megamek.common.Board;
 import megamek.common.BoardDimensions;
 import megamek.common.Coords;
 import megamek.common.Crew;
 import megamek.common.CrewType;
 import megamek.common.Entity;
-import megamek.common.IGame;
-import megamek.common.enums.GamePhase;
-import megamek.common.enums.Gender;
 import megamek.common.KeyBindParser;
 import megamek.common.MapSettings;
 import megamek.common.OffBoardDirection;
+import megamek.common.enums.GamePhase;
+import megamek.common.icons.Camouflage;
+import megamek.common.options.IBasicOption;
 import megamek.common.planetaryconditions.Light;
 import megamek.common.planetaryconditions.PlanetaryConditions;
-import megamek.common.icons.Camouflage;
-
-import megamek.common.options.IBasicOption;
 import megamek.common.preference.ClientPreferences;
 import megamek.common.preference.PreferenceManager;
 import megamek.common.util.BuildingTemplate;
+import mekwars.client.campaign.CArmy;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.AdvancedTerrain;
+import mekwars.common.PlanetEnvironment;
+import mekwars.common.Unit;
+import mekwars.common.campaign.Buildings;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 
 public class ClientThread extends Thread implements CloseClientListener {
 
@@ -159,7 +156,7 @@ public class ClientThread extends Thread implements CloseClientListener {
         if (mwclient.getGameOptions().size() < 1) {
             mwclient.setWaiting(true);
 
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RequestOperationSettings");
+			mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestOperationSettings");
             while (mwclient.isWaiting()) {
                 mwclient.addToChat("Retrieving Operation Data Please Wait..");
                 try {

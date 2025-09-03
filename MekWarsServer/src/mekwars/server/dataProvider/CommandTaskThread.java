@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.dataProvider;
+package mekwars.server.dataProvider;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,10 +25,10 @@ import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import common.CampaignData;
-import common.util.BinWriter;
-//import common.util.BinReader;
-import common.util.MWLogger;
+import mekwars.common.CampaignData;
+import mekwars.common.util.BinWriter;
+//import mekwars.common.util.BinReader;
+import mekwars.common.util.MWLogger;
 
 
 
@@ -101,7 +101,7 @@ public class CommandTaskThread extends Thread {
                     Class<?> cmdClass;
                     ServerCommand cmd;
                     try {
-                    	cmdClass = Class.forName("server.dataProvider.commands."+cmdStr);
+                    	cmdClass = Class.forName("mekwars.server.dataProvider.commands." + cmdStr);
                     	cmd = (ServerCommand)cmdClass.newInstance();
                     } catch (Exception e) {
                         in.close();

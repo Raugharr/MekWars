@@ -13,14 +13,14 @@
  * details.
  */
 
-package server.campaign.commands.leader;
+package mekwars.server.campaign.commands.leader;
 
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.commands.Command;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.commands.Command;
 
 public class ViewFactionPartsCacheCommand implements Command {
 

@@ -1,8 +1,8 @@
-package server.campaign.operations.resolvers;
+package mekwars.server.campaign.operations.resolvers;
 
 import java.util.Vector;
 
-import server.campaign.SPlayer;
+import mekwars.server.campaign.SPlayer;
 
 public class Team {
 	public Vector<SPlayer> players;

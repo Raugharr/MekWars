@@ -1,4 +1,4 @@
-package common.util;
+package mekwars.common.util;
 
 import java.awt.Color;
 

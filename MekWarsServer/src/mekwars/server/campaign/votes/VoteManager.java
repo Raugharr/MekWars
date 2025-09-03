@@ -1,12 +1,12 @@
-package server.campaign.votes;
+package mekwars.server.campaign.votes;
 
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
 
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
 
 
 /**

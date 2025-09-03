@@ -13,21 +13,21 @@
  * details.
  */
 
-package server.campaign.commands.leader;
+package mekwars.server.campaign.commands.leader;
 
 import java.io.File;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
-import common.util.StringUtils;
+import mekwars.common.util.StringUtils;
 import megamek.common.Entity;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.BuildTable;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.commands.Command;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.BuildTable;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.commands.Command;
 
 public class ResearchUnitCommand implements Command {
 

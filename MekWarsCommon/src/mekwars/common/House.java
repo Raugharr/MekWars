@@ -18,12 +18,12 @@
  * Created on 23.03.2004
  *
  */
-package common;
+package mekwars.common;
 
-import common.util.BinReader;
-import common.util.BinWriter;
-import common.util.HTMLConverter;
-import common.universe.FactionTag;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
+import mekwars.common.util.HTMLConverter;
+import mekwars.common.universe.FactionTag;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Hashtable;

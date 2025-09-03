@@ -15,12 +15,13 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.MWChatServer.commands;
+package mekwars.server.MWChatServer.commands;
 
-import common.util.MWLogger;
-import server.ServerWrapper;
-import server.MWChatServer.MWChatClient;
-import server.MWChatServer.MWChatServer;
+import mekwars.common.comm.TransportCodec;
+import mekwars.common.util.MWLogger;
+import mekwars.server.ServerWrapper;
+import mekwars.server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.MWChatServer;
 
 /**
  *
@@ -32,7 +33,7 @@ public class Command extends CommandBase implements ICommands {
    */
   public boolean process(MWChatClient client, String[] args) {
     try {
-		((ServerWrapper)client.getServer()).processCommand(client.getUserId(), common.comm.TransportCodec.unescape(args[1]));
+		((ServerWrapper)client.getServer()).processCommand(client.getUserId(), TransportCodec.unescape(args[1]));
     } catch (Exception e) {
       MWLogger.errLog(e);
       MWLogger.errLog("Not supposed to happen");

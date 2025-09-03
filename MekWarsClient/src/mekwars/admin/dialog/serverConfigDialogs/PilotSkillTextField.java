@@ -1,4 +1,4 @@
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import java.awt.Dimension;
 

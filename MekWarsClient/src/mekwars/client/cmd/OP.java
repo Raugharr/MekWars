@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,12 +29,13 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import client.MWClient;
-import client.gui.dialog.opviewer.OperationViewerDialog;
-import common.campaign.operations.DefaultOperation;
-import common.campaign.operations.Operation;
-import common.util.MMNetXStream;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.dialog.opviewer.OperationViewerDialog;
+import mekwars.common.campaign.operations.DefaultOperation;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MMNetXStream;
+import mekwars.common.util.MWLogger;
 
 /**
  * 
@@ -115,7 +116,7 @@ public class OP extends Command {
 						}
 					}
 				}
-				mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "getops getall");
+				mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "getops getall");
 				return;
 			} else {
 				// We *do* have the file.  Check the contents.
@@ -197,7 +198,7 @@ public class OP extends Command {
 				// Now, check that files that should exist do
 				if (!dir.exists()) {
 					// The xml dir doesn't exist.  Obviously we need to get everything
-					mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "getops getall");
+					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "getops getall");
 					return;
 				} else {
 					for (String opName : opsToTest) {
@@ -230,7 +231,7 @@ public class OP extends Command {
 					}
 					// Now, request these
 					//JOptionPane.showMessageDialog(null, opsToGet);
-					mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "getops getsome#" + sb.toString());
+					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "getops getsome#" + sb.toString());
 				} else {
 					// Our ops are good
 					ojd = new OperationViewerDialog(mwclient.getMainFrame(), mwclient);

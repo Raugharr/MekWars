@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,11 +34,11 @@ import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.text.html.HTMLEditorKit;
 
-import client.MWClient;
-import client.campaign.CPlayer;
-import common.campaign.clientutils.IClientConfig;
-import common.util.MWLogger;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CPlayer;
+import mekwars.common.campaign.clientutils.IClientConfig;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 
 /**
  * Player panel

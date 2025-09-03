@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.awt.Color;
@@ -58,16 +58,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import client.MWClient;
-import client.campaign.CArmy;
-import client.gui.dialog.PlanetSearchDialog;
-import common.House;
-import common.Influences;
-import common.Planet;
-import common.util.MMNetXStream;
-import common.util.MWLogger;
-import common.util.Position;
-import common.util.StringUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CArmy;
+import mekwars.client.gui.dialog.PlanetSearchDialog;
+import mekwars.common.House;
+import mekwars.common.Influences;
+import mekwars.common.Planet;
+import mekwars.common.util.MMNetXStream;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.Position;
+import mekwars.common.util.StringUtils;
 
 /**
  * Draws the main map component.

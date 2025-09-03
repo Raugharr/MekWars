@@ -1,4 +1,4 @@
-package common.campaign.targetsystems;
+package mekwars.common.campaign.targetsystems;
 
 public class TargetTypeOutOfBoundsException extends Exception {
 

@@ -14,17 +14,17 @@
  * for more details.
  */
 
-package server.campaign.commands.mod;
+package mekwars.server.campaign.commands.mod;
 
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.commands.Command;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.commands.Command;
 
 /**
  * Return a human readable string that describes the pilots

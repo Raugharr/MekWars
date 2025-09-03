@@ -1,4 +1,4 @@
-package client.gui;
+package mekwars.client.gui;
 
 /** 
  * In a chain of data manipulators some behaviour is common. TableMap

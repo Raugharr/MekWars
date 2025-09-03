@@ -21,13 +21,13 @@
  * Created on June 2, 2002, 12:23 AM
  */
 
-package common.comm;
+package mekwars.common.comm;
 
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import server.MWServ;
+import mekwars.server.MWServ;
 
 /**
  *

@@ -26,7 +26,7 @@
  * 
  */
 
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -34,8 +34,8 @@ import java.io.InputStreamReader;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-import common.util.MWLogger;
-import server.MWChatServer.commands.ICommands;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.commands.ICommands;
 
 /**
  * Constantly reads from the BufferedReader.

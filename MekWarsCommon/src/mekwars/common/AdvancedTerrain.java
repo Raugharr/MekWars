@@ -15,14 +15,14 @@
  * for more details.
  */
 
-package common;
+package mekwars.common;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import common.util.BinReader;
-import common.util.BinWriter;
-import common.util.TokenReader;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
+import mekwars.common.util.TokenReader;
 import megamek.common.planetaryconditions.Atmosphere;
 import megamek.common.planetaryconditions.EMI;
 import megamek.common.planetaryconditions.Fog;

@@ -15,18 +15,18 @@
  * for more details.
  */
 
-package dedicatedhost.cmd;
+package mekwars.dedicatedhost.cmd;
 
 import java.util.StringTokenizer;
 
-import dedicatedhost.MWDedHost;
+import mekwars.dedicatedhost.MWDedHost;
 
 /**
  * Base class that all commands have to derrive from.
  *
  * HOWTO ADD A NEW COMMAND
  * -----------------------
- * - Subclass Command. Put your class in package dedicatedhost.cmd
+ * - Subclass Command. Put your class in package mekwars.dedicatedhost.cmd
  * - Name your class like the command in the chat input (e.g. "HS" for faction status)
  * - Provide an constructor with one MMClient argument.
  * - implement execute to do the things you want to be done.

@@ -18,7 +18,7 @@
  * Created on 04.05.2004
  *
  */
-package common;
+package mekwars.common;
 
 /**
  * @author Helge Richter

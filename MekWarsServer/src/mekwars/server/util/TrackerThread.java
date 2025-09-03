@@ -14,16 +14,16 @@
  * for more details.
  */
 
-package server.util;
+package mekwars.server.util;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.UUID;
 
-import common.util.MWLogger;
-import server.MWServ;
-import server.campaign.CampaignMain;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
+import mekwars.server.campaign.CampaignMain;
 
 /**
  * 
