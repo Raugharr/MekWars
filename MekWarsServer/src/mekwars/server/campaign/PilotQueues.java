@@ -18,7 +18,7 @@
  * Created on 25.04.2004
  *
  */
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,13 +29,13 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.Unit;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.MWLogger;
-import server.campaign.pilot.SPilot;
-import server.campaign.pilot.SPilotSkills;
-import server.campaign.pilot.skills.SPilotSkill;
-import server.campaign.pilot.skills.TraitSkill;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.pilot.SPilotSkills;
+import mekwars.server.campaign.pilot.skills.SPilotSkill;
+import mekwars.server.campaign.pilot.skills.TraitSkill;
 
 /**
  * @author Helge Richter

@@ -12,7 +12,7 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 //awt imports
 import java.awt.Component;
@@ -31,10 +31,10 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import common.Unit;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.common.Unit;
+import mekwars.common.util.SpringLayoutHelper;
 //util imports
 //swing imports
 //mekwars imports

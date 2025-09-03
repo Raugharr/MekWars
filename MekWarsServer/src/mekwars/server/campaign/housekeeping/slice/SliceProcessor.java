@@ -1,4 +1,4 @@
-package server.campaign.housekeeping.slice;
+package mekwars.server.campaign.housekeeping.slice;
 
 
 public class SliceProcessor {

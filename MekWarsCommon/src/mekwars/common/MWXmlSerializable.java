@@ -14,7 +14,7 @@
  * for more details.
  *
  */
-package common;
+package mekwars.common;
 
 public interface MWXmlSerializable {
 	public abstract void writeToXmlFile(String folderName, String fileName);

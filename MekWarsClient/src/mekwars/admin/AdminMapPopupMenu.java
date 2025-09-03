@@ -13,7 +13,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  */
-package admin;
+package mekwars.admin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,14 +23,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import admin.dialog.OpFlagSelectionDialog;
-import admin.dialog.PlanetEditorDialog;
-import client.MWClient;
-import client.gui.CMapPanel;
-import client.gui.InnerStellarMap;
-import client.gui.dialog.PlanetNameDialog;
-import common.CampaignData;
-import common.Planet;
+import mekwars.admin.dialog.OpFlagSelectionDialog;
+import mekwars.admin.dialog.PlanetEditorDialog;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.CMapPanel;
+import mekwars.client.gui.InnerStellarMap;
+import mekwars.client.gui.dialog.PlanetNameDialog;
+import mekwars.common.CampaignData;
+import mekwars.common.Planet;
 
 public class AdminMapPopupMenu extends JMenu {
 	
@@ -75,7 +76,7 @@ public class AdminMapPopupMenu extends JMenu {
 				Planet cPlanet = pplanet;
 				String newName = (String)JOptionPane.showInputDialog("Rename " + cPlanet.getName() + " to:");
 				if (newName != null && newName.trim().length() > 0) {
-					mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "adminrenameplanet " + cPlanet.getId() + "#" + cPlanet.getName() + "#" + newName);
+					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "adminrenameplanet " + cPlanet.getId() + "#" + cPlanet.getName() + "#" + newName);
 					mwclient.refreshData();
 					mp.repaint();
 				}
@@ -120,7 +121,7 @@ public class AdminMapPopupMenu extends JMenu {
                 String planet = pnd.getPlanetName();
 
                 if ( planet != null ){
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminmoveplanet#"+ planet +"#"+xcoord+"#"+ycoord);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminmoveplanet#"+ planet +"#"+xcoord+"#"+ycoord);
                     mwclient.refreshData();
                     mp.repaint();
                 }
@@ -138,7 +139,7 @@ public class AdminMapPopupMenu extends JMenu {
 				if ( planetName == null || planetName.length() == 0 )
 					return;
 				
-				mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c admincreateplanet#"+planetName+"#"+xcoord+"#"+ycoord);
+				mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admincreateplanet#"+planetName+"#"+xcoord+"#"+ycoord);
 				mwclient.refreshData();
 				mp.repaint();
 				int id = CampaignData.cd.getPlanetByName(planetName).getId();
@@ -154,7 +155,7 @@ public class AdminMapPopupMenu extends JMenu {
 				int result = JOptionPane.showConfirmDialog(new JFrame(),"Are you Sure you want to Destroy this planet?");
 				if (result == JOptionPane.YES_OPTION)
 				{
-					mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c admindestroyplanet#"+ pname);
+					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admindestroyplanet#"+ pname);
 					mwclient.refreshData();
 					mp.repaint();
 				}
@@ -189,7 +190,7 @@ public class AdminMapPopupMenu extends JMenu {
                         }
                     }
                 }
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminSetPlanetOpFlags#"+ pname +"#"+results.toString());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSetPlanetOpFlags#"+ pname +"#"+results.toString());
                 mwclient.refreshData();
                 mp.repaint();
             }

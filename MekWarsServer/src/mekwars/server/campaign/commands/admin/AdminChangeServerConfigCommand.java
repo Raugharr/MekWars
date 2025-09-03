@@ -19,16 +19,16 @@
  * while the server is still running.
  * 
  */
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
-import server.campaign.util.ChristmasHandler;
-import server.campaign.util.scheduler.MWScheduler;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.Command;
+import mekwars.server.campaign.util.ChristmasHandler;
+import mekwars.server.campaign.util.scheduler.MWScheduler;
 
 /**
  * Allows the administrator to change configs.  Used by Server Config dialog.

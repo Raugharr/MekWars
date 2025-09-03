@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.campaign;
+package mekwars.client.campaign;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,17 +24,18 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import client.MWClient;
-import client.util.CArmyComparator;
-import client.util.CUnitComparator;
-import common.House;
-import common.Player;
-import common.SubFaction;
-import common.Unit;
-import common.util.MWLogger;
-import common.util.TokenReader;
-import common.util.UnitComponents;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.util.CArmyComparator;
+import mekwars.client.util.CUnitComparator;
+import mekwars.common.House;
+import mekwars.common.Player;
+import mekwars.common.SubFaction;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
+import mekwars.common.util.UnitComponents;
+import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.OffBoardDirection;
 
@@ -364,7 +365,7 @@ public class CPlayer extends Player {
          * Get the faction configs before starting anything else. I could pause
          * the client and wait for the configs but I'll let it go. --Torren
          */
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getfactionconfigs#0" + mwclient.getServerConfigs("TIMESTAMP"));
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getfactionconfigs#0" + mwclient.getServerConfigs("TIMESTAMP"));
 
         /*
          * Now that we have a house set, we can check for BM access properly. Do

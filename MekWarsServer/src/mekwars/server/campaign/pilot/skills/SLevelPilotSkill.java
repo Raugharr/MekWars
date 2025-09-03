@@ -14,9 +14,9 @@
  * for more details.
  */
 
-package server.campaign.pilot.skills;
+package mekwars.server.campaign.pilot.skills;
 
-import common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.Pilot;
 
 
 /**

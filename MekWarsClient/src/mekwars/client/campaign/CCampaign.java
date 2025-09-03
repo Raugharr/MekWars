@@ -15,19 +15,19 @@
  * for more details.
  */
 
-package client.campaign;
+package mekwars.client.campaign;
 
 import java.io.File;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import client.MWClient;
-import client.gui.CCommPanel;
-import client.gui.dialog.ArmyViewerDialog;
-import common.BMEquipment;
-import common.util.ComponentToCritsConverter;
-import common.util.MWLogger;
-import common.util.TokenReader;
+import mekwars.client.MWClient;
+import mekwars.client.gui.CCommPanel;
+import mekwars.client.gui.dialog.ArmyViewerDialog;
+import mekwars.common.BMEquipment;
+import mekwars.common.util.ComponentToCritsConverter;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
 
 /**
  * Class for Campaign object used by Client

@@ -2,7 +2,7 @@
  * Copyright (c) 2000 Lyrisoft Solutions, Inc.
  * Used by permission
  */
-package server.MWChatServer.translator;
+package mekwars.server.MWChatServer.translator;
 
 import java.util.Properties;
 

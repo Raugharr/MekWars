@@ -14,23 +14,24 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 
 import java.io.FileWriter;
 import java.io.IOException;
 
-import common.util.MWLogger;
-import server.campaign.util.Statistics;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.util.Statistics;
+import mekwars.server.campaign.CampaignMain;
 
 public class TickThread extends Thread {
 	
-	server.campaign.CampaignMain myCampaign;
+	CampaignMain myCampaign;
 	private long until;
 	private int Duration = 900000;
 	private int tickid = 0;
 	
-	public TickThread(server.campaign.CampaignMain main, int Duration) {
+	public TickThread(CampaignMain main, int Duration) {
 	    super("Tick Thread");
 		this.Duration = Duration;
 		myCampaign = main;

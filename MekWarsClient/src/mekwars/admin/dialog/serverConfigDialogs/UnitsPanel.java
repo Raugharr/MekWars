@@ -14,7 +14,7 @@
  * @author jtighe
  */
 
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -27,10 +27,10 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.Unit;
-import common.VerticalLayout;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.common.Unit;
+import mekwars.common.VerticalLayout;
+import mekwars.common.util.SpringLayoutHelper;
 
 public class UnitsPanel extends JPanel {
 

@@ -15,12 +15,12 @@
  * for more details.
  */
 
-package client.gui.commands;
+package mekwars.client.gui.commands;
 
 import javax.swing.AbstractAction;
 
-import client.MWClient;
-import common.campaign.clientutils.protocol.CConnector;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
+import mekwars.client.MWClient;
 
 /**
  * Abstract class for GUI Commands

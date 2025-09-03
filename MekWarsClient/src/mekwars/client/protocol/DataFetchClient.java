@@ -1,4 +1,4 @@
-package client.protocol;
+package mekwars.client.protocol;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,16 +20,16 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import client.MWClient;
-import client.gui.CMainFrame;
-import common.CampaignData;
-import common.Equipment;
-import common.House;
-import common.Influences;
-import common.Planet;
-import common.util.BinReader;
-import common.util.BinWriter;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.client.gui.CMainFrame;
+import mekwars.common.CampaignData;
+import mekwars.common.Equipment;
+import mekwars.common.House;
+import mekwars.common.Influences;
+import mekwars.common.Planet;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
+import mekwars.common.util.MWLogger;
 import megamek.Version;
 
 /**

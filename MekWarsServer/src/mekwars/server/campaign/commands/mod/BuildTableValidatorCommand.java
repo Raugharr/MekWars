@@ -14,7 +14,7 @@
  * details.
  */
 
-package server.campaign.commands.mod;
+package mekwars.server.campaign.commands.mod;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,12 +22,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.SUnit;
-import server.campaign.commands.Command;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.commands.Command;
 
 
 /**

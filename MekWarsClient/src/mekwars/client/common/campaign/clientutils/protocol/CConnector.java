@@ -29,20 +29,22 @@
  * @author Torren (Jason Tighe) 11.5.05
  *
  */
-package common.campaign.clientutils.protocol;
+package mekwars.client.common.campaign.clientutils.protocol;
 
 import java.io.IOException;
 import java.net.Socket;
 
-import client.gui.SplashWindow;
-import common.util.MWLogger;
+import mekwars.client.common.campaign.clientutils.protocol.IClient;
+import mekwars.client.gui.SplashWindow;
+import mekwars.common.campaign.clientutils.protocol.IConnectionHandler;
+import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
+import mekwars.common.util.MWLogger;
 
 /**
  *
  *
  */
-public class CConnector implements IConnectionListener
-{
+public class CConnector implements IConnectionListener {
     protected IClient Client;
 
     protected String _host = "";

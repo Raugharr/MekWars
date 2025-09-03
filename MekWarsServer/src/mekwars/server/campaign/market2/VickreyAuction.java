@@ -14,17 +14,17 @@
  * for more details.
  */
 
-package server.campaign.market2;
+package mekwars.server.campaign.market2;
 
 import java.util.Iterator;
 import java.util.TreeMap;
 
-import common.Unit;
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 /**
  * Vickrey auction is a modified highest sealed bid auction. Winner

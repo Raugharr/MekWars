@@ -1,8 +1,8 @@
-package common.campaign.targetsystems;
+package mekwars.common.campaign.targetsystems;
 
 import java.util.Vector;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 
 /*

@@ -15,7 +15,7 @@
  *
  */
 
-package client.gui.dialog.opviewer;
+package mekwars.client.gui.dialog.opviewer;
 
 public interface IOpViewerPane {
 	public void setHTMLContents (String s); 

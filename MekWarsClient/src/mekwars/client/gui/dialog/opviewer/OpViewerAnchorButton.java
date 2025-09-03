@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui.dialog.opviewer;
+package mekwars.client.gui.dialog.opviewer;
 
 import javax.swing.JButton;
 

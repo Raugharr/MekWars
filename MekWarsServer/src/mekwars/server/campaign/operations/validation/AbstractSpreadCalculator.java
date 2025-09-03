@@ -13,9 +13,9 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.campaign.operations.validation;
+package mekwars.server.campaign.operations.validation;
 
-import common.Unit;
+import mekwars.common.Unit;
 
 /**
  * @author 	Spork

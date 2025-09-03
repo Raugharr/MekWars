@@ -9,7 +9,7 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -18,9 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.VerticalLayout;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.common.VerticalLayout;
+import mekwars.common.util.SpringLayoutHelper;
 
 /**
  * @author jtighe

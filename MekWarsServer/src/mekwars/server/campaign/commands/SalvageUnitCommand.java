@@ -18,22 +18,22 @@
  * Created on 03.28.2007
  *  
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.Unit;
-import common.util.MWLogger;
-import common.util.UnitUtils;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.Tank;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.util.RepairTrackingThread;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.util.RepairTrackingThread;
 
 /**
  * @author Torren (Jason Tighe)

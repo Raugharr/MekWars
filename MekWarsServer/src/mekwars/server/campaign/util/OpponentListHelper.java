@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -22,16 +22,16 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.House;
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
-import common.util.StringUtils;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.operations.OperationManager;
-import server.campaign.operations.newopmanager.I_OperationManager;
+import mekwars.common.House;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.operations.OperationManager;
+import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 
 /**
  * 

@@ -19,15 +19,16 @@
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
  */ 
-package server.MWChatServer.commands;
+package mekwars.server.MWChatServer.commands;
 
-import common.util.MWLogger;
-import common.util.StringUtils;
-import server.ServerWrapper;
-import server.MWChatServer.MWChatClient;
-import server.MWChatServer.Translator;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.server.ServerWrapper;
+import mekwars.server.MWServ;
+import mekwars.server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.Translator;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
 
 /**
  * @author  Steve Hawkins
@@ -100,7 +101,7 @@ public class SignOn extends CommandBase implements ICommands {
                 client.getServer().kill(client.getUserId(), "Bye Bye");
 				return false;
 			}
-			server.MWServ server = ((ServerWrapper)client.getServer()).getMWServ();
+			MWServ server = ((ServerWrapper)client.getServer()).getMWServ();
 			server.getUser(username).setColor(UserColor);
 			server.sendNewUserToAll(username, true);
 			

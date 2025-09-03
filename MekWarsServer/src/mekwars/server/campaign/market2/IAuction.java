@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.market2;
+package mekwars.server.campaign.market2;
 
 /**
  * A simple interface which defines the auction method. Sort of pointless,

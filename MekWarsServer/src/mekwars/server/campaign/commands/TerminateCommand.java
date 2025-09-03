@@ -11,14 +11,14 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.operations.OperationManager;
-import server.campaign.operations.ShortOperation;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.operations.OperationManager;
+import mekwars.server.campaign.operations.ShortOperation;
 
 /**
  * Terminate command is analagous to the old

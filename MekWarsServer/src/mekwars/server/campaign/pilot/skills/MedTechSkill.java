@@ -13,13 +13,13 @@
 /*
  * Created on 24.04.2004
  */
-package server.campaign.pilot.skills;
+package mekwars.server.campaign.pilot.skills;
 
-import common.Unit;
-import common.campaign.pilot.Pilot;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
 import megamek.common.Entity;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
 
 /**
  * If a pilot has this skill, it levels as if it had one level less of the ability

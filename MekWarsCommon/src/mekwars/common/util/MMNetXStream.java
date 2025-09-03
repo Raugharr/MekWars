@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package common.util;
+package mekwars.common.util;
 
 
 import com.thoughtworks.xstream.XStream;
@@ -22,9 +22,9 @@ import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider
 import com.thoughtworks.xstream.core.ReferenceByIdMarshallingStrategy;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 
-import common.AdvancedTerrain;
-import common.House;
-import common.Planet;
+import mekwars.common.AdvancedTerrain;
+import mekwars.common.House;
+import mekwars.common.Planet;
 
 
 /**

@@ -13,7 +13,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.util.rss;
+package mekwars.server.util.rss;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,8 +21,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 
 /**
  * The Feed class implements an RSS feed, getting the functionality out of CampaignMain

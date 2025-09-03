@@ -18,7 +18,7 @@
  * OperationsManager should instantiate one StandardResolver
  * and pass it (Short/Long)Operations as they are completed.
  */
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -34,33 +34,33 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.CampaignData;
-import common.House;
-import common.Unit;
-import common.UnitFactory;
-import common.campaign.operations.Operation;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.MWLogger;
-import common.util.StringUtils;
-import common.util.ThreadManager;
-import common.util.UnitUtils;
+import mekwars.common.CampaignData;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.UnitFactory;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.common.util.ThreadManager;
+import mekwars.common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.IEntityRemovalConditions;
 import megamek.common.Infantry;
 import megamek.common.Mech;
-import server.campaign.BuildTable;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.SUnitFactory;
-import server.campaign.mercenaries.ContractInfo;
-import server.campaign.mercenaries.MercHouse;
-import server.campaign.pilot.SPilot;
-import server.campaign.util.ELORanking;
-import server.util.BattleToJSON;
+import mekwars.server.campaign.BuildTable;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.SUnitFactory;
+import mekwars.server.campaign.mercenaries.ContractInfo;
+import mekwars.server.campaign.mercenaries.MercHouse;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.util.ELORanking;
+import mekwars.server.util.BattleToJSON;
 
 public class ShortResolver {
 

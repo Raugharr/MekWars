@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.converters;
+package mekwars.server.campaign.converters;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -22,12 +22,12 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import common.Continent;
-import common.Influences;
-import common.PlanetEnvironments;
+import mekwars.common.Continent;
+import mekwars.common.Influences;
+import mekwars.common.PlanetEnvironments;
 import java.util.Vector;
-import server.campaign.SPlanet;
-import server.campaign.SUnitFactory;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SUnitFactory;
 
 public class SPlanetConverter implements Converter {
     public boolean canConvert(Class clazz) {

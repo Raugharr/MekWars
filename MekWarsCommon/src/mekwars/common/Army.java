@@ -18,7 +18,7 @@
  * Created on 21.05.2004
  *
  */
-package common;
+package mekwars.common;
 
 import java.util.Hashtable;
 import java.util.Iterator;

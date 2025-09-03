@@ -11,11 +11,11 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 public class SendClientDataCommand implements Command {
 	

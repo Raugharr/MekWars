@@ -18,7 +18,7 @@
  * Created on 18.04.2004
  *
  */
-package common;
+package mekwars.common;
 
 /**
  * This can be used as a container for LVL3 Megamek Pilot options in MMNet

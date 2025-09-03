@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package hpgnet;
+package mekwars.hpgnet;
 
 import java.util.Vector;
 

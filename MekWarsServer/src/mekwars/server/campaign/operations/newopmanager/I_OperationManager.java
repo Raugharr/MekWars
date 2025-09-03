@@ -1,15 +1,15 @@
-package server.campaign.operations.newopmanager;
+package mekwars.server.campaign.operations.newopmanager;
 
 import java.util.TreeMap;
 
-import common.campaign.operations.Operation;
-import server.campaign.SArmy;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.operations.OpsScrapThread;
-import server.campaign.operations.ShortOperation;
-import server.campaign.operations.ShortValidator;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.operations.OpsScrapThread;
+import mekwars.server.campaign.operations.ShortOperation;
+import mekwars.server.campaign.operations.ShortValidator;
 
 public interface I_OperationManager {
 

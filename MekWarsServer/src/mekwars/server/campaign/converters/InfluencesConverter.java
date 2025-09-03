@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.converters;
+package mekwars.server.campaign.converters;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -22,11 +22,11 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import common.Influences;
-import common.UnitFactory;
+import mekwars.common.Influences;
+import mekwars.common.UnitFactory;
 import java.util.HashMap;
-import server.campaign.SHouse;
-import server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.CampaignMain;
 
 public class InfluencesConverter implements Converter {
     public boolean canConvert(Class clazz) {

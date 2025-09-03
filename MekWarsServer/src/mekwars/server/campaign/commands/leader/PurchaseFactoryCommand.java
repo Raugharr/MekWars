@@ -13,23 +13,23 @@
  * details.
  */
 
-package server.campaign.commands.leader;
+package mekwars.server.campaign.commands.leader;
 
 import java.io.File;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.UnitFactory;
+import mekwars.common.UnitFactory;
 import megamek.common.TechConstants;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.BuildTable;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.SUnitFactory;
-import server.campaign.commands.Command;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.BuildTable;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.SUnitFactory;
+import mekwars.server.campaign.commands.Command;
 
 public class PurchaseFactoryCommand implements Command {
 

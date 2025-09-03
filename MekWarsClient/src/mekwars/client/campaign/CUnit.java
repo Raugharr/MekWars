@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.campaign;
+package mekwars.client.campaign;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -25,18 +25,18 @@ import java.util.Enumeration;
 import java.util.StringJoiner;
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import common.House;
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.campaign.targetsystems.TargetSystem;
-import common.campaign.targetsystems.TargetTypeNotImplementedException;
-import common.campaign.targetsystems.TargetTypeOutOfBoundsException;
-import common.util.MWLogger;
-import common.util.TokenReader;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.common.House;
+import mekwars.common.MegaMekPilotOption;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.campaign.targetsystems.TargetSystem;
+import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
+import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
+import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.CrewType;
 import megamek.common.CriticalSlot;

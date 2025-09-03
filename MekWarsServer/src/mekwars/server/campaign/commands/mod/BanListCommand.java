@@ -14,16 +14,16 @@
  * details.
  */
 
-package server.campaign.commands.mod;
+package mekwars.server.campaign.commands.mod;
 
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.Command;
 
 /**
  * Moving the BanList command from MWServ into the normal command structure.

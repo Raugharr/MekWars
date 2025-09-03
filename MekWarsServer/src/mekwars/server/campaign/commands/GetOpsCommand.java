@@ -14,7 +14,7 @@
  * for more details.
  *
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,9 +28,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 
 public class GetOpsCommand implements Command {
 

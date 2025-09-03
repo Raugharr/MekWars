@@ -15,13 +15,13 @@
  *
  */
 
-package common;
+package mekwars.common;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import common.util.MMNetXStream;
+import mekwars.common.util.MMNetXStream;
 
 public class MWXMLWriter {
 	String _folderName;

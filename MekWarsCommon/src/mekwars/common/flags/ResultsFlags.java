@@ -1,10 +1,10 @@
-package common.flags;
+package mekwars.common.flags;
 
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 public class ResultsFlags extends PlayerFlags {
 	private Map<Integer, Integer> flagsApplyTo;

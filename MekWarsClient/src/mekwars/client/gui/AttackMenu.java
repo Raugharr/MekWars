@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,14 +37,15 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.event.MenuKeyListener;
 
-import client.MWClient;
-import client.campaign.CArmy;
-import client.gui.dialog.ArmyViewerDialog;
-import client.gui.dialog.PlanetNameDialog;
-import client.gui.dialog.PlayerNameDialog;
-import common.House;
-import common.Planet;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CArmy;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.dialog.ArmyViewerDialog;
+import mekwars.client.gui.dialog.PlanetNameDialog;
+import mekwars.client.gui.dialog.PlayerNameDialog;
+import mekwars.common.House;
+import mekwars.common.Planet;
+import mekwars.common.util.MWLogger;
 
 /**
  * Create an "Attack" menu. Used in Map, CMainFramge, etc. to generate
@@ -487,7 +488,7 @@ public class AttackMenu extends JMenu implements ActionListener {
         //private String planetID;
         
         if ( name.equals("cmdCancelGames") ){
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c terminate");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c terminate");
             return;
         }
         
@@ -532,7 +533,7 @@ public class AttackMenu extends JMenu implements ActionListener {
             String armyName = (String)armyCombo.getSelectedItem();
             armyID = Integer.parseInt(armyName.substring(1,armyName.indexOf(" ")).trim());
 
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c checkarmyeligibility#" + armyID + "#" + attackName);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c checkarmyeligibility#" + armyID + "#" + attackName);
             return;
         }
         
@@ -540,7 +541,7 @@ public class AttackMenu extends JMenu implements ActionListener {
          * Game status
          */
         if ( name.equals("cmdGamesStatus") ){
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c games");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c games");
             return;
         }
         
@@ -644,7 +645,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                 return;*/
         }
         else
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c attack#" + name + "#" + armyID + "#" + planetName);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c attack#" + name + "#" + armyID + "#" + planetName);
     }
     
 }

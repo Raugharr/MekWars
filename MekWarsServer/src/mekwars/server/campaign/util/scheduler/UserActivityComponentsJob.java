@@ -13,7 +13,7 @@
  * details.
  */
 
-package server.campaign.util.scheduler;
+package mekwars.server.campaign.util.scheduler;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -31,11 +31,11 @@ import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
-import common.campaign.operations.Operation;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.operations.ShortOperation;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.operations.ShortOperation;
 
 
 /**

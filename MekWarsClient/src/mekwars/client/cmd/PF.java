@@ -1,8 +1,8 @@
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
+import mekwars.client.MWClient;
 
 public class PF extends Command {
 	/**

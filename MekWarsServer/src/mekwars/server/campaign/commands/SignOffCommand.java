@@ -14,12 +14,12 @@
  * details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 
 
 

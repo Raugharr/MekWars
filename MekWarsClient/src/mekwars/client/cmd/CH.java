@@ -15,14 +15,14 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 
-import client.CUser;
-import client.MWClient;
-import client.gui.CCommPanel;
-import common.util.StringUtils;
+import mekwars.client.CUser;
+import mekwars.client.MWClient;
+import mekwars.client.gui.CCommPanel;
+import mekwars.common.util.StringUtils;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)

@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package common.persistence;
+package mekwars.common.persistence;
 
 import java.io.BufferedReader;
 import java.io.IOException;

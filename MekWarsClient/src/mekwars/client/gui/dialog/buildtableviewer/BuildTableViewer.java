@@ -14,14 +14,15 @@
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  */
-package client.gui.dialog.buildtableviewer;
+package mekwars.client.gui.dialog.buildtableviewer;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import client.MWClient;
-import common.VerticalLayout;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.VerticalLayout;
 
 /**
  * A JDialog displaying a set of selectable build tables
@@ -55,10 +56,10 @@ public class BuildTableViewer extends JDialog implements Runnable {
 	@Override
 	public void run() {
         if (client.getUserLevel() >= client.getData().getAccessLevel("AdminRequestBuildTable")) {
-            client.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
+            client.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
         }
         else if (client.getUserLevel() >= client.getData().getAccessLevel("RequestBuildTable")) {
-            client.sendChat(MWClient.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
+            client.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
         }
         client.setWaiting(true);
         while (client.isWaiting()) {

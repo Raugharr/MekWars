@@ -1,4 +1,4 @@
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import common.VerticalLayout;
+import mekwars.common.VerticalLayout;
 
 public class DiscordAndDjangoPanel extends JPanel 
 {

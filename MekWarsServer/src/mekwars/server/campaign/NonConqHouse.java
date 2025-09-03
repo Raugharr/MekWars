@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 
 public class NonConqHouse extends SHouse {

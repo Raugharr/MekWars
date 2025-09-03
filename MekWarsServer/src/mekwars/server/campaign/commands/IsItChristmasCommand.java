@@ -1,12 +1,12 @@
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
 
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.util.ChristmasHandler;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.util.ChristmasHandler;
 
 public class IsItChristmasCommand implements Command {
 

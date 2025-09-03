@@ -25,13 +25,13 @@
  * 
  */
 
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
 import java.net.Socket;
 
-import common.util.MWLogger;
-import server.MWChatServer.auth.IAuthenticator;
-import server.MWChatServer.commands.ICommands;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWChatServer.commands.ICommands;
 
 /**
  * This is the representation of a Client, on the server side. All the

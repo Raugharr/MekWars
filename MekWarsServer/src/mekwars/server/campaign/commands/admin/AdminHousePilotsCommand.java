@@ -14,18 +14,18 @@
  * for more details.
  */
 
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-import common.Unit;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.PilotQueues;
-import server.campaign.SHouse;
-import server.campaign.commands.Command;
-import server.campaign.pilot.SPilot;
+import mekwars.common.Unit;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.PilotQueues;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.commands.Command;
+import mekwars.server.campaign.pilot.SPilot;
 
 public class AdminHousePilotsCommand implements Command {
 	

@@ -29,14 +29,16 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package common.campaign.clientutils.protocol;
+package mekwars.client.common.campaign.clientutils.protocol;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Vector;
 
-import common.util.MWLogger;
+import mekwars.common.campaign.clientutils.protocol.IConnectionHandler;
+import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
+import mekwars.common.util.MWLogger;
 
 /**
  * The keeper of the Socket on the client side.

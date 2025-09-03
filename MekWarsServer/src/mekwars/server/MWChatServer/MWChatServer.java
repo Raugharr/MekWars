@@ -25,7 +25,7 @@
  * 
  */
 
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -39,13 +39,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import common.util.MWLogger;
-import server.MWChatServer.auth.Auth;
-import server.MWChatServer.auth.IAuthenticator;
-import server.MWChatServer.auth.IRoomAuthenticator;
-import server.MWChatServer.auth.NullRoomAuthenticator;
-import server.MWChatServer.auth.PasswdAuthenticator;
-import server.MWChatServer.commands.ICommands;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.auth.Auth;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWChatServer.auth.IRoomAuthenticator;
+import mekwars.server.MWChatServer.auth.NullRoomAuthenticator;
+import mekwars.server.MWChatServer.auth.PasswdAuthenticator;
+import mekwars.server.MWChatServer.commands.ICommands;
 
 public class MWChatServer implements ICommands {
 
@@ -76,9 +76,9 @@ public class MWChatServer implements ICommands {
         _dispatchThread.start();*/
 
         Properties commandProps = new Properties();
-        commandProps.setProperty("signon.class", "server.MWChatServer.commands.SignOn");
+        commandProps.setProperty("signon.class", "mekwars.server.MWChatServer.commands.SignOn");
         commandProps.setProperty("signon.access", "0");
-        commandProps.setProperty("comm.class", "server.MWChatServer.commands.Command");
+        commandProps.setProperty("comm.class", "mekwars.server.MWChatServer.commands.Command");
         initCommandProcessor(commandProps);
 
         Properties messagesProps = new Properties();

@@ -20,9 +20,9 @@
  * 
  */
 
-package common.util;
+package mekwars.common.util;
 
-import common.Unit;
+import mekwars.common.Unit;
 
 public class ComponentToCritsConverter{
 

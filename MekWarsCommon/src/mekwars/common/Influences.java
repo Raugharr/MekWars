@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package common;
+package mekwars.common;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,9 +29,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import common.util.BinReader;
-import common.util.BinWriter;
-import common.util.MWLogger;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
+import mekwars.common.util.MWLogger;
 
 /**
  * Represents the influences of different Houses of a planet. This may be used

@@ -16,7 +16,7 @@ dependencies {
 }
 
 application {
-	mainClassName = 'server.MWServ'
+	mainClassName = 'mekwars.server.MWServ'
     applicationDefaultJvmArgs = [
 			'-Dlog4j2.configurationFile=log4j2.xml',
             '-Xmx4096m',

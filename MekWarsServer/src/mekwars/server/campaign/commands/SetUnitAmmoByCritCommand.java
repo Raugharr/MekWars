@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.EnumSet;
 import java.util.StringTokenizer;
@@ -26,10 +26,10 @@ import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mounted;
 import megamek.common.equipment.AmmoMounted;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 public class SetUnitAmmoByCritCommand implements Command {
 

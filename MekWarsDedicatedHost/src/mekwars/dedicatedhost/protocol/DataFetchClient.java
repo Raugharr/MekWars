@@ -1,4 +1,4 @@
-package dedicatedhost.protocol;
+package mekwars.dedicatedhost.protocol;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,13 +22,13 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import common.CampaignData;
-import common.Influences;
-import common.util.BinReader;
-import common.util.BinWriter;
+import mekwars.common.CampaignData;
+import mekwars.common.Influences;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
 
-import dedicatedhost.MWDedHost;
-import common.util.MWLogger;
+import mekwars.dedicatedhost.MWDedHost;
+import mekwars.common.util.MWLogger;
 
 
 /**

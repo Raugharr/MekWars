@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -34,7 +34,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
+import mekwars.client.MWClient;
 
 public class SplashWindow {
 	

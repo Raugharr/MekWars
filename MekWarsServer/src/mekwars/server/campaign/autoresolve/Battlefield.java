@@ -1,4 +1,4 @@
-package server.campaign.autoresolve;
+package mekwars.server.campaign.autoresolve;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import common.GameInterface;
+import mekwars.common.GameInterface;
 import megamek.common.Entity;
 
 public class Battlefield implements GameInterface {

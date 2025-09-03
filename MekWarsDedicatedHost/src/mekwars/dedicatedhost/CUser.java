@@ -15,12 +15,12 @@
  * for more details.
  */
 
-package dedicatedhost;
+package mekwars.dedicatedhost;
 
 import java.util.StringTokenizer;
 
-import common.campaign.clientutils.IClientUser;
-import common.util.MWLogger;
+import mekwars.common.campaign.clientutils.IClientUser;
+import mekwars.common.util.MWLogger;
 
 /*
  * Class for User objects held in userlist

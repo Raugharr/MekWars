@@ -30,13 +30,13 @@
  *
  * @ urgru 1.4.05
  */
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.Unit;
-import common.util.MWLogger;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
 
 public class AutoArmy {
 	

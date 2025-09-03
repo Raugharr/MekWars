@@ -14,17 +14,17 @@
  * for more details.
  */
 
-package server.dataProvider.commands;
+package mekwars.server.dataProvider.commands;
 
 import java.util.Date;
 import java.util.Vector;
 
-import common.CampaignData;
-import common.House;
-import common.util.BinWriter;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.dataProvider.ServerCommand;
+import mekwars.common.CampaignData;
+import mekwars.common.House;
+import mekwars.common.util.BinWriter;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.dataProvider.ServerCommand;
 
 /**
  * Retrieve all planet information (if the data cache is lost at client side)

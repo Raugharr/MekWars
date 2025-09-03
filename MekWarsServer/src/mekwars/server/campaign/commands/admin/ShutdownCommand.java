@@ -14,16 +14,16 @@
  * details.
  */
 
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
-import server.campaign.util.scheduler.MWScheduler;
-import server.util.MWPasswd;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.Command;
+import mekwars.server.campaign.util.scheduler.MWScheduler;
+import mekwars.server.util.MWPasswd;
 
 
 /**

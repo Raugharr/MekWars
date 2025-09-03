@@ -14,11 +14,11 @@
  * for more details.
  */
 
-package server.campaign.data;
+package mekwars.server.campaign.data;
 
 import java.util.Date;
 
-import common.House;
+import mekwars.common.House;
 
 /**
  * Adds the ability to trace the last change time to a planet.

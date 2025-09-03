@@ -26,10 +26,10 @@
  * 
  */
 
-package server.MWChatServer.auth;
+package mekwars.server.MWChatServer.auth;
 
-import server.MWChatServer.MWChatClient;
-import server.MWChatServer.RoomServer;
+import mekwars.server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.RoomServer;
 
 /**
  * Interface for objects that will handle authentication.  The server will delegate signOn

@@ -13,13 +13,13 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.util.rss;
+package mekwars.server.util.rss;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import server.campaign.CampaignMain;
+import mekwars.server.campaign.CampaignMain;
 
 /**
  * A self-contained RSS message to be added to a feed

@@ -1,4 +1,4 @@
-package common.flags;
+package mekwars.common.flags;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 /**
  * 

@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package dedicatedhost;
+package mekwars.dedicatedhost;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,8 +27,8 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
-import common.campaign.clientutils.IClientConfig;
-import common.util.MWLogger;
+import mekwars.common.campaign.clientutils.IClientConfig;
+import mekwars.common.util.MWLogger;
 
 /**
  * Class for Client's configuration.

@@ -10,7 +10,7 @@
  * developers. 2002-2003.
  */
 
-package server.util;
+package mekwars.server.util;
 
 /**
  * Represents a line in the passwd file.  All fields are public

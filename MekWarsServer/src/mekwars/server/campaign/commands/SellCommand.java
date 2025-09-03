@@ -19,18 +19,18 @@
  * 
  * To change the template for this generated file go to Window - Preferences - Java - Code Generation - Code and Comments
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.CampaignData;
-import common.Unit;
-import common.util.MWLogger;
-import common.util.UnitUtils;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.common.CampaignData;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 /**
  * @author Helge Richter

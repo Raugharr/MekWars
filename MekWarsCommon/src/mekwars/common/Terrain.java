@@ -13,14 +13,14 @@
  * details.
  */
 
-package common;
+package mekwars.common;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.util.BinReader;
-import common.util.BinWriter;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
 
 /**
  * A Terrain Base Terrain container for all environments. Each environment can be a different theme to allow for different times of year.

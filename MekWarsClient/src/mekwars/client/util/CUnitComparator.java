@@ -14,11 +14,11 @@
  *  for more details.
  */
  
- package client.util;
+ package mekwars.client.util;
  
  import java.util.Comparator;
 
-import client.campaign.CUnit;
+import mekwars.client.campaign.CUnit;
 
  public class CUnitComparator implements Comparator<Object> {
 

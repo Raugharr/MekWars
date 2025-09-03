@@ -22,7 +22,7 @@
  * Like the old Task, ShortOp handles game options, board settings, and other pertinent Client-loaded info.
  */
 
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -36,17 +36,17 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import common.AdvancedTerrain;
-import common.CampaignData;
-import common.Continent;
-import common.PlanetEnvironment;
-import common.Unit;
-import common.UnitFactory;
-import common.campaign.Buildings;
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
-import common.util.StringUtils;
-import common.util.UnitUtils;
+import mekwars.common.AdvancedTerrain;
+import mekwars.common.CampaignData;
+import mekwars.common.Continent;
+import mekwars.common.PlanetEnvironment;
+import mekwars.common.Unit;
+import mekwars.common.UnitFactory;
+import mekwars.common.campaign.Buildings;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.common.util.UnitUtils;
 import megamek.common.planetaryconditions.Atmosphere;
 import megamek.common.planetaryconditions.EMI;
 import megamek.common.planetaryconditions.Fog;
@@ -54,21 +54,21 @@ import megamek.common.planetaryconditions.Light;
 import megamek.common.planetaryconditions.PlanetaryConditions;
 import megamek.common.planetaryconditions.Weather;
 import megamek.common.planetaryconditions.Wind;
-import server.campaign.AutoArmy;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.SUnitFactory;
-import server.campaign.autoresolve.BattleResolver;
-import server.campaign.mercenaries.ContractInfo;
-import server.campaign.mercenaries.MercHouse;
-import server.campaign.operations.resolvers.NewShortResolver;
-import server.campaign.operations.resolvers.ShortOpPlayers;
-import server.campaign.pilot.SPilot;
-import server.util.StringUtil;
+import mekwars.server.campaign.AutoArmy;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.SUnitFactory;
+import mekwars.server.campaign.autoresolve.BattleResolver;
+import mekwars.server.campaign.mercenaries.ContractInfo;
+import mekwars.server.campaign.mercenaries.MercHouse;
+import mekwars.server.campaign.operations.resolvers.NewShortResolver;
+import mekwars.server.campaign.operations.resolvers.ShortOpPlayers;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.util.StringUtil;
 
 // IMPORTS
 

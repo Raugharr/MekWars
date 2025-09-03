@@ -25,9 +25,9 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
-import server.MWChatServer.commands.ICommands;
+import mekwars.server.MWChatServer.commands.ICommands;
 
 /**
  * Used to construct messages that will be sent over the socket to the client

@@ -1,11 +1,11 @@
-package server.campaign.operations.resolvers;
+package mekwars.server.campaign.operations.resolvers;
 
 import java.util.HashMap;
 import java.util.Vector;
 
-import common.CampaignData;
-import common.util.MWLogger;
-import server.campaign.SPlayer;
+import mekwars.common.CampaignData;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.SPlayer;
 
 public class ShortOpPlayers {
 	private HashMap<Integer, Team> teams;

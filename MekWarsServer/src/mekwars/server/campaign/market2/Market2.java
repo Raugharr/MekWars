@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.market2;
+package mekwars.server.campaign.market2;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -22,16 +22,16 @@ import java.util.Vector;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import common.CampaignData;
-import common.Unit;
-import common.util.MWLogger;
-import common.util.UnitUtils;
-import server.campaign.BuildTable;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.pilot.SPilot;
+import mekwars.common.CampaignData;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
+import mekwars.server.campaign.BuildTable;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.pilot.SPilot;
 
 
 /**

@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.operations.validation;
+package mekwars.server.campaign.operations.validation;
 
 /**
  * @author 	Spork

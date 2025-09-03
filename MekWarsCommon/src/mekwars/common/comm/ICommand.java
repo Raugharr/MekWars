@@ -21,7 +21,7 @@
  * Created on June 3, 2002, 7:58 AM
  */
 
-package common.comm;
+package mekwars.common.comm;
 
 /**
  *

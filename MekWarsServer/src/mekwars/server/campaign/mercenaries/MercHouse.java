@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package server.campaign.mercenaries;
+package mekwars.server.campaign.mercenaries;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
 
 public class MercHouse extends SHouse {
     /**

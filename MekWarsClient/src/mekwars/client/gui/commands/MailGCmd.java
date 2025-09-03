@@ -15,19 +15,20 @@
  * for more details.
  */
 
-package client.gui.commands;
+package mekwars.client.gui.commands;
 
 import java.awt.event.ActionEvent;
 import java.util.StringTokenizer;
 
 import javax.swing.JPanel;
 
-import client.CUser;
-import client.MWClient;
-import client.gui.CCommPanel;
-import common.campaign.clientutils.IClientConfig;
-import common.campaign.clientutils.protocol.TransportCodec;
-import common.util.StringUtils;
+import mekwars.client.CUser;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.CCommPanel;
+import mekwars.common.campaign.clientutils.IClientConfig;
+import mekwars.common.campaign.clientutils.protocol.TransportCodec;
+import mekwars.common.util.StringUtils;
 
 /**
  * Mail command
@@ -69,7 +70,7 @@ public class MailGCmd extends CGUICommand {
 				
 			}
 			if (Config.isParam("REPLYTORECEIVER") && receiver != null && !receiver.equals("")) {mwclient.setLastQuery(receiver);}
-			send(TransportCodec.encode("CH|" + MWClient.CAMPAIGN_PREFIX + "mail " + input));
+			send(TransportCodec.encode("CH|" + GameHost.CAMPAIGN_PREFIX + "mail " + input));
 			echo(input);
 			return true;
 		}

@@ -1,4 +1,4 @@
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import common.util.MWLogger;
-import server.campaign.SPlayer;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.SPlayer;
 
 public class WhoToHTML {
 	private HashMap<String,DataEntry> players = null;

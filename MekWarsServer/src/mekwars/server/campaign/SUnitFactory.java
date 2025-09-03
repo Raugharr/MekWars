@@ -22,7 +22,7 @@
  * their reset counters during ticks.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.io.File;
 import java.io.Serializable;
@@ -31,12 +31,12 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.Vector;
 
-import common.Unit;
-import common.UnitFactory;
-import common.util.MWLogger;
-import common.util.TokenReader;
-import server.campaign.pilot.SPilot;
-import server.campaign.util.SerializedMessage;
+import mekwars.common.Unit;
+import mekwars.common.UnitFactory;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.util.SerializedMessage;
 
 
 public class SUnitFactory extends UnitFactory implements Serializable {

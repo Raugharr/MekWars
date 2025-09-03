@@ -24,7 +24,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -34,10 +34,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-import server.MWChatServer.commands.ICommandProcessorRemote;
-import server.MWChatServer.commands.ICommands;
-import server.MWChatServer.commands.UnknownCommand;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.commands.ICommandProcessorRemote;
+import mekwars.server.MWChatServer.commands.ICommands;
+import mekwars.server.MWChatServer.commands.UnknownCommand;
 
 /**
  * When messages come in on the socket from the client, they have to be processed.  This class

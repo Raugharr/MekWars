@@ -24,7 +24,7 @@
  * of all the Operation/ModifyingOperation params. Modification of
  * these files must be done by hand, or with an external utility
  */
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,10 +34,10 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import common.House;
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
+import mekwars.common.House;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 
 //IMPORTS
 

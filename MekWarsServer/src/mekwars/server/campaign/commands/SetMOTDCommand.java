@@ -15,13 +15,13 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.util.StringUtil;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.util.StringUtil;
 
 /**
  * Set a faction's message of the day. Can be of arbitrary length and use HTML.

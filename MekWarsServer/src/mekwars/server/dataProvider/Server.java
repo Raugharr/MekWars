@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package server.dataProvider;
+package mekwars.server.dataProvider;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import common.CampaignData;
-import common.util.MWLogger;
+import mekwars.common.CampaignData;
+import mekwars.common.util.MWLogger;
 
 
 /**

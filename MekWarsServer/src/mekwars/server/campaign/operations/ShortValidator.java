@@ -21,7 +21,7 @@
  * There are seperate validators for Long and Modifying
  * Operations.
  */
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 // IMPORTS
 import java.util.ArrayList;
@@ -29,25 +29,25 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import common.House;
-import common.Planet;
-import common.Unit;
-import common.campaign.operations.Operation;
-import common.flags.PlayerFlags;
-import common.util.MWLogger;
+import mekwars.common.House;
+import mekwars.common.Planet;
+import mekwars.common.Unit;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.flags.PlayerFlags;
+import mekwars.common.util.MWLogger;
 import megamek.common.BattleArmor;
 import megamek.common.Protomech;
-import server.campaign.CampaignMain;
-import server.campaign.NewbieHouse;
-import server.campaign.SArmy;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.mercenaries.ContractInfo;
-import server.campaign.operations.validation.I_SpreadValidator;
-import server.campaign.operations.validation.PercentBVSpreadValidator;
-import server.campaign.operations.validation.StandardBVSpreadValidator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.NewbieHouse;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.mercenaries.ContractInfo;
+import mekwars.server.campaign.operations.validation.I_SpreadValidator;
+import mekwars.server.campaign.operations.validation.PercentBVSpreadValidator;
+import mekwars.server.campaign.operations.validation.StandardBVSpreadValidator;
 
 public class ShortValidator {
 
@@ -723,26 +723,26 @@ public class ShortValidator {
     }// end validateShortAttacker()
 
     private void checkAttackerFlags(ArrayList<Integer> failureReasons,
-			SPlayer ap, Operation o) {
-    	PlayerFlags pFlags = ap.getFlags();
-		String requiredFlags = o.getValue("AttackerFlags");
-		// Loop through the flag string, checking settings
-		StringTokenizer st = new StringTokenizer(requiredFlags, "$");
-		while(st.hasMoreTokens()) {
-			StringTokenizer element = new StringTokenizer(st.nextToken(), "#");
-			String fName = element.nextToken();
-			boolean value = Boolean.parseBoolean(element.nextToken());
-			if (pFlags.getFlagStatus(fName) != value) {
-				if (value) {
-					failureReasons.add(SFAIL_ATTACK_MISSING_REQUIRED_FLAG);
-				} else {
-					failureReasons.add(SFAIL_ATTACK_HAS_BANNED_FLAG);
-				}
-			}
-		}
-	}
+            SPlayer ap, Operation o) {
+        PlayerFlags pFlags = ap.getFlags();
+        String requiredFlags = o.getValue("AttackerFlags");
+        // Loop through the flag string, checking settings
+        StringTokenizer st = new StringTokenizer(requiredFlags, "$");
+        while(st.hasMoreTokens()) {
+            StringTokenizer element = new StringTokenizer(st.nextToken(), "#");
+            String fName = element.nextToken();
+            boolean value = Boolean.parseBoolean(element.nextToken());
+            if (pFlags.getFlagStatus(fName) != value) {
+                if (value) {
+                    failureReasons.add(SFAIL_ATTACK_MISSING_REQUIRED_FLAG);
+                } else {
+                    failureReasons.add(SFAIL_ATTACK_HAS_BANNED_FLAG);
+                }
+            }
+        }
+    }
 
-	/**
+    /**
      * Method which checks the attacker's ability to reach the target world.
      * Factions may always reach worlds on which they have running long ops, as
      * they couldn't have started them if the targets were out of range. Players
@@ -955,15 +955,15 @@ public class ShortValidator {
         I_SpreadValidator isv;
         int spreadError = I_SpreadValidator.ERROR_NONE;
         if (o.getBooleanValue("AttackerUsePercentageBVSpread")) {
-        	isv = new PercentBVSpreadValidator(o.getIntValue("MaxAttackerUnitBVSpread"), o.getDoubleValue("AttackerBVSpreadPercent"));
+            isv = new PercentBVSpreadValidator(o.getIntValue("MaxAttackerUnitBVSpread"), o.getDoubleValue("AttackerBVSpreadPercent"));
         } else {
-        	isv = new StandardBVSpreadValidator(o.getIntValue("MinAttackerUnitBVSpread"), o.getIntValue("MaxAttackerUnitBVSpread"));
+            isv = new StandardBVSpreadValidator(o.getIntValue("MinAttackerUnitBVSpread"), o.getIntValue("MaxAttackerUnitBVSpread"));
         }
         isv.setDebug(false); // Set this to false when we go live with it.
         boolean spreadValidates = isv.validate(aa, o);
         
         if (!spreadValidates) {
-        	spreadError = isv.getError();
+            spreadError = isv.getError();
         }
         
         boolean countSupport = o.getBooleanValue("CountSupportUnits");
@@ -1003,18 +1003,18 @@ public class ShortValidator {
         
         // Check Aero ratios
         if (o.getBooleanValue("EnforceAttackerAeroRatio")) {
-        	boolean countAeroSupport = o.getBooleanValue("CountSupportUnitsInAeroRatio");
-        	int numAero = aa.getNumberOfUnitTypes(Unit.AERO, countAeroSupport);
-        	int totalUnits = aa.getAmountOfUnits();
-        	double minPercent = o.getDoubleValue("MinAttackerAeroPercent");
-        	double maxPercent = o.getDoubleValue("MaxAttackerAeroPercent");
-        	double actualPercent = (double) (((double)numAero / (double)totalUnits) * 100);
-        	
-        	if (actualPercent < minPercent) {
-        		failureReasons.add(SFAIL_ATTACK_MIN_AERO);
-        	} else if (actualPercent > maxPercent) {
-        		failureReasons.add(SFAIL_ATTACK_MAX_AERO);
-        	}
+            boolean countAeroSupport = o.getBooleanValue("CountSupportUnitsInAeroRatio");
+            int numAero = aa.getNumberOfUnitTypes(Unit.AERO, countAeroSupport);
+            int totalUnits = aa.getAmountOfUnits();
+            double minPercent = o.getDoubleValue("MinAttackerAeroPercent");
+            double maxPercent = o.getDoubleValue("MaxAttackerAeroPercent");
+            double actualPercent = (double) (((double)numAero / (double)totalUnits) * 100);
+            
+            if (actualPercent < minPercent) {
+                failureReasons.add(SFAIL_ATTACK_MIN_AERO);
+            } else if (actualPercent > maxPercent) {
+                failureReasons.add(SFAIL_ATTACK_MAX_AERO);
+            }
         }
 
         int infCount = aa.getNumberOfUnitTypes(Unit.INFANTRY, countSupport);
@@ -1039,15 +1039,15 @@ public class ShortValidator {
 
         // Support Unit min/max
         if (aa.getTotalSupportUnits() < o.getIntValue("MinAttackerSupportUnits")) {
-        	failureReasons.add(SFAIL_ATTACK_TOO_FEW_SUPPORT_UNITS);
+            failureReasons.add(SFAIL_ATTACK_TOO_FEW_SUPPORT_UNITS);
         } else if (aa.getTotalSupportUnits() > o.getIntValue("MaxAttackerSupportUnits")) {
-        	failureReasons.add(SFAIL_ATTACK_TOO_MANY_SUPPORT_UNITS);
+            failureReasons.add(SFAIL_ATTACK_TOO_MANY_SUPPORT_UNITS);
         }
         // Non-Support Unit min/max
         if ((aa.getAmountOfUnitsWithoutInfantry() - aa.getTotalSupportUnits()) < o.getIntValue("MinAttackerNonSupportUnits")) {
-        	failureReasons.add(SFAIL_ATTACK_TOO_FEW_NONSUPPORT_UNITS);
+            failureReasons.add(SFAIL_ATTACK_TOO_FEW_NONSUPPORT_UNITS);
         } else if ((aa.getAmountOfUnitsWithoutInfantry() - aa.getTotalSupportUnits()) > o.getIntValue("MaxAttackerNonSupportUnits")) {
-        	failureReasons.add(SFAIL_ATTACK_TOO_MANY_NONSUPPORT_UNITS);
+            failureReasons.add(SFAIL_ATTACK_TOO_MANY_NONSUPPORT_UNITS);
         }
         
         
@@ -1129,7 +1129,7 @@ public class ShortValidator {
                     if (walkMP < o.getIntValue("MinAttackerWalk") && jumpMP < o.getIntValue("MinAttackerJump"))
                         speedFail = true;
                     if (jumpMP > o.getIntValue("MaxAttackerJump")) {
-                    	jumpTooFar = true;
+                        jumpTooFar = true;
                     }
                 } catch (Exception ex) {
                 }
@@ -1154,9 +1154,9 @@ public class ShortValidator {
             int currBV = 0;
             
             if (o.getBooleanValue("IgnorePilotsForBVSpread")) {
-            	currBV = currUnit.getBaseBV();
+                currBV = currUnit.getBaseBV();
             } else {
-            	currBV = currUnit.getBVForMatch();
+                currBV = currUnit.getBVForMatch();
             }
             
             if (currBV < o.getIntValue("MinAttackerUnitBV"))
@@ -1168,7 +1168,7 @@ public class ShortValidator {
             // should be LAST
             int type = currUnit.getType();
             if (currUnit.isSupportUnit() && !o.getBooleanValue("CountSupportUnitsForSpread"))
-            	continue;
+                continue;
             if (type == Unit.VEHICLE && !o.getBooleanValue("CountVehsForSpread"))
                 continue;
             else if (type == Unit.PROTOMEK && !o.getBooleanValue("CountProtosForSpread"))
@@ -1209,7 +1209,7 @@ public class ShortValidator {
             // Count total units and clan units
             numTotalUnits++;
             if(currUnit.getEntity().isClan()) {
-            	numClanUnits++;
+                numClanUnits++;
             }
         }// end while(units remain)
 
@@ -1251,7 +1251,7 @@ public class ShortValidator {
             failureReasons.add(SFAIL_ATTACK_MINSPEED);
 
         if (jumpTooFar) {
-        	failureReasons.add(SFAIL_ATTACK_MAXJUMP);
+            failureReasons.add(SFAIL_ATTACK_MAXJUMP);
         }
         
         // add max/min unit ton failures to list
@@ -1275,9 +1275,9 @@ public class ShortValidator {
         // check unit BV difference failures
        
         if (spreadError == I_SpreadValidator.ERROR_SPREAD_TOO_LARGE) {
-        	failureReasons.add(SFAIL_ATTACK_MAXSPREAD);
+            failureReasons.add(SFAIL_ATTACK_MAXSPREAD);
         } else if (spreadError == I_SpreadValidator.ERROR_SPREAD_TOO_SMALL) {
-        	failureReasons.add(SFAIL_ATTACK_MINSPREAD);
+            failureReasons.add(SFAIL_ATTACK_MINSPREAD);
         }
         
         averageArmySkills /= numberOfValidUnits;
@@ -1286,27 +1286,27 @@ public class ShortValidator {
             failureReasons.add(SFAIL_ATTACK_ELITE_PILOTS );
 
         if (averageArmySkills > o.getDoubleValue("AttackerAverageArmySkillMax")) {
-        	failureReasons.add(SFAIL_ATTACK_SKILLSUM_TOOHIGH);
+            failureReasons.add(SFAIL_ATTACK_SKILLSUM_TOOHIGH);
         }
         
         if (averageArmySkills < o.getDoubleValue("AttackerAverageArmySkillMin")) {
-        	failureReasons.add(SFAIL_ATTACK_SKILLSUM_TOOLOW);
+            failureReasons.add(SFAIL_ATTACK_SKILLSUM_TOOLOW);
         }
         
         if ( greenPilots )
             failureReasons.add(SFAIL_ATTACK_GREEN_PILOTS );
         
         if (checkClantech) {
-        	double minClantech = o.getDoubleValue("AttackerMinClanEquipmentPercent");
-        	double maxClantech = o.getDoubleValue("AttackerMaxClanEquipmentPercent");
-        	double clanTechPercent = (((double)numClanUnits / (double)numTotalUnits) * 100.0);
-        	
-        	if (clanTechPercent < minClantech) {
-        		failureReasons.add(SFAIL_ATTACK_TECHBASE_TOO_LITTLE_CLAN);
-        	}
-        	if (clanTechPercent > maxClantech) {
-        		failureReasons.add(SFAIL_ATTACK_TECHBASE_TOO_MUCH_CLAN);
-        	}
+            double minClantech = o.getDoubleValue("AttackerMinClanEquipmentPercent");
+            double maxClantech = o.getDoubleValue("AttackerMaxClanEquipmentPercent");
+            double clanTechPercent = (((double)numClanUnits / (double)numTotalUnits) * 100.0);
+            
+            if (clanTechPercent < minClantech) {
+                failureReasons.add(SFAIL_ATTACK_TECHBASE_TOO_LITTLE_CLAN);
+            }
+            if (clanTechPercent > maxClantech) {
+                failureReasons.add(SFAIL_ATTACK_TECHBASE_TOO_MUCH_CLAN);
+            }
         }
 
     }// end CheckAttackerConstruction
@@ -1340,27 +1340,27 @@ public class ShortValidator {
     }
 
     private void checkDefenderFlags(ArrayList<Integer> failureReasons,
-			SPlayer dp, Operation o) {
-		// TODO Auto-generated method stub
-    	PlayerFlags pFlags = dp.getFlags();
-		String requiredFlags = o.getValue("DefenderFlags");
-		// Loop through the flag string, checking settings
-		StringTokenizer st = new StringTokenizer(requiredFlags, "$");
-		while(st.hasMoreTokens()) {
-			StringTokenizer element = new StringTokenizer(st.nextToken(), "#");
-			String fName = element.nextToken();
-			boolean value = Boolean.parseBoolean(element.nextToken());
-			if (pFlags.getFlagStatus(fName) != value) {
-				if (value) {
-					failureReasons.add(SFAIL_DEFEND_MISSING_REQUIRED_FLAG);
-				} else {
-					failureReasons.add(SFAIL_DEFEND_HAS_BANNED_FLAG);
-				}
-			}
-		}
-	}
+            SPlayer dp, Operation o) {
+        // TODO Auto-generated method stub
+        PlayerFlags pFlags = dp.getFlags();
+        String requiredFlags = o.getValue("DefenderFlags");
+        // Loop through the flag string, checking settings
+        StringTokenizer st = new StringTokenizer(requiredFlags, "$");
+        while(st.hasMoreTokens()) {
+            StringTokenizer element = new StringTokenizer(st.nextToken(), "#");
+            String fName = element.nextToken();
+            boolean value = Boolean.parseBoolean(element.nextToken());
+            if (pFlags.getFlagStatus(fName) != value) {
+                if (value) {
+                    failureReasons.add(SFAIL_DEFEND_MISSING_REQUIRED_FLAG);
+                } else {
+                    failureReasons.add(SFAIL_DEFEND_HAS_BANNED_FLAG);
+                }
+            }
+        }
+    }
 
-	/**
+    /**
      * Method which checks defender milestones, like experience and rank.
      */
     private void checkDefenderMilestones(ArrayList<Integer> failureReasons, SPlayer dp, Operation o, SPlanet target) {
@@ -1369,9 +1369,9 @@ public class ShortValidator {
         boolean nonConqCanDefend = o.getBooleanValue("AllowAgainstNonConq");
         double percentOwned = 0;
         if(target != null)
-        	percentOwned = (double)100 * ((double)target.getInfluence().getInfluence(dp.getHouseFightingFor().getId()) / (double)target.getConquestPoints());
+            percentOwned = (double)100 * ((double)target.getInfluence().getInfluence(dp.getHouseFightingFor().getId()) / (double)target.getConquestPoints());
         else
-        	percentOwned = 0;
+            percentOwned = 0;
         //Baruk Khazad! - 20151003 - start
         if (target != null && percentOwned < o.getIntValue("MinPlanetOwnership")) {
             if (percentOwned > 0 && o.getIntValue("MinPlanetOwnership") > 0 && o.getBooleanValue("MinPlanetOwnershipIgnoredByDefender")) {
@@ -1455,15 +1455,15 @@ public class ShortValidator {
         I_SpreadValidator isv;
         int spreadError = I_SpreadValidator.ERROR_NONE;
         if (o.getBooleanValue("DefenderUsePercentageBVSpread")) {
-        	isv = new PercentBVSpreadValidator(o.getIntValue("MaxDefenderUnitBVSpread"), o.getDoubleValue("DefenderBVSpreadPercent"));
+            isv = new PercentBVSpreadValidator(o.getIntValue("MaxDefenderUnitBVSpread"), o.getDoubleValue("DefenderBVSpreadPercent"));
         } else {
-        	isv = new StandardBVSpreadValidator(o.getIntValue("MinDefenderUnitBVSpread"), o.getIntValue("MaxDefenderUnitBVSpread"));
+            isv = new StandardBVSpreadValidator(o.getIntValue("MinDefenderUnitBVSpread"), o.getIntValue("MaxDefenderUnitBVSpread"));
         }
         isv.setDebug(false); // Set this to false when we go live with it.
         boolean spreadValidates = isv.validate(da, o);
         
         if (!spreadValidates) {
-        	spreadError = isv.getError();
+            spreadError = isv.getError();
         }
         
         boolean countSupport = o.getBooleanValue("CountSupportUnits");
@@ -1498,17 +1498,17 @@ public class ShortValidator {
 
         // Check Aero ratios
         if (o.getBooleanValue("EnforceDefenderAeroRatio")) {
-        	boolean countAeroSupport = o.getBooleanValue("CountSupportUnitsInAeroRatio");
-        	int numAero = da.getNumberOfUnitTypes(Unit.AERO, countAeroSupport);
-        	int totalUnits = da.getAmountOfUnits();
-        	double minPercent = o.getDoubleValue("MinAttackerAeroPercent");
-        	double maxPercent = o.getDoubleValue("MaxAttackerAeroPercent");
-        	double actualPercent = (double) (((double)numAero / (double)totalUnits) * 100);
-        	if (actualPercent < minPercent) {
-        		failureReasons.add(SFAIL_DEFEND_MIN_AERO);
-        	} else if (actualPercent > maxPercent) {
-        		failureReasons.add(SFAIL_DEFEND_MAX_AERO);
-        	}
+            boolean countAeroSupport = o.getBooleanValue("CountSupportUnitsInAeroRatio");
+            int numAero = da.getNumberOfUnitTypes(Unit.AERO, countAeroSupport);
+            int totalUnits = da.getAmountOfUnits();
+            double minPercent = o.getDoubleValue("MinAttackerAeroPercent");
+            double maxPercent = o.getDoubleValue("MaxAttackerAeroPercent");
+            double actualPercent = (double) (((double)numAero / (double)totalUnits) * 100);
+            if (actualPercent < minPercent) {
+                failureReasons.add(SFAIL_DEFEND_MIN_AERO);
+            } else if (actualPercent > maxPercent) {
+                failureReasons.add(SFAIL_DEFEND_MAX_AERO);
+            }
         }
 
         
@@ -1534,16 +1534,16 @@ public class ShortValidator {
 
         // Support Unit min/max
         if (da.getTotalSupportUnits() < o.getIntValue("MinDefenderSupportUnits")) {
-        	failureReasons.add(SFAIL_DEFEND_TOO_FEW_SUPPORT_UNITS);
+            failureReasons.add(SFAIL_DEFEND_TOO_FEW_SUPPORT_UNITS);
         } else if (da.getTotalSupportUnits() > o.getIntValue("MaxDefenderSupportUnits")) {
-        	failureReasons.add(SFAIL_DEFEND_TOO_MANY_SUPPORT_UNITS);
+            failureReasons.add(SFAIL_DEFEND_TOO_MANY_SUPPORT_UNITS);
         }
         
         // Non-Support Unit min/max
         if ((da.getAmountOfUnitsWithoutInfantry() - da.getTotalSupportUnits()) < o.getIntValue("MinDefenderNonSupportUnits")) {
-        	failureReasons.add(SFAIL_DEFEND_TOO_FEW_NONSUPPORT_UNITS);
+            failureReasons.add(SFAIL_DEFEND_TOO_FEW_NONSUPPORT_UNITS);
         } else if (da.getAmountOfUnitsWithoutInfantry() - da.getTotalSupportUnits() > o.getIntValue("MaxDefenderSupportUnits")) {
-        	failureReasons.add(SFAIL_DEFEND_TOO_MANY_NONSUPPORT_UNITS);
+            failureReasons.add(SFAIL_DEFEND_TOO_MANY_NONSUPPORT_UNITS);
         }        
         
         /*
@@ -1617,7 +1617,7 @@ public class ShortValidator {
                     if (walkMP < o.getIntValue("MinDefenderWalk") && jumpMP < o.getIntValue("MinDefenderJump"))
                         speedFail = true;
                     if (jumpMP > o.getIntValue("MaxDefenderJump")) {
-                    	jumpTooFar = true;
+                        jumpTooFar = true;
                     }
                 } catch (Exception ex) {
                 }
@@ -1633,9 +1633,9 @@ public class ShortValidator {
             // check the unit's BV
             int currBV = 0;
             if(o.getBooleanValue("IgnorePilotsForBVSpread")) {
-            	currBV = currUnit.getBaseBV();
+                currBV = currUnit.getBaseBV();
             } else {
-            	currBV = currUnit.getBV();
+                currBV = currUnit.getBV();
             }
             if (currBV < o.getIntValue("MinDefenderUnitBV"))
                 minBVFail = true;
@@ -1646,7 +1646,7 @@ public class ShortValidator {
             // should be LAST
             int type = currUnit.getType();
             if (currUnit.isSupportUnit() && !o.getBooleanValue("CountSupportUnitsForSpread"))
-            	continue;
+                continue;
             if (type == Unit.VEHICLE && !o.getBooleanValue("CountVehsForSpread"))
                 continue;
             else if (type == Unit.PROTOMEK && !o.getBooleanValue("CountProtosForSpread"))
@@ -1686,7 +1686,7 @@ public class ShortValidator {
             // Count total units and clan units
             numTotalUnits++;
             if(currUnit.getEntity().isClan()) {
-            	numClanUnits++;
+                numClanUnits++;
             }
 
         }// end while(units remain)
@@ -1727,7 +1727,7 @@ public class ShortValidator {
         if (speedFail)
             failureReasons.add(SFAIL_DEFEND_MINSPEED);
         if (jumpTooFar) {
-        	failureReasons.add(SFAIL_DEFEND_MAXJUMP);
+            failureReasons.add(SFAIL_DEFEND_MAXJUMP);
         }
         // add max/min unit ton failures to list
         if (maxTonFail)
@@ -1749,19 +1749,19 @@ public class ShortValidator {
 
         // check unit BV difference failures
         if (spreadError == I_SpreadValidator.ERROR_SPREAD_TOO_LARGE) {
-        	failureReasons.add(SFAIL_DEFEND_MAXSPREAD);
+            failureReasons.add(SFAIL_DEFEND_MAXSPREAD);
         } else if (spreadError == I_SpreadValidator.ERROR_SPREAD_TOO_SMALL) {
-        	failureReasons.add(SFAIL_DEFEND_MINSPREAD);
+            failureReasons.add(SFAIL_DEFEND_MINSPREAD);
         }
         
         averageArmySkills /= numberOfValidUnits;
         
         if (averageArmySkills > o.getDoubleValue("DefenderAverageArmySkillMax") ) {
-        	failureReasons.add(SFAIL_DEFEND_SKILLSUM_TOOHIGH);
+            failureReasons.add(SFAIL_DEFEND_SKILLSUM_TOOHIGH);
         }
 
         if (averageArmySkills < o.getDoubleValue("DefenderAverageArmySkillMin") ) {
-        	failureReasons.add(SFAIL_DEFEND_SKILLSUM_TOOLOW);
+            failureReasons.add(SFAIL_DEFEND_SKILLSUM_TOOLOW);
         }
 
         
@@ -1772,15 +1772,15 @@ public class ShortValidator {
             failureReasons.add(SFAIL_DEFEND_GREEN_PILOTS );
         
         if (checkClantech) {
-        	double minClantech = o.getDoubleValue("DefenderMinClanEquipmentPercent");
-        	double maxClantech = o.getDoubleValue("DefenderMaxClanEquipmentPercent");
-        	double clanTechPercent = numClanUnits / numTotalUnits;
-        	if (clanTechPercent < minClantech) {
-        		failureReasons.add(SFAIL_DEFEND_TECHBASE_TOO_LITTLE_CLAN);
-        	}
-        	if (clanTechPercent > maxClantech) {
-        		failureReasons.add(SFAIL_DEFEND_TECHBASE_TOO_MUCH_CLAN);
-        	}
+            double minClantech = o.getDoubleValue("DefenderMinClanEquipmentPercent");
+            double maxClantech = o.getDoubleValue("DefenderMaxClanEquipmentPercent");
+            double clanTechPercent = numClanUnits / numTotalUnits;
+            if (clanTechPercent < minClantech) {
+                failureReasons.add(SFAIL_DEFEND_TECHBASE_TOO_LITTLE_CLAN);
+            }
+            if (clanTechPercent > maxClantech) {
+                failureReasons.add(SFAIL_DEFEND_TECHBASE_TOO_MUCH_CLAN);
+            }
         }
 
     }// end checkDefenderConstruction
@@ -1794,7 +1794,6 @@ public class ShortValidator {
      * message as well as the silent update.
      */
     public void checkOperations(SArmy a, boolean display, TreeMap<String, Operation> operations) {
-
         SPlayer p = CampaignMain.cm.getPlayer(a.getPlayerName());
         if (p == null)
             return;
@@ -1811,27 +1810,26 @@ public class ShortValidator {
         ArrayList<String> removeNames = new ArrayList<String>();
 
         for (Operation currType : operations.values()) {
-
             // check for failures. contruction and milestones only.
             ArrayList<Integer> failures = this.validateShortAttacker(p, a, currType, null, -1, false);
 
             // if there were failures, try to remve
             if (failures.size() > 0) {
                 String removal = a.getLegalOperations().remove(currType.getName());
-                if (removal != null)
+                if (removal != null) {
                     removeNames.add(removal);
-            }
+                }
 
             // no failures. add to the tree. if the key was connected
             // to a null previously, we need to notify the player.
-            else if (a.getLegalOperations().put(currType.getName(), currType.getName()) == null)
+            } else if (a.getLegalOperations().put(currType.getName(), currType.getName()) == null) {
                 addNames.add(currType.getName());
+            }
 
         }// end for(each operation)
 
         // if there were changes, pre updates
         if (addNames.size() > 0 || removeNames.size() > 0) {
-
             // assemble PL| command string
             String toSend = "PL|UOE|" + a.getID() + "*";
             for (String currName : addNames)
@@ -2156,10 +2154,10 @@ public class ShortValidator {
             return " this army has green pilots.";
 
         case SFAIL_ATTACK_SKILLSUM_TOOHIGH: // Army's average skillsum is too high
-        	return " this army's pilots are not skilled enough for the operation.";
+            return " this army's pilots are not skilled enough for the operation.";
 
         case SFAIL_ATTACK_SKILLSUM_TOOLOW: // Army's average skillsum is too low
-        	return " this army's pilots are too skilled for the operation.";
+            return " this army's pilots are too skilled for the operation.";
             
         case SFAIL_ATTACK_MAX_AERO:
             return " the army has too many aeros";
@@ -2171,32 +2169,32 @@ public class ShortValidator {
             return " the army contains aeros, which may not participate in this type of attack";
 
         case SFAIL_ATTACK_TECHBASE_TOO_LITTLE_CLAN:
-        	return " the army does not contain enough clantech";
-        	
+            return " the army does not contain enough clantech";
+            
         case SFAIL_ATTACK_TECHBASE_TOO_MUCH_CLAN:
-        	return " the army contains too much clantech";
-        	
+            return " the army contains too much clantech";
+            
         case SFAIL_ATTACK_TOO_MANY_SUPPORT_UNITS:
-        	return " the army has too many support units";
+            return " the army has too many support units";
         
         case SFAIL_ATTACK_TOO_FEW_SUPPORT_UNITS:
-        	return " the army does not have enough support units";
-        	
+            return " the army does not have enough support units";
+            
         case SFAIL_ATTACK_TOO_MANY_NONSUPPORT_UNITS:
-        	return " the army has too many non-support units";
-        	
+            return " the army has too many non-support units";
+            
         case SFAIL_ATTACK_TOO_FEW_NONSUPPORT_UNITS:
-        	return " the army does not have enough non-support units";
-        	
+            return " the army does not have enough non-support units";
+            
         case SFAIL_ATTACK_MISSING_REQUIRED_FLAG:
-        	return " you do not have a required Player Flag set";
-        	
+            return " you do not have a required Player Flag set";
+            
         case SFAIL_ATTACK_HAS_BANNED_FLAG:
-        	return " you have a Player Flag set that is banned from this attack";
+            return " you have a Player Flag set that is banned from this attack";
         
         case SFAIL_ATTACK_MAXJUMP:
-        	return " the army contains a unit that jumps too far.";
-        	
+            return " the army contains a unit that jumps too far.";
+            
             /*
              * DEFENSE failure causes
              */
@@ -2349,10 +2347,10 @@ public class ShortValidator {
             return " this army has eilte pilots.";
             
         case SFAIL_DEFEND_SKILLSUM_TOOHIGH: // Army's average skillsum is too high
-        	return " this army's pilots are not skilled enough for the operation.";
+            return " this army's pilots are not skilled enough for the operation.";
 
         case SFAIL_DEFEND_SKILLSUM_TOOLOW: // Army's average skillsum is too low
-        	return " this army's pilots are too skilled for the operation.";
+            return " this army's pilots are too skilled for the operation.";
 
         case SFAIL_DEFEND_GREEN_PILOTS:// Army has pilots whoes total skill is higher then the highest allowed
             return " this army has green pilots.";
@@ -2367,31 +2365,31 @@ public class ShortValidator {
             return " the army contains aeros, which may not participate in this type of defense";
             
         case SFAIL_DEFEND_TECHBASE_TOO_LITTLE_CLAN:
-        	return " the army does not contain enough clantech";
-        	
+            return " the army does not contain enough clantech";
+            
         case SFAIL_DEFEND_TECHBASE_TOO_MUCH_CLAN:
-        	return " the army contains too much clantech";
-        	
+            return " the army contains too much clantech";
+            
         case SFAIL_DEFEND_TOO_FEW_SUPPORT_UNITS:
-        	return " the army does not have enough support units";
-        	
+            return " the army does not have enough support units";
+            
         case SFAIL_DEFEND_TOO_MANY_SUPPORT_UNITS:
-        	return " the army has too many support units";
-        	
+            return " the army has too many support units";
+            
         case SFAIL_DEFEND_TOO_FEW_NONSUPPORT_UNITS:
-        	return " the army does not have enough non-support units";
-        	
+            return " the army does not have enough non-support units";
+            
         case SFAIL_DEFEND_TOO_MANY_NONSUPPORT_UNITS:
-        	return " the army has too many non-support units";
+            return " the army has too many non-support units";
 
         case SFAIL_DEFEND_MISSING_REQUIRED_FLAG:
-        	return " your opponent does not have a required Player Flag set";
-        	
+            return " your opponent does not have a required Player Flag set";
+            
         case SFAIL_DEFEND_HAS_BANNED_FLAG:
-        	return " your opponent has a Player Flag set that is banned from this attack";
+            return " your opponent has a Player Flag set that is banned from this attack";
 
         case SFAIL_DEFEND_MAXJUMP:
-        	return " your opponent's army contains a unit that jumps too far.";
+            return " your opponent's army contains a unit that jumps too far.";
         }
         
         return "";

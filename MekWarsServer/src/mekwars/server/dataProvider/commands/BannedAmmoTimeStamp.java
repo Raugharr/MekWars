@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.dataProvider.commands;
+package mekwars.server.dataProvider.commands;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,10 +22,10 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import common.CampaignData;
-import common.util.BinWriter;
-import common.util.MWLogger;
-import server.dataProvider.ServerCommand;
+import mekwars.common.CampaignData;
+import mekwars.common.util.BinWriter;
+import mekwars.common.util.MWLogger;
+import mekwars.server.dataProvider.ServerCommand;
 
 /**
  * Retrieve the MD5 of the current campaignconfig file.

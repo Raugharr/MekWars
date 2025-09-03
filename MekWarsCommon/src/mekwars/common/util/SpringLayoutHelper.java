@@ -15,7 +15,7 @@
  */
 
 
-package common.util;
+package mekwars.common.util;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;

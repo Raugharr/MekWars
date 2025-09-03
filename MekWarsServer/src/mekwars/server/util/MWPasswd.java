@@ -10,15 +10,15 @@
  * developers. 2002-2003.
  */
 
-package server.util;
+package mekwars.server.util;
 
 import java.io.IOException;
 
-import common.util.MWLogger;
-import server.MWChatServer.commands.ICommands;
-import server.MWChatServer.translator.jcrypt;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.commands.ICommands;
+import mekwars.server.MWChatServer.translator.jcrypt;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
 
 /*
  * Modified 2/26/2003 by Jonathan Ellis

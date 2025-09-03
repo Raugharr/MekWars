@@ -14,7 +14,7 @@
  */
 
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -34,10 +34,11 @@ import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import client.MWClient;
-import client.campaign.CCampaign;
-import common.BMEquipment;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CCampaign;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.BMEquipment;
+import mekwars.common.util.SpringLayoutHelper;
 
 /**
  * Black Market Parts Panel
@@ -250,7 +251,7 @@ public class CBMPartsPanel extends JPanel {
             	JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Invalid Syntax Try Again.");
             	return;
             }
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c buyparts#"+ bme.getEquipmentInternalName() +"#"+ playerAmountString);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c buyparts#"+ bme.getEquipmentInternalName() +"#"+ playerAmountString);
 
 		}
 	}//end btnBuyPartsPerformed

@@ -32,7 +32,7 @@
  * From Megamek.client.MechSelectorDialgo.java
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -63,12 +63,13 @@ import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import client.MWClient;
-import client.gui.CMainFrame;
-import client.gui.MechInfo;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.CMainFrame;
+import mekwars.client.gui.MechInfo;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 import megamek.client.ui.swing.UnitFailureDialog;
 import megamek.client.ui.swing.UnitLoadingDialog;
 import megamek.common.Entity;
@@ -353,9 +354,9 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
 
                 String unitFile = UnitUtils.getMechSummaryFileName(ms);
                 if (global) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c repod#" + unitId + "#GLOBAL#" + unitFile);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#GLOBAL#" + unitFile);
                 } else {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c repod#" + unitId + "#" + unitFile);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#" + unitFile);
                 }
                 Thread.sleep(125);
                 dispose();
@@ -367,9 +368,9 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         if (ae.getSource() == bRandom) {
             try {
                 if (global) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c repod#" + unitId + "#GLOBAL#RANDOM");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#GLOBAL#RANDOM");
                 } else {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c repod#" + unitId + "#RANDOM");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#RANDOM");
                 }
                 Thread.sleep(125);
                 dispose();

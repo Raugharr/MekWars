@@ -15,16 +15,17 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 
 import javax.swing.JPanel;
 
-import client.CUser;
-import client.MWClient;
-import client.gui.CCommPanel;
-import common.util.StringUtils;
+import mekwars.client.CUser;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.CCommPanel;
+import mekwars.common.util.StringUtils;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -78,7 +79,7 @@ public class PM extends Command {
                         int count = mwclient.getMainFrame().getMainPanel().getCommPanel().countMailTabs();
                         
                         if ( count >= maxTabs ){
-                            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "mail "+name+", "+mwclient.getConfigParam("MAXPMMESSAGE"));
+                            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+name+", "+mwclient.getConfigParam("MAXPMMESSAGE"));
                             String sysColour = mwclient.getConfigParam("SYSMESSAGECOLOR");
                             message = "<font color=\""+sysColour+"\"><b>"+name+" tried to PM you while you where busy</b></font>";
                             mwclient.addToChat(message);

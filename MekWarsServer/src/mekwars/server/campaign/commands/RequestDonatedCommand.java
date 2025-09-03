@@ -14,20 +14,20 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.File;
 import java.util.StringTokenizer;
 
-import common.Unit;
-import common.util.StringUtils;
-import common.util.UnitUtils;
-import server.campaign.BuildTable;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.pilot.SPilot;
+import mekwars.common.Unit;
+import mekwars.common.util.StringUtils;
+import mekwars.common.util.UnitUtils;
+import mekwars.server.campaign.BuildTable;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.pilot.SPilot;
 
 public class RequestDonatedCommand implements Command {
 

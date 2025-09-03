@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -37,13 +37,14 @@ import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import client.MWClient;
-import client.campaign.CBMUnit;
-import client.campaign.CCampaign;
-import client.campaign.CPlayer;
-import client.gui.dialog.SellUnitDialog;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CBMUnit;
+import mekwars.client.campaign.CCampaign;
+import mekwars.client.campaign.CPlayer;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.dialog.SellUnitDialog;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
 
@@ -298,7 +299,7 @@ public class CBMPanel extends JPanel {
         }
 
         //returns passed. send the recall command and deselect the buttons.
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c recallbid#" + mm.getAuctionID());
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c recallbid#" + mm.getAuctionID());
         btnRecallBid.setEnabled(false);
         btnRecallUnit.setEnabled(false);
         btnBid.setEnabled(false);
@@ -323,7 +324,7 @@ public class CBMPanel extends JPanel {
         }
 
         //returns passed. send the recall command and deselect the buttons.
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c recall#" + mm.getAuctionID());
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c recall#" + mm.getAuctionID());
         btnRecallBid.setEnabled(false);
         btnRecallUnit.setEnabled(false);
         btnBid.setEnabled(false);
@@ -424,7 +425,7 @@ public class CBMPanel extends JPanel {
                         return;
                     }
 
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c bid#"+ auctionID +"#"+ playerBid);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c bid#"+ auctionID +"#"+ playerBid);
 
                     //this clears the selection, so unhighlight the bid button. sometimes the
                     //bid and retract buttons will be active simultaneously, so disable both

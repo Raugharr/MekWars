@@ -14,16 +14,16 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.pilot.SPilot;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.pilot.SPilot;
 
 
 public class RetirePilotCommand implements Command {

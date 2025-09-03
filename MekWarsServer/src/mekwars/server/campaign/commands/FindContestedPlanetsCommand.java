@@ -14,19 +14,19 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.Planet;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-//import server.campaign.operations.ShortOperation;
-import server.campaign.util.PlanetNameComparator;
+import mekwars.common.Planet;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+//import mekwars.server.campaign.operations.ShortOperation;
+import mekwars.server.campaign.util.PlanetNameComparator;
 
 //BarukKahzad 20151129 with much copy and paste from HouseCommand.java
 public class FindContestedPlanetsCommand implements Command {

@@ -14,24 +14,24 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.File;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.Unit;
-import common.util.MWLogger;
-import server.campaign.BuildTable;
-import server.campaign.CampaignMain;
-import server.campaign.NewbieHouse;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.SUnitFactory;
-import server.campaign.pilot.SPilot;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.BuildTable;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.NewbieHouse;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.SUnitFactory;
+import mekwars.server.campaign.pilot.SPilot;
 
 public class RequestCommand implements Command {
 

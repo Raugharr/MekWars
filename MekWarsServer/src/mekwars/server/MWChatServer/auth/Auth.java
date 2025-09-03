@@ -25,7 +25,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package server.MWChatServer.auth;
+package mekwars.server.MWChatServer.auth;
 
 public class Auth {
     private String _userId;

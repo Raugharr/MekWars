@@ -10,27 +10,27 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.Unit;
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
-import common.util.UnitUtils;
+import mekwars.common.Unit;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 import megamek.Version;
 import megamek.common.Mech;
-import server.MWServ;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.operations.newopmanager.I_OperationManager;
-import server.campaign.util.scheduler.MWScheduler;
-import server.util.SPlayerToJSON;
-import server.util.StringUtil;
+import mekwars.server.MWServ;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
+import mekwars.server.campaign.util.scheduler.MWScheduler;
+import mekwars.server.util.SPlayerToJSON;
+import mekwars.server.util.StringUtil;
 
 public class ActivateCommand implements Command {
 
@@ -72,7 +72,7 @@ public class ActivateCommand implements Command {
         // Put it into a try block. One user was causing FormatExceptions
         try {
             // if (!(MWServ.SERVER_VERSION).substring(0, server.MWServ.SERVER_VERSION.lastIndexOf(".")).equals(p.getPlayerClientVersion().substring(0, p.getPlayerClientVersion().lastIndexOf(".")))) {
-			if (!MWServ.SERVER_VERSION.is(p.getPlayerClientVersion())) {
+            if (!MWServ.SERVER_VERSION.is(p.getPlayerClientVersion())) {
                 // server.MWLogger.modLog(Username + " failed to activate. Was using version " + p.getPlayerClientVersion()+" Server Version: "+
                 // MWServ.SERVER_VERSION);
                 CampaignMain.cm.doSendModMail("NOTE", Username + " failed to activate. Was using version " + p.getPlayerClientVersion() + " Server Version: " + MWServ.SERVER_VERSION);
@@ -187,8 +187,8 @@ public class ActivateCommand implements Command {
             }
             
             if ( (!CampaignMain.cm.getBooleanConfig("AllowActivationWithDamagedUnits")) && this.armiesDamagedUnits(p.getArmies())) {
-            	CampaignMain.cm.toUser("AM:You may not activate while units in your armies have damage.", Username, true);
-            	return;
+                CampaignMain.cm.toUser("AM:You may not activate while units in your armies have damage.", Username, true);
+                return;
             }
         }
 
@@ -229,59 +229,51 @@ public class ActivateCommand implements Command {
         armyID = hasNoAttackOptions(p, p.getArmies());
         
         if (armyID > -1) {
-        	CampaignMain.cm.toUser("AM:Army #" + armyID + " is currently unable to launch any attacks!  You may not go active.", Username, true);
-        	return;
+            CampaignMain.cm.toUser("AM:Army #" + armyID + " is currently unable to launch any attacks!  You may not go active.", Username, true);
+            return;
         }
 
         // Check if the SOs have disabled activation while over unit limits
         if (CampaignMain.cm.getBooleanConfig("DisableActivationIfOverHangarLimits") && p.isOverAnyUnitLimits()) {
-        	CampaignMain.cm.toUser("AM: You have exceeded one or more hangar limits.  Activation is disabled until you get under those limits.", Username, true);
-        	return;
+            CampaignMain.cm.toUser("AM: You have exceeded one or more hangar limits.  Activation is disabled until you get under those limits.", Username, true);
+            return;
         }
         
         // @salient
         // Check if the SOs have disabled going active with unused mektokens
         if (CampaignMain.cm.getBooleanConfig("FreeBuild_LimitGoActive") && p.hasUnusedMekTokens()) {
-        	CampaignMain.cm.toUser("AM: To go active you must first finish creating your free meks.", Username, true);
-        	return;
+            CampaignMain.cm.toUser("AM: To go active you must first finish creating your free meks.", Username, true);
+            return;
         }
         
         // @salient
         // Check mini campaign settings
         // seperated out locked unit check so it can be used without mini campaigns.
-        if(CampaignMain.cm.getBooleanConfig("LockUnits"))
-        {
-        	if(hasLockedUnitsInArmies(p.getArmies()))
-        	{
-        		p.toSelf("AM: To go active you must first remove locked units from your armies.");
-        		return;
-        	}        	
+        if (CampaignMain.cm.getBooleanConfig("LockUnits")) {
+            if (hasLockedUnitsInArmies(p.getArmies())) {
+                p.toSelf("AM: To go active you must first remove locked units from your armies.");
+                return;
+            }            
         }
         
-        if(CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign"))
-        {
-        	//handles all checks, resets currency, and msgs to player
-	        if(p.canActivateForMiniCampaign() == false)
-	        {
-	        	return;
-	        }
+        if (CampaignMain.cm.getBooleanConfig("Enable_MiniCampaign")) {
+            //handles all checks, resets currency, and msgs to player
+            if (p.canActivateForMiniCampaign() == false) {
+                return;
+            }
         }
         
-        if(CampaignMain.cm.getBooleanConfig("Enable_BotPlayerInfo"))
-        {
-        	//update json file for this player (used with discord bot)
-        	SPlayerToJSON.writeToFile(p);
+        if (CampaignMain.cm.getBooleanConfig("Enable_BotPlayerInfo")) {
+            //update json file for this player (used with discord bot)
+            SPlayerToJSON.writeToFile(p);
         }
         
-        if(CampaignMain.cm.getBooleanConfig("Activate_Subfaction_Only"))
-        {
-        	if(StringUtil.isNullOrEmpty(p.getSubFactionName()))
-        	{
-        		p.toSelf("AM: You must first join a subfaction before you can activate!");
-        		return;
-        	}
+        if (CampaignMain.cm.getBooleanConfig("Activate_Subfaction_Only")) {
+            if (StringUtil.isNullOrEmpty(p.getSubFactionName())) {
+                p.toSelf("AM: You must first join a subfaction before you can activate!");
+                return;
+            }
         }
-        
         
         for (SArmy army : p.getArmies()) {
             CampaignMain.cm.getOpsManager().checkOperations(army, false);
@@ -297,8 +289,6 @@ public class ActivateCommand implements Command {
 
         CampaignMain.cm.toUser("AM:[!] You're on your way to the front lines.", Username, true);
         CampaignMain.cm.sendPlayerStatusUpdate(p,!Boolean.parseBoolean(CampaignMain.cm.getConfig("HideActiveStatus")));
-        
-        
 
         // set up a thread which will do an auto /c ca once the minactivetime expires
         int threadLenth = CampaignMain.cm.getIntegerConfig("MinActiveTime") * 1000;
@@ -447,7 +437,7 @@ public class ActivateCommand implements Command {
 
     private boolean hasCommanderlessUnits(Vector<SArmy> armies) {
         // start Baruk Khazad!  20151108a 
-    	Boolean result = false;  
+        Boolean result = false;  
         for (SArmy army : armies) {
             if (army.getCommanders().size() == 0 && !army.isDisabled()) {    
                 result = true;   

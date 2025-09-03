@@ -1,7 +1,7 @@
-package server.campaign.autoresolve;
+package mekwars.server.campaign.autoresolve;
 
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 public class VirtualUnit {
 	

@@ -14,23 +14,23 @@
  * for more details.
  */
 
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 import java.util.ArrayList;
 import java.util.Vector;
 
-import common.Unit;
-import common.UnitFactory;
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
-import common.util.StringUtils;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.SUnitFactory;
+import mekwars.common.Unit;
+import mekwars.common.UnitFactory;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.SUnitFactory;
 
 public class OpsChickenThread extends Thread {
 

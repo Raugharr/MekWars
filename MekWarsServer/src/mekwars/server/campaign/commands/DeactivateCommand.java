@@ -14,13 +14,13 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.util.scheduler.MWScheduler;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.util.scheduler.MWScheduler;
 
 /**
  * A command that takes a player out of active status.

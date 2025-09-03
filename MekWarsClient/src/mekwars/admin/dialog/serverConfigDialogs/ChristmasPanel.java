@@ -9,7 +9,7 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,8 +26,8 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import common.VerticalLayout;
-import common.util.SpringLayoutHelper;
+import mekwars.common.VerticalLayout;
+import mekwars.common.util.SpringLayoutHelper;
 
 /**
  * Configuration panel containing settings for the Christmas season.

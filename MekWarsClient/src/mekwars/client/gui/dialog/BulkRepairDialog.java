@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -40,13 +40,14 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mech;
@@ -221,11 +222,11 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
                 if (unitRepairType == BulkRepairDialog.UNIT_TYPE_ALL) {
                     for (CUnit repairUnit : mwclient.getPlayer().getHangar()) {
                         if (((repairUnit.getType() == Unit.MEK) || (repairUnit.getType() == Unit.VEHICLE)) && (UnitUtils.hasArmorDamage(unit) || UnitUtils.hasCriticalDamage(unit) || UnitUtils.hasISDamage(unit))) {
-                            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c simplerepair#" + repairUnit.getId() + sb.toString());
+                            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c simplerepair#" + repairUnit.getId() + sb.toString());
                         }
                     }
                 }else {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c simplerepair#" + playerUnit.getId() + sb.toString());
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c simplerepair#" + playerUnit.getId() + sb.toString());
                 }
             } else if (isSalvage()) {
                 mwclient.getSMT().removeAllWorkOrders(unit.getExternalId());

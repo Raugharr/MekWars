@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -24,13 +24,13 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import common.House;
-import common.Unit;
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SmallPlayer;
-import server.util.StringUtil;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SmallPlayer;
+import mekwars.server.util.StringUtil;
 
 
 public class Statistics {

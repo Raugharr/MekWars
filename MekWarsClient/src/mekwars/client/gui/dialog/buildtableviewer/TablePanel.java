@@ -14,7 +14,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  */
-package client.gui.dialog.buildtableviewer;
+package mekwars.client.gui.dialog.buildtableviewer;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -32,11 +32,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import client.MWClient;
-import client.gui.MWUnitDisplay;
-import common.House;
-import common.Unit;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.client.gui.MWUnitDisplay;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
 import megamek.common.MechFileParser;

@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import java.awt.Dimension;
 
@@ -24,7 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import common.VerticalLayout;
+import mekwars.common.VerticalLayout;
 
 public class PayoutModPanel extends JPanel {
 

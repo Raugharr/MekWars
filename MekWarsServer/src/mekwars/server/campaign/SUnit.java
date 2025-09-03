@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,17 +28,17 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.CampaignData;
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.operations.Operation;
-import common.campaign.pilot.skills.PilotSkill;
-import common.campaign.targetsystems.TargetSystem;
-import common.campaign.targetsystems.TargetTypeNotImplementedException;
-import common.campaign.targetsystems.TargetTypeOutOfBoundsException;
-import common.util.MWLogger;
-import common.util.TokenReader;
-import common.util.UnitUtils;
+import mekwars.common.CampaignData;
+import mekwars.common.MegaMekPilotOption;
+import mekwars.common.Unit;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.campaign.targetsystems.TargetSystem;
+import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
+import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
+import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.AmmoType.Munitions;
 import megamek.common.BattleArmor;
@@ -61,12 +61,12 @@ import megamek.common.options.PilotOptions;
 import megamek.common.enums.Gender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import server.campaign.pilot.SPilot;
-import server.campaign.pilot.SPilotSkills;
-import server.campaign.pilot.skills.SPilotSkill;
-import server.campaign.pilot.skills.TraitSkill;
-import server.campaign.pilot.skills.WeaponSpecialistSkill;
-import server.campaign.util.SerializedMessage;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.pilot.SPilotSkills;
+import mekwars.server.campaign.pilot.skills.SPilotSkill;
+import mekwars.server.campaign.pilot.skills.TraitSkill;
+import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
+import mekwars.server.campaign.util.SerializedMessage;
 
 /**
  * A class representing an MM.Net Entity

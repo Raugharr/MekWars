@@ -25,7 +25,7 @@
  * 
  */
 
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,8 +33,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import common.util.MWLogger;
-import common.util.ThreadManager;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.ThreadManager;
 
 /**
  * The keeper of the Socket on the server side. Spawns a thread for reading from

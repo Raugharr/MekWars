@@ -1,17 +1,17 @@
-package server.campaign.operations.newopmanager;
+package mekwars.server.campaign.operations.newopmanager;
 
 import java.util.TreeMap;
 
-import common.campaign.operations.ModifyingOperation;
-import common.campaign.operations.Operation;
-import server.campaign.operations.LongOperation;
-import server.campaign.operations.OperationLoader;
-import server.campaign.operations.OperationWriter;
-import server.campaign.operations.OpsDisconnectionThread;
-import server.campaign.operations.OpsScrapThread;
-import server.campaign.operations.ShortOperation;
-import server.campaign.operations.ShortResolver;
-import server.campaign.operations.ShortValidator;
+import mekwars.common.campaign.operations.ModifyingOperation;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.server.campaign.operations.LongOperation;
+import mekwars.server.campaign.operations.OperationLoader;
+import mekwars.server.campaign.operations.OperationWriter;
+import mekwars.server.campaign.operations.OpsDisconnectionThread;
+import mekwars.server.campaign.operations.OpsScrapThread;
+import mekwars.server.campaign.operations.ShortOperation;
+import mekwars.server.campaign.operations.ShortResolver;
+import mekwars.server.campaign.operations.ShortValidator;
 
 public abstract class AbstractOperationManager {
 

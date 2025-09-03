@@ -25,7 +25,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
 import java.util.ArrayList;
 import java.util.Iterator;

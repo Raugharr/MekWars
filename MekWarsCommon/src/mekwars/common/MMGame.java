@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package common;
+package mekwars.common;
 
 //A Class Holding a Game Object might need some more information
 //@Author Helge Richter (McWizard@gmx.de)

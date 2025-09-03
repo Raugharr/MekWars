@@ -14,12 +14,12 @@
  * for more details.
  */
 
-package server.dataProvider;
+package mekwars.server.dataProvider;
 
 import java.util.Date;
 
-import common.CampaignData;
-import common.util.BinWriter;
+import mekwars.common.CampaignData;
+import mekwars.common.util.BinWriter;
 
 
 

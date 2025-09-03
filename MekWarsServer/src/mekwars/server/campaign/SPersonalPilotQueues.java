@@ -18,18 +18,18 @@
  * Created:       03/25/05
  * Last refactor: 01/12/06
  */
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.util.TokenReader;
-import server.campaign.pilot.SPilot;
-import server.campaign.util.SerializedMessage;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.TokenReader;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.util.SerializedMessage;
 
 /**
  * @author Torren (Jason Tighe) Server-side holder of Personal Pilot Queue information. The queue is a collection of pilots, managed by a player, which may be moved between eligible units (restricted by type and weightclass).

@@ -13,12 +13,12 @@
 /*
  * Created on 18.04.2004
  */
-package server.campaign.pilot.skills;
+package mekwars.server.campaign.pilot.skills;
 
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
 import megamek.common.Entity;
-import server.campaign.pilot.SPilot;
+import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * Base class for all skill implementations. Overide this if you want to create

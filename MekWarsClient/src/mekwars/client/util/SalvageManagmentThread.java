@@ -15,18 +15,18 @@
  */
 
 
-package client.util;
+package mekwars.client.util;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.MWLogger;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Mech;
 import megamek.common.Mounted;

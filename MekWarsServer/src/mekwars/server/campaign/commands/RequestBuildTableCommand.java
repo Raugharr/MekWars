@@ -15,7 +15,7 @@
 	 */
 
 	
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 
 
 public class RequestBuildTableCommand implements Command {

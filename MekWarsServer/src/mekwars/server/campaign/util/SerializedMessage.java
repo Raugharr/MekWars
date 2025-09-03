@@ -1,4 +1,4 @@
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
 public class SerializedMessage {
 	private final String delimiter;

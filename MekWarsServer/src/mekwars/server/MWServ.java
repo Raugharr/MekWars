@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server;
+package mekwars.server;
 
 //The MegaMek.NET Master Server Application
 //@Author: Helge Richter (McWizard@gmx.de)
@@ -40,18 +40,18 @@ import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
 
-import common.MMGame;
-import common.comm.Command;
-import common.comm.ServerCommand;
-import common.util.MWLogger;
-import server.MWChatServer.MWChatClient;
-import server.MWChatServer.MWChatServer;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.DefaultServerOptions;
-import server.campaign.SPlayer;
-import server.util.IpCountry;
-import server.util.TrackerThread;
+import mekwars.common.MMGame;
+import mekwars.common.comm.Command;
+import mekwars.common.comm.ServerCommand;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.MWChatServer;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.DefaultServerOptions;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.util.IpCountry;
+import mekwars.server.util.TrackerThread;
 import megamek.Version;
 
 public class MWServ {
@@ -125,7 +125,7 @@ public class MWServ {
 		mails = checkAndCreateConfig("./data/mails.txt");
 		MWLogger.mainLog("Mail file loaded.");
 		MWLogger.mainLog("Creating new campaign environment...");
-		campaign = new server.campaign.CampaignMain(this);
+		campaign = new CampaignMain(this);
 		MWLogger.mainLog("Environment created.");
 
 		// Touch log files
@@ -778,7 +778,7 @@ public class MWServ {
 		return users;
 	}
 
-	public server.campaign.CampaignMain getCampaign() {
+	public CampaignMain getCampaign() {
 		return campaign;
 	}
 

@@ -18,17 +18,17 @@
  * Created:       03/25/05
  * Last refactor: 01/12/06
  */
-package client.campaign;
+package mekwars.client.campaign;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.MWLogger;
-import common.util.TokenReader;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
 
 /**
  * @author Torren (Jason Tighe)

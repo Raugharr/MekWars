@@ -18,17 +18,17 @@
  * Created on 08.22.2007
  *  
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.Unit;
+import mekwars.common.Unit;
 import megamek.common.VTOL;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 /**
  * @author Jason Tighe

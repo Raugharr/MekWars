@@ -10,7 +10,7 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -55,26 +55,27 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import client.MWClient;
-import client.campaign.CArmy;
-import client.campaign.CBMUnit;
-import client.campaign.CPlayer;
-import client.campaign.CUnit;
-import client.gui.dialog.AdvancedRepairDialog;
-import client.gui.dialog.BulkRepairDialog;
-import client.gui.dialog.CamoSelectionDialog;
-import client.gui.dialog.CustomUnitDialog;
-import client.gui.dialog.PromotePilotDialog;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CArmy;
+import mekwars.client.campaign.CBMUnit;
+import mekwars.client.campaign.CPlayer;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.dialog.AdvancedRepairDialog;
+import mekwars.client.gui.dialog.BulkRepairDialog;
+import mekwars.client.gui.dialog.CamoSelectionDialog;
+import mekwars.client.gui.dialog.CustomUnitDialog;
+import mekwars.client.gui.dialog.PromotePilotDialog;
 //@Salient
-import client.gui.dialog.SolFreeBuildDialog;
-//import client.gui.dialog.TableViewerDialog; //for testing/debug
-import common.Army;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.TokenReader;
-import common.util.UnitUtils;
+import mekwars.client.gui.dialog.SolFreeBuildDialog;
+//import mekwars.client.gui.dialog.TableViewerDialog; //for testing/debug
+import mekwars.common.Army;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.TokenReader;
+import mekwars.common.util.UnitUtils;
 import megamek.client.ui.swing.tileset.MechTileset;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
@@ -279,13 +280,13 @@ public class CHQPanel extends JPanel {
 
         for (CArmy currA : mwclient.getPlayer().getArmies()) {
             if (!currA.isPlayerLocked()) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c removearmy#" + currA.getID());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c removearmy#" + currA.getID());
             }
         }
     }// end btnRemoveAllArmiesActionPerformed
 
     private void newbieResetUnitsButtonActionPerformed(ActionEvent evt) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c request#resetunits");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c request#resetunits");
     }
 
     private void repairAllUnitsButtonActionPerformed(ActionEvent evt) {
@@ -301,7 +302,7 @@ public class CHQPanel extends JPanel {
             if (result == JOptionPane.YES_OPTION) {
                 for (CUnit unit : mwclient.getPlayer().getHangar()) {
                     if (!UnitUtils.hasAllAmmo(unit.getEntity())) {
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RELOADALLAMMO#" + unit.getId());
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RELOADALLAMMO#" + unit.getId());
                     }
                 }
 
@@ -311,7 +312,7 @@ public class CHQPanel extends JPanel {
     };
 
     private void btnAddLanceActionPerformed(ActionEvent evt) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c cra#" + mwclient.getConfigParam("DEFAULTARMYNAME"));
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c cra#" + mwclient.getConfigParam("DEFAULTARMYNAME"));
     }
 
     private void setCamoButtonActionPerformed(ActionEvent evt) {
@@ -533,7 +534,7 @@ public class CHQPanel extends JPanel {
 
                     // if the unit is from an army, remove it
                     if (startArmy != null) {
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c EXM#" + startArmy.getID() + "," + dragUnit.getId());
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + startArmy.getID() + "," + dragUnit.getId());
                     }
 
                 }// end if(release over hangar)
@@ -546,9 +547,9 @@ public class CHQPanel extends JPanel {
 
                         // army # or empty space. add the unit.
                         if (exchangeUnit == null) {
-                            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c EXM#" + currArmy.getID() + ",-1" + "#" + dragUnit.getId());
+                            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + currArmy.getID() + ",-1" + "#" + dragUnit.getId());
                         } else if (dragUnit.getId() != exchangeUnit.getId()) {
-                            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c EXM#" + currArmy.getID() + "," + exchangeUnit.getId() + "#" + dragUnit.getId());
+                            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + currArmy.getID() + "," + exchangeUnit.getId() + "#" + dragUnit.getId());
                         }
                     }
 
@@ -561,7 +562,7 @@ public class CHQPanel extends JPanel {
                             }
                             newpos++;
                         }
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c unitposition#" + startArmy.getID() + "#" + dragUnit.getId() + "#" + newpos);
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c unitposition#" + startArmy.getID() + "#" + dragUnit.getId() + "#" + newpos);
                     }
 
                 }// end else(target army exists)
@@ -2074,15 +2075,15 @@ public class CHQPanel extends JPanel {
                 int lid = Integer.parseInt(st.nextToken());
                 int mid = Integer.parseInt(st.nextToken());
                 int hid = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c EXM#" + lid + "," + mid + "#" + hid);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + lid + "," + mid + "#" + hid);
                 // move to hanger
             } else if (command.equalsIgnoreCase("MH")) {
                 int lid = Integer.parseInt(st.nextToken());
                 int mid = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c EXM#" + lid + "," + mid);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + lid + "," + mid);
                 // add lance
             } else if (command.equalsIgnoreCase("AA")) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c cra#" + mwclient.getConfigParam("DEFAULTARMYNAME"));
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c cra#" + mwclient.getConfigParam("DEFAULTARMYNAME"));
                 // set lance active
             } else if (command.equalsIgnoreCase("SA")) {
                 // int lid = Integer.parseInt(st.nextToken());
@@ -2115,7 +2116,7 @@ public class CHQPanel extends JPanel {
                 }
 
                 String attackName = (String) attackCombo.getSelectedItem();
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c checkarmyeligibility#" + armyID + "#" + attackName);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c checkarmyeligibility#" + armyID + "#" + attackName);
                 // Remove Army
             } else if (command.equalsIgnoreCase("RA")) {
                 int lid = Integer.parseInt(st.nextToken());
@@ -2150,7 +2151,7 @@ public class CHQPanel extends JPanel {
                 // showtofaction - army
             } else if (command.equalsIgnoreCase("SATH")) {
                 int lid = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c sth#a#" + lid);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c sth#a#" + lid);
                 // make public challenge
             } else if (command.equalsIgnoreCase("MPC")) {
 
@@ -2568,7 +2569,7 @@ public class CHQPanel extends JPanel {
                 // showtofaction - unit
             } else if (command.equalsIgnoreCase("SUTH")) {
                 int mid = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c sth#u#" + mid);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c sth#u#" + mid);
                 // rename pilot
             } else if (command.equalsIgnoreCase("RP")) {
                 int mid = Integer.parseInt(st.nextToken());
@@ -2584,7 +2585,7 @@ public class CHQPanel extends JPanel {
                 // retire pilot
             } else if (command.equalsIgnoreCase("RT")) {
                 int mid = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c retirepilot#" + mid);// send
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c retirepilot#" + mid);// send
                 // directly
                 // show mek
             } else if (command.equalsIgnoreCase("SM")) {
@@ -2647,7 +2648,7 @@ public class CHQPanel extends JPanel {
                 int col = Integer.parseInt(st.nextToken());
                 CUnit mek = MekTable.getMekAt(row, col);
 
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c DisplayUnitRepairJobs#" + mek.getId());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c DisplayUnitRepairJobs#" + mek.getId());
             }// Display Pending Work Orders
             else if (command.equalsIgnoreCase("DPWO")) {
                 int row = Integer.parseInt(st.nextToken());
@@ -2678,7 +2679,7 @@ public class CHQPanel extends JPanel {
                 CUnit mek = MekTable.getMekAt(row, col);
                 int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to reload all the ammo on this unit " + mwclient.getPlayer().getName() + "?", "Reload it?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RELOADALLAMMO#" + mek.getId());
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RELOADALLAMMO#" + mek.getId());
                 }
             }
             // Estimate Unit Repairs
@@ -2723,7 +2724,7 @@ public class CHQPanel extends JPanel {
                 // check all armies for the selected unit
                 for (CArmy currA : mwclient.getPlayer().getArmies()) {
                     if (currA.getUnit(mid) != null) {
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c EXM#" + currA.getID() + "," + mid);
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + currA.getID() + "," + mid);
                     }
                 }
 
@@ -2734,7 +2735,7 @@ public class CHQPanel extends JPanel {
                 // repod mek
             } else if (command.equalsIgnoreCase("RM")) {
                 int mid = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c repod#" + mid);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod#" + mid);
                 // add to bm
             } else if (command.equalsIgnoreCase("AB")) {
                 int mid = Integer.parseInt(st.nextToken());
@@ -2745,7 +2746,7 @@ public class CHQPanel extends JPanel {
                 TreeMap<Integer, CBMUnit> marketUnits = mwclient.getCampaign().getBlackMarket();
                 for (CBMUnit currU : marketUnits.values()) {
                     if (currU.getUnitID() == mid) {
-                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c recall#" + currU.getAuctionID());
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c recall#" + currU.getAuctionID());
                         break;
                     }
                 }
@@ -2758,24 +2759,24 @@ public class CHQPanel extends JPanel {
                 int num = Integer.parseInt(st.nextToken());
                 int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to scrap this unit?", "Scrap it?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c scrap#" + num);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c scrap#" + num);
                     // Maintain Mek
                 }
             //@Salient for SOL freebuild option
             } else if (command.equalsIgnoreCase("DL")) {
                 int num = Integer.parseInt(st.nextToken());
                 //int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to Remove this unit?", "Delete it?", JOptionPane.YES_NO_OPTION);
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLDELETEUNIT " + num);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SOLDELETEUNIT " + num);
             } else if (command.equalsIgnoreCase("MM")) {
                 int num = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setmaintained#" + num);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setmaintained#" + num);
                 mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
                 // unmaintain mek
             } else if (command.equalsIgnoreCase("UMM")) {
                 int num = Integer.parseInt(st.nextToken());
                 int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to stop maintaining this unit?", "Unmaintain?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setunmaintained#" + num);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setunmaintained#" + num);
                 }
                 mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
                 // donate mek
@@ -2783,33 +2784,33 @@ public class CHQPanel extends JPanel {
                 int mid = Integer.parseInt(st.nextToken());
                 int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to donate this unit?", "Donate?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c donate#" + mid);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c donate#" + mid);
                     // buy mek
                 }
             } else if (command.equalsIgnoreCase("LCN")) {
                 int lid = Integer.parseInt(st.nextToken());
                 int mid = Integer.parseInt(st.nextToken());
                 int hid = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c linkunit#" + lid + "#" + mid + "#" + hid);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c linkunit#" + lid + "#" + mid + "#" + hid);
             } else if (command.equalsIgnoreCase("EAE")) {
                 int row = Integer.parseInt(st.nextToken());
                 int col = Integer.parseInt(st.nextToken());
                 CUnit mek = MekTable.getMekAt(row, col);
                 Mech mech = (Mech) mek.getEntity();
                 mech.setAutoEject(true);
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setautoeject#" + mech.getExternalId() + "#" + true);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setautoeject#" + mech.getExternalId() + "#" + true);
             } else if (command.equalsIgnoreCase("DAE")) {
                 int row = Integer.parseInt(st.nextToken());
                 int col = Integer.parseInt(st.nextToken());
                 CUnit mek = MekTable.getMekAt(row, col);
                 Mech mech = (Mech) mek.getEntity();
                 mech.setAutoEject(false);
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setautoeject#" + mech.getExternalId() + "#" + false);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setautoeject#" + mech.getExternalId() + "#" + false);
                 // exchange pilot
             } else if (command.equalsIgnoreCase("EXP")) {
                 int uid = Integer.parseInt(st.nextToken());
                 int pid = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c EXP#" + uid + "#" + pid);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXP#" + uid + "#" + pid);
             } else if (command.equalsIgnoreCase("FET")) {// fire excess techs
                 mwclient.getMainFrame().jMenuCommanderFireTechs_actionPerformed();
             } else if (command.equalsIgnoreCase("SEB")) {// sell excess bays
@@ -2818,7 +2819,7 @@ public class CHQPanel extends JPanel {
                 int armyid = Integer.parseInt(st.nextToken());
                 int unitid = Integer.parseInt(st.nextToken());
                 int newpos = Integer.parseInt(st.nextToken());
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c unitposition#" + armyid + "#" + unitid + "#" + newpos);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c unitposition#" + armyid + "#" + unitid + "#" + newpos);
             } else if (command.equals("PHQS")) {// primary HQ sort
                 mwclient.getConfig().setParam("PRIMARYHQSORTORDER", st.nextToken());
                 mwclient.getConfig().saveConfig();
@@ -2848,14 +2849,14 @@ public class CHQPanel extends JPanel {
                 int col = Integer.parseInt(st.nextToken());
                 String armyId = st.nextToken();
                 CUnit mek = MekTable.getMekAt(row, col);
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setunitcommander#" + mek.getId() + "#" + armyId + "#false");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setunitcommander#" + mek.getId() + "#" + armyId + "#false");
                 // exchange pilot
             } else if (command.equalsIgnoreCase("SETUNITCOMMANDER")) {
                 int row = Integer.parseInt(st.nextToken());
                 int col = Integer.parseInt(st.nextToken());
                 String armyId = st.nextToken();
                 CUnit mek = MekTable.getMekAt(row, col);
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setunitcommander#" + mek.getId() + "#" + armyId + "#true");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setunitcommander#" + mek.getId() + "#" + armyId + "#true");
                 // exchange pilot
             }
 

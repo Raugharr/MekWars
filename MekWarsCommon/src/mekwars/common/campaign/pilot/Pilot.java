@@ -19,15 +19,15 @@
  * Created on 24.03.2004
  *
  */
-package common.campaign.pilot;
+package mekwars.common.campaign.pilot;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-import common.MegaMekPilotOption;
-import common.campaign.pilot.skills.PilotSkill;
-import common.campaign.pilot.skills.PilotSkills;
+import mekwars.common.MegaMekPilotOption;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.campaign.pilot.skills.PilotSkills;
 
 
 /**

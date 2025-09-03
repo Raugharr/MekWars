@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.util.StringTokenizer;
 
@@ -27,9 +27,9 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 
-import client.MWClient;
-import common.Planet;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.common.Planet;
+import mekwars.common.util.MWLogger;
 
 class MMNetHyperLinkListener implements HyperlinkListener {
 	

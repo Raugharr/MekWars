@@ -13,7 +13,7 @@
  * details.
  */
 
-package admin;
+package mekwars.admin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,28 +32,29 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import admin.dialog.BannedAmmoDialog;
-import admin.dialog.BannedTargetingDialog;
-import admin.dialog.CommandNameDialog;
-import admin.dialog.ComponentDisplayDialog;
-import admin.dialog.FactionConfigurationDialog;
-import admin.dialog.FactionToFactionRewardPointMultiplierDialog;
-import admin.dialog.PlanetEditorDialog;
-import admin.dialog.ServerConfigurationDialog;
-import admin.dialog.SubFactionConfigurationDialog;
-import admin.dialog.playerFlags.DefaultPlayerFlagListDialog;
-import client.MWClient;
-import client.gui.dialog.HouseNameDialog;
-import client.gui.dialog.NewUnitViewerDialog;
-import client.gui.dialog.PlanetNameDialog;
-import client.gui.dialog.SubFactionNameDialog;
-import client.gui.dialog.TraitDialog;
-import common.CampaignData;
-import common.Planet;
-import common.Terrain;
-import common.Unit;
-import common.UnitFactory;
-import common.util.MWLogger;
+import mekwars.admin.dialog.BannedAmmoDialog;
+import mekwars.admin.dialog.BannedTargetingDialog;
+import mekwars.admin.dialog.CommandNameDialog;
+import mekwars.admin.dialog.ComponentDisplayDialog;
+import mekwars.admin.dialog.FactionConfigurationDialog;
+import mekwars.admin.dialog.FactionToFactionRewardPointMultiplierDialog;
+import mekwars.admin.dialog.PlanetEditorDialog;
+import mekwars.admin.dialog.ServerConfigurationDialog;
+import mekwars.admin.dialog.SubFactionConfigurationDialog;
+import mekwars.admin.dialog.playerFlags.DefaultPlayerFlagListDialog;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.dialog.HouseNameDialog;
+import mekwars.client.gui.dialog.NewUnitViewerDialog;
+import mekwars.client.gui.dialog.PlanetNameDialog;
+import mekwars.client.gui.dialog.SubFactionNameDialog;
+import mekwars.client.gui.dialog.TraitDialog;
+import mekwars.common.CampaignData;
+import mekwars.common.Planet;
+import mekwars.common.Terrain;
+import mekwars.common.Unit;
+import mekwars.common.UnitFactory;
+import mekwars.common.util.MWLogger;
 import megamek.client.ui.swing.UnitLoadingDialog;
 import megamek.common.TechConstants;
 
@@ -231,7 +232,7 @@ public class AdminMenu extends JMenu {
                     mwclient.getServerConfigData();
                     // Give the server configs a head start.
                     Thread.sleep(1000);
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c GetFactionConfigs#-1#" + faction);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c GetFactionConfigs#-1#" + faction);
                     mwclient.setWaiting(true);
 
                     while (mwclient.isWaiting()) {
@@ -341,7 +342,7 @@ public class AdminMenu extends JMenu {
         jMenuAdminRemoveOMG.setText("List and Remove OMG Units");
         jMenuAdminRemoveOMG.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminlistandremoveomg");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminlistandremoveomg");
             }
         });
 
@@ -369,7 +370,7 @@ public class AdminMenu extends JMenu {
         jMenuAdminSaveServerConfigs.setText("Save Server Configuration");
         jMenuAdminSaveServerConfigs.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminSaveServerConfigs");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSaveServerConfigs");
                 mwclient.reloadData();
             }
         });
@@ -377,7 +378,7 @@ public class AdminMenu extends JMenu {
         jMenuAdminSaveCommandLevels.setText("Save Command Levels");
         jMenuAdminSaveCommandLevels.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminSaveCommandLevels");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSaveCommandLevels");
             }
         });
 
@@ -412,7 +413,7 @@ public class AdminMenu extends JMenu {
         jMenuAdminSetPlanetVacuum.setText("Set Planet Vacuum");
         jMenuAdminSetPlanetVacuum.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminSetPlanetVacuum");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSetPlanetVacuum");
                 mwclient.reloadData();
             }
         });
@@ -835,7 +836,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c admincreateplanet#" + planetName + "#" + xcord + "#" + ycord + "#");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admincreateplanet#" + planetName + "#" + xcord + "#" + ycord + "#");
         mwclient.reloadData();
         int id = CampaignData.cd.getPlanetByName(planetName).getId();
         new PlanetEditorDialog(mwclient, planetName, id);
@@ -852,7 +853,7 @@ public class AdminMenu extends JMenu {
         if ((planetNamestr == null) || (planetNamestr.length() == 0)) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c admindestroyplanet#" + planetNamestr);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admindestroyplanet#" + planetNamestr);
         mwclient.reloadData();
     }
 
@@ -925,7 +926,7 @@ public class AdminMenu extends JMenu {
         sendCommand.append("#");
         sendCommand.append(factoryAccessLevel);
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c admincreatefactory#" + sendCommand.toString());
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admincreatefactory#" + sendCommand.toString());
         mwclient.reloadData();
 
     }
@@ -972,7 +973,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c admindestroyfactory#" + planetNamestr + "#" + factoryName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admindestroyfactory#" + planetNamestr + "#" + factoryName);
         mwclient.reloadData();
 
     }
@@ -1024,7 +1025,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c admincreateterrain#" + planetNamestr + "#" + terrainType + "#" + terrainChance);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admincreateterrain#" + planetNamestr + "#" + terrainType + "#" + terrainChance);
         mwclient.reloadData();
 
     }
@@ -1046,7 +1047,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c admindestroyterrain#" + planetNamestr + "#" + terrainType);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admindestroyterrain#" + planetNamestr + "#" + terrainType);
         mwclient.reloadData();
 
     }
@@ -1070,7 +1071,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminchangeplanetowner#" + planetNamestr + "#" + newOwner);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminchangeplanetowner#" + planetNamestr + "#" + newOwner);
         mwclient.reloadData();
 
     }
@@ -1091,7 +1092,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c GrantTechPoints#" + factionName + "#" + points);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c GrantTechPoints#" + factionName + "#" + points);
 
     }
 
@@ -1100,7 +1101,7 @@ public class AdminMenu extends JMenu {
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminterminateall");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminterminateall");
     }
 
     public void jMenuAdminSetHouseFluFile_actionPerformed(ActionEvent e) {
@@ -1120,7 +1121,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsethouseflufile#" + factionName + "#" + fluFilePrefix);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethouseflufile#" + factionName + "#" + fluFilePrefix);
     }
 
     public void jMenuAdminGrantComponents_actionPerformed(ActionEvent e) {
@@ -1153,7 +1154,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c admingrantcomponents#" + factionName + "#" + Typestr + "#" + Sizestr + "#" + components);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admingrantcomponents#" + factionName + "#" + Typestr + "#" + Sizestr + "#" + components);
     }
 
     public void jMenuAdminExchangePlanetOwnership_actionPerformed(ActionEvent e) {
@@ -1190,7 +1191,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminexchangeplanetownership#" + planetName + "#" + winningHouseName + "#" + losingHouseName + "#" + amount);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminexchangeplanetownership#" + planetName + "#" + winningHouseName + "#" + losingHouseName + "#" + amount);
     }
 
     public void jMenuAdminSetHousePriceMod_actionPerformed(ActionEvent e) {
@@ -1224,7 +1225,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsethousepricemod#" + factionName + "#" + unitTypestr + "#" + unitClassstr + "#" + priceMod);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethousepricemod#" + factionName + "#" + unitTypestr + "#" + unitClassstr + "#" + priceMod);
     }
 
     public void jMenuAdminSetHouseFluMod_actionPerformed(ActionEvent e) {
@@ -1258,7 +1259,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsethouseflumod#" + factionName + "#" + unitTypestr + "#" + unitClassstr + "#" + fluMod);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethouseflumod#" + factionName + "#" + unitTypestr + "#" + unitClassstr + "#" + fluMod);
     }
 
     public void jMenuAdminSetHouseTechLevel_actionPerformed(ActionEvent e) {
@@ -1286,19 +1287,19 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsethousetechlevel#" + factionName + "#" + techCombo.getSelectedIndex());
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethousetechlevel#" + factionName + "#" + techCombo.getSelectedIndex());
     }
 
     public void jMenuAdminSaveTheUniverse_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsave");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsave");
     }
 
     public void jMenuAdminSaveBlackMaketSettings_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsaveblackmarketconfigs");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsaveblackmarketconfigs");
     }
 
     public void jMenuAdminSavePlanetsToXML_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsaveplanetstoxml");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsaveplanetstoxml");
     }
 
     public void jMenuAdminOmniVariantMod_actionPerformed(ActionEvent e) {
@@ -1317,15 +1318,15 @@ public class AdminMenu extends JMenu {
     }
 
     public void jMenuAdminListMuls_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c listMuls");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c listMuls");
     }
 
     public void jMenuAdminRetrieveMul_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c listMuls#SMFD");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c listMuls#SMFD");
     }
 
     public void jMenuAdminRetrieveAllMuls_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RetrieveAllMuls");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RetrieveAllMuls");
     }
 
     public void jMenuAdminUploadMul_actionPerformed(ActionEvent e) {
@@ -1343,7 +1344,7 @@ public class AdminMenu extends JMenu {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             StringBuilder line = new StringBuilder();
-            line.append(MWClient.CAMPAIGN_PREFIX + "UploadMul ");
+            line.append(GameHost.CAMPAIGN_PREFIX + "UploadMul ");
             line.append(file.getName());
             try {
                 FileInputStream in = new FileInputStream(file);
@@ -1367,11 +1368,11 @@ public class AdminMenu extends JMenu {
     }
 
     public void jMenuAdminRequestBuildTable_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "AdminRequestBuildTable list");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "AdminRequestBuildTable list");
     }
 
     public void jMenuAdminPruneBuildTable_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "AdminRequestBuildTable prune");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "AdminRequestBuildTable prune");
     }
 
     public void jMenuAdminUploadBuildTable_actionPerformed(ActionEvent e) {
@@ -1383,7 +1384,7 @@ public class AdminMenu extends JMenu {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             StringBuilder line = new StringBuilder();
-            line.append(MWClient.CAMPAIGN_PREFIX + "AdminUploadBuildTable ");
+            line.append(GameHost.CAMPAIGN_PREFIX + "AdminUploadBuildTable ");
             String path = file.getPath();
             if (path.contains("rare")) {
                 path = "rare/" + file.getName();
@@ -1469,7 +1470,7 @@ public class AdminMenu extends JMenu {
         sendCommand.append("#");
         sendCommand.append(piloting);
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c sethousebasepilotskills#" + sendCommand.toString());
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c sethousebasepilotskills#" + sendCommand.toString());
     }
 
     public void jMenuAdminSetCommandLevel_actionPerformed(ActionEvent e) {
@@ -1489,7 +1490,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetCommandLevel#" + commandNamestr + "#" + level);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetCommandLevel#" + commandNamestr + "#" + level);
     }
 
     public void jMenuAdminLockFactory_actionPerformed(ActionEvent e) {
@@ -1526,7 +1527,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminlockfactory#" + planetNamestr + "#" + factoryName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminlockfactory#" + planetNamestr + "#" + factoryName);
         mwclient.reloadData();
 
     }
@@ -1553,7 +1554,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetplanetmapsize#" + planetNamestr + "#" + xSize + "#" + ySize);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetplanetmapsize#" + planetNamestr + "#" + xSize + "#" + ySize);
         mwclient.reloadData();
     }
 
@@ -1578,7 +1579,7 @@ public class AdminMenu extends JMenu {
             homeworld = true;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsethomeworld#" + planetNamestr + "#" + homeworld);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethomeworld#" + planetNamestr + "#" + homeworld);
         mwclient.reloadData();
 
     }
@@ -1605,7 +1606,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetplanetboardsize#" + planetNamestr + "#" + xSize + "#" + ySize);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetplanetboardsize#" + planetNamestr + "#" + xSize + "#" + ySize);
         mwclient.reloadData();
     }
 
@@ -1629,7 +1630,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetplanetoriginalowner#" + planetNamestr + "#" + owner);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetplanetoriginalowner#" + planetNamestr + "#" + owner);
         mwclient.reloadData();
     }
 
@@ -1655,7 +1656,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetplanettemperature#" + planetNamestr + "#" + lowTemp + "#" + hiTemp);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetplanettemperature#" + planetNamestr + "#" + lowTemp + "#" + hiTemp);
         mwclient.reloadData();
     }
 
@@ -1675,7 +1676,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsetplanetgravity#" + planetNamestr + "#" + grav);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetplanetgravity#" + planetNamestr + "#" + grav);
         mwclient.reloadData();
     }
 
@@ -1686,7 +1687,7 @@ public class AdminMenu extends JMenu {
         commandDialog.dispose();
 
         if (commandNamestr != null) {
-            String input = MWClient.CAMPAIGN_PREFIX + commandNamestr;
+            String input = GameHost.CAMPAIGN_PREFIX + commandNamestr;
             mwclient.getMainFrame().getMainPanel().getCommPanel().setInput(input);
             mwclient.getMainFrame().getMainPanel().getCommPanel().focusInputField();
         }
@@ -1700,15 +1701,15 @@ public class AdminMenu extends JMenu {
     }
 
     public void jMenuAdminCreateMulArmy_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "listmuls CAFM");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "listmuls CAFM");
     }
 
 	private void jMenuAdminReloadSupportUnits_actionPerformed(ActionEvent e) {
-		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "adminReloadSupportUnits");
+		mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "adminReloadSupportUnits");
 	}
 
 	private void jMenuAdminReloadSanitizer_actionPerformed(ActionEvent e) {
-		mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "adminReloadHTMLSanitizerConfigs");
+		mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "adminReloadHTMLSanitizerConfigs");
 	}
 
 }// end AdminMenu class

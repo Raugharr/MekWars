@@ -18,7 +18,7 @@
  * Created on 21.04.2004
  *
  */
-package server.campaign.pilot;
+package mekwars.server.campaign.pilot;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,21 +29,21 @@ import java.io.InputStreamReader;
 import java.util.Random;
 import java.util.StringTokenizer;
 
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.MWLogger;
-import common.util.TokenReader;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
 import megamek.common.Infantry;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.pilot.skills.AstechSkill;
-import server.campaign.pilot.skills.EdgeSkill;
-import server.campaign.pilot.skills.SPilotSkill;
-import server.campaign.pilot.skills.TraitSkill;
-import server.campaign.pilot.skills.WeaponSpecialistSkill;
-import server.campaign.util.SerializedMessage;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.pilot.skills.AstechSkill;
+import mekwars.server.campaign.pilot.skills.EdgeSkill;
+import mekwars.server.campaign.pilot.skills.SPilotSkill;
+import mekwars.server.campaign.pilot.skills.TraitSkill;
+import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
+import mekwars.server.campaign.util.SerializedMessage;
 
 /**
  * @author Helge Richter

@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -60,7 +60,7 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 public class MyImageView extends View implements ImageObserver, MouseListener, MouseMotionListener {
 	

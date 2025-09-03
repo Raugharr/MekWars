@@ -14,20 +14,20 @@
  * for more details.
  */
 
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
-import common.House;
-import common.Planet;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
-import server.campaign.util.HouseRankingHelpContainer;
-import server.campaign.util.Statistics;
+import mekwars.common.House;
+import mekwars.common.Planet;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.Command;
+import mekwars.server.campaign.util.HouseRankingHelpContainer;
+import mekwars.server.campaign.util.Statistics;
 
 public class AdminCalculateHouseRankingsCommand implements Command {
 	

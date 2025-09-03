@@ -15,16 +15,16 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.votes.Vote;
-import server.campaign.votes.VoteManager;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.votes.Vote;
+import mekwars.server.campaign.votes.VoteManager;
 
 
 

@@ -1,4 +1,4 @@
-package admin.dialog.playerFlags;
+package mekwars.admin.dialog.playerFlags;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -22,9 +22,10 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-import client.MWClient;
-import common.VerticalLayout;
-import common.flags.PlayerFlags;
+import mekwars.client.MWClient;
+import mekwars.common.VerticalLayout;
+import mekwars.common.flags.PlayerFlags;
+import mekwars.client.common.campaign.clientutils.GameHost;
 
 public class DefaultPlayerFlagListDialog extends JDialog implements ActionListener {
 
@@ -142,7 +143,7 @@ public class DefaultPlayerFlagListDialog extends JDialog implements ActionListen
 			this.dispose();
 		} else if (command.equalsIgnoreCase("Save")) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(MWClient.CAMPAIGN_PREFIX + "c adminUpdateDefaultPlayerFlags#");
+			sb.append(GameHost.CAMPAIGN_PREFIX + "c adminUpdateDefaultPlayerFlags#");
 			if (deletedFlags.size() > 0) {
 				for (String s : deletedFlags) {
 					sb.append("D#" + s + "#");

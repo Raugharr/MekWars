@@ -13,7 +13,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  */
-package admin;
+package mekwars.admin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,12 +24,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import client.MWClient;
-import client.gui.dialog.NewUnitViewerDialog;
-import client.gui.dialog.PlanetNameDialog;
-import client.gui.dialog.PlayerNameDialog;
-import common.UnitFactory;
+import mekwars.client.MWClient;
+import mekwars.client.gui.dialog.NewUnitViewerDialog;
+import mekwars.client.gui.dialog.PlanetNameDialog;
+import mekwars.client.gui.dialog.PlayerNameDialog;
+import mekwars.common.UnitFactory;
 import megamek.client.ui.swing.UnitLoadingDialog;
+import mekwars.client.common.campaign.clientutils.GameHost;
 
 public class ModeratorMenu extends JMenu {
 
@@ -39,29 +40,29 @@ public class ModeratorMenu extends JMenu {
     private static final long serialVersionUID = 1L;
 
     // moderator menu components
-    JMenuItem jMenuModCheck = new JMenuItem();
-    JMenuItem jMenuModGames = new JMenuItem();
-    JMenuItem jMenuModGetModLog = new JMenuItem();
-    JMenuItem jMenuModGrantEXP = new JMenuItem();
-    JMenuItem jMenuModGrantInfluence = new JMenuItem();
-    JMenuItem jMenuModGrantMoney = new JMenuItem();
-    JMenuItem jMenuModGrantReward = new JMenuItem();
-    JMenuItem jMenuModListCommands = new JMenuItem();
-    JMenuItem jMenuModListMultiPlayerGroups = new JMenuItem();
-    JMenuItem jMenuModTerminate = new JMenuItem();
-    JMenuItem jMenuModDeactivate = new JMenuItem();
-    JMenuItem jMenuModLog = new JMenuItem();
-    JMenuItem jMenuModNoPlay = new JMenuItem();
-    JMenuItem jMenuModSetElo = new JMenuItem();
-    JMenuItem jMenuModSetPricemod = new JMenuItem();
-    JMenuItem jMenuModTerminateContract = new JMenuItem();
-    JMenuItem jMenuModTouch = new JMenuItem();
-    JMenuItem jMenuModUnlockLances = new JMenuItem();
-    JMenuItem jMenuModCreateUnit = new JMenuItem();
-    JMenuItem jMenuModRefreshFactory = new JMenuItem();
-    JMenuItem jMenuModUpdateServerUnitsCache = new JMenuItem();
+    private JMenuItem jMenuModCheck = new JMenuItem();
+    private JMenuItem jMenuModGames = new JMenuItem();
+    private JMenuItem jMenuModGetModLog = new JMenuItem();
+    private JMenuItem jMenuModGrantEXP = new JMenuItem();
+    private JMenuItem jMenuModGrantInfluence = new JMenuItem();
+    private JMenuItem jMenuModGrantMoney = new JMenuItem();
+    private JMenuItem jMenuModGrantReward = new JMenuItem();
+    private JMenuItem jMenuModListCommands = new JMenuItem();
+    private JMenuItem jMenuModListMultiPlayerGroups = new JMenuItem();
+    private JMenuItem jMenuModTerminate = new JMenuItem();
+    private JMenuItem jMenuModDeactivate = new JMenuItem();
+    private JMenuItem jMenuModLog = new JMenuItem();
+    private JMenuItem jMenuModNoPlay = new JMenuItem();
+    private JMenuItem jMenuModSetElo = new JMenuItem();
+    private JMenuItem jMenuModSetPricemod = new JMenuItem();
+    private JMenuItem jMenuModTerminateContract = new JMenuItem();
+    private JMenuItem jMenuModTouch = new JMenuItem();
+    private JMenuItem jMenuModUnlockLances = new JMenuItem();
+    private JMenuItem jMenuModCreateUnit = new JMenuItem();
+    private JMenuItem jMenuModRefreshFactory = new JMenuItem();
+    private JMenuItem jMenuModUpdateServerUnitsCache = new JMenuItem();
 
-    MWClient mwclient;
+    private MWClient mwclient;
 
     private int userLevel = 0;
 
@@ -223,7 +224,7 @@ public class ModeratorMenu extends JMenu {
         jMenuModUpdateServerUnitsCache.setText("Update Server Units Cache");
         jMenuModUpdateServerUnitsCache.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c UpdateServerUnitsCache");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c UpdateServerUnitsCache");
             }
         });
 
@@ -357,11 +358,11 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c check#" + name);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c check#" + name);
     }
 
     public void jMenuModGames_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c modgames");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c modgames");
     }
 
     public void jMenuModCheckVersion_actionPerformed(ActionEvent e) {
@@ -372,11 +373,11 @@ public class ModeratorMenu extends JMenu {
         if ((name == null) || (name.length() == 0)) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c checkversion#" + name);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c checkversion#" + name);
     }
 
     public void jMenuModGetModLog_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c getmodlog");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getmodlog");
     }
 
     public void jMenuModGrantEXP_actionPerformed(ActionEvent e, String player) {
@@ -399,7 +400,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c grantexp#" + name + "#" + exp);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c grantexp#" + name + "#" + exp);
     }
 
     public void jMenuModGrantMoney_actionPerformed(ActionEvent e, String player) {
@@ -422,7 +423,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c grantmoney#" + name + "#" + exp);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c grantmoney#" + name + "#" + exp);
     }
 
     public void jMenuModGrantInfluence_actionPerformed(ActionEvent e, String player) {
@@ -444,7 +445,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c grantinfluence#" + name + "#" + exp);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c grantinfluence#" + name + "#" + exp);
     }
 
     public void jMenuModGrantReward_actionPerformed(ActionEvent e, String player) {
@@ -463,7 +464,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c grantreward#" + name + "#" + exp);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c grantreward#" + name + "#" + exp);
     }
 
     public void jMenuModListCommands_actionPerformed(ActionEvent e) {
@@ -471,11 +472,11 @@ public class ModeratorMenu extends JMenu {
         if (name == null) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c listcommands#" + name);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c listcommands#" + name);
     }
 
     public void jMenuModListMultiPlayerGroups_actionPerformed(ActionEvent e) {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c listmultiplayergroups");
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c listmultiplayergroups");
     }
 
     public void jMenuModTerminate_actionPerformed(ActionEvent e) {
@@ -483,7 +484,7 @@ public class ModeratorMenu extends JMenu {
         if ((id == null) || (id.length() == 0)) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c modterminate#" + id);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c modterminate#" + id);
     }
 
     public void jMenuModDeactivate_actionPerformed(ActionEvent e) {
@@ -495,7 +496,7 @@ public class ModeratorMenu extends JMenu {
         if ((name == null) || (name.length() == 0)) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c moddeactivate#" + name);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c moddeactivate#" + name);
     }
 
     public void jMenuModLog_actionPerformed(ActionEvent e) {
@@ -503,7 +504,7 @@ public class ModeratorMenu extends JMenu {
         if ((name == null) || (name.length() == 0)) {
             return;
         }
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c modlog#" + name);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c modlog#" + name);
     }
 
     public void jMenuModNoPlay_actionPerformed(ActionEvent e) {
@@ -527,7 +528,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c modnoplay#" + mode + "#" + name + "#" + offender);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c modnoplay#" + mode + "#" + name + "#" + offender);
     }
 
     public void jMenuModSetElo_actionPerformed(ActionEvent e) {
@@ -545,7 +546,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setelo#" + name + "#" + elo);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setelo#" + name + "#" + elo);
     }
 
     public void jMenuModSetPricemod_actionPerformed(ActionEvent e) {
@@ -563,7 +564,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setpricemod#" + name + "#" + elo);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setpricemod#" + name + "#" + elo);
     }
 
     public void jMenuModTerminateContract_actionPerformed(ActionEvent e) {
@@ -576,7 +577,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c terminatecontract#" + name);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c terminatecontract#" + name);
     }
 
     public void jMenuModTouch_actionPerformed(ActionEvent e) {
@@ -589,7 +590,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c touch#" + name);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c touch#" + name);
     }
 
     public void jMenuModUnlockLances_actionPerformed(ActionEvent e) {
@@ -602,7 +603,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c unlocklances#" + name);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c unlocklances#" + name);
     }
 
     public void jMenuModCreateUnit_actionPerformed(ActionEvent e) {
@@ -644,7 +645,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c modrefreshFactory#" + planetNamestr + "#" + combo.getSelectedItem().toString());
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c modrefreshFactory#" + planetNamestr + "#" + combo.getSelectedItem().toString());
     }
 
 }// end AdminMenu class

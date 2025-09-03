@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package common;
+package mekwars.common;
 
 import java.util.Collection;
 

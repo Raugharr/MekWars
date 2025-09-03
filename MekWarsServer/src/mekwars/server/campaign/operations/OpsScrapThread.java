@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 import java.util.TreeMap;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.util.StringUtil;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.util.StringUtil;
 
 public class OpsScrapThread extends Thread {
 

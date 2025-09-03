@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package common;
+package mekwars.common;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import common.util.BinReader;
-import common.util.BinWriter;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
 
 
 /**

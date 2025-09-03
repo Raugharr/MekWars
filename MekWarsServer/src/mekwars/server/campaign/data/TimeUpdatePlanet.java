@@ -14,13 +14,13 @@
  * for more details.
  */
 
-package server.campaign.data;
+package mekwars.server.campaign.data;
 
 import java.util.Date;
 
-import common.Influences;
-import common.Planet;
-import common.util.Position;
+import mekwars.common.Influences;
+import mekwars.common.Planet;
+import mekwars.common.util.Position;
 
 
 

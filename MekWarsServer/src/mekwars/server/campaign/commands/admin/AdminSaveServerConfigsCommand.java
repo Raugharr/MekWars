@@ -18,14 +18,14 @@
  * 
  * Command Saves the server config to its defined file
  */
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.DefaultServerOptions;
-import server.campaign.commands.Command;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.DefaultServerOptions;
+import mekwars.server.campaign.commands.Command;
 
 public class AdminSaveServerConfigsCommand implements Command {
 	

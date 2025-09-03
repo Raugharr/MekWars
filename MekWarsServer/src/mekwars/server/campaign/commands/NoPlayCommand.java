@@ -14,14 +14,14 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.File;
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.util.ExclusionList;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.util.ExclusionList;
 
 public class NoPlayCommand implements Command {
 

@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package dedicatedhost;
+package mekwars.dedicatedhost;
 
 import java.awt.Dimension;
 import java.io.BufferedOutputStream;
@@ -41,37 +41,35 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.GameInterface;
-import common.GameWrapper;
-import common.MMGame;
-import common.campaign.Buildings;
-import common.campaign.clientutils.GameHost;
-import common.campaign.clientutils.IGameHost;
-import common.campaign.clientutils.SerializeEntity;
-import common.campaign.clientutils.protocol.CConnector;
-import common.campaign.clientutils.protocol.IClient;
-import common.campaign.clientutils.protocol.commands.AckSignonPCmd;
-import common.campaign.clientutils.protocol.commands.CommPCmd;
-import common.campaign.clientutils.protocol.commands.IProtCommand;
-import common.campaign.clientutils.protocol.commands.PingPCmd;
-import common.campaign.clientutils.protocol.commands.PongPCmd;
-import common.util.MWLogger;
-import common.util.UnitUtils;
-import dedicatedhost.cmd.Command;
-import dedicatedhost.protocol.DataFetchClient;
+import mekwars.dedicatedhost.cmd.Command;
 import megamek.MMConstants;
 import megamek.common.Entity;
 import megamek.common.Game;
 import megamek.common.Mech;
 import megamek.common.MechWarrior;
-import megamek.common.IGame;
 import megamek.common.enums.GamePhase;
 import megamek.common.event.GameCFREvent;
 import megamek.common.options.IOption;
 import megamek.common.preference.ClientPreferences;
 import megamek.common.preference.PreferenceManager;
-import megamek.server.Server;
 import megamek.server.GameManager;
+import megamek.server.Server;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
+import mekwars.client.common.campaign.clientutils.protocol.IClient;
+import mekwars.client.common.campaign.clientutils.protocol.commands.AckSignonPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
+import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
+import mekwars.dedicatedhost.protocol.DataFetchClient;
+import mekwars.common.GameInterface;
+import mekwars.common.GameWrapper;
+import mekwars.common.MMGame;
+import mekwars.common.campaign.Buildings;
+import mekwars.common.campaign.clientutils.SerializeEntity;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 
 
 // This is the Client used for connecting to the master server.

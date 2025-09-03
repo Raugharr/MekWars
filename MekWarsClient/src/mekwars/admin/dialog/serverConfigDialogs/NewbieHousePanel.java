@@ -9,7 +9,7 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import java.awt.GridLayout;
 import java.util.HashMap;
@@ -20,8 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import common.Unit;
-import common.VerticalLayout;
+import mekwars.common.Unit;
+import mekwars.common.VerticalLayout;
 
 /**
  * @author Spork

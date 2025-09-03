@@ -12,16 +12,16 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.campaign.pilot.skills;
+package mekwars.server.campaign.pilot.skills;
 
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.MegaMekPilotOption;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
 import megamek.common.Entity;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.pilot.SPilot;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.pilot.SPilot;
 
 public class PainShunt extends SPilotSkill {
 
