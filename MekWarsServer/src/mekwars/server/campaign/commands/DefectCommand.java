@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -23,22 +23,22 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
-import common.Planet;
-import common.UnitFactory;
-import common.util.MWLogger;
-import common.util.UnitUtils;
+import mekwars.common.Planet;
+import mekwars.common.UnitFactory;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 import megamek.Version;
 import megamek.common.TechConstants;
-import server.campaign.BuildTable;
-import server.campaign.CampaignMain;
-import server.campaign.NewbieHouse;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.SUnitFactory;
-import server.campaign.util.HouseRankingHelpContainer;
-import server.util.MWPasswd;
+import mekwars.server.campaign.BuildTable;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.NewbieHouse;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.SUnitFactory;
+import mekwars.server.campaign.util.HouseRankingHelpContainer;
+import mekwars.server.util.MWPasswd;
 
 public class DefectCommand implements Command {
 

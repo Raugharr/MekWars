@@ -14,10 +14,10 @@
  * for more details.
  */
 
-package server.campaign.pilot.skills;
+package mekwars.server.campaign.pilot.skills;
 
-import common.MegaMekPilotOption;
-import common.campaign.pilot.Pilot;
+import mekwars.common.MegaMekPilotOption;
+import mekwars.common.campaign.pilot.Pilot;
 import megamek.common.Entity;
 
 /**

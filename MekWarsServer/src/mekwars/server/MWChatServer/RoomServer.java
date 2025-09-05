@@ -26,13 +26,13 @@
  * 
  */
 
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import server.MWChatServer.auth.IAuthenticator;
-import server.MWChatServer.commands.ICommands;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWChatServer.commands.ICommands;
 
 /**
  * RoomServer.  This represents a room in the system, and is sort of a little server of

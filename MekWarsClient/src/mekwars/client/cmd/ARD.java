@@ -15,12 +15,12 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import client.gui.dialog.AdvancedRepairDialog;
+import mekwars.client.MWClient;
+import mekwars.client.gui.dialog.AdvancedRepairDialog;
 
 /**
  * @@author Torren (Jason Tighe)

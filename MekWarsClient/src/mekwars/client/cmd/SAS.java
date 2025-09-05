@@ -15,9 +15,9 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
-import client.MWClient;
+import mekwars.client.MWClient;
 
 /**
  * @@author jtighe

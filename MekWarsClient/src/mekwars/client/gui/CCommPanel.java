@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -61,9 +61,11 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLEditorKit;
 
-import client.MWClient;
-import common.util.MWLogger;
-import common.util.StringUtils;
+import mekwars.client.MWClient;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.client.common.campaign.clientutils.GameHost;
+
 
 /**
  * This is a tabbed multi-channet Communications Panel using Swing to manage the
@@ -1574,6 +1576,6 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
         StringTokenizer commands = new StringTokenizer(command, ";");
 
         while (commands.hasMoreTokens())
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c " + commands.nextToken());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c " + commands.nextToken());
     }
 }

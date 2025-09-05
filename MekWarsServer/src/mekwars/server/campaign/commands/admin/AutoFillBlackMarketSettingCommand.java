@@ -19,13 +19,13 @@
  * for max/min cost and production.
  *
  */
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import common.Equipment;
-import common.util.UnitUtils;
+import mekwars.common.Equipment;
+import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
@@ -33,9 +33,9 @@ import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.TechConstants;
 import megamek.common.equipment.ArmorType;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.Command;
 
 public class AutoFillBlackMarketSettingCommand implements Command {
 

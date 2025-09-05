@@ -18,14 +18,14 @@
  * Created on 10.05.2005
  *  
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 /**
  * @author Torren (Jason Tighe)

@@ -14,7 +14,7 @@
 	 * for more details.
 	 */
 
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 public class OperationReportEntry {
 

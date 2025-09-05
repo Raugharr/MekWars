@@ -25,11 +25,11 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package server.MWChatServer.commands;
+package mekwars.server.MWChatServer.commands;
 
-import server.MWChatServer.MWChatClient;
-import server.MWChatServer.MWChatServer;
-import server.MWChatServer.Translator;
+import mekwars.server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.MWChatServer;
+import mekwars.server.MWChatServer.Translator;
 
 
 public class UnknownCommand extends CommandBase {

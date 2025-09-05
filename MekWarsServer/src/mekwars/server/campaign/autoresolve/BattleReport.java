@@ -1,4 +1,4 @@
-package server.campaign.autoresolve;
+package mekwars.server.campaign.autoresolve;
 
 public class BattleReport {
 

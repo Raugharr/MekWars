@@ -1,4 +1,4 @@
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -40,9 +40,10 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
-import client.MWClient;
-import common.util.MWLogger;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.client.ui.swing.AdvancedSearchDialog;
 import megamek.client.ui.swing.MechViewPanel;
@@ -795,7 +796,7 @@ import megamek.common.loaders.EntityLoadingException;
                             return;
                         }
 
-                        client.sendChat(MWClient.CAMPAIGN_PREFIX + "c AddOmniVariantMod#" + unit + "#" + moneyMod + "$" + compMod + "$" + fluMod);
+                        client.sendChat(GameHost.CAMPAIGN_PREFIX + "c AddOmniVariantMod#" + unit + "#" + moneyMod + "$" + compMod + "$" + fluMod);
 
                         dispose();
                     } catch (Exception ex) {
@@ -847,7 +848,7 @@ import megamek.common.loaders.EntityLoadingException;
                             return;
                         }
 
-                        client.sendChat(MWClient.CAMPAIGN_PREFIX + "c createunit#" + unitFile + "#" + fluff + "#" + gunnery + "#" + piloting + "#" + weightClass + "#" + skills);
+                        client.sendChat(GameHost.CAMPAIGN_PREFIX + "c createunit#" + unitFile + "#" + fluff + "#" + gunnery + "#" + piloting + "#" + weightClass + "#" + skills);
 
                         dispose();
                     } catch (Exception ex) {
@@ -863,7 +864,7 @@ import megamek.common.loaders.EntityLoadingException;
                     setVisible(false);
 
                     if ((unitFile != null) && !unitFile.equals("null")) {
-                        client.sendChat(MWClient.CAMPAIGN_PREFIX + "c researchunit#" + unitFile);
+                        client.sendChat(GameHost.CAMPAIGN_PREFIX + "c researchunit#" + unitFile);
                     }
 
                     dispose();

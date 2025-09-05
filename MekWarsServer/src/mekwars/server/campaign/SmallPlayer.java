@@ -25,7 +25,7 @@
  */
 
 //imports
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.math.BigDecimal;
 

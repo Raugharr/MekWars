@@ -10,23 +10,23 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.Unit;
-import common.campaign.pilot.skills.PilotSkill;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;       //Baruk Khazad! 20150929
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.pilot.SPilot;
-import server.campaign.pilot.SPilotSkills;
-import server.campaign.pilot.skills.AstechSkill;
-import server.campaign.pilot.skills.EdgeSkill;
-import server.campaign.pilot.skills.SPilotSkill;
-import server.campaign.pilot.skills.TraitSkill;
-import server.campaign.pilot.skills.WeaponSpecialistSkill;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;       //Baruk Khazad! 20150929
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.pilot.SPilot;
+import mekwars.server.campaign.pilot.SPilotSkills;
+import mekwars.server.campaign.pilot.skills.AstechSkill;
+import mekwars.server.campaign.pilot.skills.EdgeSkill;
+import mekwars.server.campaign.pilot.skills.SPilotSkill;
+import mekwars.server.campaign.pilot.skills.TraitSkill;
+import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
 
 public class PromotePilotCommand implements Command {
 

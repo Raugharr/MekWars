@@ -14,14 +14,14 @@
  * for more details.
  */
 
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
 import java.io.File;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import server.campaign.CampaignMain;
+import mekwars.server.campaign.CampaignMain;
 
 /**
  * @author urgru

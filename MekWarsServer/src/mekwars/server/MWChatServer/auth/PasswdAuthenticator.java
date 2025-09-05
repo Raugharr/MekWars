@@ -30,15 +30,15 @@
  * 
  */
 
-package server.MWChatServer.auth;
+package mekwars.server.MWChatServer.auth;
 
 import java.io.IOException;
 
-import common.util.MWLogger;
-import server.MWChatServer.MWChatClient;
-import server.MWChatServer.MWChatServer;
-import server.util.MWPasswd;
-import server.util.MWPasswdRecord;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.MWChatServer;
+import mekwars.server.util.MWPasswd;
+import mekwars.server.util.MWPasswdRecord;
 
 /**
  * Authenitcator that reads from a password file.<p>

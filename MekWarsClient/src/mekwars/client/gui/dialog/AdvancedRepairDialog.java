@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -51,13 +51,14 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import common.House;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.House;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.common.AmmoType;
 import megamek.common.AmmoType.Munitions;
@@ -338,7 +339,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                             JMenuItem info = new JMenuItem("Enable AutoEject");
                             info.addActionListener(new ActionListener() {
                                 public void actionPerformed(ActionEvent e) {
-                                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setautoeject#" + unit.getExternalId() + "#true");
+                                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setautoeject#" + unit.getExternalId() + "#true");
                                     ((Mech) unit).setAutoEject(true);
                                 }
                             });
@@ -347,7 +348,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                             JMenuItem info = new JMenuItem("Disable AutoEject");
                             info.addActionListener(new ActionListener() {
                                 public void actionPerformed(ActionEvent e) {
-                                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setautoeject#" + unit.getExternalId() + "#false");
+                                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setautoeject#" + unit.getExternalId() + "#false");
                                     ((Mech) unit).setAutoEject(false);
                                 }
                             });
@@ -484,7 +485,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
                                 info.addActionListener(new ActionListener() {
                                     public void actionPerformed(ActionEvent e) {
-                                        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setunitammobycrit#" + unit.getExternalId() + "#" + critLocation + "#" + critSlot + "#" + e.getActionCommand());
+                                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setunitammobycrit#" + unit.getExternalId() + "#" + critLocation + "#" + critSlot + "#" + e.getActionCommand());
                                     }
                                 });
                                 info.setActionCommand(atCheck.getAmmoType() + "#" + atCheck.getInternalName() + "#" + atCheck.getRackSize());

@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,8 +23,8 @@ import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import common.Unit;
-import common.util.MWLogger;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;

@@ -1,4 +1,4 @@
-package server.campaign.util.scheduler;
+package mekwars.server.campaign.util.scheduler;
 
 import java.util.Date;
 

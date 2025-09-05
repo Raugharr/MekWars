@@ -1,4 +1,4 @@
-package server.campaign.votes;
+package mekwars.server.campaign.votes;
 
 public class Vote {
 	

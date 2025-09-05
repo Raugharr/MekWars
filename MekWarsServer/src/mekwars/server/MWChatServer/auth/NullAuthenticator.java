@@ -30,10 +30,10 @@
  * 
  */
 
-package server.MWChatServer.auth;
+package mekwars.server.MWChatServer.auth;
 
-import server.MWChatServer.MWChatClient;
-import server.MWChatServer.MWChatServer;
+import mekwars.server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.MWChatServer;
 
 /**
  * Authenitcator that authenticates everybody

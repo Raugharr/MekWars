@@ -14,13 +14,13 @@
  * for more details.
  */
 
-package common.util;
+package mekwars.common.util;
 
-import common.CampaignData;
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.unitdamage.UnitDamageHandlerFactory;
+import mekwars.common.CampaignData;
+import mekwars.common.MegaMekPilotOption;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.unitdamage.UnitDamageHandlerFactory;
 import java.util.EnumSet;
 import java.util.Iterator;
 import megamek.client.generator.RandomGenderGenerator;

@@ -15,13 +15,13 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import client.gui.dialog.RepodSelectorDialog;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.client.gui.dialog.RepodSelectorDialog;
+import mekwars.common.util.MWLogger;
 import megamek.client.ui.swing.UnitLoadingDialog;
 
 /**

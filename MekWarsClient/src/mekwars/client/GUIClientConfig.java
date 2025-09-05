@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client;
+package mekwars.client;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,8 +33,8 @@ import java.util.TreeMap;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-import common.campaign.clientutils.IClientConfig;
-import common.util.MWLogger;
+import mekwars.common.campaign.clientutils.IClientConfig;
+import mekwars.common.util.MWLogger;
 
 
 /**

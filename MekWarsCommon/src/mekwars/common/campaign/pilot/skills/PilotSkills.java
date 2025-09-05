@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package common.campaign.pilot.skills;
+package mekwars.common.campaign.pilot.skills;
 
 import java.util.Iterator;
 import java.util.LinkedList;

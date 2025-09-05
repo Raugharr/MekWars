@@ -1,13 +1,13 @@
-package server.campaign.autoresolve;
+package mekwars.server.campaign.autoresolve;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import common.util.GameReport;
-import common.Unit;
-import common.campaign.operations.Operation;
+import mekwars.common.util.GameReport;
+import mekwars.common.Unit;
+import mekwars.common.campaign.operations.Operation;
 import megamek.common.Coords;
 import megamek.common.Entity;
 import megamek.common.Game;
@@ -21,12 +21,12 @@ import megamek.common.util.BoardUtilities;
 import megamek.common.weapons.Weapon;
 import megamek.server.Server;
 import megamek.server.GameManager;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.autoresolve.VirtualUnit.MovementMode;
-import server.campaign.operations.ShortOperation;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.autoresolve.VirtualUnit.MovementMode;
+import mekwars.server.campaign.operations.ShortOperation;
 
 public class BattleResolver {
     

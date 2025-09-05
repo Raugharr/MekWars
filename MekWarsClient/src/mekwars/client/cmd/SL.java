@@ -14,12 +14,12 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import common.MMGame;
+import mekwars.client.MWClient;
+import mekwars.common.MMGame;
 
 /**
  * Server list commands. All commands relating to servers

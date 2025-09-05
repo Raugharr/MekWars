@@ -33,16 +33,16 @@
  * - LongOperation.java
  * - ModifiyingOperations.java [userland: Special Ops]
  */
-package common.campaign.operations;
+package mekwars.common.campaign.operations;
 
 //IMPORTS
 import java.util.Properties;
 import java.util.TreeMap;
 
-import common.MWXMLWriter;
-import common.MWXmlSerializable;
-import common.util.MMNetXStream;
-import common.util.MWLogger;
+import mekwars.common.MWXMLWriter;
+import mekwars.common.MWXmlSerializable;
+import mekwars.common.util.MMNetXStream;
+import mekwars.common.util.MWLogger;
 
 public class Operation implements MWXmlSerializable {
 	

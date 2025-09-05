@@ -27,7 +27,7 @@
  * can be found in megamek.common.CustomMechDialog.java in megamek 0.29.59
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -52,14 +52,15 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import common.House;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.House;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.common.Aero;
 import megamek.common.AmmoType;
@@ -704,7 +705,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
             }
 
             // m_mounted.setShotsLeft(totalShots);
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setunitammo#" + entity.getExternalId() + "#" + location + "#" + at.getAmmoType() + "#" + at.getInternalName() + "#" + totalShots + "#" + hotloaded);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setunitammo#" + entity.getExternalId() + "#" + location + "#" + at.getAmmoType() + "#" + at.getInternalName() + "#" + totalShots + "#" + hotloaded);
         }
 
         @Override
@@ -767,7 +768,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
 
         public void applyChoice() {
             if (m_mounted.isRapidfire() != chBurst.isSelected()) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setunitburst#" + entity.getExternalId() + "#" + location + "#" + slot + "#" + chBurst.isSelected());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setunitburst#" + entity.getExternalId() + "#" + location + "#" + slot + "#" + chBurst.isSelected());
             }
         }
 
@@ -814,7 +815,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
 
         public void applyChoice() {
             if (m_mounted.isHotLoaded() != chHotLoad.isSelected()) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setunithotload#" + entity.getExternalId() + "#" + location + "#" + chHotLoad.isSelected());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setunithotload#" + entity.getExternalId() + "#" + location + "#" + chHotLoad.isSelected());
             }
         }
 
@@ -897,10 +898,10 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 Mech mech = (Mech) entity;
                 if (mech.isAutoEject() == autoEject) {
                     mech.setAutoEject(!autoEject);
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setautoeject#" + mech.getExternalId() + "#" + !autoEject);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setautoeject#" + mech.getExternalId() + "#" + !autoEject);
                 }
                 if (pilot.getSkills().has(PilotSkill.EdgeSkillID)) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setedgeSkills#" + mech.getExternalId() + "#" + tacCB.isSelected() + "#" + koCB.isSelected() + "#" + headHitsCB.isSelected() + "#" + explosionsCB.isSelected());
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setedgeSkills#" + mech.getExternalId() + "#" + tacCB.isSelected() + "#" + koCB.isSelected() + "#" + headHitsCB.isSelected() + "#" + explosionsCB.isSelected());
 
                 }
             }
@@ -920,7 +921,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
             MWLogger.errLog("Targeting Selected: " + newTargetSystem);
             if (newTargetSystem != unit.getTargetSystem().getCurrentType()) {
                 // Change in targeting - send server notification
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c setTargetSystem#" + unit.getId() + "#" + newTargetSystem);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setTargetSystem#" + unit.getId() + "#" + newTargetSystem);
             }
         }
 

@@ -13,18 +13,18 @@
 /*
  * Created on 21.05.2004
  */
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.Army;
-import common.Unit;
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
-import common.util.TokenReader;
+import mekwars.common.Army;
+import mekwars.common.Unit;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.TokenReader;
 import megamek.common.Aero;
 import megamek.common.AmmoType;
 import megamek.common.BattleArmor;

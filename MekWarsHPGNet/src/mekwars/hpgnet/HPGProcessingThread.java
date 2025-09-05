@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package hpgnet;
+package mekwars.hpgnet;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

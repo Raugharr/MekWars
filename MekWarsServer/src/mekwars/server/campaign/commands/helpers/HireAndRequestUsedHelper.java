@@ -23,16 +23,16 @@
  * @urgru
  */
 
-package server.campaign.commands.helpers;
+package mekwars.server.campaign.commands.helpers;
 
 //imports
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.commands.BuyBaysCommand;
-import server.campaign.commands.Command;
-import server.campaign.commands.HireTechsCommand;
-import server.campaign.commands.RequestDonatedCommand;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.BuyBaysCommand;
+import mekwars.server.campaign.commands.Command;
+import mekwars.server.campaign.commands.HireTechsCommand;
+import mekwars.server.campaign.commands.RequestDonatedCommand;
 
 public class HireAndRequestUsedHelper implements Command {
 

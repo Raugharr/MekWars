@@ -13,11 +13,11 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.campaign.operations.validation;
+package mekwars.server.campaign.operations.validation;
 
-import common.Unit;
-import server.campaign.SArmy;
-import server.campaign.SUnit;
+import mekwars.common.Unit;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SUnit;
 
 /**
  * @author 	Spork

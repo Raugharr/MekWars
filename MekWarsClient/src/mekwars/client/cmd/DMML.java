@@ -15,15 +15,15 @@
  */
 
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.common.util.MWLogger;
 
 /**
  * @author Torren

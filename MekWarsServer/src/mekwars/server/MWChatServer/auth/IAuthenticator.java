@@ -25,9 +25,9 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package server.MWChatServer.auth;
+package mekwars.server.MWChatServer.auth;
 
-import server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.MWChatClient;
 
 /**
  * Interface for objects that will handle authentication.  The server will delegate signOn

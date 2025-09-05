@@ -18,19 +18,19 @@
  * Created on 10.01.2004
  *  
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.Unit;
-import common.util.StringUtils;
-import common.util.UnitUtils;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.operations.OpsScrapThread;
-import server.campaign.pilot.SPilot;
+import mekwars.common.Unit;
+import mekwars.common.util.StringUtils;
+import mekwars.common.util.UnitUtils;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.operations.OpsScrapThread;
+import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * @author Helge Richter

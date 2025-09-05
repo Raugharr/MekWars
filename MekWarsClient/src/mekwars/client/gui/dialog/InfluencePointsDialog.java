@@ -17,7 +17,7 @@
 
 //@ Salient , copy of RewardPointsDialog
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,13 +40,14 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.House;
-import common.Planet;
-//import common.Unit;
-import common.UnitFactory;
-import common.util.SpringLayoutHelper;
-//import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.House;
+import mekwars.common.Planet;
+//import mekwars.common.Unit;
+import mekwars.common.UnitFactory;
+import mekwars.common.util.SpringLayoutHelper;
+//import mekwars.common.util.UnitUtils;
 
 
 public final class InfluencePointsDialog implements ActionListener, KeyListener{
@@ -421,13 +422,13 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 //                String type = (String)unitComboBox.getSelectedItem();
 //                String weight = (String)weightComboBox.getSelectedItem();
 //                String faction = (String)factionComboBox.getSelectedItem();
-//                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c userewardpoints#2#"+ type + "#" + weight + "#" + faction);
+//                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c userewardpoints#2#"+ type + "#" + weight + "#" + faction);
 //            }
 //            else if ( selection.equals("Techs")){
 //                if ( mwclient.isUsingAdvanceRepairs() )
-//                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c userewardpoints#0#"+ techComboBox.getSelectedIndex());
+//                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c userewardpoints#0#"+ techComboBox.getSelectedIndex());
 //                else
-//                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c userewardpoints#0#"+ amountText.getText());
+//                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c userewardpoints#0#"+ amountText.getText());
 //            }
 //            if ( selection.equals(repodCommand) )
 //            {
@@ -437,7 +438,7 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
 //                if ( ((String)repodComboBox.getSelectedItem()).equals("Random") )
 //                    options +="#RANDOM";
 //                StringTokenizer unitid = new StringTokenizer((String)pUnitsComboBox.getSelectedItem()," ");
-//                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c repod"+unitid.nextToken()+options);
+//                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod"+unitid.nextToken()+options);
 //            }
             if ( selection.equals(refreshCommand) )
             {
@@ -447,20 +448,20 @@ public final class InfluencePointsDialog implements ActionListener, KeyListener{
                 String planet = factoryInfo.substring(0,factoryInfo.indexOf(":")).trim();
                 String factory = factoryInfo.substring(planet.length()+2,factoryInfo.indexOf("(")).trim();
                 String useFlu = "true";
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c refreshFactory#"+planet+"#"+factory+"#"+useFlu);
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c refreshFactory#"+planet+"#"+factory+"#"+useFlu);
             }
 //            else if ( selection.equals(repairCommand)){
 //                String selectionName = (String)repairComboBox.getSelectedItem();
-//                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c userewardpoints#3#"+selectionName.trim().substring(0,selectionName.indexOf(" ")));
+//                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c userewardpoints#3#"+selectionName.trim().substring(0,selectionName.indexOf(" ")));
 //            }
             // @Author Salient (mwosux@gmail.com) , Add RP for CBills
             else if ( selection.equals(mwclient.getServerConfigs("MoneyLongName")) )
             {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c useinfluence#4#"+ amountText.getText());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c useinfluence#4#"+ amountText.getText());
             }
             else
             {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "mail "+mwclient.getUsername()+ "No Influence Spent. Options are disabled on this server.");
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+mwclient.getUsername()+ "No Influence Spent. Options are disabled on this server.");
             }
 
             dialog.dispose();

@@ -15,13 +15,13 @@
  * for more details.
  */
 
-package client.campaign;
+package mekwars.client.campaign;
 
 import java.util.StringTokenizer;
 
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.util.TokenReader;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.TokenReader;
 import megamek.client.generator.RandomGenderGenerator;
 import megamek.common.CrewType;
 

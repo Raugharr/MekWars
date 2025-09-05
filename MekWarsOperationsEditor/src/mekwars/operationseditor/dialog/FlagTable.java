@@ -1,4 +1,4 @@
-package OperationsEditor.dialog;
+package mekwars.operationseditor.dialog;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -17,9 +17,9 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import common.flags.FlagSet;
-import common.flags.PlayerFlags;
-import common.flags.ResultsFlags;
+import mekwars.common.flags.FlagSet;
+import mekwars.common.flags.PlayerFlags;
+import mekwars.common.flags.ResultsFlags;
 
 public class FlagTable extends JTable implements ActionListener {
 

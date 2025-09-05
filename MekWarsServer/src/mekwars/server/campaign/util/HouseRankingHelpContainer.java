@@ -14,8 +14,8 @@
  * for more details.
  */
 
-package server.campaign.util;
-import server.campaign.SHouse;
+package mekwars.server.campaign.util;
+import mekwars.server.campaign.SHouse;
 
 public class HouseRankingHelpContainer implements Comparable<Object>
 

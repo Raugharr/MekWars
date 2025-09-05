@@ -18,19 +18,19 @@
  * Created on 18.04.2004
  *
  */
-package server.campaign.pilot.skills;
+package mekwars.server.campaign.pilot.skills;
 
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.Pilot;
+import mekwars.common.MegaMekPilotOption;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
 import megamek.common.Crew;
 import megamek.common.Entity;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
 import megamek.common.battlevalue.BVCalculator;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.pilot.SPilot;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * NOTE: This is a unofficial rule. Pilot gets a -1 to-hit bonus on all

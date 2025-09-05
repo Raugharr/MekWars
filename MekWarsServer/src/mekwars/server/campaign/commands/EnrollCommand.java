@@ -14,19 +14,19 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 
 import java.net.InetAddress;
 import java.util.StringTokenizer;
 
-import common.House;
-import common.util.MWLogger;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.NewbieHouse;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
+import mekwars.common.House;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.NewbieHouse;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
 
 public class EnrollCommand implements Command {
 

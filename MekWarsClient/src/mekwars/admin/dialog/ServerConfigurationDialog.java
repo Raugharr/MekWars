@@ -16,7 +16,7 @@
  * Server Configuration Page. All new Server Options need to be added to this page or subPanels as well.
  */
 
-package admin.dialog;
+package mekwars.admin.dialog;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -42,47 +42,48 @@ import javax.swing.ToolTipManager;
 
 import org.jdatepicker.impl.JDatePickerImpl;
 
-import admin.dialog.serverConfigDialogs.AdvancedRepairPanel;
-import admin.dialog.serverConfigDialogs.ArtilleryPanel;
-import admin.dialog.serverConfigDialogs.AutoProdPanel;
-import admin.dialog.serverConfigDialogs.BattleValuePanel;
-import admin.dialog.serverConfigDialogs.BlackMarketPanel;
-import admin.dialog.serverConfigDialogs.ChristmasPanel;
-import admin.dialog.serverConfigDialogs.CombatPanel;
-import admin.dialog.serverConfigDialogs.DefectionPanel;
-import admin.dialog.serverConfigDialogs.DirectSellPanel;
-import admin.dialog.serverConfigDialogs.DisconnectionPanel;
-import admin.dialog.serverConfigDialogs.DiscordAndDjangoPanel;
-import admin.dialog.serverConfigDialogs.FactionPanel;
-import admin.dialog.serverConfigDialogs.FactoryPurchasePanel;
-import admin.dialog.serverConfigDialogs.FreebuildPanel;
-import admin.dialog.serverConfigDialogs.InfluencePanel;
-import admin.dialog.serverConfigDialogs.LinksPanel;
-import admin.dialog.serverConfigDialogs.LossCompensationPanel;
-import admin.dialog.serverConfigDialogs.MiniCampaignPanel;
-import admin.dialog.serverConfigDialogs.MiscOptionsPanel;
-import admin.dialog.serverConfigDialogs.NewbieHousePanel;
-import admin.dialog.serverConfigDialogs.NoPlayPanel;
-import admin.dialog.serverConfigDialogs.PathsPanel;
-import admin.dialog.serverConfigDialogs.PayoutModPanel;
-import admin.dialog.serverConfigDialogs.PilotSkillsCardPanel;
-import admin.dialog.serverConfigDialogs.PilotSkillsPanel;
-import admin.dialog.serverConfigDialogs.PilotsPanel;
-import admin.dialog.serverConfigDialogs.ProductionPanel;
-import admin.dialog.serverConfigDialogs.RepodPanel;
-import admin.dialog.serverConfigDialogs.RewardPanel;
-import admin.dialog.serverConfigDialogs.SchedulerPanel;
-import admin.dialog.serverConfigDialogs.SinglePlayerFactionPanel;
-import admin.dialog.serverConfigDialogs.TechnicianPanel;
-import admin.dialog.serverConfigDialogs.TechnologyResearchPanel;
-import admin.dialog.serverConfigDialogs.TrackerPanel;
-import admin.dialog.serverConfigDialogs.UnitLimitsPanel;
-import admin.dialog.serverConfigDialogs.UnitResearchPanel;
-import admin.dialog.serverConfigDialogs.UnitsCardPanel;
-import admin.dialog.serverConfigDialogs.UnitsPanel;
-import admin.dialog.serverConfigDialogs.VotingPanel;
-import client.MWClient;
-import common.util.MWLogger;
+import mekwars.admin.dialog.serverConfigDialogs.AdvancedRepairPanel;
+import mekwars.admin.dialog.serverConfigDialogs.ArtilleryPanel;
+import mekwars.admin.dialog.serverConfigDialogs.AutoProdPanel;
+import mekwars.admin.dialog.serverConfigDialogs.BattleValuePanel;
+import mekwars.admin.dialog.serverConfigDialogs.BlackMarketPanel;
+import mekwars.admin.dialog.serverConfigDialogs.ChristmasPanel;
+import mekwars.admin.dialog.serverConfigDialogs.CombatPanel;
+import mekwars.admin.dialog.serverConfigDialogs.DefectionPanel;
+import mekwars.admin.dialog.serverConfigDialogs.DirectSellPanel;
+import mekwars.admin.dialog.serverConfigDialogs.DisconnectionPanel;
+import mekwars.admin.dialog.serverConfigDialogs.DiscordAndDjangoPanel;
+import mekwars.admin.dialog.serverConfigDialogs.FactionPanel;
+import mekwars.admin.dialog.serverConfigDialogs.FactoryPurchasePanel;
+import mekwars.admin.dialog.serverConfigDialogs.FreebuildPanel;
+import mekwars.admin.dialog.serverConfigDialogs.InfluencePanel;
+import mekwars.admin.dialog.serverConfigDialogs.LinksPanel;
+import mekwars.admin.dialog.serverConfigDialogs.LossCompensationPanel;
+import mekwars.admin.dialog.serverConfigDialogs.MiniCampaignPanel;
+import mekwars.admin.dialog.serverConfigDialogs.MiscOptionsPanel;
+import mekwars.admin.dialog.serverConfigDialogs.NewbieHousePanel;
+import mekwars.admin.dialog.serverConfigDialogs.NoPlayPanel;
+import mekwars.admin.dialog.serverConfigDialogs.PathsPanel;
+import mekwars.admin.dialog.serverConfigDialogs.PayoutModPanel;
+import mekwars.admin.dialog.serverConfigDialogs.PilotSkillsCardPanel;
+import mekwars.admin.dialog.serverConfigDialogs.PilotSkillsPanel;
+import mekwars.admin.dialog.serverConfigDialogs.PilotsPanel;
+import mekwars.admin.dialog.serverConfigDialogs.ProductionPanel;
+import mekwars.admin.dialog.serverConfigDialogs.RepodPanel;
+import mekwars.admin.dialog.serverConfigDialogs.RewardPanel;
+import mekwars.admin.dialog.serverConfigDialogs.SchedulerPanel;
+import mekwars.admin.dialog.serverConfigDialogs.SinglePlayerFactionPanel;
+import mekwars.admin.dialog.serverConfigDialogs.TechnicianPanel;
+import mekwars.admin.dialog.serverConfigDialogs.TechnologyResearchPanel;
+import mekwars.admin.dialog.serverConfigDialogs.TrackerPanel;
+import mekwars.admin.dialog.serverConfigDialogs.UnitLimitsPanel;
+import mekwars.admin.dialog.serverConfigDialogs.UnitResearchPanel;
+import mekwars.admin.dialog.serverConfigDialogs.UnitsCardPanel;
+import mekwars.admin.dialog.serverConfigDialogs.UnitsPanel;
+import mekwars.admin.dialog.serverConfigDialogs.VotingPanel;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.util.MWLogger;
 
 public final class ServerConfigurationDialog implements ActionListener {
 
@@ -262,8 +263,8 @@ public final class ServerConfigurationDialog implements ActionListener {
                 JPanel panel = (JPanel) ConfigPane.getComponent(pos);
                 findAndSaveConfigs(panel);
             }
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminSaveServerConfigs");
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c CampaignConfig");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSaveServerConfigs");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c CampaignConfig");
 
             mwclient.reloadData();
 
@@ -405,7 +406,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
                 // reduce bandwidth only send things that have changed.
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }
             } else if (field instanceof JCheckBox) {
                 JCheckBox checkBox = (JCheckBox) field;
@@ -418,7 +419,7 @@ public final class ServerConfigurationDialog implements ActionListener {
                 }
                 // reduce bandwidth only send things that have changed.
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }
             } else if (field instanceof JRadioButton) {
                 JRadioButton radioButton = (JRadioButton) field;
@@ -431,7 +432,7 @@ public final class ServerConfigurationDialog implements ActionListener {
                 }
                 // reduce bandwidth only send things that have changed.
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }
             } else if (field instanceof JDatePickerImpl) {
                 JDatePickerImpl picker = (JDatePickerImpl) field;
@@ -439,7 +440,7 @@ public final class ServerConfigurationDialog implements ActionListener {
                 key = picker.getName();
                 // reduce bandwidth only send things that have changed.
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
                 }
             } else if (field instanceof JScrollPane) {
                 JScrollPane pane = (JScrollPane) field;
@@ -448,7 +449,7 @@ public final class ServerConfigurationDialog implements ActionListener {
                 key = area.getName();
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
                     String toSend = value.replace('\n', '$');
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + toSend + "#CONFIRM");
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + toSend + "#CONFIRM");
                 }
             } // else continue
         }

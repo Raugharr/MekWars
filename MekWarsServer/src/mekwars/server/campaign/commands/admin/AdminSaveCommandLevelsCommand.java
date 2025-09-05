@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,10 +23,10 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import common.util.MWLogger;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.Command;
 
 
 public class AdminSaveCommandLevelsCommand implements Command {

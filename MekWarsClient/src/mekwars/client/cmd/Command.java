@@ -15,18 +15,18 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 
-import client.MWClient;
+import mekwars.client.MWClient;
 
 /**
  * Base class that all commands have to derrive from.
  *
  * HOWTO ADD A NEW COMMAND
  * -----------------------
- * - Subclass Command. Put your class in package client.cmd
+ * - Subclass Command. Put your class in package mekwars.client.cmd
  * - Name your class like the command in the chat input (e.g. "HS" for faction status)
  * - Provide an constructor with one MMClient argument.
  * - implement execute to do the things you want to be done.

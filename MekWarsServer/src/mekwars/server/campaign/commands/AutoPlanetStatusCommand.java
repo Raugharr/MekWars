@@ -14,14 +14,14 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import common.Planet;
-import server.campaign.CampaignMain;
-import server.campaign.SPlanet;
+import mekwars.common.Planet;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlanet;
 
 public class AutoPlanetStatusCommand implements Command {
 

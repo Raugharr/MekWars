@@ -13,7 +13,7 @@
  * for more details.
  */
 
-package server.campaign;
+package mekwars.server.campaign;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -24,19 +24,19 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.AdvancedTerrain;
-import common.CampaignData;
-import common.Continent;
-import common.House;
-import common.Influences;
-import common.Terrain;
-import common.Unit;
-import common.UnitFactory;
-import common.util.MWLogger;
-import common.util.Position;
-import common.util.TokenReader;
-import server.campaign.data.TimeUpdatePlanet;
-import server.campaign.util.SerializedMessage;
+import mekwars.common.AdvancedTerrain;
+import mekwars.common.CampaignData;
+import mekwars.common.Continent;
+import mekwars.common.House;
+import mekwars.common.Influences;
+import mekwars.common.Terrain;
+import mekwars.common.Unit;
+import mekwars.common.UnitFactory;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.Position;
+import mekwars.common.util.TokenReader;
+import mekwars.server.campaign.data.TimeUpdatePlanet;
+import mekwars.server.campaign.util.SerializedMessage;
 
 public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparable<Object> {
 

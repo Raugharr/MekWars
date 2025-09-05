@@ -15,14 +15,14 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.common.util.MWLogger;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.common.options.Option;

@@ -22,7 +22,7 @@
  * 
  */
 
-package server.util;
+package mekwars.server.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,8 +33,8 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 
 public class AutomaticBackup extends Thread{
 

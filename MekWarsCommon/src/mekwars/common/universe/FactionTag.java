@@ -10,7 +10,7 @@
  * for more details.
  */
 
-package common.universe;
+package mekwars.common.universe;
 
 /*
  * This is intended to be a temporary enum. MegaMek introduces this enum in MegaMek v50.04 and

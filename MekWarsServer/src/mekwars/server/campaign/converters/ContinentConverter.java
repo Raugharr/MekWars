@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.converters;
+package mekwars.server.campaign.converters;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -22,11 +22,11 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import common.AdvancedTerrain;
-import common.Continent;
-import common.Terrain;
+import mekwars.common.AdvancedTerrain;
+import mekwars.common.Continent;
+import mekwars.common.Terrain;
 
-import server.campaign.CampaignMain;
+import mekwars.server.campaign.CampaignMain;
 
 public class ContinentConverter implements Converter {
     public boolean canConvert(Class clazz) {

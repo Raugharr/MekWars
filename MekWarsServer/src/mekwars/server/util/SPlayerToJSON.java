@@ -1,4 +1,4 @@
-package server.util;
+package mekwars.server.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,8 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import common.util.MWLogger;
-import server.campaign.SPlayer;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.SPlayer;
 
 
 //@salient - util class saves SPlayer as simple json file

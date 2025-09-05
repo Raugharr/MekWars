@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package common.util;
+package mekwars.common.util;
 
 import java.io.IOException;
 import java.io.Writer;

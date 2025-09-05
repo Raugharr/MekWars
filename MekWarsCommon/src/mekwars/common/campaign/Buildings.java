@@ -20,7 +20,7 @@
  * 
  */
 
-package common.campaign;
+package mekwars.common.campaign;
 
 import java.util.StringTokenizer;
 

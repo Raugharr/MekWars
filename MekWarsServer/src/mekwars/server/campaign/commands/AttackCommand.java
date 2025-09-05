@@ -11,18 +11,18 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import common.campaign.operations.Operation;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
-import server.campaign.SPlayer;
-import server.campaign.operations.OperationManager;
-import server.campaign.operations.newopmanager.I_OperationManager;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.operations.OperationManager;
+import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 
 /**
  * AttackCommand is used to initiate ShortOperations. Checks the validity of the

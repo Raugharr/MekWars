@@ -31,7 +31,7 @@
  * 
  */
 
-package server.MWChatServer.auth;
+package mekwars.server.MWChatServer.auth;
 
 /**
  * Represents a line in the passwd file.  All fields are public

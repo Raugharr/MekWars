@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package admin.dialog;
+package mekwars.admin.dialog;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -44,16 +44,17 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.AdvancedTerrain;
-import common.CampaignData;
-import common.Continent;
-import common.House;
-import common.Planet;
-import common.Terrain;
-import common.UnitFactory;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.AdvancedTerrain;
+import mekwars.common.CampaignData;
+import mekwars.common.Continent;
+import mekwars.common.House;
+import mekwars.common.Planet;
+import mekwars.common.Terrain;
+import mekwars.common.UnitFactory;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
 import megamek.common.planetaryconditions.Atmosphere;
 import megamek.common.planetaryconditions.PlanetaryConditions;
 
@@ -1108,29 +1109,29 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         }
 
         for (String owner : removedOwners) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminRemovePlanetOwnership#" + planetName + "#" + owner);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminRemovePlanetOwnership#" + planetName + "#" + owner);
         }
     }
 
     private void removeFactories() {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminRemoveAllFactories#" + planetName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminRemoveAllFactories#" + planetName);
     }
 
     private void removeTerrain() {
-        mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminRemoveAllTerrain#" + planetName);
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminRemoveAllTerrain#" + planetName);
     }
 
     private void saveOwners() {
 
         for (String owner : ownersMap.keySet()) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminUpdatePlanetOwnership#" + planetName + "#" + owner + "#" + ownersMap.get(owner));
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminUpdatePlanetOwnership#" + planetName + "#" + owner + "#" + ownersMap.get(owner));
         }
     }
 
     private void saveFactories() {
         for (String factory : factoryMap.keySet()) {
         	String FactoryData = factoryMap.get(factory);
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminCreateFactory#" + planetName + "#" + FactoryData);
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminCreateFactory#" + planetName + "#" + FactoryData);
         }
 
     }
@@ -1139,7 +1140,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         for (String terrainIndex : ContinentMap.keySet()) {
         	Continent terrain = ContinentMap.get(terrainIndex);
         	//TODO fix this to send the advancedterrain as well
-        	mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminCreateTerrain#" + planetName + "#" + terrain.getEnvironment().getName() + "#" + terrain.getAdvancedTerrain().getName()+ "#" + terrain.getSize());
+        	mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminCreateTerrain#" + planetName + "#" + terrain.getEnvironment().getName() + "#" + terrain.getAdvancedTerrain().getName()+ "#" + terrain.getSize());
         }
 
     }
@@ -1151,30 +1152,30 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
     private void saveMisc() {
 
         if (!planetXPosition.getText().equals(Double.toString(selectedPlanet.getPosition().getX())) || !planetYPosition.getText().equals(Double.toString(selectedPlanet.getPosition().getY()))) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminMovePlanet#" + planetName + "#" + planetXPosition.getText() + "#" + planetYPosition.getText());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminMovePlanet#" + planetName + "#" + planetXPosition.getText() + "#" + planetYPosition.getText());
         }
         if (!houseNames.getSelectedItem().toString().equals(selectedPlanet.getOriginalOwner())) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminSetPlanetOriginalOwner#" + planetName + "#" + houseNames.getSelectedItem().toString());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSetPlanetOriginalOwner#" + planetName + "#" + houseNames.getSelectedItem().toString());
         }
         if (!minPlanetOwnerShip.getText().equals(Integer.toString(selectedPlanet.getMinPlanetOwnerShip()))) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c SetPlanetMinOwnerShip#" + planetName + "#" + minPlanetOwnerShip.getText());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c SetPlanetMinOwnerShip#" + planetName + "#" + minPlanetOwnerShip.getText());
         }
         if (!planetConquerPoints.getText().equals(Integer.toString(selectedPlanet.getConquestPoints()))) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c SetPlanetConquerPoints#" + planetName + "#" + planetConquerPoints.getText());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c SetPlanetConquerPoints#" + planetName + "#" + planetConquerPoints.getText());
         }
         if (isHomeWorldCB.isSelected() != selectedPlanet.isHomeWorld()) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c Adminsethomeworld#" + planetName + "#" + isHomeWorldCB.isSelected());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c Adminsethomeworld#" + planetName + "#" + isHomeWorldCB.isSelected());
         }
 
         if (isConquerable.isSelected() != selectedPlanet.isConquerable()) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c SetPlanetConquer#" + planetName + "#" + isConquerable.isSelected());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c SetPlanetConquer#" + planetName + "#" + isConquerable.isSelected());
         }
 
         if (!planetBays.getText().equals(Integer.toString(selectedPlanet.getBaysProvided()))) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c Setplanetwarehouse#" + planetName + "#" + planetBays.getText());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c Setplanetwarehouse#" + planetName + "#" + planetBays.getText());
         }
         if (!planetComps.getText().equals(Integer.toString(selectedPlanet.getCompProduction()))) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c Setplanetcompproduction#" + planetName + "#" + planetComps.getText());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c Setplanetcompproduction#" + planetName + "#" + planetComps.getText());
         }
 
     }

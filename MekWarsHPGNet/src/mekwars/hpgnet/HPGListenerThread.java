@@ -14,14 +14,14 @@
  * for more details.
  */
 
-package hpgnet;
+package mekwars.hpgnet;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 
 /**
  * HPGListenerThread listens for connections from MekWars servers, makes

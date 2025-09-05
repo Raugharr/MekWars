@@ -16,7 +16,7 @@
  * See http://www.sourceforge.net/projects/megameknet for more info.
  */
 
-package admin.dialog;
+package mekwars.admin.dialog;
 
 //awt imports
 import java.awt.Dimension;
@@ -40,8 +40,9 @@ import javax.swing.SpringLayout;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
-import client.MWClient;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.util.SpringLayoutHelper;
 //util imports
 //swing imports
 //mekwars imports
@@ -264,7 +265,7 @@ public class OpFlagSelectionDialog extends JDialog implements ActionListener {
     private void loadOpFlags(){
         client.getData().getPlanetOpFlags().clear();
         
-        client.sendChat(MWClient.CAMPAIGN_PREFIX + "c getserveropflags");
+        client.sendChat(GameHost.CAMPAIGN_PREFIX + "c getserveropflags");
         
         int count = 0;
         while ( client.getData().getPlanetOpFlags().isEmpty() && count < 1000){

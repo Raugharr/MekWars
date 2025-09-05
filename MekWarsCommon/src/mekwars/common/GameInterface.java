@@ -1,4 +1,4 @@
-package common;
+package mekwars.common;
 
 import java.util.Enumeration;
 import java.util.Iterator;

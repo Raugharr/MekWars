@@ -1,13 +1,19 @@
-package common.campaign.clientutils;
+package mekwars.client.common.campaign.clientutils;
 
-import common.CampaignData;
-import common.MMGame;
-import common.campaign.Buildings;
-import common.campaign.clientutils.protocol.CConnector;
-import common.campaign.clientutils.protocol.IClient;
-import common.campaign.clientutils.protocol.TransportCodec;
-import common.campaign.clientutils.protocol.commands.IProtCommand;
-import common.util.MWLogger;
+
+import mekwars.common.CampaignData;
+import mekwars.common.MMGame;
+import mekwars.common.campaign.Buildings;
+import mekwars.common.campaign.clientutils.IClientConfig;
+import mekwars.common.campaign.clientutils.IClientUser;
+import mekwars.common.campaign.clientutils.IGameHost;
+import mekwars.common.campaign.clientutils.SerializeEntity;
+import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
+import mekwars.common.campaign.clientutils.protocol.TransportCodec;
+import mekwars.common.util.MWLogger;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
+import mekwars.client.common.campaign.clientutils.protocol.IClient;
+import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

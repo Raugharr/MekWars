@@ -13,15 +13,15 @@
  * details.
  */
 
-package server.campaign.commands.leader;
+package mekwars.server.campaign.commands.leader;
 
 import java.util.StringTokenizer;
 
-import common.SubFaction;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SPlayer;
-import server.campaign.commands.Command;
+import mekwars.common.SubFaction;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.commands.Command;
 
 public class PromotePlayerCommand implements Command {
 

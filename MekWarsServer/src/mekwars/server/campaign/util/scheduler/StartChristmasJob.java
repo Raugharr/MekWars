@@ -1,4 +1,4 @@
-package server.campaign.util.scheduler;
+package mekwars.server.campaign.util.scheduler;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -13,9 +13,9 @@ import org.quartz.JobExecutionContext;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.util.ChristmasHandler;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.util.ChristmasHandler;
 
 /**
  * Starts the Christmas season

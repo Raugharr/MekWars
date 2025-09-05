@@ -14,16 +14,16 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import common.House;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SmallPlayer;
+import mekwars.common.House;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SmallPlayer;
 
 public class LastOnlineCommand implements Command {
 	

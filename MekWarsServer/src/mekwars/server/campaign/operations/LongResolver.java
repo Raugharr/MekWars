@@ -18,7 +18,7 @@
  * OperationsManager should instantiate one StandardResolver
  * and pass it (Short/Long)Operations as they are completed.
  */
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 //IMPORTS
 

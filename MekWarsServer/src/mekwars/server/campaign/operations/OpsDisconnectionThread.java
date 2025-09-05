@@ -14,13 +14,13 @@
  * for more details.
  */
 
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
-import common.CampaignData;
-import common.campaign.operations.Operation;
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.util.StringUtil;
+import mekwars.common.CampaignData;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.util.StringUtil;
 
 public class OpsDisconnectionThread extends Thread {
 	

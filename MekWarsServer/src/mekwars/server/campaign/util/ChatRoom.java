@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.util;
+package mekwars.server.campaign.util;
 
 import java.util.Vector;
 

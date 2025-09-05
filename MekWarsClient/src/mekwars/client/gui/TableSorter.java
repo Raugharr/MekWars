@@ -1,4 +1,4 @@
-package client.gui;
+package mekwars.client.gui;
 
 /**
  * A sorter for TableModels. The sorter has a model (conforming to TableModel)
@@ -28,8 +28,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
-import client.MWClient;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.common.util.MWLogger;
 
 public class TableSorter extends TableMap {
 

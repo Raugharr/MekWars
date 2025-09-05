@@ -1,7 +1,8 @@
-package common.campaign.clientutils.protocol;
+package mekwars.client.common.campaign.clientutils.protocol;
 
-public interface IClient
-{
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
+
+public interface IClient {
     /**
      * The delimiter.  A tab character.
      */

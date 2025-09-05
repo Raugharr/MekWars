@@ -27,13 +27,13 @@
  * inappropriate.
  */
 
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 import java.util.Collections;
 import java.util.Vector;
 
-import server.campaign.SHouse;
-import server.campaign.SPlanet;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
 
 // TODO: Remove "unused" once longs are running
 @SuppressWarnings("unused")

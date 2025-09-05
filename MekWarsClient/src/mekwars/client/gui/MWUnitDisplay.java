@@ -1,7 +1,7 @@
-package client.gui;
+package mekwars.client.gui;
 
-import client.FakePlayer;
-import client.MWClient;
+import mekwars.client.FakePlayer;
+import mekwars.client.MWClient;
 import megamek.client.ui.swing.ClientGUI;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.client.ui.swing.util.MegaMekController;

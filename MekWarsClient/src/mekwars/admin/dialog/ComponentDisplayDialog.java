@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package admin.dialog;
+package mekwars.admin.dialog;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -36,11 +36,12 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 
-import client.MWClient;
-import common.Equipment;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.Equipment;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.EquipmentType;
 import megamek.common.Mech;
@@ -166,7 +167,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
             }
 
             transmitSettings();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminSaveBlackMarketConfigs");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSaveBlackMarketConfigs");
             dialog.dispose();
             return;
         } else if (command.equals(cancelCommand)) {
@@ -940,7 +941,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
             Equipment bme = mwclient.getBlackMarketEquipmentList().get(key);
 
             if (bme.isUpdated()) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminSetBlackMarketSetting#" + key + "#" + bme.getMinCost() + "#" + bme.getMaxCost() + "#" + bme.getMinProduction() + "#" + bme.getMaxProduction());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSetBlackMarketSetting#" + key + "#" + bme.getMinCost() + "#" + bme.getMaxCost() + "#" + bme.getMinProduction() + "#" + bme.getMaxProduction());
             }
         }
 

@@ -21,7 +21,7 @@
  * Created on June 14, 2002, 9:02 PM
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Component;
 import java.awt.Graphics;
@@ -43,13 +43,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import client.GUIClientConfig;
-import client.MWClient;
-import client.campaign.CArmy;
-import client.campaign.CUnit;
-import common.Unit;
-import common.util.MWLogger;
-import common.util.UnitUtils;
+import mekwars.client.GUIClientConfig;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CArmy;
+import mekwars.client.campaign.CUnit;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 import megamek.client.ui.swing.tileset.MechTileset;
 import megamek.client.ui.swing.util.RotateFilter;
 import megamek.common.Entity;

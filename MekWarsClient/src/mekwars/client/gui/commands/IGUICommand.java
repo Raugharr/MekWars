@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui.commands;
+package mekwars.client.gui.commands;
 
 public interface IGUICommand
 {

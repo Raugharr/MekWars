@@ -14,7 +14,7 @@
  * details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,10 +23,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
-import server.campaign.CampaignMain;
-import server.campaign.SUnit;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SUnit;
 
 
 public class BuildTableListCommand implements Command {

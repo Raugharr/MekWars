@@ -14,19 +14,20 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import client.gui.MWUnitDisplay;
-import client.gui.TableSorter;
-import client.util.CUnitComparator;
-import common.House;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.MWUnitDisplay;
+import mekwars.client.gui.TableSorter;
+import mekwars.client.util.CUnitComparator;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -1252,10 +1253,10 @@ public class TableViewerDialog extends JFrame implements ItemListener {
 
         refreshButton.setEnabled(false);
         if (userLevel >= mwclient.getData().getAccessLevel("AdminRequestBuildTable")) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
         }
         else if (userLevel >= mwclient.getData().getAccessLevel("RequestBuildTable")) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
         }
 
         mwclient.setWaiting(true);

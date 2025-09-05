@@ -15,13 +15,14 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.awt.Dimension;
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import common.util.TokenReader;
+import mekwars.client.MWClient;
+import mekwars.common.util.TokenReader;
+import mekwars.common.PlanetEnvironment;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -41,7 +42,7 @@ public class PE extends Command {
 	@Override
 	public void execute(String input) {
 		StringTokenizer st = decode(input);
-		common.PlanetEnvironment pe = new common.PlanetEnvironment(st.nextToken());
+		PlanetEnvironment pe = new PlanetEnvironment(st.nextToken());
 		int xsize = TokenReader.readInt(st);
 		int ysize = TokenReader.readInt(st);
 		int mapMedium = TokenReader.readInt(st);

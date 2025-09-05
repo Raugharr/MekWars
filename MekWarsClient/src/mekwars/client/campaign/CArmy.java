@@ -19,17 +19,17 @@
  * for more details.
  */
 
-package client.campaign;
+package mekwars.client.campaign;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
-import client.MWClient;
-import common.Army;
-import common.Unit;
-import common.util.TokenReader;
+import mekwars.client.MWClient;
+import mekwars.common.Army;
+import mekwars.common.Unit;
+import mekwars.common.util.TokenReader;
 
 /**
  * Client-side representation of an Army. The CArmy has, when compared to its

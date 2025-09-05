@@ -14,9 +14,9 @@
  * for more details.
  */
 
-package common.persistence;
+package mekwars.common.persistence;
 
-import common.util.HTMLConverter;
+import mekwars.common.util.HTMLConverter;
 import java.io.PrintWriter;
 
 /**

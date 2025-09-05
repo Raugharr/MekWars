@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.converters;
+package mekwars.server.campaign.converters;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -22,12 +22,12 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import common.universe.FactionTag;
+import mekwars.common.universe.FactionTag;
 import java.util.EnumSet;
-import server.campaign.CampaignMain;
-import server.campaign.NewbieHouse;
-import server.campaign.SHouse;
-import server.campaign.mercenaries.MercHouse;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.NewbieHouse;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.mercenaries.MercHouse;
 
 public class SHouseConverter implements Converter {
     public boolean canConvert(Class clazz) {

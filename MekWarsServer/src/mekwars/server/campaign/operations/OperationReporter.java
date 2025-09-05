@@ -14,20 +14,20 @@
 	 * for more details.
 	 */
 
-package server.campaign.operations;
+package mekwars.server.campaign.operations;
 
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import common.CampaignData;
-import common.Unit;
-import common.util.MWLogger;
+import mekwars.common.CampaignData;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
 import megamek.common.IEntityRemovalConditions;
-import server.campaign.CampaignMain;
-import server.campaign.SArmy;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SArmy;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 
 public class OperationReporter {
 

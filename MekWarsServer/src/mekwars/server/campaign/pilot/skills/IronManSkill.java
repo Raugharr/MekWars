@@ -18,17 +18,17 @@
  * Created on 18.04.2004
  *
  */
-package server.campaign.pilot.skills;
+package mekwars.server.campaign.pilot.skills;
 
-import common.MegaMekPilotOption;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.MegaMekPilotOption;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
 import megamek.common.Entity;
 import megamek.common.Mech;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.pilot.SPilot;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * NOTE: This is a unofficial rule. A pilot with this skill receives only 1 pilot hit from ammunition explosions.

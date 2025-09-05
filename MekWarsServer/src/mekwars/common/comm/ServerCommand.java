@@ -21,9 +21,9 @@
  * Created on June 3, 2002, 7:17 AM
  */
 
-package common.comm;
+package mekwars.common.comm;
 
-import server.MWServ;
+import mekwars.server.MWServ;
 
 /**
  *

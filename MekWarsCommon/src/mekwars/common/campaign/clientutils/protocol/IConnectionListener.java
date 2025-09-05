@@ -25,7 +25,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package common.campaign.clientutils.protocol;
+package mekwars.common.campaign.clientutils.protocol;
 
 /**
  * Interface the implement when you want to get raw messages from the socket connection

@@ -14,9 +14,9 @@
  * for more details.
  */
 
-package server.campaign.market2;
+package mekwars.server.campaign.market2;
 
-import server.campaign.SUnit;
+import mekwars.server.campaign.SUnit;
 
 /**
  * Interface which defines the methods needed by an actor

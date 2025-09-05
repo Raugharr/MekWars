@@ -14,12 +14,12 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import server.MWServ;
-import server.campaign.CampaignMain;
+import mekwars.server.MWServ;
+import mekwars.server.campaign.CampaignMain;
 
 public class ServerVersionCommand implements Command {
 	

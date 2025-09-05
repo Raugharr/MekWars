@@ -25,7 +25,7 @@
  * @author Torren (Jason Tighe) 11.5.05 
  * 
  */
-package server.MWChatServer.commands;
+package mekwars.server.MWChatServer.commands;
 
 public abstract class CommandBase implements ICommandProcessorRemote {
     protected String _help;

@@ -15,14 +15,14 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import client.MWClient;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.common.util.MWLogger;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)

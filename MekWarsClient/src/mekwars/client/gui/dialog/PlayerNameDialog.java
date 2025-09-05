@@ -12,7 +12,7 @@
  * for more details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 //awt imports
 import java.awt.Dimension;
@@ -36,9 +36,9 @@ import javax.swing.SpringLayout;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
-import client.CUser;
-import client.MWClient;
-import common.util.SpringLayoutHelper;
+import mekwars.client.CUser;
+import mekwars.client.MWClient;
+import mekwars.common.util.SpringLayoutHelper;
 //util imports
 //swing imports
 //mekwars imports

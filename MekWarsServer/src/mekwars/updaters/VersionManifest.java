@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.JFileChooser;
 
-import common.util.MWLogger;
+import mekwars.common.util.MWLogger;
 import updaters.utils.IOUtil;
 
 public class VersionManifest {

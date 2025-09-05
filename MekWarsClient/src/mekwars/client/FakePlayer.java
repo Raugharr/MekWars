@@ -1,4 +1,4 @@
-package client;
+package mekwars.client;
 //Torren 9/20/2020 Commenting out the class for now. This is more than likely no longer needed.
 //import java.util.Vector;
 

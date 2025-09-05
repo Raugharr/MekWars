@@ -1,4 +1,4 @@
-package server.util;
+package mekwars.server.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,12 +8,12 @@ import java.nio.file.StandardOpenOption;
 import java.util.Date;
 import java.util.TreeMap;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.operations.OperationEntity;
-import server.campaign.operations.ShortOperation;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.operations.OperationEntity;
+import mekwars.server.campaign.operations.ShortOperation;
 
 //@salient - so for now this will be basic, it wont handle salvage or draw games.
 public class BattleToJSON

@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import java.awt.Component;
 import java.awt.event.ComponentAdapter;
@@ -28,9 +28,9 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import client.MWClient;
-import common.CampaignData;
-import common.util.MWLogger;
+import mekwars.client.MWClient;
+import mekwars.common.CampaignData;
+import mekwars.common.util.MWLogger;
 
 /**
  * Class used to display Stellar InnerStellarMap in GUI

@@ -25,16 +25,16 @@
  * 
  */
 
-package server.MWChatServer;
+package mekwars.server.MWChatServer;
 
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.zip.Deflater;
 
-import common.util.MWLogger;
-import server.MWChatServer.commands.ICommands;
-import server.campaign.CampaignMain;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.commands.ICommands;
+import mekwars.server.campaign.CampaignMain;
 
 /**
  * Constantly reads from the BufferedReader. Notifies the MWChatServerLocal via

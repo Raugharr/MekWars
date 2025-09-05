@@ -18,7 +18,7 @@
  * 
  */
 
-package admin.dialog;
+package mekwars.admin.dialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,9 +36,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import client.MWClient;
-import common.House;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.common.House;
+import mekwars.common.util.SpringLayoutHelper;
 
 public final class FactionToFactionRewardPointMultiplierDialog implements ActionListener, KeyListener{
     

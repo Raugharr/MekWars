@@ -18,12 +18,12 @@
  * Created on 11-feb-2004 by Vertigo
  *
  */
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
 
 /**
  * @author Vertigo

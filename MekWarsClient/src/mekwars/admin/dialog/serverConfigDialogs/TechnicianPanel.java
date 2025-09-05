@@ -14,7 +14,7 @@
  * @author jtighe
  */
 
-package admin.dialog.serverConfigDialogs;
+package mekwars.admin.dialog.serverConfigDialogs;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -24,8 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.common.util.SpringLayoutHelper;
 
 public class TechnicianPanel extends JPanel {
 

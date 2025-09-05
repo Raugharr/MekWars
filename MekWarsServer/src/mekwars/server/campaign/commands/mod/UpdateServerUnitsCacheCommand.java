@@ -14,15 +14,15 @@
  * for more details.
  */
 
-package server.campaign.commands.mod;
+package mekwars.server.campaign.commands.mod;
 
 import java.io.File;
 import java.util.StringTokenizer;
 
 import megamek.common.MechSummaryCache;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.Command;
 
 /**
  * Remove a part from a player.

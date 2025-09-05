@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,13 +24,13 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import common.House;
-import common.util.MWLogger;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.commands.Command;
+import mekwars.common.House;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.commands.Command;
 
 public class SingASongCommand implements Command {
 	

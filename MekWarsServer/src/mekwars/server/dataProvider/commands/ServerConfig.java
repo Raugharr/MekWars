@@ -14,17 +14,17 @@
  * for more details.
  */
 
-package server.dataProvider.commands;
+package mekwars.server.dataProvider.commands;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import common.CampaignData;
-import common.util.BinWriter;
-import server.campaign.CampaignMain;
-import server.dataProvider.ServerCommand;
+import mekwars.common.CampaignData;
+import mekwars.common.util.BinWriter;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.dataProvider.ServerCommand;
 
 /**
  * Retrieve all planet information (if the data cache is lost at client side)

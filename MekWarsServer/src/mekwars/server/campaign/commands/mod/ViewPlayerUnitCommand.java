@@ -14,16 +14,16 @@
  * for more details.
  */
 
-package server.campaign.commands.mod;
+package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
 
-import common.util.UnitUtils;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.commands.Command;
+import mekwars.common.util.UnitUtils;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.commands.Command;
 
 /**
  * Sends a Players Unit data to a Mod/Admin

@@ -21,10 +21,10 @@
  * to be loaded to the server.
  * 
  */
-package OperationsEditor;
+package mekwars.operationseditor;
 
 
-import OperationsEditor.dialog.OperationsDialog;
+import mekwars.operationseditor.dialog.OperationsDialog;
 
 public class MainOperations{
 

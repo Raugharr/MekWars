@@ -19,7 +19,7 @@
  * Allows for the reading of a StringTokenizer Token and for easy to use Error Trapping
  */
 
-package common.util;
+package mekwars.common.util;
 
 import java.util.StringTokenizer;
 

@@ -15,7 +15,7 @@
  * details.
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -39,9 +39,10 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.VerticalLayout;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.VerticalLayout;
+import mekwars.common.util.SpringLayoutHelper;
 
 public final class ConfigurationDialog implements ActionListener {
 
@@ -1754,10 +1755,10 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.setKeyWords();
             mwclient.getConfig().saveConfig();
             mwclient.setConfig();
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "color " + chatNameColorField.getText());
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "color " + chatNameColorField.getText());
 
             if (mwclient.getPlayer().getAutoReorder() != autoReOrder.isSelected()) {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "setautoreorder " + autoReOrder.isSelected());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "setautoreorder " + autoReOrder.isSelected());
             }
 
             mwclient.getMainFrame().getMainPanel().recreateMainTPane(mwclient.getMainFrame());

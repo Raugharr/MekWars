@@ -1,8 +1,8 @@
-package common.campaign.clientutils.protocol.commands;
+package mekwars.client.common.campaign.clientutils.protocol.commands;
 
 import java.util.StringTokenizer;
 
-import common.campaign.clientutils.protocol.IClient;
+import mekwars.client.common.campaign.clientutils.protocol.IClient;
 
 /**
  * Pong command

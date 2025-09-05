@@ -1,4 +1,4 @@
-package common.flags;
+package mekwars.common.flags;
 
 import java.io.File;
 

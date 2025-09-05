@@ -14,7 +14,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  */
-package client.gui.dialog.buildtableviewer;
+package mekwars.client.gui.dialog.buildtableviewer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,10 +29,10 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
-import client.MWClient;
-import common.House;
-import common.Unit;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.util.SpringLayoutHelper;
 
 /**
  * A JPanel containing several JComboBoxes to control what table is displayed in the {@link TablePanel}

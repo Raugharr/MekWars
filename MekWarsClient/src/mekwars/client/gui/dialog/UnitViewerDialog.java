@@ -32,7 +32,7 @@
  * From Megamek.client.MechSelectorDialgo.java
  */
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -73,12 +73,13 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import client.MWClient;
-import client.gui.CMainFrame;
-import client.gui.MechInfo;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.CMainFrame;
+import mekwars.client.gui.MechInfo;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 import megamek.client.ui.swing.UnitFailureDialog;
 import megamek.client.ui.swing.UnitLoadingDialog;
 import megamek.common.Entity;
@@ -639,7 +640,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                         return;
                     }
 
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AddOmniVariantMod#" + unit + "#" + moneyMod + "$" + compMod + "$" + fluMod);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AddOmniVariantMod#" + unit + "#" + moneyMod + "$" + compMod + "$" + fluMod);
 
                     dispose();
                 } catch (Exception ex) {
@@ -691,7 +692,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                         return;
                     }
 
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c createunit#" + unitFile + "#" + fluff + "#" + gunnery + "#" + piloting + "#" + weightClass + "#" + skills);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c createunit#" + unitFile + "#" + fluff + "#" + gunnery + "#" + piloting + "#" + weightClass + "#" + skills);
 
                     dispose();
                 } catch (Exception ex) {
@@ -707,7 +708,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                 setVisible(false);
 
                 if ((unitFile != null) && !unitFile.equals("null")) {
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c researchunit#" + unitFile);
+                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c researchunit#" + unitFile);
                 }
 
                 dispose();

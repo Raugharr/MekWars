@@ -16,7 +16,7 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -27,20 +27,20 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import common.House;
-import common.Unit;
-import common.util.MWLogger;
-import common.util.StringUtils;
-import common.util.UnitUtils;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.Mech;
-import server.campaign.BuildTable;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.SUnitFactory;
-import server.campaign.pilot.SPilot;
+import mekwars.server.campaign.BuildTable;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.SUnitFactory;
+import mekwars.server.campaign.pilot.SPilot;
 
 /*
  * Jun 10/04 - Dave Poole

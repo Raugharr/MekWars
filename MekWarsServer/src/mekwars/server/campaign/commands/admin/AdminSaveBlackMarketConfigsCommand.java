@@ -18,18 +18,18 @@
  * 
  * Command Saves the black market sales and Production data.
  */
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
 
-import common.Equipment;
-import common.util.MWLogger;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.commands.Command;
+import mekwars.common.Equipment;
+import mekwars.common.util.MWLogger;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.commands.Command;
 
 public class AdminSaveBlackMarketConfigsCommand implements Command {
 	

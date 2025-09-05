@@ -15,7 +15,7 @@
  * for more details.
  */
 
-package client.gui;
+package mekwars.client.gui;
 
 import javax.swing.text.Element;
 import javax.swing.text.StyleConstants;

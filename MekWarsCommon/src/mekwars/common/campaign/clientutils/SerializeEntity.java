@@ -14,12 +14,12 @@
  * for more details.
  */
 
-package common.campaign.clientutils;
+package mekwars.common.campaign.clientutils;
 
 import java.util.Enumeration;
 
-import common.Unit;
-import common.util.UnitUtils;
+import mekwars.common.Unit;
+import mekwars.common.util.UnitUtils;
 import megamek.common.Aero;
 import megamek.common.BattleArmor;
 import megamek.common.BipedMech;

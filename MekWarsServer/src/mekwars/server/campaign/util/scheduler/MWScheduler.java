@@ -1,4 +1,4 @@
-package server.campaign.util.scheduler;
+package mekwars.server.campaign.util.scheduler;
 
 import java.util.Date;
 
@@ -10,12 +10,12 @@ import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
 
-import common.CampaignData;
-import common.House;
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
-import server.campaign.SHouse;
-import server.campaign.SPlayer;
+import mekwars.common.CampaignData;
+import mekwars.common.House;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
 
 /**
  * A wrapper for a Quartz scheduler.  This class handles all the ancillary stuff

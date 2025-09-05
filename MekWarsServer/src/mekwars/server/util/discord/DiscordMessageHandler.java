@@ -13,7 +13,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package server.util.discord;
+package mekwars.server.util.discord;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -27,8 +27,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
-import common.util.MWLogger;
-import server.campaign.CampaignMain;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 
 /**
  * Provides integration with a Discord webhook.  Status messages and

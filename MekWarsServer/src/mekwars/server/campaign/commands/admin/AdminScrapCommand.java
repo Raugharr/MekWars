@@ -14,16 +14,16 @@
  * for more details.
  */
 
-package server.campaign.commands.admin;
+package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
-import common.campaign.pilot.Pilot;
-import server.MWChatServer.auth.IAuthenticator;
-import server.campaign.CampaignMain;
-import server.campaign.SPlayer;
-import server.campaign.SUnit;
-import server.campaign.commands.Command;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
+import mekwars.server.campaign.commands.Command;
 
 /**
  * @author Helge Richter

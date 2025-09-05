@@ -15,12 +15,12 @@
  * for more details.
  */
 
-package client.cmd;
+package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import client.MWClient;
+import mekwars.client.MWClient;
 
 /**
  * @author Spork (billypinhead@users.sourceforge.net)

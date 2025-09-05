@@ -14,19 +14,19 @@
  * for more details.
  */
 
-package server.dataProvider.commands;
+package mekwars.server.dataProvider.commands;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import common.CampaignData;
-import common.House;
-import common.Planet;
-import common.util.BinWriter;
-import server.campaign.CampaignMain;
-import server.campaign.data.TimeUpdatePlanet;
-import server.dataProvider.ServerCommand;
+import mekwars.common.CampaignData;
+import mekwars.common.House;
+import mekwars.common.Planet;
+import mekwars.common.util.BinWriter;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.data.TimeUpdatePlanet;
+import mekwars.server.dataProvider.ServerCommand;
 
 /**
  * Request for data diff.

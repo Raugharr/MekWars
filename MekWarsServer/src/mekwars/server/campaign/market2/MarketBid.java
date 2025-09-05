@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package server.campaign.market2;
+package mekwars.server.campaign.market2;
 
 /**
  * Simple object which stores a bid's two variables: amount

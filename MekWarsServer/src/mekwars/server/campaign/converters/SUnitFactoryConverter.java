@@ -14,11 +14,11 @@
  * for more details.
  */
 
-package server.campaign.converters;
+package mekwars.server.campaign.converters;
 
-import common.UnitFactory;
+import mekwars.common.UnitFactory;
 
-import server.campaign.SUnitFactory;
+import mekwars.server.campaign.SUnitFactory;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.ConversionException;

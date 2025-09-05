@@ -20,19 +20,20 @@
  * Created on June 30, 2002, 5:26 PM
  */
 
-package server;
+package mekwars.server;
 
 import java.net.InetAddress;
 import java.rmi.AccessException;
 import java.util.Iterator;
 
-import common.util.MWLogger;
-import common.util.StringUtils;
-import server.MWChatServer.MWChatClient;
-import server.MWChatServer.MWChatServer;
-import server.MWChatServer.auth.Auth;
-import server.MWChatServer.auth.IAuthenticator;
-import server.MWChatServer.commands.ICommands;
+import mekwars.common.comm.TransportCodec;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
+import mekwars.server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.MWChatServer;
+import mekwars.server.MWChatServer.auth.Auth;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWChatServer.commands.ICommands;
 
 
 public class ServerWrapper extends MWChatServer{
@@ -70,7 +71,7 @@ public class ServerWrapper extends MWChatServer{
 		MWChatClient client = this.getClient(MWChatServer.clientKey(name));
 		if (client != null) {
 			try {
-				client.sendRaw("/comm" + ICommands.DELIMITER + common.comm.TransportCodec.encode(msg));
+				client.sendRaw("/comm" + ICommands.DELIMITER + TransportCodec.encode(msg));
 			} catch (Exception e) {
 				MWLogger.errLog(e);
 			}

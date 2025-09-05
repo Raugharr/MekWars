@@ -1,4 +1,4 @@
-package common;
+package mekwars.common;
 
 import java.awt.Component;
 import java.awt.Container;

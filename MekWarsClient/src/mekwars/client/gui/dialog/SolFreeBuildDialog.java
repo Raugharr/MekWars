@@ -25,19 +25,20 @@
 
  
 
-package client.gui.dialog;
+package mekwars.client.gui.dialog;
 
-import client.MWClient;
-import client.campaign.CUnit;
-import client.gui.MWUnitDisplay;
-import client.gui.TableSorter;
-import client.util.CUnitComparator;
-import common.House;
-import common.Unit;
-import common.campaign.pilot.Pilot;
-import common.util.MWLogger;
-import common.util.SpringLayoutHelper;
-import common.util.UnitUtils;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.MWUnitDisplay;
+import mekwars.client.gui.TableSorter;
+import mekwars.client.util.CUnitComparator;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -1298,10 +1299,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
         refreshButton.setEnabled(false);
         if (userLevel >= mwclient.getData().getAccessLevel("AdminRequestBuildTable")) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
         }
         else if (userLevel >= mwclient.getData().getAccessLevel("RequestBuildTable")) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
         }
 
         mwclient.setWaiting(true);
@@ -1324,10 +1325,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
         refreshButton.setEnabled(false);
         if (userLevel >= mwclient.getData().getAccessLevel("AdminRequestBuildTable")) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
         }
         else if (userLevel >= mwclient.getData().getAccessLevel("RequestBuildTable")) {
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
         }
 
         mwclient.setWaiting(true);
@@ -1357,17 +1358,17 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
             if(mwclient.getServerConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true") ||
                mwclient.getServerConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true")) //may not need this, command will always check house table if postdefection is enabled.
             {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + factionCombo.getSelectedItem().toString());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + factionCombo.getSelectedItem().toString());
             }
             // else if this isn't a sol player, but post defection free build is enabled
             /*else if(!mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName")) &&
                     mwclient.getServerConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true"))
             {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
             } ... dont need this?*/
             else 
             {
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity));
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity));
             }
            
             createButton.setEnabled(true);

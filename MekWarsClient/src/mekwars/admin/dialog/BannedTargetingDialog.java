@@ -1,4 +1,4 @@
-package admin.dialog;
+package mekwars.admin.dialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,11 +12,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
-import client.MWClient;
-import common.campaign.targetsystems.TargetSystem;
-import common.campaign.targetsystems.TargetTypeNotImplementedException;
-import common.campaign.targetsystems.TargetTypeOutOfBoundsException;
-import common.util.SpringLayoutHelper;
+import mekwars.client.MWClient;
+import mekwars.common.campaign.targetsystems.TargetSystem;
+import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
+import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
+import mekwars.common.util.SpringLayoutHelper;
 
 public class BannedTargetingDialog implements ActionListener {
 

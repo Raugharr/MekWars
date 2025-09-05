@@ -1,14 +1,13 @@
-package common.campaign.clientutils.protocol.commands;
+package mekwars.client.common.campaign.clientutils.protocol.commands;
 
-import common.campaign.clientutils.protocol.CConnector;
-import common.campaign.clientutils.protocol.IClient;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
+import mekwars.client.common.campaign.clientutils.protocol.IClient;
 
 /**
  * Abstract class for protocol Commands
  */
 
-public abstract class CProtCommand implements IProtCommand
-{
+public abstract class CProtCommand implements IProtCommand {
   String name = "";
   String prefix = "";
   String delimiter = "";

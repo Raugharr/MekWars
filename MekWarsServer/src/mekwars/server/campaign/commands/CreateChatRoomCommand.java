@@ -12,12 +12,12 @@
  * for more details.
  */
 
-package server.campaign.commands;
+package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import server.campaign.CampaignMain;
-import server.campaign.util.ChatRoom;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.util.ChatRoom;
 
 public class CreateChatRoomCommand implements Command {
 
