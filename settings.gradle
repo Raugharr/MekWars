@@ -5,13 +5,8 @@ include 'MekWarsClient'
 include 'MekWarsHPGNet'
 include 'MekWarsDedicatedHost'
 include 'MekWarsCommon'
-include 'MekWarsOperationsEditor'
-include 'MekWarsTracker'
-
 
 includeBuild('../megamek')
-// includeBuild('../megameklab')
-// includeBuild('../mekhq')
 
 def localSettings = file('settings_local.gradle')
 if (localSettings.exists()) {

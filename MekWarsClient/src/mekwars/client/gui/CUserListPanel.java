@@ -61,6 +61,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 //import com.sun.jndi.toolkit.url.Uri;
 
+import mekwars.admin.StaffUserlistPopupMenu;
 import mekwars.client.CUser;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
@@ -490,30 +491,9 @@ public class CUserListPanel extends JPanel implements ActionListener{
                      * a handful have access to.
                      */
                     if (mwclient.isMod()) {
-                        URLClassLoader loader = null;
-                        try {
-                            File loadJar = new File("./MekWarsAdmin.jar");
-                            if (!loadJar.exists())
-                                MWLogger.errLog("StaffUserlistPopupMenu creation skipped. No MekWarsAdmin.jar present.");
-                            else {
-                                loader = new URLClassLoader(new URL[] {loadJar.toURI().toURL()});
-                                Class<?> c = loader.loadClass("admin.StaffUserlistPopupMenu");
-                                Object o = c.newInstance();
-                                c.getDeclaredMethod("createMenu", new Class[] {MWClient.class, CUser.class}).invoke(o,
-                                        new Object[] {mwclient, user});
-                                popup.add((JMenu)o);
-                            }
-                        } catch (Exception ex) {
-                            MWLogger.errLog("StaffUserlistPopupMenu creation FAILED!");
-                            MWLogger.errLog(ex);
-                        } finally {
-                            try {
-                                loader.close();
-                            } catch (IOException e1) {
-                                MWLogger.errLog(e1);
-                            }
-                        }
-
+						StaffUserlistPopupMenu staffUserlistPopupMenu = new StaffUserlistPopupMenu();
+						staffUserlistPopupMenu.createMenu(mwclient, user);
+						popup.add((JMenu)staffUserlistPopupMenu);
                         popup.addSeparator();
                     }
 

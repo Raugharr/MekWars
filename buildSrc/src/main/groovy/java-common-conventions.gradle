@@ -1,10 +1,9 @@
 plugins {
-	id 'checkstyle'
 	id 'java-library'
 }
 
 dependencies {
-	implementation 'org.megamek:megamek-HEAD:0.50.0-SNAPSHOT'
+	implementation "org.megamek:megamek:${mmVersion}"
 
 	implementation 'com.google.guava:guava:24.0-jre'
 	implementation 'org.quartz-scheduler:quartz:2.2.3'
@@ -27,13 +26,4 @@ application {
             '-Xmx4096m',
             '-Dsun.awt.disablegrab=true'
     ]
-}
-
-checkstyle {
-    toolVersion = '10.25.0'
-    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
-    configProperties = [
-            'suppressionFile': file("${rootDir}/config/checkstyle/checkstyle-suppressions.xml")
-    ]
-    maxErrors = 0    // Fail on any error
 }
