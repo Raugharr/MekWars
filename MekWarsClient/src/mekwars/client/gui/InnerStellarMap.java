@@ -58,6 +58,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import mekwars.admin.AdminMapPopupMenu;
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CArmy;
 import mekwars.client.gui.dialog.PlanetSearchDialog;
@@ -381,23 +382,9 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             popup.add(item);
 
             if (mwclient.isMod()) {
-
-                try {
-
-                    File loadJar = new File("./MekWarsAdmin.jar");
-                    if (!loadJar.exists()) {
-                        MWLogger.errLog("AdminMapPopupMenu creation skipped. No MekWarsAdmin.jar present.");
-                    } else {
-                        loader = new URLClassLoader(new URL[] { loadJar.toURI().toURL() });
-                        Class<?> c = loader.loadClass("admin.AdminMapPopupMenu");
-                        Object o = c.newInstance();
-                        c.getDeclaredMethod("createMenu", new Class[] { MWClient.class, InnerStellarMap.class, Integer.class, Integer.class, Planet.class }).invoke(o, new Object[] { mwclient, this, (int) scr2mapX(e.getX()), (int) scr2mapY(e.getY()), mp.getPPanel().getPlanet() });
-                        popup.add((JMenu) o);
-                    }
-                } catch (Exception ex) {
-                    MWLogger.errLog("AdminMapPopupMenu creation FAILED!");
-                    MWLogger.errLog(ex);
-                }
+                AdminMapPopupMenu adminMapPopupMenu = new AdminMapPopupMenu();
+                adminMapPopupMenu.createMenu(mwclient, this, (int) scr2mapX(e.getX()), (int) scr2mapY(e.getY()), mp.getPPanel().getPlanet());
+                popup.add((JMenu) adminMapPopupMenu);
             }
 
             popup.show(this, e.getX() + 10, e.getY() + 10);

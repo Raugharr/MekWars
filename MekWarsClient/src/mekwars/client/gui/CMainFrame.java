@@ -55,6 +55,8 @@ import javax.swing.WindowConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import mekwars.admin.ModeratorMenu;
+import mekwars.admin.AdminMenu;
 import mekwars.client.CUser;
 import mekwars.client.ClientThread;
 import mekwars.client.MWClient;
@@ -392,44 +394,27 @@ public class CMainFrame extends JFrame {
         // "+Client.getUser(Client.getUsername()).getUserlevel()+" Status:
         // "+this.getClient().getMyStatus()+" StatusII: "+Client.getMyStatus());
         if ((mod || admin) && !hasAdminMenus) {
-
-            File loadJar = new File("./MekWarsAdmin.jar");
-
             // dont print an entire trace if the jar is missing.
-            if (!loadJar.exists()) {
-                MWLogger.errLog("Player/Server menu creation skipped. No MekWarsAdmin.jar present.");
-            } else {
-                // assume mod
-                try {
-                    URLClassLoader loader = new URLClassLoader(new URL[] { loadJar.toURI().toURL() });
-                    Class<?> c = loader.loadClass("admin.ModeratorMenu");
-                    Object o = c.newInstance();
-                    c.getDeclaredMethod("createMenu", new Class[] { MWClient.class }).invoke(o, new Object[] { mwclient });
-                    jMenuBar1.remove(jMenuMod);
-                    jMenuMod = (JMenu) o;
-                    jMenuBar1.add(jMenuMod);
-                    loader.close();
-                    /*
-                     * if ( jMenuMod.getItemCount() < 1 ){ mod = false; }
-                     */
-                } catch (Exception ex) {
-                    MWLogger.errLog("ModeratorMenu creation FAILED!");
-                    MWLogger.errLog(ex);
-                }
-                try {
-                    URLClassLoader loader = new URLClassLoader(new URL[] { loadJar.toURI().toURL() });
-                    Class<?> c = loader.loadClass("admin.AdminMenu");
-                    Object o = c.newInstance();
-                    c.getDeclaredMethod("createMenu", new Class[] { MWClient.class }).invoke(o, new Object[] { mwclient });
-                    jMenuBar1.remove(jMenuAdmin);
-                    jMenuAdmin = (JMenu) o;
-                    jMenuBar1.add(jMenuAdmin);
-                    loader.close();
-                } catch (Exception ex) {
-                    MWLogger.errLog("AdminMenu creation FAILED!");
-                    MWLogger.errLog(ex);
-                }
-            }// end else(Admin.jar exists)
+            try {
+                ModeratorMenu moderatorMenu = new ModeratorMenu();
+                moderatorMenu.createMenu(mwclient);
+                jMenuBar1.remove(jMenuMod);
+                jMenuMod = (JMenu) moderatorMenu;
+                jMenuBar1.add(jMenuMod);
+            } catch (Exception ex) {
+                MWLogger.errLog("ModeratorMenu creation FAILED!");
+                MWLogger.errLog(ex);
+            }
+            try {
+                AdminMenu adminMenu = new AdminMenu();
+                adminMenu.createMenu(mwclient);
+                jMenuBar1.remove(jMenuAdmin);
+                jMenuAdmin = (JMenu) adminMenu;
+                jMenuBar1.add(jMenuAdmin);
+            } catch (Exception ex) {
+                MWLogger.errLog("AdminMenu creation FAILED!");
+                MWLogger.errLog(ex);
+            }
 
             if (new File("./MekWarsOpEditor.jar").exists()) {
                 jMenuBar1.remove(jMenuOperations);
@@ -439,7 +424,7 @@ public class CMainFrame extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         try {
                             URLClassLoader loader = new URLClassLoader(new URL[] { new File("./MekWarsOpEditor.jar").toURI().toURL() });
-                            Class<?> c = loader.loadClass("OperationsEditor.MainOperations");
+                            Class<?> c = loader.loadClass("mekwars.operationseditor.MainOperations");
                             Object o = c.newInstance();
                             c.getDeclaredMethod("main", new Class[] { Object.class }).invoke(o, new Object[] { mwclient });
                             loader.close();
