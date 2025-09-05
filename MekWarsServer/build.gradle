@@ -45,7 +45,7 @@ jar {
 	archiveFileName = 'MekWarsServer.jar'
 	manifest {
 		attributes(
-		  'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+		  'Class-Path': "MegaMek.jar " + configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
 		  'Main-Class': mainClassName
 		)
 	}
