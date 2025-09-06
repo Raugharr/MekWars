@@ -15,7 +15,7 @@
  *         Server Configuration Page. All new Server Options need to be added To this page as well.
  */
 
-package mekwars.operationseditor.dialog;
+package mekwars.operationseditor.gui.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,7 +41,6 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -59,7 +58,6 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.VerticalLayout;
@@ -71,11 +69,10 @@ import mekwars.common.util.SpringLayoutHelper;
 public class OperationsDialog extends JFrame implements ActionListener, KeyListener, MouseListener {
 
     /**
-	 *
-	 */
+     *
+     */
     private static final long serialVersionUID = -238767483230471330L;
     private final static String windowName = "MekWars Operations Editor";
-
     private final static int SHORT_OP = 0;
     private final static int LONG_OP = 0;
     private final static int SPECIAL_OP = 0;
@@ -132,9 +129,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
      *         and that is the vars placement on the tab in the UI.
      */
     public OperationsDialog(Object o) {
-
         // super("Ops Editor");
-
         if (o != null) {
             mwclient = o;
         }
@@ -4125,7 +4120,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             changesMade = false;
             setTitle(windowName + " (" + taskName + ")");
         } catch (Exception ex) {
-        	System.err.println(ex.getMessage());
+            System.err.println(ex.getMessage());
             System.err.println("Unable to save file");
             MWLogger.errLog(ex);
         }
@@ -4177,11 +4172,11 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             System.err.println("Error loading file " + filePathName);
             MWLogger.errLog(ex);
         } finally {
-        	try {
-				dis.close();
-			} catch (IOException e) {
-				MWLogger.errLog(e);
-			}
+            try {
+                dis.close();
+            } catch (IOException e) {
+                MWLogger.errLog(e);
+            }
         }
 
         for (int pos = ConfigPane.getComponentCount() - 1; pos >= 0; pos--) {
@@ -4297,10 +4292,10 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
                 combo.setSelectedIndex(Integer.parseInt(defaultOperationInfo.getDefault(key)));
 
             } else if (field instanceof FlagTable) {
-            	FlagTable table = (FlagTable) field;
+                FlagTable table = (FlagTable) field;
 
-            	key = table.getName();
-            	table.importFlagString(defaultOperationInfo.getDefault(key));
+                key = table.getName();
+                table.importFlagString(defaultOperationInfo.getDefault(key));
             }// else continue
         }
     }
@@ -4356,14 +4351,14 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
                 combo.setSelectedIndex(Integer.parseInt(OperationInfo.getV(key)));
 
             } else if (field instanceof FlagTable) {
-            	FlagTable table = (FlagTable) field;
-            	key = table.getName();
+                FlagTable table = (FlagTable) field;
+                key = table.getName();
 
-            	if (key == null) {
-            		System.err.println("Null Flagtable");
-            		continue;
-            	}
-            	table.importFlagString(OperationInfo.getV(key));
+                if (key == null) {
+                    System.err.println("Null Flagtable");
+                    continue;
+                }
+                table.importFlagString(OperationInfo.getV(key));
 
             } // else continue
         }
@@ -4424,15 +4419,14 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
                     p.println(key + "=" + value);
                 }
             } else if (field instanceof FlagTable) {
-            	FlagTable table = (FlagTable) field;
-            	value = table.exportFlagString();
-            	key = table.getName();
-            	if (!value.equalsIgnoreCase(defaultOperationInfo.getDefault(key))) {
-            		p.println(key + "=" + value);
-            	}
-            }// else continue
+                FlagTable table = (FlagTable) field;
+                value = table.exportFlagString();
+                key = table.getName();
+                if (!value.equalsIgnoreCase(defaultOperationInfo.getDefault(key))) {
+                    p.println(key + "=" + value);
+                }
+            } // else continue
         }
-
     }
 
     private JMenu createEditMenu() {
@@ -4508,7 +4502,6 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
     }
 
     private void jMenuSendCurrentFile_actionPerformed(ActionEvent e) {
-
         if (changesMade) {
             saveShortOperations();
         }
@@ -4539,12 +4532,10 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
     }
 
     public void mouseClicked(MouseEvent arg0) {
-
         if (arg0.getButton() == MouseEvent.BUTTON3) {
             JTextField text = (JTextField) arg0.getSource();
             new TextEditorDialog(this, text);
         }
-
     }
 
     public void mouseEntered(MouseEvent arg0) {

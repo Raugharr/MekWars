@@ -74,7 +74,6 @@ import mekwars.client.gui.dialog.PlayerNameDialog;
 import mekwars.client.gui.dialog.RegisterNameDialog;
 import mekwars.client.gui.dialog.SellUnitDialog;
 import mekwars.client.gui.dialog.SubFactionNameDialog;
-//import mekwars.client.gui.dialog.TableViewerDialog;
 import mekwars.client.gui.dialog.TraitDialog;
 import mekwars.client.gui.dialog.UnitSelectionDialog;
 import mekwars.client.gui.dialog.buildtableviewer.BuildTableViewer;
@@ -83,6 +82,7 @@ import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
+import mekwars.operationseditor.gui.dialog.OperationsDialog;
 import megamek.MegaMek;
 import megamek.client.ui.swing.UnitLoadingDialog;
 
@@ -416,82 +416,70 @@ public class CMainFrame extends JFrame {
                 MWLogger.errLog(ex);
             }
 
-            if (new File("./MekWarsOpEditor.jar").exists()) {
-                jMenuBar1.remove(jMenuOperations);
-                jMenuOperations.setText("Operations");
-                JMenuItem item = new JMenuItem("Op Editor");
-                item.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            URLClassLoader loader = new URLClassLoader(new URL[] { new File("./MekWarsOpEditor.jar").toURI().toURL() });
-                            Class<?> c = loader.loadClass("mekwars.operationseditor.MainOperations");
-                            Object o = c.newInstance();
-                            c.getDeclaredMethod("main", new Class[] { Object.class }).invoke(o, new Object[] { mwclient });
-                            loader.close();
-                        } catch (Exception ex) {
-                            MWLogger.errLog(ex);
-                        }
-                        // new
-                        // OperationsEditor.dialog.OperationsDialog(mwclient);
-                    }
-                });
-                jMenuOperations.add(item);
-                JMenuItem jMenuRetrieveOperationFile = new JMenuItem();
-                JMenuItem jMenuSetOperationFile = new JMenuItem();
-                JMenuItem jMenuSetNewOperationFile = new JMenuItem();
-                JMenuItem jMenuSendAllOperationFiles = new JMenuItem();
-                JMenuItem jMenuUpdateOperations = new JMenuItem();
-
-                jMenuRetrieveOperationFile.setText("Retrieve Operation File");
-                jMenuRetrieveOperationFile.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        jMenuRetrieveOperationFile_actionPerformed(e);
-                    }
-                });
-
-                jMenuSetOperationFile.setText("Set Operation File");
-                jMenuSetOperationFile.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        jMenuSetOperationFile_actionPerformed(e);
-                    }
-                });
-
-                jMenuSetNewOperationFile.setText("Set New Operation File");
-                jMenuSetNewOperationFile.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        jMenuSetNewOperationFile_actionPerformed(e);
-                    }
-                });
-
-                jMenuSendAllOperationFiles.setText("Send All Local Op Files");
-                jMenuSendAllOperationFiles.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        jMenuSendAllOperationFiles_actionPerformed(e);
-                    }
-                });
-
-                jMenuUpdateOperations.setText("Update Operations");
-                jMenuUpdateOperations.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        jMenuUpdateOperations_actionPerformed(e);
-                    }
-                });
-
-                int userLevel = mwclient.getUserLevel();
-                if (userLevel >= mwclient.getData().getAccessLevel("RetrieveOperation")) {
-                    jMenuOperations.add(jMenuRetrieveOperationFile);
+            jMenuBar1.remove(jMenuOperations);
+            jMenuOperations.setText("Operations");
+            JMenuItem item = new JMenuItem("Op Editor");
+            item.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    OperationsDialog operationsDialog = new OperationsDialog(mwclient);
                 }
-                if (userLevel >= mwclient.getData().getAccessLevel("SetOperation")) {
-                    jMenuOperations.add(jMenuSetOperationFile);
-                    jMenuOperations.add(jMenuSetNewOperationFile);
-                    jMenuOperations.add(jMenuSendAllOperationFiles);
-                }
-                if (userLevel >= mwclient.getData().getAccessLevel("UpdateOperations")) {
-                    jMenuOperations.add(jMenuUpdateOperations);
-                }
+            });
+            jMenuOperations.add(item);
+            JMenuItem jMenuRetrieveOperationFile = new JMenuItem();
+            JMenuItem jMenuSetOperationFile = new JMenuItem();
+            JMenuItem jMenuSetNewOperationFile = new JMenuItem();
+            JMenuItem jMenuSendAllOperationFiles = new JMenuItem();
+            JMenuItem jMenuUpdateOperations = new JMenuItem();
 
-                jMenuBar1.add(jMenuOperations);
+            jMenuRetrieveOperationFile.setText("Retrieve Operation File");
+            jMenuRetrieveOperationFile.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    jMenuRetrieveOperationFile_actionPerformed(e);
+                }
+            });
+
+            jMenuSetOperationFile.setText("Set Operation File");
+            jMenuSetOperationFile.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    jMenuSetOperationFile_actionPerformed(e);
+                }
+            });
+
+            jMenuSetNewOperationFile.setText("Set New Operation File");
+            jMenuSetNewOperationFile.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    jMenuSetNewOperationFile_actionPerformed(e);
+                }
+            });
+
+            jMenuSendAllOperationFiles.setText("Send All Local Op Files");
+            jMenuSendAllOperationFiles.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    jMenuSendAllOperationFiles_actionPerformed(e);
+                }
+            });
+
+            jMenuUpdateOperations.setText("Update Operations");
+            jMenuUpdateOperations.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    jMenuUpdateOperations_actionPerformed(e);
+                }
+            });
+
+            int userLevel = mwclient.getUserLevel();
+            if (userLevel >= mwclient.getData().getAccessLevel("RetrieveOperation")) {
+                jMenuOperations.add(jMenuRetrieveOperationFile);
             }
+            if (userLevel >= mwclient.getData().getAccessLevel("SetOperation")) {
+                jMenuOperations.add(jMenuSetOperationFile);
+                jMenuOperations.add(jMenuSetNewOperationFile);
+                jMenuOperations.add(jMenuSendAllOperationFiles);
+            }
+            if (userLevel >= mwclient.getData().getAccessLevel("UpdateOperations")) {
+                jMenuOperations.add(jMenuUpdateOperations);
+            }
+
+            jMenuBar1.add(jMenuOperations);
             hasAdminMenus = true;
         }// end if(is admin or mod)
 

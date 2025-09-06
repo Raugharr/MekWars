@@ -24,7 +24,7 @@
 package mekwars.operationseditor;
 
 
-import mekwars.operationseditor.dialog.OperationsDialog;
+import mekwars.operationseditor.gui.dialog.OperationsDialog;
 
 public class MainOperations{
 
