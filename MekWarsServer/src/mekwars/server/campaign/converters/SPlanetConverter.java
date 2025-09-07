@@ -22,10 +22,13 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import java.util.Vector;
+import mekwars.common.CampaignData;
 import mekwars.common.Continent;
+import mekwars.common.House;
 import mekwars.common.Influences;
 import mekwars.common.PlanetEnvironments;
-import java.util.Vector;
+import mekwars.common.UnitFactory;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
 
@@ -46,7 +49,9 @@ public class SPlanetConverter implements Converter {
         String name = null;
         int componentProduction = 0;
         Influences influences = null;
-        Vector<SUnitFactory> unitFactoryList = new Vector<SUnitFactory>();
+        Vector<UnitFactory> unitFactoryList = new Vector<UnitFactory>();
+        boolean isHomeworld = false;
+        String originalOwnerString = null;
 
         while (reader.hasMoreChildren()) {
             reader.moveDown();
@@ -61,7 +66,7 @@ public class SPlanetConverter implements Converter {
             } else if (nodeName.equals("xCoord")) {
                 xcoord = reader.getValue();
             } else if (nodeName.equals("componentProduction")) {
-                componentProduction = Integer.valueOf(reader.getValue());
+                componentProduction = Integer.parseInt(reader.getValue());
             } else if (nodeName.equals("influence")) {
                 influences = (Influences) context.convertAnother(null, Influences.class);
             } else if (nodeName.equals("unitFactory")) {
@@ -71,16 +76,36 @@ public class SPlanetConverter implements Converter {
                             SUnitFactory.class
                     );
                 unitFactoryList.add(unitFactory);
+            } else if (nodeName.equals("isHomeWorld")) {
+                isHomeworld = Boolean.parseBoolean(reader.getValue());
+            } else if (nodeName.equals("originalOwner")) {
+                originalOwnerString = reader.getValue();
             }
             reader.moveUp();
         }
         if (name == null) {
             throw new ConversionException("name is null");
         }
-        SPlanet planet = new SPlanet(name, influences, componentProduction, Double.parseDouble(xcoord), Double.parseDouble(ycoord));
-        for (SUnitFactory unitFactory : unitFactoryList) {
-            unitFactory.setPlanet(planet);
+        SPlanet planet = new SPlanet(
+                name,
+                influences,
+                componentProduction,
+                Double.parseDouble(xcoord),
+                Double.parseDouble(ycoord)
+            );
+        for (UnitFactory unitFactory : unitFactoryList) {
+            ((SUnitFactory) unitFactory).setPlanet(planet);
         }
+        planet.setHomeWorld(isHomeworld);
+        if (originalOwnerString == null) {
+            Integer owner = influences.getOwner();
+            
+            House house = CampaignData.cd.getHouse(owner);
+            originalOwnerString = house.getName();
+        }
+        planet.setEnvironments(planetEnvironments);
+        planet.setUnitFactories(unitFactoryList);
+        planet.setOriginalOwner(originalOwnerString);
         return planet;
     }
 }

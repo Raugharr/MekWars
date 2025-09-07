@@ -464,17 +464,10 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             }
 
             setInitialHouseRanking(TokenReader.readInt(ST));
-
             setConquerable(TokenReader.readBoolean(ST));
-
             setInHouseAttacks(TokenReader.readBoolean(ST));
-            // Used to read the house id here but if you have to recreate a
-            // house from
-            // Pfiles this could cause issues. now we just set the ID to -1
-            // and let the server pick an id. --Torren
 
             TokenReader.readString(ST);
-            setId(-1);
             String housePlayerColor = TokenReader.readString(ST);
             try {
                 int redColor = Integer.parseInt(housePlayerColor);

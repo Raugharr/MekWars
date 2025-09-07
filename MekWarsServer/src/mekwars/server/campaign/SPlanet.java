@@ -142,7 +142,6 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
 
         setPosition(new Position(TokenReader.readDouble(ST), TokenReader.readDouble(ST)));
 
-//        int Infcount = 0;
         try {
             HashMap<Integer, Integer> influence = new HashMap<Integer, Integer>();
             {
@@ -152,14 +151,12 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
                     String HouseName = TokenReader.readString(influences);
                     SHouse h = (SHouse) data.getHouseByName(HouseName);
                     int HouseInf = TokenReader.readInt(influences);
-//                    Infcount += HouseInf;
                     if (h != null)
                         influence.put(h.getId(), HouseInf);
                     else
                         MWLogger.errLog("House not found: " + HouseName);
                 }
             }
-            // getInfluence().setInfluence(influence);
             setInfluence(new Influences(influence));
         } catch (RuntimeException ex) {
             MWLogger.errLog("Problem on Planet: " + this.getName());
@@ -204,9 +201,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         }
 
         setDescription(TokenReader.readString(ST));
-
         this.setBaysProvided(TokenReader.readInt(ST));
-
         setConquerable(TokenReader.readBoolean(ST));
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
