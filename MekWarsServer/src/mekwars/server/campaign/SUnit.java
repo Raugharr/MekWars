@@ -27,7 +27,26 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
+import megamek.common.AmmoType;
+import megamek.common.AmmoType.Munitions;
+import megamek.common.BattleArmor;
+import megamek.common.Crew;
+import megamek.common.CrewType;
+import megamek.common.CriticalSlot;
+import megamek.common.Entity;
+import megamek.common.Infantry;
+import megamek.common.MULParser;
+import megamek.common.Mech;
+import megamek.common.MechFileParser;
+import megamek.common.MechSummary;
+import megamek.common.MechSummaryCache;
+import megamek.common.Mounted;
+import megamek.common.Tank;
+import megamek.common.WeaponType;
+import megamek.common.enums.Gender;
+import megamek.common.equipment.AmmoMounted;
+import megamek.common.loaders.EntityLoadingException;
+import megamek.common.options.PilotOptions;
 import mekwars.common.CampaignData;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
@@ -39,26 +58,6 @@ import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
-import megamek.common.AmmoType;
-import megamek.common.AmmoType.Munitions;
-import megamek.common.BattleArmor;
-import megamek.common.Crew;
-import megamek.common.CrewType;
-import megamek.common.CriticalSlot;
-import megamek.common.Entity;
-import megamek.common.MULParser;
-import megamek.common.Infantry;
-import megamek.common.MULParser;
-import megamek.common.Mech;
-import megamek.common.MechFileParser;
-import megamek.common.MechSummary;
-import megamek.common.MechSummaryCache;
-import megamek.common.Mounted;
-import megamek.common.equipment.AmmoMounted;
-import megamek.common.Tank;
-import megamek.common.WeaponType;
-import megamek.common.options.PilotOptions;
-import megamek.common.enums.Gender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import mekwars.server.campaign.pilot.SPilot;
@@ -1057,79 +1056,28 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         this.unitEntity = unitEntity;
     }
 
-    public static Entity loadMech(String Filename) {
-        if (Filename == null) {
+    public static Entity loadMech(String filename) {
+        if (filename == null) {
             return null;
         }
 
-        Entity ent = null;
-
-        if (new File("./data/mechfiles").exists()) {
-            try {
-                MechSummary ms = MechSummaryCache.getInstance().getMech(Filename.trim());
-                if (ms == null) {
-                    MechSummary[] units = MechSummaryCache.getInstance().getAllMechs();
-                    for (MechSummary unit : units) {
-                        if (unit.getEntryName().equalsIgnoreCase(Filename) || unit.getModel().trim().equalsIgnoreCase(Filename.trim()) || unit.getChassis().trim().equalsIgnoreCase(Filename.trim())) {
-                            ms = unit;
-                            break;
-                        }
-                    }
-                }
-
-                if (ms != null) {
-                    ent = new MechFileParser(ms.getSourceFile(), ms.getEntryName()).getEntity();
-                }
-            } catch (Exception exep) {
-                ent = null;
-            }
-
+        MechSummary mechSummary = MechSummaryCache.getInstance().getMech(filename);
+        if (mechSummary == null) {
+            logger.error("Cannot find MechSummary for '{}', please validate units.cache is correct", filename);
+            return UnitUtils.createOMG();
         }
-
-        if (ent != null) {
-            return ent;
-        }
-
-        // look for a mek first
         try {
-            ent = new MechFileParser(new File("./data/mechfiles/Meks.zip"), Filename).getEntity();
-        } catch (Exception ex) {
-
-            // not a mek, see if file is a vehicle...
-            try {
-                ent = new MechFileParser(new File("./data/mechfiles/Vehicles.zip"), Filename).getEntity();
-            } catch (Exception exe) {
-
-                // neither mek nor veh. look for infantry.
-                try {
-                    ent = new MechFileParser(new File("./data/mechfiles/Infantry.zip"), Filename).getEntity();
-                } catch (Exception exei) {
-
-                    /*
-                     * Unit cannot be found in Meks.zip, Vehicles.zip or
-                     * Infantry.zip. Probably a bad filename (table type) or a
-                     * missing unit. Either way, need to set up and return a
-                     * failsafe unit.
-                     */
-                    logger.error("Error loading mek from file '{}'",  Filename);
-
-                    try {
-                        ent = UnitUtils.createOMG();// new MechFileParser(new
-                    } catch (Exception exep) {
-
-                        /*
-                         * Can't even find the default unit file. Are all the
-                         * .zip files missing? Misnamed? Read access is denied?
-                         */
-                        MWLogger.errLog("Unable to find default unit file. Server Exiting");
-                        MWLogger.errLog(exep);
-                        System.exit(1);
-                    }
-                }
-            }
+            MechFileParser fileParser = new MechFileParser(
+                    mechSummary.getSourceFile(),
+                    mechSummary.getEntryName()
+                );
+            
+            return fileParser.getEntity();
+        } catch (EntityLoadingException e) {
+            logger.error("Cannot load unit '{}': {}", filename, e);
+            return UnitUtils.createOMG();
         }
-        return ent;
-    }// end loadMech
+    } // end loadMech
 
     public void setPassesMaintainanceUntil(long l) {
         passesMaintainanceUntil = l;

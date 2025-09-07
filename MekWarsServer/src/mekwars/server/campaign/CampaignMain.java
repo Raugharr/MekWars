@@ -280,15 +280,6 @@ public final class CampaignMain implements Serializable {
             f.mkdir();
         }
 
-        /*
-         * clear any cache'd unit files. these will be rebuilt later in the
-         * start process. clearing @ each start ensures that updates take hold
-         * properly.
-         */
-        File cache = new File("./data/mechfiles/units.cache");
-        if (cache.exists()) {
-            cache.delete();
-        }
 
         // Try to read the config file
         try {
