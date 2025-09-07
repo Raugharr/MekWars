@@ -29,6 +29,8 @@ import megamek.client.CloseClientListener;
 import megamek.client.bot.BotClient;
 import megamek.client.bot.princess.Princess;
 import megamek.client.generator.RandomGenderGenerator;
+import megamek.client.ui.swing.ClientGUI;
+import megamek.client.ui.swing.MegaMekGUI;
 import megamek.client.ui.swing.util.MegaMekController;
 import megamek.common.Board;
 import megamek.common.BoardDimensions;
@@ -66,8 +68,8 @@ public class ClientThread extends Thread implements CloseClientListener {
     private int serverport;
     private MWClient mwclient;
     private Client client;
-    private megamek.client.ui.swing.ClientGUI swingGui;
-    private megamek.client.ui.swing.util.MegaMekController controller;
+    private ClientGUI swingGui;
+    private MegaMekController controller;
 
     private ArrayList<Unit> mechs = new ArrayList<Unit>();
     private ArrayList<CUnit> autoarmy = new ArrayList<CUnit>();// from server's
@@ -95,7 +97,9 @@ public class ClientThread extends Thread implements CloseClientListener {
         if (serverip.indexOf("127.0.0.1") != -1) {
             serverip = "127.0.0.1";
         }
-        controller = new MegaMekController();
+        MegaMekGUI megaMekGUI = new MegaMekGUI();
+        megaMekGUI.createController();
+        controller = megaMekGUI.getKeyDispatcher();
         KeyboardFocusManager kbfm = KeyboardFocusManager
                 .getCurrentKeyboardFocusManager();
         kbfm.addKeyEventDispatcher(controller);
@@ -149,7 +153,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                 swingGui.getLocalBots().clear();
             }
 
-            swingGui = new megamek.client.ui.swing.ClientGUI(client, controller);
+            swingGui = new ClientGUI(client, controller);
             swingGui.initialize();
 
 
