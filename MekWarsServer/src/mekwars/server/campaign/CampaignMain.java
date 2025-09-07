@@ -12,7 +12,6 @@
 package mekwars.server.campaign;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.security.AnyTypePermission;
 import mekwars.common.AdvancedTerrain;
 import mekwars.common.CampaignData;
 import mekwars.common.Continent;
@@ -364,8 +363,6 @@ public final class CampaignMain implements Serializable {
         xstream.alias("unitFactory", SUnitFactory.class);
         xstream.alias("terrain", Terrain.class);
         xstream.alias("influences", Influences.class);
-
-        xstream.addPermission(AnyTypePermission.ANY);
 
         File terrainFile = new File("./data/terrain.xml");
         Terrain[] terrainList = (Terrain[]) getXStream().fromXML(terrainFile);

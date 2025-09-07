@@ -16,12 +16,11 @@
 
 package mekwars.common.util;
 
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.core.ReferenceByIdMarshallingStrategy;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
-
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import mekwars.common.AdvancedTerrain;
 import mekwars.common.House;
 import mekwars.common.Planet;
@@ -48,5 +47,6 @@ public class MMNetXStream extends XStream {
         alias("advancedTerrain", AdvancedTerrain.class);
         // Enables reference marshalling.
         setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
+        addPermission(AnyTypePermission.ANY);
     }
 }
