@@ -17,14 +17,13 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.common.SubFaction;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
-
 
 /**
  * Syntax  /SetSubFactionConfig SubFactionName#FactionName#Config#Value#Config#Value....
@@ -41,7 +40,7 @@ public class SetSubFactionConfigCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -54,7 +53,7 @@ public class SetSubFactionConfigCommand implements Command {
 		
 		try{
 			subFactionName = command.nextToken();
-			if ( CampaignMain.cm.getServer().isModerator(Username) )
+			if ( MWServ.getInstance().isModerator(Username) )
 				factionName = command.nextToken();
 			else{
 				command.nextElement();

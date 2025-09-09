@@ -48,6 +48,7 @@ import megamek.common.Entity;
 import megamek.common.IEntityRemovalConditions;
 import megamek.common.Infantry;
 import megamek.common.Mech;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.BuildTable;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
@@ -521,7 +522,7 @@ public class ShortResolver {
         CampaignMain.cm.addGamesCompleted(1);
 
         if (o.getBooleanValue("ReportOpToNewsFeed")) {
-            CampaignMain.cm.addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
+            MWServ.getInstance().addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
             CampaignMain.cm.postToDiscord(newsFeedBody);
         }
         so.getReporter().closeOperation(drawGame, attackersWon);
@@ -800,7 +801,7 @@ public class ShortResolver {
         // send to news feed, if the server ops believe this is a "meaningful"
         // game
         if (o.getBooleanValue("ReportOpToNewsFeed")) {
-            CampaignMain.cm.addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
+            MWServ.getInstance().addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
             CampaignMain.cm.postToDiscord(newsFeedBody);
         }
         

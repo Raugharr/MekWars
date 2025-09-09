@@ -1,7 +1,7 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.util.SPlayerToJSON;
@@ -18,7 +18,7 @@ public class SPlayerToJsonCommand implements Command
 	public void process(StringTokenizer command,String Username) 
 	{
 		//access level checks
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		
 		if(userLevel < getExecutionLevel()) 
 		{

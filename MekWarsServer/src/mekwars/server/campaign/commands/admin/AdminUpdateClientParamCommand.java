@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
@@ -43,7 +43,7 @@ public class AdminUpdateClientParamCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check. hard check'ed to admin.
-		if(CampaignMain.cm.getServer().getUserLevel(Username) < IAuthenticator.ADMIN) {
+		if(MWServ.getInstance().getUserLevel(Username) < IAuthenticator.ADMIN) {
 			CampaignMain.cm.toUser("Only admins may use the update client param command.",Username,true);
 			return;
 		}

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.StringTokenizer;
 
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 
@@ -56,7 +57,7 @@ public class QuirkCheckCommand implements Command
 	{
 		enableQuirks = CampaignMain.cm.getBooleanConfig("EnableQuirks");
 		player = CampaignMain.cm.getPlayer(username);
-		userLevel = CampaignMain.cm.getServer().getUserLevel(username);
+		userLevel = MWServ.getInstance().getUserLevel(username);
 	}
 
 	private boolean checkAccess() 

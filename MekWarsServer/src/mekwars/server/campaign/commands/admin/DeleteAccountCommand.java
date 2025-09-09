@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.io.File;
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -36,7 +36,7 @@ public class DeleteAccountCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		if(userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
@@ -77,8 +77,8 @@ public class DeleteAccountCommand implements Command {
 		CampaignMain.cm.doSendModMail("NOTE",Username + " deleted " + p.getName() + "'s account.");
 		//server.MWLogger.modLog(Username + " deleted " + p.getName() + "'s account.");
 		CampaignMain.cm.doLogoutPlayer(p.getName(),false);  //Baruk Khazad! 20151110
-		if (CampaignMain.cm.getServer().getClient(MWChatServer.clientKey(p.getName())) != null)
-			CampaignMain.cm.getServer().killClient(p.getName(),Username);
+		if (MWServ.getInstance().getClient(MWChatServer.clientKey(p.getName())) != null)
+			MWServ.getInstance().killClient(p.getName(),Username);
 		
 	}//end process()
 	

@@ -26,6 +26,7 @@ import mekwars.common.House;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SHouse;
@@ -114,8 +115,8 @@ public class OpponentListHelper {
 				//check for same IP if account involvement is barred
 				if (CampaignMain.cm.getBooleanConfig("IPCheck")) {
 					try {
-						String p1 = CampaignMain.cm.getServer().getIP(searchPlayer.getName()).toString();
-						String p2 = CampaignMain.cm.getServer().getIP(currPlayer.getName()).toString();
+						String p1 = MWServ.getInstance().getIP(searchPlayer.getName()).toString();
+						String p2 = MWServ.getInstance().getIP(currPlayer.getName()).toString();
 						if (p1.equals(p2))
 							continue playersLoop;
 					} catch (Exception e) {

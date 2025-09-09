@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.common.House;
 import mekwars.common.Planet;
 import mekwars.common.util.MWLogger;
@@ -39,7 +39,7 @@ public class AdminReturnPlanetsToOriginalOwnersCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		if(userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;

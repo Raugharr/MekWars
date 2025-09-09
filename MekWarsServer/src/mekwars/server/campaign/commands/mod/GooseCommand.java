@@ -17,7 +17,7 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -35,7 +35,7 @@ public class GooseCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		if(userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
@@ -50,7 +50,7 @@ public class GooseCommand implements Command {
 				return;
 			}
 			
-			if ( p.getName().equalsIgnoreCase("torren") || p.getName().equalsIgnoreCase("spork") || userLevel < CampaignMain.cm.getServer().getUserLevel(p.getName()) ) {
+			if ( p.getName().equalsIgnoreCase("torren") || p.getName().equalsIgnoreCase("spork") || userLevel < MWServ.getInstance().getUserLevel(p.getName()) ) {
 				CampaignMain.cm.toUser(p.getName()+" grabs your hand and breaks it just before your able to goose 'em!", Username);
 				CampaignMain.cm.toUser(Username+" tried to goose you but you deftly avoided it!",p.getName());
 				CampaignMain.cm.doSendModMail("NOTE",Username + " tried to goose " + p.getName() + " and nearly lost their hand for it.");

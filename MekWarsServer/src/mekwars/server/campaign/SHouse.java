@@ -50,6 +50,7 @@ import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.TechConstants;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.campaign.data.TimeUpdateHouse;
 import mekwars.server.campaign.market2.IBuyer;
@@ -2180,7 +2181,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         CampaignMain.cm.toUser(tsBans.toString(), realName, false);
         
         // Send default player flags if it's an admin or mod
-        if (CampaignMain.cm.getServer().isModerator(p.getName()) || CampaignMain.cm.getServer().isAdmin(p.getName())) {
+        if (MWServ.getInstance().isModerator(p.getName()) || MWServ.getInstance().isAdmin(p.getName())) {
             if(!CampaignMain.cm.getDefaultPlayerFlags().isEmpty()) {
                 CampaignMain.cm.toUser("PF|SDF|" + CampaignMain.cm.getDefaultPlayerFlags().export(), p.getName(), false);
             }

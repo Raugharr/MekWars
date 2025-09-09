@@ -17,7 +17,7 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWClientInfo;
 import mekwars.server.campaign.CampaignMain;
 
@@ -32,7 +32,7 @@ public class InCharacterCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -52,12 +52,12 @@ public class InCharacterCommand implements Command {
 		toSend = "(In Character)"+Username+":" + toSend;
 		
         //if client is somehow null, just send the message
-        MWClientInfo client = CampaignMain.cm.getServer().getUser(Username);
+        MWClientInfo client = MWServ.getInstance().getUser(Username);
         if (client == null) 
         	return;
         
-        boolean generalMute = CampaignMain.cm.getServer().getIgnoreList().indexOf(client.getName()) > -1;
-        boolean factionMute = CampaignMain.cm.getServer().getFactionLeaderIgnoreList().indexOf(client.getName()) > -1;
+        boolean generalMute = MWServ.getInstance().getIgnoreList().indexOf(client.getName()) > -1;
+        boolean factionMute = MWServ.getInstance().getFactionLeaderIgnoreList().indexOf(client.getName()) > -1;
        
         if (generalMute || factionMute)
             CampaignMain.cm.toUser("AM:You've been set to ignore mode and cannot participate in chat.", Username,true);

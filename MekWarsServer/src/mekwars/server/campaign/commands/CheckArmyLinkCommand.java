@@ -20,6 +20,7 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
@@ -36,7 +37,7 @@ public class CheckArmyLinkCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -56,7 +57,7 @@ public class CheckArmyLinkCommand implements Command {
 			return;
 		}
 		
-		if (p.getDutyStatus() != SPlayer.STATUS_FIGHTING && CampaignMain.cm.getServer().getUserLevel(Username) < IAuthenticator.ADMIN) {
+		if (p.getDutyStatus() != SPlayer.STATUS_FIGHTING && MWServ.getInstance().getUserLevel(Username) < IAuthenticator.ADMIN) {
 			CampaignMain.cm.toUser("AM:You may only check links in fighting players' amries.",Username,true);
 			return;
 		}

@@ -17,7 +17,7 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -38,7 +38,7 @@ public class AddLeaderCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -55,10 +55,10 @@ public class AddLeaderCommand implements Command {
 			if ( player.getPassword().getAccess() < level ) {
 				//CampaignMain.cm.updatePlayersAccessLevel(target,level);
 				MWPasswd.getRecord(target).setAccess(level);
-				CampaignMain.cm.getServer().getClient(target).setAccessLevel(level);
-				CampaignMain.cm.getServer().getUser(target).setLevel(level);
-				CampaignMain.cm.getServer().sendRemoveUserToAll(target, false);
-				CampaignMain.cm.getServer().sendNewUserToAll(target, false);
+				MWServ.getInstance().getClient(target).setAccessLevel(level);
+				MWServ.getInstance().getUser(target).setLevel(level);
+				MWServ.getInstance().sendRemoveUserToAll(target, false);
+				MWServ.getInstance().sendNewUserToAll(target, false);
 				MWPasswd.writeRecord(player.getPassword(), target);
 				if (player != null) {
 					CampaignMain.cm.doSendToAllOnlinePlayers("PI|DA|" + CampaignMain.cm.getPlayerUpdateString(player), false);

@@ -18,6 +18,7 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 
 import mekwars.common.SubFaction;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
@@ -51,7 +52,7 @@ public class SelfPromoteCommand implements Command {
 
         if (accessLevel != 0) 
         {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
             
             if (userLevel < getExecutionLevel()) 
             {

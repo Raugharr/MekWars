@@ -20,7 +20,7 @@ package mekwars.server.campaign.commands;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.votes.Vote;
@@ -39,7 +39,7 @@ public class MyVotesCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;

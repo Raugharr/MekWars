@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
@@ -42,7 +42,7 @@ public class AdminSpoofCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check
-		if(CampaignMain.cm.getServer().getUserLevel(Username) < IAuthenticator.ADMIN) {
+		if(MWServ.getInstance().getUserLevel(Username) < IAuthenticator.ADMIN) {
 			CampaignMain.cm.toUser("Only admins may use the spoof command.",Username,true);
 			return;
 		}
@@ -69,7 +69,7 @@ public class AdminSpoofCommand implements Command {
     		return;
 		}
 		
-		if ( CampaignMain.cm.getServerCommands().get(targetCommandName.toUpperCase()).getExecutionLevel() > CampaignMain.cm.getServer().getUserLevel(targetPlayerName)){
+		if ( CampaignMain.cm.getServerCommands().get(targetCommandName.toUpperCase()).getExecutionLevel() > MWServ.getInstance().getUserLevel(targetPlayerName)){
 			CampaignMain.cm.toUser(targetPlayerName+"'s access level is too low to use command "+targetCommandName, Username);
 			return;
 		}

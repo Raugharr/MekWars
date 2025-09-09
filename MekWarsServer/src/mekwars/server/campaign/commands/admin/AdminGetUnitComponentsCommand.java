@@ -24,6 +24,7 @@ import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
 import megamek.common.Mech;
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -53,7 +54,7 @@ public class AdminGetUnitComponentsCommand implements Command {
     public void process(StringTokenizer command, String Username) {
 
         // access level check
-        int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
         if (userLevel < getExecutionLevel()) {
             CampaignMain.cm.toUser(
                     "AM:Insufficient access level for command. Level: "

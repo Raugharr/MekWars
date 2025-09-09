@@ -17,7 +17,7 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 
@@ -36,7 +36,7 @@ public class ReportStatusMC implements Command
 	public void process(StringTokenizer command,String Username) 
 	{
 		//access level checks
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		SPlayer p = CampaignMain.cm.getPlayer(Username);
 
 		if(userLevel < getExecutionLevel()) 

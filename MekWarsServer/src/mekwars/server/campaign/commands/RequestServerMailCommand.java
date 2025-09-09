@@ -21,7 +21,7 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 
@@ -37,16 +37,16 @@ public class RequestServerMailCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		if(userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
 		}
 		
-        if (CampaignMain.cm.getServer().getServerMail().get(Username.toLowerCase()) != null) {
-            CampaignMain.cm.toUser("PM|SERVER|" + (CampaignMain.cm.getServer().getServerMail().get(Username.toLowerCase())), Username,false);
-    		CampaignMain.cm.getServer().getServerMail().remove(Username.toLowerCase());
-            CampaignMain.cm.getServer().doWriteMailFile();
+        if (MWServ.getInstance().getServerMail().get(Username.toLowerCase()) != null) {
+            CampaignMain.cm.toUser("PM|SERVER|" + (MWServ.getInstance().getServerMail().get(Username.toLowerCase())), Username,false);
+    		MWServ.getInstance().getServerMail().remove(Username.toLowerCase());
+            MWServ.getInstance().doWriteMailFile();
         }
         else
             CampaignMain.cm.toUser("AM:Sorry but you do not have any mail waiting for you.",Username,true);

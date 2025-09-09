@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 
 /**
@@ -59,10 +60,10 @@ public class Feed {
 		sb.append("<channel>\n");
 		sb.append("<atom:link href=\"" + CampaignMain.cm.getConfig("NewsURL") + "\" rel=\"self\" type=\"application/rss+xml\" />\n");
 		sb.append("<title>");
-		sb.append(CampaignMain.cm.getServer().getConfigParam("SERVERNAME") + " News Feed");
+		sb.append(MWServ.getInstance().getConfigParam("SERVERNAME") + " News Feed");
 		sb.append("</title>\n");
 		sb.append("<link>");
-		sb.append(CampaignMain.cm.getServer().getConfigParam("TRACKERLINK"));
+		sb.append(MWServ.getInstance().getConfigParam("TRACKERLINK"));
 		sb.append("</link>\n");
 		sb.append("<description>Campaign News</description>\n");
 		return sb.toString();

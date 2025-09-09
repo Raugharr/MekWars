@@ -16,16 +16,8 @@
 
 package mekwars.server.campaign.commands;
 
-//import java.io.File;
-//import java.io.IOException;
-//import java.io.UnsupportedEncodingException;
-//import java.nio.file.Files;
-//import java.nio.file.Paths;
-//import java.nio.file.StandardOpenOption;
 import java.util.StringTokenizer;
-
-//
-//import mekwars.common.CampaignData;
+import mekwars.server.MWServ;
 import mekwars.server.MWClientInfo;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -47,7 +39,7 @@ public class MeCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -82,15 +74,15 @@ public class MeCommand implements Command {
         	channel = channels.nextToken();
 
         //if client is somehow null, just send the message
-        MWClientInfo client = CampaignMain.cm.getServer().getUser(Username);
+        MWClientInfo client = MWServ.getInstance().getUser(Username);
         if (client == null) {
         	CampaignMain.cm.doSendToAllOnlinePlayers(Username + "|#me " + toSend,true);
         	return;
         }
         
         //check to see if the player is muted
-        boolean generalMute = CampaignMain.cm.getServer().getIgnoreList().indexOf(client.getName()) > -1;
-        boolean factionMute = CampaignMain.cm.getServer().getFactionLeaderIgnoreList().indexOf(client.getName()) > -1;
+        boolean generalMute = MWServ.getInstance().getIgnoreList().indexOf(client.getName()) > -1;
+        boolean factionMute = MWServ.getInstance().getFactionLeaderIgnoreList().indexOf(client.getName()) > -1;
        
         if (generalMute || factionMute)
             CampaignMain.cm.toUser("AM:You've been set to ignore mode and cannot participate in chat.", Username,true);
@@ -107,7 +99,7 @@ public class MeCommand implements Command {
 		}
 		else if ( channel.equalsIgnoreCase("mail") ){
 			String reciever = channels.nextToken();
-			CampaignMain.cm.getServer().doStoreMail(reciever+",#me " + toSend, Username);
+			MWServ.getInstance().doStoreMail(reciever+",#me " + toSend, Username);
 		}
 		else {
 	        CampaignMain.cm.doSendToAllOnlinePlayers(Username+"|#me " + toSend,true);

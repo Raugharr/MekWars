@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 import mekwars.common.CampaignData;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.operations.ShortOperation;
@@ -39,7 +40,7 @@ public class CommenceOperationCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;

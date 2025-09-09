@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.admin;
 
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -35,7 +35,7 @@ public class InvisCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		if(userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
@@ -52,10 +52,10 @@ public class InvisCommand implements Command {
         
         player.setInvisible(!player.isInvisible());
 
-        CampaignMain.cm.getServer().sendRemoveUserToAll(Username,false);
+        MWServ.getInstance().sendRemoveUserToAll(Username,false);
 
-        CampaignMain.cm.getServer().getUser(Username).setInvis(player.isInvisible());
-        CampaignMain.cm.getServer().sendNewUserToAll(Username,false);
+        MWServ.getInstance().getUser(Username).setInvis(player.isInvisible());
+        MWServ.getInstance().sendNewUserToAll(Username,false);
         
         //Fix for BUG 1491951: post-invisibility status
         CampaignMain.cm.sendPlayerStatusUpdate(player,true);

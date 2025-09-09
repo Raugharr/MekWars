@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import mekwars.common.Unit;
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.BuildTable;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.NewbieHouse;
@@ -52,7 +53,7 @@ public class RequestCommand implements Command {
 
     public void process(StringTokenizer command, String Username) {
 
-    	int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+    	int userLevel = MWServ.getInstance().getUserLevel(Username);
     	
         if (accessLevel != 0) {
             if (userLevel < getExecutionLevel()) {

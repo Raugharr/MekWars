@@ -23,8 +23,10 @@ import java.util.Date;
 
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
-import mekwars.server.campaign.CampaignMain;
+import mekwars.server.MWServ;
 import mekwars.server.dataProvider.ServerCommand;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Retrieve all planet information (if the data cache is lost at client side)
@@ -32,6 +34,7 @@ import mekwars.server.dataProvider.ServerCommand;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class ServerConfig implements ServerCommand {
+    private static final Logger logger = LogManager.getLogger(ServerConfig.class);
 
     /**
      * @see server.dataProvider.ServerCommand#execute(java.util.Date,
@@ -39,13 +42,19 @@ public class ServerConfig implements ServerCommand {
      */
     public void execute(Date timestamp, BinWriter out, CampaignData data)
             throws Exception {
-        FileInputStream configFile = new FileInputStream(CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG"));
-        BufferedReader config = new BufferedReader(new InputStreamReader(configFile));
-         
-        while (config.ready()) {
-            out.println(config.readLine(),"ConfigLine");
-        }
+        try {
+            String campaignConfig = MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG");
+            FileInputStream configFile = new FileInputStream(campaignConfig);
+            BufferedReader config = new BufferedReader(new InputStreamReader(configFile));
+             
+            while (config.ready()) {
+                out.println(config.readLine(),"ConfigLine");
+            }
         
-        config.close();
+            config.close();
+        } catch (Exception ex) {
+           logger.error("ServerConfig failed"); 
+           logger.error(ex); 
+        }
     }
 }

@@ -17,7 +17,8 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 
 /**
@@ -36,7 +37,7 @@ public class MailCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -55,7 +56,7 @@ public class MailCommand implements Command {
 		if (toSend.trim().length() == 0)
 			return;
 		
-		CampaignMain.cm.getServer().doStoreMail(toSend, Username);
+		MWServ.getInstance().doStoreMail(toSend, Username);
 		
 	}
 }
