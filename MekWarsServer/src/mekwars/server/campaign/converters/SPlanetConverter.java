@@ -141,9 +141,7 @@ public class SPlanetConverter implements Converter {
             } else if (nodeName.equals("originalOwner")) {
                 originalOwnerString = reader.getValue();
             } else if (nodeName.equals("operationFlags")) {
-                //reader.moveDown();
                 planetFlags = unmarshalOperationFlags(reader, context);
-                //reader.moveUp();
             }
             reader.moveUp();
         }
@@ -184,9 +182,7 @@ public class SPlanetConverter implements Converter {
             reader.moveDown();
             String nodeName = reader.getNodeName();
             if (nodeName.equals("operationFlag")) {
-                //reader.moveDown();
                 unmarshalOperationFlag(operationFlags, reader, context);
-                //reader.moveUp();
             }
             reader.moveUp();
         }

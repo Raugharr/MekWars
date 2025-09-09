@@ -16,10 +16,9 @@
 
 package mekwars.server.campaign.converters;
 
+import java.util.Vector;
 import mekwars.common.UnitFactory;
-
 import mekwars.server.campaign.SUnitFactory;
-
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -32,8 +31,59 @@ public class SUnitFactoryConverter implements Converter {
         return clazz.equals(SUnitFactory.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-        // TODO: Implement
+    public void marshal(Object source, HierarchicalStreamWriter writer,
+            MarshallingContext context) {
+        SUnitFactory unitFactory = (SUnitFactory) source;
+
+        writer.startNode("name");
+        writer.setValue(unitFactory.getName());
+        writer.endNode();
+
+        writer.startNode("size");
+        writer.setValue(unitFactory.getSize());
+        writer.endNode();
+
+        writer.startNode("founder");
+        writer.setValue(unitFactory.getFounder());
+        writer.endNode();
+
+        writer.startNode("ticksUntilRefresh");
+        writer.setValue(Integer.toString(unitFactory.getTicksUntilRefresh()));
+        writer.endNode();
+
+        writer.startNode("buildTableFolder");
+        writer.setValue(unitFactory.getBuildTableFolder());
+        writer.endNode();
+
+        writer.startNode("accessLevel");
+        writer.setValue(Integer.toString(unitFactory.getAccessLevel()));
+        writer.endNode();
+
+        Vector<String> types = new Vector<String>();
+        if (unitFactory.canProduce(UnitFactory.BUILDVEHICLES)) {
+            types.add("Vehicle");
+        }
+        if (unitFactory.canProduce(UnitFactory.BUILDINFANTRY)) {
+            types.add("Infantry");
+        }
+        if (unitFactory.canProduce(UnitFactory.BUILDBATTLEARMOR)) {
+            types.add("BattleArmor");
+        }
+        if (unitFactory.canProduce(UnitFactory.BUILDPROTOMECHS)) {
+            types.add("Protomek");
+        }
+        if (unitFactory.canProduce(UnitFactory.BUILDAERO)) {
+            types.add("Aero");
+        }
+        if (unitFactory.canProduce(UnitFactory.BUILDMEK)) {
+            types.add("Mek");
+        }
+
+        for (String type : types) {
+            writer.startNode("type");
+            writer.setValue(type);
+            writer.endNode();
+        }
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
@@ -64,17 +114,17 @@ public class SUnitFactoryConverter implements Converter {
             } else if (nodeName.equals("accessLevel")) {
                 accessLevel = Integer.valueOf(reader.getValue());
             } else if (nodeName.equals("type")) {
-                if (nodeName.equals("vehicle")) {
+                if (nodeName.equals("Vehicle")) {
                     type = type + UnitFactory.BUILDVEHICLES;
-                } else if (nodeName.equals("infantry")) {
+                } else if (nodeName.equals("Infantry")) {
                     type = type + UnitFactory.BUILDINFANTRY;
-                } else if (nodeName.equals("battleArmor")) {
+                } else if (nodeName.equals("BattleArmor")) {
                     type = type + UnitFactory.BUILDBATTLEARMOR;
-                } else if (nodeName.equals("protomek")) {
+                } else if (nodeName.equals("Protomek")) {
                     type = type + UnitFactory.BUILDPROTOMECHS;
-                } else if (nodeName.equals("aero")) {
+                } else if (nodeName.equals("Aero")) {
                     type = type + UnitFactory.BUILDAERO;
-                } else {
+                } else if (nodeName.equals("Mek")) {
                     type = type + UnitFactory.BUILDMEK;
                 }
             }

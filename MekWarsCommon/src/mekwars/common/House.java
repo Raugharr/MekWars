@@ -726,6 +726,10 @@ public class House {
         this.tags = tags;
     }
 
+    public Set<FactionTag>getTags() {
+        return tags;
+    }
+
     public boolean is(FactionTag tag) {
         return tags.contains(tag);
     }

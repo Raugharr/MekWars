@@ -34,8 +34,67 @@ public class SHouseConverter implements Converter {
         return clazz.equals(SHouse.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-        // TODO: Implement
+    public void marshal(Object source, HierarchicalStreamWriter writer,
+            MarshallingContext context) {
+        SHouse house = (SHouse) source;
+
+        writer.startNode("name");
+        writer.setValue(house.getName());
+        writer.endNode();
+
+        writer.startNode("color");
+        writer.setValue(house.getHouseColor());
+        writer.endNode();
+
+        writer.startNode("abbreviation");
+        writer.setValue(house.getAbbreviation());
+        writer.endNode();
+
+        writer.startNode("type");
+        if (house instanceof NewbieHouse) {
+            writer.setValue("Mercenary");
+        } else if (house instanceof MercHouse) {
+            writer.setValue("Newbie");
+        } else {
+            writer.setValue("House");
+        }
+        writer.endNode();
+
+        writer.startNode("logo");
+        writer.setValue(house.getLogo());
+        writer.endNode();
+
+        writer.startNode("baseGunner");
+        writer.setValue(Integer.toString(house.getBaseGunner()));
+        writer.endNode();
+
+        writer.startNode("basePilot");
+        writer.setValue(Integer.toString(house.getBasePilot()));
+        writer.endNode();
+
+        writer.startNode("conquerable");
+        writer.setValue(Boolean.toString(house.isConquerable()));
+        writer.endNode();
+
+        writer.startNode("inHouseAttacks");
+        writer.setValue(Boolean.toString(house.isInHouseAttacks()));
+        writer.endNode();
+
+        writer.startNode("housePlayerColor");
+        writer.setValue(house.getHouseColor());
+        writer.endNode();
+
+        writer.startNode("canDefectFrom");
+        writer.setValue(Boolean.toString(house.getHouseDefectionFrom()));
+        writer.endNode();
+
+        writer.startNode("canDefectTo");
+        writer.setValue(Boolean.toString(house.getHouseDefectionTo()));
+        writer.endNode();
+
+        writer.startNode("tags");
+        context.convertAnother(house.getTags());
+        writer.endNode();
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {

@@ -31,7 +31,17 @@ public class TerrainConverter implements Converter {
     }
 
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-        // TODO: Implement
+        Terrain terrain = (Terrain) source;
+
+        for (PlanetEnvironment environment : terrain.getEnvironments()) {
+            writer.startNode("environment");
+            context.convertAnother(environment);
+            writer.endNode();
+        }
+
+        writer.startNode("name");
+        writer.setValue(terrain.getName());
+        writer.endNode();
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
