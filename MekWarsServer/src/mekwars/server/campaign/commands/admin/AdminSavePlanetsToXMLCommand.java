@@ -18,6 +18,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Collection;
 import java.util.StringTokenizer;
 
 import mekwars.common.Continent;
@@ -35,7 +36,7 @@ import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminSavePlanetsToXMLCommand implements Command {
-	int accessLevel = IAuthenticator.ADMIN;
+    int accessLevel = IAuthenticator.ADMIN;
     String syntax = "";
 
     public int getExecutionLevel() {
@@ -62,78 +63,8 @@ public class AdminSavePlanetsToXMLCommand implements Command {
         try {
             FileOutputStream out = new FileOutputStream("./campaign/saveplanets.xml");
             PrintStream p = new PrintStream(out);
-            p.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOCUMENT SYSTEM \"planets.dtd\">");
-            p.println("<DOCUMENT>");
-            p.println("<MEGAMEKNETPLANETDATA>");
-
-            for (Planet planets : CampaignMain.cm.getData().getAllPlanets()) {
-                SPlanet planet = (SPlanet) planets;
-                p.println("	<PLANET>");
-                p.println("		<NAME>" + planet.getName() + "</NAME>");
-                p.println("		<COMPPRODUCTION>" + planet.getCompProduction() + "</COMPPRODUCTION>");
-                p.println("		<XCOOD>" + planet.getPosition().x + "</XCOOD>");
-                p.println("		<YCOOD>" + planet.getPosition().y + "</YCOOD>");
-                p.println("		<INFLUENCE>");
-                for (House flu : planet.getInfluence().getHouses()) {
-                    p.println("			<INF>");
-                    SHouse faction = (SHouse) flu;
-                    p.println("				<FACTION>" + faction.getName() + "</FACTION>");
-                    p.println("				<AMOUNT>" + planet.getInfluence().getInfluence(faction.getId()) + "</AMOUNT>");
-                    p.println("			</INF>");
-                }
-                p.println("		</INFLUENCE>");
-                p.print("       <ORIGINALOWNER>");
-                p.print(planet.getOriginalOwner());
-                p.println("</ORIGINALOWNER>");
-                for (UnitFactory UF : planet.getUnitFactories()) {
-                    p.println("		<UNITFACTORY>");
-                    SUnitFactory factory = (SUnitFactory) UF;
-                    p.println("			<FACTORYNAME>" + factory.getName() + "</FACTORYNAME>");
-                    p.println("			<SIZE>" + factory.getSize() + "</SIZE>");
-                    p.println("			<FOUNDER>" + factory.getFounder() + "</FOUNDER>");
-                    p.println("			<BUILDTABLEFOLDER>" + factory.getBuildTableFolder().substring(BuildTable.STANDARD.length()) + "</BUILDTABLEFOLDER>");
-                    if (factory.canProduce(Unit.MEK)) {
-                        p.println("			<TYPE>Mek</TYPE>");
-                    }
-                    if (factory.canProduce(Unit.INFANTRY)) {
-                        p.println("			<TYPE>Infantry</TYPE>");
-                    }
-                    if (factory.canProduce(Unit.VEHICLE)) {
-                        p.println("			<TYPE>Vehicle</TYPE>");
-                    }
-                    if (factory.canProduce(Unit.PROTOMEK)) {
-                        p.println("         <TYPE>PROTOMEK</TYPE>");
-                    }
-                    if (factory.canProduce(Unit.BATTLEARMOR)) {
-                        p.println("         <TYPE>BATTLEARMOR</TYPE>");
-                    }
-                    if (factory.canProduce(Unit.AERO)) {
-                        p.println("         <TYPE>AERO</TYPE>");
-                    }
-                    p.println("		</UNITFACTORY>");
-                }
-
-                for (Continent pe : planet.getEnvironments().toArray()) {
-                    p.println("		<CONTINENT>");
-                    p.println("			<TERRAIN>" + pe.getEnvironment().getName() + "</TERRAIN>");
-                    p.println("			<ADVTERRAIN>" + pe.getAdvancedTerrain().getName() + "</ADVTERRAIN>");                  
-                    p.println("			<SIZE>" + pe.getSize() + "</SIZE>");
-                    p.println("		</CONTINENT>");
-                }
-                p.println("     <WAREHOUSE>" + planet.getBaysProvided() + "</WAREHOUSE>");
-                if (planet.getPlanetFlags().size() > 0) {
-                    p.println("     <PLANETOPFLAGS>");
-                    for (String key : planet.getPlanetFlags().keySet()) {
-                        p.println("          <OPKEY>" + key + "</OPKEY>");
-                        p.println("          <OPNAME>" + planet.getPlanetFlags().get(key) + "</OPNAME>");
-                    }
-                    p.println("     </PLANETOPFLAGS>");
-                }
-                p.println("     <HOMEWORLD>" + planet.isHomeWorld() + "</HOMEWORLD>");
-                p.println("	</PLANET>");
-            }
-            p.println("</MEGAMEKNETPLANETDATA>");
-            p.println("</DOCUMENT>");
+            Collection<Planet> planets = CampaignMain.cm.getData().getAllPlanets();
+            p.print(CampaignMain.cm.getXStream().toXML(planets.toArray()));
             p.close();
             out.close();
         } catch (Exception ex) {
@@ -141,6 +72,5 @@ public class AdminSavePlanetsToXMLCommand implements Command {
         }
         CampaignMain.cm.toUser("XML saved!", Username, true);
         CampaignMain.cm.doSendModMail("NOTE", Username + " has saved the universe to XML");
-
     }
 }

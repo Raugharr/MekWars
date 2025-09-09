@@ -22,6 +22,7 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import java.util.TreeMap;
 import java.util.Vector;
 import mekwars.common.CampaignData;
 import mekwars.common.Continent;
@@ -39,7 +40,65 @@ public class SPlanetConverter implements Converter {
 
     public void marshal(Object source, HierarchicalStreamWriter writer,
             MarshallingContext context) {
-        // TODO: Implement
+        SPlanet planet = (SPlanet) source;
+
+        for (Continent continent : planet.getEnvironments().toArray()) {
+            writer.startNode("continent");
+            context.convertAnother(continent);
+            writer.endNode();
+        }
+
+        writer.startNode("name");
+        writer.setValue(planet.getName());
+        writer.endNode();
+
+        writer.startNode("xCoord");
+        writer.setValue(Double.toString(planet.getPosition().x));
+        writer.endNode();
+
+        writer.startNode("yCoord");
+        writer.setValue(Double.toString(planet.getPosition().y));
+        writer.endNode();
+
+        writer.startNode("componentProduction");
+        writer.setValue(Integer.toString(planet.getCompProduction()));
+        writer.endNode();
+
+        writer.startNode("influence");
+        context.convertAnother(planet.getInfluence());
+        writer.endNode();
+
+        for (UnitFactory unitFactory : planet.getUnitFactories()) {
+            writer.startNode("unitFactory");
+            context.convertAnother(unitFactory);
+            writer.endNode();
+        }
+
+        writer.startNode("isHomeworld");
+        writer.setValue(Boolean.toString(planet.isHomeWorld()));
+        writer.endNode();
+
+        writer.startNode("originalOwner");
+        writer.setValue(planet.getOriginalOwner());
+        writer.endNode();
+
+        if (planet.getPlanetFlags().size() > 0) {
+            writer.startNode("operationFlags");
+            for (String key : planet.getPlanetFlags().keySet()) {
+                writer.startNode("operationFlag");
+
+                writer.startNode("key");
+                writer.setValue(key);
+                writer.endNode();
+
+                writer.startNode("value");
+                writer.setValue(planet.getPlanetFlags().get(key));
+                writer.endNode();
+
+                writer.endNode();
+            }
+            writer.endNode();
+        }
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
@@ -52,6 +111,7 @@ public class SPlanetConverter implements Converter {
         Vector<UnitFactory> unitFactoryList = new Vector<UnitFactory>();
         boolean isHomeworld = false;
         String originalOwnerString = null;
+        TreeMap<String, String> planetFlags = null;
 
         while (reader.hasMoreChildren()) {
             reader.moveDown();
@@ -76,10 +136,14 @@ public class SPlanetConverter implements Converter {
                             SUnitFactory.class
                     );
                 unitFactoryList.add(unitFactory);
-            } else if (nodeName.equals("isHomeWorld")) {
+            } else if (nodeName.equals("isHomeworld")) {
                 isHomeworld = Boolean.parseBoolean(reader.getValue());
             } else if (nodeName.equals("originalOwner")) {
                 originalOwnerString = reader.getValue();
+            } else if (nodeName.equals("operationFlags")) {
+                //reader.moveDown();
+                planetFlags = unmarshalOperationFlags(reader, context);
+                //reader.moveUp();
             }
             reader.moveUp();
         }
@@ -106,6 +170,44 @@ public class SPlanetConverter implements Converter {
         planet.setEnvironments(planetEnvironments);
         planet.setUnitFactories(unitFactoryList);
         planet.setOriginalOwner(originalOwnerString);
+        if (planetFlags != null) {
+            planet.setPlanetFlags(planetFlags);
+        }
         return planet;
+    }
+
+    public TreeMap<String, String> unmarshalOperationFlags(HierarchicalStreamReader reader,
+            UnmarshallingContext context) {
+        TreeMap<String, String> operationFlags = new TreeMap<String, String>();
+
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
+            String nodeName = reader.getNodeName();
+            if (nodeName.equals("operationFlag")) {
+                //reader.moveDown();
+                unmarshalOperationFlag(operationFlags, reader, context);
+                //reader.moveUp();
+            }
+            reader.moveUp();
+        }
+        return operationFlags;
+    }
+
+    public void unmarshalOperationFlag(TreeMap<String, String> operationFlags, HierarchicalStreamReader reader,
+            UnmarshallingContext context) {
+        String key = null;
+        String value = null;
+
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
+            String nodeName = reader.getNodeName();
+            if (nodeName.equals("key")) {
+                key = reader.getValue();
+            } else if (nodeName.equals("value")) {
+                value = reader.getValue();
+            }
+            reader.moveUp();
+        }
+        operationFlags.put(key, value);
     }
 }

@@ -22,10 +22,10 @@ import mekwars.common.Planet;
 import mekwars.common.Terrain;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.flags.PlayerFlags;
-import mekwars.common.util.MMNetXStream;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.MekwarsFileReader;
 import mekwars.common.util.UnitUtils;
+import mekwars.server.common.util.SMMNetXStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,15 +59,7 @@ import megamek.common.Mounted;
 import megamek.common.WeaponType;
 import megamek.common.equipment.WeaponMounted;
 import megamek.common.options.IOption;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import mekwars.server.MWServ;
-import mekwars.server.campaign.converters.ContinentConverter;
-import mekwars.server.campaign.converters.SPlanetConverter;
-import mekwars.server.campaign.converters.SUnitFactoryConverter;
-import mekwars.server.campaign.converters.SHouseConverter;
-import mekwars.server.campaign.converters.TerrainConverter;
-import mekwars.server.campaign.converters.InfluencesConverter;
 import mekwars.server.campaign.commands.*;
 import mekwars.server.campaign.commands.admin.*;
 import mekwars.server.campaign.commands.helpers.HireAndMaintainHelper;
@@ -164,6 +156,8 @@ import mekwars.server.util.StringUtil;
 import mekwars.server.util.discord.DiscordMessageHandler;
 import mekwars.server.util.rss.Feed;
 import mekwars.server.util.rss.FeedMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class CampaignMain implements Serializable {
     private static final Logger logger = LogManager.getLogger(CampaignMain.class);
@@ -259,7 +253,7 @@ public final class CampaignMain implements Serializable {
 
     private ChristmasHandler christmas;
     
-    private MMNetXStream xstream;
+    private SMMNetXStream xstream;
 
     // CONSTRUCTOR
     public CampaignMain(MWServ serv) {
@@ -348,21 +342,7 @@ public final class CampaignMain implements Serializable {
         // Load & Init Data
         data = new CampaignData();
 
-        xstream = new MMNetXStream();
-
-        xstream.registerConverter(new ContinentConverter());
-        xstream.registerConverter(new SPlanetConverter());
-        xstream.registerConverter(new SHouseConverter());
-        xstream.registerConverter(new SUnitFactoryConverter());
-        xstream.registerConverter(new TerrainConverter());
-        xstream.registerConverter(new InfluencesConverter());
-
-        xstream.alias("continent", Continent.class);
-        xstream.alias("planet", SPlanet.class);
-        xstream.alias("faction", SHouse.class);
-        xstream.alias("unitFactory", SUnitFactory.class);
-        xstream.alias("terrain", Terrain.class);
-        xstream.alias("influences", Influences.class);
+        xstream = new SMMNetXStream();
 
         File terrainFile = new File("./data/terrain.xml");
         Terrain[] terrainList = (Terrain[]) getXStream().fromXML(terrainFile);

@@ -33,8 +33,21 @@ public class ContinentConverter implements Converter {
         return clazz.equals(Continent.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-        // TODO: Implement
+    public void marshal(Object source, HierarchicalStreamWriter writer,
+            MarshallingContext context) {
+        Continent continent = (Continent) source;
+
+        writer.startNode("size");
+        writer.setValue(Integer.toString(continent.getSize()));
+        writer.endNode();
+
+        writer.startNode("terrain");
+        writer.setValue(continent.getEnvironment().getName());
+        writer.endNode();
+
+        writer.startNode("advancedTerrain");
+        writer.setValue(continent.getAdvancedTerrain().getName());
+        writer.endNode();
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {

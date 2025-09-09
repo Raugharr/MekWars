@@ -71,6 +71,10 @@ public class Influences implements MutableSerializable {
         setInfluence(new HashMap<Integer, Integer>(influences.influences));
     }
 
+    public Set<Map.Entry<Integer, Integer> > entrySet() {
+        return influences.entrySet();
+    }
+
     /**
      * Return the influence of a specific faction.
      */
@@ -308,22 +312,6 @@ public class Influences implements MutableSerializable {
             int flu = in.readInt("amount");
             influences.put((factionID), (flu));
         }
-    }
-
-    /**
-     * Outputs itself into an xml-Stream.
-     */
-    public void xmlOut(PrintWriter out) {
-        Iterator<House> inf = getHouses().iterator();
-        out.println("\t<influence>");
-        while (inf.hasNext()) {
-            House h = inf.next();
-            out.println("\t\t<inf>");
-            out.println("\t\t<faction>" + h.getName() + "</faction>");
-            out.println("\t\t<amount>" + getInfluence(h.getId()) + "</amount>");
-            out.println("\t\t</inf>");
-        }
-        out.println("\t</influence>");
     }
 
     /**

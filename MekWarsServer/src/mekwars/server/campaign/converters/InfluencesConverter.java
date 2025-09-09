@@ -25,6 +25,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import mekwars.common.Influences;
 import mekwars.common.UnitFactory;
 import java.util.HashMap;
+import java.util.Map;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.CampaignMain;
 
@@ -34,7 +35,19 @@ public class InfluencesConverter implements Converter {
     }
 
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-        // TODO: Implement
+        Influences influences = (Influences) source;
+
+        for (Map.Entry<Integer, Integer> influence : influences.entrySet()) {
+            SHouse faction = CampaignMain.cm.getHouseById(influence.getKey());
+
+            writer.startNode("faction");
+            writer.setValue(faction.getName());
+            writer.endNode();
+
+            writer.startNode("inf");
+            writer.setValue(Integer.toString(influence.getValue()));
+            writer.endNode();
+        }
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
@@ -69,7 +82,7 @@ public class InfluencesConverter implements Converter {
         if (factionName == null) {
             throw new ConversionException("faction expected");
         }
-    	SHouse house = CampaignMain.cm.getHouseFromPartialString(factionName, null);
+        SHouse house = CampaignMain.cm.getHouseFromPartialString(factionName, null);
         if (house == null) {
             throw new ConversionException("unable to find faction '" + factionName + "'");
         }
