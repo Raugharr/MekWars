@@ -23,23 +23,20 @@
  *  for more details.
  */
 
-package mekwars.operationseditor.dialog;
+package mekwars.operationseditor.gui.dialog;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-
 import mekwars.common.util.SpringLayoutHelper;
-
 
 /*
  * Allows a user to sort through a list of MechSummaries and select one
@@ -47,21 +44,21 @@ import mekwars.common.util.SpringLayoutHelper;
 
 public class TextEditorDialog extends JDialog implements ActionListener, KeyListener {
 
-	/**
+    /**
      *
      */
     private static final long serialVersionUID = -3851019509649287454L;
 
 
-	private JButton bCancel = new JButton("Close");
-	private JButton bSave = new JButton("Save");
+    private JButton bCancel = new JButton("Close");
+    private JButton bSave = new JButton("Save");
 
-	private JTextArea textField = new JTextArea();
+    private JTextArea textField = new JTextArea();
     private JTextField textBox = null;
     private OperationsDialog opDialog = null;
 
     public TextEditorDialog(OperationsDialog opDialog, JTextField textBox) {
-		//save params
+        //save params
         this.textBox = textBox;
         this.opDialog = opDialog;
         textField.setText(textBox.getText());
@@ -74,12 +71,12 @@ public class TextEditorDialog extends JDialog implements ActionListener, KeyList
         textField.setWrapStyleWord(true);
         textField.setLineWrap(true);
 
-		//set up a formatting holder for the cancel button
-		JPanel buttonHolder = new JPanel();
-		buttonHolder.add(bSave);
-		buttonHolder.add(bCancel);
+        //set up a formatting holder for the cancel button
+        JPanel buttonHolder = new JPanel();
+        buttonHolder.add(bSave);
+        buttonHolder.add(bCancel);
 
-		bSave.addActionListener(this);
+        bSave.addActionListener(this);
         bCancel.addActionListener(this);
 
         bCancel.setMnemonic(KeyEvent.VK_ESCAPE);
@@ -87,38 +84,38 @@ public class TextEditorDialog extends JDialog implements ActionListener, KeyList
         addKeyListener(this);
         textField.addKeyListener(this);
 
-		//set up the overall SpringLayout
-		JPanel springHolder = new JPanel(new SpringLayout());
-		springHolder.add(textField);
-		springHolder.add(buttonHolder);
-		SpringLayoutHelper.setupSpringGrid(springHolder,1);
-		getContentPane().add(springHolder);
-		getRootPane().setDefaultButton(bSave);
+        //set up the overall SpringLayout
+        JPanel springHolder = new JPanel(new SpringLayout());
+        springHolder.add(textField);
+        springHolder.add(buttonHolder);
+        SpringLayoutHelper.setupSpringGrid(springHolder, 1);
+        getContentPane().add(springHolder);
+        getRootPane().setDefaultButton(bSave);
 
-		setSize(785, 560);
-		setResizable(false);
+        setSize(785, 560);
+        setResizable(false);
 
         setModal(false);
         pack();
         setVisible(true);
-	}
+    }
 
-	@Override
-	public void setVisible(boolean show) {
-		setLocationRelativeTo(null);
-		super.setVisible(show);
-		pack();
-	}
+    @Override
+    public void setVisible(boolean show) {
+        setLocationRelativeTo(null);
+        super.setVisible(show);
+        pack();
+    }
 
-	public void actionPerformed(ActionEvent ae) {
-		if (ae.getSource() == bCancel) {
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == bCancel) {
             dispose();
-		} else if (ae.getSource() == bSave) {
+        } else if (ae.getSource() == bSave) {
             textBox.setText(textField.getText());
             opDialog.keyPressed(new KeyEvent(textBox, 0, KeyEvent.KEY_PRESSED, 0, KeyEvent.VK_0, '0'));
             dispose();
-		}
-	}
+        }
+    }
 
     public void keyPressed(KeyEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
