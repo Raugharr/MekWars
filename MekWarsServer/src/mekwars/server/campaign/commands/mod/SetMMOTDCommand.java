@@ -63,7 +63,7 @@ public class SetMMOTDCommand implements Command {
 		}
 		
 		if (motd.trim().equals("") || motd.equalsIgnoreCase("clear")) {
-			CampaignMain.cm.getConfig().setProperty("MMOTD", "");
+			CampaignMain.cm.getCampaignOptions().getConfig().setProperty("MMOTD", "");
 			CampaignMain.cm.toUser("MMOTD cleared.",Username,true);
 			return;
 		}
@@ -74,7 +74,7 @@ public class SetMMOTDCommand implements Command {
 			return;
 		}
 		
-		CampaignMain.cm.getConfig().setProperty("MMOTD",motd + "<br>- Set by " + Username);
+		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("MMOTD",motd + "<br>- Set by " + Username);
 		CampaignMain.cm.toUser("MMOTD set. Use /c mmotd to review.",Username,true);
 					
 	}//end process()

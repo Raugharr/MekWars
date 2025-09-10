@@ -42,7 +42,7 @@ public class CampaignConfigCommand implements Command {
 		}
 		
 		try {//Try to read the config file
-			CampaignMain.cm.getConfig().load(new FileInputStream(CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG")));
+			CampaignMain.cm.getCampaignOptions().getConfig().load(new FileInputStream(CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG")));
 		} catch (Exception ex) {
 			MWLogger.errLog(ex);
 			CampaignMain.cm.toUser("Failed to read campaign config.",Username,true);

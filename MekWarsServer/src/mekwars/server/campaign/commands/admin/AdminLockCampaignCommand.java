@@ -66,7 +66,7 @@ public class AdminLockCampaignCommand implements Command {
         }// end while(factions remain)
 
         // set the lock property, so no new players can activate
-        CampaignMain.cm.getConfig().setProperty("CampaignLock", "true");
+        CampaignMain.cm.getCampaignOptions().getConfig().setProperty("CampaignLock", "true");
 
         // tell the admin he has locked the campaign
         CampaignMain.cm.doSendToAllOnlinePlayers("AM:" + Username + " locked the campaign!", true);

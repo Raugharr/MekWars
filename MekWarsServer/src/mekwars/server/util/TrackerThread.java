@@ -52,7 +52,7 @@ public class TrackerThread extends Thread {
 			if((trackerID = serv.getCampaign().getConfig("TrackerUUID")).equalsIgnoreCase("0")) {
 				// The tracker ID is not yet set by the server.  Let's set it so this never happens again
 				trackerID = UUID.randomUUID().toString();
-				serv.getCampaign().getConfig().setProperty("TrackerUUID", trackerID);
+				serv.getCampaign().getCampaignOptions().getConfig().setProperty("TrackerUUID", trackerID);
 				serv.saveConfigs();
 			}
 		}		

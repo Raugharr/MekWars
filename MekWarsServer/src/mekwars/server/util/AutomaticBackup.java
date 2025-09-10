@@ -126,8 +126,8 @@ public class AutomaticBackup extends Thread{
             MWLogger.errLog("Unable to create data zip file");
             MWLogger.errLog(ex);
         }
-		CampaignMain.cm.getConfig().setProperty("LastAutomatedBackup",Long.toString(time));
-		CampaignMain.dso.createConfig();
+		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("LastAutomatedBackup",Long.toString(time));
+		CampaignMain.cm.getCampaignOptions().getDefaultOptions().createConfig();
         CampaignMain.cm.setArchiving(false);
         MWLogger.mainLog("Archiving Ended.");
     }

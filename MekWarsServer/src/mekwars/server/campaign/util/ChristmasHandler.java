@@ -112,8 +112,8 @@ public class ChristmasHandler {
 		gifts = new ConcurrentHashMap<String, Boolean>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			startDate = sdf.parse(CampaignMain.cm.getConfig("Christmas_StartDate"));
-			endDate = sdf.parse(CampaignMain.cm.getConfig("Christmas_EndDate"));
+			startDate = sdf.parse(CampaignMain.cm.getCampaignOptions().getConfig("Christmas_StartDate"));
+			endDate = sdf.parse(CampaignMain.cm.getCampaignOptions().getConfig("Christmas_EndDate"));
 			} catch (ParseException e) {
 			MWLogger.errLog(e);
 		}
@@ -130,7 +130,7 @@ public class ChristmasHandler {
 		}
 		
 		// Populate the Christmas List
-		populateChristmasList(CampaignMain.cm.getConfig("Christmas_List"));
+		populateChristmasList(CampaignMain.cm.getCampaignOptions().getConfig("Christmas_List"));
 		
 		if(CampaignMain.cm.getBooleanConfig("Christmas_Units_Method_OneOfEach")) {
 			unitMethod = UNIT_METHOD_ONEOFEACH;
@@ -232,9 +232,9 @@ public class ChristmasHandler {
 		Date start = new Date();
 		Date end = new Date();
 		try {
-			start = sdf.parse(CampaignMain.cm.getConfig("Christmas_StartDate"));
+			start = sdf.parse(CampaignMain.cm.getCampaignOptions().getConfig("Christmas_StartDate"));
 			
-			end = sdf.parse(CampaignMain.cm.getConfig("Christmas_EndDate"));
+			end = sdf.parse(CampaignMain.cm.getCampaignOptions().getConfig("Christmas_EndDate"));
 		} catch (ParseException e) {
 			MWLogger.errLog(e);
 		}
@@ -257,7 +257,7 @@ public class ChristmasHandler {
 			return;
 		}
 		isChristmasSeason = true;
-		CampaignMain.cm.getConfig().setProperty("Christmas_ManuallyStarted", "true");
+		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("Christmas_ManuallyStarted", "true");
 	}
 	
 	/**
@@ -265,7 +265,7 @@ public class ChristmasHandler {
 	 */
 	public void endChristmas() {
 		isChristmasSeason = false;
-		CampaignMain.cm.getConfig().setProperty("Christmas_ManuallyStarted", "false");
+		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("Christmas_ManuallyStarted", "false");
 		
 		// Clear the gift recipients so they are not penalized next Christmas season
 		File file = new File(giftRecipientsFile);

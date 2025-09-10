@@ -68,7 +68,7 @@ public class ForceUpdateCommand implements Command {
         if ( updateKey.equalsIgnoreCase("Clear") || updateKey.equalsIgnoreCase("-1") )
         	updateKey = "";
         
-        CampaignMain.cm.getConfig().setProperty("ForceUpdateKey",updateKey);
+        CampaignMain.cm.getCampaignOptions().getConfig().setProperty("ForceUpdateKey",updateKey);
         DefaultServerOptions dso = new DefaultServerOptions();
         dso.createConfig();
 

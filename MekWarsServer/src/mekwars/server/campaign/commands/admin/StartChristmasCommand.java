@@ -28,7 +28,7 @@ public class StartChristmasCommand implements Command {
 		}
 		
 		ChristmasHandler.getInstance().startChristmas();
-		CampaignMain.cm.getConfig().setProperty("Christmas_ManuallyStarted", "true");
+		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("Christmas_ManuallyStarted", "true");
 		
 		CampaignMain.cm.doSendModMail("SERVER", "Happy Holidays! " + Username + " started the Christmas season.");
 		CampaignMain.cm.doSendToAllOnlinePlayers("AM: The Christmas season is upon us.  Happy Holidays!", true);

@@ -131,6 +131,7 @@ import mekwars.server.campaign.commands.mod.UpdateServerUnitsCacheCommand;
 import mekwars.server.campaign.commands.mod.ViewPlayerPartsCommand;
 import mekwars.server.campaign.commands.mod.ViewPlayerPersonalPilotQueueCommand;
 import mekwars.server.campaign.commands.mod.ViewPlayerUnitCommand;
+import mekwars.server.campaign.CampaignOptions;
 import mekwars.server.campaign.market2.Market2;
 import mekwars.server.campaign.market2.PartsMarket;
 import mekwars.server.campaign.mercenaries.ContractInfo;
@@ -175,66 +176,33 @@ public final class CampaignMain implements Serializable {
      */
     public static CampaignMain cm;
 
-    public static DefaultServerOptions dso;
-
+    private CampaignOptions campaignOptions;
     private MWServ myServer;
-
     private Client megaMekClient = new Client("MWServer", "None", 0);
-
     private Server dataProviderServer;
-
     private CampaignData data = new CampaignData();
-
-    private Properties config = new Properties();
-
-    // private ConcurrentHashMap<String, SPlayer> savePlayers = new
-    // ConcurrentHashMap<String, SPlayer>();
-
     private Hashtable<String, Command> Commands = new Hashtable<String, Command>();
-
     private Hashtable<String, MechStatistics> MechStats = new Hashtable<String, MechStatistics>();
-
     private Hashtable<String, String> omniVariantMods = new Hashtable<String, String>();
-
     private Hashtable<String, Equipment> blackMarketEquipmentCostTable = new Hashtable<String, Equipment>();
-
     private int gamesCompleted;// used by Tracker
-
     private int currentUnitID = 1;
-
     private int currentPilotID = 1;
-
     private TickThread TThread;
-
     private SliceThread SThread;
-
     private ImmunityThread IThread;
-
     private RepairTrackingThread RTT;
-
     private AutomaticBackup aub = new AutomaticBackup(System.currentTimeMillis());
-
     private Market2 market;
-
     private PartsMarket partsmarket;
-
     private VoteManager voteManager;
-
     private I_OperationManager opsManager;
-
     private Vector<ContractInfo> unresolvedContracts = new Vector<ContractInfo>(1, 1);
-
     private UnitCosts unitCostLists = null;
-
-    //private TreeMap<String, String> NewsFeed = new TreeMap<String, String>();
     private Feed newsFeed = new Feed();
-
     private boolean isArchiving = false;
-
     private Random r = new Random(System.currentTimeMillis());
-
     private Date housePlanetDate = new Date();
-
     private HashMap<String, ChatRoom> chatRooms = new HashMap<String, ChatRoom>();
 
     /**
@@ -257,11 +225,8 @@ public final class CampaignMain implements Serializable {
 
     // CONSTRUCTOR
     public CampaignMain(MWServ serv) {
-
         cm = this;
         myServer = serv;
-        dso = new DefaultServerOptions();
-        dso.createDefaults();
 
         // make sure vital folders exist
         File f = new File("./campaign/");
@@ -273,60 +238,10 @@ public final class CampaignMain implements Serializable {
             f.mkdir();
         }
 
-
-        // Try to read the config file
-        try {
-            config.putAll(dso.getServerDefaults());// load all of the defaults
-            // into the config file
-            // before you load in the
-            // campaign stuff
-            // if(!isUsingMySQL())
-            config.load(new FileInputStream(myServer.getConfigParam("CAMPAIGNCONFIG")));
-            /*
-             * else { if(cm.MySQL.configIsSaved()) cm.MySQL.loadConfig(config);
-             * else config.load(new
-             * FileInputStream(this.myServer.getConfigParam("CAMPAIGNCONFIG")));
-             * }
-             */
-
-            // Right here, we're going to try to prune old cruft from the configs
-            // Over the course of many years, as config options change, crap never
-            // gets removed from campaignconfig.txt.  We're seeing this very badly on
-            // MMNet, and probably other servers are, as well.
-            Vector<String> keysToRemove = new Vector<String>();
-            for (Object key : config.keySet()) {
-                if (!dso.getServerDefaults().keySet().contains(key) && !((String)key).endsWith("RewardPointMultiplier")) {
-                    MWLogger.errLog("Key " + (String)key + " does not exist in DefaultServerConfig.  Pruning from configs.");
-                    keysToRemove.add((String)key);
-                }
-            }
-
-            for (String key : keysToRemove) {
-                config.remove(key);
-            }
-
-            CampaignMain.cm.saveConfigureFile(config, CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG"));
-            // Now, in theory, there is no cruft for next boot.  Let's test.
-
-        } catch (Exception ex) {
-            MWLogger.errLog("Problems with loading campaign config");
-            MWLogger.errLog(ex);
-            dso.createConfig();
-            try {
-                config.load(new FileInputStream(myServer.getConfigParam("CAMPAIGNCONFIG")));
-            } catch (Exception ex1) {
-                MWLogger.errLog("Problems with loading campaing config from defaults");
-                MWLogger.errLog(ex1);
-                System.exit(1);
-            }
-        }
-
+        campaignOptions = new CampaignOptions(myServer.getConfigParam("CAMPAIGNCONFIG"));
         if (!getConfig("AllowedMegaMekVersion").equals("-1")) {
-            getConfig().setProperty("AllowedMegaMekVersion", megamek.MMConstants.VERSION.toString());
+            getCampaignOptions().getConfig().setProperty("AllowedMegaMekVersion", megamek.MMConstants.VERSION.toString());
         }
-
-        dso.createConfig(); // save the cofig file so any missed defaults are
-        // added
 
         /*
          * Create the auction environment/market. Notice that the new market
@@ -591,58 +506,38 @@ public final class CampaignMain implements Serializable {
         return false;
     }
 
+    public CampaignOptions getCampaignOptions() {
+        return campaignOptions;
+    }
+
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public boolean getBooleanConfig(String key) {
-        try {
-            return Boolean.parseBoolean(cm.getConfig(key));
-        } catch (Exception ex) {
-            return false;
-        }
+        return getCampaignOptions().getBooleanConfig(key);
     }
 
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public int getIntegerConfig(String key) {
-        try {
-            return Integer.parseInt(cm.getConfig(key));
-        } catch (Exception ex) {
-            return -1;
-        }
+        return getCampaignOptions().getIntegerConfig(key);
     }
 
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public long getLongConfig(String key) {
-        try {
-            return Long.parseLong(cm.getConfig(key));
-        } catch (Exception ex) {
-            return -1;
-        }
+        return getCampaignOptions().getLongConfig(key);
     }
 
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public double getDoubleConfig(String key) {
-        try {
-            return Double.parseDouble(cm.getConfig(key));
-        } catch (Exception ex) {
-            return -1;
-        }
+        return getCampaignOptions().getDoubleConfig(key);
     }
 
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public float getFloatConfig(String key) {
-        try {
-            return Float.parseFloat(cm.getConfig(key));
-        } catch (Exception ex) {
-            return -1;
-        }
+        return getCampaignOptions().getFloatConfig(key);
     }
 
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public String getConfig(String key) {
-
-        if (config.getProperty(key) == null) {
-            if (dso.getServerDefaults().getProperty(key) == null) {
-                MWLogger.mainLog("You're missing the config variable: " + key + " in campaignconfig!");
-                MWLogger.errLog("You're missing the config variable: " + key + " in campaignconfig! returning -1");
-                return "-1";
-            }
-            // else
-            return dso.getServerDefaults().getProperty(key).trim();
-        }
-        return config.getProperty(key).trim();
+        return getCampaignOptions().getConfig(key);
     }
 
     /**
@@ -2494,12 +2389,6 @@ public final class CampaignMain implements Serializable {
         return partsmarket;
     }
 
-
-
-    public Properties getConfig() {
-        return config;
-    }
-
     public Hashtable<String, Command> getServerCommands() {
         return Commands;
     }
@@ -2509,7 +2398,6 @@ public final class CampaignMain implements Serializable {
     }
 
     public double getAmmoCost(String ammo) {
-
         if (blackMarketEquipmentCostTable.containsKey(ammo) && blackMarketEquipmentCostTable.get(ammo).getMinCost() > 0) {
             return blackMarketEquipmentCostTable.get(ammo).getMinCost();
         }
@@ -3191,23 +3079,10 @@ public final class CampaignMain implements Serializable {
         return isArchiving;
     }
 
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public void saveConfigureFile(Properties config, String fileName) {
-        /*
-         *
-         * if(CampaignMain.cm.isUsingMySQL()) {
-         * CampaignMain.cm.MySQL.saveConfig(); return; }
-         */
-        try {
-            PrintStream ps = new PrintStream(new FileOutputStream(fileName));
-            ps.println("#Timestamp=" + System.currentTimeMillis());
-            config.store(ps, "Server Config");
-            ps.close();
-        } catch (FileNotFoundException fe) {
-            MWLogger.errLog(fileName + " not found");
-        } catch (Exception ex) {
-            MWLogger.errLog(ex);
-        }
-    }// end saveConfigureFile
+        getCampaignOptions().saveConfigureFile(config, fileName);
+    } // end saveConfigureFile
 
     public UnitCosts getUnitCostLists() {
         return cm.unitCostLists;

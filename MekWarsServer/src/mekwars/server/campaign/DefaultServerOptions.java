@@ -1479,7 +1479,7 @@ public class DefaultServerOptions {
      */
     public void createConfig() {
         try {
-            CampaignMain.cm.saveConfigureFile(CampaignMain.cm.getConfig(), CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG"));
+            CampaignMain.cm.saveConfigureFile(CampaignMain.cm.getCampaignOptions().getConfig(), CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG"));
         } catch (Exception ex) {
             MWLogger.errLog("Unable to save config file.");
             MWLogger.errLog(ex);

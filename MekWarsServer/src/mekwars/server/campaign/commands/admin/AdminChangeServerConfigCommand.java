@@ -60,7 +60,7 @@ public class AdminChangeServerConfigCommand implements Command {
 		String arg = command.nextToken();
 		
 		//make setting change
-		CampaignMain.cm.getConfig().setProperty(config,arg);
+		CampaignMain.cm.getCampaignOptions().getConfig().setProperty(config,arg);
 		
 		// Check for Schedule changes here
 		if (config.equalsIgnoreCase("Christmas_StartDate")) {
@@ -90,8 +90,8 @@ public class AdminChangeServerConfigCommand implements Command {
 		} else if (config.equalsIgnoreCase("Celebrate_Christmas")) {
 			ChristmasHandler.getInstance().setCelebrateChristmas(Boolean.parseBoolean(arg));
 		} else if (config.equalsIgnoreCase("TrackerResetUUID")) {
-			CampaignMain.cm.getConfig().setProperty("TrackerUUID", UUID.randomUUID().toString());
-			CampaignMain.cm.getConfig().setProperty("TrackerResetUUID", "false");
+			CampaignMain.cm.getCampaignOptions().getConfig().setProperty("TrackerUUID", UUID.randomUUID().toString());
+			CampaignMain.cm.getCampaignOptions().getConfig().setProperty("TrackerResetUUID", "false");
 		}
 		
 		//NOTE:

@@ -43,7 +43,7 @@ public class AdminUnlockCampaignCommand implements Command {
 		}
 		
 		//reset the lock property so players can activate
-		CampaignMain.cm.getConfig().setProperty("CampaignLock","false");
+		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("CampaignLock","false");
 		
 		//tell the admin he has unlocked the campaign
         CampaignMain.cm.doSendToAllOnlinePlayers("AM:"+Username+" unlocked the campaign!", true);
