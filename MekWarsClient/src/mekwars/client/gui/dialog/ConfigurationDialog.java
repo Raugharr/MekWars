@@ -39,6 +39,11 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
+import megamek.client.ui.dialogs.CamoChooserDialog;
+import megamek.common.Configuration;
+import megamek.common.icons.Camouflage;
+import megamek.common.icons.FileCamouflage;
+import mekwars.client.GUIClientConfig;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.VerticalLayout;
@@ -1825,8 +1830,18 @@ public final class ConfigurationDialog implements ActionListener {
             pane.setValue(cancelButton);
             dialog.dispose();
         } else if (command.equals(camoCommand)) {
-            CamoSelectionDialog camoDialog = new CamoSelectionDialog(mwclient.getMainFrame(), mwclient);
-            camoDialog.setVisible(true);
+            FileCamouflage fileCamouflage = new FileCamouflage(new File(Configuration.camoDir(), mwclient.getConfigParam("UNITCAMO")));
+            CamoChooserDialog camoDialog = new CamoChooserDialog(mwclient.getMainFrame(), fileCamouflage);
+            if (camoDialog.showDialog().isConfirmed()) {
+                Camouflage selectedItem = camoDialog.getSelectedItem();
+                mwclient.getConfig().setParam("UNITCAMO", selectedItem.getCategory() + selectedItem.getFilename());
+                mwclient.getConfig().saveConfig();
+                mwclient.setConfig();
+                // then reload images and update the GUI
+                mwclient.getConfig().loadImage(GUIClientConfig.CAMO_PATH + selectedItem.getCategory() + selectedItem.getFilename(), "CAMO", 84, 72);
+                mwclient.getMainFrame().getMainPanel().selectFirstTab();
+                mwclient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
+            }
         } else if (command.equals(lookAndFeelCommand)) {
             if (lookandfeelComboBox.getSelectedIndex() == 9) {
                 skinComboBox.setEnabled(true);

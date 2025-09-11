@@ -55,6 +55,16 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import megamek.client.ui.dialogs.CamoChooserDialog;
+import megamek.client.ui.swing.tileset.MechTileset;
+import megamek.client.ui.swing.unitDisplay.UnitDisplay;
+import megamek.common.Configuration;
+import megamek.common.Entity;
+import megamek.common.Infantry;
+import megamek.common.Mech;
+import megamek.common.icons.Camouflage;
+import megamek.common.icons.FileCamouflage;
+import mekwars.client.GUIClientConfig;
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CArmy;
 import mekwars.client.campaign.CBMUnit;
@@ -63,7 +73,6 @@ import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
 import mekwars.client.gui.dialog.BulkRepairDialog;
-import mekwars.client.gui.dialog.CamoSelectionDialog;
 import mekwars.client.gui.dialog.CustomUnitDialog;
 import mekwars.client.gui.dialog.PromotePilotDialog;
 //@Salient
@@ -76,11 +85,6 @@ import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
-import megamek.client.ui.swing.tileset.MechTileset;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
-import megamek.common.Entity;
-import megamek.common.Infantry;
-import megamek.common.Mech;
 
 /**
  * Headquarters Panel
@@ -316,8 +320,18 @@ public class CHQPanel extends JPanel {
     }
 
     private void setCamoButtonActionPerformed(ActionEvent evt) {
-        CamoSelectionDialog camoDialog = new CamoSelectionDialog(mwclient.getMainFrame(), mwclient);
-        camoDialog.setVisible(true);
+        FileCamouflage fileCamouflage = new FileCamouflage(new File(Configuration.camoDir(), mwclient.getConfigParam("UNITCAMO")));
+        CamoChooserDialog camoDialog = new CamoChooserDialog(mwclient.getMainFrame(), fileCamouflage);
+        if(camoDialog.showDialog().isConfirmed()) {
+            Camouflage selectedItem = camoDialog.getSelectedItem();
+            mwclient.getConfig().setParam("UNITCAMO", selectedItem.getCategory() + selectedItem.getFilename());
+            mwclient.getConfig().saveConfig();
+            mwclient.setConfig();
+            // then reload images and update the GUI
+            mwclient.getConfig().loadImage(GUIClientConfig.CAMO_PATH + selectedItem.getCategory() + selectedItem.getFilename(), "CAMO", 84, 72);
+            mwclient.getMainFrame().getMainPanel().selectFirstTab();
+            mwclient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
+        }
     }
 
     //@Salient (mwosux@gmail.com) added for SolFreeBuild option
