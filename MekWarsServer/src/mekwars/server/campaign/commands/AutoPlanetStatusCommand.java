@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import mekwars.common.Planet;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 

@@ -21,8 +21,6 @@ import java.util.Date;
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
 
-
-
 /**
  * Executes an command for the dataProvider-Server.
  * 

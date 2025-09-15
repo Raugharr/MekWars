@@ -4,6 +4,7 @@ import java.util.StringTokenizer;
 
 import mekwars.common.CampaignData;
 import mekwars.common.House;
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
@@ -33,7 +34,7 @@ public class AnnounceCommand implements Command {
 	@Override
 	public void process(StringTokenizer command, String Username) {
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if (userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser(
 						"AM:Insufficient access level for command. Level: "

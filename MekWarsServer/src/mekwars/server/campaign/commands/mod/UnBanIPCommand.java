@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.mod;
 
 import java.net.InetAddress;
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
@@ -40,7 +40,7 @@ public class UnBanIPCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -52,12 +52,12 @@ public class UnBanIPCommand implements Command {
     		InetAddress ip = null;
     		String toUnBan = command.nextToken().trim();//ip to unban
     		ip = InetAddress.getByName(toUnBan);
-    		if (!CampaignMain.cm.getServer().getBanIps().containsKey(ip)) {
+    		if (!MWServ.getInstance().getBanIps().containsKey(ip)) {
     			CampaignMain.cm.toUser("AM:Value (" + ip + ") not found in banlist.", Username);
     			return;
     		}
-            CampaignMain.cm.getServer().getBanIps().remove(ip);
-            CampaignMain.cm.getServer().bansUpdate();
+            MWServ.getInstance().getBanIps().remove(ip);
+            MWServ.getInstance().bansUpdate();
             CampaignMain.cm.toUser("AM:You unbanned: " + ip.toString(), Username);
             CampaignMain.cm.doSendModMail("NOTE",Username + " unbanned " + ip.toString());
         } catch(Exception ex) {

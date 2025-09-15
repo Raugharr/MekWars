@@ -18,6 +18,7 @@ package mekwars.server.campaign.commands.leader;
 import java.util.StringTokenizer;
 
 import mekwars.common.SubFaction;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
@@ -44,7 +45,7 @@ public class DemotePlayerCommand implements Command {
     public void process(StringTokenizer command, String Username) {
 
         if (accessLevel != 0) {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
@@ -71,7 +72,7 @@ public class DemotePlayerCommand implements Command {
             return;
         }
 
-        if (!grunt.getMyHouse().getName().equalsIgnoreCase(leader.getMyHouse().getName()) && !CampaignMain.cm.getServer().isModerator(Username)) {
+        if (!grunt.getMyHouse().getName().equalsIgnoreCase(leader.getMyHouse().getName()) && !MWServ.getInstance().isModerator(Username)) {
             CampaignMain.cm.toUser("AM:You can only demote players that within your same faction!", Username);
             return;
         }
@@ -112,7 +113,7 @@ public class DemotePlayerCommand implements Command {
         CampaignMain.cm.doSendHouseMail(grunt.getMyHouse(), "NOTE", grunt.getName() + " has been demoted to subfaction " + subFactionName + " by " + leader.getName() + "!");
         CampaignMain.cm.toUser("AM:You demoted " + grunt.getName() + " to SubFaction " + subFactionName + ".", Username);
 
-        if (CampaignMain.cm.getServer().isModerator(Username))
+        if (MWServ.getInstance().isModerator(Username))
             CampaignMain.cm.doSendModMail("NOTE", Username + " demoted " + grunt.getName() + " to SubFaction " + subFactionName + ".");
     }
 }// end RequestSubFactionPromotionCommand class

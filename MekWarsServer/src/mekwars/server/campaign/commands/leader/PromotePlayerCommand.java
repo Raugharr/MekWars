@@ -18,6 +18,7 @@ package mekwars.server.campaign.commands.leader;
 import java.util.StringTokenizer;
 
 import mekwars.common.SubFaction;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
@@ -44,7 +45,7 @@ public class PromotePlayerCommand implements Command {
     public void process(StringTokenizer command, String Username) {
 
         if (accessLevel != 0) {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
@@ -57,7 +58,7 @@ public class PromotePlayerCommand implements Command {
         SPlayer grunt = null;
         String subFactionName;
         SubFaction subFaction = null;
-        boolean isMod = CampaignMain.cm.getServer().isModerator(Username);
+        boolean isMod = MWServ.getInstance().isModerator(Username);
 
         try {
             grunt = CampaignMain.cm.getPlayer(command.nextToken());
@@ -77,7 +78,7 @@ public class PromotePlayerCommand implements Command {
             return;
         }
 
-        if (!grunt.getMyHouse().getName().equalsIgnoreCase(leader.getMyHouse().getName()) && !CampaignMain.cm.getServer().isModerator(Username)) {
+        if (!grunt.getMyHouse().getName().equalsIgnoreCase(leader.getMyHouse().getName()) && !MWServ.getInstance().isModerator(Username)) {
             CampaignMain.cm.toUser("AM:You can only promote players that within your same faction!", Username);
             return;
         }

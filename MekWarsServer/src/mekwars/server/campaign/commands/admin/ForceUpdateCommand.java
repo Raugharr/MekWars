@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
+import mekwars.server.MWServ;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -45,7 +45,7 @@ public class ForceUpdateCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -89,9 +89,9 @@ public class ForceUpdateCommand implements Command {
             else
             	deds = true;
             
-            ConcurrentLinkedQueue<String> users = new ConcurrentLinkedQueue<String>(CampaignMain.cm.getServer().getUsers().keySet());
+            ConcurrentLinkedQueue<String> users = new ConcurrentLinkedQueue<String>(MWServ.getInstance().getUsers().keySet());
             for ( String toKick : users ){
-                if ( CampaignMain.cm.getServer().isAdmin(toKick) )
+                if ( MWServ.getInstance().isAdmin(toKick) )
                     continue;
             	if ( players && !toKick.toLowerCase().startsWith("[dedicated]") ){
 	                CampaignMain.cm.toUser("You have been forced to update by " + Username+"!", toKick);
@@ -99,7 +99,7 @@ public class ForceUpdateCommand implements Command {
             	}
             	else if ( deds && toKick.toLowerCase().startsWith("[dedicated]") ){
 	                try{
-	            		CampaignMain.cm.getServer().doStoreMail(toKick+",update", Username);
+	            		MWServ.getInstance().doStoreMail(toKick+",update", Username);
 	                	Thread.sleep(120);
 	                }catch (Exception ex){
 	                    MWLogger.errLog(ex);

@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-
 import mekwars.common.House;
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
@@ -43,7 +43,7 @@ public class SingASongCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		if(userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
@@ -85,7 +85,7 @@ public class SingASongCommand implements Command {
 					for (SPlayer player : faction.getAllOnlinePlayers().values() ){
 						if ( player.getDutyStatus() < SPlayer.STATUS_RESERVE)
 							continue;
-						if ( CampaignMain.cm.getServer().isAdmin(player.getName()) )
+						if ( MWServ.getInstance().isAdmin(player.getName()) )
 							continue;
 						if ( player.getName().equalsIgnoreCase("Spork") )
 							continue;
@@ -100,7 +100,7 @@ public class SingASongCommand implements Command {
                     for (SPlayer player : faction.getAllOnlinePlayers().values() ){
 						if ( player.getDutyStatus() < SPlayer.STATUS_RESERVE)
 							continue;
-						if (CampaignMain.cm.getServer().isAdmin(player.getName()))
+						if (MWServ.getInstance().isAdmin(player.getName()))
 							continue;
 						if ( player.getName().equalsIgnoreCase("Spork") )
 							continue;

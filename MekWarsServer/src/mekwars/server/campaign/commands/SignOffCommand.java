@@ -17,11 +17,8 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
 import mekwars.common.util.MWLogger;
-import mekwars.server.campaign.CampaignMain;
-
-
+import mekwars.server.MWServ;
 
 /**
  * Moving the SignOff command from MWServ into the normal command structure.
@@ -38,6 +35,6 @@ public class SignOffCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
         MWLogger.errLog(Username+" has sent signoff command");
-        CampaignMain.cm.getServer().clientLogout(Username);
+        MWServ.getInstance().clientLogout(Username);
 	}
 }

@@ -17,12 +17,10 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
-
-
 
 public class AdminRestartTrackerThreadCommand implements Command {
 	
@@ -35,7 +33,7 @@ public class AdminRestartTrackerThreadCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -46,7 +44,7 @@ public class AdminRestartTrackerThreadCommand implements Command {
 			CampaignMain.cm.toUser("AM: Server is configured not to use the tracker.", Username, true);
 			return;
 		}
-		CampaignMain.cm.getServer().startTracker();
+		MWServ.getInstance().startTracker();
 		CampaignMain.cm.toUser("AM: Tracker Thread restarted.", Username, true);
 	}
 	

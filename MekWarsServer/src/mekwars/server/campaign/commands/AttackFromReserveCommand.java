@@ -18,6 +18,7 @@ import java.util.StringTokenizer;
 
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlanet;
@@ -53,7 +54,7 @@ public class AttackFromReserveCommand implements Command {
     public void process(StringTokenizer command, String Username) {
 
         if (accessLevel != 0) {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
@@ -209,8 +210,8 @@ public class AttackFromReserveCommand implements Command {
 
         // Check that the opponent is not on the same IP
         if (CampaignMain.cm.getBooleanConfig("IPCheck")) {
-        	String apip = CampaignMain.cm.getServer().getIP(ap.getName()).toString();
-        	String dpip = CampaignMain.cm.getServer().getIP(dp.getName()).toString();
+        	String apip = MWServ.getInstance().getIP(ap.getName()).toString();
+        	String dpip = MWServ.getInstance().getIP(dp.getName()).toString();
         	if(apip.equalsIgnoreCase(dpip)) {
         		CampaignMain.cm.toUser("AM: You cannot attack a player on the same IP as you.", Username, true);
         		return;

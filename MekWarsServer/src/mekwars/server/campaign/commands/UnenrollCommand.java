@@ -20,7 +20,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.common.UnitFactory;
 import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
@@ -40,7 +40,7 @@ public class UnenrollCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -112,7 +112,7 @@ public class UnenrollCommand implements Command {
 			fp.delete();
 
 		//tell the mods and add to iplog.0
-		InetAddress ip = CampaignMain.cm.getServer().getIP(Username);
+		InetAddress ip = MWServ.getInstance().getIP(Username);
 		//MWLogger.modLog(Username + " unenrolled from the campaign (IP: " + ip + ").");
 		MWLogger.ipLog("UNENROLL: " + Username + " IP: " + ip);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " unenrolled from the campaign (IP: " + ip + ").");

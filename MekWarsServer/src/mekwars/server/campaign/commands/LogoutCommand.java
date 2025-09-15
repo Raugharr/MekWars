@@ -17,7 +17,6 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 

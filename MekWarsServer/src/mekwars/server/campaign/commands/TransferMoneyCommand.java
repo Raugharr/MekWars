@@ -17,7 +17,7 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
@@ -34,7 +34,7 @@ public class TransferMoneyCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -74,7 +74,7 @@ public class TransferMoneyCommand implements Command {
 		
 		// check for same-ip interaction
 		boolean ipcheck = Boolean.parseBoolean(house.getConfig("IPCheck"));
-		if (ipcheck && CampaignMain.cm.getServer().getIP(player.getName()).toString().equals(CampaignMain.cm.getServer().getIP(targetplayer.getName()).toString())) {
+		if (ipcheck && MWServ.getInstance().getIP(player.getName()).toString().equals(MWServ.getInstance().getIP(targetplayer.getName()).toString())) {
 			CampaignMain.cm.toUser("AM:"+targetplayer.getName() + " has the same IP as you do. You can't send them "+house.getConfig("MoneyLongName"), Username, true);
 			return;
 		}

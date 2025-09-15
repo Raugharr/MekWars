@@ -29,6 +29,7 @@ import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.Version;
 import megamek.common.TechConstants;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.BuildTable;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.NewbieHouse;
@@ -60,7 +61,7 @@ public class DefectCommand implements Command {
     public void process(StringTokenizer command, String Username) {
 
         if (accessLevel != 0) {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
@@ -575,7 +576,7 @@ public class DefectCommand implements Command {
             CampaignMain.cm.doSendHouseMail(newHouse, "NOTE: ", p.getName() + " joined the faction! (Defected from " + oldHouse.getName() + ")");
 
             // do we really want to keep the RSS feed?
-            CampaignMain.cm.addToNewsFeed("Player Defection", "Player News", Username + " defected from " + oldHouse.getName() + " to " + HouseName);
+            MWServ.getInstance().addToNewsFeed("Player Defection", "Player News", Username + " defected from " + oldHouse.getName() + " to " + HouseName);
             CampaignMain.cm.postToDiscord(Username + " defected from " + oldHouse.getName() + " to " + HouseName);
 
             if ( p.getMyLogo().trim().equals(oldHouse.getLogo().trim()) ){
@@ -587,7 +588,7 @@ public class DefectCommand implements Command {
             // let people defect and retain faction leadership access, etc. May
             // be
             // a problem for mods, but better than the alternative ...
-            if (p.getMyHouse().equals(newHouse) && !CampaignMain.cm.getServer().isAdmin(Username) && !isSingleFaction)
+            if (p.getMyHouse().equals(newHouse) && !MWServ.getInstance().isAdmin(Username) && !isSingleFaction)
                 MWPasswd.getRecord(Username).setAccess(2);
 
             /*

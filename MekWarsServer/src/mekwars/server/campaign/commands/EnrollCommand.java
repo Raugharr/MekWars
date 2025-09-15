@@ -22,6 +22,7 @@ import java.util.StringTokenizer;
 
 import mekwars.common.House;
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.NewbieHouse;
@@ -155,13 +156,13 @@ public class EnrollCommand implements Command {
 				+ "</font><br>");
 		CampaignMain.cm.toUser(result,Username,true);
 
-		if (CampaignMain.cm.getServer().getUserLevel(Username) < IAuthenticator.REGISTERED)
+		if (MWServ.getInstance().getUserLevel(Username) < IAuthenticator.REGISTERED)
 			CampaignMain.cm.toUser("AM:<font color=\"navy\"><br>---<br>NOTE: Your account will not be password protected until you [<a href=\"MWREG\">register</a>] your nickname.<br>---<br></font>", Username, true);
 
 		CampaignMain.cm.doLoginPlayer(Username);
 
 		//tell the mods and add to the IP log
-		InetAddress ip = CampaignMain.cm.getServer().getIP(Username);
+		InetAddress ip = MWServ.getInstance().getIP(Username);
 		//MWLogger.modLog(Username + " enrolled in the campaign (IP: " + ip + ").");
 		MWLogger.ipLog("ENROLL: " + Username + " IP: " + ip);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " enrolled in the campaign (IP: " + ip + ").");

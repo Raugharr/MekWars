@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import mekwars.common.Planet;
 import megamek.common.TechConstants;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
@@ -40,7 +41,7 @@ public class HouseCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -117,7 +118,7 @@ public class HouseCommand implements Command {
 		
         s += "<br><b>Tech Level: </b>"+TechConstants.getLevelDisplayableName(h.getTechLevel())+".";
         
-        if ( CampaignMain.cm.getPlayer(Username).getMyHouse().equals(h) || CampaignMain.cm.getServer().isModerator(Username) ) {
+        if ( CampaignMain.cm.getPlayer(Username).getMyHouse().equals(h) || MWServ.getInstance().isModerator(Username) ) {
             s += " Current Research: "+h.getTechResearchPoints()+" of "+CampaignMain.cm.getConfig("TechPointsNeedToLevel");
         }
         

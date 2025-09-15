@@ -17,9 +17,8 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
-
 
 public class EmojiCommand implements Command 
 {
@@ -66,7 +65,7 @@ public class EmojiCommand implements Command
 	{
 		if (accessLevel != 0) 
 		{
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(username);
+			int userLevel = MWServ.getInstance().getUserLevel(username);
 			if(userLevel < getExecutionLevel()) 
 			{
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",username,true);

@@ -22,17 +22,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-//import java.nio.charset.Charset;
-//import java.nio.file.Files;
-//import java.nio.file.Paths;
-//import java.nio.file.StandardOpenOption;
 import java.util.StringTokenizer;
 
 import mekwars.common.util.MWLogger;
-//import mekwars.server.MWClientInfo;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
-//import mekwars.server.campaign.SPlayer;
-
 
 /**
  * used for capturing chat to a file a discord bot can manipulate
@@ -62,7 +56,7 @@ public class ChatBotHelperCommand implements Command {
 	
 	private Boolean accessChecks(String Username)  
 	{
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		
 		if(userLevel < getExecutionLevel()) 
 		{

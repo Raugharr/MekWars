@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.io.FileInputStream;
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -35,14 +35,14 @@ public class CampaignConfigCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		if(userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
 		}
 		
 		try {//Try to read the config file
-			CampaignMain.cm.getCampaignOptions().getConfig().load(new FileInputStream(CampaignMain.cm.getServer().getConfigParam("CAMPAIGNCONFIG")));
+			CampaignMain.cm.getCampaignOptions().getConfig().load(new FileInputStream(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG")));
 		} catch (Exception ex) {
 			MWLogger.errLog(ex);
 			CampaignMain.cm.toUser("Failed to read campaign config.",Username,true);

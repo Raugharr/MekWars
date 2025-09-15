@@ -19,6 +19,7 @@ package mekwars.server.campaign.commands.admin;
 import java.util.StringTokenizer;
 
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -47,7 +48,7 @@ public class AdminPasswordCommand implements Command {
     public void process(StringTokenizer command, String Username) {
 
         if (accessLevel != 0) {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
@@ -96,10 +97,10 @@ public class AdminPasswordCommand implements Command {
             }
 
             try {
-                CampaignMain.cm.getServer().getClient(target).setAccessLevel(level);
-                CampaignMain.cm.getServer().getUser(target).setLevel(level);
-                CampaignMain.cm.getServer().sendRemoveUserToAll(target, false);
-                CampaignMain.cm.getServer().sendNewUserToAll(target, false);
+                MWServ.getInstance().getClient(target).setAccessLevel(level);
+                MWServ.getInstance().getUser(target).setLevel(level);
+                MWServ.getInstance().sendRemoveUserToAll(target, false);
+                MWServ.getInstance().sendNewUserToAll(target, false);
                 MWPasswd.writeRecord(p.getPassword(), target);
 
                 if (p != null) {

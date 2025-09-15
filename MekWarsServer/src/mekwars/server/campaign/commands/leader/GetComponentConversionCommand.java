@@ -18,6 +18,7 @@ package mekwars.server.campaign.commands.leader;
 import java.util.StringTokenizer;
 
 import mekwars.common.util.ComponentToCritsConverter;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
@@ -44,7 +45,7 @@ public class GetComponentConversionCommand implements Command {
     public void process(StringTokenizer command, String Username) {
 
         if (accessLevel != 0) {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
@@ -54,7 +55,7 @@ public class GetComponentConversionCommand implements Command {
         SPlayer player = CampaignMain.cm.getPlayer(Username);
         SHouse house = player.getMyHouse();
         
-        if ( CampaignMain.cm.getServer().isModerator(Username) && command.hasMoreElements() )
+        if ( MWServ.getInstance().isModerator(Username) && command.hasMoreElements() )
             house = CampaignMain.cm.getHouseFromPartialString(command.nextToken(),Username);
         
         

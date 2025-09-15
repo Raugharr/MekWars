@@ -20,7 +20,7 @@ import java.net.InetAddress;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
@@ -48,7 +48,7 @@ public class BanListCommand implements Command {
 	public void process(StringTokenizer command, String Username) {
 
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if (userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser(
 						"AM:Insufficient access level for command. Level: "
@@ -62,7 +62,7 @@ public class BanListCommand implements Command {
 		int i = 1;
 
 		ConcurrentHashMap<String, String> banHash = new ConcurrentHashMap<String, String>(
-				CampaignMain.cm.getServer().getBanAccounts());
+				MWServ.getInstance().getBanAccounts());
 		for (String banName : banHash.keySet()) {
 			String banTime = banHash.get(banName);
 
@@ -73,8 +73,8 @@ public class BanListCommand implements Command {
 			// display them
 			if (until.longValue() < System.currentTimeMillis()
 					|| until.longValue() == 0) {
-				CampaignMain.cm.getServer().getBanAccounts().remove(banName);
-				CampaignMain.cm.getServer().bansUpdate();
+				MWServ.getInstance().getBanAccounts().remove(banName);
+				MWServ.getInstance().bansUpdate();
 				continue;
 			}
 
@@ -90,17 +90,17 @@ public class BanListCommand implements Command {
 		i = 1;
 		result += "Banned IPs:<br>";
 		ConcurrentHashMap<InetAddress, Long> banIpHash = new ConcurrentHashMap<InetAddress, Long>(
-				CampaignMain.cm.getServer().getBanIps());
+				MWServ.getInstance().getBanIps());
 
 		for (InetAddress currAddress : banIpHash.keySet()) {
-			Long until = CampaignMain.cm.getServer().getBanIps().get(currAddress);
+			Long until = MWServ.getInstance().getBanIps().get(currAddress);
 
 			// If they are no longer banned remove them from the list and don't
 			// display them
 			if (until.longValue() < System.currentTimeMillis()
 					|| until.longValue() == 0) {
-				CampaignMain.cm.getServer().getBanIps().remove(currAddress);
-				CampaignMain.cm.getServer().bansUpdate();
+				MWServ.getInstance().getBanIps().remove(currAddress);
+				MWServ.getInstance().bansUpdate();
 				continue;
 			}
 

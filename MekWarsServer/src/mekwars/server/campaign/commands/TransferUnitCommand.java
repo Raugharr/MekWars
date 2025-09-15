@@ -17,7 +17,7 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.common.Unit;
 import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
@@ -36,7 +36,7 @@ public class TransferUnitCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -110,7 +110,7 @@ public class TransferUnitCommand implements Command {
 			return;
 			//Same IP address?
 		} else if (Boolean.parseBoolean(house.getConfig("IPCheck"))) {
-			if (CampaignMain.cm.getServer().getIP(player.getName()).toString().equals(CampaignMain.cm.getServer().getIP(targetplayer.getName()).toString())) {
+			if (MWServ.getInstance().getIP(player.getName()).toString().equals(MWServ.getInstance().getIP(targetplayer.getName()).toString())) {
 				CampaignMain.cm.toUser("AM:"+targetplayer.getName() + " has the same IP as you do. You can't send him units.", Username, true);
 				return;
 			}

@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.mod;
 
 import java.net.InetAddress;
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
@@ -40,7 +40,7 @@ public class BanCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -117,13 +117,13 @@ public class BanCommand implements Command {
 				timeName = "year";
 			}
 			
-			if (CampaignMain.cm.getServer().isAdmin(toKill) && !Username.startsWith("[Dedicated]")) {
+			if (MWServ.getInstance().isAdmin(toKill) && !Username.startsWith("[Dedicated]")) {
 				CampaignMain.cm.toUser("AM:You may not ban an admin.", Username);
 				return;
 			}
 			
 			//howlong = Long.parseLong(str.nextToken());
-			InetAddress banip = CampaignMain.cm.getServer().getIP(toKill);
+			InetAddress banip = MWServ.getInstance().getIP(toKill);
 			if (banip.equals(InetAddress.getLocalHost()) )
 				banip = null;
 			
@@ -136,20 +136,20 @@ public class BanCommand implements Command {
 			} catch (Exception ex){}
 			
 			if (banip != null)
-				CampaignMain.cm.getServer().getBanIps().put(banip, until);
-			CampaignMain.cm.getServer().getBanAccounts().put(toKill.toLowerCase(), Long.toString(until));
+				MWServ.getInstance().getBanIps().put(banip, until);
+			MWServ.getInstance().getBanAccounts().put(toKill.toLowerCase(), Long.toString(until));
 			
-			//CampaignMain.cm.getServer().ISPlog.put(CampaignMain.cm.getServer().myCommunicator.getClient(toKill).getClientVersion(),until);
+			//MWServ.getInstance().ISPlog.put(MWServ.getInstance().myCommunicator.getClient(toKill).getClientVersion(),until);
 			//retreiveISPS(until,toKill);
-			CampaignMain.cm.getServer().bansUpdate();
+			MWServ.getInstance().bansUpdate();
 			//MWLogger.modLog(Username + " banned " + toKill + " " +timeName+".");
-			CampaignMain.cm.getServer().sendChat("AM:"+Username + " banned " + toKill + " " +timeName+".");
+			MWServ.getInstance().sendChat("AM:"+Username + " banned " + toKill + " " +timeName+".");
 			
 			CampaignMain.cm.getOpsManager().doDisconnectCheckOnPlayer(toKill);
-			CampaignMain.cm.getServer().getCampaign().doLogoutPlayer(toKill);
+			MWServ.getInstance().getCampaign().doLogoutPlayer(toKill);
 			
-			if (CampaignMain.cm.getServer().getClient(toKill) != null)
-				CampaignMain.cm.getServer().killClient(toKill,Username);
+			if (MWServ.getInstance().getClient(toKill) != null)
+				MWServ.getInstance().killClient(toKill,Username);
 		} catch(Exception ex) {
 			CampaignMain.cm.toUser("AM:Incorrect Syntax: Syntax is as follows<br>/ban playername#time" +
 					"<br>Please note the time argument can be left off and will default to 1 year" +

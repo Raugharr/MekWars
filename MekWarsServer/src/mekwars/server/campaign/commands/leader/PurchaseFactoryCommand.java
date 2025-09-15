@@ -21,6 +21,7 @@ import java.util.Vector;
 
 import mekwars.common.UnitFactory;
 import megamek.common.TechConstants;
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.BuildTable;
 import mekwars.server.campaign.CampaignMain;
@@ -53,7 +54,7 @@ public class PurchaseFactoryCommand implements Command {
     public void process(StringTokenizer command, String Username) {
 
         if (accessLevel != 0) {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;

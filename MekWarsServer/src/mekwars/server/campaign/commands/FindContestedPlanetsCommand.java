@@ -22,10 +22,11 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import mekwars.common.Planet;
+import mekwars.server.MWServ;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
-//import mekwars.server.campaign.operations.ShortOperation;
 import mekwars.server.campaign.util.PlanetNameComparator;
 
 //BarukKahzad 20151129 with much copy and paste from HouseCommand.java
@@ -47,7 +48,7 @@ public class FindContestedPlanetsCommand implements Command {
 		int PercentAmount = -1;
 
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;

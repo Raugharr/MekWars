@@ -17,7 +17,7 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
@@ -41,7 +41,7 @@ public class KickCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -56,7 +56,7 @@ public class KickCommand implements Command {
         	return;
 		}
 
-		if (CampaignMain.cm.getServer().isAdmin(toKick) && !Username.startsWith("[Dedicated]")) {
+		if (MWServ.getInstance().isAdmin(toKick) && !Username.startsWith("[Dedicated]")) {
 			CampaignMain.cm.toUser("AM:You may not kick an admin.", Username);
 			return;
 		}
@@ -65,8 +65,8 @@ public class KickCommand implements Command {
 		CampaignMain.cm.toUser("PL|GBB|Bye Bye", toKick,false);
 		
 		//Use this to kick ghost players from the clients.
-		CampaignMain.cm.getServer().sendRemoveUserToAll(toKick,false);
-		CampaignMain.cm.getServer().sendChat("AM:"+Username + " kicked " + toKick);
+		MWServ.getInstance().sendRemoveUserToAll(toKick,false);
+		MWServ.getInstance().sendChat("AM:"+Username + " kicked " + toKick);
 		MWLogger.modLog(Username + " kicked " + toKick);
 		
 		/*try {
@@ -79,8 +79,8 @@ public class KickCommand implements Command {
 			
 			CampaignMain.cm.getOpsManager().doDisconnectCheckOnPlayer(toKick);
 			CampaignMain.cm.doLogoutPlayer(toKick);
-			if (CampaignMain.cm.getServer().getClient(MWChatServer.clientKey(toKick)) != null)
-				CampaignMain.cm.getServer().killClient(toKick,Username);
+			if (MWServ.getInstance().getClient(MWChatServer.clientKey(toKick)) != null)
+				MWServ.getInstance().killClient(toKick,Username);
 			
 		} catch (Exception ex) {
 			MWLogger.errLog(ex);

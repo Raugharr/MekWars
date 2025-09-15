@@ -25,6 +25,7 @@ import java.util.StringTokenizer;
 
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
@@ -53,7 +54,7 @@ public class GetFactionConfigsCommand implements Command {
 
         try {
             if (accessLevel != 0) {
-                int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+                int userLevel = MWServ.getInstance().getUserLevel(Username);
                 if (userLevel < getExecutionLevel()) {
                     CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                     CampaignMain.cm.toUser("PL|FC|DONE#DONE", Username, false);

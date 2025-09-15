@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
@@ -37,7 +38,7 @@ public class FactionLeaderMuteCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		//access level check
-		int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		if(userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 			return;
@@ -64,19 +65,19 @@ public class FactionLeaderMuteCommand implements Command {
 		}
 		
 		
-		Vector<String> factionIgnores = CampaignMain.cm.getServer().getFactionLeaderIgnoreList();
+		Vector<String> factionIgnores = MWServ.getInstance().getFactionLeaderIgnoreList();
 		
 		//do the actual mute
 		if (factionIgnores.indexOf(p.getName()) == -1) {
 			factionIgnores.add(p.getName());
 			//server.MWLogger.modLog(Username + " faction muted " + p.getName());
 			CampaignMain.cm.doSendModMail("NOTE",Username + " faction muted " + p.getName());
-			CampaignMain.cm.getServer().sendChat(Username + " muted " + p.getName() + " (faction mute).");
+			MWServ.getInstance().sendChat(Username + " muted " + p.getName() + " (faction mute).");
 		} else { //unmute
 			factionIgnores.remove(p.getName());
 			MWLogger.modLog(Username + " faction unmuted " + p.getName());
 			CampaignMain.cm.doSendModMail("NOTE",Username + " faction unmuted " + p.getName());
-			CampaignMain.cm.getServer().sendChat(Username + " unmuted " + p.getName() + " (faction mute).");
+			MWServ.getInstance().sendChat(Username + " unmuted " + p.getName() + " (faction mute).");
 		}
 		
 	}

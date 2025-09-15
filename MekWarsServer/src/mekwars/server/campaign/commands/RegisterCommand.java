@@ -19,6 +19,7 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -77,7 +78,7 @@ public class RegisterCommand implements Command {
                 regged = true;
             }
              
-            if (regged && !CampaignMain.cm.getServer().isAdmin(Username)) {
+            if (regged && !MWServ.getInstance().isAdmin(Username)) {
             	CampaignMain.cm.toUser("AM:Nickname \"" + regname + "\" is already registered!", Username);
                 //MWLogger.modLog(Username + " tried to register the nickname \"" + regname + "\", which was already registered.");
                 CampaignMain.cm.doSendModMail("NOTE",Username + " tried to register the nickname \"" + regname + "\", which was already registered.");
@@ -92,7 +93,7 @@ public class RegisterCommand implements Command {
                 	
             //change userlevel
             int level = -1;
-            if (CampaignMain.cm.getServer().isAdmin(Username)){
+            if (MWServ.getInstance().isAdmin(Username)){
             	MWPasswd.writeRecord(regname, IAuthenticator.ADMIN, pw);	
             	level = IAuthenticator.ADMIN;
             } else {
@@ -101,10 +102,10 @@ public class RegisterCommand implements Command {
             }
             
             //send the userlevel change to all players
-            CampaignMain.cm.getServer().getClient(regname).setAccessLevel(level);
-            CampaignMain.cm.getServer().getUser(regname).setLevel(level);
-            CampaignMain.cm.getServer().sendRemoveUserToAll(regname,false);
-            CampaignMain.cm.getServer().sendNewUserToAll(regname,false);
+            MWServ.getInstance().getClient(regname).setAccessLevel(level);
+            MWServ.getInstance().getUser(regname).setLevel(level);
+            MWServ.getInstance().sendRemoveUserToAll(regname,false);
+            MWServ.getInstance().sendNewUserToAll(regname,false);
             
             if (player != null){
             	CampaignMain.cm.doSendToAllOnlinePlayers("PI|DA|" + CampaignMain.cm.getPlayerUpdateString(player),false);

@@ -18,7 +18,7 @@ package mekwars.server.campaign.commands.mod;
 
 import java.net.InetAddress;
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
@@ -46,7 +46,7 @@ public class BanIPCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -141,11 +141,11 @@ public class BanIPCommand implements Command {
 		
 		long until = System.currentTimeMillis() + howlong;
 		if (ip != null)
-			CampaignMain.cm.getServer().getBanIps().put(ip, until);
+			MWServ.getInstance().getBanIps().put(ip, until);
 
-		CampaignMain.cm.getServer().bansUpdate();
+		MWServ.getInstance().bansUpdate();
 		//MWLogger.modLog(Username + " banned " + toKill + " " +timeName+".");
-		CampaignMain.cm.getServer().sendChat(Username + " banned " + toKill + " " +timeName+".");
+		MWServ.getInstance().sendChat(Username + " banned " + toKill + " " +timeName+".");
 	}
 	
 }//end banipcommand.java

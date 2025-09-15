@@ -21,6 +21,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.util.Statistics;
 import mekwars.server.campaign.CampaignMain;
 
@@ -81,7 +82,7 @@ public class TickThread extends Thread {
 				}
 				
 				if (this.tickid % 8 == 0) {
-					this.myCampaign.addToNewsFeed("Faction Rankings", "Server News", Statistics.getReadableHouseRanking(false));
+					MWServ.getInstance().addToNewsFeed("Faction Rankings", "Server News", Statistics.getReadableHouseRanking(false));
 					if(CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
 						CampaignMain.cm.postToDiscord(Statistics.getReadableHouseRanking(false));
 					}

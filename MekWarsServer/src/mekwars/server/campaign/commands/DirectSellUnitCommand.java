@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 
 import mekwars.common.Unit;
 import mekwars.common.util.StringUtils;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
@@ -46,7 +47,7 @@ public class DirectSellUnitCommand implements Command {
     public void process(StringTokenizer command, String Username) {
 
         if (accessLevel != 0) {
-            int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
                 CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
                 return;
@@ -121,7 +122,7 @@ public class DirectSellUnitCommand implements Command {
             return;
             // Same IP address?
         } else if (CampaignMain.cm.getBooleanConfig("IPCheck")) {
-            if (CampaignMain.cm.getServer().getIP(pSeller.getName()).toString().equals(CampaignMain.cm.getServer().getIP(pBuyer.getName()).toString())) {
+            if (MWServ.getInstance().getIP(pSeller.getName()).toString().equals(MWServ.getInstance().getIP(pBuyer.getName()).toString())) {
                 CampaignMain.cm.toUser(pBuyer.getName() + " has the same IP as you do. You can't send him units.", Username, true);
                 return;
             }

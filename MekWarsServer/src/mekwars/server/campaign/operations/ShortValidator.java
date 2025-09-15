@@ -37,6 +37,7 @@ import mekwars.common.flags.PlayerFlags;
 import mekwars.common.util.MWLogger;
 import megamek.common.BattleArmor;
 import megamek.common.Protomech;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.NewbieHouse;
 import mekwars.server.campaign.SArmy;
@@ -643,7 +644,7 @@ public class ShortValidator {
                         newsFeedBody = ap.getName() + " gained " + totalConquest + "cp on " + newOp.getTargetWorld().getName();
                     }
                     if (o.getBooleanValue("ReportOpToNewsFeed")) {
-                        CampaignMain.cm.addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
+                        MWServ.getInstance().addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
                         CampaignMain.cm.postToDiscord(newsFeedBody);
                     }
                     newOp.setCompleteFinishedInfo(ap.getName() + " gained " + totalConquest + "cp on " + newOp.getTargetWorld().getName());

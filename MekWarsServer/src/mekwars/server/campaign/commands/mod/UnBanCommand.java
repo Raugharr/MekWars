@@ -17,11 +17,10 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
-
 
 /**
  * Moving the unban command from MWServ into the normal command structure.
@@ -39,7 +38,7 @@ public class UnBanCommand implements Command {
 	public void process(StringTokenizer command,String Username) {
 		
 		if (accessLevel != 0) {
-			int userLevel = CampaignMain.cm.getServer().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(Username);
 			if(userLevel < getExecutionLevel()) {
 				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
 				return;
@@ -48,9 +47,9 @@ public class UnBanCommand implements Command {
 
         try{
             String account = command.nextToken().toLowerCase();
-            if (CampaignMain.cm.getServer().getBanAccounts().get(account) != null) {
-                CampaignMain.cm.getServer().getBanAccounts().remove(account);
-                CampaignMain.cm.getServer().bansUpdate();
+            if (MWServ.getInstance().getBanAccounts().get(account) != null) {
+                MWServ.getInstance().getBanAccounts().remove(account);
+                MWServ.getInstance().bansUpdate();
                 CampaignMain.cm.doSendModMail("NOTE",Username + " unbanned " + account);
                 //MWLogger.modLog(Username + " unbanned " + account);
 

@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 import mekwars.common.House;
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
@@ -113,7 +114,7 @@ public class FreeBuildCreateUnitCommand implements Command
 	private void initVars(String Username)
 	{
 		username = Username;
-		userlvl = CampaignMain.cm.getServer().getUserLevel(username);
+		userlvl = MWServ.getInstance().getUserLevel(username);
 		player = CampaignMain.cm.getPlayer(username);
 		house = player.getMyHouse();
 		solFreeBuild = Boolean.parseBoolean(CampaignMain.cm.getConfig("Sol_FreeBuild"));

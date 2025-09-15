@@ -27,9 +27,11 @@ import java.util.Date;
 
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
-//import mekwars.common.util.BinReader;
 import mekwars.common.util.MWLogger;
+import mekwars.server.MWServ;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -37,6 +39,7 @@ import mekwars.common.util.MWLogger;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class CommandTaskThread extends Thread {
+    private static final Logger logger = LogManager.getLogger(MWServ.class);
     
     private Socket client;
     private CampaignData data;
@@ -50,8 +53,8 @@ public class CommandTaskThread extends Thread {
             this.client = client;
             this.data = data;
             //this.client.setSoTimeout(12000);
-        }catch (Exception ex){
-            
+        } catch (Exception ex){
+          logger.error(ex); 
         }
     }
     
@@ -102,7 +105,8 @@ public class CommandTaskThread extends Thread {
                     ServerCommand cmd;
                     try {
                     	cmdClass = Class.forName("mekwars.server.dataProvider.commands." + cmdStr);
-                    	cmd = (ServerCommand)cmdClass.newInstance();
+                    	logger.info(cmdStr);
+                    	cmd = (ServerCommand)cmdClass.getDeclaredConstructor().newInstance();
                     } catch (Exception e) {
                         in.close();
                         out.close();
