@@ -240,7 +240,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                         mySettings.setIceParams(env.getIceMinSpots(), env.getIceMaxSpots(), env.getIceMinHexes(), env.getIceMaxHexes());
                         mySettings.setRubbleParams(env.getRubbleMinSpots(), env.getRubbleMaxSpots(), env.getRubbleMinHexes(), env.getRubbleMaxHexes(), env.getRubbleUltraProbability());
                         mySettings.setFortifiedParams(env.getFortifiedMinSpots(), env.getFortifiedMaxSpots(), env.getFortifiedMinHexes(), env.getFortifiedMaxHexes());
-                        mySettings.setSpecialFX(env.getFxMod(), env.getProbabilityForestFire(), env.getProbabilityFreeze(), env.getProbabilityFlood(), env.getProbabilityDrought());
+                        mySettings.setSpecialFX(env.getFxMod(), env.getForestFireProbability(), env.getFreezeProbability(), env.getFloodProbability(), env.getDroughtProbability());
                         mySettings.setRiverParam(env.getRiverProbability());
                         mySettings.setCliffParam(env.getCliffProbability());
                         mySettings.setRoadParam(env.getRoadProbability());
@@ -332,7 +332,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                     mySettings.setIceParams(env.getIceMinSpots(), env.getIceMaxSpots(), env.getIceMinHexes(), env.getIceMaxHexes());
                     mySettings.setRubbleParams(env.getRubbleMinSpots(), env.getRubbleMaxSpots(), env.getRubbleMinHexes(), env.getRubbleMaxHexes(), env.getRubbleUltraProbability());
                     mySettings.setFortifiedParams(env.getFortifiedMinSpots(), env.getFortifiedMaxSpots(), env.getFortifiedMinHexes(), env.getFortifiedMaxHexes());
-                    mySettings.setSpecialFX(env.getFxMod(), env.getProbabilityForestFire(), env.getProbabilityFreeze(), env.getProbabilityFlood(), env.getProbabilityDrought());
+                    mySettings.setSpecialFX(env.getFxMod(), env.getForestFireProbability(), env.getFreezeProbability(), env.getFloodProbability(), env.getDroughtProbability());
                     mySettings.setRiverParam(env.getRiverProbability());
                     mySettings.setCliffParam(env.getCliffProbability());
                     mySettings.setRoadParam(env.getRoadProbability());

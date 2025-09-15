@@ -23,7 +23,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import java.util.TreeMap;
-import java.util.Vector;
+import java.util.ArrayList;
 import mekwars.common.CampaignData;
 import mekwars.common.Continent;
 import mekwars.common.House;
@@ -108,7 +108,7 @@ public class SPlanetConverter implements Converter {
         String name = null;
         int componentProduction = 0;
         Influences influences = null;
-        Vector<UnitFactory> unitFactoryList = new Vector<UnitFactory>();
+        ArrayList<UnitFactory> unitFactoryList = new ArrayList<UnitFactory>();
         boolean isHomeworld = false;
         String originalOwnerString = null;
         TreeMap<String, String> planetFlags = null;

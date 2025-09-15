@@ -17,7 +17,7 @@ package mekwars.server.campaign.commands.leader;
 
 import java.io.File;
 import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import mekwars.common.UnitFactory;
 import megamek.common.TechConstants;
@@ -156,7 +156,7 @@ public class PurchaseFactoryCommand implements Command {
         player.addInfluence((int)-flu);
         
         SUnitFactory fac = new SUnitFactory(name, planet, SUnit.getWeightClassDesc(weight), house.getName(), 0, CampaignMain.cm.getIntegerConfig("BaseFactoryRefreshRate"), buildType, BuildTable.STANDARD, 0);
-        Vector<UnitFactory> uf = planet.getUnitFactories();
+        ArrayList<UnitFactory> uf = planet.getUnitFactories();
         uf.add(fac);
         fac.setPlanet(planet);
         planet.setOwner(null,house, true);

@@ -63,6 +63,8 @@ import mekwars.server.util.rss.FeedMessage;
 import mekwars.server.util.discord.DiscordMessageHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import megamek.Version;
+import megamek.common.EquipmentType;
 
 public class MWServ {
     private static final Logger logger = LogManager.getLogger(MWServ.class);
@@ -153,6 +155,7 @@ public class MWServ {
 
         MWLogger.mainLog("Creating new campaign environment...");
         campaign = new CampaignMain(getConfigParam("CAMPAIGNCONFIG"));
+        campaign.start();
         MWLogger.mainLog("Environment created.");
         //this.addToNewsFeed("MekWars Server Started!", "Server News", "");
         // create & start a data provider

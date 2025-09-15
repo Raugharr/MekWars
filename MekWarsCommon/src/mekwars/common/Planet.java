@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
@@ -62,7 +62,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
      * The unit factories on this planet. Type is UnitFactory Mutable field (has
      * to be transfered)
      */
-    private Vector<UnitFactory> unitFactories = new Vector<UnitFactory>(1, 1);
+    private ArrayList<UnitFactory> unitFactories = new ArrayList<UnitFactory>();
 
     /**
      * The environment modifiers for the planet.
@@ -288,7 +288,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
     /**
      * @return Returns the Factories.
      */
-    public Vector<UnitFactory> getUnitFactories() {
+    public ArrayList<UnitFactory> getUnitFactories() {
         return unitFactories;
     }
 
@@ -296,7 +296,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
      * @param Factories
      *            The Factories to set.
      */
-    public void setUnitFactories(Vector<UnitFactory> unitFactories) {
+    public void setUnitFactories(ArrayList<UnitFactory> unitFactories) {
         this.unitFactories = unitFactories;
     }
 
@@ -409,7 +409,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
         setName(in.readLine("name"));
         setPosition(new Position(in.readDouble("x"), in.readDouble("y")));
         int size = in.readInt("unitFactories.size");
-        setUnitFactories(new Vector<UnitFactory>(size, 1));
+        setUnitFactories(new ArrayList<UnitFactory>(size));
         for (int i = 0; i < size; ++i) {
             UnitFactory uf = new UnitFactory();
             uf.binIn(in);
@@ -592,7 +592,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
      *      IOException { this.setId(new Integer(in.readInt("id")));
      *      this.setName(in.readString("name")); this.setPosition(new
      *      Position(in.readDouble("x"), in.readDouble("y")));
-     *      this.setUnitFactories(new Vector<UnitFactory>(1,1));
+     *      this.setUnitFactories(new ArrayList<UnitFactory>(1,1));
      *      in.readCollection(this.getUnitFactories(), UnitFactory.class,
      *      dataProvider, "unitFactories"); this.setEnvironments(new
      *      PlanetEnvironments()); in.readObject(this.getEnvironments(),

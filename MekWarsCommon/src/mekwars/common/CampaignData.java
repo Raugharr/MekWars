@@ -29,6 +29,7 @@ import java.util.Properties;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import mekwars.common.House;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.MWLogger;
@@ -815,10 +816,9 @@ public class CampaignData implements TerrainProvider {
                 String commandName = in.readLine("CommandName");
                 int accessLevel = in.readInt("AccessLevel");
                 commandTemp.put(commandName, accessLevel);
-            }// end while
-        }// end try
-        catch (Exception ex) {
-        }// in is empty move on.
+            }
+        } catch (Exception ex) {
+        } // in is empty move on.
         setCommandTable(commandTemp);
     }
 
@@ -847,7 +847,6 @@ public class CampaignData implements TerrainProvider {
 
     public Properties getServerConfigs() {
         return serverConfigs;
-
     }
 
     public void setServerConfigs(Properties configs) {
@@ -855,9 +854,32 @@ public class CampaignData implements TerrainProvider {
     }
 
     public boolean targetSystemIsBanned(int id) {
-        if(bannedTargetingSystems.contains(id)) {
+        if (bannedTargetingSystems.contains(id)) {
             return true;
         }
         return false;
+    }
+    
+    public House getHouseFromPartialString(String houseString) {
+        // store matches so we can tell player if there's more than one
+        int numMatches = 0;
+        House theMatch = null;
+
+        for (House currH : getAllHouses()) {
+            House shouse = (House) currH;
+            // exact match
+            if (shouse.getName().equals(houseString)) {
+                return shouse;
+            }
+
+            // store all matches
+            if (shouse.getName().startsWith(houseString)) {
+                theMatch = shouse;
+                numMatches++;
+            }
+        }
+
+        // only one match! send it back.
+        return theMatch;
     }
 }

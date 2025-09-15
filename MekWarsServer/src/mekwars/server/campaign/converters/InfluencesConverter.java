@@ -23,7 +23,6 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import mekwars.common.Influences;
-import mekwars.common.UnitFactory;
 import java.util.HashMap;
 import java.util.Map;
 import mekwars.server.campaign.SHouse;
