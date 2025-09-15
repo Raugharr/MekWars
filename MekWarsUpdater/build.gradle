@@ -1,0 +1,38 @@
+plugins {
+    id 'application'
+	id 'java-common-conventions'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+	}
+}
+
+dependencies {
+	implementation project(':MekWarsServer')
+	implementation project(':MekWarsCommon')
+	implementation files('lib/TinyXML.jar')
+	implementation 'commons-cli:commons-cli:1.10.0'
+}
+
+application {
+	mainClassName = 'mekwars.updater.Updater'
+    applicationDefaultJvmArgs = [
+			'-Dlog4j2.configurationFile=log4j2.xml',
+            '-Xmx4096m',
+            '-Dsun.awt.disablegrab=true'
+    ]
+}
+
+jar {
+	archiveFileName = 'MekWarsUpdater.jar'
+	manifest {
+		attributes(
+		  'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+		  'Main-Class': mainClassName
+		)
+	}
+}

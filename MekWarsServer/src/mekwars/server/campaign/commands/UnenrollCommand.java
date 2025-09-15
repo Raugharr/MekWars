@@ -127,11 +127,9 @@ public class UnenrollCommand implements Command {
 	    while ( planets.hasMoreElements() ) {
 	        SPlanet planet = planets.nextElement();
 	        planet.doGainInfluence(CampaignMain.cm.getHouseById(-1), faction, Integer.MAX_VALUE, true);
-	        Enumeration<UnitFactory> factories = planet.getUnitFactories().elements();
-	        while ( factories.hasMoreElements() ) {
-	            UnitFactory factory = factories.nextElement();
+	        for (UnitFactory factory : planet.getUnitFactories()) {
 	            if ( factory.getFounder().equalsIgnoreCase(faction.getName()) )
-	                planet.getUnitFactories().removeElement(factory);
+	                planet.getUnitFactories().remove(factory);
 	        }
 	        planet.setBaysProvided(0);
 	        planet.updated();

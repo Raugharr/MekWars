@@ -32,7 +32,7 @@ import mekwars.common.util.BinWriter;
  * if you subclass PlanetEnvironment.
  */
 
-final public class PlanetEnvironment{
+final public class PlanetEnvironment {
     // id
     private int id = -1;
     private String name = "";
@@ -1407,19 +1407,19 @@ final public class PlanetEnvironment{
         this.fxMod = mod;
     }
 
-    public void setProbabilityForestFire(int prob) {
+    public void setForestFireProbability(int prob) {
         this.forestFireProbability = prob;
     }
 
-    public void setProbabilityFreeze(int prob) {
+    public void setFreezeProbability(int prob) {
         this.freezeProbability = prob;
     }
 
-    public void setProbabilityFlood(int prob) {
+    public void setFloodProbability(int prob) {
         this.floodProbability = prob;
     }
 
-    public void setProbabilityDrought(int prob) {
+    public void setDroughtProbability(int prob) {
         this.droughtProbability = prob;
     }
 
@@ -1462,16 +1462,16 @@ final public class PlanetEnvironment{
     public int getFxMod() {
         return fxMod;
     }
-    public int getProbabilityForestFire() {
+    public int getForestFireProbability() {
         return forestFireProbability;
     }
-    public int getProbabilityFreeze() {
+    public int getFreezeProbability() {
         return freezeProbability;
     }
-    public int getProbabilityFlood() {
+    public int getFloodProbability() {
         return floodProbability;
     }
-    public int getProbabilityDrought() {
+    public int getDroughtProbability() {
         return droughtProbability;
     }
     /**
@@ -1700,7 +1700,7 @@ final public class PlanetEnvironment{
     public String getTheme() {
         return theme;
     }
-    public void settheme(String theme) {
+    public void setTheme(String theme) {
         if (theme.length() <= 1) {
             theme = " ";
         }
@@ -1757,7 +1757,7 @@ final public class PlanetEnvironment{
         return sandMinSpots;
     }
 
-    public void setsandMinSpots(int sandMinSpots) {
+    public void setSandMinSpots(int sandMinSpots) {
         sandMinSpots = sandMinSpots;
     }
 
@@ -1765,7 +1765,7 @@ final public class PlanetEnvironment{
         return sandMaxSpots;
     }
 
-    public void setsandMaxSpots(int sandMaxSpots) {
+    public void setSandMaxSpots(int sandMaxSpots) {
         sandMaxSpots = sandMaxSpots;
     }
 
@@ -1773,7 +1773,7 @@ final public class PlanetEnvironment{
         return sandMinHexes;
     }
 
-    public void setsandMinHexes(int sandMinHexes) {
+    public void setSandMinHexes(int sandMinHexes) {
         sandMinHexes = sandMinHexes;
     }
 
@@ -1781,7 +1781,7 @@ final public class PlanetEnvironment{
         return sandMaxHexes;
     }
 
-    public void setsandMaxHexes(int sandMaxHexes) {
+    public void setSandMaxHexes(int sandMaxHexes) {
         sandMaxHexes = sandMaxHexes;
     }
 
@@ -1789,7 +1789,7 @@ final public class PlanetEnvironment{
         return plantedFieldMinSpots;
     }
 
-    public void setplantedFieldMinSpots(int plantedFieldMinSpots) {
+    public void setPlantedFieldMinSpots(int plantedFieldMinSpots) {
         plantedFieldMinSpots = plantedFieldMinSpots;
     }
 
@@ -1797,7 +1797,7 @@ final public class PlanetEnvironment{
         return plantedFieldMinHexes;
     }
 
-    public void setplantedFieldMinHexes(int plantedFieldMinHexes) {
+    public void setPlantedFieldMinHexes(int plantedFieldMinHexes) {
         plantedFieldMinHexes = plantedFieldMinHexes;
     }
 
@@ -1805,7 +1805,7 @@ final public class PlanetEnvironment{
         return plantedFieldMaxSpots;
     }
 
-    public void setplantedFieldMaxSpots(int plantedFieldMaxSpots) {
+    public void setPlantedFieldMaxSpots(int plantedFieldMaxSpots) {
         plantedFieldMaxSpots = plantedFieldMaxSpots;
     }
 
@@ -1813,8 +1813,7 @@ final public class PlanetEnvironment{
         return plantedFieldMaxHexes;
     }
 
-    public void setplantedFieldMaxHexes(int plantedFieldMaxHexes) {
+    public void setPlantedFieldMaxHexes(int plantedFieldMaxHexes) {
         plantedFieldMaxHexes = plantedFieldMaxHexes;
     }
-
 }

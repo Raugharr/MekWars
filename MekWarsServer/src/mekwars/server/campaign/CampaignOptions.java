@@ -16,8 +16,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Properties;
-import java.util.Vector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,22 +27,28 @@ public class CampaignOptions {
     private DefaultServerOptions defaultOptions;
     private Properties config = new Properties();
 
+    public static String CAMPAIGN_CONFIG = "./data/campaignconfig.txt";
+
+    public CampaignOptions() {
+        this(CAMPAIGN_CONFIG);
+    }
+
     public CampaignOptions(String configFile) {
         defaultOptions = new DefaultServerOptions();
         defaultOptions.createDefaults();
         try {
-            config.putAll(defaultOptions.getServerDefaults());// load all of the defaults
+            config.putAll(defaultOptions.getServerDefaults()); // load all of the defaults
             config.load(new FileInputStream(configFile));
 
             // Right here, we're going to try to prune old cruft from the configs
             // Over the course of many years, as config options change, crap never
             // gets removed from campaignconfig.txt.  We're seeing this very badly on
             // MMNet, and probably other servers are, as well.
-            Vector<String> keysToRemove = new Vector<String>();
+            ArrayList<String> keysToRemove = new ArrayList<String>();
             for (Object key : config.keySet()) {
                 if (!defaultOptions.getServerDefaults().keySet().contains(key) && !((String)key).endsWith("RewardPointMultiplier")) {
                     logger.error("Key " + (String)key + " does not exist in DefaultServerConfig.  Pruning from configs.");
-                    keysToRemove.add((String)key);
+                    keysToRemove.add((String) key);
                 }
             }
 

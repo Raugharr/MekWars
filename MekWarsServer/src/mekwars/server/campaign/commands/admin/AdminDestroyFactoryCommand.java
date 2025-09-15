@@ -69,7 +69,7 @@ public class AdminDestroyFactoryCommand implements Command {
 				return;
 			}
 			
-			p.getUnitFactories().removeElement(foundFactory);
+			p.getUnitFactories().remove(foundFactory);
 			p.getUnitFactories().trimToSize();
 			
 

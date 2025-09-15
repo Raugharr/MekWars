@@ -231,24 +231,23 @@ public final class CampaignMain implements Serializable {
 
         market = new Market2();
         partsmarket = new PartsMarket();
-
         SPilotSkills.initializePilotSkills();
 
         // Load & Init Data
         data = new CampaignData();
-
         xstream = new SMMNetXStream();
 
+        // load megamek gameoptions;
+        logger.info("Loading MegaMek Game Options");
+        cm.megaMekClient.getGame().getOptions().loadOptions();
+    }
+    
+    public void start() {
         File terrainFile = new File("./data/terrain.xml");
         Terrain[] terrainList = (Terrain[]) getXStream().fromXML(terrainFile);
         for (Terrain terrain : terrainList) {
             getData().addTerrain(terrain);
         }
-
-        // load megamek gameoptions;
-        logger.info("Loading MegaMek Game Options");
-        cm.megaMekClient.getGame().getOptions().loadOptions();
-
         // Parse Terrain
         File advancedTerrainFile = new File("./data/advancedTerrain.xml");
         AdvancedTerrain[] advancedTerrainList = (AdvancedTerrain[]) getXStream().fromXML(advancedTerrainFile);
@@ -2410,41 +2409,7 @@ public final class CampaignMain implements Serializable {
     }
 
     public SHouse getHouseFromPartialString(String houseString, String username) {
-        // store matches so we can tell player if there's more than one
-        int numMatches = 0;
-        SHouse theMatch = null;
-
-        for (House currH : data.getAllHouses()) {
-            SHouse shouse = (SHouse) currH;
-            // exact match
-            if (shouse.getName().equals(houseString)) {
-                return shouse;
-            }
-
-            // store all matches
-            if (shouse.getName().startsWith(houseString)) {
-                theMatch = shouse;
-                numMatches++;
-            }
-        }
-
-        // too many matches
-        if (numMatches > 1) {
-            if (username != null) {
-                toUser("\"" + houseString + "\" is not unique [" + numMatches + " matches]. Please be more specific.", username);
-            }
-            return null;
-        }
-
-        if (numMatches == 0) {
-            if (username != null) {
-                toUser("Couldn't find a factions whose name begins with \"" + houseString + "\". Try again.", username, true);
-            }
-            return null;
-        }
-
-        // only one match! send it back.
-        return theMatch;
+        return (SHouse) data.getHouseFromPartialString(houseString);
     }
 
     /**

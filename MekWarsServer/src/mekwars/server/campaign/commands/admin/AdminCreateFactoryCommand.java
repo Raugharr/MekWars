@@ -20,6 +20,7 @@
  */
 package mekwars.server.campaign.commands.admin;
 
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.Vector;
@@ -30,7 +31,6 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.commands.Command;
-
 
 /**
  * @author Helge Richter
@@ -71,7 +71,7 @@ public class AdminCreateFactoryCommand implements Command {
 		
 		fac.setID(UUID.randomUUID().toString());
         
-		Vector<UnitFactory> uf = planet.getUnitFactories();
+		ArrayList<UnitFactory> uf = planet.getUnitFactories();
 		uf.add(fac);
 		fac.setPlanet(planet);
 		if (planet.getOwner() != null) {
@@ -83,6 +83,5 @@ public class AdminCreateFactoryCommand implements Command {
 		CampaignMain.cm.toUser("Factory created!",Username,true);
 
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has created factory " + fac.getName()+" on planet "+planet.getName());
-		
 	}
 }

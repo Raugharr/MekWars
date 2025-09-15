@@ -48,5 +48,6 @@ public class MMNetXStream extends XStream {
         // Enables reference marshalling.
         setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
         addPermission(AnyTypePermission.ANY);
+        setMode(XStream.NO_REFERENCES);
     }
 }

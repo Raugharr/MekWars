@@ -6,6 +6,7 @@ include 'MekWarsHPGNet'
 include 'MekWarsDedicatedHost'
 include 'MekWarsOperationsEditor'
 include 'MekWarsCommon'
+include 'MekWarsUpdater'
 
 includeBuild('../megamek')
 
