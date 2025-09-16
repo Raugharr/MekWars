@@ -99,7 +99,7 @@ public class OpponentListHelper {
 					continue playersLoop;
 
 				//if the player is immune, skip him
-				if (CampaignMain.cm.getIThread().isImmune(currPlayer))
+				if (MWServ.getInstance().getIThread().isImmune(currPlayer))
 					continue playersLoop;
 
 				//if player has no armies, skip him

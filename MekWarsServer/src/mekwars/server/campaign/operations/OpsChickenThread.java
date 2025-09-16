@@ -24,6 +24,7 @@ import mekwars.common.UnitFactory;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SHouse;
@@ -99,7 +100,7 @@ public class OpsChickenThread extends Thread {
             return;
         }
 
-        if (CampaignMain.cm.getIThread().isImmune(pdefender)) {
+        if (MWServ.getInstance().getIThread().isImmune(pdefender)) {
             String toPlayer = "You did not defend Attack #" + opID + ". You've not been punished because " + "you are still immune; however, if your immunity wears off and you're still under attack you may " + "lose money, units, experience, influence, rewards, or some combination thereof.";
             CampaignMain.cm.toUser(toPlayer, pdefender.getName(), true);
             return;

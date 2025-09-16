@@ -126,7 +126,7 @@ public class SimpleRepairCommand implements Command {
                 }
             }
             
-            if ( CampaignMain.cm.getRTT().getState() == Thread.State.TERMINATED ){
+            if ( MWServ.getInstance().getRTT().getState() == Thread.State.TERMINATED ){
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed the repair thread has been terminated. Staff has been notified.",Username,false);
                 MWLogger.errLog("AM:NOTE: Repair Thread has been terminated! Use the restartrepairthread command to restart it! If all else fails reboot!");
                 return;
@@ -140,7 +140,7 @@ public class SimpleRepairCommand implements Command {
             player.setSave();
             time = setWorkHours(rolls,techs,unit.getEntity(),player.getMyHouse());
             MWLogger.errLog("Repair Time: "+time);
-            CampaignMain.cm.getRTT().getRepairList().add(
+            MWServ.getInstance().getRTT().getRepairList().add(
                     RepairTrackingThread.Repair(player, unitID, techs, time,false));
             CampaignMain.cm.toUser("FSM|Repairs have begone on your "+unit.getModelName()+" <b>At a Cost of "+CampaignMain.cm.moneyOrFluMessage(true,true,cost)+"</b>",Username,false);
             CampaignMain.cm.toUser("PL|UU|"+unitID+"|"+unit.toString(true),Username,false);

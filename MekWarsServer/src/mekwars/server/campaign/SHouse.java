@@ -2111,7 +2111,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
          * In sum, we can put all players in the Reserve hash at this point, and
          * they will be properly moved afterwards when setBusyNoOpList() is run.
          */
-        CampaignMain.cm.getIThread().removeImmunity(p);// logging in player
+        MWServ.getInstance().getIThread().removeImmunity(p);// logging in player
         // should NEVER be
         // immune
 

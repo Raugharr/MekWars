@@ -48,7 +48,7 @@ public class DisplayUnitRepairJobsCommand implements Command {
 		
         try{
             int unitid = Integer.parseInt(command.nextToken());
-            String data = CampaignMain.cm.getRTT().unitRepairTimes(unitid);
+            String data = MWServ.getInstance().getRTT().unitRepairTimes(unitid);
             if ( data != null )
                 CampaignMain.cm.toUser("FSM|"+data,Username,false);
             else{

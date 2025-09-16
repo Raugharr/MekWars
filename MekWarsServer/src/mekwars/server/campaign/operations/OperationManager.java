@@ -44,8 +44,7 @@ import java.util.TreeMap;
 
 import mekwars.common.campaign.operations.ModifyingOperation;
 import mekwars.common.campaign.operations.Operation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SHouse;
@@ -55,6 +54,8 @@ import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.operations.newopmanager.AbstractOperationManager;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OperationManager extends AbstractOperationManager implements I_OperationManager {
     private static final Logger logger = LogManager.getLogger(OperationManager.class);
@@ -567,7 +568,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
                 }
                 
                 SPlayer currP = CampaignMain.cm.getPlayer(currN);
-                CampaignMain.cm.getIThread().removeImmunity(currP);//ensure player is not in immunity tree.
+                MWServ.getInstance().getIThread().removeImmunity(currP);//ensure player is not in immunity tree.
                 
                 //If AFR, return to reserve. Else, standard switch to activated.
                 if (so.isFromReserve())

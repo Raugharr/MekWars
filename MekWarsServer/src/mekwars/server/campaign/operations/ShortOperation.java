@@ -55,6 +55,7 @@ import megamek.common.planetaryconditions.PlanetaryConditions;
 import megamek.common.planetaryconditions.Weather;
 import megamek.common.planetaryconditions.Wind;
 import mekwars.server.campaign.AutoArmy;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SHouse;
@@ -1330,7 +1331,7 @@ public class ShortOperation implements Comparable<Object> {
                     while (units.hasMoreElements()) {
                         SUnit u = (SUnit) units.nextElement();
                         if (UnitUtils.isRepairing(u.getEntity())) {
-                            CampaignMain.cm.getRTT().stopAllRepairJobs(u.getId(), currP);
+                            MWServ.getInstance().getRTT().stopAllRepairJobs(u.getId(), currP);
                         }
                     }
                 }
@@ -1343,7 +1344,7 @@ public class ShortOperation implements Comparable<Object> {
                     while (units.hasMoreElements()) {
                         SUnit u = (SUnit) units.nextElement();
                         if (UnitUtils.isRepairing(u.getEntity())) {
-                            CampaignMain.cm.getRTT().stopAllRepairJobs(u.getId(), currP);
+                            MWServ.getInstance().getRTT().stopAllRepairJobs(u.getId(), currP);
                         }
                     }
                 }

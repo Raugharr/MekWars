@@ -39,6 +39,7 @@ import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 import megamek.common.Protomech;
 import megamek.Version;
+import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.market2.IBuyer;
 import mekwars.server.campaign.market2.ISeller;
@@ -783,7 +784,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
                 // immediately after a game, only decrement. don't scrap.
                 long currTime = System.currentTimeMillis();
-                if (CampaignMain.cm.getIThread().isImmune(this) || (currUnit.getPassesMaintainanceUntil() > currTime)) {
+                if (MWServ.getInstance().getIThread().isImmune(this) || (currUnit.getPassesMaintainanceUntil() > currTime)) {
                     currUnit.addToMaintainanceLevel(-decrease);
                 } else if (rnd <= currUnit.getMaintainanceLevel()) {
                     currUnit.addToMaintainanceLevel(-decrease);
@@ -921,7 +922,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             // activating. set current timestamp and clear immunity.
             activeSince = System.currentTimeMillis();
-            CampaignMain.cm.getIThread().removeImmunity(this);
+            MWServ.getInstance().getIThread().removeImmunity(this);
 
             /*
              * Player is activating. His armies are all acceptable, and his
@@ -1010,7 +1011,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              * will not be any immunity and updates should be sent to all
              * players immediately.
              */
-            if (!CampaignMain.cm.getIThread().isImmune(this)) {
+            if (!MWServ.getInstance().getIThread().isImmune(this)) {
                 OpponentListHelper olh = new OpponentListHelper(this, OpponentListHelper.MODE_ADD);
                 olh.sendInfoToOpponents(" halted combat operations and returned to its post. You may attack it with ");
             }
@@ -1030,7 +1031,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public void setFightingNoOppList() {
 
         // no immunity from immediate activation
-        CampaignMain.cm.getIThread().removeImmunity(this);
+        MWServ.getInstance().getIThread().removeImmunity(this);
 
         // mark this as the time-of-activation
         activeSince = System.currentTimeMillis();

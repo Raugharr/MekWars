@@ -148,9 +148,7 @@ import mekwars.server.campaign.util.Statistics;
 import mekwars.server.campaign.util.WhoToHTML;
 import mekwars.server.campaign.util.scheduler.MWScheduler;
 import mekwars.server.campaign.votes.VoteManager;
-import mekwars.server.util.AutomaticBackup;
 import mekwars.server.util.MWPasswd;
-import mekwars.server.util.RepairTrackingThread;
 import mekwars.server.util.StringUtil;
 import mekwars.server.util.discord.DiscordMessageHandler;
 import org.apache.logging.log4j.LogManager;
@@ -173,7 +171,6 @@ public final class CampaignMain implements Serializable {
     public static CampaignMain cm;
 
     private CampaignOptions campaignOptions;
-    private MWServ myServer;
     private Client megaMekClient = new Client("MWServer", "None", 0);
     private CampaignData data = new CampaignData();
     private Hashtable<String, Command> Commands = new Hashtable<String, Command>();
@@ -183,11 +180,6 @@ public final class CampaignMain implements Serializable {
     private int gamesCompleted;// used by Tracker
     private int currentUnitID = 1;
     private int currentPilotID = 1;
-    private TickThread TThread;
-    private SliceThread SThread;
-    private ImmunityThread IThread;
-    private RepairTrackingThread RTT;
-    private AutomaticBackup aub = new AutomaticBackup(System.currentTimeMillis());
     private Market2 market;
     private PartsMarket partsmarket;
     private VoteManager voteManager;
@@ -206,20 +198,14 @@ public final class CampaignMain implements Serializable {
      * removed from this hash and added to the houses memory.
      */
     private Hashtable<String, SPlayer> lostSouls = new Hashtable<String, SPlayer>();
-
     private Vector<String> supportUnits = new Vector<String>();
-
     private PlayerFlags defaultPlayerFlags = new PlayerFlags();
-
     private MWScheduler scheduler;
-
     private ChristmasHandler christmas;
-    
     private SMMNetXStream xstream;
 
     // CONSTRUCTOR
     public CampaignMain(String configFilename) {
-
         cm = this;
 
         // make sure vital folders exist
@@ -349,17 +335,6 @@ public final class CampaignMain implements Serializable {
         // Load the Christmas Handler and set the start and end dates
         christmas = ChristmasHandler.getInstance();
         christmas.schedule();
-
-        // start tick, slice and immunity threads
-        TThread = new TickThread(this, Integer.parseInt(getConfig("TickTime")));
-        TThread.start();
-        SThread = new SliceThread(this, Integer.parseInt(getConfig("SliceTime")));
-        SThread.start(); // it slices, it dices, it chops!
-        IThread = new ImmunityThread();
-        IThread.start();
-
-        // start Advanced Repair, if enabled
-        isUsingAdvanceRepair();
     }
 
     public void loadSupportUnitDefinitions() {
@@ -996,7 +971,7 @@ public final class CampaignMain implements Serializable {
             CampaignMain.cm.toUser("PL|SHP|" + toLogin.buildHangarPenaltyString(), Username, false);
 
             // Send him the Tick Counter
-            CampaignMain.cm.toUser("CC|NT|" + TThread.getRemainingSleepTime() + "|" + false, Username, false);
+            CampaignMain.cm.toUser("CC|NT|" + MWServ.getInstance().getTThread().getRemainingSleepTime() + "|" + false, Username, false);
 
             // Check for Christmas
             if(ChristmasHandler.getInstance().isItChristmas()) {
@@ -2159,17 +2134,13 @@ public final class CampaignMain implements Serializable {
          * die immediately if it is not time to back up (last was written within
          * offset).
          */
-        aub = new AutomaticBackup(System.currentTimeMillis());
-        // new Thread(aub).start();
-        aub.run();
+        MWServ.getInstance().startAutomaticBackup();
 
         logger.info("GC");
         // force a GC. this may not be necessary anymore?
         System.gc();
 
         // mainlog footer
-        logger.info("Tick #" + tickid + " Finished");
-        logger.info("Tick #" + tickid + " Finished");
         logger.info("Tick #" + tickid + " Finished");
     }
 
@@ -2311,24 +2282,8 @@ public final class CampaignMain implements Serializable {
      */
     public boolean isUsingAdvanceRepair() {
         boolean isUsing = cm.getBooleanConfig("UseAdvanceRepair") || cm.getBooleanConfig("UseSimpleRepair");
-        if (isUsing && RTT == null) {
-            RTT = new RepairTrackingThread(cm.getLongConfig("TimeForEachRepairPoint") * 1000);
-            RTT.start();
-        } else if (!isUsing && RTT != null) {
-            RTT.interrupt();
-            RTT = null;
-        }
 
         return isUsing;
-    }
-
-    public void restartRTT() {
-        boolean isUsing = cm.getBooleanConfig("UseAdvanceRepair") || cm.getBooleanConfig("UseSimpleRepair");
-        if (isUsing) {
-            RTT = null;
-            RTT = new RepairTrackingThread(cm.getLongConfig("TimeForEachRepairPoint") * 1000);
-            RTT.start();
-        }
     }
 
     public Random getR() {
@@ -2400,19 +2355,9 @@ public final class CampaignMain implements Serializable {
         return blackMarketEquipmentCostTable;
     }
 
-    public TickThread getTThread() {
-        return TThread;
-    }
-
-    public ImmunityThread getIThread() {
-        return IThread;
-    }
-
     public Vector<ContractInfo> getUnresolvedContracts() {
         return unresolvedContracts;
     }
-
-
 
     /**
      * @return Returns the currentUnitID.
@@ -3057,10 +3002,6 @@ public final class CampaignMain implements Serializable {
 
     public void setMegaMekClient(Client mmClient) {
         cm.megaMekClient = mmClient;
-    }
-
-    public RepairTrackingThread getRTT() {
-        return RTT;
     }
 
     public int getTotalRepairCosts(Entity unit, Vector<Integer> techs, Vector<Integer> rolls, int pilotLevel, SHouse house) {

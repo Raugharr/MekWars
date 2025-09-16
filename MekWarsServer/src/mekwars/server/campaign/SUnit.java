@@ -58,14 +58,15 @@ import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.pilot.SPilotSkills;
 import mekwars.server.campaign.pilot.skills.SPilotSkill;
 import mekwars.server.campaign.pilot.skills.TraitSkill;
 import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
 import mekwars.server.campaign.util.SerializedMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A class representing an MM.Net Entity
@@ -695,7 +696,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             setScrappableFor(TokenReader.readInt(ST));
 
             if (CampaignMain.cm.isUsingAdvanceRepair() && ((unitEntity instanceof Mech) || (unitEntity instanceof Tank))) {
-                UnitUtils.applyBattleDamage(unitEntity, TokenReader.readString(ST), ((CampaignMain.cm.getRTT() != null) && (CampaignMain.cm.getRTT().unitRepairTimes(getId()) != null)));
+                UnitUtils.applyBattleDamage(unitEntity, TokenReader.readString(ST), ((MWServ.getInstance().getRTT() != null) && (MWServ.getInstance().getRTT().unitRepairTimes(getId()) != null)));
             } else {
                 TokenReader.readString(ST);
             }

@@ -39,13 +39,13 @@ public class RestartRepairThreadCommand implements Command {
 			return;
 		}
 		
-        if ( CampaignMain.cm.getRTT().getState() != Thread.State.TERMINATED )
+        if ( MWServ.getInstance().getRTT().getState() != Thread.State.TERMINATED )
             return;
         
         
         // start advanced Repair
         if ( CampaignMain.cm.isUsingAdvanceRepair() ){
-            CampaignMain.cm.restartRTT();
+            MWServ.getInstance().restartRTT();
         }
 
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has restared the repair thread");

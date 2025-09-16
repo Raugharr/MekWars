@@ -60,18 +60,18 @@ public class StopRepairJobCommand implements Command {
             SPlayer player = CampaignMain.cm.getPlayer(Username);
             SUnit unit = player.getUnit(unitID);
             
-            if ( !CampaignMain.cm.getRTT().isBeingRepaired(unitID,location,slot,armor) ){
+            if ( !MWServ.getInstance().getRTT().isBeingRepaired(unitID,location,slot,armor) ){
                 CampaignMain.cm.toUser("FSM|There is no repair order for this section at the present.",Username,false);
                 return;
             }
             
-            if ( CampaignMain.cm.getRTT().getState() == Thread.State.TERMINATED ){
+            if ( MWServ.getInstance().getRTT().getState() == Thread.State.TERMINATED ){
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed - the repair thread terminated. Staff was notified.",Username,false);
                 MWLogger.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart the thread. If all else fails reboot!");
                 return;
             }
 
-            CampaignMain.cm.getRTT().stopRepair(unitID,location,slot,armor);
+            MWServ.getInstance().getRTT().stopRepair(unitID,location,slot,armor);
             
             CampaignMain.cm.toUser("PL|UU|"+unitID+"|"+unit.toString(true),Username,false);
 

@@ -196,12 +196,12 @@ public class SalvageUnitCommand implements Command {
 
             }
 
-            if (CampaignMain.cm.getRTT().isBeingRepaired(unitID, location, slot, armor)) {
+            if (MWServ.getInstance().getRTT().isBeingRepaired(unitID, location, slot, armor)) {
                 CampaignMain.cm.toUser("FSM|That section is already being worked on wait for the work to finish before starting again.", Username, false);
                 return;
             }
 
-            if (CampaignMain.cm.getRTT().getState() == Thread.State.TERMINATED) {
+            if (MWServ.getInstance().getRTT().getState() == Thread.State.TERMINATED) {
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed, and the repair thread terminated. Staff was notified.", Username, false);
                 MWLogger.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
                 return;
@@ -212,7 +212,7 @@ public class SalvageUnitCommand implements Command {
             // charge them for the repair now.
             player.addMoney(-cost);
             player.setSave();
-            CampaignMain.cm.getRTT().getRepairList().add(RepairTrackingThread.Repair(player, unitID, armor, location, slot, techType, 0, 0, true));
+            MWServ.getInstance().getRTT().getRepairList().add(RepairTrackingThread.Repair(player, unitID, armor, location, slot, techType, 0, 0, true));
             CampaignMain.cm.toUser("FSM|" + salvageMessage, Username, false);
             CampaignMain.cm.toUser("PL|UU|" + unitID + "|" + unit.toString(true), Username, false);
 

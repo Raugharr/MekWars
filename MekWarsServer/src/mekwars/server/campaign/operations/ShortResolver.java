@@ -481,7 +481,7 @@ public class ShortResolver {
             currPlayer.resetWeightedArmyNumber();
 
             // set immunity && make unbusy
-            CampaignMain.cm.getIThread().addImmunePlayer(currPlayer);
+            MWServ.getInstance().getIThread().addImmunePlayer(currPlayer);
             if (so.isFromReserve()) {
                 currPlayer.setFighting(false, true);
             } else {
@@ -735,7 +735,7 @@ public class ShortResolver {
 
         // set immunity && make unbusy
         MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "set immunity && make unbusy");
-        CampaignMain.cm.getIThread().addImmunePlayer(winner);
+        MWServ.getInstance().getIThread().addImmunePlayer(winner);
         if (so.isFromReserve() && (winner != null)) {
             winner.setFighting(false, true);// return AFR players to reserve
         } else if (winner != null) {

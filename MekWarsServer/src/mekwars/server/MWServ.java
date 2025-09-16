@@ -38,6 +38,9 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.Vector;
 import megamek.Version;
+import mekwars.server.campaign.ImmunityThread;
+import mekwars.server.campaign.SliceThread;
+import mekwars.server.campaign.TickThread;
 import megamek.common.EquipmentType;
 import megamek.common.MechSummaryCache;
 import mekwars.common.MMGame;
@@ -51,7 +54,9 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.DefaultServerOptions;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.dataProvider.Server;
+import mekwars.server.util.AutomaticBackup;
 import mekwars.server.util.IpCountry;
+import mekwars.server.util.RepairTrackingThread;
 import mekwars.server.util.TrackerThread;
 import mekwars.server.util.rss.Feed;
 import mekwars.server.util.rss.FeedMessage;
@@ -82,8 +87,13 @@ public class MWServ {
     private Command.Table myCommands = new Command.Table();
     private Vector<String> ignoreList = new Vector<String>(1, 1);
     private Vector<String> factionLeaderIgnoreList = new Vector<String>(1, 1);
-    private TrackerThread trackerThread;
     private Feed newsFeed = new Feed();
+    private TickThread TThread;
+    private SliceThread SThread;
+    private ImmunityThread IThread;
+    private RepairTrackingThread RTT;
+    private AutomaticBackup aub = new AutomaticBackup(System.currentTimeMillis());
+    private TrackerThread trackerThread;
     
     // private boolean debug = true;
 
@@ -104,9 +114,9 @@ public class MWServ {
      */
 
     public static void main(String[] argv) {
-    	MWServ.getInstance();
+        MWServ.getInstance();
         // start the TrackerThread if using tracker
-    	MWServ.getInstance().startTracker();
+        MWServ.getInstance().startTracker();
         
         //start server
         MWLogger.mainLog("Entering main loop cycle. Starting the server...");
@@ -171,6 +181,24 @@ public class MWServ {
         MWLogger.errLog("Server errors log touched.");
         MWLogger.modLog("Moderators log touched.");
         MWLogger.tickLog("Tick report log touched.");
+
+        // start tick, slice and immunity threads
+        TThread = new TickThread(campaign, campaign.getCampaignOptions().getIntegerConfig("TickTime"));
+        TThread.start();
+        SThread = new SliceThread(campaign, campaign.getCampaignOptions().getIntegerConfig("SliceTime"));
+        SThread.start(); // it slices, it dices, it chops!
+        IThread = new ImmunityThread();
+        IThread.start();
+
+        // start Advanced Repair, if enabled
+        boolean isUsing = campaign.getBooleanConfig("UseAdvanceRepair") || campaign.getBooleanConfig("UseSimpleRepair");
+        if (isUsing && RTT == null) {
+            RTT = new RepairTrackingThread(campaign.getLongConfig("TimeForEachRepairPoint") * 1000);
+            RTT.start();
+        } else if (!isUsing && RTT != null) {
+            RTT.interrupt();
+            RTT = null;
+        }
     }
 
     public void startTracker() {
@@ -1192,6 +1220,32 @@ public class MWServ {
         }
         DiscordMessageHandler handler = new DiscordMessageHandler();
         handler.post(message);
+    }
+
+    public TickThread getTThread() {
+        return TThread;
+    }
+
+    public ImmunityThread getIThread() {
+        return IThread;
+    }
+
+    public RepairTrackingThread getRTT() {
+        return RTT;
+    }
+
+    public void restartRTT() {
+        boolean isUsing = campaign.getBooleanConfig("UseAdvanceRepair") || campaign.getBooleanConfig("UseSimpleRepair");
+        if (isUsing) {
+            RTT = null;
+            RTT = new RepairTrackingThread(campaign.getLongConfig("TimeForEachRepairPoint") * 1000);
+            RTT.start();
+        }
+    }
+
+    public void startAutomaticBackup() {
+        aub = new AutomaticBackup(System.currentTimeMillis());
+        aub.run();
     }
 }
 
