@@ -645,7 +645,7 @@ public class ShortValidator {
                     }
                     if (o.getBooleanValue("ReportOpToNewsFeed")) {
                         MWServ.getInstance().addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
-                        CampaignMain.cm.postToDiscord(newsFeedBody);
+                        MWServ.getInstance().postToDiscord(newsFeedBody);
                     }
                     newOp.setCompleteFinishedInfo(ap.getName() + " gained " + totalConquest + "cp on " + newOp.getTargetWorld().getName());
                     newOp.setIncompleteFinishedInfo(ap.getHouseFightingFor().getColoredNameAsLink() + " gained " + totalConquest + "cp on " + newOp.getTargetWorld().getName());

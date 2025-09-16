@@ -2778,7 +2778,6 @@ public final class CampaignMain implements Serializable {
     }
 
     public void saveFactionTraits(String faction, Vector<String> traits) {
-
         File traitFile = new File("./data/pilotnames/" + faction.toLowerCase() + "traitnames.txt");
 
         try {
@@ -2812,7 +2811,6 @@ public final class CampaignMain implements Serializable {
     }
 
     public void saveOmniVariantMods() {
-
         if (omniVariantMods.size() < 1) {
             return;
         }
@@ -3894,7 +3892,7 @@ public final class CampaignMain implements Serializable {
         }
     }
 
-    public void saveMegaMekGameOptions(StringTokenizer gameOptions){
+    public void saveMegaMekGameOptions(StringTokenizer gameOptions) {
         File mmGameOptionsFolder = new File("./mmconf");
 
         if (!mmGameOptionsFolder.exists()) {
@@ -3977,17 +3975,4 @@ public final class CampaignMain implements Serializable {
     public XStream getXStream() {
         return (XStream) xstream;    
     }
-
-    /**
-     * Send a message to a Discord Webhook
-     * @param message the message to send
-     */
-    public void postToDiscord(String message) {
-        if(!CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
-            return;
-        }
-        DiscordMessageHandler handler = new DiscordMessageHandler();
-        handler.post(message);
-    }
-
 }

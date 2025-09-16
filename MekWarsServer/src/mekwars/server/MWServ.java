@@ -55,6 +55,7 @@ import mekwars.server.util.IpCountry;
 import mekwars.server.util.TrackerThread;
 import mekwars.server.util.rss.Feed;
 import mekwars.server.util.rss.FeedMessage;
+import mekwars.server.util.discord.DiscordMessageHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -1179,6 +1180,18 @@ public class MWServ {
 
     synchronized public void addToNewsFeed(String title, String category, String body) {
         newsFeed.addMessage(new FeedMessage(title, category, body));
+    }
+
+    /**
+     * Send a message to a Discord Webhook
+     * @param message the message to send
+     */
+    public void postToDiscord(String message) {
+        if(!CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
+            return;
+        }
+        DiscordMessageHandler handler = new DiscordMessageHandler();
+        handler.post(message);
     }
 }
 

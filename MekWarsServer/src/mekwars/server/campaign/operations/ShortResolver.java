@@ -523,7 +523,7 @@ public class ShortResolver {
 
         if (o.getBooleanValue("ReportOpToNewsFeed")) {
             MWServ.getInstance().addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
-            CampaignMain.cm.postToDiscord(newsFeedBody);
+            MWServ.getInstance().postToDiscord(newsFeedBody);
         }
         so.getReporter().closeOperation(drawGame, attackersWon);
         so.getReporter().commit();
@@ -802,7 +802,7 @@ public class ShortResolver {
         // game
         if (o.getBooleanValue("ReportOpToNewsFeed")) {
             MWServ.getInstance().addToNewsFeed(newsFeedTitle, "Operations News", newsFeedBody);
-            CampaignMain.cm.postToDiscord(newsFeedBody);
+            MWServ.getInstance().postToDiscord(newsFeedBody);
         }
         
         // removeLockedUnitsFromAllPlayersArmiesMC(); //@salient

@@ -58,7 +58,7 @@ public class ShutdownCommand implements Command {
         CampaignMain.cm.toUser("AM:You halted the server. Have a nice day.", Username,true);
         MWLogger.infoLog(Username + " halted the server. Have a nice day!");
         MWServ.getInstance().addToNewsFeed("Server halted!", "Server News", "");
-        CampaignMain.cm.postToDiscord("Server halted!");
+        MWServ.getInstance().postToDiscord("Server halted!");
         try {
             MWPasswd.save();
         } catch(Exception ex) {

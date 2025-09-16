@@ -84,7 +84,7 @@ public class TickThread extends Thread {
 				if (this.tickid % 8 == 0) {
 					MWServ.getInstance().addToNewsFeed("Faction Rankings", "Server News", Statistics.getReadableHouseRanking(false));
 					if(CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
-						CampaignMain.cm.postToDiscord(Statistics.getReadableHouseRanking(false));
+						MWServ.getInstance().postToDiscord(Statistics.getReadableHouseRanking(false));
 					}
 					
 					try {
