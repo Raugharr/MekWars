@@ -36,16 +36,13 @@ task stageFiles(type: Copy) {
 
 	from serverdist
 	into fileStagingDir
-
-	// inputs.dir "${data}"
-	// outputs.dir fileStagingDir
 }
 
 jar {
 	archiveFileName = 'MekWarsServer.jar'
 	manifest {
 		attributes(
-		  'Class-Path': "MegaMek.jar " + configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+		  'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
 		  'Main-Class': mainClassName
 		)
 	}
@@ -55,16 +52,10 @@ tasks.named('run') {
 	workingDir = file(serverdist)
 }
 
-task assembleDist (overwrite: true) {
-	dependsOn stageFiles
-}
-
 distributions {
 	main {
 		contents {
-			from "${fileStagingDir}"
-			// from mmJar
-            // from ("${mmDir}/megamek/build/files")
+			from stageFiles
             duplicatesStrategy = 'exclude'
 		}
 	}

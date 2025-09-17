@@ -28,7 +28,7 @@ ext {
 	mmconf = "mmconf"
 }
 
-task copyFiles(type: Copy) {
+task stageFiles(type: Copy) {
 	description = 'Stages files that are to be copied into the distribution.'
 
 	dependsOn gradle.includedBuild('megamek').task(':megamek:stageFiles')
@@ -41,7 +41,7 @@ jar {
 	archiveFileName = 'MekWars.jar'
     manifest {
         attributes(
-            'Class-Path': "MegaMek.jar " + configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+            'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
             'Main-Class': mainClassName
         )
     }
@@ -51,15 +51,10 @@ tasks.named ('run') {
 	workingDir = file('client-dist')
 }
 
-task assembleDist (overwrite: true) {
-	dependsOn copyFiles
-}
-
 distributions {
 	main {
 		contents {
-			from "${clientdist}"
-            // from ("${mmDir}/megamek/build/files")
+			from stageFiles
             duplicatesStrategy = 'exclude'
 		}
 	}
