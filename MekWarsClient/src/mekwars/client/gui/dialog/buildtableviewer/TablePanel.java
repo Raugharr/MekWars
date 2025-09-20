@@ -33,7 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import mekwars.client.MWClient;
-import mekwars.client.gui.MWUnitDisplay;
+import mekwars.client.gui.MWUnitDisplayHelper;
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.util.MWLogger;
@@ -180,17 +180,7 @@ public class TablePanel extends JPanel implements ActionListener {
 			try {
 				entity = new MechFileParser(ms.getSourceFile(), ms.getEntryName()).getEntity();
 				
-                JFrame infoWindow = new JFrame();
-                UnitDisplay unitdisplay = new MWUnitDisplay(null, client);
-                entity.loadAllWeapons();
-                infoWindow.getContentPane().add(unitdisplay);
-                infoWindow.setSize(300, 400);
-                infoWindow.setResizable(false);
-                infoWindow.setTitle(entity.getModel());
-                infoWindow.setLocationRelativeTo(null);
-                infoWindow.setVisible(true);
-                unitdisplay.displayEntity(entity);
-				
+				MWUnitDisplayHelper.create(entity);
 			} catch (EntityLoadingException e) {
 				MWLogger.errLog(e);
 			}

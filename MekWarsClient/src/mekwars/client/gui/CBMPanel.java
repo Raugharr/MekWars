@@ -355,17 +355,7 @@ public class CBMPanel extends JPanel {
         Entity theEntity = mm.getEmbeddedUnit().getEntity();
         theEntity.loadAllWeapons();
 
-        JFrame infoWindow = new JFrame();
-        UnitDisplay unitDisplay = new MWUnitDisplay(null, mwclient);
-
-        infoWindow.getContentPane().add(unitDisplay);
-        infoWindow.setSize(300,400);
-        infoWindow.setResizable(false);
-
-        infoWindow.setTitle(mm.getModelName());
-        infoWindow.setLocationRelativeTo(mwclient.getMainFrame());//center it
-        infoWindow.setVisible(true);
-        unitDisplay.displayEntity(theEntity);
+        MWUnitDisplayHelper.create(theEntity);
     }
 
 

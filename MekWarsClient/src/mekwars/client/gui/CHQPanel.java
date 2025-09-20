@@ -674,17 +674,10 @@ public class CHQPanel extends JPanel {
                 CUnit mek = MekTable.getMekAt(row, col);
 
                 if (mek != null) {
-                    JFrame infoWindow = new JFrame();
-                    UnitDisplay unitdisplay = new MWUnitDisplay(null, mwclient);
                     Entity theEntity = mek.getEntity();
+
                     theEntity.loadAllWeapons();
-                    infoWindow.getContentPane().add(unitdisplay);
-                    infoWindow.setSize(300, 400);
-                    infoWindow.setResizable(false);
-                    infoWindow.setTitle(mek.getModelName());
-                    infoWindow.setLocationRelativeTo(null);
-                    infoWindow.setVisible(true);
-                    unitdisplay.displayEntity(theEntity);
+                    MWUnitDisplayHelper.create(theEntity);
                 }
             }
             tblMeks.repaint();
@@ -2607,16 +2600,8 @@ public class CHQPanel extends JPanel {
                 int col = Integer.parseInt(st.nextToken());
                 CUnit mek = MekTable.getMekAt(row, col);
                 Entity theEntity = mek.getEntity();
-                JFrame infoWindow = new JFrame();
-                UnitDisplay unitDisplay = new MWUnitDisplay(null, mwclient);
                 theEntity.loadAllWeapons();
-                infoWindow.getContentPane().add(unitDisplay);
-                infoWindow.setSize(300, 400);
-                infoWindow.setResizable(false);
-                infoWindow.setTitle(mek.getModelName());
-                infoWindow.setLocationRelativeTo(mwclient.getMainFrame());
-                infoWindow.setVisible(true);
-                unitDisplay.displayEntity(theEntity);
+                MWUnitDisplayHelper.create(theEntity);
             } else if (command.equalsIgnoreCase("CMU")) {
                 int row = Integer.parseInt(st.nextToken());
                 int col = Integer.parseInt(st.nextToken());

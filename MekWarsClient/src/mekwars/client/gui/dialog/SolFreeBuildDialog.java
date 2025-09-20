@@ -30,7 +30,7 @@ package mekwars.client.gui.dialog;
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.client.gui.MWUnitDisplay;
+import mekwars.client.gui.MWUnitDisplayHelper;
 import mekwars.client.gui.TableSorter;
 import mekwars.client.util.CUnitComparator;
 import mekwars.common.House;
@@ -295,18 +295,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                     Entity theEntity = u.getEntity();
                     theEntity.loadAllWeapons();
 
-                    JFrame infoWindow = new JFrame();
-                    UnitDisplay unitDetailInfo = new MWUnitDisplay(null, client);
-
-                    infoWindow.getContentPane().add(unitDetailInfo);
-                    infoWindow.setSize(300, 400);
-                    infoWindow.setResizable(false);
-
-                    infoWindow.setTitle(u.getModelName());
-                    infoWindow.setLocationRelativeTo(mwclient.getMainFrame());// center
-                    // it
-                    infoWindow.setVisible(true);
-                    unitDetailInfo.displayEntity(theEntity);
+					MWUnitDisplayHelper.create(theEntity);
                 }
             }
         });// end addMouseListener();

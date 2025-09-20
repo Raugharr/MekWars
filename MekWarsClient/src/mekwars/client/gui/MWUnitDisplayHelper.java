@@ -1,0 +1,45 @@
+/*
+ * MekWars - Copyright (C) 2004 
+ * 
+ * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
+ * Original author Helge Richter (McWizard)
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ */
+
+package mekwars.client.gui;
+
+import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import megamek.client.ui.swing.ClientGUI;
+import megamek.client.ui.swing.unitDisplay.UnitDisplay;
+import megamek.client.ui.swing.util.MegaMekController;
+import megamek.common.Entity;
+import megamek.common.Player;
+import megamek.common.annotations.Nullable;
+import mekwars.client.MWClient;
+
+public class MWUnitDisplayHelper {
+    public static MWUnitDisplay create(Entity entity) {
+        JFrame infoWindow = new JFrame();
+        MWUnitDisplay unitDisplay = new MWUnitDisplay(entity);
+        JScrollPane scrollPane = new JScrollPane(unitDisplay);
+
+        infoWindow.getContentPane().add(scrollPane);
+        infoWindow.setSize(400, 600);
+        infoWindow.setResizable(false);
+        infoWindow.setTitle(entity.getShortNameRaw());
+        infoWindow.setLocationRelativeTo(null);
+        infoWindow.setVisible(true);
+        return unitDisplay;
+    }
+}

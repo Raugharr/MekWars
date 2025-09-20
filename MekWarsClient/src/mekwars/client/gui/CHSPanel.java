@@ -38,12 +38,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
+
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
@@ -53,6 +54,7 @@ import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.MWUnitDisplayHelper;
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
@@ -829,7 +831,6 @@ public class CHSPanel extends JPanel {
         unitEntity = embeddedUnit.getEntity();
 
         JFrame InfoWindow = new JFrame();
-        UnitDisplay unitDetailInfo = new MWUnitDisplay(null, mwclient);
         unitEntity.loadAllWeapons();
         Crew newCrew = new Crew(
                 CrewType.SINGLE,
@@ -847,13 +848,7 @@ public class CHSPanel extends JPanel {
         if (battleDamage.trim().length() > 1) {
             UnitUtils.applyBattleDamage(unitEntity, battleDamage, false);
         }
-        InfoWindow.getContentPane().add(unitDetailInfo);
-        InfoWindow.setSize(300, 400);
-        InfoWindow.setResizable(false);
-        InfoWindow.setTitle(unitEntity.getModel());
-        InfoWindow.setLocationRelativeTo(mwclient.getMainFrame());
-        InfoWindow.setVisible(true);
-        unitDetailInfo.displayEntity(unitEntity);
+        MWUnitDisplayHelper.create(unitEntity);
     }
 
     // BUY MENU METHODS AND LISTENERS
