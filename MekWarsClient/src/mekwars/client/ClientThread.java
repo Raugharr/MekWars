@@ -14,6 +14,8 @@ package mekwars.client;
 
 import java.awt.KeyboardFocusManager;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -160,7 +162,7 @@ public class ClientThread extends Thread implements CloseClientListener {
         if (mwclient.getGameOptions().size() < 1) {
             mwclient.setWaiting(true);
 
-			mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestOperationSettings");
+            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestOperationSettings");
             while (mwclient.isWaiting()) {
                 mwclient.addToChat("Retrieving Operation Data Please Wait..");
                 try {
@@ -198,7 +200,7 @@ public class ClientThread extends Thread implements CloseClientListener {
             if ((mwclient.getCurrentEnvironment() != null) && (client.getGame().getPhase() == GamePhase.LOUNGE)) {
                 // creates the playboard*/
                 MapSettings mySettings = MapSettings.getInstance();
-                mySettings.setBoardSize((int)mwclient.getMapSize().getWidth(), (int)mwclient.getMapSize().getHeight());
+                mySettings.setBoardSize((int) mwclient.getMapSize().getWidth(), (int) mwclient.getMapSize().getHeight());
                 mySettings.setMapSize(1, 1);  // Note to self: MapSize in MM is boards x boards, not hexes x hexes
                 
                 AdvancedTerrain aTerrain = mwclient.getCurrentAdvancedTerrain();
@@ -455,7 +457,12 @@ public class ClientThread extends Thread implements CloseClientListener {
                  cs = null;
 
                 if (!mwclient.getConfig().getParam("UNITCAMO").equals(Camouflage.NO_CAMOUFLAGE)) {
-                    client.getLocalPlayer().setCamouflage(new Camouflage(Camouflage.ROOT_CATEGORY, mwclient.getConfig().getParam("UNITCAMO")));
+                    Path path = Paths.get(mwclient.getConfig().getParam("UNITCAMO"));
+                    Camouflage camouflage = new Camouflage(
+                            path.getParent().toString(),
+                            path.getFileName().toString()
+                        );
+                    client.getLocalPlayer().setCamouflage(camouflage);
                     playerUpdate = true;
                 }
 
