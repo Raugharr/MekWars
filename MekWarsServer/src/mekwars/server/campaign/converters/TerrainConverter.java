@@ -67,6 +67,9 @@ public class TerrainConverter implements Converter {
         if (terrain.getName() == null) {
             throw new ConversionException("name is null");
         }
+        for (PlanetEnvironment planetEnvironment : terrain.getEnvironments()) {
+            planetEnvironment.setName(name);
+        }
         return terrain;
     }
 }
