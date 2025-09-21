@@ -9,6 +9,12 @@ sourceSets {
             srcDirs = ['src']
         }
 	}
+
+    test {
+        java {
+            srcDirs = ['unittests']
+        }
+    }
 }
 
 dependencies {
@@ -59,4 +65,8 @@ distributions {
             duplicatesStrategy = 'exclude'
 		}
 	}
+}
+
+test {  
+	useJUnitPlatform()
 }

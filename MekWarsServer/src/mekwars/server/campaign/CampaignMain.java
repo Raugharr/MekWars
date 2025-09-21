@@ -157,6 +157,7 @@ import org.apache.logging.log4j.Logger;
 public final class CampaignMain implements Serializable {
     private static final Logger logger = LogManager.getLogger(CampaignMain.class);
     private static final long serialVersionUID = -8671163467590633378L;
+    public static final String DEFAULT_CONFIG_PATH = "data/campaignconfig.txt";
 
     /**
      * I realized, that almost every class needs access to the current global
@@ -203,6 +204,10 @@ public final class CampaignMain implements Serializable {
     private MWScheduler scheduler;
     private ChristmasHandler christmas;
     private SMMNetXStream xstream;
+
+    public CampaignMain() {
+        this(DEFAULT_CONFIG_PATH);
+    }
 
     // CONSTRUCTOR
     public CampaignMain(String configFilename) {
