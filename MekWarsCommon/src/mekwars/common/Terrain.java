@@ -29,7 +29,7 @@ import mekwars.common.util.BinWriter;
 final public class Terrain {
     // id
     private int id = -1;
-    private String name = "";
+    private String name = "None";
     private Vector<PlanetEnvironment> environments = new Vector<PlanetEnvironment>(10, 1);
 
     /**
@@ -107,7 +107,7 @@ final public class Terrain {
      */
     public void setId(int id) {
         this.id = id;
-        for ( PlanetEnvironment pe : environments ){
+        for (PlanetEnvironment pe : environments) {
             pe.setId(id);
         }
     }

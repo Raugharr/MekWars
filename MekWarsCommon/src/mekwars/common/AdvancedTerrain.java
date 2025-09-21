@@ -160,7 +160,7 @@ final public class AdvancedTerrain {
         result += "$";
         result += tornadoF4WindChance;
         result += "$";
-        result += atmosphere;
+        result += atmosphere.ordinal();
         result += "$";
         result += lightFogChance;
         result += "$";
@@ -647,27 +647,27 @@ final public class AdvancedTerrain {
 
         results.append(toString());
         results.append("$");
-        results.append(lightConditions);
+        results.append(lightConditions.ordinal());
         results.append("$");
-        results.append(weatherConditions);
+        results.append(weatherConditions.ordinal());
         results.append("$");
-        results.append(windStrength);
+        results.append(windStrength.ordinal());
         results.append("$");
-        results.append(windDirection);
+        results.append(windDirection.ordinal());
         results.append("$");
         results.append(shiftingWindDirection);
         results.append("$");
         results.append(shiftingWindStrength);
         results.append("$");
-        results.append(fog);
+        results.append(fog.ordinal());
         results.append("$");
         results.append(temperature);
         results.append("$");
-        results.append(emi);
+        results.append(emi.ordinal());
         results.append("$");
         results.append(terrainAffected);
         results.append("$");
-        results.append(maxWindStrength);
+        results.append(maxWindStrength.ordinal());
 
         return results.toString();
     }
