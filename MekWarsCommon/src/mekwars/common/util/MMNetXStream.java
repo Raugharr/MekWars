@@ -24,8 +24,7 @@ import com.thoughtworks.xstream.security.AnyTypePermission;
 import mekwars.common.AdvancedTerrain;
 import mekwars.common.House;
 import mekwars.common.Planet;
-
-
+import mekwars.common.campaign.converters.PointConverter;
 /**
  * 
  * @author Imi (immanuel.scholz@gmx.de)
@@ -44,7 +43,10 @@ public class MMNetXStream extends XStream {
     protected void setup() {
         // you may add shortcuts here, so XStream will not 
         // write the whole class name each time ;-)
+    	registerConverter(new PointConverter());
+    	
         alias("advancedTerrain", AdvancedTerrain.class);
+        alias("point", java.awt.Point.class);
         // Enables reference marshalling.
         setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
         addPermission(AnyTypePermission.ANY);
