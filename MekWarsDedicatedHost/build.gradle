@@ -1,6 +1,12 @@
 plugins {
     id 'application'
-	id 'java-common-conventions'
+    id 'java-common-conventions'
+}
+
+repositories {
+    flatDir {
+        dirs '../MekWarsClient/lib'
+    }
 }
 
 sourceSets {
@@ -8,16 +14,16 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
-	}
+    }
 }
 
 dependencies {
-	implementation project(':MekWarsCommon')
-	implementation project(':MekWarsClient')
+    implementation project(':MekWarsCommon')
+    implementation project(':MekWarsClient')
 }
 
 application {
-	mainClassName = 'mekwars.dedicatedhost.MWDedHost'
+    mainClassName = 'mekwars.dedicatedhost.MWDedHost'
     applicationDefaultJvmArgs = [
             '-Xmx4096m',
             '-Dsun.awt.disablegrab=true'
@@ -25,16 +31,16 @@ application {
 }
 
 ext {
-	data = "data"
-	docs = "docs"
-	mmconf = "mmconf"
+    data = "data"
+    docs = "docs"
+    mmconf = "mmconf"
 }
 
 jar {
-  manifest {
-    attributes(
-      'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
-      'Main-Class': mainClassName
-    )
-  }
+    manifest {
+        attributes(
+            'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+            'Main-Class': mainClassName
+        )
+    }
 }

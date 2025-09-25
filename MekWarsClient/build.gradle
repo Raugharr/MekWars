@@ -3,6 +3,12 @@ plugins {
 	id 'java-common-conventions'
 }
 
+repositories {
+    flatDir {
+        dirs 'lib' // This tells Gradle to look for dependencies in the 'lib' directory (MekWars/MekWarsClient/lib)
+    }
+}
+
 sourceSets {
     main {
         java {
@@ -16,6 +22,9 @@ sourceSets {
 
 dependencies {
 	implementation project(':MekWarsCommon')
+    implementation 'org.megamek:MegaMek:49.20' // Looks in MekWars/MekWarsClient/lib for the pre-built MegaMek.jar
+    // The MegaMek artifact doesn't follow proper naming conventions. To follow proper naming conventions,
+    // please rename the MegaMek.jar, built on tag 49.20, to follow convention -> "MegaMek-49.20.jar"
 }
 
 application {

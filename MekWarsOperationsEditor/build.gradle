@@ -3,6 +3,12 @@ plugins {
 	id 'java-common-conventions'
 }
 
+repositories {
+    flatDir {
+        dirs '../MekWarsClient/lib'
+    }
+}
+
 sourceSets {
     main {
         java {
