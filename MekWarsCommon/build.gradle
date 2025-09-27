@@ -9,6 +9,12 @@ sourceSets {
             srcDirs = ['src']
         }
 	}
+
+    test {
+        java {
+            srcDirs = ['unittests']
+        }
+    }
 }
 
 application {
@@ -23,4 +29,8 @@ ext {
 	data = "data"
 	docs = "docs"
 	mmconf = "mmconf"
+}
+
+test {  
+	useJUnitPlatform()
 }
