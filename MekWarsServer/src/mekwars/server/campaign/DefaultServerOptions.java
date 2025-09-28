@@ -11,19 +11,18 @@
 
 /**
  * @author jtighe
- *
- *         This class loads the default server config options as well as saves the server configs back to the serverconfig file
+ *     <p>This class loads the default server config options as well as saves the server configs
+ *     back to the serverconfig file
  */
 package mekwars.server.campaign;
 
 import java.util.Properties;
-
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 
 /**
- * @author Torren Oct 22, 2004 Loads the default settings for the server config If any configs are added please add them to this function as well as
- *         createConfig().
+ * @author Torren Oct 22, 2004 Loads the default settings for the server config If any configs are
+ *     added please add them to this function as well as createConfig().
  * @version 2016.10.06
  */
 public class DefaultServerOptions {
@@ -34,8 +33,10 @@ public class DefaultServerOptions {
 
         defaults.setProperty("CampaignYear", "3145"); // Base year of campaign
 
-        defaults.setProperty("TickTime", "900000"); // Had to change this, as it's measured in milliseconds now
-        defaults.setProperty("SliceTime", "180000"); // Had to change this, as it's measured in milliseconds now
+        defaults.setProperty(
+                "TickTime", "900000"); // Had to change this, as it's measured in milliseconds now
+        defaults.setProperty(
+                "SliceTime", "180000"); // Had to change this, as it's measured in milliseconds now
 
         defaults.setProperty("HTMLOUTPUT", "true");
 
@@ -97,58 +98,57 @@ public class DefaultServerOptions {
         defaults.setProperty("MaximumVotes", "7");
 
         defaults.setProperty("PlayerBaseMoney", "2000");
-        //@Salient adding option to give new player starting RP
+        // @Salient adding option to give new player starting RP
         defaults.setProperty("PlayerBaseRP", "0");
         defaults.setProperty("MaxSOLExp", "150");
         defaults.setProperty("MaxSOLCBills", "300");
         defaults.setProperty("MinEXPforDefecting", "0");
-        defaults.setProperty("MinEXPforLight", "0"); //@salient
+        defaults.setProperty("MinEXPforLight", "0"); // @salient
         defaults.setProperty("MinEXPforMedium", "0");
         defaults.setProperty("MinEXPforHeavy", "0");
         defaults.setProperty("MinEXPforAssault", "0");
 
-        defaults.setProperty("ScrapsAllowed", "1");// nee "ScrappingAllowed",
+        defaults.setProperty("ScrapsAllowed", "1"); // nee "ScrappingAllowed",
         // 6.12.05 @urgru
-        defaults.setProperty("ScrapCostMultiplier", ".40");// nee
+        defaults.setProperty("ScrapCostMultiplier", ".40"); // nee
         // "ScrappingCostsBills",
         // 11.12.06 @urgru
-        defaults.setProperty("DonationsAllowed", "2");// nee
+        defaults.setProperty("DonationsAllowed", "2"); // nee
         // "DonatingAllowed",
         // 6.12.05 @urgru
-        defaults.setProperty("DonationCostMultiplier", ".20");// nee
+        defaults.setProperty("DonationCostMultiplier", ".20"); // nee
         // "DonatingCostsBills",
         // 11.12.06
         // @urgru
         defaults.setProperty("DonatingCostsBills", "false");
 
-        defaults.setProperty("UsedPurchaseCostMulti", ".50");// @urgru
+        defaults.setProperty("UsedPurchaseCostMulti", ".50"); // @urgru
         // 11.12.06
         defaults.setProperty("SelectableSalvage", "true");
         defaults.setProperty("TimeToSelectSalvage", "300");
-        //Allow RP Transfer switch
+        // Allow RP Transfer switch
         defaults.setProperty("AllowRPTransfer", "true");
 
-
-        defaults.setProperty("BaseUnitLossPayment", "0");// int
-        defaults.setProperty("NewCostMultiUnitLossPayment", ".50");// float
-        defaults.setProperty("SalvageMultiToUnitLossPayment", ".50");// float
-        defaults.setProperty("MekMultiToUnitLossPayment", "1.0");// float
-        defaults.setProperty("VehMultiToUnitLossPayment", "1.0");// float
-        defaults.setProperty("ProtoMultiToUnitLossPayment", "1.0");// float
-        defaults.setProperty("BAMultiToUnitLossPayment", "1.0");// float
-        defaults.setProperty("InfMultiToUnitLossPayment", "1.0");// float
-        defaults.setProperty("AeroMultiToUnitLossPayment", "1.0");// float
-        defaults.setProperty("NewCostMultiMaxUnitLossPayment", "1.0");// float
-        defaults.setProperty("FlatMaxUnitLossPayment", "0");// int. 0 ensures no
+        defaults.setProperty("BaseUnitLossPayment", "0"); // int
+        defaults.setProperty("NewCostMultiUnitLossPayment", ".50"); // float
+        defaults.setProperty("SalvageMultiToUnitLossPayment", ".50"); // float
+        defaults.setProperty("MekMultiToUnitLossPayment", "1.0"); // float
+        defaults.setProperty("VehMultiToUnitLossPayment", "1.0"); // float
+        defaults.setProperty("ProtoMultiToUnitLossPayment", "1.0"); // float
+        defaults.setProperty("BAMultiToUnitLossPayment", "1.0"); // float
+        defaults.setProperty("InfMultiToUnitLossPayment", "1.0"); // float
+        defaults.setProperty("AeroMultiToUnitLossPayment", "1.0"); // float
+        defaults.setProperty("NewCostMultiMaxUnitLossPayment", "1.0"); // float
+        defaults.setProperty("FlatMaxUnitLossPayment", "0"); // int. 0 ensures no
         // payment by
         // default.
 
         defaults.setProperty("MinEXPforBMSelling", "800");
         defaults.setProperty("MinEXPforBMBuying", "300");
-        defaults.setProperty("MinBMSalesTicks", "5");// 6.4.05 @urgru
-        defaults.setProperty("MinBMSalesPrice", "5");// 6.4.05 @urgru
-        defaults.setProperty("MaxBMSalesTicks", "100");// 8.2.06 @urgru
-        defaults.setProperty("MaxBMSalesPrice", "999999");// 8.2.06 @urgru
+        defaults.setProperty("MinBMSalesTicks", "5"); // 6.4.05 @urgru
+        defaults.setProperty("MinBMSalesPrice", "5"); // 6.4.05 @urgru
+        defaults.setProperty("MaxBMSalesTicks", "100"); // 8.2.06 @urgru
+        defaults.setProperty("MaxBMSalesPrice", "999999"); // 8.2.06 @urgru
         defaults.setProperty("BMBidFlu", "10");
         defaults.setProperty("BMSellFlu", "20");
         defaults.setProperty("BMFluSizeCost", "5");
@@ -158,12 +158,12 @@ public class DefaultServerOptions {
         defaults.setProperty("BMAssaultMekWeight", "1");
         defaults.setProperty("UseBMWeightingTables", "false");
         defaults.setProperty("MaximumNegativeBaysFromBM", "-1");
-        defaults.setProperty("InfantryMayBeSoldOnBM", "false");// 10.23.05
+        defaults.setProperty("InfantryMayBeSoldOnBM", "false"); // 10.23.05
         // @urgru
-        defaults.setProperty("BAMayBeSoldOnBM", "true");// 10.23.05 @urgru
-        defaults.setProperty("ProtosMayBeSoldOnBM", "true");// 10.23.05 @urgru
-        defaults.setProperty("VehsMayBeSoldOnBM", "true");// 10.23.05 @urgru
-        defaults.setProperty("MeksMayBeSoldOnBM", "true");// 10.23.05 @urgru
+        defaults.setProperty("BAMayBeSoldOnBM", "true"); // 10.23.05 @urgru
+        defaults.setProperty("ProtosMayBeSoldOnBM", "true"); // 10.23.05 @urgru
+        defaults.setProperty("VehsMayBeSoldOnBM", "true"); // 10.23.05 @urgru
+        defaults.setProperty("MeksMayBeSoldOnBM", "true"); // 10.23.05 @urgru
         defaults.setProperty("AerosMayBeSoldOnBM", "true");
         defaults.setProperty("HiddenBMUnits", "false");
 
@@ -193,9 +193,9 @@ public class DefaultServerOptions {
         defaults.setProperty("BMPriceMultiplier_HeavyAero", "1.0");
         defaults.setProperty("BMPriceMultiplier_AssaultAero", "1.0");
 
-        defaults.setProperty("WelfareCeiling", "30");// go above this and you
+        defaults.setProperty("WelfareCeiling", "30"); // go above this and you
         // no longer can pull welfare units
-        defaults.setProperty("WelfareTotalUnitBVCeiling", "3000");// Go above
+        defaults.setProperty("WelfareTotalUnitBVCeiling", "3000"); // Go above
         // this and you no longer can pull welfare units
 
         defaults.setProperty("InfluenceCeiling", "2000000");
@@ -333,7 +333,9 @@ public class DefaultServerOptions {
         defaults.setProperty("UseAutoProdClassic", "true");
         defaults.setProperty("UseAutoProdNew", "false");
         defaults.setProperty("ScrapOldestUnitsFirst", "false");
-        defaults.setProperty("OnlyUseOriginalFactoriesForAutoprod", "true");  // Setting this to false will allow autoprod from captured factories.
+        defaults.setProperty(
+                "OnlyUseOriginalFactoriesForAutoprod",
+                "true"); // Setting this to false will allow autoprod from captured factories.
 
         defaults.setProperty("APAtMaxLightMek", "30");
         defaults.setProperty("APAtMaxMediumMek", "20");
@@ -521,7 +523,7 @@ public class DefaultServerOptions {
         defaults.setProperty("AllowedMegaMekVersion", "0.29.81-dev");
 
         // BLIND DROPS (MM option: real_blind_drop)
-        defaults.setProperty("UseBlindDrops", "false");// TODO: move this into
+        defaults.setProperty("UseBlindDrops", "false"); // TODO: move this into
         // ops
 
         // SOL unit defaults & legal fights
@@ -600,7 +602,7 @@ public class DefaultServerOptions {
         // ratios TODO: Remove? Move into ops? Are these still used?
         defaults.setProperty("AllowRatios", "false"); // if turned off you can
         // have as many units as you want and also non-mek armies
-        defaults.setProperty("MekToInfantryRatio", "100");// with AllowRatios
+        defaults.setProperty("MekToInfantryRatio", "100"); // with AllowRatios
         // on this well set your inf to mek Ratio 100%, 50% if 50% then 1 inf
         // for every 2 meks
         defaults.setProperty("MekToVehicleRatio", "100");
@@ -712,10 +714,10 @@ public class DefaultServerOptions {
         defaults.setProperty("CountInfForLimiters", "true");
         defaults.setProperty("LowerLimitBuffer", "1");
         defaults.setProperty("UpperLimitBuffer", "1");
-        defaults.setProperty("DefaultUpperLimit", "4");// make this client
+        defaults.setProperty("DefaultUpperLimit", "4"); // make this client
         // configurable
         // eventually
-        defaults.setProperty("DefaultLowerLimit", "4");// make this client
+        defaults.setProperty("DefaultLowerLimit", "4"); // make this client
         // configurable
         // eventually
         defaults.setProperty("AllowLimiters", "true");
@@ -728,13 +730,28 @@ public class DefaultServerOptions {
         defaults.setProperty("CostToBuyNewPilot", "1");
         defaults.setProperty("CostToBuyNewProtoPilot", "1");
         defaults.setProperty("AllowPlayerToBuyPilotsFromHouseWhenPoolIsFull", "false");
-        defaults.setProperty("MaxAllowedPilotsInQueueToBuyFromHouse", "2"); // if the player has more then 2 pilots in their queue of size and wieght they
-                                                                            // cannot buy from the faction.
-        defaults.setProperty("BasePilotSurvival", "20"); // if the player has more then 2 pilots in their queue of a size and wieght they cannot buy from the
-                                                         // faction.
-        defaults.setProperty("TrappedInMechSurvivalMod", "-20"); // If the pilot was still in his mek when it died this mod is applied to the surival rate.
-        defaults.setProperty("DownPilotsMustRollForSurvival", "false"); // engined and cored meks whoes pilots are alive may have to check for survival
-        defaults.setProperty("ChanceToConvertCapturedPilots", "10");// capture a pilot and you have chance to convert them
+        defaults.setProperty(
+                "MaxAllowedPilotsInQueueToBuyFromHouse",
+                "2"); // if the player has more then 2 pilots in their queue of size and wieght they
+        // cannot buy from the faction.
+        defaults.setProperty(
+                "BasePilotSurvival",
+                "20"); // if the player has more then 2 pilots in their queue of a size and wieght
+        // they
+        // cannot buy from the
+        // faction.
+        defaults.setProperty(
+                "TrappedInMechSurvivalMod",
+                "-20"); // If the pilot was still in his mek when it died this mod is applied to the
+        // surival
+        // rate.
+        defaults.setProperty(
+                "DownPilotsMustRollForSurvival",
+                "false"); // engined and cored meks whoes pilots are alive may have to check for
+        // survival
+        defaults.setProperty(
+                "ChanceToConvertCapturedPilots",
+                "10"); // capture a pilot and you have chance to convert them
 
         // no-play options
         defaults.setProperty("NoPlayListSize", "1");
@@ -844,7 +861,9 @@ public class DefaultServerOptions {
         defaults.setProperty("ManeuveringAceSpeedRating", "5");
         defaults.setProperty("TacticalGeniusBVMod", "50");
         defaults.setProperty("MeleeSpecialistBaseBVMod", "50");
-        defaults.setProperty("MeleeSpecialistUseSpeedFactor", "false"); // If checked, applies a BV addition based on unit movement to MS skill
+        defaults.setProperty(
+                "MeleeSpecialistUseSpeedFactor",
+                "false"); // If checked, applies a BV addition based on unit movement to MS skill
         defaults.setProperty("HatchetRating", "5");
         defaults.setProperty("EnhancedInterfaceBaseBVMod", "50");
         defaults.setProperty("EdgeBaseBVMod", "50");
@@ -877,7 +896,7 @@ public class DefaultServerOptions {
         defaults.setProperty("BestPilotingSkill", "2");
         defaults.setProperty("BestTotalPilot", "4");
         defaults.setProperty("BaseRollToLevel", "250");
-        defaults.setProperty("MultiplierPerPreviousLevel", "1");// 0 to use only base
+        defaults.setProperty("MultiplierPerPreviousLevel", "1"); // 0 to use only base
         defaults.setProperty("UseRandomPilotLevelups", "true");
         defaults.setProperty("LosingPilotsCheckToLevel", "false");
         defaults.setProperty("AllowAsymmetricPilotLevels", "false");
@@ -885,10 +904,10 @@ public class DefaultServerOptions {
         // Disconnection auto-report settings
         defaults.setProperty("DisconnectionAddUnitsDestroyed", "0");
         defaults.setProperty("DisconnectionAddUnitsSalvage", "1");
-        defaults.setProperty("DisconnectionTimeToReport", "600");// 10
+        defaults.setProperty("DisconnectionTimeToReport", "600"); // 10
         // minutes
         // to report
-        defaults.setProperty("DisconnectionGracePeriod", "120");// 2 minute
+        defaults.setProperty("DisconnectionGracePeriod", "120"); // 2 minute
         // grace period
         // after crash
         defaults.setProperty("DisconnectionPayPercentage", "55");
@@ -1008,7 +1027,7 @@ public class DefaultServerOptions {
         // Attack from reserver options
         defaults.setProperty("AllowAttackFromReserve", "false");
         defaults.setProperty("AttackFromReserveResponseTime", "5");
-        defaults.setProperty("AttackFromReserveSleepTime", "60");// time between each attack.
+        defaults.setProperty("AttackFromReserveSleepTime", "60"); // time between each attack.
         defaults.setProperty("MaxNegativeBaysForAFR", "-1");
         defaults.setProperty("MaxNegativeBaysForActivation", "0");
 
@@ -1021,10 +1040,10 @@ public class DefaultServerOptions {
         // Newish Black Market settings
         defaults.setProperty("UseVickeryAuctionType", "true");
         defaults.setProperty("UseHighestSealedBidAuctionType", "false");
-        defaults.setProperty("AuctionFee", "0.15");// double, so .15 = 15% of
+        defaults.setProperty("AuctionFee", "0.15"); // double, so .15 = 15% of
         // the price is taken as fee
-        defaults.setProperty("RareMinSaleTime", "30");// in ticks
-        defaults.setProperty("ChanceToSendUnitToBM", "40");// int % chance to
+        defaults.setProperty("RareMinSaleTime", "30"); // in ticks
+        defaults.setProperty("ChanceToSendUnitToBM", "40"); // int % chance to
         // sell instead of
         // autoscrapping
 
@@ -1284,7 +1303,6 @@ public class DefaultServerOptions {
         defaults.setProperty("CanBuyBMHeavyAero", "true");
         defaults.setProperty("CanBuyBMAssaultAero", "true");
 
-
         // Slice Settings
         defaults.setProperty("ProcessHouseTicksAtSlice", "false");
 
@@ -1341,14 +1359,13 @@ public class DefaultServerOptions {
         defaults.setProperty("Christmas_AllowBM", "false");
         defaults.setProperty("Christmas_AllowDirectSell", "false");
         defaults.setProperty("Christmas_StartDate", "2016-12-01");
-        defaults.setProperty("Christmas_EndDate",  "2017-01-01");
+        defaults.setProperty("Christmas_EndDate", "2017-01-01");
         defaults.setProperty("Christmas_List", "");
         defaults.setProperty("Christmas_Units_Method_OneOfEach", "false");
         defaults.setProperty("Christmas_Units_Method_XOfEach", "false");
         defaults.setProperty("Christmas_Units_Method_XTotal", "false");
         defaults.setProperty("Christmas_Units_X", "1");
         defaults.setProperty("Christmas_ManuallyStarted", "false");
-
 
         // Quartz Scheduler defaults
         defaults.setProperty("Scheduler_PlayerActivity_comps", "900");
@@ -1364,7 +1381,7 @@ public class DefaultServerOptions {
         // Or set this to true to just use all of them instead
         defaults.setProperty("Sol_FreeBuild_UseAll", "false");
         // -1 disables limits, 0 disables build, otherwise it is a limiter
-        //can be set in faction configuration panel to differ per faction
+        // can be set in faction configuration panel to differ per faction
         defaults.setProperty("FreeBuild_Limit", "-1");
         // allows player to build free meks in the house they defected to
         defaults.setProperty("FreeBuild_PostDefection", "false");
@@ -1395,45 +1412,45 @@ public class DefaultServerOptions {
         defaults.setProperty("Enable_Link3_Button", "false");
         defaults.setProperty("Link3_URL", "https://facebook.com");
         defaults.setProperty("Link3_Icon", "./data/images/misc/facebook.png");
-        //---Bot Options---
+        // ---Bot Options---
         defaults.setProperty("Enable_Bot_Chat", "false");
         defaults.setProperty("Enable_BotPlayerInfo", "false");
         defaults.setProperty("Bot_Buffer_Location", "./data/allchatforbot.txt");
-        //---django options---
+        // ---django options---
         defaults.setProperty("Django_CaptureBattleAsJson", "false");
-        //---Subfaction Options---
+        // ---Subfaction Options---
         defaults.setProperty("Enforce_Subfaction_Factory_Access", "false");
         defaults.setProperty("Self_Promote_Subfaction", "false");
         defaults.setProperty("Disable_Promote_Subfaction", "false");
         defaults.setProperty("Disable_Demote_Subfaction", "false");
         defaults.setProperty("Activate_Subfaction_Only", "false");
-        //---Additional Influence Options---
+        // ---Additional Influence Options---
         defaults.setProperty("Cbills_Per_Flu", "0");
         defaults.setProperty("AllowFluTransfer", "false");
-        defaults.setProperty("PlayerBaseFlu", "0"); 
+        defaults.setProperty("PlayerBaseFlu", "0");
         defaults.setProperty("FluXPRollOverCap", "0");
         defaults.setProperty("FluToRefreshFactory", "0");
-        //defaults.setProperty("FluToRepod", "0");
-        //---Mini Campaigns---
+        // defaults.setProperty("FluToRepod", "0");
+        // ---Mini Campaigns---
         defaults.setProperty("Enable_MiniCampaign", "false");
-        //if BV of players hangar reaches this state, initiate 'restock'
+        // if BV of players hangar reaches this state, initiate 'restock'
         defaults.setProperty("MinBV_HangarRestock", "-1");
         defaults.setProperty("Percent_HangarRestock", "-1");
         defaults.setProperty("Unit_HangarRestock", "-1");
-        //inject RP/FLU and or mek tokens when BV hits this value
+        // inject RP/FLU and or mek tokens when BV hits this value
         defaults.setProperty("RestockCB_Injection", "-1");
         defaults.setProperty("RestockRP_Injection", "-1");
         defaults.setProperty("RestockFLU_Injection", "-1");
         defaults.setProperty("RestockMT_Injection", "-1");
-        //user must use 'most' of the injection to go active, this sets the leeway
+        // user must use 'most' of the injection to go active, this sets the leeway
         defaults.setProperty("RestockCB_LeewayPercentage", "-1");
         defaults.setProperty("RestockRP_LeewayPercentage", "-1");
         defaults.setProperty("RestockFLU_LeewayPercentage", "-1");
         defaults.setProperty("RestockMT_LeewayPercentage", "-1");
-        //ignore
+        // ignore
         defaults.setProperty("IgnoreAeroBV", "false");
         defaults.setProperty("IgnoreAeroUnitLimit", "false");
-        //end of cycle rewards
+        // end of cycle rewards
         defaults.setProperty("MC_Reward_BAYS", "0");
         defaults.setProperty("MC_Reward_TECHS", "0");
         defaults.setProperty("MC_Reward_XP", "0");
@@ -1441,21 +1458,19 @@ public class DefaultServerOptions {
         defaults.setProperty("MC_Reward_FLU", "0");
         defaults.setProperty("MC_Reward_CB", "0");
         defaults.setProperty("MC_Reward_MT", "0");
-        //lock units
+        // lock units
         defaults.setProperty("LockUnits", "false");
         defaults.setProperty("LockSalvagedUnits", "false");
         defaults.setProperty("UnlockUnits_Percentage", "-1");
         defaults.setProperty("LockedUnits_RemoveBV", "false");
         defaults.setProperty("LockedUnits_DecrementUnitCount", "false");
         defaults.setProperty("LockUnits_ForOneFightOnly", "false");
-        //MC Misc Options
+        // MC Misc Options
         defaults.setProperty("AtUnitLimitsMC", "false");
         defaults.setProperty("AtOrOverUnitLimitsMC", "false");
-        //---MISC---
+        // ---MISC---
         defaults.setProperty("AllowEmoji", "false");
         defaults.setProperty("EnableQuirks", "false");
-
-
 
         // Tracker - let's move stuff out of the server config file and into
         // Campaign configs so we can edit it while the server is live, shall we?
@@ -1467,10 +1482,10 @@ public class DefaultServerOptions {
         defaults.setProperty("TrackerResetUUID", "false");
         defaults.setProperty("ServerName", "ExampleTech");
 
-        //Discord Integration
+        // Discord Integration
         defaults.setProperty("DiscordWebHookAddress", "");
         defaults.setProperty("DiscordEnable", "false");
-        
+
         // New OpsManager - use at your own risk!
         defaults.setProperty("UseNewOpManager", "false");
     }
@@ -1480,7 +1495,8 @@ public class DefaultServerOptions {
      */
     public void createConfig(String filename) {
         try {
-            CampaignMain.cm.saveConfigureFile(CampaignMain.cm.getCampaignOptions().getConfig(), filename);
+            CampaignMain.cm.saveConfigureFile(
+                    CampaignMain.cm.getCampaignOptions().getConfig(), filename);
         } catch (Exception ex) {
             MWLogger.errLog("Unable to save config file.");
             MWLogger.errLog(ex);
@@ -1489,7 +1505,7 @@ public class DefaultServerOptions {
     }
 
     public void createConfig() {
-            createConfig(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG"));
+        createConfig(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG"));
     }
 
     public Properties getServerDefaults() {

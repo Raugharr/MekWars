@@ -1,13 +1,13 @@
 /*
  * MekWars - Copyright (C) 2005
- * 
+ *
  * Original author - nmorris (urgru@users.sourceforge.net)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -17,8 +17,8 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
@@ -44,7 +44,14 @@ public class AddOmniVariantModCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -61,8 +68,29 @@ public class AddOmniVariantModCommand implements Command {
         String comp = modlist.nextToken();
         String flu = modlist.nextToken();
 
-        CampaignMain.cm.toUser("AM:Variant " + variant + " has been given the following repod mods " + CampaignMain.cm.moneyOrFluMessage(true, true, Integer.parseInt(money)) + " " + comp + " components " + CampaignMain.cm.moneyOrFluMessage(false, true, Integer.parseInt(flu)) + ".", Username, true);
-        CampaignMain.cm.doSendModMail("NOTE", Username + " has given variant " + variant + " the following repod mods " + CampaignMain.cm.moneyOrFluMessage(true, true, Integer.parseInt(money)) + " " + comp + " components " + CampaignMain.cm.moneyOrFluMessage(false, true, Integer.parseInt(flu)) + ".");
+        CampaignMain.cm.toUser(
+                "AM:Variant "
+                        + variant
+                        + " has been given the following repod mods "
+                        + CampaignMain.cm.moneyOrFluMessage(true, true, Integer.parseInt(money))
+                        + " "
+                        + comp
+                        + " components "
+                        + CampaignMain.cm.moneyOrFluMessage(false, true, Integer.parseInt(flu))
+                        + ".",
+                Username,
+                true);
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username
+                        + " has given variant "
+                        + variant
+                        + " the following repod mods "
+                        + CampaignMain.cm.moneyOrFluMessage(true, true, Integer.parseInt(money))
+                        + " "
+                        + comp
+                        + " components "
+                        + CampaignMain.cm.moneyOrFluMessage(false, true, Integer.parseInt(flu))
+                        + ".");
     }
-
 }

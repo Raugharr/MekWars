@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,11 +17,11 @@
 /*
  * LongOperations are holders for info necessary to resolve
  * multiple game Operations (win ratios, etc).
- * 
+ *
  * Creation of a LongOperation on will fail if a player lacks
  * necassary privledges (faction status, user level, whatever
  * is being used to regulate creation on a given server).
- * 
+ *
  * NOTE: LongOperations need not be used. For simple servers,
  * or servers without formalized structures, they're wholly
  * inappropriate.
@@ -31,7 +31,6 @@ package mekwars.server.campaign.operations;
 
 import java.util.Collections;
 import java.util.Vector;
-
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 
@@ -46,7 +45,7 @@ public class LongOperation implements Comparable<LongOperation> {
 
     // holding vars for pertinant info
     private SPlanet targetWorld;
-    private Vector<Integer> shortIDs;// running short ops
+    private Vector<Integer> shortIDs; // running short ops
     private SHouse attackingHouse;
     private SHouse defendingHouse;
     private int longID;
@@ -70,7 +69,8 @@ public class LongOperation implements Comparable<LongOperation> {
     private String opName;
 
     // CONSTRUCTOR
-    public LongOperation(String opName, SPlanet target, int id, SHouse attacker, SHouse defender, int duration) {
+    public LongOperation(
+            String opName, SPlanet target, int id, SHouse attacker, SHouse defender, int duration) {
 
         // save params
         this.opName = opName;
@@ -90,68 +90,54 @@ public class LongOperation implements Comparable<LongOperation> {
 
     // METHODS
 
-    /**
-     * Method which returns current op status.
-     */
+    /** Method which returns current op status. */
     public int getStatus() {
         return currentStatus;
     }
 
-    /**
-     * method which sets current status.
-     */
+    /** method which sets current status. */
     public void setStatus(int i) {
         currentStatus = i;
     }
 
-    /**
-     * Method which returns world targetted by this op.
-     */
+    /** Method which returns world targetted by this op. */
     public SPlanet getTargetWorld() {
         return targetWorld;
     }
 
-    /**
-     * Method which returns the ID # of this op. NOTE: this is by definition a
-     * long ID ...
-     */
+    /** Method which returns the ID # of this op. NOTE: this is by definition a long ID ... */
     public int getID() {
         return longID;
     }
 
     /**
-     * Method which returns the name (type) of this op. Used to pull matching
-     * Operation, which contains paramaters, from Manager and to match with
-     * shorts.
+     * Method which returns the name (type) of this op. Used to pull matching Operation, which
+     * contains paramaters, from Manager and to match with shorts.
      */
     public String getName() {
         return opName;
     }
 
     /**
-     * Method which returns a set of IDs for in-progress short ops under this
-     * particular longop instance.
+     * Method which returns a set of IDs for in-progress short ops under this particular longop
+     * instance.
      */
     public Vector<ShortOperation> getActiveShortops() {
-        if (this.getStatus() == STATUS_OPINPROGRESS)
-            return activeShorts;
+        if (this.getStatus() == STATUS_OPINPROGRESS) return activeShorts;
         // else
         return null;
     }
 
     /**
-     * Method to add a new ShortOperation to the activeShortOps vector. After
-     * addition, the vector is re-sorted by ID.
+     * Method to add a new ShortOperation to the activeShortOps vector. After addition, the vector
+     * is re-sorted by ID.
      */
     public void addShortOp(ShortOperation o) {
         activeShorts.add(o);
         Collections.sort(activeShorts);
     }
 
-    /**
-     * Method which returns info for an operation which is waiting for players
-     * to join.
-     */
+    /** Method which returns info for an operation which is waiting for players to join. */
     public String getIdleInfo() {
 
         // strings
@@ -164,57 +150,44 @@ public class LongOperation implements Comparable<LongOperation> {
         resultString += attackingHouse.getColoredNameAsLink() + " is ";
 
         // add planet
-        resultString += " has begun a " + opName + " on " + targetWorld.getNameAsColoredLink() + ". ";
+        resultString +=
+                " has begun a " + opName + " on " + targetWorld.getNameAsColoredLink() + ". ";
         resultString += defendingHouse.getNameAsLink() + " forces are mobilizing in defense.";
 
         // make return
         return resultString;
     }
 
-    /**
-     * Method which returns the attacking faction.
-     */
+    /** Method which returns the attacking faction. */
     public SHouse getAttackingHouse() {
         return this.attackingHouse;
     }
 
-    /**
-     * Method which returns the defending faction.
-     */
+    /** Method which returns the defending faction. */
     public SHouse getDefendingHouse() {
         return this.defendingHouse;
     }
 
-    /**
-     * Method which returns info for an operation which is in-progress.
-     */
+    /** Method which returns info for an operation which is in-progress. */
     public String getInProgressInfo(boolean complete) {
         return "";
     }
 
-    /**
-     * Method which returns info for an operation which is in-progress.
-     */
+    /** Method which returns info for an operation which is in-progress. */
     public String getFinishedInfo(boolean complete) {
         return "";
     }
 
-    /**
-     * compareTo required for compliance with Comparable interface.
-     */
+    /** compareTo required for compliance with Comparable interface. */
     public int compareTo(LongOperation o) {
 
-        try{
-        LongOperation compOp = o;
-        if (compOp.getID() > this.getID())
-            return 1;
-        else if (compOp.getID() == this.getID())
-            return 0;
-        else
-            return -1;
-        }catch(Exception ex){
+        try {
+            LongOperation compOp = o;
+            if (compOp.getID() > this.getID()) return 1;
+            else if (compOp.getID() == this.getID()) return 0;
+            else return -1;
+        } catch (Exception ex) {
             return 0;
         }
     }
-
-}// end OperationsManager class
+} // end OperationsManager class

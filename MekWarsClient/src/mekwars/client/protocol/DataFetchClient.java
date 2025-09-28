@@ -17,9 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.JOptionPane;
-
+import megamek.Version;
 import mekwars.client.MWClient;
 import mekwars.client.gui.CMainFrame;
 import mekwars.common.CampaignData;
@@ -30,16 +29,14 @@ import mekwars.common.Planet;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.MWLogger;
-import megamek.Version;
 
 /**
  * Calls to the data retrieving server and gets data for planets and factions
- * 
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
-
 public class DataFetchClient {
-	private String hostAddr;
+    private String hostAddr;
     private String cacheDir;
     private CampaignData data;
     private Map<Integer, Influences> changesSinceLastRefresh;
@@ -50,11 +47,10 @@ public class DataFetchClient {
     private int socketDelayTime = 2000;
 
     /**
-     * Constructor. This will not setup the connection. To actually transfer
-     * data use the get*() methods. Remember to set the host address before
-     * calling any get* methods. This cannot be set here, because
-     * DataFetchClient is used with xstream and persistance and we want the
-     * users to change the address in the config, not the cache file.
+     * Constructor. This will not setup the connection. To actually transfer data use the get*()
+     * methods. Remember to set the host address before calling any get* methods. This cannot be set
+     * here, because DataFetchClient is used with xstream and persistance and we want the users to
+     * change the address in the config, not the cache file.
      */
     public DataFetchClient(int dataport, int socketDelayTime) {
         dataPort = dataport;
@@ -65,19 +61,18 @@ public class DataFetchClient {
         } else {
             this.socketDelayTime = 2000;
         }
-
     }
 
     /**
-     * Transfer the server configuration files. Used to set up verious portions
-     * of the GUI, determing proper Money/Flu names, and more.
+     * Transfer the server configuration files. Used to set up verious portions of the GUI,
+     * determing proper Money/Flu names, and more.
      */
     public void getServerConfigData(MWClient mwclient) throws IOException {
 
         /*
          * Look for an existing serverconfig.txt in the appropriate data dir. If
          * it exists, MD5 is and request the MD5 of its server side analog.
-         * 
+         *
          * If the MD5's don't match, or the local file doesnt exist, force a
          * refresh from the data feeder.
          */
@@ -101,7 +96,7 @@ public class DataFetchClient {
                 br.close();
                 in.close();
 
-                localConfigTimestamp = tempTime.substring(11);// remove
+                localConfigTimestamp = tempTime.substring(11); // remove
                 // "#Timestamp="
             } catch (Exception e) {
                 MWLogger.errLog("Problems reading timestamp from local configuration.");
@@ -116,19 +111,23 @@ public class DataFetchClient {
                 MWLogger.errLog("Problems connecting to server to get config timestamp.");
             }
 
-            MWLogger.errLog("Local Config: " + localConfigTimestamp + " Server Config: " + serverConfigTimestamp);
+            MWLogger.errLog(
+                    "Local Config: "
+                            + localConfigTimestamp
+                            + " Server Config: "
+                            + serverConfigTimestamp);
             if (localConfigTimestamp.equals(serverConfigTimestamp)) {
                 timestampMatch = true;
                 try {
-                    FileInputStream configFile = new FileInputStream(cacheDir + "/campaignconfig.txt");
+                    FileInputStream configFile =
+                            new FileInputStream(cacheDir + "/campaignconfig.txt");
                     mwclient.getServerConfigs().load(configFile);
                     configFile.close();
                 } catch (Exception ex) {
                     timestampMatch = false;
                 }
             }
-
-        }// end if(localConfigExists, get MD5)
+        } // end if(localConfigExists, get MD5)
 
         /*
          * If the config is missing, or the timestamps dont match, update
@@ -162,33 +161,40 @@ public class DataFetchClient {
 
                     // read in the "complete" config
                     try {
-                        FileInputStream configFile = new FileInputStream(cacheDir + "/campaignconfig.txt");
+                        FileInputStream configFile =
+                                new FileInputStream(cacheDir + "/campaignconfig.txt");
                         mwclient.getServerConfigs().load(configFile);
                         configFile.close();
                     } catch (Exception ex) {
                         MWLogger.errLog(ex);
                     }
-                }// end catch for read-in
+                } // end catch for read-in
             }
 
             // failed to open connection. try to load local defaults.
             catch (Exception exe) {
                 if (!mwclient.getConfig().isParam("DEDICATED")) {
-                    Object[] options = { "Exit", "Continue" };
-                    int selectedValue = JOptionPane.showOptionDialog(null, "No campaignconfig.txt. This usually means that you were unable to\n\r" + "connect to the server to fetch a copy. Do you wish to exit?", "Startup\n\r" + "error!", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+                    Object[] options = {"Exit", "Continue"};
+                    int selectedValue =
+                            JOptionPane.showOptionDialog(
+                                    null,
+                                    "No campaignconfig.txt. This usually means that you were unable to\n\r"
+                                            + "connect to the server to fetch a copy. Do you wish to exit?",
+                                    "Startup\n\r" + "error!",
+                                    JOptionPane.DEFAULT_OPTION,
+                                    JOptionPane.ERROR_MESSAGE,
+                                    null,
+                                    options,
+                                    options[0]);
                     if (selectedValue == 0) {
-                        System.exit(0);// exit, if they so choose
+                        System.exit(0); // exit, if they so choose
                     }
                 }
-            }// end catch(Connection Failure)
-
-        }// end if(!md5Match || !localConfigExists)
+            } // end catch(Connection Failure)
+        } // end if(!md5Match || !localConfigExists)
     }
 
-    /**
-     * Transfer the Black Market Settings Only called from
-     * Admin.ComponentDisplayDialog
-     */
+    /** Transfer the Black Market Settings Only called from Admin.ComponentDisplayDialog */
     public void getBlackMarketSettings(MWClient mwclient) throws IOException {
 
         // open the connection to the server, and write out the config
@@ -217,19 +223,16 @@ public class DataFetchClient {
                 }
             } catch (Exception e) {
                 MWLogger.errLog(e);
-            }// end catch for read-in
+            } // end catch for read-in
         }
 
         // failed to open connection. try to load local defaults.
         catch (Exception exe) {
             MWLogger.errLog(exe);
-        }// end catch(Connection Failure)
+        } // end catch(Connection Failure)
     }
 
-    /**
-     * Transfers server wide banned ammo data from the server to the client.
-     * 
-     */
+    /** Transfers server wide banned ammo data from the server to the client. */
     public void getBannedAmmoData(MWClient mwclient) throws IOException {
 
         boolean timestampMatch = false;
@@ -249,14 +252,14 @@ public class DataFetchClient {
                 BinReader binreader = openConnection("BannedAmmoTimeStamp");
                 String serverTimeStamp = binreader.readLine("BannedAmmoTimeStamp");
 
-                MWLogger.errLog("Local Ban: " + localListTimestamp + " Server Ban: " + serverTimeStamp);
+                MWLogger.errLog(
+                        "Local Ban: " + localListTimestamp + " Server Ban: " + serverTimeStamp);
                 if (localListTimestamp.equals(serverTimeStamp)) {
                     timestampMatch = true;
                 }
             } catch (Exception e) {
                 MWLogger.errLog("Problems reading timestamp from local banammo.dat.");
             }
-
         }
 
         // clear the hash so we can add all the new stuff --Torren
@@ -265,14 +268,14 @@ public class DataFetchClient {
             BinReader in = openConnection("BannedAmmo");
             String timestamp = "-1";
             try {
-                timestamp = in.readLine("BannedAmmo");// TIMESTAMP
+                timestamp = in.readLine("BannedAmmo"); // TIMESTAMP
                 while (true) {
                     mwclient.loadBanAmmo(in.readLine("BannedAmmo"));
                 }
             } catch (Exception ex) {
-            }// Bin empty
+            } // Bin empty
             mwclient.saveBannedAmmo(timestamp);
-        } else {// load from the banned file.
+        } else { // load from the banned file.
             try {
                 FileInputStream fis = new FileInputStream(mwclient.getCacheDir() + "/banammo.dat");
                 BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
@@ -286,14 +289,9 @@ public class DataFetchClient {
                 MWLogger.errLog(ex);
             }
         }
-
     }
 
-    /**
-     * Transfers server wide banned targeting systems from the server to the
-     * client.
-     * 
-     */
+    /** Transfers server wide banned targeting systems from the server to the client. */
     public void getBanTargetingData(MWClient mwclient) throws IOException {
 
         boolean timestampMatch = false;
@@ -313,30 +311,31 @@ public class DataFetchClient {
                 BinReader binreader = openConnection("BanTargetingTimeStamp");
                 String serverTimeStamp = binreader.readLine("BanTargetingTimeStamp");
 
-                MWLogger.errLog("Local BanT: " + localListTimestamp + " Server BanT: " + serverTimeStamp);
+                MWLogger.errLog(
+                        "Local BanT: " + localListTimestamp + " Server BanT: " + serverTimeStamp);
                 if (localListTimestamp.equals(serverTimeStamp)) {
                     timestampMatch = true;
                 }
             } catch (Exception e) {
                 MWLogger.errLog("Problems reading timestamp from local bantargeting.dat.");
             }
-
         }
 
         // clear the hash so we can add all the new stuff --Torren
-        //mwclient.clearBanTargeting();
+        // mwclient.clearBanTargeting();
         if (!timestampMatch) { // BanTargeting
             BinReader in = openConnection("BanTargeting");
             String timestamp = "-1";
             try {
-                timestamp = in.readLine("BanTargeting");// TIMESTAMP
+                timestamp = in.readLine("BanTargeting"); // TIMESTAMP
                 mwclient.loadBanTargeting(in.readLine("BanTargeting"));
             } catch (Exception ex) {
-            }// Bin empty
+            } // Bin empty
             mwclient.saveBannedTargetingSystems(timestamp);
-        } else {// load from the banned file.
+        } else { // load from the banned file.
             try {
-                FileInputStream fis = new FileInputStream(mwclient.getCacheDir() + "/bantargeting.dat");
+                FileInputStream fis =
+                        new FileInputStream(mwclient.getCacheDir() + "/bantargeting.dat");
                 BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
                 dis.readLine();
                 mwclient.loadBanTargeting(dis.readLine());
@@ -345,18 +344,13 @@ public class DataFetchClient {
             } catch (Exception ex) {
             }
         }
-
     }
 
-    /**
-     * Check Server version against client if it doesn't match you can't connect
-     * 
-     */
+    /** Check Server version against client if it doesn't match you can't connect */
     public void checkServerVersion(MWClient mwclient) throws IOException {
 
         boolean mustUpdate = false;
         Version clientVersion = MWClient.CLIENT_VERSION;
-
 
         BinReader binreader = openConnection("ServerVersion");
         Version serverVersion = new Version(binreader.readLine("ServerVersion"));
@@ -381,13 +375,18 @@ public class DataFetchClient {
         if (mustUpdate) {
             int update = JOptionPane.NO_OPTION;
             if (!mwclient.isDedicated()) {
-                update = JOptionPane.showConfirmDialog(null, "You have an invalid version\n\rof the MekWars Client\n\rWould you like to update now?", "Invalid Client update now!", JOptionPane.YES_NO_OPTION);
+                update =
+                        JOptionPane.showConfirmDialog(
+                                null,
+                                "You have an invalid version\n\rof the MekWars Client\n\rWould you like to update now?",
+                                "Invalid Client update now!",
+                                JOptionPane.YES_NO_OPTION);
 
                 if (update == JOptionPane.YES_OPTION) {
                     try {
                         mwclient.goodbye();
                         Runtime runtime = Runtime.getRuntime();
-                        String[] call = { "java", "-jar", "./MekWarsAutoUpdate.jar", "PLAYER" };
+                        String[] call = {"java", "-jar", "./MekWarsAutoUpdate.jar", "PLAYER"};
                         runtime.exec(call);
                         MWLogger.errLog("Starting Update!");
                     } catch (Exception ex) {
@@ -395,34 +394,32 @@ public class DataFetchClient {
                     }
                 }
 
-            } else {// is Ded
+            } else { // is Ded
                 try {
                     mwclient.stopHost();
                     mwclient.goodbye();
                     Runtime runtime = Runtime.getRuntime();
-                    String[] call = { "java", "-jar", "MekWarsAutoUpdate.jar", "DEDICATED" };
+                    String[] call = {"java", "-jar", "MekWarsAutoUpdate.jar", "DEDICATED"};
                     runtime.exec(call);
                 } catch (Exception ex) {
                     MWLogger.errLog(ex);
                 }
-
             }
 
             System.exit(0);
-
         }
     }
 
     /**
-     * Transfer the server configuration files. Used to set up verious portions
-     * of the GUI, determing proper Money/Flu names, and more.
+     * Transfer the server configuration files. Used to set up verious portions of the GUI,
+     * determing proper Money/Flu names, and more.
      */
     public void checkForMostRecentOpList() throws IOException {
 
         /*
          * Look for an existing OpList.txt in the appropriate data dir. If it
          * exists, MD5 it and request the MD5 of its server side analog.
-         * 
+         *
          * If the timestamps don't match, force a refresh from the data feeder.
          */
         boolean timestampMatch = false;
@@ -439,7 +436,7 @@ public class DataFetchClient {
                 br.close();
                 in.close();
 
-                localListTimestamp = tempTime.substring(11);// remove
+                localListTimestamp = tempTime.substring(11); // remove
                 // "#Timestamp="
             } catch (Exception e) {
                 MWLogger.errLog("Problems reading timestamp from local OpList.");
@@ -448,12 +445,15 @@ public class DataFetchClient {
             // now get the server list's timestamp ...
             BinReader in = openConnection("OpListTimestamp");
             String serverListTimestamp = in.readLine("OpListTimestamp");
-            MWLogger.errLog("Local OpList: " + localListTimestamp + " Server OpList: " + serverListTimestamp);
+            MWLogger.errLog(
+                    "Local OpList: "
+                            + localListTimestamp
+                            + " Server OpList: "
+                            + serverListTimestamp);
             if (localListTimestamp.equals(serverListTimestamp)) {
                 timestampMatch = true;
             }
-
-        }// end if(localList.exists)
+        } // end if(localList.exists)
 
         /*
          * If the MD5s dont match, update
@@ -485,26 +485,26 @@ public class DataFetchClient {
                     // //in.close();
                     out.close();
                     fops.close();
-
                 }
             } catch (Exception exe) {
                 MWLogger.errLog(exe);
             }
-        }// end if(!md5Match)
-    }// end getOpListMD5
+        } // end if(!md5Match)
+    } // end getOpListMD5
 
     /**
      * Transfer trait data. Used to generate the Trait dialogs in Help menu.
-     * 
-     * Regardless of the data sent, if there is a 0% chance for meks to get the
-     * trait skill the help menu will not be shown.
-     * 
+     *
+     * <p>Regardless of the data sent, if there is a 0% chance for meks to get the trait skill the
+     * help menu will not be shown.
+     *
      * @see CMainFrame.java
      */
     public void getServerTraitFiles() throws IOException {
 
         try {
-            // MMClient.mwClientLog.clientErrLog("- opening connection to datafeed. requesting Trait Files");
+            // MMClient.mwClientLog.clientErrLog("- opening connection to datafeed. requesting Trait
+            // Files");
             BinReader in = openConnection("ServerTrait");
 
             // keep reading until there is an error.
@@ -512,7 +512,9 @@ public class DataFetchClient {
                 while (true) {
                     String faction = in.readLine("TraitLine");
                     int count = in.readInt("TraitLine");
-                    FileOutputStream fops = new FileOutputStream(cacheDir + "/" + faction.toLowerCase() + "traitnames.txt");
+                    FileOutputStream fops =
+                            new FileOutputStream(
+                                    cacheDir + "/" + faction.toLowerCase() + "traitnames.txt");
                     PrintStream out = new PrintStream(fops);
                     for (; count > 0; count--) {
                         out.println(in.readLine("TraitLine"));
@@ -530,12 +532,9 @@ public class DataFetchClient {
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-
     }
 
-    /**
-     * Transfer the whole planet data xml.
-     */
+    /** Transfer the whole planet data xml. */
     public CampaignData getAllData() throws IOException {
         BinReader in = openConnection("All");
         CampaignData data = new CampaignData(in);
@@ -548,9 +547,7 @@ public class DataFetchClient {
         return data;
     }
 
-    /**
-     * Transfer the data from cache.
-     */
+    /** Transfer the data from cache. */
     public CampaignData getCacheData(String cachePath) throws IOException {
         BinReader in = new BinReader(new FileReader(cachePath + "/data.dat"));
         CampaignData data = new CampaignData(in);
@@ -561,9 +558,7 @@ public class DataFetchClient {
         return data;
     }
 
-    /**
-     * Transfer only the differential planets since last timestamp.
-     */
+    /** Transfer only the differential planets since last timestamp. */
     public boolean getPlanetsUpdate(CampaignData Data) {
         try {
             BinReader in = openConnection("PDiff", 60000);
@@ -599,7 +594,7 @@ public class DataFetchClient {
 
             } catch (Exception ex) {
                 MWLogger.errLog(ex);
-            }// Bin empty
+            } // Bin empty
 
             /*
              * changesSinceLastRefresh = new HashMap();
@@ -627,9 +622,8 @@ public class DataFetchClient {
     }
 
     /**
-     * Transfer the Access levels of all the commands but only save the ones
-     * that matchs the users.
-     * 
+     * Transfer the Access levels of all the commands but only save the ones that matchs the users.
+     *
      * @author Torren (Jason Tighe)
      */
     public boolean getAccessLevels(CampaignData Data) {
@@ -654,18 +648,21 @@ public class DataFetchClient {
 
     /**
      * Open a connection to the server.
-     * 
+     *
      * @return
      */
     private BinReader openConnection(String cmd, int timeout) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         MWLogger.infoLog("Command: " + cmd);
-        if (dataSocket == null || dataSocket.isClosed() || dataSocket.isInputShutdown() || dataSocket.isOutputShutdown()) {
+        if (dataSocket == null
+                || dataSocket.isClosed()
+                || dataSocket.isInputShutdown()
+                || dataSocket.isOutputShutdown()) {
             closeDataConnection();
             MWLogger.infoLog("Trying to connect to " + hostAddr + " at port " + dataPort);
             dataSocket = new Socket(hostAddr, dataPort);
             dataSocket.setKeepAlive(true);
-        } else {// clean out any old data first.
+        } else { // clean out any old data first.
             dataSocket.getOutputStream().flush();
         }
         dataSocket.setSoTimeout(timeout);
@@ -699,17 +696,14 @@ public class DataFetchClient {
     }
 
     /**
-     * @param hostAddr
-     *            The hostAddr to set.
+     * @param hostAddr The hostAddr to set.
      */
     public void setData(String hostAddr, String cacheDir) {
         this.hostAddr = hostAddr;
         this.cacheDir = cacheDir;
     }
 
-    /**
-     * Store itself to disk.
-     */
+    /** Store itself to disk. */
     public void store() {
 
         if (lastTimestamp != null) {
@@ -725,7 +719,8 @@ public class DataFetchClient {
             }
         }
         try {
-            BinWriter binOut = new BinWriter(new PrintWriter(new FileWriter(cacheDir + "/data.dat")));
+            BinWriter binOut =
+                    new BinWriter(new PrintWriter(new FileWriter(cacheDir + "/data.dat")));
             data.binOut(binOut);
             binOut.close();
         } catch (Exception ex) {
@@ -742,8 +737,7 @@ public class DataFetchClient {
     }
 
     /**
-     * @param lastTimestamp
-     *            The lastTimestamp to set.
+     * @param lastTimestamp The lastTimestamp to set.
      */
     public void setLastTimestamp(Date lastTimestamp) {
         this.lastTimestamp = lastTimestamp;
@@ -763,7 +757,5 @@ public class DataFetchClient {
             MWLogger.errLog(ex);
             dataSocket = null;
         }
-
     }
-
 }

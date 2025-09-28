@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,50 +17,65 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-
 import mekwars.common.util.Position;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminMovePlanetCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Planet Name#X Coord#Y Coord";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		SPlanet p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
-        
-        if ( p == null )
-            return;
-        double x = 0;
-        double y = 0;
-        
-        try{
-            x = Double.parseDouble(command.nextToken());
-            y = Double.parseDouble(command.nextToken());
-        }catch (Exception ex){
-            CampaignMain.cm.toUser("Invalid Syntax: adminmoveplanet#name#x#y",Username);
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Planet Name#X Coord#Y Coord";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
-        
-        p.setPosition(new Position(x,y));
+
+        SPlanet p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), Username);
+
+        if (p == null) return;
+        double x = 0;
+        double y = 0;
+
+        try {
+            x = Double.parseDouble(command.nextToken());
+            y = Double.parseDouble(command.nextToken());
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser("Invalid Syntax: adminmoveplanet#name#x#y", Username);
+            return;
+        }
+
+        p.setPosition(new Position(x, y));
         p.updated();
 
-        CampaignMain.cm.doSendModMail("NOTE",Username + " has moved planet " + p.getName()+" to "+x+","+y);
-		CampaignMain.cm.toUser("Planet Moved",Username);
-	}
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has moved planet " + p.getName() + " to " + x + "," + y);
+        CampaignMain.cm.toUser("Planet Moved", Username);
+    }
 }

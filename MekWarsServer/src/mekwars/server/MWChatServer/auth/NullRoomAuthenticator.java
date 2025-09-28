@@ -3,8 +3,8 @@
  * Used by permission
  */
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,38 +18,33 @@
  * for more details.
  */
 
-
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
- */ 
-/**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
  */
-
+/**
+ * @author Torren (Jason Tighe) 11.5.05
+ */
 package mekwars.server.MWChatServer.auth;
 
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.RoomServer;
 
 /**
- * Interface for objects that will handle authentication.  The server will delegate signOn
- * calls to us.
+ * Interface for objects that will handle authentication. The server will delegate signOn calls to
+ * us.
  */
 public class NullRoomAuthenticator implements IRoomAuthenticator {
-	public boolean isCreateAllowed(MWChatClient client, String room, String password) {
-		return true;
-	}
-    
-    public int getAccessLevel(MWChatClient client, RoomServer room) {
-    	return client.getAccessLevel();
-    }
-    
-    public MWChatClient getNextOp(RoomServer room) {
-    	return room.getOldestClient();
+    public boolean isCreateAllowed(MWChatClient client, String room, String password) {
+        return true;
     }
 
+    public int getAccessLevel(MWChatClient client, RoomServer room) {
+        return client.getAccessLevel();
+    }
+
+    public MWChatClient getNextOp(RoomServer room) {
+        return room.getOldestClient();
+    }
 }

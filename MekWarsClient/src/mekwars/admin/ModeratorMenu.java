@@ -17,26 +17,22 @@ package mekwars.admin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-
+import megamek.client.ui.swing.UnitLoadingDialog;
 import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.dialog.NewUnitViewerDialog;
 import mekwars.client.gui.dialog.PlanetNameDialog;
 import mekwars.client.gui.dialog.PlayerNameDialog;
 import mekwars.common.UnitFactory;
-import megamek.client.ui.swing.UnitLoadingDialog;
-import mekwars.client.common.campaign.clientutils.GameHost;
 
 public class ModeratorMenu extends JMenu {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 1L;
 
     // moderator menu components
@@ -82,151 +78,172 @@ public class ModeratorMenu extends JMenu {
          * action, for example.
          */
         jMenuModCheck.setText("Check Player");
-        jMenuModCheck.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModCheck_actionPerformed(e);
-            }
-        });
+        jMenuModCheck.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModCheck_actionPerformed(e);
+                    }
+                });
 
         jMenuModGames.setText("View Games");
-        jMenuModGames.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModGames_actionPerformed(e);
-            }
-        });
+        jMenuModGames.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModGames_actionPerformed(e);
+                    }
+                });
 
         jMenuModGetModLog.setText("Get Mod Log");
-        jMenuModGetModLog.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModGetModLog_actionPerformed(e);
-            }
-        });
+        jMenuModGetModLog.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModGetModLog_actionPerformed(e);
+                    }
+                });
 
         jMenuModGrantEXP.setText("Grant EXP");
-        jMenuModGrantEXP.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModGrantEXP_actionPerformed(e, null);
-            }
-        });
+        jMenuModGrantEXP.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModGrantEXP_actionPerformed(e, null);
+                    }
+                });
 
         jMenuModGrantInfluence.setText("Grant " + client.moneyOrFluMessage(false, true, -1) + "");
-        jMenuModGrantInfluence.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModGrantInfluence_actionPerformed(e, null);
-            }
-        });
+        jMenuModGrantInfluence.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModGrantInfluence_actionPerformed(e, null);
+                    }
+                });
 
         jMenuModGrantMoney.setText("Grant " + client.moneyOrFluMessage(true, true, -1));
-        jMenuModGrantMoney.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModGrantMoney_actionPerformed(e, null);
-            }
-        });
+        jMenuModGrantMoney.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModGrantMoney_actionPerformed(e, null);
+                    }
+                });
 
         jMenuModGrantReward.setText("Grant Reward");
-        jMenuModGrantReward.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModGrantReward_actionPerformed(e, null);
-            }
-        });
+        jMenuModGrantReward.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModGrantReward_actionPerformed(e, null);
+                    }
+                });
 
         jMenuModListCommands.setText("List Commands");
-        jMenuModListCommands.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModListCommands_actionPerformed(e);
-            }
-        });
+        jMenuModListCommands.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModListCommands_actionPerformed(e);
+                    }
+                });
 
         jMenuModListMultiPlayerGroups.setText("List Multi Player Groups");
-        jMenuModListMultiPlayerGroups.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModListMultiPlayerGroups_actionPerformed(e);
-            }
-        });
+        jMenuModListMultiPlayerGroups.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModListMultiPlayerGroups_actionPerformed(e);
+                    }
+                });
 
         jMenuModTerminate.setText("Cancel Game");
-        jMenuModTerminate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModTerminate_actionPerformed(e);
-            }
-        });
+        jMenuModTerminate.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModTerminate_actionPerformed(e);
+                    }
+                });
 
         jMenuModDeactivate.setText("Deactivate Player");
-        jMenuModDeactivate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModDeactivate_actionPerformed(e);
-            }
-        });
+        jMenuModDeactivate.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModDeactivate_actionPerformed(e);
+                    }
+                });
 
         jMenuModLog.setText("Mod Log");
-        jMenuModLog.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModLog_actionPerformed(e);
-            }
-        });
+        jMenuModLog.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModLog_actionPerformed(e);
+                    }
+                });
 
         jMenuModNoPlay.setText("No Play");
-        jMenuModNoPlay.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModNoPlay_actionPerformed(e);
-            }
-        });
+        jMenuModNoPlay.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModNoPlay_actionPerformed(e);
+                    }
+                });
 
         jMenuModSetElo.setText("Set ELO");
-        jMenuModSetElo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModSetElo_actionPerformed(e);
-            }
-        });
+        jMenuModSetElo.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModSetElo_actionPerformed(e);
+                    }
+                });
 
         jMenuModSetPricemod.setText("Set Price Mod");
-        jMenuModSetPricemod.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModSetPricemod_actionPerformed(e);
-            }
-        });
+        jMenuModSetPricemod.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModSetPricemod_actionPerformed(e);
+                    }
+                });
 
         jMenuModTerminateContract.setText("Terminate Contract");
-        jMenuModTerminateContract.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModTerminateContract_actionPerformed(e);
-            }
-        });
+        jMenuModTerminateContract.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModTerminateContract_actionPerformed(e);
+                    }
+                });
 
         jMenuModTouch.setText("Touch Player");
-        jMenuModTouch.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModTouch_actionPerformed(e);
-            }
-        });
+        jMenuModTouch.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModTouch_actionPerformed(e);
+                    }
+                });
 
         jMenuModUnlockLances.setText("Unlock Armies");
-        jMenuModUnlockLances.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModUnlockLances_actionPerformed(e);
-            }
-        });
+        jMenuModUnlockLances.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModUnlockLances_actionPerformed(e);
+                    }
+                });
 
         jMenuModCreateUnit.setText("Create Unit");
-        jMenuModCreateUnit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModCreateUnit_actionPerformed(e);
-            }
-        });
+        jMenuModCreateUnit.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModCreateUnit_actionPerformed(e);
+                    }
+                });
 
         jMenuModRefreshFactory.setText("Refresh Factory");
-        jMenuModRefreshFactory.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuModRefreshFactory_actionPerformed(e);
-            }
-        });
+        jMenuModRefreshFactory.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        jMenuModRefreshFactory_actionPerformed(e);
+                    }
+                });
 
         jMenuModUpdateServerUnitsCache.setText("Update Server Units Cache");
-        jMenuModUpdateServerUnitsCache.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c UpdateServerUnitsCache");
-            }
-        });
+        jMenuModUpdateServerUnitsCache.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c UpdateServerUnitsCache");
+                    }
+                });
 
         // clear the menu, in case this is a reconstruction
         removeAll();
@@ -334,8 +351,7 @@ public class ModeratorMenu extends JMenu {
         if (subMenu.getItemCount() > 0) {
             this.add(subMenu);
         }
-
-    }// end CreateMenu()
+    } // end CreateMenu()
 
     /*
      * Various mod methods. These really don't need to be stand alone, and could
@@ -349,7 +365,8 @@ public class ModeratorMenu extends JMenu {
 
     public void jMenuModCheck_actionPerformed(ActionEvent e) {
 
-        PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+        PlayerNameDialog playerDialog =
+                new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
         String name = playerDialog.getPlayerName();
         playerDialog.dispose();
@@ -366,7 +383,8 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModCheckVersion_actionPerformed(ActionEvent e) {
-        PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+        PlayerNameDialog playerDialog =
+                new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
         String name = playerDialog.getPlayerName();
         playerDialog.dispose();
@@ -384,7 +402,8 @@ public class ModeratorMenu extends JMenu {
 
         String name = "";
         if (player == null) {
-            PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+            PlayerNameDialog playerDialog =
+                    new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
             name = playerDialog.getPlayerName();
             playerDialog.dispose();
@@ -407,7 +426,8 @@ public class ModeratorMenu extends JMenu {
 
         String name = null;
         if (player == null) {
-            PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+            PlayerNameDialog playerDialog =
+                    new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
             name = playerDialog.getPlayerName();
             playerDialog.dispose();
@@ -418,7 +438,10 @@ public class ModeratorMenu extends JMenu {
         if ((name == null) || (name.length() == 0)) {
             return;
         }
-        String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), mwclient.moneyOrFluMessage(true, true, -1) + " Amount,- to remove");
+        String exp =
+                JOptionPane.showInputDialog(
+                        mwclient.getMainFrame(),
+                        mwclient.moneyOrFluMessage(true, true, -1) + " Amount,- to remove");
         if ((exp == null) || (exp.length() == 0)) {
             return;
         }
@@ -429,7 +452,8 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModGrantInfluence_actionPerformed(ActionEvent e, String player) {
         String name = null;
         if (player == null) {
-            PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+            PlayerNameDialog playerDialog =
+                    new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
             name = playerDialog.getPlayerName();
             playerDialog.dispose();
@@ -440,7 +464,10 @@ public class ModeratorMenu extends JMenu {
         if ((name == null) || (name.length() == 0)) {
             return;
         }
-        String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), mwclient.moneyOrFluMessage(false, true, -1) + " Amount,- to remove");
+        String exp =
+                JOptionPane.showInputDialog(
+                        mwclient.getMainFrame(),
+                        mwclient.moneyOrFluMessage(false, true, -1) + " Amount,- to remove");
         if ((exp == null) || (exp.length() == 0)) {
             return;
         }
@@ -451,7 +478,8 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModGrantReward_actionPerformed(ActionEvent e, String player) {
         String name = null;
         if (player == null) {
-            PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+            PlayerNameDialog playerDialog =
+                    new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
             name = playerDialog.getPlayerName();
             playerDialog.dispose();
@@ -459,7 +487,8 @@ public class ModeratorMenu extends JMenu {
             name = player;
         }
 
-        String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Reward Amount,- to remove");
+        String exp =
+                JOptionPane.showInputDialog(mwclient.getMainFrame(), "Reward Amount,- to remove");
         if ((exp == null) || (exp.length() == 0)) {
             return;
         }
@@ -488,7 +517,9 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModDeactivate_actionPerformed(ActionEvent e) {
-        PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose Player to Deactivate", PlayerNameDialog.ANY_PLAYER);
+        PlayerNameDialog playerDialog =
+                new PlayerNameDialog(
+                        mwclient, "Choose Player to Deactivate", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
         String name = playerDialog.getPlayerName();
         playerDialog.dispose();
@@ -500,7 +531,10 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModLog_actionPerformed(ActionEvent e) {
-        String name = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter comments you would like to add the the mod log");
+        String name =
+                JOptionPane.showInputDialog(
+                        mwclient.getMainFrame(),
+                        "Enter comments you would like to add the the mod log");
         if ((name == null) || (name.length() == 0)) {
             return;
         }
@@ -508,7 +542,8 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModNoPlay_actionPerformed(ActionEvent e) {
-        PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+        PlayerNameDialog playerDialog =
+                new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
         String name = playerDialog.getPlayerName();
         playerDialog.dispose();
@@ -528,11 +563,13 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c modnoplay#" + mode + "#" + name + "#" + offender);
+        mwclient.sendChat(
+                GameHost.CAMPAIGN_PREFIX + "c modnoplay#" + mode + "#" + name + "#" + offender);
     }
 
     public void jMenuModSetElo_actionPerformed(ActionEvent e) {
-        PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+        PlayerNameDialog playerDialog =
+                new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
         String name = playerDialog.getPlayerName();
         playerDialog.dispose();
@@ -550,7 +587,8 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModSetPricemod_actionPerformed(ActionEvent e) {
-        PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+        PlayerNameDialog playerDialog =
+                new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
         String name = playerDialog.getPlayerName();
         playerDialog.dispose();
@@ -559,7 +597,9 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        String elo = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Price Mod Amount(- to remove)");
+        String elo =
+                JOptionPane.showInputDialog(
+                        mwclient.getMainFrame(), "Price Mod Amount(- to remove)");
         if ((elo == null) || (elo.length() == 0)) {
             return;
         }
@@ -568,7 +608,8 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModTerminateContract_actionPerformed(ActionEvent e) {
-        PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+        PlayerNameDialog playerDialog =
+                new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
         String name = playerDialog.getPlayerName();
         playerDialog.dispose();
@@ -581,7 +622,8 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModTouch_actionPerformed(ActionEvent e) {
-        PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+        PlayerNameDialog playerDialog =
+                new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
         String name = playerDialog.getPlayerName();
         playerDialog.dispose();
@@ -594,7 +636,8 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModUnlockLances_actionPerformed(ActionEvent e) {
-        PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
+        PlayerNameDialog playerDialog =
+                new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
         String name = playerDialog.getPlayerName();
         playerDialog.dispose();
@@ -608,7 +651,12 @@ public class ModeratorMenu extends JMenu {
 
     public void jMenuModCreateUnit_actionPerformed(ActionEvent e) {
         UnitLoadingDialog unitLoadingDialog = new UnitLoadingDialog(mwclient.getMainFrame());
-        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(mwclient.getMainFrame(), unitLoadingDialog, mwclient,NewUnitViewerDialog.UNIT_SELECTOR);
+        NewUnitViewerDialog unitSelector =
+                new NewUnitViewerDialog(
+                        mwclient.getMainFrame(),
+                        unitLoadingDialog,
+                        mwclient,
+                        NewUnitViewerDialog.UNIT_SELECTOR);
         unitSelector.setName("Unit Selector");
         new Thread(unitSelector).start();
     }
@@ -625,13 +673,15 @@ public class ModeratorMenu extends JMenu {
 
         JComboBox combo = new JComboBox();
 
-        for (UnitFactory factory : mwclient.getData().getPlanetByName(planetNamestr).getUnitFactories()) {
+        for (UnitFactory factory :
+                mwclient.getData().getPlanetByName(planetNamestr).getUnitFactories()) {
             // if ( factory.getTicksUntilRefresh() > 0)
             combo.addItem(factory.getName());
         }
 
         combo.setEditable(false);
-        JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        JOptionPane jop =
+                new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
         JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select a factory.");
         combo.grabFocus();
@@ -645,7 +695,11 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c modrefreshFactory#" + planetNamestr + "#" + combo.getSelectedItem().toString());
+        mwclient.sendChat(
+                GameHost.CAMPAIGN_PREFIX
+                        + "c modrefreshFactory#"
+                        + planetNamestr
+                        + "#"
+                        + combo.getSelectedItem().toString());
     }
-
-}// end AdminMenu class
+} // end AdminMenu class

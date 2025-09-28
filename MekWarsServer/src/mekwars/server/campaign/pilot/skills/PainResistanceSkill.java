@@ -16,14 +16,15 @@
 
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
+import megamek.common.Mech;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
-import megamek.common.Mech;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.pilot.SPilot;
+
 /**
  * @author Helge Richter
  */
@@ -35,7 +36,8 @@ public class PainResistanceSkill extends SPilotSkill {
 
     public PainResistanceSkill(int id) {
         super(id, "Pain Resistance", "PR");
-        setDescription("When making consciousness rolls, 1 is added to all rolls. Also, damage received from ammo explosions is reduced to 1. Note: This ability is only used for BattleMechs.");
+        setDescription(
+                "When making consciousness rolls, 1 is added to all rolls. Also, damage received from ammo explosions is reduced to 1. Note: This ability is only used for BattleMechs.");
     }
 
     @Override
@@ -68,37 +70,42 @@ public class PainResistanceSkill extends SPilotSkill {
 
     @Override
     public int getBVMod(Entity unit) {
-    	//BK - changing PR costs to % of bv, doubled for CASE/CASEII units
-    	//this is because in Megamek, PR gives +1 on any KO roll (hidden modifier) and reduces pilot hits from 2 to 1 for any ammo explosion
-    	//The previous PR costs were 30 or 40 per ammo bin which is silly if you have no 
-    	//CASE (mek gets gutted anyways) and silly if you have nothing to explode (free +1 on KO rolls)
+        // BK - changing PR costs to % of bv, doubled for CASE/CASEII units
+        // this is because in Megamek, PR gives +1 on any KO roll (hidden modifier) and reduces
+        // pilot
+        // hits from 2 to 1 for any ammo explosion
+        // The previous PR costs were 30 or 40 per ammo bin which is silly if you have no
+        // CASE (mek gets gutted anyways) and silly if you have nothing to explode (free +1 on KO
+        // rolls)
         int PainResistanceBVBaseMod = CampaignMain.cm.getIntegerConfig("PainResistanceBaseBVMod");
         boolean b = false;
-        if (unit instanceof Mech) { //BK - this section of code is tested! ty STK9A
-        	Mech m = (Mech)unit; 
-        	b = m.hasCASEII(); 
+        if (unit instanceof Mech) { // BK - this section of code is tested! ty STK9A
+            Mech m = (Mech) unit;
+            b = m.hasCASEII();
         }
-        if(unit.hasCase() || b) {
-        	return (int) (2 * unit.calculateBattleValue(false, true) *  PainResistanceBVBaseMod/100);
-      	} else {
-        	return (int) (unit.calculateBattleValue(false, true) *  PainResistanceBVBaseMod/100);
-    	}
+        if (unit.hasCase() || b) {
+            return (int)
+                    (2 * unit.calculateBattleValue(false, true) * PainResistanceBVBaseMod / 100);
+        } else {
+            return (int) (unit.calculateBattleValue(false, true) * PainResistanceBVBaseMod / 100);
+        }
     }
 
     @Override
     public int getBVMod(Entity unit, SPilot p) {
-    	//BK repeat of comments in getBVMod(Entity unit)
+        // BK repeat of comments in getBVMod(Entity unit)
         SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
         int PainResistanceBVBaseMod = house.getIntegerConfig("PainResistanceBaseBVMod");
         boolean b = false;
-        if (unit instanceof Mech) { 
-        	Mech m = (Mech)unit; 
-        	b = m.hasCASEII(); 
+        if (unit instanceof Mech) {
+            Mech m = (Mech) unit;
+            b = m.hasCASEII();
         }
-        if(unit.hasCase() || b) {
-        	return (int) (2 * unit.calculateBattleValue(false, true) *  PainResistanceBVBaseMod/100);
-      	} else {
-        	return (int) (unit.calculateBattleValue(false, true) *  PainResistanceBVBaseMod/100);
-    	}
+        if (unit.hasCase() || b) {
+            return (int)
+                    (2 * unit.calculateBattleValue(false, true) * PainResistanceBVBaseMod / 100);
+        } else {
+            return (int) (unit.calculateBattleValue(false, true) * PainResistanceBVBaseMod / 100);
+        }
     }
 }

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -20,101 +20,98 @@ package mekwars.common;
 import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
-
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 
-
 /**
  * A Planet's Environment.
- * 
- * Final simple because you should be aware to overwrite binIn and binOut properly 
- * if you subclass PlanetEnvironment.
+ *
+ * <p>Final simple because you should be aware to overwrite binIn and binOut properly if you
+ * subclass PlanetEnvironment.
  */
-
-final public class PlanetEnvironment {
+public final class PlanetEnvironment {
     // id
     private int id = -1;
     private String name = "";
-    
-    //Crater
+
+    // Crater
     private int craterProbability = 0;
     private int craterMinimum = 0;
     private int craterMaximum = 0;
     private int craterMinRadius = 0;
     private int craterMaxRadius = 0;
-    
-    //Hills
+
+    // Hills
     private int hillyness = 100;
     private int hillElevationRange = 3;
     private int hillInvertProbability = 0;
-    
-    //Water
+
+    // Water
     private int waterMinSpots = 3;
     private int waterMaxSpots = 8;
     private int waterMinHexes = 2;
     private int waterMaxHexes = 10;
     private int waterDeepProbability = 20;
-    
-    //Forest
+
+    // Forest
     private int forestMinSpots = 4;
     private int forestMaxSpots = 8;
     private int forestMinHexes = 2;
     private int forestMaxHexes = 6;
     private int forestHeavyProbability = 20;
     private int forestUltraProbability = 0;
-    
-    //Rough
+
+    // Rough
     private int roughMinSpots = 0;
     private int roughMaxSpots = 5;
     private int roughMinHexes = 1;
     private int roughMaxHexes = 2;
     private int roughUltraProbability = 0;
-    
-    //Swamp
+
+    // Swamp
     private int swampMinSpots = 0;
     private int swampMaxSpots = 0;
     private int swampMinHexes = 0;
     private int swampMaxHexes = 0;
-    
-    //Pavement
+
+    // Pavement
     private int pavementMinSpots = 0;
     private int pavementMaxSpots = 0;
     private int pavementMinHexes = 0;
     private int pavementMaxHexes = 0;
-    
-    //Ice
+
+    // Ice
     private int iceMinSpots = 0;
     private int iceMaxSpots = 0;
     private int iceMinHexes = 0;
     private int iceMaxHexes = 0;
 
-    //Rubble
+    // Rubble
     private int rubbleMinSpots = 0;
     private int rubbleMaxSpots = 0;
     private int rubbleMinHexes = 0;
     private int rubbleMaxHexes = 0;
     private int rubbleUltraProbability = 0;
 
-    //Fortified
+    // Fortified
     private int fortifiedMinSpots = 0;
     private int fortifiedMaxSpots = 0;
     private int fortifiedMinHexes = 0;
     private int fortifiedMaxHexes = 0;
 
-    //Sand 
+    // Sand
     private int sandMinSpots = 0;
     private int sandMaxSpots = 0;
     private int sandMinHexes = 0;
     private int sandMaxHexes = 0;
-    
-    //Planted Field 
+
+    // Planted Field
     private int plantedFieldMinSpots = 0;
     private int plantedFieldMaxSpots = 0;
     private int plantedFieldMinHexes = 0;
     private int plantedFieldMaxHexes = 0;
-    
-    //Buildings
+
+    // Buildings
     private int minBuildings = 0;
     private int maxBuildings = 0;
     private int minCF = 0;
@@ -125,32 +122,32 @@ final public class PlanetEnvironment {
     private String cityType = "NONE";
     private int roads = 4;
     private int townSize = 0;
-    
-    //Special Effects
+
+    // Special Effects
     private int fxMod = 0;
     private int forestFireProbability = 0;
     private int freezeProbability = 0;
     private int floodProbability = 0;
     private int droughtProbability = 0;
     private String theme = "";
-    
-    //Mountains
+
+    // Mountains
     private int mountPeaks = 0;
     private int mountWidthMin = 0;
     private int mountWidthMax = 0;
     private int mountHeightMin = 0;
-    private int mountHeightMax = 0; 
-    private int mountStyle = 0; 
-    
-    //Misc
+    private int mountHeightMax = 0;
+    private int mountStyle = 0;
+
+    // Misc
     private int roadProbability = 25;
     private int riverProbability = 25;
     private int algorithm = 0;
     private int cliffProbability = 0;
     private int invertNegativeTerrain = 0;
     private int environmentProbability = 1;
- 
-    //static maps support
+
+    // static maps support
     private String staticMapName = "surprise";
     private int xSize = -1;
     private int ySize = -1;
@@ -159,18 +156,15 @@ final public class PlanetEnvironment {
     private int xBoardSize = -1;
     private int yBoardSize = -1;
 
-    /**
-     * For Serialisation.
-     */
-    public PlanetEnvironment() {
-    }
+    /** For Serialisation. */
+    public PlanetEnvironment() {}
 
     public PlanetEnvironment(String s) {
-        StringTokenizer ST = new StringTokenizer(s,"$");
-        //Read the PE$;
+        StringTokenizer ST = new StringTokenizer(s, "$");
+        // Read the PE$;
         ST.nextToken();
-        //Read the Data
-        
+        // Read the Data
+
         name = ST.nextToken();
         craterProbability = Integer.parseInt(ST.nextToken());
         craterMinimum = Integer.parseInt(ST.nextToken());
@@ -199,140 +193,79 @@ final public class PlanetEnvironment {
         roadProbability = Integer.parseInt(ST.nextToken());
         riverProbability = Integer.parseInt(ST.nextToken());
         algorithm = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            id = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            swampMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            swampMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            swampMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            swampMaxHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            pavementMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            pavementMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            pavementMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            pavementMaxHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            fxMod = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            forestFireProbability = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            freezeProbability = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            floodProbability = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            droughtProbability = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            theme = ST.nextToken();
-        if (ST.hasMoreTokens())
-            iceMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            iceMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            iceMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            iceMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) id = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) swampMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) swampMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) swampMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) swampMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) pavementMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) pavementMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) pavementMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) pavementMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fxMod = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) forestFireProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) freezeProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) floodProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) droughtProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) theme = ST.nextToken();
+        if (ST.hasMoreTokens()) iceMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) iceMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) iceMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) iceMaxHexes = Integer.parseInt(ST.nextToken());
 
-        if (ST.hasMoreTokens())
-            rubbleMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            rubbleMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            rubbleMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            rubbleMaxHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            rubbleUltraProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleUltraProbability = Integer.parseInt(ST.nextToken());
 
-        if (ST.hasMoreTokens())
-            fortifiedMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            fortifiedMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            fortifiedMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            fortifiedMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fortifiedMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fortifiedMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fortifiedMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fortifiedMaxHexes = Integer.parseInt(ST.nextToken());
 
-        if (ST.hasMoreTokens())
-            minBuildings = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            maxBuildings = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            minCF = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            maxCF = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            minFloors = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            maxFloors = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            cityDensity = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            cityType = ST.nextToken();
-        if (ST.hasMoreTokens())
-            roads = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements())
-            cliffProbability = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements())
-            invertNegativeTerrain = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            townSize = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountPeaks = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountWidthMin = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountWidthMax = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountHeightMin = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountHeightMax = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountStyle = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            environmentProbability = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            setStaticMap(Boolean.parseBoolean(ST.nextToken()));
-        if ( ST.hasMoreElements() )
-            staticMapName = ST.nextToken();        
-        if ( ST.hasMoreElements() )
-            xSize = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            ySize = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            xBoardSize = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            yBoardSize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) minBuildings = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) maxBuildings = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) minCF = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) maxCF = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) minFloors = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) maxFloors = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) cityDensity = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) cityType = ST.nextToken();
+        if (ST.hasMoreTokens()) roads = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) cliffProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) invertNegativeTerrain = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) townSize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountPeaks = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountWidthMin = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountWidthMax = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountHeightMin = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountHeightMax = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountStyle = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) environmentProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) setStaticMap(Boolean.parseBoolean(ST.nextToken()));
+        if (ST.hasMoreElements()) staticMapName = ST.nextToken();
+        if (ST.hasMoreElements()) xSize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) ySize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) xBoardSize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) yBoardSize = Integer.parseInt(ST.nextToken());
 
-        if ( ST.hasMoreElements() )
-            sandMinSpots = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            sandMaxSpots = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            sandMinHexes = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            sandMaxHexes = Integer.parseInt(ST.nextToken());
-        
-        if ( ST.hasMoreElements() )
-            plantedFieldMinSpots = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            plantedFieldMaxSpots = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            plantedFieldMinHexes = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            plantedFieldMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) sandMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) sandMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) sandMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) sandMaxHexes = Integer.parseInt(ST.nextToken());
+
+        if (ST.hasMoreElements()) plantedFieldMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) plantedFieldMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) plantedFieldMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) plantedFieldMaxHexes = Integer.parseInt(ST.nextToken());
     }
 
     public PlanetEnvironment(StringTokenizer ST) {
-        //Read the PE$;
+        // Read the PE$;
         ST.nextToken();
-        //Read the Data
-        
+        // Read the Data
+
         name = ST.nextToken();
         craterProbability = Integer.parseInt(ST.nextToken());
         craterMinimum = Integer.parseInt(ST.nextToken());
@@ -361,145 +294,83 @@ final public class PlanetEnvironment {
         roadProbability = Integer.parseInt(ST.nextToken());
         riverProbability = Integer.parseInt(ST.nextToken());
         algorithm = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            id = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            swampMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            swampMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            swampMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            swampMaxHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            pavementMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            pavementMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            pavementMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            pavementMaxHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            fxMod = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            forestFireProbability = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            freezeProbability = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            floodProbability = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            droughtProbability = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            theme = ST.nextToken();
-        if (ST.hasMoreTokens())
-            iceMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            iceMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            iceMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            iceMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) id = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) swampMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) swampMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) swampMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) swampMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) pavementMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) pavementMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) pavementMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) pavementMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fxMod = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) forestFireProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) freezeProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) floodProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) droughtProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) theme = ST.nextToken();
+        if (ST.hasMoreTokens()) iceMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) iceMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) iceMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) iceMaxHexes = Integer.parseInt(ST.nextToken());
 
-        if (ST.hasMoreTokens())
-            rubbleMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            rubbleMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            rubbleMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            rubbleMaxHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            rubbleUltraProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) rubbleUltraProbability = Integer.parseInt(ST.nextToken());
 
-        if (ST.hasMoreTokens())
-            fortifiedMinSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            fortifiedMaxSpots = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            fortifiedMinHexes = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            fortifiedMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fortifiedMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fortifiedMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fortifiedMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) fortifiedMaxHexes = Integer.parseInt(ST.nextToken());
 
-        if (ST.hasMoreTokens())
-            minBuildings = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            maxBuildings = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            minCF = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            maxCF = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            minFloors = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            maxFloors = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            cityDensity = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens())
-            cityType = ST.nextToken();
-        if (ST.hasMoreTokens())
-            roads = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements())
-            cliffProbability = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements())
-            invertNegativeTerrain = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            townSize = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountPeaks = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountWidthMin = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountWidthMax = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountHeightMin = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountHeightMax = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            mountStyle = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            environmentProbability = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            setStaticMap(Boolean.parseBoolean(ST.nextToken()));
-        if ( ST.hasMoreElements() )
-            staticMapName = ST.nextToken();        
-        if ( ST.hasMoreElements() )
-            xSize = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            ySize = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            xBoardSize = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            yBoardSize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) minBuildings = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) maxBuildings = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) minCF = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) maxCF = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) minFloors = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) maxFloors = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) cityDensity = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) cityType = ST.nextToken();
+        if (ST.hasMoreTokens()) roads = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) cliffProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) invertNegativeTerrain = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) townSize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountPeaks = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountWidthMin = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountWidthMax = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountHeightMin = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountHeightMax = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) mountStyle = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) environmentProbability = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) setStaticMap(Boolean.parseBoolean(ST.nextToken()));
+        if (ST.hasMoreElements()) staticMapName = ST.nextToken();
+        if (ST.hasMoreElements()) xSize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) ySize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) xBoardSize = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) yBoardSize = Integer.parseInt(ST.nextToken());
 
-        if ( ST.hasMoreElements() )
-            sandMinSpots = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            sandMaxSpots = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            sandMinHexes = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            sandMaxHexes = Integer.parseInt(ST.nextToken());
-        
-        if ( ST.hasMoreElements() )
-            plantedFieldMinSpots = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            plantedFieldMaxSpots = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            plantedFieldMinHexes = Integer.parseInt(ST.nextToken());
-        if ( ST.hasMoreElements() )
-            plantedFieldMaxHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) sandMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) sandMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) sandMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) sandMaxHexes = Integer.parseInt(ST.nextToken());
+
+        if (ST.hasMoreElements()) plantedFieldMinSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) plantedFieldMaxSpots = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) plantedFieldMinHexes = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreElements()) plantedFieldMaxHexes = Integer.parseInt(ST.nextToken());
     }
-    
 
     public String toDescription() {
-        String result="";
-        
-        int water=(((waterMaxSpots+waterMinSpots)/2)*
-                (waterMinHexes+waterMaxSpots)/2)+riverProbability/10;
-        int rough=(((roughMaxSpots+roughMinSpots)/2)*
-                (roughMinHexes+roughMaxSpots)/2);
-        int forest=(((forestMaxSpots+forestMinSpots)/2)*
-                (forestMinHexes+forestMaxSpots)/2);
+        String result = "";
+
+        int water =
+                (((waterMaxSpots + waterMinSpots) / 2) * (waterMinHexes + waterMaxSpots) / 2)
+                        + riverProbability / 10;
+        int rough = (((roughMaxSpots + roughMinSpots) / 2) * (roughMinHexes + roughMaxSpots) / 2);
+        int forest =
+                (((forestMaxSpots + forestMinSpots) / 2) * (forestMinHexes + forestMaxSpots) / 2);
         /*int swamp=(((swampMaxSpots+swampMinSpots)/2)*
                 (swampMinHexes+swampMaxSpots)/2);
         int pavement=(((pavementMaxSpots+pavementMinSpots)/2)*
@@ -510,7 +381,7 @@ final public class PlanetEnvironment {
         if (hillyness < 200) {
             result += "plain";
         }
-        if ((hillyness < 500) && (hillyness >=200)) {
+        if ((hillyness < 500) && (hillyness >= 200)) {
             result += "uneven";
         }
         if ((hillyness >= 500) && (hillyness <= 800)) {
@@ -519,7 +390,7 @@ final public class PlanetEnvironment {
         if (hillyness > 800) {
             result += "mountainous";
         }
-        if (craterProbability ==0 ) {
+        if (craterProbability == 0) {
             result += ". <br> ";
             if (rough > 0) {
                 result += "Through tectonic activity of this continent, rough terrain is appearing";
@@ -529,161 +400,125 @@ final public class PlanetEnvironment {
                     result += " sometimes";
                 }
             }
-        }
-        else {
+        } else {
             if (craterProbability < 30) {
                 result += ", which is seldom coverd with";
             }
             if ((craterProbability >= 30) && (craterProbability < 60)) {
                 result += ", which is covered with";
             }
-            if (craterProbability>=60)
-                result+=", often coverd with";
-            int avgCraterSize=(craterMinRadius+craterMaxRadius)/2;
-            if (avgCraterSize < 4)
-                result+=" small craters";
-            if ((avgCraterSize >=4) && (avgCraterSize<7))
-                result+=" craters ";
-            if (avgCraterSize>=7)
-                result+=" large craters";
-            if (rough>0) {
-                result+=". Another remaing of the ancient meteorid impacts is the rough terrain appearing";
-                if (rough > 8)
-                    result+=" everywhere";
-                else
-                    result+= " sometimes";
+            if (craterProbability >= 60) result += ", often coverd with";
+            int avgCraterSize = (craterMinRadius + craterMaxRadius) / 2;
+            if (avgCraterSize < 4) result += " small craters";
+            if ((avgCraterSize >= 4) && (avgCraterSize < 7)) result += " craters ";
+            if (avgCraterSize >= 7) result += " large craters";
+            if (rough > 0) {
+                result +=
+                        ". Another remaing of the ancient meteorid impacts is the rough terrain appearing";
+                if (rough > 8) result += " everywhere";
+                else result += " sometimes";
             }
         } // craters
-        result+=". <br>";
-        
+        result += ". <br>";
+
         /* woods */
-        result+="Most facitlities on this continent are lying";
-        if (forest>50) {
-            result+=" deep in the ";
-            result+=(forestHeavyProbability < 30)? "woods": "jungle";
+        result += "Most facitlities on this continent are lying";
+        if (forest > 50) {
+            result += " deep in the ";
+            result += (forestHeavyProbability < 30) ? "woods" : "jungle";
             if (water > 20)
-                result+=" mixed up with much water, because of heavy rain due too monsoon period";
-            result+=".";
-        } /* jungle */
-        else {
-            if (water > 20)
-                result+=" close to the coast.";
-            else
-                if (water < 3) {
-                    if (forest < 15)
-                        result+=" in the desert. So dont expect vegetation for cover or water for cooling.";
-                    else
-                        result+=" in an area moderatly forested.";
-                }
-                else
-                    result+=" in an area famous for its agriculture.";
+                result += " mixed up with much water, because of heavy rain due too monsoon period";
+            result += ".";
+        } /* jungle */ else {
+            if (water > 20) result += " close to the coast.";
+            else if (water < 3) {
+                if (forest < 15)
+                    result +=
+                            " in the desert. So dont expect vegetation for cover or water for cooling.";
+                else result += " in an area moderatly forested.";
+            } else result += " in an area famous for its agriculture.";
         } /* else */
         return result;
     } /* to Description */
-    
 
-    public String toImageDescription()
-    {
-        String result ="";
-        int water=(((waterMaxSpots+waterMinSpots)/2)*
-                (waterMinHexes+waterMaxSpots)/2)+riverProbability/10;
-        int rough=(((roughMaxSpots+roughMinSpots)/2)*
-                (roughMinHexes+roughMaxSpots)/2);
-        int forest=(((forestMaxSpots+forestMinSpots)/2)*
-                (forestMinHexes+forestMaxSpots)/2);
+    public String toImageDescription() {
+        String result = "";
+        int water =
+                (((waterMaxSpots + waterMinSpots) / 2) * (waterMinHexes + waterMaxSpots) / 2)
+                        + riverProbability / 10;
+        int rough = (((roughMaxSpots + roughMinSpots) / 2) * (roughMinHexes + roughMaxSpots) / 2);
+        int forest =
+                (((forestMaxSpots + forestMinSpots) / 2) * (forestMinHexes + forestMaxSpots) / 2);
         /*int swamp=(((swampMaxSpots+swampMinSpots)/2)*
                 (swampMinHexes+swampMaxSpots)/2);
         int pavement=(((pavementMaxSpots+pavementMinSpots)/2)*
                 (pavementMinHexes+pavementMaxSpots)/2);
         */
         /* generate the hilliness/crater description */
-        if (hillyness < 200)
-            result+="<img src=\"data/images/hill0.gif\">";
-        if ((hillyness < 500) && (hillyness >=200))
-            result+="<img src=\"data/images/hill1.gif\">";
+        if (hillyness < 200) result += "<img src=\"data/images/hill0.gif\">";
+        if ((hillyness < 500) && (hillyness >= 200))
+            result += "<img src=\"data/images/hill1.gif\">";
         if ((hillyness >= 500) && (hillyness <= 800))
-            result+="<img src=\"data/images/hill2.gif\">";
-        if (hillyness > 800)
-            result+="<img src=\"data/images/hill3.gif\">";
-        if (rough > 8)
-            result+="<img src=\"data/images/roug1.gif\">";
-        if (craterProbability>30)
-            result+="<img src=\"data/images/crtr1.gif\">";
-        
+            result += "<img src=\"data/images/hill2.gif\">";
+        if (hillyness > 800) result += "<img src=\"data/images/hill3.gif\">";
+        if (rough > 8) result += "<img src=\"data/images/roug1.gif\">";
+        if (craterProbability > 30) result += "<img src=\"data/images/crtr1.gif\">";
+
         /* woods */
-        if (forest>15 && forest < 30) 
-            result+="<img src=\"data/images/wood1.gif\">";
-        else if (forest>=30 && forest <50)
-            result+="<img src=\"data/images/wood2.gif\">";
-        else if (forest >=50)
-            result+="<img src=\"data/images/wood3.gif\">";
-        
+        if (forest > 15 && forest < 30) result += "<img src=\"data/images/wood1.gif\">";
+        else if (forest >= 30 && forest < 50) result += "<img src=\"data/images/wood2.gif\">";
+        else if (forest >= 50) result += "<img src=\"data/images/wood3.gif\">";
+
         /*water */
-        if (water >5 && water < 20)
-            result+="<img src=\"data/images/watr1.gif\">";
-        else if (water >= 20)
-            result+="<img src=\"data/images/watr2.gif\">";
-        if (getRiverProbability() > 50)
-            result+="<img src=\"data/images/rivr1.gif\">";
-        if (getRoadProbability() > 50)
-            result+="<img src=\"data/images/road1.gif\">";
-        
+        if (water > 5 && water < 20) result += "<img src=\"data/images/watr1.gif\">";
+        else if (water >= 20) result += "<img src=\"data/images/watr2.gif\">";
+        if (getRiverProbability() > 50) result += "<img src=\"data/images/rivr1.gif\">";
+        if (getRoadProbability() > 50) result += "<img src=\"data/images/road1.gif\">";
+
         return result;
-        
     }
 
-    /**
-     * TODO: remove this code bloat - make a better way to get the images.
-     */
-    public String toImageAbsolutePathDescription()
-    {
-        String result ="";
-        int water=(((waterMaxSpots+waterMinSpots)/2)*
-                (waterMinHexes+waterMaxSpots)/2)+riverProbability/10;
-        int rough=(((roughMaxSpots+roughMinSpots)/2)*
-                (roughMinHexes+roughMaxSpots)/2);
-        int forest=(((forestMaxSpots+forestMinSpots)/2)*
-                (forestMinHexes+forestMaxSpots)/2);
+    /** TODO: remove this code bloat - make a better way to get the images. */
+    public String toImageAbsolutePathDescription() {
+        String result = "";
+        int water =
+                (((waterMaxSpots + waterMinSpots) / 2) * (waterMinHexes + waterMaxSpots) / 2)
+                        + riverProbability / 10;
+        int rough = (((roughMaxSpots + roughMinSpots) / 2) * (roughMinHexes + roughMaxSpots) / 2);
+        int forest =
+                (((forestMaxSpots + forestMinSpots) / 2) * (forestMinHexes + forestMaxSpots) / 2);
         /*int swamp=(((swampMaxSpots+swampMinSpots)/2)*
                 (swampMinHexes+swampMaxSpots)/2);
         int pavement=(((pavementMaxSpots+pavementMinSpots)/2)*
                 (pavementMinHexes+pavementMaxSpots)/2);
-          */      
+          */
         /* generate the hilliness/crater description */
-        String path = "file:///"+new File(".").getAbsolutePath();
-        
-        if (hillElevationRange  < 2)
-            result+="<img src=\""+path+"/data/images/hill0.gif\">";
-            //result+="<img src=\"file:///"+path+"/data/images/hill0.gif\">";
-        if ((hillElevationRange  < 5) && (hillElevationRange   >=2))
-            result+="<img src=\""+path+"/data/images/hill1.gif\">";
-        if ((hillElevationRange   >= 5) && (hillElevationRange  <= 8))
-            result+="<img src=\""+path+"/data/images/hill2.gif\">";
-        if (hillElevationRange  > 8)
-            result+="<img src=\""+path+"/data/images/hill3.gif\">";
-        if (rough > 8)
-            result+="<img src=\""+path+"/data/images/roug1.gif\">";
-        if (craterProbability>30)
-            result+="<img src=\""+path+"/data/images/crtr1.gif\">";
+        String path = "file:///" + new File(".").getAbsolutePath();
+
+        if (hillElevationRange < 2) result += "<img src=\"" + path + "/data/images/hill0.gif\">";
+        // result+="<img src=\"file:///"+path+"/data/images/hill0.gif\">";
+        if ((hillElevationRange < 5) && (hillElevationRange >= 2))
+            result += "<img src=\"" + path + "/data/images/hill1.gif\">";
+        if ((hillElevationRange >= 5) && (hillElevationRange <= 8))
+            result += "<img src=\"" + path + "/data/images/hill2.gif\">";
+        if (hillElevationRange > 8) result += "<img src=\"" + path + "/data/images/hill3.gif\">";
+        if (rough > 8) result += "<img src=\"" + path + "/data/images/roug1.gif\">";
+        if (craterProbability > 30) result += "<img src=\"" + path + "/data/images/crtr1.gif\">";
 
         /* woods */
-        if (forest>15 && forest < 30) 
-            result+="<img src=\""+path+"/data/images/wood1.gif\">";
-        else if (forest>=30 && forest <50)
-            result+="<img src=\""+path+"/data/images/wood2.gif\">";
-        else if (forest >=50)
-            result+="<img src=\""+path+"/data/images/wood3.gif\">";
+        if (forest > 15 && forest < 30)
+            result += "<img src=\"" + path + "/data/images/wood1.gif\">";
+        else if (forest >= 30 && forest < 50)
+            result += "<img src=\"" + path + "/data/images/wood2.gif\">";
+        else if (forest >= 50) result += "<img src=\"" + path + "/data/images/wood3.gif\">";
 
         /*water */
-        if (water > 5 && water < 20)
-            result += "<img src=\"" + path + "/data/images/watr1.gif\">";
-        else if (water >= 20)
-            result += "<img src=\"" + path + "/data/images/watr2.gif\">";
+        if (water > 5 && water < 20) result += "<img src=\"" + path + "/data/images/watr1.gif\">";
+        else if (water >= 20) result += "<img src=\"" + path + "/data/images/watr2.gif\">";
         if (getRiverProbability() > 50)
             result += "<img src=\"" + path + "/data/images/rivr1.gif\">";
-        if (getRoadProbability() > 50)
-            result +="<img src=\"" + path + "/data/images/road1.gif\">";
-        
+        if (getRoadProbability() > 50) result += "<img src=\"" + path + "/data/images/road1.gif\">";
+
         return result;
     }
 
@@ -747,7 +582,7 @@ final public class PlanetEnvironment {
         result += fortifiedMaxSpots + "$";
         result += fortifiedMinHexes + "$";
         result += fortifiedMaxHexes + "$";
-        
+
         result += minBuildings + "$";
         result += maxBuildings + "$";
         result += minCF + "$";
@@ -785,24 +620,20 @@ final public class PlanetEnvironment {
         result += sandMinHexes + "$";
         result += sandMaxHexes + "$";
 
-
         result += plantedFieldMinSpots + "$";
         result += plantedFieldMaxSpots + "$";
         result += plantedFieldMinHexes + "$";
         result += plantedFieldMaxHexes + "$";
 
-
         return result;
     }
 
-    public String toString(String city)
-    {
-        
-        //no city info then use the normal one.
-        if ( city.trim().length() <= 1)
-            return this.toString();
-        
-        //else 
+    public String toString(String city) {
+
+        // no city info then use the normal one.
+        if (city.trim().length() <= 1) return this.toString();
+
+        // else
         String result = "PE$";
         result += name + "$";
         result += craterProbability + "$";
@@ -862,9 +693,9 @@ final public class PlanetEnvironment {
         result += fortifiedMaxSpots + "$";
         result += fortifiedMinHexes + "$";
         result += fortifiedMaxHexes + "$";
-        
+
         result += city + "$";
-        
+
         result += cliffProbability + "$";
         result += invertNegativeTerrain + "$";
         result += townSize + "$";
@@ -893,15 +724,15 @@ final public class PlanetEnvironment {
         result += sandMinHexes + "$";
         result += sandMaxHexes + "$";
 
-
         result += plantedFieldMinSpots + "$";
         result += plantedFieldMaxSpots + "$";
         result += plantedFieldMinHexes + "$";
         result += plantedFieldMaxHexes + "$";
-        
+
         return result;
     }
-    //Getter and Setter
+
+    // Getter and Setter
     public int getWaterMinSpots() {
         return waterMinSpots;
     }
@@ -1061,7 +892,6 @@ final public class PlanetEnvironment {
     public String getCityType() {
         return cityType;
     }
-
 
     public int getRoadProbability() {
         return roadProbability;
@@ -1301,7 +1131,7 @@ final public class PlanetEnvironment {
 
     public void setPavementMaxHexes(int pavementMaxHexes) {
         this.pavementMaxHexes = pavementMaxHexes;
-    } 
+    }
 
     public void setPavementMaxSpots(int pavementMaxSpots) {
         this.pavementMaxSpots = pavementMaxSpots;
@@ -1314,7 +1144,7 @@ final public class PlanetEnvironment {
     public void setPavementMinHexes(int pavementMinHexes) {
         this.pavementMinHexes = pavementMinHexes;
     }
-    
+
     public void setIceMaxHexes(int iceMaxHexes) {
         this.iceMaxHexes = iceMaxHexes;
     }
@@ -1342,18 +1172,18 @@ final public class PlanetEnvironment {
     public void setRubbleMinHexes(int rubbleMinHexes) {
         this.rubbleMinHexes = rubbleMinHexes;
     }
-  
+
     public void setFortifiedMaxHexes(int fortifiedMaxHexes) {
         this.fortifiedMaxHexes = fortifiedMaxHexes;
     }
-    
+
     public void setRubbleMaxHexes(int rubbleMaxHexes) {
         this.rubbleMaxHexes = rubbleMaxHexes;
-    } 
+    }
 
     public void setRubbleUltraProbability(int rubbleUltraProbability) {
         this.rubbleUltraProbability = rubbleUltraProbability;
-    } 
+    }
 
     public void setFortifiedMaxSpots(int fortifiedMaxSpots) {
         this.fortifiedMaxSpots = fortifiedMaxSpots;
@@ -1366,7 +1196,7 @@ final public class PlanetEnvironment {
     public void setFortifiedMinHexes(int fortifiedMinHexes) {
         this.fortifiedMinHexes = fortifiedMinHexes;
     }
-  
+
     public void setMaxBuildings(int Buildings) {
         this.maxBuildings = Buildings;
     }
@@ -1462,21 +1292,24 @@ final public class PlanetEnvironment {
     public int getFxMod() {
         return fxMod;
     }
+
     public int getForestFireProbability() {
         return forestFireProbability;
     }
+
     public int getFreezeProbability() {
         return freezeProbability;
     }
+
     public int getFloodProbability() {
         return floodProbability;
     }
+
     public int getDroughtProbability() {
         return droughtProbability;
     }
-    /**
-     * Writes as binary stream
-     */
+
+    /** Writes as binary stream */
     public void binOut(BinWriter out) throws IOException {
         out.println(id, "id");
         out.println(name, "name");
@@ -1540,7 +1373,7 @@ final public class PlanetEnvironment {
         out.println(plantedFieldMaxSpots, "plantedFieldMaxSpots");
         out.println(plantedFieldMinHexes, "plantedFieldMinHexes");
         out.println(plantedFieldMaxHexes, "plantedFieldMaxHexes");
-                
+
         out.println(fortifiedMinSpots, "fortifiedMinSpots");
         out.println(fortifiedMaxSpots, "fortifiedMaxSpots");
         out.println(fortifiedMinHexes, "fortifiedMinHexes");
@@ -1568,12 +1401,9 @@ final public class PlanetEnvironment {
         out.println(ySize, "ySize");
         out.println(xBoardSize, "xBoardSize");
         out.println(yBoardSize, "yBoardSize");
-        
     }
-    
-     /**
-     * Read from a binary stream
-     */
+
+    /** Read from a binary stream */
     public void binIn(BinReader in, CampaignData data) throws IOException {
         id = in.readInt("id");
         name = in.readLine("name");
@@ -1617,7 +1447,7 @@ final public class PlanetEnvironment {
         roadProbability = in.readInt("roadProbability");
         riverProbability = in.readInt("riverProbability");
         algorithm = in.readInt("algorithm");
-        theme = in.readLine("theme"); 
+        theme = in.readLine("theme");
         iceMinSpots = in.readInt("iceMinSpots");
         iceMaxSpots = in.readInt("iceMaxSpots");
         iceMinHexes = in.readInt("iceMinHexes");
@@ -1662,13 +1492,12 @@ final public class PlanetEnvironment {
         staticMap = in.readBoolean("staticMap");
         staticMapName = in.readLine("staticMapName");
         xSize = in.readInt("xSize");
-        ySize =in.readInt("ySize");
+        ySize = in.readInt("ySize");
         xBoardSize = in.readInt("xBoardSize");
         yBoardSize = in.readInt("yBoardSize");
-        
     }
-    
-     /**
+
+    /**
      * @return Returns the id.
      */
     public int getId() {
@@ -1676,20 +1505,22 @@ final public class PlanetEnvironment {
     }
 
     /**
-     * Do not use this to set the id. This is only used in 
-     * PlanetEnvironments.add until .dat - saving vanishes.
-     * @param id The id to set.
-     * @TODO DON'T USE THIS! You were warned! (imi) 
+     * Do not use this to set the id. This is only used in PlanetEnvironments.add until .dat -
+     * saving vanishes.
+     *
+     * @param id The id to set. @TODO DON'T USE THIS! You were warned! (imi)
      */
     public void setId(int id) {
         this.id = id;
     }
+
     /**
      * @return Returns the name.
      */
     public String getName() {
         return name;
     }
+
     /**
      * @param name The name to set.
      */
@@ -1700,12 +1531,14 @@ final public class PlanetEnvironment {
     public String getTheme() {
         return theme;
     }
+
     public void setTheme(String theme) {
         if (theme.length() <= 1) {
             theme = " ";
         }
         this.theme = theme;
     }
+
     public boolean isStaticMap() {
         return staticMap;
     }
@@ -1737,6 +1570,7 @@ final public class PlanetEnvironment {
     public void setYSize(int ySize) {
         this.ySize = ySize;
     }
+
     public int getXBoardSize() {
         return xBoardSize;
     }

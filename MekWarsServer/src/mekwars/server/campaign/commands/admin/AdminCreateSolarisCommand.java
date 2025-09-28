@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,9 +18,9 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.common.Influences;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.NewbieHouse;
 import mekwars.server.campaign.SHouse;
@@ -49,22 +49,36 @@ public class AdminCreateSolarisCommand implements Command {
         // access level check
         int userLevel = MWServ.getInstance().getUserLevel(Username);
         if (userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
 
         // Add the Newbie-SHouse
-        SHouse solaris = new NewbieHouse(CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
+        SHouse solaris =
+                new NewbieHouse(
+                        CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
 
         CampaignMain.cm.addHouse(solaris);
         HashMap<Integer, Integer> solFlu = new HashMap<Integer, Integer>();
-        solFlu.put(CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"), null).getId(), 100);
+        solFlu.put(
+                CampaignMain.cm
+                        .getHouseFromPartialString(
+                                CampaignMain.cm.getConfig("NewbieHouseName"), null)
+                        .getId(),
+                100);
         SPlanet newbieP = new SPlanet("Solaris VII", new Influences(solFlu), 0, -3, -2);
         CampaignMain.cm.addPlanet(newbieP);
 
         solaris.addPlanet(newbieP);
         CampaignMain.cm.toUser(CampaignMain.cm.getConfig("NewbieHouseName"), Username, true);
-        CampaignMain.cm.doSendModMail("NOTE", Username + " has created " + CampaignMain.cm.getConfig("NewbieHouseName"));
-
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has created " + CampaignMain.cm.getConfig("NewbieHouseName"));
     }
 }

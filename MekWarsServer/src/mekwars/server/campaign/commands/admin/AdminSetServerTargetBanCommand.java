@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2010 
- * 
+ * MekWars - Copyright (C) 2010
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,44 +18,60 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 import java.util.Vector;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminSetServerTargetBanCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Banned TargetSystem String - list of integers separated by #";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		CampaignMain.cm.getData().getBannedTargetingSystems().clear();
-		Vector<Integer> bans = new Vector<Integer>(1,1);
-		while (command.hasMoreTokens()) {
-			bans.add(Integer.parseInt(command.nextToken()));
-		}
-		CampaignMain.cm.getData().setBannedTargetingSystems(bans);
-		
-		// Send updates to everyone
-		StringBuilder sb = new StringBuilder();
-		sb.append("SBT|");
-		for (int ban : bans) {
-			sb.append(ban);
-			sb.append("|");
-		}
-		CampaignMain.cm.saveBannedTargetSystems();
-		CampaignMain.cm.doSendToAllOnlinePlayers(sb.toString(), false);
-		CampaignMain.cm.toUser("AM: Server Target Bans set", Username, true);
-	}
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Banned TargetSystem String - list of integers separated by #";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        CampaignMain.cm.getData().getBannedTargetingSystems().clear();
+        Vector<Integer> bans = new Vector<Integer>(1, 1);
+        while (command.hasMoreTokens()) {
+            bans.add(Integer.parseInt(command.nextToken()));
+        }
+        CampaignMain.cm.getData().setBannedTargetingSystems(bans);
+
+        // Send updates to everyone
+        StringBuilder sb = new StringBuilder();
+        sb.append("SBT|");
+        for (int ban : bans) {
+            sb.append(ban);
+            sb.append("|");
+        }
+        CampaignMain.cm.saveBannedTargetSystems();
+        CampaignMain.cm.doSendToAllOnlinePlayers(sb.toString(), false);
+        CampaignMain.cm.toUser("AM: Server Target Bans set", Username, true);
+    }
 }

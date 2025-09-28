@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2004 
+ * MekWars - Copyright (C) 2004
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -15,34 +15,30 @@
 package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.client.MWClient;
 
 /**
  * @@author Torren (Jason Tighe)
- * 
- * Used for Game Map Edge Placement
- * Normally used when you have buildings being placed on the map
+ *
+ * <p>Used for Game Map Edge Placement Normally used when you have buildings being placed on the map
  * and want the defender to start near them.
- * 
  */
-
 public class GMEP extends Command {
 
-	/**
-	 * @see Command#Command(MMClient)
-	 */
-	public GMEP(MWClient mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @see Command#Command(MMClient)
+     */
+    public GMEP(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
         int edge = Integer.parseInt(st.nextToken());
         mwclient.setPlayerStartingEdge(edge);
-	}
+    }
 }

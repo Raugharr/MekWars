@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2013 
- * 
+ * MekWars - Copyright (C) 2013
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,19 +18,17 @@ package mekwars.client.gui.dialog.opviewer;
 
 import javax.swing.JTextPane;
 
-
 public class OpViewerOpPane extends JTextPane implements IOpViewerPane {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public void setHTMLContents(String s) {
-		this.setContentType("text/html");
-		this.setText(s);
-	}
-	
-	public OpViewerOpPane(String s) {
-		super();
-		setHTMLContents(s);
-	}
-	
+    public void setHTMLContents(String s) {
+        this.setContentType("text/html");
+        this.setText(s);
+    }
+
+    public OpViewerOpPane(String s) {
+        super();
+        setHTMLContents(s);
+    }
 }

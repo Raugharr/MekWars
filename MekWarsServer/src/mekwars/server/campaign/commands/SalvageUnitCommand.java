@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2007 
- * 
+ * MekWars - Copyright (C) 2007
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,20 +16,19 @@
 
 /*
  * Created on 03.28.2007
- *  
+ *
  */
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
-import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
-import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.Tank;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -38,8 +37,8 @@ import mekwars.server.util.RepairTrackingThread;
 
 /**
  * @author Torren (Jason Tighe)
- * @author Kestrel this parses out what the User wants salvaged on thier unit
- *         and sends that data to the repair thread
+ * @author Kestrel this parses out what the User wants salvaged on thier unit and sends that data to
+ *     the repair thread
  */
 public class SalvageUnitCommand implements Command {
 
@@ -63,7 +62,14 @@ public class SalvageUnitCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -82,25 +88,40 @@ public class SalvageUnitCommand implements Command {
             Entity entity = unit.getEntity();
             String salvageMessage = "";
             int tabLocation = location;
-            int cost = CampaignMain.cm.getRepairCost(entity, location, slot, techType, armor, 0, true);
+            int cost =
+                    CampaignMain.cm.getRepairCost(entity, location, slot, techType, armor, 0, true);
 
             if ((unit.getType() != Unit.MEK) && (unit.getType() != Unit.VEHICLE)) {
-                CampaignMain.cm.toUser("AM:Sorry you can only salvage components from meks and vehicles.", Username);
+                CampaignMain.cm.toUser(
+                        "AM:Sorry you can only salvage components from meks and vehicles.",
+                        Username);
                 return;
             }
 
             if (player.isUnitInLockedArmy(unitID)) {
-                CampaignMain.cm.toUser("FSM|Sorry but that unit is currently in combat and may not be worked on.", Username, false);
+                CampaignMain.cm.toUser(
+                        "FSM|Sorry but that unit is currently in combat and may not be worked on.",
+                        Username,
+                        false);
                 return;
             }
 
             if (cost > player.getMoney()) {
-                CampaignMain.cm.toUser("FSM|You do not have enough " + CampaignMain.cm.moneyOrFluMessage(true, false, -cost) + " to salvage this location.", Username, false);
+                CampaignMain.cm.toUser(
+                        "FSM|You do not have enough "
+                                + CampaignMain.cm.moneyOrFluMessage(true, false, -cost)
+                                + " to salvage this location.",
+                        Username,
+                        false);
                 return;
             }
 
-            if ((player.getDutyStatus() == SPlayer.STATUS_ACTIVE) && (player.getAmountOfTimesUnitExistsInArmies(unitID) > 0)) {
-                CampaignMain.cm.toUser("FSM|You may not work on that unit while it is in an active army.", Username, false);
+            if ((player.getDutyStatus() == SPlayer.STATUS_ACTIVE)
+                    && (player.getAmountOfTimesUnitExistsInArmies(unitID) > 0)) {
+                CampaignMain.cm.toUser(
+                        "FSM|You may not work on that unit while it is in an active army.",
+                        Username,
+                        false);
                 return;
             }
 
@@ -108,7 +129,9 @@ public class SalvageUnitCommand implements Command {
              * by Kestrel Do not allow users to salvage fresh units if the
              * option is enabled.
              */
-            if (CampaignMain.cm.getBooleanConfig("DisallowFreshUnitSalvage") && !(UnitUtils.hasArmorDamage(entity)) && !UnitUtils.hasCriticalDamage(entity)) {
+            if (CampaignMain.cm.getBooleanConfig("DisallowFreshUnitSalvage")
+                    && !(UnitUtils.hasArmorDamage(entity))
+                    && !UnitUtils.hasCriticalDamage(entity)) {
                 CampaignMain.cm.toUser("FSM|You may not salvage undamaged units.", Username, false);
                 return;
             }
@@ -119,13 +142,25 @@ public class SalvageUnitCommand implements Command {
                 numberOfTechs = player.getAvailableTechs().elementAt(techType);
             }
 
-            if ((techType == UnitUtils.TECH_PILOT) && (unit.getPilot() != null) && (unit.getLastCombatPilot() != unit.getPilot().getPilotId())) {
-                CampaignMain.cm.toUser("FSM|" + unit.getPilot().getName() + " refuses to work on a unit he does not remember damaging himself!", Username, false);
+            if ((techType == UnitUtils.TECH_PILOT)
+                    && (unit.getPilot() != null)
+                    && (unit.getLastCombatPilot() != unit.getPilot().getPilotId())) {
+                CampaignMain.cm.toUser(
+                        "FSM|"
+                                + unit.getPilot().getName()
+                                + " refuses to work on a unit he does not remember damaging himself!",
+                        Username,
+                        false);
                 return;
             }
 
             if (numberOfTechs <= 0) {
-                CampaignMain.cm.toUser("FSM|You do not have any " + UnitUtils.techDescription(techType) + " techs to do this salvage job!", Username, false);
+                CampaignMain.cm.toUser(
+                        "FSM|You do not have any "
+                                + UnitUtils.techDescription(techType)
+                                + " techs to do this salvage job!",
+                        Username,
+                        false);
                 return;
             }
 
@@ -168,13 +203,34 @@ public class SalvageUnitCommand implements Command {
                     }
 
                     if (rear) {
-                        salvageMessage = "Work has begun on the external armor(" + entity.getLocationAbbr(tabLocation) + "r) of your " + entity.getShortNameRaw() + ".  <b>At a Cost of " + CampaignMain.cm.moneyOrFluMessage(true, true, cost) + "</b>";
+                        salvageMessage =
+                                "Work has begun on the external armor("
+                                        + entity.getLocationAbbr(tabLocation)
+                                        + "r) of your "
+                                        + entity.getShortNameRaw()
+                                        + ".  <b>At a Cost of "
+                                        + CampaignMain.cm.moneyOrFluMessage(true, true, cost)
+                                        + "</b>";
                     } else {
-                        salvageMessage = "Work has begun on the external armor(" + entity.getLocationAbbr(tabLocation) + ") of your " + entity.getShortNameRaw() + ".  <b>At a Cost of " + CampaignMain.cm.moneyOrFluMessage(true, true, cost) + "</b>";
+                        salvageMessage =
+                                "Work has begun on the external armor("
+                                        + entity.getLocationAbbr(tabLocation)
+                                        + ") of your "
+                                        + entity.getShortNameRaw()
+                                        + ".  <b>At a Cost of "
+                                        + CampaignMain.cm.moneyOrFluMessage(true, true, cost)
+                                        + "</b>";
                     }
-                }// Internal armor
+                } // Internal armor
                 else {
-                    salvageMessage = "Work has begun on the internal structure(" + entity.getLocationAbbr(location) + ") of your " + entity.getShortNameRaw() + ".  <b>At a Cost of " + CampaignMain.cm.moneyOrFluMessage(true, true, cost) + "</b>";
+                    salvageMessage =
+                            "Work has begun on the internal structure("
+                                    + entity.getLocationAbbr(location)
+                                    + ") of your "
+                                    + entity.getShortNameRaw()
+                                    + ".  <b>At a Cost of "
+                                    + CampaignMain.cm.moneyOrFluMessage(true, true, cost)
+                                    + "</b>";
                 }
 
             } else {
@@ -182,28 +238,57 @@ public class SalvageUnitCommand implements Command {
 
                 if (cs.getType() == CriticalSlot.TYPE_EQUIPMENT) {
                     Mounted mounted = cs.getMount();
-                    salvageMessage = "Work has begun on the " + mounted.getName() + "(" + entity.getLocationAbbr(location) + ") for your " + entity.getShortNameRaw() + ".  <b>At a Cost of " + CampaignMain.cm.moneyOrFluMessage(true, true, cost) + "</b>";
-                }// end CS type if
+                    salvageMessage =
+                            "Work has begun on the "
+                                    + mounted.getName()
+                                    + "("
+                                    + entity.getLocationAbbr(location)
+                                    + ") for your "
+                                    + entity.getShortNameRaw()
+                                    + ".  <b>At a Cost of "
+                                    + CampaignMain.cm.moneyOrFluMessage(true, true, cost)
+                                    + "</b>";
+                } // end CS type if
                 else {
                     if (UnitUtils.isEngineCrit(cs)) {
-                        salvageMessage = "Work on your " + entity.getShortNameRaw() + "'s engine has begun.  <b>At a Cost of " + CampaignMain.cm.moneyOrFluMessage(true, true, cost) + "</b>";
+                        salvageMessage =
+                                "Work on your "
+                                        + entity.getShortNameRaw()
+                                        + "'s engine has begun.  <b>At a Cost of "
+                                        + CampaignMain.cm.moneyOrFluMessage(true, true, cost)
+                                        + "</b>";
                     } else {
                         if (entity instanceof Mech) {
-                            salvageMessage = "Work has begun on the " + ((Mech) entity).getSystemName(cs.getIndex()) + "(" + entity.getLocationAbbr(location) + ") for your " + entity.getShortName() + ".  <b>At a Cost of " + CampaignMain.cm.moneyOrFluMessage(true, true, cost) + "</b>";
+                            salvageMessage =
+                                    "Work has begun on the "
+                                            + ((Mech) entity).getSystemName(cs.getIndex())
+                                            + "("
+                                            + entity.getLocationAbbr(location)
+                                            + ") for your "
+                                            + entity.getShortName()
+                                            + ".  <b>At a Cost of "
+                                            + CampaignMain.cm.moneyOrFluMessage(true, true, cost)
+                                            + "</b>";
                         }
                     }
-                }// end CS type else
-
+                } // end CS type else
             }
 
             if (MWServ.getInstance().getRTT().isBeingRepaired(unitID, location, slot, armor)) {
-                CampaignMain.cm.toUser("FSM|That section is already being worked on wait for the work to finish before starting again.", Username, false);
+                CampaignMain.cm.toUser(
+                        "FSM|That section is already being worked on wait for the work to finish before starting again.",
+                        Username,
+                        false);
                 return;
             }
 
             if (MWServ.getInstance().getRTT().getState() == Thread.State.TERMINATED) {
-                CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed, and the repair thread terminated. Staff was notified.", Username, false);
-                MWLogger.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
+                CampaignMain.cm.toUser(
+                        "FSM|Sorry your repair order could not be processed, and the repair thread terminated. Staff was notified.",
+                        Username,
+                        false);
+                MWLogger.errLog(
+                        "NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
                 return;
             }
             if (techType == UnitUtils.TECH_PILOT) {
@@ -212,7 +297,12 @@ public class SalvageUnitCommand implements Command {
             // charge them for the repair now.
             player.addMoney(-cost);
             player.setSave();
-            MWServ.getInstance().getRTT().getRepairList().add(RepairTrackingThread.Repair(player, unitID, armor, location, slot, techType, 0, 0, true));
+            MWServ.getInstance()
+                    .getRTT()
+                    .getRepairList()
+                    .add(
+                            RepairTrackingThread.Repair(
+                                    player, unitID, armor, location, slot, techType, 0, 0, true));
             CampaignMain.cm.toUser("FSM|" + salvageMessage, Username, false);
             CampaignMain.cm.toUser("PL|UU|" + unitID + "|" + unit.toString(true), Username, false);
 
@@ -224,7 +314,5 @@ public class SalvageUnitCommand implements Command {
             MWLogger.errLog("Unable to Process Salvage Unit Command!");
             MWLogger.errLog(ex);
         }
-
-    }// end process()
-
-}// end SalvageUnitCommand
+    } // end process()
+} // end SalvageUnitCommand

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,23 +16,23 @@
 
 package mekwars.server.campaign.converters;
 
-import java.util.Vector;
-import mekwars.common.UnitFactory;
-import mekwars.server.campaign.SUnitFactory;
-import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import java.util.Vector;
+import mekwars.common.UnitFactory;
+import mekwars.server.campaign.SUnitFactory;
 
 public class SUnitFactoryConverter implements Converter {
     public boolean canConvert(Class clazz) {
         return clazz.equals(SUnitFactory.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer,
-            MarshallingContext context) {
+    public void marshal(
+            Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         SUnitFactory unitFactory = (SUnitFactory) source;
 
         writer.startNode("name");
@@ -131,14 +131,23 @@ public class SUnitFactoryConverter implements Converter {
             reader.moveUp();
         }
         if (name == null) {
-               throw new ConversionException("Name expected");
+            throw new ConversionException("Name expected");
         }
         if (founder == null) {
-               throw new ConversionException("Founder expected");
+            throw new ConversionException("Founder expected");
         }
         if (size == null) {
-               throw new ConversionException("Size expected");
+            throw new ConversionException("Size expected");
         }
-        return new SUnitFactory(name, null, size, founder, ticksUntilRefresh, refreshSpeed, type, buildTableFolder, accessLevel);
+        return new SUnitFactory(
+                name,
+                null,
+                size,
+                founder,
+                ticksUntilRefresh,
+                refreshSpeed,
+                type,
+                buildTableFolder,
+                accessLevel);
     }
 }

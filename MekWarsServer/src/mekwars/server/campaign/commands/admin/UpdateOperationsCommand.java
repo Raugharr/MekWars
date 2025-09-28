@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2006 
+ * MekWars - Copyright (C) 2006
  *
  * Original author - jtighe (torren@users.sourceforge.net)
  *
@@ -17,39 +17,59 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
-//Syntax updateoperations
+// Syntax updateoperations
 public class UpdateOperationsCommand implements Command {
-    
-    int accessLevel = IAuthenticator.ADMIN;
-    public int getExecutionLevel(){return accessLevel;}
-    public void setExecutionLevel(int i) {accessLevel = i;}
-	String syntax = "";
-	public String getSyntax() { return syntax;}
 
-    public void process(StringTokenizer command,String Username) {
-        
-        //access level check
-        int userLevel = MWServ.getInstance().getUserLevel(Username);
-        if(userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-            return;
-        }
-        
-        if (!CampaignMain.cm.getBooleanConfig("CampaignLock"))  {
-            CampaignMain.cm.toUser("The campaign must be locked before you can update the operations.",Username,true);
-            return;
-        }
-        
-        CampaignMain.cm.getOpsManager().loadOperations();
-        
-        CampaignMain.cm.doSendModMail("NOTE",Username+" ops manager updated.");
-        
-        CampaignMain.cm.updateAllOnlinePlayerArmies();
-        CampaignMain.cm.doSendToAllOnlinePlayers("PL|UDAO|1",false);
+    int accessLevel = IAuthenticator.ADMIN;
+
+    public int getExecutionLevel() {
+        return accessLevel;
     }
-}//end RetrieveOperation
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    String syntax = "";
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        if (!CampaignMain.cm.getBooleanConfig("CampaignLock")) {
+            CampaignMain.cm.toUser(
+                    "The campaign must be locked before you can update the operations.",
+                    Username,
+                    true);
+            return;
+        }
+
+        CampaignMain.cm.getOpsManager().loadOperations();
+
+        CampaignMain.cm.doSendModMail("NOTE", Username + " ops manager updated.");
+
+        CampaignMain.cm.updateAllOnlinePlayerArmies();
+        CampaignMain.cm.doSendToAllOnlinePlayers("PL|UDAO|1", false);
+    }
+} // end RetrieveOperation

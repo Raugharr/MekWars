@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,16 +15,13 @@
  */
 
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
  */
 /**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
+ * @author Torren (Jason Tighe) 11.5.05
  */
-
 package mekwars.server.MWChatServer;
 
 import java.io.IOException;
@@ -38,7 +35,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.Auth;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
@@ -56,22 +52,23 @@ public class MWChatServer implements ICommands {
     protected IAuthenticator _authenticator;
     protected IRoomAuthenticator _roomAuthenticator;
 
-    protected Map<String, MWChatClient> _users = Collections.synchronizedMap(new HashMap<String, MWChatClient>());
+    protected Map<String, MWChatClient> _users =
+            Collections.synchronizedMap(new HashMap<String, MWChatClient>());
     protected HashMap<String, RoomServer> _rooms = new HashMap<String, RoomServer>();
 
     protected String _motd;
 
     protected ServerSocket _serverSocket;
-   // protected Dispatcher _dispatcher;
-    //protected Thread _dispatchThread;
+    // protected Dispatcher _dispatcher;
+    // protected Thread _dispatchThread;
 
     protected int _cumulativeLogins = 0;
     protected int _port = 0;
     protected int _kickBanSeconds = 60 * 60 * 24;
 
     public MWChatServer(String IPAddress, int port) throws Exception {
-       
-    	/*_dispatcher = createDispatcher();
+
+        /*_dispatcher = createDispatcher();
         _dispatchThread = new Thread(_dispatcher, "Dispatcher");
         _dispatchThread.start();*/
 
@@ -85,7 +82,7 @@ public class MWChatServer implements ICommands {
         messagesProps.setProperty("access_denied", "Accessdenied.");
         messagesProps.setProperty("sql_error", "SQLError:{0}");
         messagesProps.setProperty("already_on", "Youarealreadysignedon");
-        messagesProps.setProperty("unknown_command","Sorry,Ididnotrecognizethatcommand.");
+        messagesProps.setProperty("unknown_command", "Sorry,Ididnotrecognizethatcommand.");
         messagesProps.setProperty("noroom", "Thereisnoroomcalled{0}");
         messagesProps.setProperty("reserved_name", "{0}isareservedname");
         messagesProps.setProperty("nosuchcommand", "Nosuchcommand:{0}");
@@ -95,8 +92,8 @@ public class MWChatServer implements ICommands {
 
         this._port = port;
 
-        //construct authenticators
-        _authenticator = new PasswdAuthenticator(this, true,false);
+        // construct authenticators
+        _authenticator = new PasswdAuthenticator(this, true, false);
         _roomAuthenticator = new NullRoomAuthenticator();
 
         this._asciiRoomNames = true;
@@ -107,13 +104,12 @@ public class MWChatServer implements ICommands {
          * order to bind the socket to all available IPs/devices. If we check for a
          * real null and a "-1", we can know to bind on either the first run (when
          * no config is present) or when the value is missing from serverconfig.txt
-         * 
+         *
          * @urgru 12.4.05
          */
-        if (IPAddress == null || IPAddress.equals("-1")){
+        if (IPAddress == null || IPAddress.equals("-1")) {
             _serverSocket = new ServerSocket(_port, -1, null);
-        }
-        else{
+        } else {
             _serverSocket = new ServerSocket(_port, -1, InetAddress.getByName(IPAddress));
         }
 
@@ -153,9 +149,7 @@ public class MWChatServer implements ICommands {
         CommandProcessorRemote.init(p);
     }
 
-    /**
-     * Get a MWChatClient by name
-     */
+    /** Get a MWChatClient by name */
     public MWChatClient getClient(String target) {
         try {
             return _users.get(clientKey(target));
@@ -166,23 +160,32 @@ public class MWChatServer implements ICommands {
     }
 
     /**
-     * Determines if a user id is valid. Ensures that the name is made up of
-     * alphanumerical characters and contains no spaces.
+     * Determines if a user id is valid. Ensures that the name is made up of alphanumerical
+     * characters and contains no spaces.
      */
     protected void validateUserId(String user) throws Exception {
         if (getName().toLowerCase().equals(user.toLowerCase()))
             throw new Exception(user + " is a reserved name");
 
-        if (user.toLowerCase().startsWith("war bot"))
-            throw new Exception(ACCESS_DENIED);
+        if (user.toLowerCase().startsWith("war bot")) throw new Exception(ACCESS_DENIED);
 
         char[] chars = user.toLowerCase().toCharArray();
         for (int i = 0; i < chars.length; i++) {
             char ch = chars[i];
-            if (!(Character.isLetterOrDigit(chars[i]) || ch == '_' || ch == '-'
-                    || ch == '\\' || ch == '^' || ch == '`' || ch == '|'
-                    || ch == '[' || ch == '{' || ch == ']' || ch == '}'
-                    || ch == '(' || ch == ')' || ch == '\'')) {
+            if (!(Character.isLetterOrDigit(chars[i])
+                    || ch == '_'
+                    || ch == '-'
+                    || ch == '\\'
+                    || ch == '^'
+                    || ch == '`'
+                    || ch == '|'
+                    || ch == '['
+                    || ch == '{'
+                    || ch == ']'
+                    || ch == '}'
+                    || ch == '('
+                    || ch == ')'
+                    || ch == '\'')) {
                 throw new Exception(INVALID_CHARACTER);
             }
         }
@@ -190,21 +193,23 @@ public class MWChatServer implements ICommands {
 
     /**
      * Sign on to the server
-     * 
-     * @param client
-     *            the MWChatClient
+     *
+     * @param client the MWChatClient
      * @param password
-     * @exception AccessException
-     *                is the login failed
+     * @exception AccessException is the login failed
      */
     public boolean signOn(MWChatClient client, String password) throws Exception {
         String userId = client.getUserId();
         validateUserId(userId);
         Auth auth = _authenticator.authenticate(client, password);
         int access = auth.getAccess();
-        MWLogger.infoLog(client.getUserId() + " signon from "
-                + client.getHost() + ".  Access = " + access
-                + (client.getTunneling() ? " (tunneling)" : ""));
+        MWLogger.infoLog(
+                client.getUserId()
+                        + " signon from "
+                        + client.getHost()
+                        + ".  Access = "
+                        + access
+                        + (client.getTunneling() ? " (tunneling)" : ""));
 
         if (access == IAuthenticator.NONE || _killedUsers.contains(client.getKey())) {
             throw new Exception(ACCESS_DENIED);
@@ -216,7 +221,7 @@ public class MWChatServer implements ICommands {
             // if signed on locally, let new take precedence
             MWChatClient oldC = _users.get(clientKey(client));
             if (oldC != null) {
-                oldC.killed(client.getUserId(),"Terminated by signing on elsewhere");
+                oldC.killed(client.getUserId(), "Terminated by signing on elsewhere");
                 MWLogger.errLog("Terminated by signing on elsewhere");
                 signOff(oldC);
             }
@@ -231,15 +236,15 @@ public class MWChatServer implements ICommands {
                 MWLogger.errLog(ex);
             }
         }
-        
+
         client.ackSignon(auth.getUserId());
-        
+
         return true;
     }
-    
+
     /**
-     * Sign off of the system. This is called by the MWChatClient when the
-     * socket unexpectedly closes, or when the user quits.
+     * Sign off of the system. This is called by the MWChatClient when the socket unexpectedly
+     * closes, or when the user quits.
      */
     public void signOff(MWChatClient client) {
         if (client.getAccessLevel() == IAuthenticator.NONE) {
@@ -266,12 +271,11 @@ public class MWChatServer implements ICommands {
         if (o != null) {
             // inform all the rooms that this user is gone
             synchronized (_rooms) {
-
                 for (String key : _rooms.keySet()) {
-                	RoomServer room = _rooms.get(key);
+                    RoomServer room = _rooms.get(key);
                     room.part(client, true);
                     if (room.isEmpty()) {
-                        MWLogger.infoLog("Removing empty room: "+ key);
+                        MWLogger.infoLog("Removing empty room: " + key);
                         _rooms.remove(key);
                     }
                 }
@@ -281,9 +285,7 @@ public class MWChatServer implements ICommands {
         client.die();
     }
 
-    /**
-     * Kick a user off the system.
-     */
+    /** Kick a user off the system. */
     public void kill(String victim, MWChatClient killer, String message) {
         if (killer.getAccessLevel() < IAuthenticator.MODERATOR) {
             killer.error(ACCESS_DENIED, KILL + " " + victim);
@@ -313,9 +315,7 @@ public class MWChatServer implements ICommands {
         }
     }
 
-    /**
-     * Kick a user off the system by the system itself.
-     */
+    /** Kick a user off the system by the system itself. */
     public void kill(String victim, String message) {
         String killedKey = null;
         MWChatClient c = getClient(victim);
@@ -342,8 +342,7 @@ public class MWChatServer implements ICommands {
         RoomServer room = _rooms.get(key);
         synchronized (_rooms) {
             if (room == null) {
-                if (!_roomAuthenticator.isCreateAllowed(client, roomName,
-                        password)) {
+                if (!_roomAuthenticator.isCreateAllowed(client, roomName, password)) {
                     throw new Exception(ICommands.ROOM_ACCESS_DENIED);
                 }
                 room = _rooms.get(roomKey(roomName));
@@ -353,13 +352,15 @@ public class MWChatServer implements ICommands {
                             int c = roomName.charAt(i);
                             // don't include space or DEL
                             if (c <= 32 && c >= 128) {
-                                MWLogger.infoLog(client.getUserId() + " room creation rejected: " + roomName);
+                                MWLogger.infoLog(
+                                        client.getUserId()
+                                                + " room creation rejected: "
+                                                + roomName);
                                 throw new Exception(ICommands.INVALID_CHARACTER);
                             }
                         }
                     }
-                    MWLogger.infoLog(client.getUserId()
-                            + " created new room: " + roomName);
+                    MWLogger.infoLog(client.getUserId() + " created new room: " + roomName);
                     room = createRoomServer(roomName, password);
                     _rooms.put(roomKey(room), room);
                 }
@@ -373,39 +374,34 @@ public class MWChatServer implements ICommands {
     }
 
     /**
-     * returns a key for referencing the rooms hashmap. mainly to avoid
-     * case-sensitivity problems.
+     * returns a key for referencing the rooms hashmap. mainly to avoid case-sensitivity problems.
      */
     public static String roomKey(String room) {
         return room.toLowerCase();
     }
 
     /**
-     * returns a key for referencing the rooms hashmap. mainly to avoid
-     * case-sensitivity problems.
+     * returns a key for referencing the rooms hashmap. mainly to avoid case-sensitivity problems.
      */
     public static String roomKey(RoomServer room) {
         return roomKey(room.getName());
     }
 
     /**
-     * returns a key for referencing the users hashmap. mainly to avoid
-     * case-sensitivity problems.
+     * returns a key for referencing the users hashmap. mainly to avoid case-sensitivity problems.
      */
     public static String clientKey(MWChatClient client) {
         return client.getKey();
     }
 
     /**
-     * returns a key for referencing the users hashmap. mainly to avoid
-     * case-sensitivity problems.
+     * returns a key for referencing the users hashmap. mainly to avoid case-sensitivity problems.
      */
     public static String clientKey(String client) {
 
         // Sometimes bad strings are set up. Not much to do about it except
         // return the null and hope for the best --Torren.
-        if (client == null)
-            return null;
+        if (client == null) return null;
 
         try {
             return client.toLowerCase();
@@ -415,9 +411,7 @@ public class MWChatServer implements ICommands {
         }
     }
 
-    /**
-     * Tells the server to begin accepting connections.
-     */
+    /** Tells the server to begin accepting connections. */
     protected void acceptConnections() {
 
         PingThread pingKeepAlive = new PingThread(this);
@@ -427,10 +421,10 @@ public class MWChatServer implements ICommands {
         while (true) {
             try {
                 Socket s = _serverSocket.accept();
-                //s.setTcpNoDelay(true);// couldn't hurt
-                //s.setKeepAlive(false);
-                //s.setSoTimeout(15000);// 15 second timeout
-                //s.setSoLinger(false, 0);
+                // s.setTcpNoDelay(true);// couldn't hurt
+                // s.setKeepAlive(false);
+                // s.setSoTimeout(15000);// 15 second timeout
+                // s.setSoLinger(false, 0);
                 // MWChatClient client =
                 createMWChatClient(s);
             } catch (IOException e) {
@@ -464,7 +458,7 @@ public class MWChatServer implements ICommands {
     }
 
     public boolean userExists(String username) {
-        //MWLogger.infoLog("userExists: " + username);
+        // MWLogger.infoLog("userExists: " + username);
         return _users.containsKey(username.toLowerCase());
     }
 
@@ -497,43 +491,39 @@ public class MWChatServer implements ICommands {
     }
 
     /**
-     * Loop though all clients and make sure that the latest command or the
-     * latest pong was within the last 200 seconds. If not, add to a removal
-     * pile.
-     * 
-     * After all clients are checked, sign off everyone on toRemove list.
+     * Loop though all clients and make sure that the latest command or the latest pong was within
+     * the last 200 seconds. If not, add to a removal pile.
+     *
+     * <p>After all clients are checked, sign off everyone on toRemove list.
      */
     protected void checkForPongs() {
 
         synchronized (_users) {
-            
-        	ArrayList<MWChatClient> clientToRemove = new ArrayList<MWChatClient>();
+            ArrayList<MWChatClient> clientToRemove = new ArrayList<MWChatClient>();
             Iterator<MWChatClient> clients = _users.values().iterator();
-            
+
             while (clients.hasNext()) {
                 MWChatClient client = clients.next();
                 if (client._connectionHandler._lastReceived + 120000 < System.currentTimeMillis())
                     clientToRemove.add(client);
             }
-            
+
             for (MWChatClient client : clientToRemove) {
                 MWLogger.infoLog("RemovalThread sign off: " + client.getUserId());
                 this.signOff(client);
             }
-            
         }
     }
 
     /**
-     * PingThread was created because NFC 1.1-RC stopped using the heartbeat ping to
-     * the clients. MWClients still need this heartbeat. This is the best thing I
-     * could think of.
-     * 
+     * PingThread was created because NFC 1.1-RC stopped using the heartbeat ping to the clients.
+     * MWClients still need this heartbeat. This is the best thing I could think of.
+     *
      * @author Torren (Jason Tighe) 11.7.05
      */
     private static final class PingThread extends Thread {
 
-        private long waittime = 45000;// 45 second wait
+        private long waittime = 45000; // 45 second wait
 
         private MWChatServer server;
 
@@ -544,7 +534,7 @@ public class MWChatServer implements ICommands {
         }
 
         @Override
-		public synchronized void run() {
+        public synchronized void run() {
             try {
                 while (true) {
 
@@ -555,15 +545,11 @@ public class MWChatServer implements ICommands {
                     // check for pongs
                     // this.wait(waittime);
                     server.checkForPongs();
-
                 }
             } catch (Exception ex) {
                 MWLogger.errLog("Error while trying to sleep PingThread");
                 MWLogger.errLog(ex);
             }
-
         }
-    }// end PingThread class
-    
-}// end MWChatServer class
-
+    } // end PingThread class
+} // end MWChatServer class

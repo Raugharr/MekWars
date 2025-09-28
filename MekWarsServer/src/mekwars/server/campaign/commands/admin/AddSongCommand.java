@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,63 +20,80 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
-//Syntax addsong#songname#lyric1#lyric2....
+// Syntax addsong#songname#lyric1#lyric2....
 public class AddSongCommand implements Command {
-    
-    int accessLevel = IAuthenticator.ADMIN;
-    public int getExecutionLevel(){return accessLevel;}
-    public void setExecutionLevel(int i) {accessLevel = i;}
-	String syntax = "addsong#songname#lyric1#lyric2....";
-	public String getSyntax() { return syntax;}
 
-    public void process(StringTokenizer command,String Username) {
-        
-        //access level check
+    int accessLevel = IAuthenticator.ADMIN;
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    String syntax = "addsong#songname#lyric1#lyric2....";
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
         int userLevel = MWServ.getInstance().getUserLevel(Username);
-        if(userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
-        
+
         File songList = new File("./data/songs.txt");
 
-        
-        if ( !songList.exists() ){
-            try{
+        if (!songList.exists()) {
+            try {
                 songList.createNewFile();
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 return;
             }
         }
-            
+
         String songName = command.nextToken();
-        
+
         StringBuilder lyrics = new StringBuilder();
-        
-        while ( command.hasMoreTokens() ){
+
+        while (command.hasMoreTokens()) {
             lyrics.append(command.nextToken());
             lyrics.append("#");
         }
-         
-        //get rid of that last #
-        lyrics.deleteCharAt(lyrics.length()-1);
-        try{
-            FileOutputStream fos = new FileOutputStream(songList,true);
+
+        // get rid of that last #
+        lyrics.deleteCharAt(lyrics.length() - 1);
+        try {
+            FileOutputStream fos = new FileOutputStream(songList, true);
             PrintStream ps = new PrintStream(fos);
-            ps.println(songName+"|"+lyrics.toString().trim());
-            
+            ps.println(songName + "|" + lyrics.toString().trim());
+
             ps.close();
             fos.close();
-        }catch(Exception ex){
-            CampaignMain.cm.toUser("Unable to append to songs.txt",Username,true);
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser("Unable to append to songs.txt", Username, true);
             return;
         }
-        
-        CampaignMain.cm.doSendModMail("NOTE",Username+" has added "+songName+" to the song list!");
+
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has added " + songName + " to the song list!");
     }
 }

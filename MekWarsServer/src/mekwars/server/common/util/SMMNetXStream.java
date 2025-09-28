@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,24 +16,19 @@
 
 package mekwars.server.common.util;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.core.ReferenceByIdMarshallingStrategy;
-import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
-import com.thoughtworks.xstream.security.AnyTypePermission;
 import mekwars.common.Continent;
 import mekwars.common.Influences;
 import mekwars.common.Terrain;
 import mekwars.common.util.MMNetXStream;
-import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.converters.ContinentConverter;
+import mekwars.server.campaign.converters.InfluencesConverter;
+import mekwars.server.campaign.converters.SHouseConverter;
 import mekwars.server.campaign.converters.SPlanetConverter;
 import mekwars.server.campaign.converters.SUnitFactoryConverter;
-import mekwars.server.campaign.converters.SHouseConverter;
 import mekwars.server.campaign.converters.TerrainConverter;
-import mekwars.server.campaign.converters.InfluencesConverter;
 
 public class SMMNetXStream extends MMNetXStream {
     @Override

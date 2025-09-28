@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * original author: nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,16 +19,17 @@ package mekwars.server.campaign.market2;
 import mekwars.server.campaign.SUnit;
 
 /**
- * Interface which defines the methods needed by an actor
- * who is able to buy units from the market. At this time,
- * only the SPlayer should be an IBuyer; however, buying may
- * be expanded to SHouse once leadership is implemented.
+ * Interface which defines the methods needed by an actor who is able to buy units from the market.
+ * At this time, only the SPlayer should be an IBuyer; however, buying may be expanded to SHouse
+ * once leadership is implemented.
  */
 public interface IBuyer {
-	
-	public abstract void addMoney(int amountToAdd);
-	public abstract int getMoney();
-	public abstract String addUnit(SUnit toAdd, boolean isNew, boolean sendUpdate);
-	public abstract boolean isHuman();
-	
+
+    public abstract void addMoney(int amountToAdd);
+
+    public abstract int getMoney();
+
+    public abstract String addUnit(SUnit toAdd, boolean isNew, boolean sendUpdate);
+
+    public abstract boolean isHuman();
 }

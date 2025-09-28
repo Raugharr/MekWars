@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2007 
+ * MekWars - Copyright (C) 2007
  *
  * Original author - jtighe (torren@users.sourceforge.net)
  *
@@ -17,69 +17,101 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-
 import mekwars.common.util.UnitUtils;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.commands.Command;
 
-/**
- * Sends a Players Unit data to a Mod/Admin
- */
+/** Sends a Players Unit data to a Mod/Admin */
 public class ViewPlayerUnitCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Player Name#Unit ID#Show Damage[true/false]";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		//get the player you wish to use
-		SPlayer p;
-		SUnit unit;
-		int unitId;
-		boolean damage = false;
-		try{
-			p = CampaignMain.cm.getPlayer(command.nextToken());
-			unitId = Integer.parseInt(command.nextToken());
-			damage = Boolean.parseBoolean(command.nextToken());
-		}
-        catch(Exception ex){
-            CampaignMain.cm.toUser("Syntax: ViewPlayerUnit#Name#UnitID#ShowDamage[true/false]",Username);
+
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Player Name#Unit ID#Show Damage[true/false]";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        // get the player you wish to use
+        SPlayer p;
+        SUnit unit;
+        int unitId;
+        boolean damage = false;
+        try {
+            p = CampaignMain.cm.getPlayer(command.nextToken());
+            unitId = Integer.parseInt(command.nextToken());
+            damage = Boolean.parseBoolean(command.nextToken());
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser(
+                    "Syntax: ViewPlayerUnit#Name#UnitID#ShowDamage[true/false]", Username);
             return;
         }
-		
-        if ( p == null ){
-            CampaignMain.cm.toUser("Player does not exist!",Username);
+
+        if (p == null) {
+            CampaignMain.cm.toUser("Player does not exist!", Username);
             return;
         }
         unit = p.getUnit(unitId);
-        
-        if ( unit == null ){
-        	CampaignMain.cm.toUser(p.getName()+" does not have unit #"+unitId, Username);
-        	return;
+
+        if (unit == null) {
+            CampaignMain.cm.toUser(p.getName() + " does not have unit #" + unitId, Username);
+            return;
         }
-        
-        String fileName = unit.getEntity().getChassis() + " " +  unit.getEntity().getModel();
-        if ( !damage)
-        	CampaignMain.cm.toUser("PL|VUI|"+fileName+ "#" + unit.getBVForMatch() + "#" + unit.getPilot().getGunnery() + "#" + unit.getPilot().getPiloting()+"#"+UnitUtils.unitBattleDamage(unit.getEntity(), true), Username,false);
+
+        String fileName = unit.getEntity().getChassis() + " " + unit.getEntity().getModel();
+        if (!damage)
+            CampaignMain.cm.toUser(
+                    "PL|VUI|"
+                            + fileName
+                            + "#"
+                            + unit.getBVForMatch()
+                            + "#"
+                            + unit.getPilot().getGunnery()
+                            + "#"
+                            + unit.getPilot().getPiloting()
+                            + "#"
+                            + UnitUtils.unitBattleDamage(unit.getEntity(), true),
+                    Username,
+                    false);
         else
-        	CampaignMain.cm.toUser("PL|VURD|"+fileName+ "#"+UnitUtils.unitBattleDamage(unit.getEntity(), true), Username,false);
-        CampaignMain.cm.doSendModMail("NOTE",Username+" has viewed "+p.getName()+"'s "+unit.getModelName());
-        CampaignMain.cm.toUser(Username+" has viewed your "+unit.getModelName()+".", p.getName());
-        
-	}
+            CampaignMain.cm.toUser(
+                    "PL|VURD|"
+                            + fileName
+                            + "#"
+                            + UnitUtils.unitBattleDamage(unit.getEntity(), true),
+                    Username,
+                    false);
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has viewed " + p.getName() + "'s " + unit.getModelName());
+        CampaignMain.cm.toUser(
+                Username + " has viewed your " + unit.getModelName() + ".", p.getName());
+    }
 }

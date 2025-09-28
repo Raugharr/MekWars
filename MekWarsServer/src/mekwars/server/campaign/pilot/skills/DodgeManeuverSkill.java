@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,23 +20,23 @@
  */
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * @author Helge Richter
- * 
  */
 public class DodgeManeuverSkill extends SPilotSkill {
 
     public DodgeManeuverSkill(int id) {
         super(id, "Dodge Maneuver", "DM");
-        setDescription("Enables the unit to make a dodge maneuver instead of a physical attack. This maneuver adds +2 to the BTH to physical attacks against the unit.");
+        setDescription(
+                "Enables the unit to make a dodge maneuver instead of a physical attack. This maneuver adds +2 to the BTH to physical attacks against the unit.");
     }
 
     public DodgeManeuverSkill() {

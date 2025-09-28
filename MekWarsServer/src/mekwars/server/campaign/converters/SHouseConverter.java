@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,9 +22,8 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import mekwars.common.universe.FactionTag;
 import java.util.EnumSet;
-import mekwars.server.campaign.CampaignMain;
+import mekwars.common.universe.FactionTag;
 import mekwars.server.campaign.NewbieHouse;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.mercenaries.MercHouse;
@@ -34,8 +33,8 @@ public class SHouseConverter implements Converter {
         return clazz.equals(SHouse.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer,
-            MarshallingContext context) {
+    public void marshal(
+            Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         SHouse house = (SHouse) source;
 
         writer.startNode("name");
@@ -150,7 +149,7 @@ public class SHouseConverter implements Converter {
             }
             reader.moveUp();
         }
-        SHouse house = null; 
+        SHouse house = null;
         if (type.equals("House")) {
             house = new SHouse(name, color, baseGunner, basePilot, abbreviation);
         } else if (type.equals("Mercenary")) {
@@ -158,7 +157,8 @@ public class SHouseConverter implements Converter {
         } else if (type.equals("Newbie")) {
             house = new NewbieHouse(name, color, baseGunner, basePilot, abbreviation);
         } else {
-            new ConversionException("type must be one of the following: 'House', 'Mercenary', 'Newbie'");
+            new ConversionException(
+                    "type must be one of the following: 'House', 'Mercenary', 'Newbie'");
         }
         if (logo != null) {
             house.setLogo(logo);

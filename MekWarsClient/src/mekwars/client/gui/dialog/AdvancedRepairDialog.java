@@ -27,9 +27,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Vector;
 import java.util.EnumSet;
-
+import java.util.Vector;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -50,15 +49,6 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import mekwars.client.MWClient;
-import mekwars.client.campaign.CUnit;
-import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.common.House;
-import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.SpringLayoutHelper;
-import mekwars.common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.common.AmmoType;
 import megamek.common.AmmoType.Munitions;
@@ -70,21 +60,29 @@ import megamek.common.Mounted;
 import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.TechConstants;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.House;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 
-public class AdvancedRepairDialog extends JFrame implements ActionListener, MouseListener, KeyListener, ChangeListener {
+public class AdvancedRepairDialog extends JFrame
+        implements ActionListener, MouseListener, KeyListener, ChangeListener {
 
-    /**
-         *
-         */
+    /** */
     private static final long serialVersionUID = 381067715464633969L;
+
     // store the client backlink for other things to use
     private MWClient mwclient = null;
     private Entity unit = null;
     private CUnit playerUnit = null;
 
-    private final static String okayCommand = "Add";
-    private final static String cancelCommand = "Close";
-    private final static String techComboCommand = "TechCombo";
+    private static final String okayCommand = "Add";
+    private static final String cancelCommand = "Close";
+    private static final String techComboCommand = "TechCombo";
 
     private String windowName = "Repair Dialog";
 
@@ -184,10 +182,17 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         loadTechPanel();
 
         // Set the user's options
-        Object[] options = { okayButton, cancelButton };
+        Object[] options = {okayButton, cancelButton};
 
         // Create the pane containing the buttons
-        pane = new JOptionPane(MasterPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, options, null);
+        pane =
+                new JOptionPane(
+                        MasterPanel,
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.DEFAULT_OPTION,
+                        null,
+                        options,
+                        null);
 
         // this.setIconImage(new ImageIcon(new
         // ImageIcon("./data/images/mics/megamek-icon.gif").getImage().getScaledInstance(100,
@@ -271,15 +276,37 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             }
 
             if (salvage) {
-                mwclient.sendChat("/c salvageunit#" + unit.getExternalId() + "#" + critLocation + "#" + critSlot + "#" + armor + "#" + techType + "#true");
+                mwclient.sendChat(
+                        "/c salvageunit#"
+                                + unit.getExternalId()
+                                + "#"
+                                + critLocation
+                                + "#"
+                                + critSlot
+                                + "#"
+                                + armor
+                                + "#"
+                                + techType
+                                + "#true");
                 super.dispose();
                 return;
             }
 
-            if ((!UnitUtils.checkRepairViability(unit, critLocation, critSlot, armor) || (numberOfTechs <= 0)) && (techType != UnitUtils.TECH_REWARD_POINTS)) {
+            if ((!UnitUtils.checkRepairViability(unit, critLocation, critSlot, armor)
+                            || (numberOfTechs <= 0))
+                    && (techType != UnitUtils.TECH_REWARD_POINTS)) {
 
                 if (!mwclient.getRMT().isQueued(critLocation, critSlot, unit.getExternalId())) {
-                    String workOrder = unit.getExternalId() + "#" + critLocation + "#" + critSlot + "#" + baseRollField.getText() + "#" + retries;
+                    String workOrder =
+                            unit.getExternalId()
+                                    + "#"
+                                    + critLocation
+                                    + "#"
+                                    + critSlot
+                                    + "#"
+                                    + baseRollField.getText()
+                                    + "#"
+                                    + retries;
                     mwclient.getRMT().addWorkOrder(techType, workOrder);
                     mwclient.systemMessage("Work placed in queue.");
                 } else {
@@ -297,7 +324,22 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 loadPanel();
                 loadTechPanel();
             } else {
-                mwclient.sendChat("/c repairunit#" + unit.getExternalId() + "#" + critLocation + "#" + critSlot + "#" + armor + "#" + techType + "#" + retries + "#" + techWorkMod + "#true");
+                mwclient.sendChat(
+                        "/c repairunit#"
+                                + unit.getExternalId()
+                                + "#"
+                                + critLocation
+                                + "#"
+                                + critSlot
+                                + "#"
+                                + armor
+                                + "#"
+                                + techType
+                                + "#"
+                                + retries
+                                + "#"
+                                + techWorkMod
+                                + "#true");
                 super.dispose();
             }
             return;
@@ -319,11 +361,9 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             setBaseRoll();
             setWorkHours();
         }
-
     }
 
-    public void mouseExited(MouseEvent e) {
-    }
+    public void mouseExited(MouseEvent e) {}
 
     public void mousePressed(MouseEvent arg0) {
         if (arg0.getComponent() instanceof JList) {
@@ -337,25 +377,35 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
                         if (!((Mech) unit).isAutoEject()) {
                             JMenuItem info = new JMenuItem("Enable AutoEject");
-                            info.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent e) {
-                                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setautoeject#" + unit.getExternalId() + "#true");
-                                    ((Mech) unit).setAutoEject(true);
-                                }
-                            });
+                            info.addActionListener(
+                                    new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                            mwclient.sendChat(
+                                                    GameHost.CAMPAIGN_PREFIX
+                                                            + "c setautoeject#"
+                                                            + unit.getExternalId()
+                                                            + "#true");
+                                            ((Mech) unit).setAutoEject(true);
+                                        }
+                                    });
                             popup.add(info);
                         } else {
                             JMenuItem info = new JMenuItem("Disable AutoEject");
-                            info.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent e) {
-                                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setautoeject#" + unit.getExternalId() + "#false");
-                                    ((Mech) unit).setAutoEject(false);
-                                }
-                            });
+                            info.addActionListener(
+                                    new ActionListener() {
+                                        public void actionPerformed(ActionEvent e) {
+                                            mwclient.sendChat(
+                                                    GameHost.CAMPAIGN_PREFIX
+                                                            + "c setautoeject#"
+                                                            + unit.getExternalId()
+                                                            + "#false");
+                                            ((Mech) unit).setAutoEject(false);
+                                        }
+                                    });
                             popup.add(info);
                         }
                         popup.show(this, arg0.getX() + 50, arg0.getY() + 120);
-                    }// end autoeject
+                    } // end autoeject
                     else if ((component.indexOf("Ammo") > -1) || (component.indexOf("Pods") > -1)) {
                         JPopupMenu popup = new JPopupMenu();
                         Client mmClient = new Client("temp", "None", 0);
@@ -368,7 +418,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                         Vector<AmmoType> vAllTypes = AmmoType.getMunitionsFor(at.getAmmoType());
                         // location++;
 
-                        boolean canDump = mmClient.getGame().getOptions().booleanOption("lobby_ammo_dump");
+                        boolean canDump =
+                                mmClient.getGame().getOptions().booleanOption("lobby_ammo_dump");
 
                         if (vAllTypes == null) {
                             return;
@@ -380,15 +431,22 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
                         for (int x = 0, n = vAllTypes.size(); x < n; x++) {
                             AmmoType atCheck = vAllTypes.elementAt(x);
-                            boolean bTechMatch = TechConstants.isLegal(unit.getTechLevel(), atCheck.getTechLevel(year), unit.isMixedTech());// (unit.getTechLevel()
-                                                                                                                    // ==
-                                                                                                                    // atCheck.getTechLevel());
+                            boolean bTechMatch =
+                                    TechConstants.isLegal(
+                                            unit.getTechLevel(),
+                                            atCheck.getTechLevel(year),
+                                            unit.isMixedTech()); // (unit.getTechLevel()
+                            // ==
+                            // atCheck.getTechLevel());
 
                             EnumSet<Munitions> munition = atCheck.getMunitionType();
-                            House faction = mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse());
+                            House faction =
+                                    mwclient.getData()
+                                            .getHouseByName(mwclient.getPlayer().getHouse());
 
                             // check banned ammo
-                            if (mwclient.getData().getServerBannedAmmo().containsKey(munition) || faction.getBannedAmmo().containsKey(munition)) {
+                            if (mwclient.getData().getServerBannedAmmo().containsKey(munition)
+                                    || faction.getBannedAmmo().containsKey(munition)) {
                                 continue;
                             }
 
@@ -398,27 +456,46 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                             // because there is no special lvl1 ammo, therefore
                             // it doesn't
                             // need to show up in this display.
-                            if (!bTechMatch && (unit.getTechLevel() == TechConstants.T_IS_ADVANCED) && (atCheck.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)) {
+                            if (!bTechMatch
+                                    && (unit.getTechLevel() == TechConstants.T_IS_ADVANCED)
+                                    && (atCheck.getTechLevel(year)
+                                            <= TechConstants.T_IS_TW_NON_BOX)) {
                                 bTechMatch = true;
                             }
 
                             // if is_eq_limits is unchecked allow L1 units to
                             // use L2 munitions
-                            if (!mmClient.getGame().getOptions().booleanOption("is_eq_limits") && (unit.getTechLevel() <= TechConstants.T_IS_TW_NON_BOX) && (atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED)) {
+                            if (!mmClient.getGame().getOptions().booleanOption("is_eq_limits")
+                                    && (unit.getTechLevel() <= TechConstants.T_IS_TW_NON_BOX)
+                                    && (atCheck.getTechLevel(year)
+                                            == TechConstants.T_IS_ADVANCED)) {
                                 bTechMatch = true;
                             }
 
                             // Possibly allow level 3 ammos, possibly not.
-                            if (mmClient.getGame().getOptions().booleanOption("allow_advanced_ammo")) {
-                                if (!mmClient.getGame().getOptions().booleanOption("is_eq_limits")) {
-                                    if ((unit.getTechLevel() == TechConstants.T_CLAN_EXPERIMENTAL) && (atCheck.getTechLevel(year) == TechConstants.T_CLAN_EXPERIMENTAL)) {
+                            if (mmClient.getGame()
+                                    .getOptions()
+                                    .booleanOption("allow_advanced_ammo")) {
+                                if (!mmClient.getGame()
+                                        .getOptions()
+                                        .booleanOption("is_eq_limits")) {
+                                    if ((unit.getTechLevel() == TechConstants.T_CLAN_EXPERIMENTAL)
+                                            && (atCheck.getTechLevel(year)
+                                                    == TechConstants.T_CLAN_EXPERIMENTAL)) {
                                         bTechMatch = true;
                                     }
-                                    if (((unit.getTechLevel() <= TechConstants.T_IS_TW_NON_BOX) || (unit.getTechLevel() == TechConstants.T_IS_ADVANCED)) && (atCheck.getTechLevel(year) == TechConstants.T_IS_EXPERIMENTAL)) {
+                                    if (((unit.getTechLevel() <= TechConstants.T_IS_TW_NON_BOX)
+                                                    || (unit.getTechLevel()
+                                                            == TechConstants.T_IS_ADVANCED))
+                                            && (atCheck.getTechLevel(year)
+                                                    == TechConstants.T_IS_EXPERIMENTAL)) {
                                         bTechMatch = true;
                                     }
                                 }
-                            } else if ((atCheck.getTechLevel(year) == TechConstants.T_IS_EXPERIMENTAL) || (atCheck.getTechLevel(year) == TechConstants.T_CLAN_EXPERIMENTAL)) {
+                            } else if ((atCheck.getTechLevel(year)
+                                            == TechConstants.T_IS_EXPERIMENTAL)
+                                    || (atCheck.getTechLevel(year)
+                                            == TechConstants.T_CLAN_EXPERIMENTAL)) {
                                 bTechMatch = false;
                             }
 
@@ -433,42 +510,59 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                             // N.B. play bit-shifting games to allow
                             // "incendiary"
                             // to be combined to other munition types.
-                            if (!mmClient.getGame().getOptions().booleanOption("clan_ignore_eq_limits") && unit.isClan() && UnitUtils.isInnerSphereOnlyAmmo(atCheck.getMunitionType())) {
+                            if (!mmClient.getGame()
+                                            .getOptions()
+                                            .booleanOption("clan_ignore_eq_limits")
+                                    && unit.isClan()
+                                    && UnitUtils.isInnerSphereOnlyAmmo(atCheck.getMunitionType())) {
                                 bTechMatch = false;
                             }
 
-                            if (!mmClient.getGame().getOptions().booleanOption("minefields") && AmmoType.canDeliverMinefield(atCheck)) {
+                            if (!mmClient.getGame().getOptions().booleanOption("minefields")
+                                    && AmmoType.canDeliverMinefield(atCheck)) {
                                 continue;
                             }
 
                             // Only Protos can use Proto-specific ammo
-                            if (atCheck.hasFlag(AmmoType.F_PROTOMECH) && !(unit instanceof Protomech)) {
+                            if (atCheck.hasFlag(AmmoType.F_PROTOMECH)
+                                    && !(unit instanceof Protomech)) {
                                 continue;
                             }
 
                             // When dealing with machine guns, Protos can only
                             // use proto-specific machine gun ammo
-                            if ((unit instanceof Protomech) && atCheck.hasFlag(AmmoType.F_MG) && !atCheck.hasFlag(AmmoType.F_PROTOMECH)) {
+                            if ((unit instanceof Protomech)
+                                    && atCheck.hasFlag(AmmoType.F_MG)
+                                    && !atCheck.hasFlag(AmmoType.F_PROTOMECH)) {
                                 continue;
                             }
 
                             // BattleArmor ammo can't be selected at all.
                             // All other ammo types need to match on rack size
                             // and tech.
-                            if (bTechMatch && (atCheck.getRackSize() == at.getRackSize()) && !atCheck.hasFlag(AmmoType.F_BATTLEARMOR) && (atCheck.getTonnage(unit) == at.getTonnage(unit))) {
+                            if (bTechMatch
+                                    && (atCheck.getRackSize() == at.getRackSize())
+                                    && !atCheck.hasFlag(AmmoType.F_BATTLEARMOR)
+                                    && (atCheck.getTonnage(unit) == at.getTonnage(unit))) {
                                 double ammoCost = mwclient.getAmmoCost(atCheck.getInternalName());
                                 int cost = 0;
                                 JMenuItem info = new JMenuItem();
                                 if (m.getLocation() == Entity.LOC_NONE) {
                                     cost = (int) ammoCost;
-                                    info.setText(atCheck.getName() + " (" + m.getUsableShotsLeft() + "/1) " + mwclient.moneyOrFluMessage(true, true, cost));
+                                    info.setText(
+                                            atCheck.getName()
+                                                    + " ("
+                                                    + m.getUsableShotsLeft()
+                                                    + "/1) "
+                                                    + mwclient.moneyOrFluMessage(true, true, cost));
                                 } else {
                                     int refillShots = at.getShots();
                                     if (m.byShot()) {
                                         refillShots = m.getOriginalShots();
                                     }
                                     int shotsLeft = m.getUsableShotsLeft();
-                                    if (!atCheck.getInternalName().equalsIgnoreCase(at.getInternalName())) {
+                                    if (!atCheck.getInternalName()
+                                            .equalsIgnoreCase(at.getInternalName())) {
                                         shotsLeft = 0;
                                     }
 
@@ -480,27 +574,48 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                                         cost = (int) Math.ceil(ammoCost * refillShots);
                                     }
 
-                                    info.setText(atCheck.getName() + " (" + m.getUsableShotsLeft() + "/" + refillShots+ ") " + mwclient.moneyOrFluMessage(true, true, cost));
+                                    info.setText(
+                                            atCheck.getName()
+                                                    + " ("
+                                                    + m.getUsableShotsLeft()
+                                                    + "/"
+                                                    + refillShots
+                                                    + ") "
+                                                    + mwclient.moneyOrFluMessage(true, true, cost));
                                 }
 
-                                info.addActionListener(new ActionListener() {
-                                    public void actionPerformed(ActionEvent e) {
-                                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setunitammobycrit#" + unit.getExternalId() + "#" + critLocation + "#" + critSlot + "#" + e.getActionCommand());
-                                    }
-                                });
-                                info.setActionCommand(atCheck.getAmmoType() + "#" + atCheck.getInternalName() + "#" + atCheck.getRackSize());
+                                info.addActionListener(
+                                        new ActionListener() {
+                                            public void actionPerformed(ActionEvent e) {
+                                                mwclient.sendChat(
+                                                        GameHost.CAMPAIGN_PREFIX
+                                                                + "c setunitammobycrit#"
+                                                                + unit.getExternalId()
+                                                                + "#"
+                                                                + critLocation
+                                                                + "#"
+                                                                + critSlot
+                                                                + "#"
+                                                                + e.getActionCommand());
+                                            }
+                                        });
+                                info.setActionCommand(
+                                        atCheck.getAmmoType()
+                                                + "#"
+                                                + atCheck.getInternalName()
+                                                + "#"
+                                                + atCheck.getRackSize());
                                 popup.add(info);
                             }
-                        }// end for
+                        } // end for
                         popup.show(this, arg0.getX() + 50, arg0.getY() + 120);
-                    }// end component is ammo
-                }// end component != null
-            }// end if Button3
-        }// end if JList
+                    } // end component is ammo
+                } // end component != null
+            } // end if Button3
+        } // end if JList
     }
 
-    public void mouseEntered(MouseEvent e) {
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     public void mouseClicked(MouseEvent arg0) {
 
@@ -528,12 +643,10 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             setCost();
             setBaseRoll();
             setWorkHours();
-        }// end if JList
+        } // end if JList
     }
 
-    public void mouseReleased(MouseEvent arg0) {
-
-    }
+    public void mouseReleased(MouseEvent arg0) {}
 
     private void loadPanel() {
         ConfigPane.removeAll();
@@ -592,12 +705,30 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
                 if (unit.getArmor(location) > unit.getOArmor(location)) {
                     UnitUtils.removeArmorRepair(unit, UnitUtils.LOC_FRONT_ARMOR, location);
-                    armorNames.add("!!" + armorName + ": " + (unit.getArmor(location)) + "/" + unit.getOArmor(location));
+                    armorNames.add(
+                            "!!"
+                                    + armorName
+                                    + ": "
+                                    + (unit.getArmor(location))
+                                    + "/"
+                                    + unit.getOArmor(location));
                     UnitUtils.setArmorRepair(unit, UnitUtils.LOC_FRONT_ARMOR, location);
-                } else if (mwclient.getRMT().isQueued(location, UnitUtils.LOC_FRONT_ARMOR, unit.getExternalId())) {
-                    armorNames.add("@@" + armorName + ": " + Math.max(0, unit.getArmor(location)) + "/" + unit.getOArmor(location));
+                } else if (mwclient.getRMT()
+                        .isQueued(location, UnitUtils.LOC_FRONT_ARMOR, unit.getExternalId())) {
+                    armorNames.add(
+                            "@@"
+                                    + armorName
+                                    + ": "
+                                    + Math.max(0, unit.getArmor(location))
+                                    + "/"
+                                    + unit.getOArmor(location));
                 } else {
-                    armorNames.add(armorName + ": " + Math.max(0, unit.getArmor(location)) + "/" + unit.getOArmor(location));
+                    armorNames.add(
+                            armorName
+                                    + ": "
+                                    + Math.max(0, unit.getArmor(location))
+                                    + "/"
+                                    + unit.getOArmor(location));
                 }
 
                 if (unit.getArmor(location) != unit.getOArmor(location)) {
@@ -606,12 +737,31 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 if (unit.hasRearArmor(location)) {
                     if (unit.getArmor(location, true) > unit.getOArmor(location, true)) {
                         UnitUtils.removeArmorRepair(unit, UnitUtils.LOC_REAR_ARMOR, location);
-                        armorNames.add("!!" + armorName + "(r): " + unit.getArmor(location, true) + "/" + unit.getOArmor(location, true));
+                        armorNames.add(
+                                "!!"
+                                        + armorName
+                                        + "(r): "
+                                        + unit.getArmor(location, true)
+                                        + "/"
+                                        + unit.getOArmor(location, true));
                         UnitUtils.setArmorRepair(unit, UnitUtils.LOC_REAR_ARMOR, location);
-                    } else if (mwclient.getRMT().isQueued(location, UnitUtils.LOC_REAR_ARMOR, unit.getExternalId())) {
-                        armorNames.add("@@" + armorName + "(r): " + Math.max(0, unit.getArmor(location, true)) + "/" + unit.getOArmor(location, true));
+                    } else if (mwclient.getRMT()
+                            .isQueued(location, UnitUtils.LOC_REAR_ARMOR, unit.getExternalId())) {
+                        armorNames.add(
+                                "@@"
+                                        + armorName
+                                        + "(r): "
+                                        + Math.max(0, unit.getArmor(location, true))
+                                        + "/"
+                                        + unit.getOArmor(location, true));
                     } else {
-                        armorNames.add("" + armorName + "(r): " + Math.max(0, unit.getArmor(location, true)) + "/" + unit.getOArmor(location, true));
+                        armorNames.add(
+                                ""
+                                        + armorName
+                                        + "(r): "
+                                        + Math.max(0, unit.getArmor(location, true))
+                                        + "/"
+                                        + unit.getOArmor(location, true));
                     }
                     if (unit.getArmor(location, true) != unit.getOArmor(location, true)) {
                         armorDamage = true;
@@ -620,12 +770,30 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
                 if (unit.getInternal(location) > unit.getOInternal(location)) {
                     UnitUtils.removeArmorRepair(unit, UnitUtils.LOC_INTERNAL_ARMOR, location);
-                    armorNames.add("!!" + isName + ": " + unit.getInternal(location) + "/" + unit.getOInternal(location));
+                    armorNames.add(
+                            "!!"
+                                    + isName
+                                    + ": "
+                                    + unit.getInternal(location)
+                                    + "/"
+                                    + unit.getOInternal(location));
                     UnitUtils.setArmorRepair(unit, UnitUtils.LOC_INTERNAL_ARMOR, location);
-                } else if (mwclient.getRMT().isQueued(location, UnitUtils.LOC_INTERNAL_ARMOR, unit.getExternalId())) {
-                    armorNames.add("@@" + isName + ": " + Math.max(0, unit.getInternal(location)) + "/" + unit.getOInternal(location));
+                } else if (mwclient.getRMT()
+                        .isQueued(location, UnitUtils.LOC_INTERNAL_ARMOR, unit.getExternalId())) {
+                    armorNames.add(
+                            "@@"
+                                    + isName
+                                    + ": "
+                                    + Math.max(0, unit.getInternal(location))
+                                    + "/"
+                                    + unit.getOInternal(location));
                 } else {
-                    armorNames.add(isName + ": " + Math.max(0, unit.getInternal(location)) + "/" + unit.getOInternal(location));
+                    armorNames.add(
+                            isName
+                                    + ": "
+                                    + Math.max(0, unit.getInternal(location))
+                                    + "/"
+                                    + unit.getOInternal(location));
                 }
 
                 if (unit.getInternal(location) != unit.getOInternal(location)) {
@@ -640,94 +808,94 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 ArmorSlotList.setFont(new Font("Arial", Font.PLAIN, 10));
                 ArmorSlotList.setName("armor" + location);
                 switch (location) {
-                case Mech.LOC_HEAD:
-                    headArmorPanel.add(ArmorSlotList);
-                    headArmorPanel.addMouseListener(this);
-                    if (critDamage) {
-                        ArmorSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        ArmorSlotList.setBackground(Color.yellow);
-                    } else {
-                        ArmorSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_LARM:
-                    laArmorPanel.add(ArmorSlotList);
-                    laArmorPanel.addMouseListener(this);
-                    if (critDamage) {
-                        ArmorSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        ArmorSlotList.setBackground(Color.yellow);
-                    } else {
-                        ArmorSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_RARM:
-                    raArmorPanel.add(ArmorSlotList);
-                    raArmorPanel.addMouseListener(this);
-                    if (critDamage) {
-                        ArmorSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        ArmorSlotList.setBackground(Color.yellow);
-                    } else {
-                        ArmorSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_CT:
-                    ctArmorPanel.add(ArmorSlotList);
-                    ctArmorPanel.addMouseListener(this);
-                    if (critDamage) {
-                        ArmorSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        ArmorSlotList.setBackground(Color.yellow);
-                    } else {
-                        ArmorSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_LT:
-                    ltArmorPanel.add(ArmorSlotList);
-                    ltArmorPanel.addMouseListener(this);
-                    if (critDamage) {
-                        ArmorSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        ArmorSlotList.setBackground(Color.yellow);
-                    } else {
-                        ArmorSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_RT:
-                    rtArmorPanel.add(ArmorSlotList);
-                    rtArmorPanel.addMouseListener(this);
-                    if (critDamage) {
-                        ArmorSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        ArmorSlotList.setBackground(Color.yellow);
-                    } else {
-                        ArmorSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_LLEG:
-                    llArmorPanel.add(ArmorSlotList);
-                    llArmorPanel.addMouseListener(this);
-                    if (critDamage) {
-                        ArmorSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        ArmorSlotList.setBackground(Color.yellow);
-                    } else {
-                        ArmorSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_RLEG:
-                    rlArmorPanel.add(ArmorSlotList);
-                    rlArmorPanel.addMouseListener(this);
-                    if (critDamage) {
-                        ArmorSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        ArmorSlotList.setBackground(Color.yellow);
-                    } else {
-                        ArmorSlotList.setBackground(Color.green);
-                    }
-                    break;
+                    case Mech.LOC_HEAD:
+                        headArmorPanel.add(ArmorSlotList);
+                        headArmorPanel.addMouseListener(this);
+                        if (critDamage) {
+                            ArmorSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            ArmorSlotList.setBackground(Color.yellow);
+                        } else {
+                            ArmorSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_LARM:
+                        laArmorPanel.add(ArmorSlotList);
+                        laArmorPanel.addMouseListener(this);
+                        if (critDamage) {
+                            ArmorSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            ArmorSlotList.setBackground(Color.yellow);
+                        } else {
+                            ArmorSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_RARM:
+                        raArmorPanel.add(ArmorSlotList);
+                        raArmorPanel.addMouseListener(this);
+                        if (critDamage) {
+                            ArmorSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            ArmorSlotList.setBackground(Color.yellow);
+                        } else {
+                            ArmorSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_CT:
+                        ctArmorPanel.add(ArmorSlotList);
+                        ctArmorPanel.addMouseListener(this);
+                        if (critDamage) {
+                            ArmorSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            ArmorSlotList.setBackground(Color.yellow);
+                        } else {
+                            ArmorSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_LT:
+                        ltArmorPanel.add(ArmorSlotList);
+                        ltArmorPanel.addMouseListener(this);
+                        if (critDamage) {
+                            ArmorSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            ArmorSlotList.setBackground(Color.yellow);
+                        } else {
+                            ArmorSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_RT:
+                        rtArmorPanel.add(ArmorSlotList);
+                        rtArmorPanel.addMouseListener(this);
+                        if (critDamage) {
+                            ArmorSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            ArmorSlotList.setBackground(Color.yellow);
+                        } else {
+                            ArmorSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_LLEG:
+                        llArmorPanel.add(ArmorSlotList);
+                        llArmorPanel.addMouseListener(this);
+                        if (critDamage) {
+                            ArmorSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            ArmorSlotList.setBackground(Color.yellow);
+                        } else {
+                            ArmorSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_RLEG:
+                        rlArmorPanel.add(ArmorSlotList);
+                        rlArmorPanel.addMouseListener(this);
+                        if (critDamage) {
+                            ArmorSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            ArmorSlotList.setBackground(Color.yellow);
+                        } else {
+                            ArmorSlotList.setBackground(Color.green);
+                        }
+                        break;
                 }
 
                 for (int slot = 0; slot < unit.getNumberOfCriticals(location); slot++) {
@@ -741,7 +909,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                         String result = "";
                         if (cs.isRepairing()) {
                             result += "!!";
-                        } else if (mwclient.getRMT().isQueued(location, slot, unit.getExternalId())) {
+                        } else if (mwclient.getRMT()
+                                .isQueued(location, slot, unit.getExternalId())) {
                             result += "@@";
                             critDamage = true;
                         } else if (cs.isMissing()) {
@@ -761,7 +930,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                         Mounted m = cs.getMount();
                         if (cs.isRepairing()) {
                             critNames.add("!!" + m.getDesc());
-                        } else if (mwclient.getRMT().isQueued(location, slot, unit.getExternalId())) {
+                        } else if (mwclient.getRMT()
+                                .isQueued(location, slot, unit.getExternalId())) {
                             critNames.add("@@" + m.getDesc());
                             critDamage = true;
                         } else if (cs.isMissing()) {
@@ -786,94 +956,94 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 CriticalSlotList.setFont(new Font("Arial", Font.PLAIN, 10));
                 CriticalSlotList.setName(Integer.toString(location));
                 switch (location) {
-                case Mech.LOC_HEAD:
-                    headPanel.add(CriticalSlotList);
-                    headPanel.addMouseListener(this);
-                    if (critDamage) {
-                        CriticalSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        CriticalSlotList.setBackground(Color.yellow);
-                    } else {
-                        CriticalSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_LARM:
-                    laPanel.add(CriticalSlotList);
-                    laPanel.addMouseListener(this);
-                    if (critDamage) {
-                        CriticalSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        CriticalSlotList.setBackground(Color.yellow);
-                    } else {
-                        CriticalSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_RARM:
-                    raPanel.add(CriticalSlotList);
-                    raPanel.addMouseListener(this);
-                    if (critDamage) {
-                        CriticalSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        CriticalSlotList.setBackground(Color.yellow);
-                    } else {
-                        CriticalSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_CT:
-                    ctPanel.add(CriticalSlotList);
-                    ctPanel.addMouseListener(this);
-                    if (critDamage) {
-                        CriticalSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        CriticalSlotList.setBackground(Color.yellow);
-                    } else {
-                        CriticalSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_LT:
-                    ltPanel.add(CriticalSlotList);
-                    ltPanel.addMouseListener(this);
-                    if (critDamage) {
-                        CriticalSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        CriticalSlotList.setBackground(Color.yellow);
-                    } else {
-                        CriticalSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_RT:
-                    rtPanel.add(CriticalSlotList);
-                    rtPanel.addMouseListener(this);
-                    if (critDamage) {
-                        CriticalSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        CriticalSlotList.setBackground(Color.yellow);
-                    } else {
-                        CriticalSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_LLEG:
-                    llPanel.add(CriticalSlotList);
-                    llPanel.addMouseListener(this);
-                    if (critDamage) {
-                        CriticalSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        CriticalSlotList.setBackground(Color.yellow);
-                    } else {
-                        CriticalSlotList.setBackground(Color.green);
-                    }
-                    break;
-                case Mech.LOC_RLEG:
-                    rlPanel.add(CriticalSlotList);
-                    rlPanel.addMouseListener(this);
-                    if (critDamage) {
-                        CriticalSlotList.setBackground(Color.red);
-                    } else if (armorDamage) {
-                        CriticalSlotList.setBackground(Color.yellow);
-                    } else {
-                        CriticalSlotList.setBackground(Color.green);
-                    }
-                    break;
+                    case Mech.LOC_HEAD:
+                        headPanel.add(CriticalSlotList);
+                        headPanel.addMouseListener(this);
+                        if (critDamage) {
+                            CriticalSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            CriticalSlotList.setBackground(Color.yellow);
+                        } else {
+                            CriticalSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_LARM:
+                        laPanel.add(CriticalSlotList);
+                        laPanel.addMouseListener(this);
+                        if (critDamage) {
+                            CriticalSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            CriticalSlotList.setBackground(Color.yellow);
+                        } else {
+                            CriticalSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_RARM:
+                        raPanel.add(CriticalSlotList);
+                        raPanel.addMouseListener(this);
+                        if (critDamage) {
+                            CriticalSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            CriticalSlotList.setBackground(Color.yellow);
+                        } else {
+                            CriticalSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_CT:
+                        ctPanel.add(CriticalSlotList);
+                        ctPanel.addMouseListener(this);
+                        if (critDamage) {
+                            CriticalSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            CriticalSlotList.setBackground(Color.yellow);
+                        } else {
+                            CriticalSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_LT:
+                        ltPanel.add(CriticalSlotList);
+                        ltPanel.addMouseListener(this);
+                        if (critDamage) {
+                            CriticalSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            CriticalSlotList.setBackground(Color.yellow);
+                        } else {
+                            CriticalSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_RT:
+                        rtPanel.add(CriticalSlotList);
+                        rtPanel.addMouseListener(this);
+                        if (critDamage) {
+                            CriticalSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            CriticalSlotList.setBackground(Color.yellow);
+                        } else {
+                            CriticalSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_LLEG:
+                        llPanel.add(CriticalSlotList);
+                        llPanel.addMouseListener(this);
+                        if (critDamage) {
+                            CriticalSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            CriticalSlotList.setBackground(Color.yellow);
+                        } else {
+                            CriticalSlotList.setBackground(Color.green);
+                        }
+                        break;
+                    case Mech.LOC_RLEG:
+                        rlPanel.add(CriticalSlotList);
+                        rlPanel.addMouseListener(this);
+                        if (critDamage) {
+                            CriticalSlotList.setBackground(Color.red);
+                        } else if (armorDamage) {
+                            CriticalSlotList.setBackground(Color.yellow);
+                        } else {
+                            CriticalSlotList.setBackground(Color.green);
+                        }
+                        break;
                 }
             }
         }
@@ -930,7 +1100,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             techString.add(UnitUtils.techDescription(UnitUtils.TECH_PILOT));
         }
 
-        if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowCritRepairsForRewards")) && !salvage) {
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowCritRepairsForRewards"))
+                && !salvage) {
             techString.add(UnitUtils.techDescription(UnitUtils.TECH_REWARD_POINTS));
         }
 
@@ -976,7 +1147,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 numberOfRetriesEditor.setValue(0);
                 numberOfRetriesField.setValue(0);
             }
-            numberOfRetriesField.setToolTipText("<html>Number of times the assigned tech will try to finish the repair<br>will stop when repair is sucessful or you run out of money or tries<br>Set to -1 or infinite retries</html>");
+            numberOfRetriesField.setToolTipText(
+                    "<html>Number of times the assigned tech will try to finish the repair<br>will stop when repair is sucessful or you run out of money or tries<br>Set to -1 or infinite retries</html>");
             numberOfRetriesField.addKeyListener(this);
             techPanel.add(numberOfRetriesField);
             SpringLayoutHelper.setupSpringGrid(techPanel, 9);
@@ -993,9 +1165,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
     }
 
     /**
-     * This method sets the cost field with the cost of the repair based on the
-     * crit and the tech doing the job.
-     *
+     * This method sets the cost field with the cost of the repair based on the crit and the tech
+     * doing the job.
      */
     public void setCost() {
 
@@ -1010,7 +1181,10 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         critSlot = selectedSlot;
 
         if (techComboBox.getSelectedIndex() < UnitUtils.TECH_PILOT) {
-            techCost = Integer.parseInt(mwclient.getServerConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
+            techCost =
+                    Integer.parseInt(
+                            mwclient.getServerConfigs(
+                                    UnitUtils.techDescription(techType) + "TechRepairCost"));
             techCostWorkMod = techWorkMod;
         }
 
@@ -1032,7 +1206,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
             cost += (techCost * Math.abs(techCostWorkMod)) + techCost;
             costField.setText(Integer.toString((int) cost));
-        // Use Crit based Repairs!
+            // Use Crit based Repairs!
         } else {
             if (critSlot == UnitUtils.LOC_FRONT_ARMOR) {
                 armor = true;
@@ -1095,9 +1269,13 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 CriticalSlot cs = unit.getCritical(critLocation, critSlot);
                 double cost = 1;
                 if (salvage) {
-                    totalCrits = UnitUtils.getNumberOfCrits(unit, cs) - UnitUtils.getNumberOfDamagedCrits(unit, critSlot, critLocation, armor);
+                    totalCrits =
+                            UnitUtils.getNumberOfCrits(unit, cs)
+                                    - UnitUtils.getNumberOfDamagedCrits(
+                                            unit, critSlot, critLocation, armor);
                 } else {
-                    totalCrits = UnitUtils.getNumberOfDamagedCrits(unit, critSlot, critLocation, armor);
+                    totalCrits =
+                            UnitUtils.getNumberOfDamagedCrits(unit, critSlot, critLocation, armor);
                 }
                 cost = CUnit.getCritCost(unit, mwclient, cs);
                 totalCost = (int) (totalCrits * cost);
@@ -1106,40 +1284,48 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 totalCost += techCost * Math.abs(techWorkMod);
                 cost = Math.max(1, totalCost);
                 costField.setText(Integer.toString((int) cost));
+            } // end Else
+        } // end real repair cost else
 
-            }// end Else
-        }// end real repair cost else
-
-        if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowCritRepairsForRewards")) && (UnitUtils.techType((String) techComboBox.getSelectedItem()) == UnitUtils.TECH_REWARD_POINTS)) {
-            double cost = totalCrits * Double.parseDouble(mwclient.getServerConfigs("RewardPointsForCritRepair"));
+        if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowCritRepairsForRewards"))
+                && (UnitUtils.techType((String) techComboBox.getSelectedItem())
+                        == UnitUtils.TECH_REWARD_POINTS)) {
+            double cost =
+                    totalCrits
+                            * Double.parseDouble(
+                                    mwclient.getServerConfigs("RewardPointsForCritRepair"));
 
             cost = Math.ceil(cost);
             cost = Math.max(cost, 1);
 
             costField.setText(Integer.toString((int) cost));
         }
-
     }
 
-    /**
-     * this method sets the roll needed to be made to accomplish the repair.
-     *
-     */
+    /** this method sets the roll needed to be made to accomplish the repair. */
     public void setBaseRoll() {
 
         if ((critLocation < 0) || (critSlot < 0)) {
             return;
         }
-        int roll = UnitUtils.getTechRoll(unit, critLocation, critSlot, techType, armor, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getTechLevel(), salvage);
+        int roll =
+                UnitUtils.getTechRoll(
+                        unit,
+                        critLocation,
+                        critSlot,
+                        techType,
+                        armor,
+                        mwclient.getData()
+                                .getHouseByName(mwclient.getPlayer().getHouse())
+                                .getTechLevel(),
+                        salvage);
 
         baseRollField.setText(Integer.toString(roll));
     }
 
-    public void keyTyped(KeyEvent arg0) {
-    }
+    public void keyTyped(KeyEvent arg0) {}
 
-    public void keyPressed(KeyEvent arg0) {
-    }
+    public void keyPressed(KeyEvent arg0) {}
 
     public void keyReleased(KeyEvent arg0) {
         if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -1168,7 +1354,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             setCost();
             setBaseRoll();
             setWorkHours();
-        }// end if JList
+        } // end if JList
     }
 
     private void setWorkHours() {
@@ -1192,7 +1378,18 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             baseLine = 1;
         }
 
-        int rolls = UnitUtils.getTechRoll(unit, critLocation, critSlot, techType, armor, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getTechLevel(), salvage) - 3;
+        int rolls =
+                UnitUtils.getTechRoll(
+                                unit,
+                                critLocation,
+                                critSlot,
+                                techType,
+                                armor,
+                                mwclient.getData()
+                                        .getHouseByName(mwclient.getPlayer().getHouse())
+                                        .getTechLevel(),
+                                salvage)
+                        - 3;
         int maxCost = baseLine;
 
         baseLineCost = baseLine;
@@ -1225,7 +1422,17 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 baseRollField.setText(Integer.toString(roll));
             } else if (techType != UnitUtils.TECH_GREEN) {
                 techWorkMod = 1;
-                roll = UnitUtils.getTechRoll(unit, critLocation, critSlot, techType - 1, armor, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getTechLevel(), salvage);
+                roll =
+                        UnitUtils.getTechRoll(
+                                unit,
+                                critLocation,
+                                critSlot,
+                                techType - 1,
+                                armor,
+                                mwclient.getData()
+                                        .getHouseByName(mwclient.getPlayer().getHouse())
+                                        .getTechLevel(),
+                                salvage);
                 baseRollField.setText(Integer.toString(roll));
             }
             return;
@@ -1241,9 +1448,18 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             }
         }
 
-        roll = UnitUtils.getTechRoll(unit, critLocation, critSlot, techType, armor, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getTechLevel());
+        roll =
+                UnitUtils.getTechRoll(
+                        unit,
+                        critLocation,
+                        critSlot,
+                        techType,
+                        armor,
+                        mwclient.getData()
+                                .getHouseByName(mwclient.getPlayer().getHouse())
+                                .getTechLevel());
 
         baseRollField.setText(Integer.toString(roll + techWorkMod));
         setCost();
     }
-}// end AdvancedRepairDialog.java
+} // end AdvancedRepairDialog.java

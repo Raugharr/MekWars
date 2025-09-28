@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,44 +17,56 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 public class ModeratorMailCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Message";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		
-		if (Username.startsWith("[Dedicated]"))
-			userLevel = getExecutionLevel();
-		
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		if (command.countTokens() < 1)
-			return;
-		
-		String toSend = command.nextToken();
-		while (command.hasMoreElements())
-			toSend += "#"+command.nextToken();
-		
-		if (toSend.trim().length() == 0)
-			return;
-		
-		CampaignMain.cm.doSendModMail(Username, toSend);
-		//MWLogger.modLog("[MM] " + Username + ": " + toSend);
-		
-	}
+
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Message";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+
+        if (Username.startsWith("[Dedicated]")) userLevel = getExecutionLevel();
+
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        if (command.countTokens() < 1) return;
+
+        String toSend = command.nextToken();
+        while (command.hasMoreElements()) toSend += "#" + command.nextToken();
+
+        if (toSend.trim().length() == 0) return;
+
+        CampaignMain.cm.doSendModMail(Username, toSend);
+        // MWLogger.modLog("[MM] " + Username + ": " + toSend);
+
+    }
 }

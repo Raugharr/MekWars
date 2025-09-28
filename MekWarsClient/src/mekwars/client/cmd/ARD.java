@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -18,38 +18,34 @@
 package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.client.MWClient;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
 
 /**
  * @@author Torren (Jason Tighe)
- * 
- * Used for Advanced Repair Dialog.
- * 
- * This command creates a new repair dialog once the unit has been updated.
+ *
+ * <p>Used for Advanced Repair Dialog.
+ *
+ * <p>This command creates a new repair dialog once the unit has been updated.
  */
-
 public class ARD extends Command {
 
-	/**
-	 * @see Command#Command(MMClient)
-	 */
-	public ARD(MWClient mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @see Command#Command(MMClient)
+     */
+    public ARD(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-		int unitID = Integer.parseInt(st.nextToken());
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        int unitID = Integer.parseInt(st.nextToken());
 
-		if ( st.hasMoreElements() )
-			new AdvancedRepairDialog(mwclient,unitID,true);
-		else
-	        new AdvancedRepairDialog(mwclient,unitID,false);
-	}
+        if (st.hasMoreElements()) new AdvancedRepairDialog(mwclient, unitID, true);
+        else new AdvancedRepairDialog(mwclient, unitID, false);
+    }
 }

@@ -17,9 +17,6 @@
 
 package mekwars.client;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,24 +26,20 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Properties;
 import java.util.TreeMap;
-
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-
 import mekwars.common.campaign.clientutils.IClientConfig;
 import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-
-/**
- * Class for Client's configuration.
- */
+/** Class for Client's configuration. */
 public class GUIClientConfig implements IClientConfig {
-	private static final Logger logger = LogManager.getLogger(GUIClientConfig.class);
+    private static final Logger logger = LogManager.getLogger(GUIClientConfig.class);
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 415432969624634387L;
+
     // VARIABLES
     public static final String IMAGE_PATH = "data/images/";
     public static final String CAMO_PATH = "data/images/camo/";
@@ -69,7 +62,7 @@ public class GUIClientConfig implements IClientConfig {
             File configfile = new File(CONFIG_FILE);
             FileInputStream fis = new FileInputStream(configfile);
 
-            config.load(fis);  // Here's the change.
+            config.load(fis); // Here's the change.
             fis.close();
         } catch (IOException ie) {
             try {
@@ -127,9 +120,9 @@ public class GUIClientConfig implements IClientConfig {
 
     // METHODS
     /**
-     * Private method that loads hardcoded defaults. These are loaded before the
-     * players config values, adding any new configs in their default position
-     * and ensuring that no config value is even missing.
+     * Private method that loads hardcoded defaults. These are loaded before the players config
+     * values, adding any new configs in their default position and ensuring that no config value is
+     * even missing.
      */
     private Properties setDefaults() {
         Properties defaults = new Properties();
@@ -152,51 +145,51 @@ public class GUIClientConfig implements IClientConfig {
         defaults.setProperty("SPLITTERSIZE", "7"); // divider thickness
         defaults.setProperty("PLAYERPANEL", "YES"); // visible player panel
         defaults.setProperty("PLAYERPANELHEIGHT", "130"); // player panel height
-                                                          // (excluding logo
-                                                          // height)
+        // (excluding logo
+        // height)
         defaults.setProperty("LOGO", "NO"); // logo visible
         // defaults.setProperty("LOGOIMAGE","logo.jpg");
         defaults.setProperty("POPUPONATTACK", "YES"); // pop up dialog on attack
         defaults.setProperty("POPUPONMESSAGE", "NO"); // pop up dialog on popup
-                                                      // message
+        // message
         // HQ Panel properties
         defaults.setProperty("UNITCAMO", "Flame.jpg"); // camouflage for units
-                                                       // in hangar bay
+        // in hangar bay
         defaults.setProperty("UNITHEX", "NO"); // hexes for units in hangar bay
-        defaults.setProperty("HQCOLORSCHEME", "grey");// colors for unit
-                                                      // backgrounds in HQ
+        defaults.setProperty("HQCOLORSCHEME", "grey"); // colors for unit
+        // backgrounds in HQ
         defaults.setProperty("UNITAMOUNT", "10"); // hexes for units in hangar
-                                                  // bay
+        // bay
         // UserList properties
         defaults.setProperty("USERLISTBOLD", "YES"); // bold names on userlist
         defaults.setProperty("USERLISTCOLOR", "YES"); // colored names on
-                                                      // userlist
+        // userlist
         defaults.setProperty("USERLISTIMAGE", "YES"); // images on userlist
         defaults.setProperty("USERLISTCOUNT", "YES"); // player count on
-                                                      // userlist
+        // userlist
         defaults.setProperty("USERLISTDEDICATEDS", "NO"); // show dedicated
-                                                          // hosts on userlist
-        defaults.setProperty("USERLISTACTIVITYBTN", "YES");// show
-                                                           // activate/deactivate
-                                                           // button
+        // hosts on userlist
+        defaults.setProperty("USERLISTACTIVITYBTN", "YES"); // show
+        // activate/deactivate
+        // button
         // Chat properties
         defaults.setProperty("MAINCHANNELHM", "NO"); // show factionmail in main
-                                                     // channel
+        // channel
         defaults.setProperty("MAINCHANNELPM", "NO"); // show privatemail in main
-                                                     // channel
+        // channel
         defaults.setProperty("MAINCHANNELSM", "NO"); // show system messages in
-                                                     // main channel
+        // main channel
         defaults.setProperty("MAINCHANNELMISC", "NO"); // show misc messages in
-                                                       // main channel
+        // main channel
         defaults.setProperty("MAINCHANNELRPG", "NO"); // show in char messages
-                                                      // in main channel
+        // in main channel
         defaults.setProperty("MAINCHANNELMM", "NO"); // show modmail in main
-                                                      // channel
+        // channel
         defaults.setProperty("AUTOSCROLL", "NO"); // automatic chat scrolling
         defaults.setProperty("REPLYTOSENDER", "YES"); // PM tab replies to last
-                                                      // mail sender
+        // mail sender
         defaults.setProperty("REPLYTORECEIVER", "NO"); // PM tab replies to last
-                                                       // mail sender
+        // mail sender
         defaults.setProperty("CHATFONTSIZE", "+0");
         defaults.setProperty("CHATFONTCOLOR", "black");
         // sound properties
@@ -230,7 +223,7 @@ public class GUIClientConfig implements IClientConfig {
         defaults.setProperty("HQTABNAME", "Headquarters");
         defaults.setProperty("HQINTOPROW", "YES");
         defaults.setProperty("HQMNEMONIC", "Q");
-        defaults.setProperty("RULESTABVISIBLE", "YES"); //@Salient
+        defaults.setProperty("RULESTABVISIBLE", "YES"); // @Salient
         defaults.setProperty("RULESTABNAME", "Rules");
         defaults.setProperty("RULESINTOPROW", "YES");
         defaults.setProperty("RULESMNEMONIC", "Z");
@@ -289,9 +282,9 @@ public class GUIClientConfig implements IClientConfig {
         defaults.setProperty("STATUSINTRAYICON", "NO");
         defaults.setProperty("TRAYIMAGE", "reserve_colored.gif");
         defaults.setProperty("REPAIRIMAGE", "repair.gif");
-        defaults.setProperty("DISABLEALLSOUND", "false");// option menu, mute.
-        defaults.setProperty("SORTMODE", "NAME");// player list sort
-        defaults.setProperty("SORTORDER", "ASCENDING");// player list order
+        defaults.setProperty("DISABLEALLSOUND", "false"); // option menu, mute.
+        defaults.setProperty("SORTMODE", "NAME"); // player list sort
+        defaults.setProperty("SORTORDER", "ASCENDING"); // player list order
         defaults.setProperty("BMSORTCOLUMN", "-2");
         defaults.setProperty("BMSORTORDER", "true");
         defaults.setProperty("BATTLESSORTCOLUMN", "0");
@@ -358,7 +351,9 @@ public class GUIClientConfig implements IClientConfig {
         defaults.setProperty("MAPIMAGEWIDTH", "100");
 
         defaults.setProperty("UPDATEKEY", "-1");
-        defaults.setProperty("DEDMEMORY", "256");  //Had to up this - new MM is taking way more memory than before
+        defaults.setProperty(
+                "DEDMEMORY",
+                "256"); // Had to up this - new MM is taking way more memory than before
 
         // unitstatus setting
         // Right column
@@ -422,7 +417,7 @@ public class GUIClientConfig implements IClientConfig {
 
         // Developer stuffs
         defaults.setProperty("USETESTBUILDTABLEVIEWER", "false");
-        defaults.setProperty("EXPANDEDUNITTOOLTIP","true");
+        defaults.setProperty("EXPANDEDUNITTOOLTIP", "true");
 
         return defaults;
     }
@@ -436,10 +431,10 @@ public class GUIClientConfig implements IClientConfig {
      * options will be made public or removed.
      */
     /* (non-Javadoc)
-	 * @see client.IClientConfig#createConfig()
-	 */
+     * @see client.IClientConfig#createConfig()
+     */
     @Override
-	public void createConfig() {
+    public void createConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(CONFIG_FILE);
             PrintStream ps = new PrintStream(fos);
@@ -456,11 +451,13 @@ public class GUIClientConfig implements IClientConfig {
             // ps.println("#CHATFONTCOLOR: black");
             // ps.println("#If you don't want the Player Panel to be visible, set it to NO");
             // ps.println("PLAYERPANEL: YES");
-            // ps.println("#Put player panel height in pixels (excluding logo height) here (default is 130)");
+            // ps.println("#Put player panel height in pixels (excluding logo height) here (default
+            // is 130)");
             // ps.println("#PLAYERPANELHEIGHT: 130");
             // ps.println("#If you don't want the Logo to be visible, set it to NO");
             // ps.println("LOGO: NO");
-            // ps.println("#A picture (from /data/images) to be shown as your logo in client. If you comment it out, it will download your unit logo!");
+            // ps.println("#A picture (from /data/images) to be shown as your logo in client. If you
+            // comment it out, it will download your unit logo!");
             // ps.println("LOGOIMAGE: logo.jpg");
             // ps.println("#The thickness of splitters dividing client windows");
             // ps.println("#SPLITTERSIZE: 7");
@@ -472,18 +469,25 @@ public class GUIClientConfig implements IClientConfig {
              */
             // ps.println("#Your Color used for your name in the chat ");
             // ps.println("#Color of your name in chat.");
-            // ps.println("#Choices: standard HTML colours, any hex colour with a Red Value under AA)");
+            // ps.println("#Choices: standard HTML colours, any hex colour with a Red Value under
+            // AA)");
             // ps.println("COLOR: black");
             // ps.println("#IP of MekWars Server you are connecting to");
-            // ps.println("#Servers listed on forums @ http://www.sourceforge.net/projects/mekwars");
+            // ps.println("#Servers listed on forums @
+            // http://www.sourceforge.net/projects/mekwars");
             // ps.println("SERVERIP: SEE THE MEKWARS PROJECT PAGE FOR A LIST OF KNOWN SERVERS");
             // ps.println("#MegaMek host settings");
-            // ps.println("#IF and only IF your ip isn't detected correctly, you may edit this setting (very unlikely that this happens)");
-            // ps.println("#This is your current IP, needed to host games. You can use a Dynamically assigned DNS entry or just your plain IP here.");
-            // ps.println("#If you don't know your IP-Address try this website: http://www.whatismyip.com");
-            // ps.println("#You only need to enable that line if your IP isn't shown correctly when you create a game.");
+            // ps.println("#IF and only IF your ip isn't detected correctly, you may edit this
+            // setting (very unlikely that this happens)");
+            // ps.println("#This is your current IP, needed to host games. You can use a Dynamically
+            // assigned DNS entry or just your plain IP here.");
+            // ps.println("#If you don't know your IP-Address try this website:
+            // http://www.whatismyip.com");
+            // ps.println("#You only need to enable that line if your IP isn't shown correctly when
+            // you create a game.");
             // ps.println("#IP: 127.0.0.1");
-            // ps.println("#The maximum number of players you want to join your host. (If you host a game) Default: 12");
+            // ps.println("#The maximum number of players you want to join your host. (If you host a
+            // game) Default: 12");
             // ps.println("MAXPLAYERS: 12");
             // ps.println("#A comment for your game (If you host a game)");
             // ps.println("COMMENT: ");
@@ -501,23 +505,28 @@ public class GUIClientConfig implements IClientConfig {
             // ps.println("#Dedicated server settings");
             // ps.println("#Should this be a Dedicated Server ONLY?");
             // ps.println("DEDICATED: NO");
-            // ps.println("#(Only if Dedicated Only) Put names of people allowed to reset him here, separated with commas");
+            // ps.println("#(Only if Dedicated Only) Put names of people allowed to reset him here,
+            // separated with commas");
             // ps.println("DEDICATEDOWNERNAME: ");
-            // ps.println("#If you don't want to see news and statuses in Main Channel, set it to NO");
+            // ps.println("#If you don't want to see news and statuses in Main Channel, set it to
+            // NO");
             // ps.println("MAINCHANNELNEWS: YES");
             // ps.println("#If you don't want to see faction mails in Main Channel, set it to NO");
             // ps.println("MAINCHANNELHM: NO");
             // ps.println("#If you don't want to see private mails in Main Channel, set it to NO");
             // ps.println("MAINCHANNELPM: NO");
-            // ps.println("#If you don't want to see system messages in Main Channel, set it to NO");
+            // ps.println("#If you don't want to see system messages in Main Channel, set it to
+            // NO");
             // ps.println("MAINCHANNELSM: NO");
             // ps.println("#If you don't want to see misc messages in Main Channel, set it to NO");
             // ps.println("MAINCHANNELMISC: NO");
-            // ps.println("#If you want to hear a sound when specific word is received, put them in here, separated with commas");
+            // ps.println("#If you want to hear a sound when specific word is received, put them in
+            // here, separated with commas");
             // ps.println("#REPLYTOSENDER: YES");
             // ps.println("#If you don't want PM tab reply to last mail receiver, set it to NO");
             // ps.println("#REPLYTORECEIVER: NO");
-            // ps.println("#If you don't want dialog to popup on when you are attacked, set it to NO");
+            // ps.println("#If you don't want dialog to popup on when you are attacked, set it to
+            // NO");
             // ps.println("#POPUPONATTACK: YES");
             // ps.println("#PanelDivider set between 1-100");
             // ps.println("PANELDIVIDER: 40");
@@ -539,23 +548,29 @@ public class GUIClientConfig implements IClientConfig {
             ps.close();
             fos.close();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Failed to create config file. Check folder write access privledges?");
-			logger.fatal(ex.getMessage());
+            JOptionPane.showMessageDialog(
+                    null, "Failed to create config file. Check folder write access privledges?");
+            logger.fatal(ex.getMessage());
             System.exit(0);
         }
     }
 
     /**
-     * Load an image. Used by the CConfig constructor to load client images (eg
-     * - player list icons). Only external call is from the camo dialog and is
-     * used to replace the UNITCAMO image with the newly selected imageicon.
+     * Load an image. Used by the CConfig constructor to load client images (eg - player list
+     * icons). Only external call is from the camo dialog and is used to replace the UNITCAMO image
+     * with the newly selected imageicon.
      */
     public void loadImage(String imagename, String image, int width, int height) {
         if (imagename.equals("")) {
             return;
         }
         try {
-            images.put(image, new ImageIcon(new ImageIcon(imagename).getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT)));
+            images.put(
+                    image,
+                    new ImageIcon(
+                            new ImageIcon(imagename)
+                                    .getImage()
+                                    .getScaledInstance(width, height, Image.SCALE_DEFAULT)));
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
@@ -564,8 +579,7 @@ public class GUIClientConfig implements IClientConfig {
     /**
      * Get an ImageIcon from the client image cache.
      *
-     * @param image
-     *            - name of image to fetch
+     * @param image - name of image to fetch
      * @return an ImageIcon. Null if no match.
      */
     public ImageIcon getImage(String image) {
@@ -573,10 +587,10 @@ public class GUIClientConfig implements IClientConfig {
     }
 
     /* (non-Javadoc)
-	 * @see client.IClientConfig#getParam(java.lang.String)
-	 */
+     * @see client.IClientConfig#getParam(java.lang.String)
+     */
     @Override
-	public String getParam(String param) {
+    public String getParam(String param) {
         String tparam = null;
 
         if (param.endsWith(":")) {
@@ -590,20 +604,22 @@ public class GUIClientConfig implements IClientConfig {
     }
 
     /* (non-Javadoc)
-	 * @see client.IClientConfig#setParam(java.lang.String, java.lang.String)
-	 */
+     * @see client.IClientConfig#setParam(java.lang.String, java.lang.String)
+     */
     @Override
-	public void setParam(String param, String value) {
+    public void setParam(String param, String value) {
         config.setProperty(param, value);
     }
 
     /* (non-Javadoc)
-	 * @see client.IClientConfig#isParam(java.lang.String)
-	 */
+     * @see client.IClientConfig#isParam(java.lang.String)
+     */
     @Override
-	public boolean isParam(String param) {
+    public boolean isParam(String param) {
         String tparam = getParam(param);
-        if (tparam.equalsIgnoreCase("YES") || tparam.equalsIgnoreCase("TRUE") || tparam.equalsIgnoreCase("ON")) {
+        if (tparam.equalsIgnoreCase("YES")
+                || tparam.equalsIgnoreCase("TRUE")
+                || tparam.equalsIgnoreCase("ON")) {
             return true;
         }
         return false;
@@ -653,10 +669,10 @@ public class GUIClientConfig implements IClientConfig {
     }
 
     /* (non-Javadoc)
-	 * @see client.IClientConfig#getIntParam(java.lang.String)
-	 */
+     * @see client.IClientConfig#getIntParam(java.lang.String)
+     */
     @Override
-	public int getIntParam(String param) {
+    public int getIntParam(String param) {
         int toReturn;
         try {
             toReturn = Integer.parseInt(getParam(param));
@@ -667,10 +683,10 @@ public class GUIClientConfig implements IClientConfig {
     }
 
     /* (non-Javadoc)
-	 * @see client.IClientConfig#saveConfig()
-	 */
+     * @see client.IClientConfig#saveConfig()
+     */
     @Override
-	public void saveConfig() {
+    public void saveConfig() {
 
         try {
 
@@ -695,5 +711,4 @@ public class GUIClientConfig implements IClientConfig {
             MWLogger.errLog("Failed saving config file");
         }
     }
-
 }

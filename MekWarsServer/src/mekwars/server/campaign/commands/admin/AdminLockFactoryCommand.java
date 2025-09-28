@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,10 +17,9 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-
 import mekwars.common.util.MWLogger;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
@@ -28,74 +27,102 @@ import mekwars.server.campaign.commands.Command;
 
 // AdminLockPlanet#Planet#factory#true/false
 public class AdminLockFactoryCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Planet#factory#true/false";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		try{
-			SPlanet p = (SPlanet) CampaignMain.cm.getData().getPlanetByName(command.nextToken());
-			if (p == null){
-				CampaignMain.cm.toUser("Unknown planet!",Username,true);
-				return;   
-			}
-			
-			SUnitFactory uf = (SUnitFactory)CampaignMain.cm.getData().getFactoryByName(p,command.nextToken());
-			if ( uf == null ){
-				CampaignMain.cm.toUser("Unknown factory!",Username,true);
-				return;               
-			}
-			
-			boolean lock; 
-			if (command.hasMoreElements())
-				lock = Boolean.parseBoolean(command.nextToken());
-			else {
-				if (uf.isLocked())
-					lock = false;
-				else
-					lock = true;
-			}
-			uf.setLock(lock);
-			
-			if (lock) {
-				
-				//set 9999 miniticks so factory can be used. use add instead of set so HSUpdates are sent.
-				int currMiniTicks = uf.getTicksUntilRefresh();
-				uf.addRefresh(9999 - currMiniTicks, true);
-				
-				//send messages
-				CampaignMain.cm.toUser("You locked "+ uf.getName()+" on planet "+p.getName(),Username,true);
-				//server.MWLogger.modLog(Username + " has locked "+ uf.getName()+" on planet "+p.getName());
-				CampaignMain.cm.doSendModMail("NOTE",Username + " has locked "+ uf.getName()+" on planet "+p.getName());
-				
-			}
-			else {
-				
-				//reset miniticks so factory can be used. use add instead of set so HSUpdates are sent.
-				int miniTicksToRemove = uf.getTicksUntilRefresh();
-				uf.addRefresh(-miniTicksToRemove, true);
-				
-				//send messages
-				CampaignMain.cm.toUser("You unlocked "+ uf.getName()+" on planet "+p.getName(),Username,true);
-				//server.MWLogger.modLog(Username + " has unlocked "+ uf.getName()+" on planet "+p.getName());
-				CampaignMain.cm.doSendModMail("NOTE",Username + " has unlocked "+ uf.getName()+" on planet "+p.getName());
-			}
 
-		} catch (Exception ex){
-			CampaignMain.cm.toUser("Command failed. Make sure format was: /c adminlockfactory#planetname#factoryname", Username, true);
-			MWLogger.errLog(ex);
-		}
-		
-	}
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Planet#factory#true/false";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        try {
+            SPlanet p = (SPlanet) CampaignMain.cm.getData().getPlanetByName(command.nextToken());
+            if (p == null) {
+                CampaignMain.cm.toUser("Unknown planet!", Username, true);
+                return;
+            }
+
+            SUnitFactory uf =
+                    (SUnitFactory)
+                            CampaignMain.cm.getData().getFactoryByName(p, command.nextToken());
+            if (uf == null) {
+                CampaignMain.cm.toUser("Unknown factory!", Username, true);
+                return;
+            }
+
+            boolean lock;
+            if (command.hasMoreElements()) lock = Boolean.parseBoolean(command.nextToken());
+            else {
+                if (uf.isLocked()) lock = false;
+                else lock = true;
+            }
+            uf.setLock(lock);
+
+            if (lock) {
+
+                // set 9999 miniticks so factory can be used. use add instead of set so HSUpdates
+                // are sent.
+                int currMiniTicks = uf.getTicksUntilRefresh();
+                uf.addRefresh(9999 - currMiniTicks, true);
+
+                // send messages
+                CampaignMain.cm.toUser(
+                        "You locked " + uf.getName() + " on planet " + p.getName(), Username, true);
+                // server.MWLogger.modLog(Username + " has locked "+ uf.getName()+" on planet
+                // "+p.getName());
+                CampaignMain.cm.doSendModMail(
+                        "NOTE",
+                        Username + " has locked " + uf.getName() + " on planet " + p.getName());
+
+            } else {
+
+                // reset miniticks so factory can be used. use add instead of set so HSUpdates are
+                // sent.
+                int miniTicksToRemove = uf.getTicksUntilRefresh();
+                uf.addRefresh(-miniTicksToRemove, true);
+
+                // send messages
+                CampaignMain.cm.toUser(
+                        "You unlocked " + uf.getName() + " on planet " + p.getName(),
+                        Username,
+                        true);
+                // server.MWLogger.modLog(Username + " has unlocked "+ uf.getName()+" on planet
+                // "+p.getName());
+                CampaignMain.cm.doSendModMail(
+                        "NOTE",
+                        Username + " has unlocked " + uf.getName() + " on planet " + p.getName());
+            }
+
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser(
+                    "Command failed. Make sure format was: /c adminlockfactory#planetname#factoryname",
+                    Username,
+                    true);
+            MWLogger.errLog(ex);
+        }
+    }
 }

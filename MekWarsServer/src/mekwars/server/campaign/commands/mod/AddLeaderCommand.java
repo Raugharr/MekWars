@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2007 
+ * MekWars - Copyright (C) 2007
  *
  * Original author - jtighe (torren@users.sourceforge.net)
  *
@@ -17,59 +17,80 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.util.MWPasswd;
 
-/**
- * Add a Leader to a faction.
- */
+/** Add a Leader to a faction. */
 public class AddLeaderCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Player Name";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		SPlayer player;
-		
-		try{
-			String target = command.nextToken();
-			player = CampaignMain.cm.getPlayer(target);
-			player.getMyHouse().addLeader(player.getName());
-			int level = CampaignMain.cm.getIntegerConfig("factionLeaderLevel");
-			if ( player.getPassword().getAccess() < level ) {
-				//CampaignMain.cm.updatePlayersAccessLevel(target,level);
-				MWPasswd.getRecord(target).setAccess(level);
-				MWServ.getInstance().getClient(target).setAccessLevel(level);
-				MWServ.getInstance().getUser(target).setLevel(level);
-				MWServ.getInstance().sendRemoveUserToAll(target, false);
-				MWServ.getInstance().sendNewUserToAll(target, false);
-				MWPasswd.writeRecord(player.getPassword(), target);
-				if (player != null) {
-					CampaignMain.cm.doSendToAllOnlinePlayers("PI|DA|" + CampaignMain.cm.getPlayerUpdateString(player), false);
-				}
-			}
-			CampaignMain.cm.toUser("AM:You have been promoted to the faction leadership by "+Username+".", target);
-			CampaignMain.cm.doSendHouseMail(player.getMyHouse(), "NOTE", player.getName()+" has been promoted to the faction leadership.");
-			CampaignMain.cm.doSendModMail("NOTE",Username+" has added promoted "+target+" to faction leader.");		
-			
-		}catch(Exception ex){
-			CampaignMain.cm.toUser("AM:Invalid syntax: /addleader UserName", Username);
-		}
-	}		
+
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Player Name";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        SPlayer player;
+
+        try {
+            String target = command.nextToken();
+            player = CampaignMain.cm.getPlayer(target);
+            player.getMyHouse().addLeader(player.getName());
+            int level = CampaignMain.cm.getIntegerConfig("factionLeaderLevel");
+            if (player.getPassword().getAccess() < level) {
+                // CampaignMain.cm.updatePlayersAccessLevel(target,level);
+                MWPasswd.getRecord(target).setAccess(level);
+                MWServ.getInstance().getClient(target).setAccessLevel(level);
+                MWServ.getInstance().getUser(target).setLevel(level);
+                MWServ.getInstance().sendRemoveUserToAll(target, false);
+                MWServ.getInstance().sendNewUserToAll(target, false);
+                MWPasswd.writeRecord(player.getPassword(), target);
+                if (player != null) {
+                    CampaignMain.cm.doSendToAllOnlinePlayers(
+                            "PI|DA|" + CampaignMain.cm.getPlayerUpdateString(player), false);
+                }
+            }
+            CampaignMain.cm.toUser(
+                    "AM:You have been promoted to the faction leadership by " + Username + ".",
+                    target);
+            CampaignMain.cm.doSendHouseMail(
+                    player.getMyHouse(),
+                    "NOTE",
+                    player.getName() + " has been promoted to the faction leadership.");
+            CampaignMain.cm.doSendModMail(
+                    "NOTE", Username + " has added promoted " + target + " to faction leader.");
+
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser("AM:Invalid syntax: /addleader UserName", Username);
+        }
+    }
 }

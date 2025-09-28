@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2018 
- * 
+ * MekWars - Copyright (C) 2018
+ *
  * Original author - Bob Eldred (spork@mekwars.org)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,7 +19,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -27,51 +28,50 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
-import mekwars.common.util.MWLogger;
-import mekwars.server.campaign.CampaignMain;
-
 /**
- * Provides integration with a Discord webhook.  Status messages and
- * Operation outcome can be sent to the webhook.  
- * 
- * @author Spork
+ * Provides integration with a Discord webhook. Status messages and Operation outcome can be sent to
+ * the webhook.
  *
+ * @author Spork
  */
 public class DiscordMessageHandler {
-	private String webhookAddress = "";
-	
-	public DiscordMessageHandler() {
-		if(!CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
-			return;
-		}
-		webhookAddress = CampaignMain.cm.getConfig("DiscordWebHookAddress");
-	}
-	
-	/**
-	 * Post a message to the webhook
-	 * @param message the message to send
-	 */
-	public void post(String message) {		
-		if(webhookAddress.equalsIgnoreCase("") || webhookAddress.length() < 1 || webhookAddress == null) {
-			return;
-		}
-		
-		HttpClient httpclient = HttpClients.createDefault();
-		HttpPost httppost = new HttpPost(webhookAddress);
+    private String webhookAddress = "";
 
-		// Request parameters and other properties.
-		List<NameValuePair> params = new ArrayList<NameValuePair>(2);
-		params.add(new BasicNameValuePair("content", message));
-		try {
-			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			MWLogger.errLog(e);
-		}
+    public DiscordMessageHandler() {
+        if (!CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
+            return;
+        }
+        webhookAddress = CampaignMain.cm.getConfig("DiscordWebHookAddress");
+    }
 
-		try {
-			httpclient.execute(httppost);
-		} catch (IOException e) {
-			MWLogger.errLog(e);
-		}
-	}
+    /**
+     * Post a message to the webhook
+     *
+     * @param message the message to send
+     */
+    public void post(String message) {
+        if (webhookAddress.equalsIgnoreCase("")
+                || webhookAddress.length() < 1
+                || webhookAddress == null) {
+            return;
+        }
+
+        HttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost(webhookAddress);
+
+        // Request parameters and other properties.
+        List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+        params.add(new BasicNameValuePair("content", message));
+        try {
+            httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            MWLogger.errLog(e);
+        }
+
+        try {
+            httpclient.execute(httppost);
+        } catch (IOException e) {
+            MWLogger.errLog(e);
+        }
+    }
 }

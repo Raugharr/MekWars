@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,51 +16,75 @@
 
 /*
  * Created on 10.27.2005
- *  
+ *
  */
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminSetPlanetOriginalOwnerCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Planet Name#Faction Name";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		String PlanetName = command.nextToken();
-        String originalOwner = CampaignMain.cm.getConfig("NewbieHouseName");
-        SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(PlanetName,Username);
-        
-        if ( planet == null )
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Planet Name#Faction Name";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
-        
-        try{
-            if ( command.hasMoreTokens() )
-                originalOwner = command.nextToken();
-        }catch (Exception ex){}
-        
-        
+        }
+
+        String PlanetName = command.nextToken();
+        String originalOwner = CampaignMain.cm.getConfig("NewbieHouseName");
+        SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(PlanetName, Username);
+
+        if (planet == null) return;
+
+        try {
+            if (command.hasMoreTokens()) originalOwner = command.nextToken();
+        } catch (Exception ex) {
+        }
+
         planet.setOriginalOwner(originalOwner);
-        
-		CampaignMain.cm.toUser(planet.getName()+"'s original owner set to: " +originalOwner + ".",Username,true);
-		CampaignMain.cm.doSendModMail("NOTE",Username + " changed " + PlanetName+" 's original owner to: " + originalOwner + ".");
-		planet.updated();
-	}
+
+        CampaignMain.cm.toUser(
+                planet.getName() + "'s original owner set to: " + originalOwner + ".",
+                Username,
+                true);
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username
+                        + " changed "
+                        + PlanetName
+                        + " 's original owner to: "
+                        + originalOwner
+                        + ".");
+        planet.updated();
+    }
 }

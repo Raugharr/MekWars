@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,10 +20,10 @@ import megamek.Version;
 
 public abstract class AbstractVersionUpdater implements Comparable<AbstractVersionUpdater> {
     public abstract void update();
-    
+
     public abstract Version getVersion();
-    
+
     public int compareTo(final AbstractVersionUpdater other) {
-    	return getVersion().compareTo(other.getVersion());
-    } 
+        return getVersion().compareTo(other.getVersion());
+    }
 }

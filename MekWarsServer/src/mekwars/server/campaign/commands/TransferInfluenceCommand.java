@@ -17,7 +17,6 @@
 /**
  * @author Salient
  */
-
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
@@ -26,91 +25,146 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 
-
 public class TransferInfluenceCommand implements Command {
 
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
+    int accessLevel = 0;
+    String syntax = "";
 
-	public void process(StringTokenizer command,String Username)
-	{
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
 
-		if (accessLevel != 0)
-		{
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel())
-			{
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
 
-		SPlayer player = CampaignMain.cm.getPlayer(Username);
-		SHouse house = player.getMyHouse();
+    public String getSyntax() {
+        return syntax;
+    }
 
-		if (player.getMyHouse().isNewbieHouse())
-		{
-			CampaignMain.cm.toUser("AM:You may not transfer " + CampaignMain.cm.getConfig("FluLongName") + " while in a training faction.",Username,true);
-			return;
-		}
+    public void process(StringTokenizer command, String Username) {
 
-		//Acquire needed Data
-		String targetPlayer;
-		int amount;
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
 
-		try
-		{
-			targetPlayer = (String) command.nextElement();
-			amount = Integer.parseInt((String) command.nextElement());
-		}
-		catch (Exception e)
-		{
-			CampaignMain.cm.toUser("AM:Improper format. Try: /c transferinfluencepoints#TargetPlayer#amount",Username,true);
-			return;
-		}
+        SPlayer player = CampaignMain.cm.getPlayer(Username);
+        SHouse house = player.getMyHouse();
 
-		SPlayer targetplayer = CampaignMain.cm.getPlayer(targetPlayer);
+        if (player.getMyHouse().isNewbieHouse()) {
+            CampaignMain.cm.toUser(
+                    "AM:You may not transfer "
+                            + CampaignMain.cm.getConfig("FluLongName")
+                            + " while in a training faction.",
+                    Username,
+                    true);
+            return;
+        }
 
-		if (targetplayer == null)
-		{
-			CampaignMain.cm.toUser("AM:Could not find a player named " + targetPlayer + ".",Username,true);
-			return;
-		}
+        // Acquire needed Data
+        String targetPlayer;
+        int amount;
 
-		//no negative amounts
-		if (amount < 1)
-		{
-			CampaignMain.cm.toUser("AM:You must transfer at least 1 " + CampaignMain.cm.getConfig("FluLongName") + ".",Username,true);
-			return;
-		}
+        try {
+            targetPlayer = (String) command.nextElement();
+            amount = Integer.parseInt((String) command.nextElement());
+        } catch (Exception e) {
+            CampaignMain.cm.toUser(
+                    "AM:Improper format. Try: /c transferinfluencepoints#TargetPlayer#amount",
+                    Username,
+                    true);
+            return;
+        }
 
-		// check for same-ip interaction
-		boolean ipcheck = Boolean.parseBoolean(house.getConfig("IPCheck"));
-		if (ipcheck && MWServ.getInstance().getIP(player.getName()).toString().equals(MWServ.getInstance().getIP(targetplayer.getName()).toString())) {
-			CampaignMain.cm.toUser("AM:"+targetplayer.getName() + " has the same IP as you do. You can't send them " + CampaignMain.cm.getConfig("FluLongName") + ".", Username, true);
-			return;
-		}
+        SPlayer targetplayer = CampaignMain.cm.getPlayer(targetPlayer);
 
-		// if the player is neither in the faction of the target, nor fighting for that faction
-		if (!targetplayer.getHouseFightingFor().equals(player.getMyHouse()) && !targetplayer.getMyHouse().equals(player.getMyHouse())) {
-			CampaignMain.cm.toUser("AM:"+targetplayer.getName() + " is not from your faction! You can't send them " + CampaignMain.cm.getConfig("FluLongName") + ".", Username, true);
-			return;
-		}
+        if (targetplayer == null) {
+            CampaignMain.cm.toUser(
+                    "AM:Could not find a player named " + targetPlayer + ".", Username, true);
+            return;
+        }
 
-	if (!Boolean.parseBoolean(CampaignMain.cm.getConfig("AllowFluTransfer")))
-	{
-		CampaignMain.cm.toUser("AM:This feature has been disabled by the server operators.", Username, true);
-		return;
-	}
+        // no negative amounts
+        if (amount < 1) {
+            CampaignMain.cm.toUser(
+                    "AM:You must transfer at least 1 "
+                            + CampaignMain.cm.getConfig("FluLongName")
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
 
-		//do the transfer
-		player.addInfluence(-amount);
-		targetplayer.addInfluence(amount);
-		CampaignMain.cm.toUser("AM:You've transferred " + amount + " " + CampaignMain.cm.getConfig("FluLongName") + " to " + targetplayer.getName(), Username, true);
-		CampaignMain.cm.toUser("AM:"+player.getName() + " sends you " + amount + " " + CampaignMain.cm.getConfig("FluLongName") + ".", targetPlayer, true);
+        // check for same-ip interaction
+        boolean ipcheck = Boolean.parseBoolean(house.getConfig("IPCheck"));
+        if (ipcheck
+                && MWServ.getInstance()
+                        .getIP(player.getName())
+                        .toString()
+                        .equals(MWServ.getInstance().getIP(targetplayer.getName()).toString())) {
+            CampaignMain.cm.toUser(
+                    "AM:"
+                            + targetplayer.getName()
+                            + " has the same IP as you do. You can't send them "
+                            + CampaignMain.cm.getConfig("FluLongName")
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
 
-	}
+        // if the player is neither in the faction of the target, nor fighting for that faction
+        if (!targetplayer.getHouseFightingFor().equals(player.getMyHouse())
+                && !targetplayer.getMyHouse().equals(player.getMyHouse())) {
+            CampaignMain.cm.toUser(
+                    "AM:"
+                            + targetplayer.getName()
+                            + " is not from your faction! You can't send them "
+                            + CampaignMain.cm.getConfig("FluLongName")
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        if (!Boolean.parseBoolean(CampaignMain.cm.getConfig("AllowFluTransfer"))) {
+            CampaignMain.cm.toUser(
+                    "AM:This feature has been disabled by the server operators.", Username, true);
+            return;
+        }
+
+        // do the transfer
+        player.addInfluence(-amount);
+        targetplayer.addInfluence(amount);
+        CampaignMain.cm.toUser(
+                "AM:You've transferred "
+                        + amount
+                        + " "
+                        + CampaignMain.cm.getConfig("FluLongName")
+                        + " to "
+                        + targetplayer.getName(),
+                Username,
+                true);
+        CampaignMain.cm.toUser(
+                "AM:"
+                        + player.getName()
+                        + " sends you "
+                        + amount
+                        + " "
+                        + CampaignMain.cm.getConfig("FluLongName")
+                        + ".",
+                targetPlayer,
+                true);
+    }
 }

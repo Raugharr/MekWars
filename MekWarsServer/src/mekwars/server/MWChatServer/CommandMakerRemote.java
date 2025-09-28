@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -14,26 +14,21 @@
  * for more details.
  */
 
-
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
- */ 
+ */
 /**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
+ * @author Torren (Jason Tighe) 11.5.05
  */
 package mekwars.server.MWChatServer;
 
 import mekwars.server.MWChatServer.commands.ICommands;
 
-/**
- * Used to construct messages that will be sent over the socket to the client
- */
+/** Used to construct messages that will be sent over the socket to the client */
 public class CommandMakerRemote implements ICommands {
-    
+
     public static final String constructSignonAck(String myname) {
         StringBuilder sb = new StringBuilder();
         sb.append(SIGNON_ACK);
@@ -94,7 +89,7 @@ public class CommandMakerRemote implements ICommands {
         sb.append(DELIMITER);
         sb.append(room);
         sb.append(DELIMITER);
-        for (int i=0; i < names.length; i++) {
+        for (int i = 0; i < names.length; i++) {
             sb.append(names[i]);
             sb.append(DELIMITER);
         }
@@ -105,13 +100,12 @@ public class CommandMakerRemote implements ICommands {
         StringBuilder sb = new StringBuilder();
         sb.append(GET_USERS_ON_SERVER);
         sb.append(DELIMITER);
-        for (int i=0; i < names.length; i++) {
+        for (int i = 0; i < names.length; i++) {
             sb.append(names[i]);
             sb.append(DELIMITER);
         }
         return sb.toString();
     }
-
 
     public static final String constructUserJoinedRoomMessage(String user, String room) {
         StringBuilder sb = new StringBuilder();
@@ -125,9 +119,8 @@ public class CommandMakerRemote implements ICommands {
         return sb.toString();
     }
 
-    public static final String constructUserPartedRoomMessage(String user, String room, 
-                                                              boolean signOff) 
-    {
+    public static final String constructUserPartedRoomMessage(
+            String user, String room, boolean signOff) {
         StringBuilder sb = new StringBuilder();
         sb.append(ROOM_USER_DIFF);
         sb.append(DELIMITER);
@@ -158,14 +151,14 @@ public class CommandMakerRemote implements ICommands {
     }
 
     public static final String constructRoomListMessage(String[] rooms) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(GET_ROOMS);
-		sb.append(DELIMITER);
-		for (int i=0; i < rooms.length; i++) {
-			sb.append(rooms[i]);
-			sb.append(DELIMITER);
-		}
-		return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(GET_ROOMS);
+        sb.append(DELIMITER);
+        for (int i = 0; i < rooms.length; i++) {
+            sb.append(rooms[i]);
+            sb.append(DELIMITER);
+        }
+        return sb.toString();
     }
 
     public static final String constructPing(String user, String arg) {
@@ -180,7 +173,7 @@ public class CommandMakerRemote implements ICommands {
 
     public static final String constructPong(String user, String arg) {
         StringBuilder sb = new StringBuilder();
-        sb.append(PONG); 
+        sb.append(PONG);
         sb.append(DELIMITER);
         sb.append(user);
         sb.append(DELIMITER);
@@ -197,8 +190,10 @@ public class CommandMakerRemote implements ICommands {
         sb.append(msg);
         return sb.toString();
     }
+
     /**
      * Method constructRoomJoinError.
+     *
      * @param s
      * @param room
      * @return String
@@ -212,6 +207,7 @@ public class CommandMakerRemote implements ICommands {
 
     /**
      * Method constructSignOnError.
+     *
      * @param s
      * @param user
      * @return String
@@ -225,6 +221,7 @@ public class CommandMakerRemote implements ICommands {
 
     /**
      * Method constructError.
+     *
      * @param type
      * @param arg
      * @return String
@@ -238,38 +235,41 @@ public class CommandMakerRemote implements ICommands {
         return sb.toString();
     }
 
-	/**
-	 * Method constructKilled.
-	 * @param killer
-	 * @param msg
-	 * @return String
-	 */
-	public static String constructKilled(String killer, String msg) {
-		StringBuilder sb = new StringBuilder(KILL);
-		sb.append(DELIMITER);
-		sb.append(killer);
-		sb.append(DELIMITER);
-		sb.append(msg);
-		return sb.toString();
-	}
+    /**
+     * Method constructKilled.
+     *
+     * @param killer
+     * @param msg
+     * @return String
+     */
+    public static String constructKilled(String killer, String msg) {
+        StringBuilder sb = new StringBuilder(KILL);
+        sb.append(DELIMITER);
+        sb.append(killer);
+        sb.append(DELIMITER);
+        sb.append(msg);
+        return sb.toString();
+    }
 
-	/**
-	 * Method constructIgnoreList.
-	 * @return String
-	 */
-	public static String constructIgnoreListMessage(String[] ignorees) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(IGNORE_LIST);
-		sb.append(DELIMITER);
-		for (int i=0; i < ignorees.length; i++) {
-			sb.append(ignorees[i]);
-			sb.append(DELIMITER);
-		}
-		return sb.toString();
-	}
+    /**
+     * Method constructIgnoreList.
+     *
+     * @return String
+     */
+    public static String constructIgnoreListMessage(String[] ignorees) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(IGNORE_LIST);
+        sb.append(DELIMITER);
+        for (int i = 0; i < ignorees.length; i++) {
+            sb.append(ignorees[i]);
+            sb.append(DELIMITER);
+        }
+        return sb.toString();
+    }
 
     /**
      * Method constructAckKill.
+     *
      * @param victim
      * @return String
      */
@@ -282,6 +282,7 @@ public class CommandMakerRemote implements ICommands {
 
     /**
      * Method constructEmote.
+     *
      * @param user
      * @param room
      * @param message
@@ -300,6 +301,7 @@ public class CommandMakerRemote implements ICommands {
 
     /**
      * Method constructUserSignOn.
+     *
      * @param userId
      * @return String
      */
@@ -309,13 +311,14 @@ public class CommandMakerRemote implements ICommands {
 
     /**
      * Method constructUserSignOff.
+     *
      * @param userId
      * @return String
      */
     public static String constructUserSignOff(String userId) {
         return constructUserDiff(userId, "-");
     }
-    
+
     private static String constructUserDiff(String userId, String diff) {
         StringBuilder sb = new StringBuilder(USER_DIFF);
         sb.append(DELIMITER);
@@ -327,6 +330,7 @@ public class CommandMakerRemote implements ICommands {
 
     /**
      * Method constructRoomCreated.
+     *
      * @param room
      * @return String
      */
@@ -336,6 +340,7 @@ public class CommandMakerRemote implements ICommands {
 
     /**
      * Method constructRoomDestroyed.
+     *
      * @param room
      * @return String
      */
@@ -344,18 +349,18 @@ public class CommandMakerRemote implements ICommands {
     }
 
     private static String constructRoomDiff(String room, String diff) {
-		StringBuilder sb = new StringBuilder(ROOM_DIFF);
-		sb.append(DELIMITER);
-		sb.append(diff);
-		sb.append(DELIMITER);
-		sb.append(room);
-		return sb.toString();
+        StringBuilder sb = new StringBuilder(ROOM_DIFF);
+        sb.append(DELIMITER);
+        sb.append(diff);
+        sb.append(DELIMITER);
+        sb.append(room);
+        return sb.toString();
     }
 
-	public static String constructAckMail(String toUser) {
-		StringBuilder sb = new StringBuilder(MAIL_ACK);
-		sb.append(DELIMITER);
-		sb.append(toUser);
-		return sb.toString();
-	}
+    public static String constructAckMail(String toUser) {
+        StringBuilder sb = new StringBuilder(MAIL_ACK);
+        sb.append(DELIMITER);
+        sb.append(toUser);
+        return sb.toString();
+    }
 }

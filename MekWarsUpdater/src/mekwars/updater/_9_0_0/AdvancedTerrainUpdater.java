@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,8 +20,6 @@ import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
 import mekwars.common.AdvancedTerrain;
 import mekwars.server.campaign.CampaignMain;
-import mekwars.server.common.util.SMMNetXStream;
-import mekwars.updater.Updater;
 import mekwars.updater.FileUpdater;
 import mekwars.updater._9_0_0.util.XMLAdvancedTerrainDataParser;
 
@@ -32,8 +30,8 @@ public class AdvancedTerrainUpdater extends FileUpdater<AdvancedTerrain> {
     }
 
     protected ArrayList<AdvancedTerrain> deserialize() {
-        ArrayList<AdvancedTerrain> terrains = new XMLAdvancedTerrainDataParser(getInFilename())
-            .getAdvancedTerrains();
+        ArrayList<AdvancedTerrain> terrains =
+                new XMLAdvancedTerrainDataParser(getInFilename()).getAdvancedTerrains();
 
         for (AdvancedTerrain terrain : terrains) {
             CampaignMain.cm.getData().addAdvancedTerrain(terrain);
@@ -42,8 +40,8 @@ public class AdvancedTerrainUpdater extends FileUpdater<AdvancedTerrain> {
     }
 
     protected String serialize(ArrayList<AdvancedTerrain> elements) {
-        XStream xstream = CampaignMain.cm.getXStream(); 
-        
+        XStream xstream = CampaignMain.cm.getXStream();
+
         return xstream.toXML(elements.toArray(new AdvancedTerrain[elements.size()]));
     }
 }

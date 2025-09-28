@@ -1,10 +1,10 @@
 /*
  * MekWars - Copyright (C) 2011
- * 
- * 
+ *
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
 import mekwars.common.Unit;
 import mekwars.common.util.SpringLayoutHelper;
 
@@ -28,12 +27,12 @@ import mekwars.common.util.SpringLayoutHelper;
  */
 public class SinglePlayerFactionPanel extends JPanel {
 
-	private static final long serialVersionUID = -6458150681823841221L;
-	private JTextField baseTextField = new JTextField(5);
-	private JCheckBox BaseCheckBox = new JCheckBox();
-	
-	public SinglePlayerFactionPanel() {
-		super();
+    private static final long serialVersionUID = -6458150681823841221L;
+    private JTextField baseTextField = new JTextField(5);
+    private JCheckBox BaseCheckBox = new JCheckBox();
+
+    public SinglePlayerFactionPanel() {
+        super();
         /*
          * Single Player Faction Configuration Panel Construction
          */
@@ -45,7 +44,8 @@ public class SinglePlayerFactionPanel extends JPanel {
         masterPanel.setLayout(new BoxLayout(masterPanel, BoxLayout.Y_AXIS));
 
         BaseCheckBox = new JCheckBox("Single Player Factions");
-        BaseCheckBox.setToolTipText("If this is checked then each player will have their own faction");
+        BaseCheckBox.setToolTipText(
+                "If this is checked then each player will have their own faction");
         BaseCheckBox.setName("AllowSinglePlayerFactions");
         checkBoxPanel.add(BaseCheckBox);
 
@@ -71,19 +71,22 @@ public class SinglePlayerFactionPanel extends JPanel {
 
         baseTextField = new JTextField(5);
         playerFactionPanel.add(new JLabel("Base Components:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("How many components the new faction starts with for each type/class");
+        baseTextField.setToolTipText(
+                "How many components the new faction starts with for each type/class");
         baseTextField.setName("BaseFactoryComponents");
         playerFactionPanel.add(baseTextField);
 
         baseTextField = new JTextField(5);
         playerFactionPanel.add(new JLabel("Base Common Table Chances:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<HTML>Base number of shares for the common build table<br>in all of the starting factions build tables.</html>");
+        baseTextField.setToolTipText(
+                "<HTML>Base number of shares for the common build table<br>in all of the starting factions build tables.</html>");
         baseTextField.setName("BaseCommonBuildTableShares");
         playerFactionPanel.add(baseTextField);
 
         baseTextField = new JTextField(5);
         playerFactionPanel.add(new JLabel("Starting Bays:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<HTML>Number of bays the players starting planet gets.</html>");
+        baseTextField.setToolTipText(
+                "<HTML>Number of bays the players starting planet gets.</html>");
         baseTextField.setName("StartingPlanetBays");
         playerFactionPanel.add(baseTextField);
 
@@ -92,9 +95,25 @@ public class SinglePlayerFactionPanel extends JPanel {
         for (int type = 0; type < Unit.MAXBUILD; type++) {
             for (int weight = 0; weight <= Unit.ASSAULT; weight++) {
                 baseTextField = new JTextField(5);
-                playerFactionPanel2.add(new JLabel("Starting " + Unit.getWeightClassDesc(weight) + " " + Unit.getTypeClassDesc(type) + " Factory:", SwingConstants.TRAILING));
-                baseTextField.setToolTipText("Number of " + Unit.getWeightClassDesc(weight) + " " + Unit.getTypeClassDesc(type) + " factories a new faction starts with.");
-                baseTextField.setName("Starting" + Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type) + "Factory");
+                playerFactionPanel2.add(
+                        new JLabel(
+                                "Starting "
+                                        + Unit.getWeightClassDesc(weight)
+                                        + " "
+                                        + Unit.getTypeClassDesc(type)
+                                        + " Factory:",
+                                SwingConstants.TRAILING));
+                baseTextField.setToolTipText(
+                        "Number of "
+                                + Unit.getWeightClassDesc(weight)
+                                + " "
+                                + Unit.getTypeClassDesc(type)
+                                + " factories a new faction starts with.");
+                baseTextField.setName(
+                        "Starting"
+                                + Unit.getWeightClassDesc(weight)
+                                + Unit.getTypeClassDesc(type)
+                                + "Factory");
                 playerFactionPanel2.add(baseTextField);
             }
         }
@@ -105,6 +124,5 @@ public class SinglePlayerFactionPanel extends JPanel {
         masterPanel.add(playerFactionPanel);
         masterPanel.add(playerFactionPanel2);
         add(masterPanel);
-	}
-
+    }
 }

@@ -14,31 +14,17 @@
  * for more details.
  */
 
- /*
+/*
  * SolFreeBuildDialog
  * @Author Salient (mwosux@gmail.com) August 2017
- * Duplicated and modified TableViewerDialog in an attempt to create new dialog 
- * for SOL players to create any mek/vee on a pre defined build table. This is part 
+ * Duplicated and modified TableViewerDialog in an attempt to create new dialog
+ * for SOL players to create any mek/vee on a pre defined build table. This is part
  * of a Larger system to change how SOL works in general.
- * 
+ *
  */
-
- 
 
 package mekwars.client.gui.dialog;
 
-import mekwars.client.MWClient;
-import mekwars.client.campaign.CUnit;
-import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.client.gui.MWUnitDisplayHelper;
-import mekwars.client.gui.TableSorter;
-import mekwars.client.util.CUnitComparator;
-import mekwars.common.House;
-import mekwars.common.Unit;
-import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.MWLogger;
-import mekwars.common.util.SpringLayoutHelper;
-import mekwars.common.util.UnitUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -79,20 +65,29 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
 import megamek.common.MULParser;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
-import megamek.common.MULParser;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.MWUnitDisplayHelper;
+import mekwars.client.gui.TableSorter;
+import mekwars.client.util.CUnitComparator;
+import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 
 public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -5449999786199993020L;
+
     // ivars
     JComboBox<String> weightClassCombo;
     JComboBox<String> factionCombo;
@@ -104,8 +99,8 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     JLabel percentageLabel = new JLabel("Please Select a Unit To Create", SwingConstants.CENTER);
 
     String[] factionArray = {};
-    String[] unitTypeArray = { "Mek", "Vehicle", "BattleArmor", "Infantry", "ProtoMek", "Aero" };
-    String[] weightClassArray = { "Light", "Medium", "Heavy", "Assault" };
+    String[] unitTypeArray = {"Mek", "Vehicle", "BattleArmor", "Infantry", "ProtoMek", "Aero"};
+    String[] weightClassArray = {"Light", "Medium", "Heavy", "Assault"};
 
     int factionSort = 0;
     int unitSort = 0;
@@ -123,9 +118,9 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
     // maps and sorts
     TreeMap<Object, TableUnit> currentUnits;
-    TableUnit[] sortedUnits = {};// sorts generated from the map.
-    
-    //@Salient adding this to capture unit selection
+    TableUnit[] sortedUnits = {}; // sorts generated from the map.
+
+    // @Salient adding this to capture unit selection
     TableUnit selectedUnit;
 
     MWClient mwclient;
@@ -133,47 +128,47 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     // constructor
     public SolFreeBuildDialog(MWClient client) {
         super("Free Unit Browser");
-        
+
         mwclient = client;
         currentUnits = new TreeMap<Object, TableUnit>();
         generalScrollPane = new JScrollPane();
 
         // alpha sorted faction array. hacky and evil.
-        TreeSet<String> factionNames = new TreeSet<String>();// tree to alpha
-        
-        // if freebuild use all option is checked, and player is in SOL, all houses are loaded into the dialog
-        if( mwclient.getServerConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true") &&
-            mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName")))
-        {
+        TreeSet<String> factionNames = new TreeSet<String>(); // tree to alpha
+
+        // if freebuild use all option is checked, and player is in SOL, all houses are loaded into
+        // the dialog
+        if (mwclient.getServerConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true")
+                && mwclient.getPlayer()
+                        .getHouse()
+                        .equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName"))) {
             Iterator<House> i = mwclient.getData().getAllHouses().iterator();
-            while (i.hasNext()) 
-            {
+            while (i.hasNext()) {
                 House house = i.next();
-        
-                if (house.getId() > -1) 
-                {
+
+                if (house.getId() > -1) {
                     factionNames.add(house.getName());
                 }
             }
-            
-            //check if build table is set to common, if not add it
-            if(!mwclient.getServerConfigs("Sol_FreeBuild_BuildTable").equalsIgnoreCase("Common"))
-            {
+
+            // check if build table is set to common, if not add it
+            if (!mwclient.getServerConfigs("Sol_FreeBuild_BuildTable").equalsIgnoreCase("Common")) {
                 factionNames.add("Common");
             }
         }
-        
+
         // Only going to allow SOL to build from a table defined by DSO
         factionNames.add(mwclient.getServerConfigs("Sol_FreeBuild_BuildTable"));
-        
+
         // If player is not in newbie house AND post defection is true add only their house to list
-        if(!mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName")) &&
-            mwclient.getServerConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true"))
-        {
+        if (!mwclient.getPlayer()
+                        .getHouse()
+                        .equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName"))
+                && mwclient.getServerConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true")) {
             factionNames.clear();
             factionNames.add(mwclient.getPlayer().getHouse().trim());
         }
-        
+
         factionArray = factionNames.toArray(factionArray);
 
         // CONSTRUCT GUI
@@ -182,13 +177,15 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         factionCombo = new JComboBox<String>(factionArray);
         unitTypeCombo = new JComboBox<String>();
 
-        for ( int type = Unit.MEK; type < Unit.MAXBUILD; type++ ){
+        for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
             unitTypeCombo.addItem(Unit.getTypeClassDesc(type));
         }
 
         // set max combo heights
         Dimension comboDim = new Dimension();
-        comboDim.setSize(factionCombo.getMinimumSize().getWidth() * 1.5, factionLabel.getMinimumSize().getHeight() + 2);
+        comboDim.setSize(
+                factionCombo.getMinimumSize().getWidth() * 1.5,
+                factionLabel.getMinimumSize().getHeight() + 2);
 
         factionCombo.setAlignmentX(Component.CENTER_ALIGNMENT);
         factionCombo.setMaximumSize(comboDim);
@@ -211,7 +208,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
          * Load preserved combo selection settings.
          */
         // In the absence of a saved faction, load the player's own.
-        
+
         /*
         try {
             String previousItem = mwclient.getConfigParam("TABLEVIEWERFACTION");
@@ -241,8 +238,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         weightClassCombo.setSelectedIndex(0);
         unitTypeCombo.setSelectedIndex(0);
         factionCombo.setSelectedItem(0);
-        
-        
+
         // add listeners to the combo boxes
         factionCombo.addItemListener(this);
         unitTypeCombo.addItemListener(this);
@@ -251,31 +247,34 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         // allow the close button to actually close things ...
         closeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         closeButton.setAlignmentY(Component.CENTER_ALIGNMENT);
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        closeButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dispose();
+                    }
+                });
 
         refreshButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         refreshButton.setAlignmentY(Component.CENTER_ALIGNMENT);
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refreshButton_ActionPerformed();
-            }
-        });
-        
+        refreshButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        refreshButton_ActionPerformed();
+                    }
+                });
+
         createButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         createButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         createButton.setMnemonic(KeyEvent.VK_C);
-        createButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createUnit_ActionPerformed();
-            }
-        });
+        createButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        createUnit_ActionPerformed();
+                    }
+                });
 
         // set up the BM-style table
         tvModel = new TableViewerModel(mwclient, currentUnits, sortedUnits);
@@ -283,22 +282,23 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         generalTable.setModel(sorter);
 
         // make it possible to double click for unit info
-        generalTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    TableUnit u = getUnitAtRow(generalTable.getSelectedRow());
-                    if (u == null) {
-                        return;
+        generalTable.addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (e.getClickCount() == 2) {
+                            TableUnit u = getUnitAtRow(generalTable.getSelectedRow());
+                            if (u == null) {
+                                return;
+                            }
+
+                            Entity theEntity = u.getEntity();
+                            theEntity.loadAllWeapons();
+
+                            MWUnitDisplayHelper.create(theEntity);
+                        }
                     }
-
-                    Entity theEntity = u.getEntity();
-                    theEntity.loadAllWeapons();
-
-					MWUnitDisplayHelper.create(theEntity);
-                }
-            }
-        });// end addMouseListener();
+                }); // end addMouseListener();
 
         // set the proper cell renderers
         for (int j = 0; j < tvModel.getColumnCount(); j++) {
@@ -323,7 +323,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         // add the table to the scroll pane
         generalScrollPane.setToolTipText("Click on column header to sort.");
         generalScrollPane.setViewportView(generalTable);
-        generalScrollPane.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0), BorderFactory.createLineBorder(Color.BLACK, 1)));
+        generalScrollPane.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(10, 0, 10, 0),
+                        BorderFactory.createLineBorder(Color.BLACK, 1)));
 
         // make a box layout to hold the combos and table
         JPanel boxPanel = new JPanel();
@@ -342,7 +345,6 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         buttonPanel.add(createButton);
         buttonPanel.add(refreshButton);
         buttonPanel.add(closeButton);
-        
 
         SpringLayoutHelper.setupSpringGrid(buttonPanel, 3);
 
@@ -364,7 +366,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     // refresh
     public void refresh() {
         tvModel.refreshModel();
-        generalTable.setPreferredSize(new Dimension(generalTable.getWidth(), generalTable.getRowHeight() * (generalTable.getRowCount())));
+        generalTable.setPreferredSize(
+                new Dimension(
+                        generalTable.getWidth(),
+                        generalTable.getRowHeight() * (generalTable.getRowCount())));
         generalTable.revalidate();
     }
 
@@ -384,7 +389,8 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     // methods
     public TableUnit getUnitAtRow(int row) {
 
-        String filename = (String) generalTable.getModel().getValueAt(row, TableViewerModel.FILENAME);
+        String filename =
+                (String) generalTable.getModel().getValueAt(row, TableViewerModel.FILENAME);
         if (filename != null) {
             return currentUnits.get(filename);
         }
@@ -394,8 +400,8 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     }
 
     /**
-     * Method to conform with ItemListener. Takes item events from the combo
-     * boxes and triggers table loads.
+     * Method to conform with ItemListener. Takes item events from the combo boxes and triggers
+     * table loads.
      */
     @Override
     public void itemStateChanged(ItemEvent i) {
@@ -408,7 +414,8 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         JComboBox<String> source = (JComboBox<String>) i.getSource();
         if ((source == unitTypeCombo) && (unitSort == unitTypeCombo.getSelectedIndex())) {
             return;
-        } else if ((source == weightClassCombo) && (weightSort == weightClassCombo.getSelectedIndex())) {
+        } else if ((source == weightClassCombo)
+                && (weightSort == weightClassCombo.getSelectedIndex())) {
             return;
         } else if ((source == factionCombo) && (factionSort == factionCombo.getSelectedIndex())) {
             return;
@@ -423,9 +430,11 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         factionSort = factionCombo.getSelectedIndex();
 
         // save the new sort to the config
-        mwclient.getConfig().setParam("TABLEVIEWERFACTION", (String) factionCombo.getSelectedItem());
+        mwclient.getConfig()
+                .setParam("TABLEVIEWERFACTION", (String) factionCombo.getSelectedItem());
         mwclient.getConfig().setParam("TABLEVIEWERTYPE", (String) unitTypeCombo.getSelectedItem());
-        mwclient.getConfig().setParam("TALEVIEWERWEIGHT", (String) weightClassCombo.getSelectedItem());
+        mwclient.getConfig()
+                .setParam("TALEVIEWERWEIGHT", (String) weightClassCombo.getSelectedItem());
         mwclient.getConfig().saveConfig();
         mwclient.setConfig();
 
@@ -433,13 +442,16 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         refresh();
     }
 
-    /**
-     * Helper which checks strings to see if they end with a known-good unit
-     * file extension.
-     */
+    /** Helper which checks strings to see if they end with a known-good unit file extension. */
     public boolean hasValidExtension(String l) {
         String lc = l.toLowerCase();
-        if (lc.endsWith(".blk") || lc.endsWith(".mtf") || lc.endsWith(".hmp") || lc.endsWith(".xml") || lc.endsWith(".hmv") || lc.endsWith(".mep") || lc.endsWith(".mul")) {
+        if (lc.endsWith(".blk")
+                || lc.endsWith(".mtf")
+                || lc.endsWith(".hmp")
+                || lc.endsWith(".xml")
+                || lc.endsWith(".hmv")
+                || lc.endsWith(".mep")
+                || lc.endsWith(".mul")) {
             return true;
         }
         // else
@@ -447,8 +459,8 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     }
 
     /**
-     * Helper which takes a File entry and returns an input stream. Handles
-     * errors, etc. to reduce clutter in loadTables().
+     * Helper which takes a File entry and returns an input stream. Handles errors, etc. to reduce
+     * clutter in loadTables().
      */
     public InputStream getEntryInputStream(File bf) {
         InputStream is = null;
@@ -461,8 +473,8 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     }
 
     /**
-     * Helper which loops through a table, ignoring filenames and tablenames.
-     * Returns total table weighting for use when analyzing names.
+     * Helper which loops through a table, ignoring filenames and tablenames. Returns total table
+     * weighting for use when analyzing names.
      */
     public int getTotalWeightForTable(File bf) {
 
@@ -499,12 +511,16 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
     }
 
     /**
-     * Helper method which reads a given layer of tables. Extracted from
-     * loadTables to reduce repetition; however, doing do actually makes each
-     * check (inparticular, the first and last map levels) more complex than
-     * they would otherwise.
+     * Helper method which reads a given layer of tables. Extracted from loadTables to reduce
+     * repetition; however, doing do actually makes each check (inparticular, the first and last map
+     * levels) more complex than they would otherwise.
      */
-    public void doTableLayer(TreeMap<String, Double> curr, TreeMap<String, Double> next, String add, File buildTablePath, boolean commonOverride) {
+    public void doTableLayer(
+            TreeMap<String, Double> curr,
+            TreeMap<String, Double> next,
+            String add,
+            File buildTablePath,
+            boolean commonOverride) {
 
         /*
          * Set up an iterator of target tables. Note that the first level (base
@@ -517,16 +533,31 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
             // get zip entry for the new file.
             File tableEntry = null;
             if (commonOverride) {
-                tableEntry = new File(buildTablePath.getPath() + File.separatorChar + "Common" + add);
+                tableEntry =
+                        new File(buildTablePath.getPath() + File.separatorChar + "Common" + add);
             } else {
-                tableEntry = new File(buildTablePath.getPath() + File.separatorChar + currTableName + add);
+                tableEntry =
+                        new File(
+                                buildTablePath.getPath()
+                                        + File.separatorChar
+                                        + currTableName
+                                        + add);
             }
 
             if (!tableEntry.exists()) {
                 if (commonOverride) {
-                    tableEntry = new File((buildTablePath.getPath() + File.separatorChar + "Common" + add).toLowerCase());
+                    tableEntry =
+                            new File(
+                                    (buildTablePath.getPath() + File.separatorChar + "Common" + add)
+                                            .toLowerCase());
                 } else {
-                    tableEntry = new File((buildTablePath.getPath() + File.separatorChar + currTableName + add).toLowerCase());
+                    tableEntry =
+                            new File(
+                                    (buildTablePath.getPath()
+                                                    + File.separatorChar
+                                                    + currTableName
+                                                    + add)
+                                            .toLowerCase());
                 }
             }
 
@@ -626,59 +657,58 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                                     TableUnit tu = new TableUnit(en, frequency);
                                     if (tu != null) {
 
+                                        TableUnit eu =
+                                                currentUnits.get(tu.getRealFilename()); // existing
+                                        // unit
+                                        if (eu != null) {
+                                            eu.addFrequencyFrom(tu);
+                                        } else {
+                                            currentUnits.put(tu.getRealFilename(), tu);
+                                        }
 
-                                    TableUnit eu = currentUnits.get(tu.getRealFilename());// existing
-                                    // unit
-                                    if (eu != null) {
-                                        eu.addFrequencyFrom(tu);
-                                    } else {
-                                        currentUnits.put(tu.getRealFilename(), tu);
-                                    }
-
-                                    /*
-                                     * Add this table as a source.
-                                     */
-                                    eu = currentUnits.get(tu.getRealFilename());// existing
-                                    // unit
-                                    if (eu.getTables().get(currTableName) == null) {
-                                        eu.getTables().put(currTableName, frequency);
-                                    } else {
-                                        Double currFreq = eu.getTables().get(currTableName);
-                                        Double newFreq = currFreq + frequency;
-                                        eu.getTables().remove(currTableName);
-                                        eu.getTables().put(currTableName, newFreq);
-                                    }
+                                        /*
+                                         * Add this table as a source.
+                                         */
+                                        eu = currentUnits.get(tu.getRealFilename()); // existing
+                                        // unit
+                                        if (eu.getTables().get(currTableName) == null) {
+                                            eu.getTables().put(currTableName, frequency);
+                                        } else {
+                                            Double currFreq = eu.getTables().get(currTableName);
+                                            Double newFreq = currFreq + frequency;
+                                            eu.getTables().remove(currTableName);
+                                            eu.getTables().put(currTableName, newFreq);
+                                        }
                                     }
                                 }
                             } else {
                                 TableUnit tu = new TableUnit(Filename, frequency);
                                 if (tu != null) {
 
+                                    TableUnit eu = currentUnits.get(Filename); // existing
+                                    // unit
+                                    if (eu != null) {
+                                        eu.addFrequencyFrom(tu);
+                                    } else {
+                                        currentUnits.put(Filename, tu);
+                                    }
 
-                                TableUnit eu = currentUnits.get(Filename);// existing
-                                // unit
-                                if (eu != null) {
-                                    eu.addFrequencyFrom(tu);
-                                } else {
-                                    currentUnits.put(Filename, tu);
-                                }
-
-                                /*
-                                 * Add this table as a source.
-                                 */
-                                eu = currentUnits.get(Filename);// existing
-                                // unit
-                                if (eu.getTables().get(currTableName) == null) {
-                                    eu.getTables().put(currTableName, frequency);
-                                } else {
-                                    Double currFreq = eu.getTables().get(currTableName);
-                                    Double newFreq = currFreq.doubleValue() + frequency;
-                                    eu.getTables().remove(currTableName);
-                                    eu.getTables().put(currTableName, newFreq);
-                                }
+                                    /*
+                                     * Add this table as a source.
+                                     */
+                                    eu = currentUnits.get(Filename); // existing
+                                    // unit
+                                    if (eu.getTables().get(currTableName) == null) {
+                                        eu.getTables().put(currTableName, frequency);
+                                    } else {
+                                        Double currFreq = eu.getTables().get(currTableName);
+                                        Double newFreq = currFreq.doubleValue() + frequency;
+                                        eu.getTables().remove(currTableName);
+                                        eu.getTables().put(currTableName, newFreq);
+                                    }
                                 }
                             }
-                        } else if (weight != 0) {// is a crosslink table
+                        } else if (weight != 0) { // is a crosslink table
                             String crossTableName = "";
                             while (ST.hasMoreElements()) {
                                 crossTableName += ST.nextToken();
@@ -696,28 +726,32 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                             if (next != null) {
                                 if (next.containsKey("crossTableName")) {
                                     Double d = next.get(crossTableName);
-                                    double newTableWeight = d.doubleValue() + ((weight / totaltableweight) * tablemultiplier);
+                                    double newTableWeight =
+                                            d.doubleValue()
+                                                    + ((weight / totaltableweight)
+                                                            * tablemultiplier);
                                     next.remove(crossTableName);
                                     next.put(crossTableName, newTableWeight);
                                 } else {
-                                    next.put(crossTableName, (weight / totaltableweight) * tablemultiplier);
+                                    next.put(
+                                            crossTableName,
+                                            (weight / totaltableweight) * tablemultiplier);
                                 }
                             }
                         }
                     }
-                    is.close();// close input stream
-                    dis.close();// close buffer
+                    is.close(); // close input stream
+                    dis.close(); // close buffer
                 } catch (Exception e) {
                     return;
                 }
-
-            }// end if(Entry != null)
-        }// end while(more tables in iterator)
-    }// end doTableLayer()
+            } // end if(Entry != null)
+        } // end while(more tables in iterator)
+    } // end doTableLayer()
 
     /**
-     * Method which loads tables and TableUnits, based on current ComboBox
-     * selections. This is the beef of the class ...
+     * Method which loads tables and TableUnits, based on current ComboBox selections. This is the
+     * beef of the class ...
      */
     @SuppressWarnings("unused")
     public void loadTables() {
@@ -773,9 +807,20 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
          */
         boolean overrideWithCommon = false;
         // System.out.println("Attempting to find base table entry.");
-        File tableEntry = new File(buildTablePath.getPath() + File.separatorChar + factionString + addOnString);
+        File tableEntry =
+                new File(
+                        buildTablePath.getPath()
+                                + File.separatorChar
+                                + factionString
+                                + addOnString);
         if (tableEntry == null) {
-            tableEntry = new File((buildTablePath.getPath() + File.separatorChar + factionString + addOnString).toLowerCase());
+            tableEntry =
+                    new File(
+                            (buildTablePath.getPath()
+                                            + File.separatorChar
+                                            + factionString
+                                            + addOnString)
+                                    .toLowerCase());
         }
 
         /*
@@ -788,7 +833,9 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
             // System.out.println("Didn't find Faction table in lower case
             // either. Retrying with Common.");
             overrideWithCommon = true;
-            tableEntry = new File(buildTablePath.getPath() + File.separatorChar + "Common" + addOnString);
+            tableEntry =
+                    new File(
+                            buildTablePath.getPath() + File.separatorChar + "Common" + addOnString);
         }
 
         /*
@@ -797,7 +844,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         if (tableEntry == null) {
             // System.out.println("Didn't find Common table with standard
             // casing. Retrying in lower case.");
-            tableEntry = new File((buildTablePath.getPath() + File.separatorChar + "Common" + addOnString).toLowerCase());
+            tableEntry =
+                    new File(
+                            (buildTablePath.getPath() + File.separatorChar + "Common" + addOnString)
+                                    .toLowerCase());
         }
 
         if (tableEntry == null) {
@@ -821,7 +871,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
          * value and carries a 100% weight.
          */
         TreeMap<String, Double> temp = new TreeMap<String, Double>();
-        temp.put(factionString, 100.0);// using 100 makes things
+        temp.put(factionString, 100.0); // using 100 makes things
         // %'s instead of decimals
         // ...
         // System.out.println("this.doTableLayer - base");
@@ -866,7 +916,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
             totalPercent += currUnit.getFrequency();
         }
         DecimalFormat myFormatter = new DecimalFormat("###.#####");
-        //percentageLabel.setText("Total Percentage: " + myFormatter.format(totalPercent) + "%");
+        // percentageLabel.setText("Total Percentage: " + myFormatter.format(totalPercent) + "%");
     }
 
     // inner classes
@@ -877,17 +927,16 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
      */
     static class TableViewerModel extends AbstractTableModel {
 
-        /**
-         *
-         */
+        /** */
         private static final long serialVersionUID = 4544599978221999391L;
+
         // IVARS
         // static ints
-        public final static int UNIT = 0;// model/name
-        public final static int WEIGHT = 1;
-        public final static int BATTLEVALUE = 2;
-        public final static int FREQUENCY = 3;
-        public final static int FILENAME = 4;
+        public static final int UNIT = 0; // model/name
+        public static final int WEIGHT = 1;
+        public static final int BATTLEVALUE = 2;
+        public static final int FREQUENCY = 3;
+        public static final int FILENAME = 4;
 
         TreeMap<Object, TableUnit> currentUnits;
         TableUnit[] sortedUnits;
@@ -895,13 +944,14 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         int currentSortMode = TableViewerModel.FREQUENCY;
 
         // column name array
-        //String[] columnNames = { "Unit", "Weight", "BV", "Frequency" };
-        String[] columnNames = { "Unit", "Weight", "BV" };
+        // String[] columnNames = { "Unit", "Weight", "BV", "Frequency" };
+        String[] columnNames = {"Unit", "Weight", "BV"};
         // client reference
         MWClient mwclient;
 
         // CONSTRUCTOR
-        public TableViewerModel(MWClient c, TreeMap<Object, TableUnit> current, TableUnit[] sorted) {
+        public TableViewerModel(
+                MWClient c, TreeMap<Object, TableUnit> current, TableUnit[] sorted) {
             mwclient = c;
             currentUnits = current;
             sortedUnits = sorted;
@@ -969,42 +1019,43 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
             }
 
             switch (col) {
-            case UNIT:
-
-                try {
-                    if ((currU.getType() == Unit.MEK) && (currU.getEntity() != null) && !currU.getEntity().isOmni()) {
-                        return "<html><body>" + currU.getEntity().getChassis() + ", " + currU.getModelName();
+                case UNIT:
+                    try {
+                        if ((currU.getType() == Unit.MEK)
+                                && (currU.getEntity() != null)
+                                && !currU.getEntity().isOmni()) {
+                            return "<html><body>"
+                                    + currU.getEntity().getChassis()
+                                    + ", "
+                                    + currU.getModelName();
+                        }
+                        // else
+                        return "<html><body>" + currU.getModelName();
+                    } catch (Exception ex) {
+                        MWLogger.errLog(ex);
+                        return "";
                     }
-                    // else
-                    return "<html><body>" + currU.getModelName();
-                } catch (Exception ex) {
-                    MWLogger.errLog(ex);
-                    return "";
-                }
-            case WEIGHT:
-                return (int) currU.getEntity().getWeight();
+                case WEIGHT:
+                    return (int) currU.getEntity().getWeight();
 
-            case BATTLEVALUE:
+                case BATTLEVALUE:
+                    return currU.getEntity().calculateBattleValue();
 
-                return currU.getEntity().calculateBattleValue();
-
-            case FREQUENCY:
-
-                DecimalFormat myFormatter = new DecimalFormat("##0.00");
-                String val = myFormatter.format(currU.getFrequency());
-                //Double returnVal = Double.parseDouble(val);
-                Double returnVal = 0.0;
-                try {
+                case FREQUENCY:
+                    DecimalFormat myFormatter = new DecimalFormat("##0.00");
+                    String val = myFormatter.format(currU.getFrequency());
+                    // Double returnVal = Double.parseDouble(val);
+                    Double returnVal = 0.0;
+                    try {
                         returnVal = NumberFormat.getNumberInstance().parse(val).doubleValue();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
-                return returnVal;
+                    return returnVal;
 
-            case FILENAME:
-                return currU.getRealFilename();
-
+                case FILENAME:
+                    return currU.getRealFilename();
             }
 
             return "";
@@ -1024,55 +1075,52 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
             CUnitComparator comparator = null;
 
             switch (sortMode) {
-            case TableViewerModel.UNIT:
+                case TableViewerModel.UNIT:
+                    sortedUnits = currentUnits.values().toArray(sortedUnits);
+                    comparator = new CUnitComparator(CUnitComparator.HQSORT_NAME);
+                    Arrays.sort(sortedUnits, comparator);
+                    return sortedUnits;
 
-                sortedUnits = currentUnits.values().toArray(sortedUnits);
-                comparator = new CUnitComparator(CUnitComparator.HQSORT_NAME);
-                Arrays.sort(sortedUnits, comparator);
-                return sortedUnits;
+                case TableViewerModel.WEIGHT:
+                    sortedUnits = currentUnits.values().toArray(sortedUnits);
+                    comparator = new CUnitComparator(CUnitComparator.HQSORT_WEIGHTTONS);
+                    Arrays.sort(sortedUnits, comparator);
+                    return sortedUnits;
 
-            case TableViewerModel.WEIGHT:
+                case TableViewerModel.BATTLEVALUE:
+                    sortedUnits = currentUnits.values().toArray(sortedUnits);
+                    comparator = new CUnitComparator(CUnitComparator.HQSORT_BV);
+                    Arrays.sort(sortedUnits, comparator);
+                    return sortedUnits;
 
-                sortedUnits = currentUnits.values().toArray(sortedUnits);
-                comparator = new CUnitComparator(CUnitComparator.HQSORT_WEIGHTTONS);
-                Arrays.sort(sortedUnits, comparator);
-                return sortedUnits;
+                case TableViewerModel.FREQUENCY:
+                    sortedUnits = currentUnits.values().toArray(sortedUnits);
+                    Arrays.sort(
+                            sortedUnits,
+                            new Comparator<TableUnit>() {
+                                @Override
+                                public int compare(TableUnit o1, TableUnit o2) {
 
-            case TableViewerModel.BATTLEVALUE:
-
-                sortedUnits = currentUnits.values().toArray(sortedUnits);
-                comparator = new CUnitComparator(CUnitComparator.HQSORT_BV);
-                Arrays.sort(sortedUnits, comparator);
-                return sortedUnits;
-
-            case TableViewerModel.FREQUENCY:
-
-                sortedUnits = currentUnits.values().toArray(sortedUnits);
-                Arrays.sort(sortedUnits, new Comparator<TableUnit>() {
-                    @Override
-                    public int compare(TableUnit o1, TableUnit o2) {
-
-                        try {
-                            TableUnit t1 = o1;
-                            TableUnit t2 = o2;
-                            Double d1 = 0.0;
-                            Double d2 = 0.0;
-                            if (t1 != null) {
-                                d1 = t1.getFrequency();
-                            }
-                            if (t2 != null) {
-                                d2 = t2.getFrequency();
-                            }
-                            return d1.compareTo(d2);
-                        } catch (Exception ex) {
-                            MWLogger.errLog(ex);
-                            return 0;
-                        }
-                    }
-                });
-                return sortedUnits;
-
-            }// end switch
+                                    try {
+                                        TableUnit t1 = o1;
+                                        TableUnit t2 = o2;
+                                        Double d1 = 0.0;
+                                        Double d2 = 0.0;
+                                        if (t1 != null) {
+                                            d1 = t1.getFrequency();
+                                        }
+                                        if (t2 != null) {
+                                            d2 = t2.getFrequency();
+                                        }
+                                        return d1.compareTo(d2);
+                                    } catch (Exception ex) {
+                                        MWLogger.errLog(ex);
+                                        return 0;
+                                    }
+                                }
+                            });
+                    return sortedUnits;
+            } // end switch
 
             // failsafe return
             return new TableUnit[] {};
@@ -1083,14 +1131,20 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
          */
         private class TableViewerRenderer extends DefaultTableCellRenderer {
 
-            /**
-             *
-             */
+            /** */
             private static final long serialVersionUID = -8249928299962506117L;
 
             @Override
-            public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                java.awt.Component d = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            public java.awt.Component getTableCellRendererComponent(
+                    JTable table,
+                    Object value,
+                    boolean isSelected,
+                    boolean hasFocus,
+                    int row,
+                    int column) {
+                java.awt.Component d =
+                        super.getTableCellRendererComponent(
+                                table, value, isSelected, hasFocus, row, column);
 
                 JLabel c = new JLabel(); // use a new label for everything
                 // (should be made better later)
@@ -1117,7 +1171,12 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                 StringBuilder description = new StringBuilder();
 
                 if ((currU.getType() == Unit.MEK) && !currU.getEntity().isOmni()) {
-                    description.append("<html><body><u>" + currU.getEntity().getChassis() + ", " + currU.getModelName() + "</u><br>");
+                    description.append(
+                            "<html><body><u>"
+                                    + currU.getEntity().getChassis()
+                                    + ", "
+                                    + currU.getModelName()
+                                    + "</u><br>");
                 } else {
                     description.append("<html><body><u>" + currU.getModelName() + "</u><br>");
                 }
@@ -1126,12 +1185,13 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                 description.append("Sources:");
 
                 Iterator<String> i = currU.getTables().keySet().iterator();
-                //DecimalFormat formatter = new DecimalFormat("##0.0##");
+                // DecimalFormat formatter = new DecimalFormat("##0.0##");
                 while (i.hasNext()) {
                     String tableName = i.next();
-                    //Double freq = currU.getTables().get(tableName);
+                    // Double freq = currU.getTables().get(tableName);
                     description.append("<br>- " + tableName);
-                    //description.append("<br>- " + tableName + ": " + formatter.format(freq.doubleValue()) + "%");
+                    // description.append("<br>- " + tableName + ": " +
+                    // formatter.format(freq.doubleValue()) + "%");
                 }
 
                 c.setToolTipText(description.toString());
@@ -1148,13 +1208,11 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                 return c;
             }
         }
-
-    }// end TableViewerModel class
+    } // end TableViewerModel class
 
     /**
-     * TableUnit is a CUnit with added stat-tracking for ongoing frequency
-     * calculations. Much like the BMUnit; however, the TableUnit is less
-     * complex.
+     * TableUnit is a CUnit with added stat-tracking for ongoing frequency calculations. Much like
+     * the BMUnit; however, the TableUnit is less complex.
      */
     static class TableUnit extends CUnit {
 
@@ -1192,7 +1250,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
             } catch (Exception e) {
                 // MWLogger.errLog(e);
-                createEntityFromFileNameWithCache(fn.trim());// make the
+                createEntityFromFileNameWithCache(fn.trim()); // make the
                 // entity
             }
 
@@ -1207,13 +1265,11 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
             realFilename = UnitUtils.getEntityFileName(en);
 
-
             setUnitFilename(realFilename);
             setPilot(new Pilot("Autopilot", 4, 5));
 
             // get the unit from the summary cache
             unitEntity = en;
-
 
             frequency = f;
 
@@ -1247,27 +1303,32 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         }
 
         /**
-         * Tries to setUnitEntity from a filename w/ extension. This used to be
-         * the default way of getting units, but CUnit was changed to use the
-         * MegaMek summary cache. Because the table viewer reads the tables the
-         * same way the server does, it needs a server-style loading cascade,
-         * ugly as it may be :-(
+         * Tries to setUnitEntity from a filename w/ extension. This used to be the default way of
+         * getting units, but CUnit was changed to use the MegaMek summary cache. Because the table
+         * viewer reads the tables the same way the server does, it needs a server-style loading
+         * cascade, ugly as it may be :-(
          */
         private void createEntityFromFilename(String fn) {
 
             unitEntity = null;
             try {
-                unitEntity = new MechFileParser(new File("./data/mechfiles/Meks.zip"), fn).getEntity();
+                unitEntity =
+                        new MechFileParser(new File("./data/mechfiles/Meks.zip"), fn).getEntity();
             } catch (Exception e) {
                 try {
-                    unitEntity = new MechFileParser(new File("./data/mechfiles/Vehicles.zip"), fn).getEntity();
+                    unitEntity =
+                            new MechFileParser(new File("./data/mechfiles/Vehicles.zip"), fn)
+                                    .getEntity();
                 } catch (Exception ex) {
                     try {
-                        unitEntity = new MechFileParser(new File("./data/mechfiles/Infantry.zip"), fn).getEntity();
+                        unitEntity =
+                                new MechFileParser(new File("./data/mechfiles/Infantry.zip"), fn)
+                                        .getEntity();
                     } catch (Exception exc) {
                         try {
-                            MWLogger.errLog("Error loading unit: " + fn + ". Try replacing with OMG.");
-                            unitEntity = UnitUtils.createOMG();// new
+                            MWLogger.errLog(
+                                    "Error loading unit: " + fn + ". Try replacing with OMG.");
+                            unitEntity = UnitUtils.createOMG(); // new
                         } catch (Exception exepe) {
                             MWLogger.errLog("Error unit failed to load. Exiting.");
                             System.exit(1);
@@ -1279,8 +1340,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
             setType(getEntityType(unitEntity));
             getC3Type(unitEntity);
         }
-
-    }// end TableUnit
+    } // end TableUnit
 
     public void refreshButton_ActionPerformed() {
 
@@ -1289,8 +1349,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         refreshButton.setEnabled(false);
         if (userLevel >= mwclient.getData().getAccessLevel("AdminRequestBuildTable")) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
-        }
-        else if (userLevel >= mwclient.getData().getAccessLevel("RequestBuildTable")) {
+        } else if (userLevel >= mwclient.getData().getAccessLevel("RequestBuildTable")) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
         }
 
@@ -1306,17 +1365,15 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         refresh();
         refreshButton.setEnabled(true);
     }
-    
+
     public void createButton_ActionPerformed() {
-        
 
         int userLevel = mwclient.getUserLevel();
 
         refreshButton.setEnabled(false);
         if (userLevel >= mwclient.getData().getAccessLevel("AdminRequestBuildTable")) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminRequestBuildTable#list#true");
-        }
-        else if (userLevel >= mwclient.getData().getAccessLevel("RequestBuildTable")) {
+        } else if (userLevel >= mwclient.getData().getAccessLevel("RequestBuildTable")) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestBuildTable#list#true");
         }
 
@@ -1332,22 +1389,31 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         refresh();
         refreshButton.setEnabled(true);
     }
-    
-    //@Salient
+
+    // @Salient
     public void createUnit_ActionPerformed() {
-        
+
         selectedUnit = getUnitAtRow(generalTable.getSelectedRow());
         Entity tempEntity = selectedUnit.getEntity();
-        //why does mekwars use 0-3 and megamek uses 1-4 for weight classes? ... :(
-        
-        if (selectedUnit != null) 
-        {
+        // why does mekwars use 0-3 and megamek uses 1-4 for weight classes? ... :(
+
+        if (selectedUnit != null) {
             createButton.setEnabled(false);
-            
-            if(mwclient.getServerConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true") ||
-               mwclient.getServerConfigs("FreeBuild_PostDefection").equalsIgnoreCase("true")) //may not need this, command will always check house table if postdefection is enabled.
+
+            if (mwclient.getServerConfigs("Sol_FreeBuild_UseAll").equalsIgnoreCase("true")
+                    || mwclient.getServerConfigs("FreeBuild_PostDefection")
+                            .equalsIgnoreCase(
+                                    "true")) // may not need this, command will always check house
+            // table if postdefection is enabled.
             {
-                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + factionCombo.getSelectedItem().toString());
+                mwclient.sendChat(
+                        GameHost.CAMPAIGN_PREFIX
+                                + "SOLCREATEUNIT "
+                                + selectedUnit.getRealFilename()
+                                + "#"
+                                + TableUnit.getEntityWeight(tempEntity)
+                                + "#"
+                                + factionCombo.getSelectedItem().toString());
             }
             // else if this isn't a sol player, but post defection free build is enabled
             /*else if(!mwclient.getPlayer().getHouse().equalsIgnoreCase(mwclient.getServerConfigs("NewbieHouseName")) &&
@@ -1355,16 +1421,18 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
             {
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity) + "#" + (String) factionCombo.getSelectedItem());
             } ... dont need this?*/
-            else 
-            {
-                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SOLCREATEUNIT " + selectedUnit.getRealFilename() + "#" + TableUnit.getEntityWeight(tempEntity));
+            else {
+                mwclient.sendChat(
+                        GameHost.CAMPAIGN_PREFIX
+                                + "SOLCREATEUNIT "
+                                + selectedUnit.getRealFilename()
+                                + "#"
+                                + TableUnit.getEntityWeight(tempEntity));
             }
-           
+
             createButton.setEnabled(true);
             loadTables();
             refresh();
-
         }
     }
-
-}// end SolFreeBuildDialog class
+} // end SolFreeBuildDialog class

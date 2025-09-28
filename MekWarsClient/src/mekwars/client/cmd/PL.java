@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -18,21 +18,19 @@
 package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
+import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
-import mekwars.client.common.campaign.clientutils.GameHost;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
-
 public class PL extends Command {
 
     /**
@@ -86,7 +84,7 @@ public class PL extends Command {
         } else if (cmd.equals("SM")) {
             player.setMoney(TokenReader.readInt(st));
         } else if (cmd.equals("UMT")) {
-            player.setMekToken(TokenReader.readInt(st)); //@Salient
+            player.setMekToken(TokenReader.readInt(st)); // @Salient
         } else if (cmd.equals("SB")) {
             player.setBays(TokenReader.readInt(st));
         } else if (cmd.equals("SF")) {
@@ -104,11 +102,11 @@ public class PL extends Command {
         } else if (cmd.equals("SSN")) {
             player.setSubFaction(TokenReader.readString(st));
         } else if (cmd.equals("AAA")) {
-            player.setAutoArmy(st);// give it the whole tokenizer
+            player.setAutoArmy(st); // give it the whole tokenizer
         } else if (cmd.equals("AAM")) {
-            player.setMines(st);// give it the whole tokenizer
+            player.setMines(st); // give it the whole tokenizer
         } else if (cmd.equals("GEA")) {
-            player.setAutoGunEmplacements(st);// give it the whole tokenizer
+            player.setAutoGunEmplacements(st); // give it the whole tokenizer
         } else if (cmd.equals("SUS")) {
             player.setUnitStatus(TokenReader.readString(st));
         } else if (cmd.equals("RNA")) {
@@ -147,7 +145,7 @@ public class PL extends Command {
             mwclient.setBotsOnSameTeam(TokenReader.readBoolean(st));
         } else if (cmd.equals("SHFF")) {
             player.setHouseFightingFor(TokenReader.readString(st));
-        } else if (cmd.equals("SUL")) {// Players Unit Logo
+        } else if (cmd.equals("SUL")) { // Players Unit Logo
             player.setLogo(TokenReader.readString(st));
             mwclient.getMainFrame().getMainPanel().getPlayerPanel().refresh();
         } else if (cmd.equals("AP2PPQ")) {
@@ -165,7 +163,9 @@ public class PL extends Command {
         } else if (cmd.equals("FC")) {
             player.setFactionConfigs(TokenReader.readString(st));
         } else if (cmd.equals("UPBM")) {
-            mwclient.updatePartsBlackMarket(TokenReader.readString(st), Integer.parseInt(mwclient.getServerConfigs("CampaignYear")));
+            mwclient.updatePartsBlackMarket(
+                    TokenReader.readString(st),
+                    Integer.parseInt(mwclient.getServerConfigs("CampaignYear")));
         } else if (cmd.equals("UPPC")) {
             mwclient.updatePlayerPartsCache(TokenReader.readString(st));
         } else if (cmd.equals("RPPC")) {
@@ -184,7 +184,10 @@ public class PL extends Command {
                 damage = TokenReader.readString(data);
             }
 
-            mwclient.getMainFrame().getMainPanel().getHSPanel().showInfoWindow(filename, BV, gunnery, piloting, damage);
+            mwclient.getMainFrame()
+                    .getMainPanel()
+                    .getHSPanel()
+                    .showInfoWindow(filename, BV, gunnery, piloting, damage);
         } else if (cmd.equals("VURD")) {
             StringTokenizer data = new StringTokenizer(TokenReader.readString(st), "#");
             String filename = TokenReader.readString(data);
@@ -227,7 +230,10 @@ public class PL extends Command {
             // clear supported units
             MWLogger.infoLog("Clearing Supported Units");
             player.getMyHouse().supportedUnits.clear();
-            player.getMyHouse().setNonFactionUnitsCostMore(Boolean.parseBoolean(mwclient.getServerConfigs("UseNonFactionUnitsIncreasedTechs")));
+            player.getMyHouse()
+                    .setNonFactionUnitsCostMore(
+                            Boolean.parseBoolean(
+                                    mwclient.getServerConfigs("UseNonFactionUnitsIncreasedTechs")));
         } else if (cmd.equals("SMA")) {
             mwclient.getPlayer().setMULCreatedArmy(st);
         } else if (cmd.equals("ANH")) {
@@ -236,20 +242,37 @@ public class PL extends Command {
             int id = TokenReader.readInt(st);
             mwclient.getData().removeHouse(id);
         } else if (cmd.equals("UDT")) {
-            mwclient.addToChat(TokenReader.readString(st), mwclient.getConfig().getIntParam("USERDEFINDMESSAGETAB"));
+            mwclient.addToChat(
+                    TokenReader.readString(st),
+                    mwclient.getConfig().getIntParam("USERDEFINDMESSAGETAB"));
         } else if (cmd.equals("CCC")) {
             mwclient.getCampaign().setComponentConverter(st.nextToken());
         } else if (cmd.equals("SUD")) {
             try {
-                StringBuilder userData = new StringBuilder(GameHost.CAMPAIGN_PREFIX + "c sendclientdata#");
+                StringBuilder userData =
+                        new StringBuilder(GameHost.CAMPAIGN_PREFIX + "c sendclientdata#");
                 String clientMD5 = mwclient.createFilenameChecksum("./MekWarsClient.jar");
                 String mmMD5 = mwclient.createFilenameChecksum("./MegaMek.jar");
-                userData.append(mwclient.getClass().getProtectionDomain().getCodeSource().getLocation().toURI() + "#");
+                userData.append(
+                        mwclient.getClass()
+                                        .getProtectionDomain()
+                                        .getCodeSource()
+                                        .getLocation()
+                                        .toURI()
+                                + "#");
                 userData.append(clientMD5 + "#");
                 userData.append(mmMD5 + "#");
 
-                String[] userDataSet =
-                    { "user.name", "user.language", "user.country", "user.timezone", "os.name", "os.arch", "os.version", "java.version" };
+                String[] userDataSet = {
+                    "user.name",
+                    "user.language",
+                    "user.country",
+                    "user.timezone",
+                    "os.name",
+                    "os.arch",
+                    "os.version",
+                    "java.version"
+                };
 
                 for (int pos = 0; pos < userDataSet.length; pos++) {
                     String property = System.getProperty(userDataSet[pos], "Unknown");
@@ -266,9 +289,13 @@ public class PL extends Command {
         } else if (cmd.equals("STS")) {
             int unitID = TokenReader.readInt(st);
             int targetType = TokenReader.readInt(st);
-            //MWLogger.errLog("Setting Targeting for Unit " + unitID + " to " + targetType);
+            // MWLogger.errLog("Setting Targeting for Unit " + unitID + " to " + targetType);
             player.getUnit(unitID).setTargetSystem(targetType);
-            mwclient.doParseDataInput("CH|AM: Targeting for unit " + unitID + " set to " + player.getUnit(unitID).getTargetSystemTypeDesc());
+            mwclient.doParseDataInput(
+                    "CH|AM: Targeting for unit "
+                            + unitID
+                            + " set to "
+                            + player.getUnit(unitID).getTargetSystemTypeDesc());
         } else {
             return;
         }

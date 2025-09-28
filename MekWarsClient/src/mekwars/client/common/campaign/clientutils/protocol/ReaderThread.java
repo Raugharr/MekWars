@@ -3,8 +3,8 @@
  * Used by permission
  */
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,14 +19,12 @@
  */
 
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
  */
 /**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
+ * @author Torren (Jason Tighe) 11.5.05
  */
 package mekwars.client.common.campaign.clientutils.protocol;
 
@@ -39,18 +37,15 @@ import java.net.Socket;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.zip.Inflater;
-
 import mekwars.common.campaign.clientutils.protocol.IConnectionHandler;
 import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
 import mekwars.common.util.MWLogger;
 
-/**
- * Constantly read from the socket's input stream
- */
+/** Constantly read from the socket's input stream */
 public class ReaderThread extends Thread {
     private boolean keepGoing = true;
 
-    //private BufferedReader _in;
+    // private BufferedReader _in;
 
     private InputStream _sis;
 
@@ -64,11 +59,11 @@ public class ReaderThread extends Thread {
 
     private Inflater inflater = new Inflater();
 
-    //private Checksum checksum = new CRC32();
+    // private Checksum checksum = new CRC32();
 
     public ReaderThread(IConnectionHandler handler, Socket s) {
         super("ConnectionHandler$ReaderThread");
-        //_in = in;
+        // _in = in;
         try {
             _sis = s.getInputStream();
         } catch (Exception ex) {
@@ -85,7 +80,7 @@ public class ReaderThread extends Thread {
 
     private static final int NL = 10; // "\n" in ASCII and UTF8
 
-    private String readLine() throws IOException{
+    private String readLine() throws IOException {
         try {
             int n = 0;
             int i;
@@ -102,13 +97,12 @@ public class ReaderThread extends Thread {
     }
 
     /**
-     * Decompose a raw message into an array of String, splitting on the
-     * DELIMITER defined in ICommands.
+     * Decompose a raw message into an array of String, splitting on the DELIMITER defined in
+     * ICommands.
      */
-
     private String[] decompose(String input) {
         StringTokenizer st = new StringTokenizer(input, IClient.DELIMITER);
-        Vector<String> v = new Vector<String>(5,1);
+        Vector<String> v = new Vector<String>(5, 1);
         while (st.hasMoreTokens()) {
             v.addElement(st.nextToken());
         }
@@ -121,10 +115,9 @@ public class ReaderThread extends Thread {
         String[] args = decompose(command);
         int size = Integer.parseInt(args[1]);
         int fullSize = 29999;
-        
-        //just in case
-        if ( args.length > 2 )
-            fullSize = Integer.parseInt(args[2]);
+
+        // just in case
+        if (args.length > 2) fullSize = Integer.parseInt(args[2]);
 
         compressedBytes = new byte[size];
         rawBytes = new byte[fullSize];
@@ -156,7 +149,10 @@ public class ReaderThread extends Thread {
         inflater.setInput(compressedBytes, 0, size);
         int textLength = inflater.inflate(rawBytes);
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(rawBytes, 0, textLength), "UTF8"));
+        BufferedReader br =
+                new BufferedReader(
+                        new InputStreamReader(
+                                new ByteArrayInputStream(rawBytes, 0, textLength), "UTF8"));
         while ((command = br.readLine()) != null) {
             ConnectionHandlerLocal.DEBUG("< inflated: " + command);
             _listener.incomingMessage(command);
@@ -164,20 +160,20 @@ public class ReaderThread extends Thread {
     }
 
     @Override
-	public void run() {
+    public void run() {
         try {
             String newLine;
             while (keepGoing) {
-                
-            	newLine = readLine();
-            	if (newLine == null) {
+
+                newLine = readLine();
+                if (newLine == null) {
                     pleaseStop();
                     continue;
                 }
-                
-            	if (_listener != null) {
-                    
-            		if (newLine.startsWith(IClient.DEFLATED)) {
+
+                if (_listener != null) {
+
+                    if (newLine.startsWith(IClient.DEFLATED)) {
                         String[] args = decompose(newLine);
                         if (args.length > 0) { // can be 0 if server is having problems
                             try {
@@ -188,20 +184,20 @@ public class ReaderThread extends Thread {
                             continue;
                         }
                     }
-            		
-            		//else
-            		ConnectionHandlerLocal.DEBUG("< " + newLine);
+
+                    // else
+                    ConnectionHandlerLocal.DEBUG("< " + newLine);
                     _listener.incomingMessage(newLine);
-                    
+
                 } else {
                     MWLogger.errLog("Null listener: " + newLine);
                 }
             }
             MWLogger.errLog("ReaderThread: stopping gracefully.");
-            
+
         } catch (IOException e) {
             if (keepGoing) {
-            	pleaseStop();
+                pleaseStop();
                 MWLogger.errLog("ReaderThread Error");
                 MWLogger.errLog(e);
                 _connectionHandler.shutdown(true);

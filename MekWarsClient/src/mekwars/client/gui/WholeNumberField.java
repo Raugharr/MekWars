@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -21,20 +21,17 @@ import java.awt.Toolkit;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
-
 import mekwars.common.util.MWLogger;
 
 public class WholeNumberField extends JTextField {
-    /**
-     * 
-     */
+    /** */
     private static final long serialVersionUID = 3640879107242018821L;
+
     private Toolkit toolkit;
     private NumberFormat integerFormatter;
 
@@ -63,28 +60,22 @@ public class WholeNumberField extends JTextField {
     }
 
     @Override
-	protected Document createDefaultModel() {
+    protected Document createDefaultModel() {
         return new WholeNumberDocument();
     }
 
     protected class WholeNumberDocument extends PlainDocument {
-        /**
-         * 
-         */
+        /** */
         private static final long serialVersionUID = -6680227995973307297L;
 
         @Override
-		public void insertString(int offs, 
-                                 String str,
-                                 AttributeSet a) 
-                throws BadLocationException {
+        public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
             char[] source = str.toCharArray();
             char[] result = new char[source.length];
             int j = 0;
 
             for (int i = 0; i < result.length; i++) {
-                if (Character.isDigit(source[i]))
-                    result[j++] = source[i];
+                if (Character.isDigit(source[i])) result[j++] = source[i];
                 else {
                     toolkit.beep();
                     MWLogger.errLog("insertString: " + source[i]);
@@ -94,4 +85,3 @@ public class WholeNumberField extends JTextField {
         }
     }
 }
-

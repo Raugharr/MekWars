@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -21,12 +21,11 @@
  */
 package mekwars.common.campaign.pilot.skills;
 
-
 /**
  * @author Helge Richter
- *
  */
 public interface IPilotSkill {
-	public String getName();
-	public int getLevel();
+    public String getName();
+
+    public int getLevel();
 }

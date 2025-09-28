@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -23,69 +23,56 @@
 
 package mekwars.client.gui;
 
-
 import java.awt.Color;
 import java.awt.Component;
 import java.util.TreeMap;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
-
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CBMUnit;
 import mekwars.client.campaign.CCampaign;
 import mekwars.common.Unit;
 
 /**
- *
  * @author Steve Hawkins
  */
 public class BlackMarketModel extends AbstractTableModel {
 
-    /**
-     * 
-     */
+    /** */
     private static final long serialVersionUID = -783116408720137035L;
+
     public MWClient mwclient;
     CCampaign theCampaign;
-    public TreeMap<Integer,CBMUnit> mechs; //this collection is backed by the main map, so it should always be good
-    //public TreeMap bids;
-    public Object[] sortedMechs; //not really though, sort is handled elsewhere...
+    public TreeMap<Integer, CBMUnit>
+            mechs; // this collection is backed by the main map, so it should always be good
+    // public TreeMap bids;
+    public Object[] sortedMechs; // not really though, sort is handled elsewhere...
 
-    public final static int MECH = 0;
-    public final static int BV = 1;
-    public final static int MIN = 2;
-    public final static int TICKS = 3;
-    public final static int BID = 4;
-    public final static int AUCTION_ID = 5; //not shown in table
+    public static final int MECH = 0;
+    public static final int BV = 1;
+    public static final int MIN = 2;
+    public static final int TICKS = 3;
+    public static final int BID = 4;
+    public static final int AUCTION_ID = 5; // not shown in table
 
     private boolean hiddenUnits = false;
-    
+
     final String[] columnNames = {
-            "Unit",
-            "Stock BV",
-            "Min Bid",
-            "Ticks",
-            "Your Bid",
+        "Unit", "Stock BV", "Min Bid", "Ticks", "Your Bid",
     };
 
     final String[] longValues = {
-            "XXXXXX-XXXX-XXXXXX",
-            "XXXXXXXXX",
-            "XXXXXXXXX",
-            "XXXXXXXXX",
-            "XXXXXXXXX",
+        "XXXXXX-XXXX-XXXXXX", "XXXXXXXXX", "XXXXXXXXX", "XXXXXXXXX", "XXXXXXXXX",
     };
 
     public int getColumnCount() {
         return this.columnNames.length;
     }
 
-    public BlackMarketModel(MWClient client, boolean hideBMUnits)
-    {
+    public BlackMarketModel(MWClient client, boolean hideBMUnits) {
         this.mwclient = client;
         theCampaign = mwclient.getCampaign();
         this.mechs = theCampaign.getBlackMarket();
@@ -96,7 +83,7 @@ public class BlackMarketModel extends AbstractTableModel {
     }
 
     public void refreshModel() {
-        //do a resort
+        // do a resort
         this.sortedMechs = this.mechs.values().toArray();
         this.fireTableDataChanged();
     }
@@ -109,21 +96,20 @@ public class BlackMarketModel extends AbstractTableModel {
         BlackMarketModel model = this;
         for (int i = 0; i < this.getColumnCount(); i++) {
             column = table.getColumnModel().getColumn(i);
-            comp = table.getDefaultRenderer(model.getColumnClass(i)).
-            getTableCellRendererComponent(
-                    table, longValues[i],
-                    false, false, 0, i);
+            comp =
+                    table.getDefaultRenderer(model.getColumnClass(i))
+                            .getTableCellRendererComponent(
+                                    table, longValues[i], false, false, 0, i);
             cellWidth = comp.getPreferredSize().width;
             column.setPreferredWidth(Math.max(headerWidth, cellWidth));
-            
+
             // This is a hack, but removeColumn() is throwing errors, so for the moment...
             if (hiddenUnits && i == BV) {
-            	column.setMinWidth(0);
-            	column.setMaxWidth(0);
-            	column.setPreferredWidth(0);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
+                column.setPreferredWidth(0);
             }
         }
-        
     }
 
     public int getRowCount() {
@@ -143,26 +129,25 @@ public class BlackMarketModel extends AbstractTableModel {
     public Object getValueAt(int row, int col) {
         if (row < 0) return "";
         if (row >= sortedMechs.length) return "";
-        CBMUnit mm = (CBMUnit)this.sortedMechs[row];
+        CBMUnit mm = (CBMUnit) this.sortedMechs[row];
         switch (col) {
             case MECH:
-            	if (hiddenUnits) {
-            		return mm.getHiddenUnitDescription();
-            	} else {
-                return mm.getModelName();
-            	}
+                if (hiddenUnits) {
+                    return mm.getHiddenUnitDescription();
+                } else {
+                    return mm.getModelName();
+                }
             case BV:
-            	if (hiddenUnits) {
-            		return " ";
-            	}
+                if (hiddenUnits) {
+                    return " ";
+                }
                 return mm.getEmbeddedUnit().getEntity().calculateBattleValue();
             case MIN:
                 return mm.getMinBid();
             case TICKS:
                 return mm.getTicks();
             case BID:
-                if (mm.getBid() > 0)
-                    return mm.getBid();
+                if (mm.getBid() > 0) return mm.getBid();
                 return null;
             case AUCTION_ID:
                 return mm.getAuctionID();
@@ -179,16 +164,22 @@ public class BlackMarketModel extends AbstractTableModel {
      */
     private class Renderer extends DefaultTableCellRenderer {
 
-        /**
-         * 
-         */
+        /** */
         private static final long serialVersionUID = 5506902358006897558L;
 
         @Override
-        public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            java.awt.Component d =  super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+        public java.awt.Component getTableCellRendererComponent(
+                JTable table,
+                Object value,
+                boolean isSelected,
+                boolean hasFocus,
+                int row,
+                int column) {
+            java.awt.Component d =
+                    super.getTableCellRendererComponent(
+                            table, value, isSelected, hasFocus, row, column);
 
-            JLabel c = new JLabel(); //use a new label for everything (should be made better later)
+            JLabel c = new JLabel(); // use a new label for everything (should be made better later)
             c.setOpaque(true);
             if (mechs.size() < row || row < 0) return c;
             if (table.getModel().getValueAt(row, column) != null) {
@@ -196,23 +187,31 @@ public class BlackMarketModel extends AbstractTableModel {
             }
             c.setToolTipText("");
 
-            CBMUnit mm = (CBMUnit)mechs.get(table.getModel().getValueAt(row, BlackMarketModel.AUCTION_ID));
+            CBMUnit mm =
+                    (CBMUnit)
+                            mechs.get(
+                                    table.getModel().getValueAt(row, BlackMarketModel.AUCTION_ID));
             String description = "";
             if (!hiddenUnits) {
-            	description="<html><body>#" + mm.getAuctionID() + " " + mm.getEmbeddedUnit().getEntity().getChassis()
-            	+ " (" + mm.getEmbeddedUnit().getEntity().getModel() + ")<br>";
-            
+                description =
+                        "<html><body>#"
+                                + mm.getAuctionID()
+                                + " "
+                                + mm.getEmbeddedUnit().getEntity().getChassis()
+                                + " ("
+                                + mm.getEmbeddedUnit().getEntity().getModel()
+                                + ")<br>";
 
-            	if (mm.getEmbeddedUnit().getC3Level() > Unit.C3_NONE){
-            		if ( mm.getEmbeddedUnit().getC3Level() == Unit.C3_SLAVE)
-            			description += "<br>" + "C3 Slave";
-            		else if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_MASTER)
-            			description += "<br>" + "C3 Master";
-            		else if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_IMPROVED)
-            			description += "<br>" + "C3 Improved";
-            	}
+                if (mm.getEmbeddedUnit().getC3Level() > Unit.C3_NONE) {
+                    if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_SLAVE)
+                        description += "<br>" + "C3 Slave";
+                    else if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_MASTER)
+                        description += "<br>" + "C3 Master";
+                    else if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_IMPROVED)
+                        description += "<br>" + "C3 Improved";
+                }
 
-            	description += "</body></html>";
+                description += "</body></html>";
             }
             c.setToolTipText(description);
             if (isSelected) {

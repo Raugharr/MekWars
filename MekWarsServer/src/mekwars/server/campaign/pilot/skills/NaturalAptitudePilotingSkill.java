@@ -15,9 +15,9 @@
  */
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 
@@ -25,12 +25,12 @@ import mekwars.server.campaign.SHouse;
  * If a pilot has this skill, it levels as if it had one level less of the ability
  *
  * @author Helge Richter
- *
  */
 public class NaturalAptitudePilotingSkill extends SPilotSkill {
     public NaturalAptitudePilotingSkill(int id) {
         super(id, "Natural Aptitude: Piloting", "NAP");
-        setDescription("The pilot checks leveling for piloting at one level higher then current i.e. 5 instead of 4 for a 4/5 pilot");
+        setDescription(
+                "The pilot checks leveling for piloting at one level higher then current i.e. 5 instead of 4 for a 4/5 pilot");
     }
 
     public NaturalAptitudePilotingSkill() {
@@ -58,5 +58,4 @@ public class NaturalAptitudePilotingSkill extends SPilotSkill {
     public int getBVMod(Entity unit) {
         return 0;
     }
-
 }

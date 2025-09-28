@@ -16,14 +16,12 @@
 
 package mekwars.server.campaign.commands;
 
-
 import java.net.InetAddress;
 import java.util.StringTokenizer;
-
 import mekwars.common.House;
 import mekwars.common.util.MWLogger;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.NewbieHouse;
 import mekwars.server.campaign.SHouse;
@@ -31,141 +29,185 @@ import mekwars.server.campaign.SPlayer;
 
 public class EnrollCommand implements Command {
 
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
+    int accessLevel = 0;
+    String syntax = "";
 
-	public void process(StringTokenizer command,String Username) {
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
 
-		/*
-		 * Never check access level for Enroll.
-		 */
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
 
-		//don't let stock names enroll
-		if (Username.startsWith("Nobody")) {
-			CampaignMain.cm.toUser("AM:Nobodies are not allowed to enroll. If you're signing on for the " +
-					"first time and were labelled a Nobody, you're probably using a name someone else " +
-					"has already registered. If you've registered this name previously, you're either not " +
-					"sending a password or sending an incorrect password. Try changing/removing your password in " +
-					"the configuration menu and connecting again.",Username,true);
-			return;
-		}
+    public String getSyntax() {
+        return syntax;
+    }
 
-		if ( Username.equalsIgnoreCase("DRAW") ){
-			CampaignMain.cm.toUser("AM:The name DRAW is reserved for system use. Try another name.",Username,true);
-			return;
+    public void process(StringTokenizer command, String Username) {
 
-		}
+        /*
+         * Never check access level for Enroll.
+         */
 
-		if (Username.startsWith("[Dedicated]")) {
-			CampaignMain.cm.toUser("AM:Dedicated hosts may not enroll in the campaign.",Username,true);
-			return;
-		}
+        // don't let stock names enroll
+        if (Username.startsWith("Nobody")) {
+            CampaignMain.cm.toUser(
+                    "AM:Nobodies are not allowed to enroll. If you're signing on for the "
+                            + "first time and were labelled a Nobody, you're probably using a name someone else "
+                            + "has already registered. If you've registered this name previously, you're either not "
+                            + "sending a password or sending an incorrect password. Try changing/removing your password in "
+                            + "the configuration menu and connecting again.",
+                    Username,
+                    true);
+            return;
+        }
 
-		/*
-		 * Do not allow players to enroll with campaign faction  names. This would cause
-		 * problems with the Market and with various admin commands (scrap, transfer, etc).
-		 */
-		for (House currFaction : CampaignMain.cm.getData().getAllHouses()) {
-			if (Username.equalsIgnoreCase(currFaction.getName())) {
-				CampaignMain.cm.toUser("AM:You may not enroll in the campaign using the name of an existing faction.",Username,true);
-				return;
-			}
-		}
+        if (Username.equalsIgnoreCase("DRAW")) {
+            CampaignMain.cm.toUser(
+                    "AM:The name DRAW is reserved for system use. Try another name.",
+                    Username,
+                    true);
+            return;
+        }
 
-		//reserve "SERVER" as a PM and BM name
-		if (Username.trim().equalsIgnoreCase("SERVER")) {
-			CampaignMain.cm.toUser("AM:The name SERVER is reserved for system use. Try another name.",Username,true);
-			return;
-		}
+        if (Username.startsWith("[Dedicated]")) {
+            CampaignMain.cm.toUser(
+                    "AM:Dedicated hosts may not enroll in the campaign.", Username, true);
+            return;
+        }
 
-		/*
-		 * block special charachters used in to/from string,
-		 * or which may be used in the future, or are reserved
-		 * for special players.
-		 */
-		 if (Username.indexOf("~") > 0 ||
-				 Username.indexOf("$") > -1 ||
-				 Username.indexOf("#") > -1 ||
-				 Username.indexOf("^") > -1 ||
-				 Username.indexOf("@") > -1 ||
-				 Username.indexOf("*") > -1 ||
-				 Username.indexOf("&") > -1 ||
-				 Username.indexOf("%") > -1 ||
-				 Username.indexOf(".") > -1 ||
-				 Username.indexOf(",") > -1 ||
-				 Username.indexOf("!") > -1 ||
-				 Username.indexOf("<") > -1 ||
-				 Username.indexOf(">") > -1 ||
-				 Username.indexOf("+") > -1 ||
-				 Username.indexOf("=") > -1 ||
-				 Username.indexOf("|") > -1 ){
- 			CampaignMain.cm.toUser("AM:Your name contains one or more illegal charachters. These are "
- 					+ " reserved for system use or high-level players (mods, admins). Remove any of "
- 					+ " the following and try enrolling again: ~ @ # $ % ^ + = & < > * . , ! |",Username,true);
- 			return;
- 		}
+        /*
+         * Do not allow players to enroll with campaign faction  names. This would cause
+         * problems with the Market and with various admin commands (scrap, transfer, etc).
+         */
+        for (House currFaction : CampaignMain.cm.getData().getAllHouses()) {
+            if (Username.equalsIgnoreCase(currFaction.getName())) {
+                CampaignMain.cm.toUser(
+                        "AM:You may not enroll in the campaign using the name of an existing faction.",
+                        Username,
+                        true);
+                return;
+            }
+        }
 
-		//make sure the player isn't alread enrolled
-		if (CampaignMain.cm.getHouseForPlayer(Username) != null) {
-			CampaignMain.cm.toUser("AM:You are already enrolled in the campaign. Nice try though.",Username,true);
-			return;
-		}
+        // reserve "SERVER" as a PM and BM name
+        if (Username.trim().equalsIgnoreCase("SERVER")) {
+            CampaignMain.cm.toUser(
+                    "AM:The name SERVER is reserved for system use. Try another name.",
+                    Username,
+                    true);
+            return;
+        }
 
-		//this shouldn't ever happen, but still needs to be checked ...
-		SHouse h = CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"),null);
-		if (h == null) {
-			CampaignMain.cm.toUser("AM:Training faction is null. Contact an admin immediately.",Username,true);
-			return;
-		}
+        /*
+         * block special charachters used in to/from string,
+         * or which may be used in the future, or are reserved
+         * for special players.
+         */
+        if (Username.indexOf("~") > 0
+                || Username.indexOf("$") > -1
+                || Username.indexOf("#") > -1
+                || Username.indexOf("^") > -1
+                || Username.indexOf("@") > -1
+                || Username.indexOf("*") > -1
+                || Username.indexOf("&") > -1
+                || Username.indexOf("%") > -1
+                || Username.indexOf(".") > -1
+                || Username.indexOf(",") > -1
+                || Username.indexOf("!") > -1
+                || Username.indexOf("<") > -1
+                || Username.indexOf(">") > -1
+                || Username.indexOf("+") > -1
+                || Username.indexOf("=") > -1
+                || Username.indexOf("|") > -1) {
+            CampaignMain.cm.toUser(
+                    "AM:Your name contains one or more illegal charachters. These are "
+                            + " reserved for system use or high-level players (mods, admins). Remove any of "
+                            + " the following and try enrolling again: ~ @ # $ % ^ + = & < > * . , ! |",
+                    Username, true);
+            return;
+        }
 
-		//cast the house into a newbie house
-		NewbieHouse nh = null;
-		if (h instanceof NewbieHouse)
-			nh = (NewbieHouse)h;
+        // make sure the player isn't alread enrolled
+        if (CampaignMain.cm.getHouseForPlayer(Username) != null) {
+            CampaignMain.cm.toUser(
+                    "AM:You are already enrolled in the campaign. Nice try though.",
+                    Username,
+                    true);
+            return;
+        }
 
-		if (nh == null) {
-			CampaignMain.cm.toUser("AM:Named training faction is not a NewbieHouse. Contact an admin immediately.",Username,true);
-			return;
-		}
+        // this shouldn't ever happen, but still needs to be checked ...
+        SHouse h =
+                CampaignMain.cm.getHouseFromPartialString(
+                        CampaignMain.cm.getConfig("NewbieHouseName"), null);
+        if (h == null) {
+            CampaignMain.cm.toUser(
+                    "AM:Training faction is null. Contact an admin immediately.", Username, true);
+            return;
+        }
 
-		/*
-		 * break outs passed. enroll the player in a newbie faction,
-		 * give him some units, give him some money, and send him a
-		 * pleasant welcome msg.
-		 */
-		SPlayer newPlayer = new SPlayer();
-		newPlayer.setName(Username);
-		newPlayer.setMyHouse(nh);
+        // cast the house into a newbie house
+        NewbieHouse nh = null;
+        if (h instanceof NewbieHouse) nh = (NewbieHouse) h;
 
-		String unitInfo = nh.getNewSOLUnits(newPlayer,null);
-		newPlayer.addMoney(CampaignMain.cm.getIntegerConfig("PlayerBaseMoney"));
-		newPlayer.addReward(CampaignMain.cm.getIntegerConfig("PlayerBaseRP"));  //@Salient adding option to give new player RP
-		newPlayer.addInfluence(CampaignMain.cm.getIntegerConfig("PlayerBaseFlu")); //@Salient adding option to give new player Flu
+        if (nh == null) {
+            CampaignMain.cm.toUser(
+                    "AM:Named training faction is not a NewbieHouse. Contact an admin immediately.",
+                    Username,
+                    true);
+            return;
+        }
 
-		String result = new String("AM:<font color=\"navy\">WELCOME TO MEKWARS!</font>"
-				+ "<br><br>You've been assigned to " + nh.getNameAsLink() + ", "
-				+ "a training faction. Take some time here to learn about the server rules, "
-				+ "the unique qualities of the factions that you may join, and the software "
-				+ "in general. If you're looking for helpful hints, many servers include "
-				+ "a short <b>New Player Guide</b>. Most have active forums. All have veteran "
-				+ "players, moderators and admins willing to help new folks learn the ropes.<br><br>"
-				+ "You've been assigned a starting force: " + unitInfo + ".<br><br>Have fun!"
-				+ "</font><br>");
-		CampaignMain.cm.toUser(result,Username,true);
+        /*
+         * break outs passed. enroll the player in a newbie faction,
+         * give him some units, give him some money, and send him a
+         * pleasant welcome msg.
+         */
+        SPlayer newPlayer = new SPlayer();
+        newPlayer.setName(Username);
+        newPlayer.setMyHouse(nh);
 
-		if (MWServ.getInstance().getUserLevel(Username) < IAuthenticator.REGISTERED)
-			CampaignMain.cm.toUser("AM:<font color=\"navy\"><br>---<br>NOTE: Your account will not be password protected until you [<a href=\"MWREG\">register</a>] your nickname.<br>---<br></font>", Username, true);
+        String unitInfo = nh.getNewSOLUnits(newPlayer, null);
+        newPlayer.addMoney(CampaignMain.cm.getIntegerConfig("PlayerBaseMoney"));
+        newPlayer.addReward(
+                CampaignMain.cm.getIntegerConfig(
+                        "PlayerBaseRP")); // @Salient adding option to give new player RP
+        newPlayer.addInfluence(
+                CampaignMain.cm.getIntegerConfig(
+                        "PlayerBaseFlu")); // @Salient adding option to give new player Flu
 
-		CampaignMain.cm.doLoginPlayer(Username);
+        String result =
+                new String(
+                        "AM:<font color=\"navy\">WELCOME TO MEKWARS!</font>"
+                                + "<br><br>You've been assigned to "
+                                + nh.getNameAsLink()
+                                + ", "
+                                + "a training faction. Take some time here to learn about the server rules, "
+                                + "the unique qualities of the factions that you may join, and the software "
+                                + "in general. If you're looking for helpful hints, many servers include "
+                                + "a short <b>New Player Guide</b>. Most have active forums. All have veteran "
+                                + "players, moderators and admins willing to help new folks learn the ropes.<br><br>"
+                                + "You've been assigned a starting force: "
+                                + unitInfo
+                                + ".<br><br>Have fun!"
+                                + "</font><br>");
+        CampaignMain.cm.toUser(result, Username, true);
 
-		//tell the mods and add to the IP log
-		InetAddress ip = MWServ.getInstance().getIP(Username);
-		//MWLogger.modLog(Username + " enrolled in the campaign (IP: " + ip + ").");
-		MWLogger.ipLog("ENROLL: " + Username + " IP: " + ip);
-		CampaignMain.cm.doSendModMail("NOTE",Username + " enrolled in the campaign (IP: " + ip + ").");
+        if (MWServ.getInstance().getUserLevel(Username) < IAuthenticator.REGISTERED)
+            CampaignMain.cm.toUser(
+                    "AM:<font color=\"navy\"><br>---<br>NOTE: Your account will not be password protected until you [<a href=\"MWREG\">register</a>] your nickname.<br>---<br></font>",
+                    Username,
+                    true);
 
-	}//end process()
-}//end EnrollCommand
+        CampaignMain.cm.doLoginPlayer(Username);
+
+        // tell the mods and add to the IP log
+        InetAddress ip = MWServ.getInstance().getIP(Username);
+        // MWLogger.modLog(Username + " enrolled in the campaign (IP: " + ip + ").");
+        MWLogger.ipLog("ENROLL: " + Username + " IP: " + ip);
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " enrolled in the campaign (IP: " + ip + ").");
+    } // end process()
+} // end EnrollCommand

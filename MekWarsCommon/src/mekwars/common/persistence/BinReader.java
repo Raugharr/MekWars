@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,20 +20,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
- * Reads compact data from a stream written with BinWriter. No data structure
- * information is written/read, so expect bad results, if the data structure 
- * does not match.
+ * Reads compact data from a stream written with BinWriter. No data structure information is
+ * written/read, so expect bad results, if the data structure does not match.
  *
  * @author Imi (immanuel.scholz@gmx.de)
  */
-
 public class BinReader {
     private BufferedReader in;
 
-    /**
-     * Constructs a new BinReader from an buffered reader and start reading 
-     * from it
-     */
+    /** Constructs a new BinReader from an buffered reader and start reading from it */
     public BinReader(BufferedReader in) {
         this.in = in;
     }
@@ -72,41 +67,28 @@ public class BinReader {
     public String readString(String name) throws IOException {
         return read();
     }
-    
+
     private String read() throws IOException {
         return in.readLine();
     }
 
     public void startDataBlock(String name) {}
+
     public void endDataBlock(String name) {}
 
     /**
-     * @see common.persistence.TreeReader#readObject(common.persistence.MMNetSerializable, java.lang.String)
-     *
-    public void readObject(MMNetSerializable obj, CampaignData dataProvider, String name) throws IOException {
-        obj.binIn(this, dataProvider);
-    }*/
+     * @see common.persistence.TreeReader#readObject(common.persistence.MMNetSerializable,
+     *     java.lang.String)
+     *     <p>public void readObject(MMNetSerializable obj, CampaignData dataProvider, String name)
+     *     throws IOException { obj.binIn(this, dataProvider); }
+     */
 
     /**
      * @see common.persistence.TreeReader#readCollection(java.util.Collection, java.lang.String)
-     *
-    public void readCollection(
-            Collection col, 
-            Class cl, 
-            CampaignData 
-            dataProvider, 
-            String name) throws IOException {
-        int size = readInt(null);
-        for (int i = 0; i < size; ++i) {
-            try {
-                MMNetSerializable obj = (MMNetSerializable) cl.newInstance();
-                obj.binIn(this, dataProvider);
-                col.add(obj);
-            } catch (InstantiationException e) {
-                MWLogger.errLog(e);
-            } catch (IllegalAccessException e) {
-                MWLogger.errLog(e);
-            }
-        }
-    }*/
+     *     <p>public void readCollection( Collection col, Class cl, CampaignData dataProvider,
+     *     String name) throws IOException { int size = readInt(null); for (int i = 0; i < size;
+     *     ++i) { try { MMNetSerializable obj = (MMNetSerializable) cl.newInstance();
+     *     obj.binIn(this, dataProvider); col.add(obj); } catch (InstantiationException e) {
+     *     MWLogger.errLog(e); } catch (IllegalAccessException e) { MWLogger.errLog(e); } } }
+     */
 }

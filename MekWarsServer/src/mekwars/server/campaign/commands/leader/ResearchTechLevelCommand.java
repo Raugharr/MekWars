@@ -1,13 +1,13 @@
 /*
  * MekWars - Copyright (C) 2007
- * 
+ *
  * Original author - jtighe (torren@users.sourceforge.net)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
@@ -16,8 +16,8 @@
 package mekwars.server.campaign.commands.leader;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
@@ -47,7 +47,14 @@ public class ResearchTechLevelCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -58,54 +65,75 @@ public class ResearchTechLevelCommand implements Command {
         double flu = 0.0;
 
         if (house.isNewbieHouse()) {
-            CampaignMain.cm.toUser("AM:"+CampaignMain.cm.getConfig("NewbieHouseName") + " cannot research technology!", Username);
+            CampaignMain.cm.toUser(
+                    "AM:"
+                            + CampaignMain.cm.getConfig("NewbieHouseName")
+                            + " cannot research technology!",
+                    Username);
             return;
         }
 
         int currentTech = house.getTechResearchLevel();
-        
-        if ( currentTech >= 6) {
+
+        if (currentTech >= 6) {
             CampaignMain.cm.toUser("AM:You Faction has researched all known technology!", Username);
             return;
         }
-        
-        
+
         cost = CampaignMain.cm.getDoubleConfig("TechPointCost");
-        if ( currentTech > 1)
-            cost *= CampaignMain.cm.getDoubleConfig("TechLevelTechPointCostModifier") * (currentTech-1);
+        if (currentTech > 1)
+            cost *=
+                    CampaignMain.cm.getDoubleConfig("TechLevelTechPointCostModifier")
+                            * (currentTech - 1);
 
         cost = Math.round(cost);
 
         flu = CampaignMain.cm.getDoubleConfig("TechPointFlu");
-        if ( currentTech > 1)
-            flu *= CampaignMain.cm.getDoubleConfig("TechLevelTechPointFluModifier") * (currentTech-1);
+        if (currentTech > 1)
+            flu *=
+                    CampaignMain.cm.getDoubleConfig("TechLevelTechPointFluModifier")
+                            * (currentTech - 1);
 
         flu = Math.round(flu);
 
         if (player.getMoney() < cost) {
-            CampaignMain.cm.toUser("AM:You need " + CampaignMain.cm.moneyOrFluMessage(true, true, (int) cost) + " to research technology.", Username);
+            CampaignMain.cm.toUser(
+                    "AM:You need "
+                            + CampaignMain.cm.moneyOrFluMessage(true, true, (int) cost)
+                            + " to research technology.",
+                    Username);
             return;
         }
 
         if (player.getInfluence() < flu) {
-            CampaignMain.cm.toUser("AM:You need " + CampaignMain.cm.moneyOrFluMessage(false, true, (int) flu) + " to research technology.", Username);
+            CampaignMain.cm.toUser(
+                    "AM:You need "
+                            + CampaignMain.cm.moneyOrFluMessage(false, true, (int) flu)
+                            + " to research technology.",
+                    Username);
             return;
         }
 
         cost = Math.max(0, cost);
         flu = Math.max(0, flu);
 
-        player.addMoney((int)-cost);
-        player.addInfluence((int)-flu);
+        player.addMoney((int) -cost);
+        player.addInfluence((int) -flu);
 
         house.addTechResearchPoint(1);
-        
-        if ( house.getTechResearchPoints() >= CampaignMain.cm.getIntegerConfig("TechPointsNeedToLevel") ) {
+
+        if (house.getTechResearchPoints()
+                >= CampaignMain.cm.getIntegerConfig("TechPointsNeedToLevel")) {
             house.updateHouseTechLevel();
-            CampaignMain.cm.doSendHouseMail(house, "NOTE", Username+" has increased your factions Tech Level!");
-        }else {
-            CampaignMain.cm.doSendHouseMail(house, "NOTE", Username+" has taken your faction another step closer to the next technology level!");
+            CampaignMain.cm.doSendHouseMail(
+                    house, "NOTE", Username + " has increased your factions Tech Level!");
+        } else {
+            CampaignMain.cm.doSendHouseMail(
+                    house,
+                    "NOTE",
+                    Username
+                            + " has taken your faction another step closer to the next technology level!");
         }
         house.updated();
     }
-}// end RequestSubFactionPromotionCommand class
+} // end RequestSubFactionPromotionCommand class

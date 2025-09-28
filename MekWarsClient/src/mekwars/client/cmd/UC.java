@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -18,7 +18,6 @@
 package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.client.CUser;
 import mekwars.client.MWClient;
 
@@ -27,18 +26,17 @@ import mekwars.client.MWClient;
  */
 public class UC extends Command {
 
-	public UC(MWClient mwclient) {
-		super(mwclient);
-	}
+    public UC(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
         CUser user = mwclient.getUser(st.nextToken());
-        if (user != null) 
-        	user.setColor(st.nextToken());
-	}
+        if (user != null) user.setColor(st.nextToken());
+    }
 }

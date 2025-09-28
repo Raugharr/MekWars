@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -21,17 +21,15 @@
 package mekwars.server.campaign.util;
 
 import java.util.Comparator;
-
 import mekwars.server.campaign.SPlanet;
 
 /**
  * @author Helge Richter
- * 
  */
 public class PlanetNameComparator implements Comparator<SPlanet> {
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     public int compare(SPlanet p1, SPlanet p2) {

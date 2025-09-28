@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,31 +18,35 @@ package mekwars.server.campaign.commands;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
-
 import mekwars.common.Planet;
-import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 
 public class AutoPlanetStatusCommand implements Command {
 
-	//conforming methods
-	public int getExecutionLevel(){return 0;}
-	public void setExecutionLevel(int i) {}
-	String syntax = "";
-	public String getSyntax() { return syntax;}
+    // conforming methods
+    public int getExecutionLevel() {
+        return 0;
+    }
 
-	public void process(StringTokenizer command,String Username) {
-		
-		//Send all SPlanet Info to the user
-		Iterator<Planet> e = CampaignMain.cm.getData().getAllPlanets().iterator();
-		String result = "PL|";
-		while (e.hasNext()) {
-			SPlanet p = (SPlanet)e.next();
-			result += p.toString();
-			result += "|";
-		}
-		CampaignMain.cm.toUser(result,Username,false);
-		
-	}
+    public void setExecutionLevel(int i) {}
+
+    String syntax = "";
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // Send all SPlanet Info to the user
+        Iterator<Planet> e = CampaignMain.cm.getData().getAllPlanets().iterator();
+        String result = "PL|";
+        while (e.hasNext()) {
+            SPlanet p = (SPlanet) e.next();
+            result += p.toString();
+            result += "|";
+        }
+        CampaignMain.cm.toUser(result, Username, false);
+    }
 }

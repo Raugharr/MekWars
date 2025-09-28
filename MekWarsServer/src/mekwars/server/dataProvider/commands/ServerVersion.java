@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Original Author: nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,16 +17,14 @@
 package mekwars.server.dataProvider.commands;
 
 import java.util.Date;
-
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
 import mekwars.server.MWServ;
 import mekwars.server.dataProvider.ServerCommand;
 
 /**
- * Retrieve the current server version. Used to ensure
- * the connecting clients are point compatible before
- * they initiate a chat connection.
+ * Retrieve the current server version. Used to ensure the connecting clients are point compatible
+ * before they initiate a chat connection.
  */
 public class ServerVersion implements ServerCommand {
     public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {

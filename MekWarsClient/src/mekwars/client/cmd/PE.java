@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -19,36 +19,34 @@ package mekwars.client.cmd;
 
 import java.awt.Dimension;
 import java.util.StringTokenizer;
-
 import mekwars.client.MWClient;
-import mekwars.common.util.TokenReader;
 import mekwars.common.PlanetEnvironment;
+import mekwars.common.util.TokenReader;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class PE extends Command {
 
-	/**
-	 * @see Command#Command(MMClient)
-	 */
-	public PE(MWClient mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @see Command#Command(MMClient)
+     */
+    public PE(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-		PlanetEnvironment pe = new PlanetEnvironment(st.nextToken());
-		int xsize = TokenReader.readInt(st);
-		int ysize = TokenReader.readInt(st);
-		int mapMedium = TokenReader.readInt(st);
-		if (pe.isStaticMap())
-			mwclient.setEnvironment(pe, new Dimension(pe.getXSize(),pe.getYSize()),mapMedium);
-		else
-			mwclient.setEnvironment(pe, new Dimension(xsize,ysize), mapMedium);
-	}
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        PlanetEnvironment pe = new PlanetEnvironment(st.nextToken());
+        int xsize = TokenReader.readInt(st);
+        int ysize = TokenReader.readInt(st);
+        int mapMedium = TokenReader.readInt(st);
+        if (pe.isStaticMap())
+            mwclient.setEnvironment(pe, new Dimension(pe.getXSize(), pe.getYSize()), mapMedium);
+        else mwclient.setEnvironment(pe, new Dimension(xsize, ysize), mapMedium);
+    }
 }

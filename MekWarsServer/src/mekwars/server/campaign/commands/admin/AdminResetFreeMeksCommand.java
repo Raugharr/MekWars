@@ -17,47 +17,64 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminResetFreeMeksCommand implements Command {
 
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Player Name";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Player Name";
 
-	public void process(StringTokenizer command,String Username) {
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
 
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
 
-		SPlayer p = null;
+    public String getSyntax() {
+        return syntax;
+    }
 
-		try {
-			p = CampaignMain.cm.getPlayer(command.nextToken());
-		} catch (Exception e) {
-			CampaignMain.cm.toUser("Improper command. Try: /c resetfreemeks#name", Username, true);
-			return;
-		}
+    public void process(StringTokenizer command, String Username) {
 
-		if(p == null) {
-			CampaignMain.cm.toUser("Couldn't find a player with that name.", Username, true);
-			return;
-		}
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
 
-		//mek token counts up to the server limit, reset it to zero
-		p.addMekToken(-p.getMekToken());
-		CampaignMain.cm.toUser("You reset " + p.getName() + "'s free mek limit.", Username, true);
-		CampaignMain.cm.toUser(Username + " reset your free mek limit.", p.getName(), true);
-		CampaignMain.cm.doSendModMail("NOTE",Username + " reset " + p.getName() + "'s free mek limit.");
-	}
+        SPlayer p = null;
+
+        try {
+            p = CampaignMain.cm.getPlayer(command.nextToken());
+        } catch (Exception e) {
+            CampaignMain.cm.toUser("Improper command. Try: /c resetfreemeks#name", Username, true);
+            return;
+        }
+
+        if (p == null) {
+            CampaignMain.cm.toUser("Couldn't find a player with that name.", Username, true);
+            return;
+        }
+
+        // mek token counts up to the server limit, reset it to zero
+        p.addMekToken(-p.getMekToken());
+        CampaignMain.cm.toUser("You reset " + p.getName() + "'s free mek limit.", Username, true);
+        CampaignMain.cm.toUser(Username + " reset your free mek limit.", p.getName(), true);
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " reset " + p.getName() + "'s free mek limit.");
+    }
 }

@@ -15,17 +15,17 @@
 
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * VDNI
- * 
+ *
  * @author Jason Tighe
  */
 public class VDNI extends SPilotSkill {
@@ -73,5 +73,4 @@ public class VDNI extends SPilotSkill {
 
         return house.getIntegerConfig(chance);
     }
-
 }

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2008 
- * 
+ * MekWars - Copyright (C) 2008
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,10 +17,10 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.common.House;
 import mekwars.common.Planet;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
@@ -48,24 +48,44 @@ public class AdminRandomlySetPlanetProductionCommand implements Command {
         // access level check
         int userLevel = MWServ.getInstance().getUserLevel(Username);
         if (userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
 
         int min = Integer.parseInt(command.nextToken());
         int max = Integer.parseInt(command.nextToken());
 
-        if (max == 0)
-            min = 0;
+        if (max == 0) min = 0;
         // look for confirmation
         if (!command.hasMoreTokens() || !command.nextToken().equalsIgnoreCase("confirm")) {
-            CampaignMain.cm.toUser("Do you want to change all of the planets production? If so, [<a href=\"MEKWARS/c AdminRandomlySetPlanetProduction#" + min + "#" + max + "#confirm\">click to confirm.</a>", Username, true);
+            CampaignMain.cm.toUser(
+                    "Do you want to change all of the planets production? If so, [<a href=\"MEKWARS/c AdminRandomlySetPlanetProduction#"
+                            + min
+                            + "#"
+                            + max
+                            + "#confirm\">click to confirm.</a>",
+                    Username,
+                    true);
             return;
         }
 
         // check for double confirmation
         if (!command.hasMoreTokens() || !command.nextToken().equalsIgnoreCase("confirm")) {
-            CampaignMain.cm.toUser("Are you *ABSOLUTELY SURE* you want to change all of the planets production? This cannot be easily reversed. If so, [<a href=\"MEKWARS/c AdminRandomlySetPlanetProduction#" + min + "#" + max + "#confirm#confirm\">click to re-confirm.</a>", Username, true);
+            CampaignMain.cm.toUser(
+                    "Are you *ABSOLUTELY SURE* you want to change all of the planets production? This cannot be easily reversed. If so, [<a href=\"MEKWARS/c AdminRandomlySetPlanetProduction#"
+                            + min
+                            + "#"
+                            + max
+                            + "#confirm#confirm\">click to re-confirm.</a>",
+                    Username,
+                    true);
             return;
         }
 
@@ -76,8 +96,7 @@ public class AdminRandomlySetPlanetProductionCommand implements Command {
             // cast to planet
             SPlanet p = (SPlanet) currP;
 
-            if (p.getCompProduction() > 0 && max > 0)
-                continue;
+            if (p.getCompProduction() > 0 && max > 0) continue;
 
             int production = CampaignMain.cm.getRandomNumber(max);
 
@@ -93,8 +112,8 @@ public class AdminRandomlySetPlanetProductionCommand implements Command {
             for (House currH : CampaignMain.cm.getData().getAllHouses()) {
                 SHouse h = (SHouse) currH;
                 h.setComponentProduction(0);
-                int productionAmount = 0; 
-                for ( SPlanet planet : h.getPlanets().values() ) {
+                int productionAmount = 0;
+                for (SPlanet planet : h.getPlanets().values()) {
                     productionAmount = planet.getCompProduction();
                 }
                 h.setComponentProduction(productionAmount);
@@ -102,7 +121,7 @@ public class AdminRandomlySetPlanetProductionCommand implements Command {
         }
 
         CampaignMain.cm.toUser("You have set production for all of the planets.", Username, true);
-        CampaignMain.cm.doSendModMail("NOTE", Username + " has set production for all of the planets.");
-
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has set production for all of the planets.");
     }
 }

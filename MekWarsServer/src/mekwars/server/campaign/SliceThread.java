@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,16 +17,12 @@
 package mekwars.server.campaign;
 
 import mekwars.common.util.MWLogger;
-import mekwars.server.campaign.CampaignMain;
 
 /**
  * @author urgru A barebones timing thread which calls slices in CampaignMain.
- * 
- * Created in CM as follows: SThread = new SliceThread(this,
- * Integer.parseInt(getConfig("SliceTime"))); SThread.start();//it slices, it
- * dices, it chops!
+ *     <p>Created in CM as follows: SThread = new SliceThread(this,
+ *     Integer.parseInt(getConfig("SliceTime"))); SThread.start();//it slices, it dices, it chops!
  */
-
 public class SliceThread extends Thread {
     CampaignMain myCampaign;
     long until;
@@ -51,7 +47,7 @@ public class SliceThread extends Thread {
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-    }// end ExtendedWait(time)
+    } // end ExtendedWait(time)
 
     public long getRemainingSleepTime() {
         return Math.max(0, until - System.currentTimeMillis());
@@ -70,16 +66,16 @@ public class SliceThread extends Thread {
                     myCampaign.slice(getSliceID());
 
                     if (CampaignMain.cm.getBooleanConfig("ProcessHouseTicksAtSlice")) {
-                        long endTime = startTime + Duration/2;
-                        while ( endTime > System.currentTimeMillis()) {
-                            if ( lastHouseId > CampaignMain.cm.getData().getAllHouses().size() ) {
+                        long endTime = startTime + Duration / 2;
+                        while (endTime > System.currentTimeMillis()) {
+                            if (lastHouseId > CampaignMain.cm.getData().getAllHouses().size()) {
                                 lastHouseId = 0;
                             }
                             SHouse house = CampaignMain.cm.getHouseById(lastHouseId);
-                            if ( house != null && house.getAllOnlinePlayers().size() > 0 ) {
-                                CampaignMain.cm.getHouseById(lastHouseId).tick(true, sliceid );
+                            if (house != null && house.getAllOnlinePlayers().size() > 0) {
+                                CampaignMain.cm.getHouseById(lastHouseId).tick(true, sliceid);
                                 lastHouseId++;
-                            }else {
+                            } else {
                                 lastHouseId++;
                             }
                         }
@@ -88,9 +84,8 @@ public class SliceThread extends Thread {
                     MWLogger.errLog(ex);
                     myCampaign.doSendToAllOnlinePlayers("Slice skipped. Errors occured", true);
                 }
-                sleepTime = (int)(Duration - (System.currentTimeMillis() - startTime));
+                sleepTime = (int) (Duration - (System.currentTimeMillis() - startTime));
                 sleepTime = Math.max(100, sleepTime);
-                
             }
         } catch (Exception ex) {
             MWLogger.errLog(ex);

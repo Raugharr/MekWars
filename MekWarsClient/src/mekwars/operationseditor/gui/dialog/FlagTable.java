@@ -21,21 +21,21 @@ import mekwars.common.flags.ResultsFlags;
 
 public class FlagTable extends JTable implements ActionListener {
 
-    /**
-     * 
-     */
+    /** */
     private static final long serialVersionUID = 1674365115046546502L;
+
     private PlayerFlags flags;
     private PlayerFlags availableFlags = new PlayerFlags();
-    
+
     private JPopupMenu popup;
-    
+
     private Component parent;
-    
+
     private int flagType = 0;
-    
+
     /**
      * A Table to store PlayerFlag settings for the operation.
+     *
      * @param parentObject
      */
     public FlagTable(Component parentObject, int flagType) {
@@ -47,43 +47,44 @@ public class FlagTable extends JTable implements ActionListener {
         parent = parentObject;
         availableFlags.loadFromDisk();
         this.flagType = flagType;
-        
-        String[] cNames = { "Bad FlagType" };
+
+        String[] cNames = {"Bad FlagType"};
         if (flagType == FlagSet.FLAGTYPE_PLAYER) {
-            cNames = new String[]{"Flag Name", "Value"};
+            cNames = new String[] {"Flag Name", "Value"};
         } else if (flagType == FlagSet.FLAGTYPE_RESULTS) {
             cNames = new String[] {"Flag Name", "Value", "Apply To Attacker", "Apply To Defender"};
         }
-        
+
         PFTableModel model = new PFTableModel(cNames);
         this.setModel(model);
         if (flagType == FlagSet.FLAGTYPE_PLAYER) {
-            model.addRow(new Object[]{" ", false});
+            model.addRow(new Object[] {" ", false});
         } else if (flagType == FlagSet.FLAGTYPE_RESULTS) {
-            model.addRow(new Object[]{ " ", false, false, false});
+            model.addRow(new Object[] {" ", false, false, false});
         }
-                
+
         this.getColumnModel().getColumn(0).setPreferredWidth(200);
         this.getColumnModel().getColumn(1).setPreferredWidth(40);
-        
+
         if (flagType == FlagSet.FLAGTYPE_RESULTS) {
-            //this.getColumnModel().getColumn(2).setPreferredWidth(40);
-            //this.getColumnModel().getColumn(3).setPreferredWidth(40);
+            // this.getColumnModel().getColumn(2).setPreferredWidth(40);
+            // this.getColumnModel().getColumn(3).setPreferredWidth(40);
         }
-        
+
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.setVisible(true);
-        
-        this.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                maybeShowPopup(e);
-            }
-            
-            public void mouseReleased(MouseEvent e) {
-                maybeShowPopup(e);
-            }
-        });
-        
+
+        this.addMouseListener(
+                new MouseAdapter() {
+                    public void mousePressed(MouseEvent e) {
+                        maybeShowPopup(e);
+                    }
+
+                    public void mouseReleased(MouseEvent e) {
+                        maybeShowPopup(e);
+                    }
+                });
+
         popup = new JPopupMenu();
         JMenuItem addItem = new JMenuItem("Add");
         addItem.setActionCommand("Add");
@@ -93,9 +94,8 @@ public class FlagTable extends JTable implements ActionListener {
         delItem.setActionCommand("Del");
         delItem.addActionListener(this);
         popup.add(delItem);
-        
     }
-    
+
     private void maybeShowPopup(MouseEvent e) {
         if (e.isPopupTrigger()) {
             Point p = e.getPoint();
@@ -105,9 +105,10 @@ public class FlagTable extends JTable implements ActionListener {
             popup.show(e.getComponent(), e.getX(), e.getY());
         }
     }
-    
+
     /**
      * Populates the table and the Flag Settings for the operation.
+     *
      * @param flagSettings
      */
     public void importFlagString(String flagSettings) {
@@ -135,23 +136,23 @@ public class FlagTable extends JTable implements ActionListener {
             if (flagType == FlagSet.FLAGTYPE_PLAYER) {
                 flags.addFlag(flagName, flags.getAvailableID(), value);
             } else if (flagType == FlagSet.FLAGTYPE_RESULTS) {
-                ((ResultsFlags) flags).addFlag(
-                    flagName,
-                    flags.getAvailableID(),
-                    value,
-                    appliesToAttacker,
-                    appliesToDefender
-                );
+                ((ResultsFlags) flags)
+                        .addFlag(
+                                flagName,
+                                flags.getAvailableID(),
+                                value,
+                                appliesToAttacker,
+                                appliesToDefender);
             }
             DefaultTableModel model = (DefaultTableModel) this.getModel();
             if (flagType == FlagSet.FLAGTYPE_PLAYER) {
-                model.addRow(new Object[]{flagName, value});
+                model.addRow(new Object[] {flagName, value});
             } else if (flagType == FlagSet.FLAGTYPE_RESULTS) {
-                model.addRow(new Object[]{flagName, value, appliesToAttacker, appliesToDefender});
+                model.addRow(new Object[] {flagName, value, appliesToAttacker, appliesToDefender});
             }
         }
     }
-    
+
     /**
      * Returns the operations Flag string.
      *
@@ -159,9 +160,9 @@ public class FlagTable extends JTable implements ActionListener {
      */
     public String exportFlagString() {
         StringBuilder toReturn = new StringBuilder();
-        
+
         replaceFlagsFromTable();
-        
+
         for (String flag : flags.getFlagNames()) {
             if (flag.equalsIgnoreCase(" ")) {
                 continue;
@@ -199,11 +200,11 @@ public class FlagTable extends JTable implements ActionListener {
             }
         }
     }
-    
+
     private void replaceFlagsFromTable() {
         if (flagType == FlagSet.FLAGTYPE_PLAYER) {
             flags = new PlayerFlags();
-        
+
             for (int i = 0; i < this.getRowCount(); i++) {
                 String flagName = (String) this.getValueAt(i, 0);
                 if (!flagName.equalsIgnoreCase(" ")) {
@@ -215,63 +216,70 @@ public class FlagTable extends JTable implements ActionListener {
             for (int i = 0; i < this.getRowCount(); i++) {
                 String flagName = (String) this.getValueAt(i, 0);
                 if (!flagName.equalsIgnoreCase(" ")) {
-                    ((ResultsFlags) flags).addFlag(
-                        flagName,
-                        flags.getAvailableID(),
-                        (Boolean) getValueAt(i, 1),
-                        (Boolean) getValueAt(i, 2),
-                        (Boolean) getValueAt(i, 3)
-                    );
+                    ((ResultsFlags) flags)
+                            .addFlag(
+                                    flagName,
+                                    flags.getAvailableID(),
+                                    (Boolean) getValueAt(i, 1),
+                                    (Boolean) getValueAt(i, 2),
+                                    (Boolean) getValueAt(i, 3));
                 }
             }
         }
     }
-    
+
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        
+
         if (command.equalsIgnoreCase("Del")) {
             int row = this.getSelectedRow();
             PFTableModel tableModel = (PFTableModel) getModel();
             tableModel.removeRow(row);
         } else if (command.equalsIgnoreCase("Add")) {
             DefaultTableModel tableModel = (DefaultTableModel) getModel();
-            String flagName = (String) JOptionPane.showInputDialog(parent, "Add which flag", "Select a flag", JOptionPane.PLAIN_MESSAGE, null, availableFlags.getFlagNames().toArray(), "");
+            String flagName =
+                    (String)
+                            JOptionPane.showInputDialog(
+                                    parent,
+                                    "Add which flag",
+                                    "Select a flag",
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    availableFlags.getFlagNames().toArray(),
+                                    "");
             if (flagName != null) {
-                tableModel.addRow(new Object[]{flagName, false, false, false});
+                tableModel.addRow(new Object[] {flagName, false, false, false});
             }
         }
     }
-    
+
     private class PFTableModel extends DefaultTableModel {
-        /**
-         * 
-         */
+        /** */
         private static final long serialVersionUID = -4242279250379540474L;
 
         public PFTableModel(String[] columnNames) {
             setColumnCount(columnNames.length);
             setColumnIdentifiers(columnNames);
         }
-        
+
         public void addRow(Object[] rowData) {
             if (this.getRowCount() == 1 && this.getValueAt(0, 0).equals(" ")) {
                 this.removeInitialRow();
             }
             super.addRow(rowData);
         }
-        
+
         private void removeInitialRow() {
             super.removeRow(0);
         }
-        
+
         public void removeRow(int row) {
             super.removeRow(row);
             if (this.getRowCount() == 0) {
                 this.addRow(new Object[] {" ", false});
             }
         }
-        
+
         public boolean isCellEditable(int row, int col) {
             if (col == 0) {
                 return false;
@@ -279,7 +287,7 @@ public class FlagTable extends JTable implements ActionListener {
                 return true;
             }
         }
-        
+
         @SuppressWarnings("unchecked")
         public Class getColumnClass(int c) {
             if (c == 0) {

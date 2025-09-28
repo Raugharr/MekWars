@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,10 +17,9 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-
 import mekwars.common.util.MWLogger;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
@@ -39,7 +38,13 @@ public class AdminPasswordCommand implements Command {
         accessLevel = i;
     }
 
-    String syntax = "Admin Password Commands:<br>" + " /c adminpassword#save - save the password file<br>" + " /c adminpassword#remove#NAME - remove NAME's password<br>" + " /c adminpassword#level#NAME#LEVEL - set a player's userlevel.<br>" + " EXAMPLE: /c adminpassword#remove#urgru<br>" + " EXAMPLE: /c adminpassword#level#urgru#200";
+    String syntax =
+            "Admin Password Commands:<br>"
+                    + " /c adminpassword#save - save the password file<br>"
+                    + " /c adminpassword#remove#NAME - remove NAME's password<br>"
+                    + " /c adminpassword#level#NAME#LEVEL - set a player's userlevel.<br>"
+                    + " EXAMPLE: /c adminpassword#remove#urgru<br>"
+                    + " EXAMPLE: /c adminpassword#level#urgru#200";
 
     public String getSyntax() {
         return syntax;
@@ -50,13 +55,28 @@ public class AdminPasswordCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
 
         if (!command.hasMoreTokens()) {
-            CampaignMain.cm.toUser("Admin Password Commands:<br>" + " /c adminpassword#save - save the password file<br>" + " /c adminpassword#remove#NAME - remove NAME's password<br>" + " /c adminpassword#level#NAME#LEVEL - set a player's userlevel.<br>" + " EXAMPLE: /c adminpassword#remove#urgru<br>" + " EXAMPLE: /c adminpassword#level#urgru#200", Username, true);
+            CampaignMain.cm.toUser(
+                    "Admin Password Commands:<br>"
+                            + " /c adminpassword#save - save the password file<br>"
+                            + " /c adminpassword#remove#NAME - remove NAME's password<br>"
+                            + " /c adminpassword#level#NAME#LEVEL - set a player's userlevel.<br>"
+                            + " EXAMPLE: /c adminpassword#remove#urgru<br>"
+                            + " EXAMPLE: /c adminpassword#level#urgru#200",
+                    Username,
+                    true);
             return;
         }
 
@@ -69,9 +89,7 @@ public class AdminPasswordCommand implements Command {
             } catch (Exception ex) {
                 CampaignMain.cm.toUser("Problems saving password file!", Username, true);
             }
-        }
-
-        else if (action.equalsIgnoreCase("remove")) {
+        } else if (action.equalsIgnoreCase("remove")) {
             String target = command.nextToken();
             MWPasswd.removeRecord(target);
             try {
@@ -80,10 +98,9 @@ public class AdminPasswordCommand implements Command {
                 MWLogger.errLog(ex);
             }
             CampaignMain.cm.toUser("Password for " + target + " removed!", Username, true);
-            CampaignMain.cm.doSendModMail("NOTE", Username + " has removed " + target + "'s password");
-        }
-
-        else if (action.equalsIgnoreCase("level")) {
+            CampaignMain.cm.doSendModMail(
+                    "NOTE", Username + " has removed " + target + "'s password");
+        } else if (action.equalsIgnoreCase("level")) {
 
             String target = command.nextToken();
             int level = Integer.parseInt(command.nextToken());
@@ -92,7 +109,9 @@ public class AdminPasswordCommand implements Command {
             try {
                 MWPasswd.getRecord(target).setAccess(level);
             } catch (Exception ex) {
-                CampaignMain.cm.toUser(target + " is not registered. Have them register, then try again.", Username);
+                CampaignMain.cm.toUser(
+                        target + " is not registered. Have them register, then try again.",
+                        Username);
                 return;
             }
 
@@ -104,15 +123,18 @@ public class AdminPasswordCommand implements Command {
                 MWPasswd.writeRecord(p.getPassword(), target);
 
                 if (p != null) {
-                    CampaignMain.cm.doSendToAllOnlinePlayers("PI|DA|" + CampaignMain.cm.getPlayerUpdateString(p), false);
+                    CampaignMain.cm.doSendToAllOnlinePlayers(
+                            "PI|DA|" + CampaignMain.cm.getPlayerUpdateString(p), false);
                 }
 
             } catch (Exception ex) {
                 MWLogger.errLog(ex);
             }
 
-            CampaignMain.cm.toUser("Level for " + target + " set to " + level + "!", Username, true);
-            CampaignMain.cm.doSendModMail("NOTE", Username + " has set " + target + "'s level to " + level);
+            CampaignMain.cm.toUser(
+                    "Level for " + target + " set to " + level + "!", Username, true);
+            CampaignMain.cm.doSendModMail(
+                    "NOTE", Username + " has set " + target + "'s level to " + level);
         }
     }
 }

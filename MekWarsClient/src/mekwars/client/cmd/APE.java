@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -18,34 +18,31 @@
 package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.client.MWClient;
 import mekwars.common.AdvancedTerrain;
 
 /**
  * @@author Torren (Jason Tighe)
- * 
- * Used for Advanced Planet Environments.
- * 
+ *
+ * <p>Used for Advanced Planet Environments.
  */
-
 public class APE extends Command {
 
-	/**
-	 * @see Command#Command(MMClient)
-	 */
-	public APE(MWClient mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @see Command#Command(MMClient)
+     */
+    public APE(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-		AdvancedTerrain aTerrain = new AdvancedTerrain(st.nextToken());
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        AdvancedTerrain aTerrain = new AdvancedTerrain(st.nextToken());
 
-		mwclient.setAdvancedTerrain(aTerrain);
-	}
+        mwclient.setAdvancedTerrain(aTerrain);
+    }
 }

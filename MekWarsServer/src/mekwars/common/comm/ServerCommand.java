@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -26,14 +26,15 @@ package mekwars.common.comm;
 import mekwars.server.MWServ;
 
 /**
- *
- * @author  Administrator
+ * @author Administrator
  */
 public interface ServerCommand extends ICommand {
 
-  public void parseArguments(String s);
-  public void setServer(MWServ server);
-  public void setUsername(String name);
-  public void clientSend(String txt);
+    public void parseArguments(String s);
 
+    public void setServer(MWServ server);
+
+    public void setUsername(String name);
+
+    public void clientSend(String txt);
 }

@@ -16,10 +16,10 @@
 
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.pilot.SPilot;
@@ -35,7 +35,8 @@ public class EnhancedInterfaceSkill extends SPilotSkill {
 
     public EnhancedInterfaceSkill(int id) {
         super(id, "Enhanced Interface", "EI");
-        setDescription("Neural interface to the clan enhanced imaging system -1 To PSR +2 when targeting with TC instead of +3 Can Target without TC at +6 Reduces all forest and Smoke mods to 1 Pilot receives 1 point of damage every time Units IS is hit, If you fail a roll of 7+ BA's recieve 1 extra point of damage every time they are hit.");
+        setDescription(
+                "Neural interface to the clan enhanced imaging system -1 To PSR +2 when targeting with TC instead of +3 Can Target without TC at +6 Reduces all forest and Smoke mods to 1 Pilot receives 1 point of damage every time Units IS is hit, If you fail a roll of 7+ BA's recieve 1 extra point of damage every time they are hit.");
     }
 
     @Override
@@ -69,10 +70,10 @@ public class EnhancedInterfaceSkill extends SPilotSkill {
     @Override
     public int getBVMod(Entity unit) {
 
-        int EnhancedInterfaceBVBaseMod = CampaignMain.cm.getIntegerConfig("EnhancedInterfaceBaseBVMod");
+        int EnhancedInterfaceBVBaseMod =
+                CampaignMain.cm.getIntegerConfig("EnhancedInterfaceBaseBVMod");
 
         return EnhancedInterfaceBVBaseMod;
-
     }
 
     @Override
@@ -84,5 +85,4 @@ public class EnhancedInterfaceSkill extends SPilotSkill {
         }
         return CampaignMain.cm.getIntegerConfig("EnhancedInterfaceBaseBVMod");
     }
-
 }

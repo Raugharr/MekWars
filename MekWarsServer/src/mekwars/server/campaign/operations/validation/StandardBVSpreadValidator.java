@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2013 
- * 
+ * MekWars - Copyright (C) 2013
+ *
  * Original author - Spork (billypinhead@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,23 +17,23 @@
 package mekwars.server.campaign.operations.validation;
 
 /**
- * @author 	Spork
- * @version	1.0
- * @since	2013-06-19
+ * @author Spork
+ * @version 1.0
+ * @since 2013-06-19
  */
 public class StandardBVSpreadValidator extends BVSpreadValidator implements I_SpreadValidator {
-	
-	/**
-	 * Validates Unit BV Spread
-	 * @param min Minimum spread allowed
-	 * @param max Maximum spread allowed
-	 */
-	public StandardBVSpreadValidator(int min, int max) {
-		setValidatorClass(I_SpreadValidator.VALIDATOR_CLASS_BV_STANDARD);
-		setSpreadType(I_SpreadValidator.SPREADTYPE_BV);
-		
-		setMaxAllowed(max);
-		setMinAllowed(min);
-	}
 
+    /**
+     * Validates Unit BV Spread
+     *
+     * @param min Minimum spread allowed
+     * @param max Maximum spread allowed
+     */
+    public StandardBVSpreadValidator(int min, int max) {
+        setValidatorClass(I_SpreadValidator.VALIDATOR_CLASS_BV_STANDARD);
+        setSpreadType(I_SpreadValidator.SPREADTYPE_BV);
+
+        setMaxAllowed(max);
+        setMinAllowed(min);
+    }
 }

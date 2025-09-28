@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,18 +22,19 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import mekwars.common.Influences;
 import java.util.HashMap;
 import java.util.Map;
-import mekwars.server.campaign.SHouse;
+import mekwars.common.Influences;
 import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
 
 public class InfluencesConverter implements Converter {
     public boolean canConvert(Class clazz) {
         return clazz.equals(Influences.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+    public void marshal(
+            Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         Influences influences = (Influences) source;
 
         for (Map.Entry<Integer, Integer> influence : influences.entrySet()) {
@@ -64,7 +65,8 @@ public class InfluencesConverter implements Converter {
         return new Influences(influences);
     }
 
-    public void addInfluence(HierarchicalStreamReader reader, HashMap<Integer, Integer> influences) {
+    public void addInfluence(
+            HierarchicalStreamReader reader, HashMap<Integer, Integer> influences) {
         String factionName = null;
         int influence = 0;
 

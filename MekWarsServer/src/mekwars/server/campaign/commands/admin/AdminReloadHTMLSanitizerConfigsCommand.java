@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2011 
- * 
+ * MekWars - Copyright (C) 2011
+ *
  * Original author - coelocanth
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,32 +17,49 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.util.StringUtil;
 
 public class AdminReloadHTMLSanitizerConfigsCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
 
-	//calculate faction rankings by comparing with original owner
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		StringUtil.reloadSanitizer();
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has reloaded the HTML Sanitizer configs");
-		CampaignMain.cm.toUser("You have reloaded the HTML Sanitizer configs",Username,true);
-	}
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    // calculate faction rankings by comparing with original owner
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        StringUtil.reloadSanitizer();
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has reloaded the HTML Sanitizer configs");
+        CampaignMain.cm.toUser("You have reloaded the HTML Sanitizer configs", Username, true);
+    }
 }

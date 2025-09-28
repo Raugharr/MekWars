@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -20,23 +20,22 @@ package mekwars.dedicatedhost.cmd;
 import mekwars.dedicatedhost.MWDedHost;
 
 /**
- * @@author jtighe
- * command to kick idlers
+ * @@author jtighe command to kick idlers
  */
 public class KI extends Command {
 
-	/**
-	 * @param client
-	 */
-	public KI(MWDedHost mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @param client
+     */
+    public KI(MWDedHost mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		mwclient.sendChat(MWDedHost.CAMPAIGN_PREFIX + "c logout");
-	}
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        mwclient.sendChat(MWDedHost.CAMPAIGN_PREFIX + "c logout");
+    }
 }

@@ -15,22 +15,23 @@
  */
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 
 /**
- * If a pilot has this skill they will have a +20% of returning home if ejected and left on the field.
+ * If a pilot has this skill they will have a +20% of returning home if ejected and left on the
+ * field.
  *
  * @author Helge Richter
- *
  */
 public class SurvivalistSkill extends SPilotSkill {
     public SurvivalistSkill(int id) {
         super(id, "Survivalist", "SV");
-        setDescription("If a pilot has this skill they will have a +20% of returning home if ejected andleft on the field.");
+        setDescription(
+                "If a pilot has this skill they will have a +20% of returning home if ejected andleft on the field.");
     }
 
     public SurvivalistSkill() {
@@ -62,5 +63,4 @@ public class SurvivalistSkill extends SPilotSkill {
     public int getBVMod(Entity unit) {
         return 0;
     }
-
 }

@@ -1,13 +1,13 @@
 /*
  * MekWars - Copyright (C) 2008
- * 
+ *
  * Original author - jtighe (torren@users.sourceforge.net)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
@@ -18,25 +18,21 @@ package mekwars.common;
 import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 
 /**
- * A Terrain Base Terrain container for all environments. Each environment can be a different theme to allow for different times of year.
+ * A Terrain Base Terrain container for all environments. Each environment can be a different theme
+ * to allow for different times of year.
  */
-
-final public class Terrain {
+public final class Terrain {
     // id
     private int id = -1;
     private String name = "None";
     private Vector<PlanetEnvironment> environments = new Vector<PlanetEnvironment>(10, 1);
 
-    /**
-     * For Serialisation.
-     */
-    public Terrain() {
-    }
+    /** For Serialisation. */
+    public Terrain() {}
 
     public Terrain(String s) {
         StringTokenizer ST = new StringTokenizer(s, "$");
@@ -62,9 +58,7 @@ final public class Terrain {
         return result;
     }
 
-    /**
-     * Writes as binary stream
-     */
+    /** Writes as binary stream */
     public void binOut(BinWriter out) throws IOException {
         out.println(id, "id");
         out.println(name, "name");
@@ -74,12 +68,9 @@ final public class Terrain {
         for (PlanetEnvironment env : environments) {
             env.binOut(out);
         }
-
     }
 
-    /**
-     * Read from a binary stream
-     */
+    /** Read from a binary stream */
     public void binIn(BinReader in, CampaignData data) throws IOException {
         id = in.readInt("id");
         name = in.readLine("name");
@@ -120,8 +111,7 @@ final public class Terrain {
     }
 
     /**
-     * @param name
-     *            The name to set.
+     * @param name The name to set.
      */
     public void setName(String name) {
         this.name = name;
@@ -135,27 +125,21 @@ final public class Terrain {
     }
 
     public String toImageDescription() {
-        if (environments.size() > 0)
-            return environments.get(0).toImageDescription();
+        if (environments.size() > 0) return environments.get(0).toImageDescription();
 
         return "";
     }
 
     public String toImageAbsolutePathDescription() {
-        if (environments.size() > 0)
-            return environments.get(0).toImageAbsolutePathDescription();
+        if (environments.size() > 0) return environments.get(0).toImageAbsolutePathDescription();
 
         return "";
     }
-    
-    /**
-     * Return the total probability of all environments.
-     */
+
+    /** Return the total probability of all environments. */
     public int getTotalEnvironmentProbabilities() {
         int result = 0;
-        for (PlanetEnvironment pe : environments )
-            result += pe.getEnvironmentalProbability();
+        for (PlanetEnvironment pe : environments) result += pe.getEnvironmentalProbability();
         return result;
     }
-
 }

@@ -6,34 +6,46 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.util.SPlayerToJSON;
 
-public class SPlayerToJsonCommand implements Command 
-{
+public class SPlayerToJsonCommand implements Command {
 
-	int accessLevel = 1;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
+    int accessLevel = 1;
+    String syntax = "";
 
-	public void process(StringTokenizer command,String Username) 
-	{
-		//access level checks
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		
-		if(userLevel < getExecutionLevel()) 
-		{
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
 
-		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_BotPlayerInfo"))) 
-		{
-			CampaignMain.cm.toUser("AM:This command is disabled on this server.",Username,true);
-			return;
-		}
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
 
-		SPlayer p = CampaignMain.cm.getPlayer(Username);
-		SPlayerToJSON.writeToFile(p);
-		p.toSelf("AM: JSON player data updated.");
-	}
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+        // access level checks
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        if (!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_BotPlayerInfo"))) {
+            CampaignMain.cm.toUser("AM:This command is disabled on this server.", Username, true);
+            return;
+        }
+
+        SPlayer p = CampaignMain.cm.getPlayer(Username);
+        SPlayerToJSON.writeToFile(p);
+        p.toSelf("AM: JSON player data updated.");
+    }
 }

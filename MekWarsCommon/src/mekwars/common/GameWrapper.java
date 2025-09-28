@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-
-import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import megamek.common.Game;
 import megamek.common.Player;
-
+import mekwars.common.util.MWLogger;
 
 public class GameWrapper implements GameInterface {
-    
+
     private final Game game;
-    
+
     public GameWrapper(Game game) {
         this.game = game;
     }
@@ -37,19 +35,23 @@ public class GameWrapper implements GameInterface {
 
     public List<String> getWinners() {
         ArrayList<String> result = new ArrayList<String>();
-        
-        //TODO: Winners sometimes coming up empty. Let's see why
-        
+
+        // TODO: Winners sometimes coming up empty. Let's see why
+
         Enumeration<Player> en = game.getPlayers();
-        
+
         MWLogger.errLog("  :: game.getPlayers(): " + en.toString());
         MWLogger.errLog("  :: VictoryTeam: " + game.getVictoryTeam());
-        
-        while (en.hasMoreElements()){
+
+        while (en.hasMoreElements()) {
             final Player player = en.nextElement();
-            MWLogger.errLog("  :: ==> Player: " + player.getName().trim() + " :: Team: " + player.getTeam());
-            
-            if (player.getTeam() == game.getVictoryTeam()){
+            MWLogger.errLog(
+                    "  :: ==> Player: "
+                            + player.getName().trim()
+                            + " :: Team: "
+                            + player.getTeam());
+
+            if (player.getTeam() == game.getVictoryTeam()) {
                 result.add(player.getName().trim());
             }
         }
@@ -59,6 +61,4 @@ public class GameWrapper implements GameInterface {
     public boolean hasWinner() {
         return game.getVictoryTeam() != Player.TEAM_NONE;
     }
-
-
 }

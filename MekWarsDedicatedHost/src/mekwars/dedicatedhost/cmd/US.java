@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -18,30 +18,26 @@
 package mekwars.dedicatedhost.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.dedicatedhost.CUser;
 import mekwars.dedicatedhost.MWDedHost;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
-
 public class US extends Command {
-	
-	/**
-	 * @param client
-	 */
-	public US(MWDedHost client) {
-	    super(client);
-	}
-	
-	public void execute(String input) {
-	       StringTokenizer st = decode(input);
-	       mwclient.getUsers().clear();
-	        
-	        //add all users to the list
-	        while (st.hasMoreElements()) 
-	            mwclient.getUsers().add(new CUser(st.nextToken()));
-	}
-	
+
+    /**
+     * @param client
+     */
+    public US(MWDedHost client) {
+        super(client);
+    }
+
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        mwclient.getUsers().clear();
+
+        // add all users to the list
+        while (st.hasMoreElements()) mwclient.getUsers().add(new CUser(st.nextToken()));
+    }
 }

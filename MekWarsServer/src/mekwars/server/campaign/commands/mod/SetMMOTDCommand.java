@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2006 
- * 
+ * MekWars - Copyright (C) 2006
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,65 +17,89 @@
 /**
  * @author Jason Tighe
  */
-
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 /**
  * Set a faction's message of the day. Can be of arbitrary length and use HTML.
- * 
- * Syntax: /c setmmotd#text
+ *
+ * <p>Syntax: /c setmmotd#text
  */
 public class SetMMOTDCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Message[Clear to clear]";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		String motd = "";
-		try {
-			
-			//there may be #'s in HTML. Use all tokens and restore #'s.
-			motd = command.nextToken();
-			while (command.hasMoreTokens())
-				motd += "#" + command.nextToken();
-			
-		} catch (Exception e) {
-			CampaignMain.cm.toUser("Improper syntax. Try: /setmmotd text or /setmmotd clear to clear",Username,true);
-			return;
-		}
-		
-		if (motd.trim().equals("") || motd.equalsIgnoreCase("clear")) {
-			CampaignMain.cm.getCampaignOptions().getConfig().setProperty("MMOTD", "");
-			CampaignMain.cm.toUser("MMOTD cleared.",Username,true);
-			return;
-		}
-		
-		int size = motd.length();
-		if (size > 7000) {
-			CampaignMain.cm.toUser("MMOTD's may contain up to 7000 charachters. Your message was " + size + "chars long. Reduce its length and try again.",Username,true);
-			return;
-		}
-		
-		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("MMOTD",motd + "<br>- Set by " + Username);
-		CampaignMain.cm.toUser("MMOTD set. Use /c mmotd to review.",Username,true);
-					
-	}//end process()
-}//end setMMOTDCommand.java
+
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Message[Clear to clear]";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        String motd = "";
+        try {
+
+            // there may be #'s in HTML. Use all tokens and restore #'s.
+            motd = command.nextToken();
+            while (command.hasMoreTokens()) motd += "#" + command.nextToken();
+
+        } catch (Exception e) {
+            CampaignMain.cm.toUser(
+                    "Improper syntax. Try: /setmmotd text or /setmmotd clear to clear",
+                    Username,
+                    true);
+            return;
+        }
+
+        if (motd.trim().equals("") || motd.equalsIgnoreCase("clear")) {
+            CampaignMain.cm.getCampaignOptions().getConfig().setProperty("MMOTD", "");
+            CampaignMain.cm.toUser("MMOTD cleared.", Username, true);
+            return;
+        }
+
+        int size = motd.length();
+        if (size > 7000) {
+            CampaignMain.cm.toUser(
+                    "MMOTD's may contain up to 7000 charachters. Your message was "
+                            + size
+                            + "chars long. Reduce its length and try again.",
+                    Username,
+                    true);
+            return;
+        }
+
+        CampaignMain.cm
+                .getCampaignOptions()
+                .getConfig()
+                .setProperty("MMOTD", motd + "<br>- Set by " + Username);
+        CampaignMain.cm.toUser("MMOTD set. Use /c mmotd to review.", Username, true);
+    } // end process()
+} // end setMMOTDCommand.java

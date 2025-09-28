@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,27 +20,25 @@
  */
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.pilot.SPilot;
 
 /**
- * A pilot who has a Tactical Genius may reroll their initiative once per turn.
- * The second roll must be accepted.\n\nNote: Only one Tactical Genius may be
- * utilized per team.
- * 
- * @@author Torren (Jason Tighe)
+ * A pilot who has a Tactical Genius may reroll their initiative once per turn. The second roll must
+ * be accepted.\n\nNote: Only one Tactical Genius may be utilized per team. @@author Torren (Jason
+ * Tighe)
  */
 public class TacticalGeniusSkill extends SPilotSkill {
 
     public TacticalGeniusSkill(int id) {
         super(id, "Tactical Genius", "TG");
-        setDescription("A pilot who has a Tactical Genius may reroll their initiative once per turn.  The second roll must be accepted.");
-
+        setDescription(
+                "A pilot who has a Tactical Genius may reroll their initiative once per turn.  The second roll must be accepted.");
     }
 
     public TacticalGeniusSkill() {

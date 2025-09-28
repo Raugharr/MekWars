@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,11 +15,8 @@
  */
 
 /**
- * 
- * @author Torren (Jason Tighe) 10.13.05 
- * 
+ * @author Torren (Jason Tighe) 10.13.05
  */
-
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
@@ -29,34 +26,57 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 
 public class DisplayUnitRepairJobsCommand implements Command {
-	
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-        try{
+
+    int accessLevel = 0;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        try {
             int unitid = Integer.parseInt(command.nextToken());
             String data = MWServ.getInstance().getRTT().unitRepairTimes(unitid);
-            if ( data != null )
-                CampaignMain.cm.toUser("FSM|"+data,Username,false);
-            else{
+            if (data != null) CampaignMain.cm.toUser("FSM|" + data, Username, false);
+            else {
                 SPlayer player = CampaignMain.cm.getPlayer(Username);
                 SUnit unit = player.getUnit(unitid);
-                
-                CampaignMain.cm.toUser("FSM|#"+unitid+" "+unit.getEntity().getShortNameRaw()+" has the following repair jobs pending:<br><b>None.</b><br>",Username,false);
+
+                CampaignMain.cm.toUser(
+                        "FSM|#"
+                                + unitid
+                                + " "
+                                + unit.getEntity().getShortNameRaw()
+                                + " has the following repair jobs pending:<br><b>None.</b><br>",
+                        Username,
+                        false);
             }
-        }catch(Exception ex){}
-	}
+        } catch (Exception ex) {
+        }
+    }
 }

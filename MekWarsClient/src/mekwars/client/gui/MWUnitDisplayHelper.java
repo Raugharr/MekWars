@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -17,16 +17,9 @@
 
 package mekwars.client.gui;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import megamek.client.ui.swing.ClientGUI;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
-import megamek.client.ui.swing.util.MegaMekController;
 import megamek.common.Entity;
-import megamek.common.Player;
-import megamek.common.annotations.Nullable;
-import mekwars.client.MWClient;
 
 public class MWUnitDisplayHelper {
     public static MWUnitDisplay create(Entity entity) {

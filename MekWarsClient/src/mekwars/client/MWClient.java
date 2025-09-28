@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -61,7 +60,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -80,7 +78,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
@@ -97,7 +94,10 @@ import megamek.common.Mech;
 import megamek.common.MechWarrior;
 import megamek.common.event.GameCFREvent;
 import megamek.common.event.GameEvent;
+<<<<<<< HEAD
 import megamek.common.icons.Camouflage;
+=======
+>>>>>>> c23aa28 (Format to google style and enforce checkstyle)
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.common.preference.ClientPreferences;
@@ -108,7 +108,14 @@ import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.cmd.Command;
-import mekwars.client.gui.Browser;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
+import mekwars.client.common.campaign.clientutils.protocol.IClient;
+import mekwars.client.common.campaign.clientutils.protocol.commands.AckSignonPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
+import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
 import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.CMainFrame;
 import mekwars.client.gui.SplashWindow;
@@ -125,7 +132,6 @@ import mekwars.common.AdvancedTerrain;
 import mekwars.common.BMEquipment;
 import mekwars.common.CampaignData;
 import mekwars.common.Equipment;
-import mekwars.common.GameInterface;
 import mekwars.common.GameWrapper;
 import mekwars.common.House;
 import mekwars.common.Influences;
@@ -134,15 +140,7 @@ import mekwars.common.Planet;
 import mekwars.common.PlanetEnvironment;
 import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
-import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.campaign.clientutils.SerializeEntity;
-import mekwars.client.common.campaign.clientutils.protocol.CConnector;
-import mekwars.client.common.campaign.clientutils.protocol.IClient;
-import mekwars.client.common.campaign.clientutils.protocol.commands.AckSignonPCmd;
-import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
-import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
-import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
-import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
 import mekwars.common.util.GameReport;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.ThreadManager;
@@ -154,10 +152,9 @@ import org.apache.logging.log4j.Logger;
 public final class MWClient extends GameHost implements IClient {
     private static final Logger logger = LogManager.getLogger(MWClient.class);
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = 6056977040880995791L;
+
     public static Object mwClientLog;
     // Holds campaign data as factions and planets..
     CampaignData data = null;
@@ -193,7 +190,7 @@ public final class MWClient extends GameHost implements IClient {
     PlanetEnvironment currentEnvironment;
     AdvancedTerrain aTerrain = null;
 
-    TreeMap<String, String[]> allOps;// all operations, from OpList.txt
+    TreeMap<String, String[]> allOps; // all operations, from OpList.txt
 
     Dimension MapSize;
     int mapMedium = 0;
@@ -224,8 +221,8 @@ public final class MWClient extends GameHost implements IClient {
     TreeMap<String, IGUICommand> GUICommands = new TreeMap<String, IGUICommand>();
 
     /**
-     * Maps the task prefixes as HS, PL, SP etc. to a command under package cmd.
-     * key: String, value: cmd.Command
+     * Maps the task prefixes as HS, PL, SP etc. to a command under package cmd. key: String, value:
+     * cmd.Command
      */
     HashMap<String, Command> commands = new HashMap<String, Command>();
 
@@ -266,7 +263,6 @@ public final class MWClient extends GameHost implements IClient {
         boolean dedicated = false;
         int i;
 
-        
         /*
          * put StdErr and StdOut into ./logs/megameklog.txt, because MegaMek
          * uses StdOut and StdErr, but the part of MegaMek that sets that up
@@ -277,22 +273,20 @@ public final class MWClient extends GameHost implements IClient {
         String logFileName = "./logs/megameklog.txt";
         boolean enableSplashScreen = true;
         try {
-            PrintStream ps = new PrintStream(new BufferedOutputStream(
-                    new FileOutputStream(logFileName), 64));
+            PrintStream ps =
+                    new PrintStream(
+                            new BufferedOutputStream(new FileOutputStream(logFileName), 64));
             System.setOut(ps);
             System.setErr(ps);
         } catch (Exception ex) {
             MWLogger.errLog(ex);
-            MWLogger.errLog("Unable to redirect MegaMek output to "
-                    + logFileName);
+            MWLogger.errLog("Unable to redirect MegaMek output to " + logFileName);
         }
 
-        MWLogger.infoLog("Starting MekWars Client Version: "
-                + CLIENT_VERSION);
+        MWLogger.infoLog("Starting MekWars Client Version: " + CLIENT_VERSION);
         try {
             for (i = 0; i < args.length; i++) {
-                if (args[i].equalsIgnoreCase("-dedicated")
-                        || args[i].equalsIgnoreCase("-d")) {
+                if (args[i].equalsIgnoreCase("-dedicated") || args[i].equalsIgnoreCase("-d")) {
                     dedicated = true;
                 }
                 // add more args?
@@ -335,9 +329,7 @@ public final class MWClient extends GameHost implements IClient {
         }
     }
 
-    
     public MWClient(GUIClientConfig config) {
-
 
         ProtCommands = new TreeMap<String, IProtCommand>();
         Config = config;
@@ -348,7 +340,7 @@ public final class MWClient extends GameHost implements IClient {
         if (isDedicated()) {
             try {
                 Runtime runTime = Runtime.getRuntime();
-                String[] call = { "java", "-Xmx512m", "-jar", "MekWarsDed.jar" };
+                String[] call = {"java", "-Xmx512m", "-jar", "MekWarsDed.jar"};
                 runTime.exec(call);
                 System.exit(0);
             } catch (Exception ex) {
@@ -368,7 +360,7 @@ public final class MWClient extends GameHost implements IClient {
             MWLogger.errLog(ex);
         }
         Connector = new CConnector(this);
-        Connector.setSplashWindow(splash);// may set null if ded.
+        Connector.setSplashWindow(splash); // may set null if ded.
 
         Users = Collections.synchronizedList(new Vector<CUser>(1, 1));
 
@@ -418,21 +410,27 @@ public final class MWClient extends GameHost implements IClient {
             }
 
             // Start the data fetcher, get ops/map/etc
-            dataFetcher = new DataFetchClient(Integer.parseInt(Config
-                    .getParam("DATAPORT")), Integer.parseInt(Config
-                    .getParam("SOCKETTIMEOUTDELAY")));
+            dataFetcher =
+                    new DataFetchClient(
+                            Integer.parseInt(Config.getParam("DATAPORT")),
+                            Integer.parseInt(Config.getParam("SOCKETTIMEOUTDELAY")));
 
             try {
-                BufferedReader dis = new BufferedReader(new InputStreamReader(
-                        new FileInputStream("data/servers/"
-                                + Config.getParam("SERVERIP") + "."
-                                + Config.getParam("SERVERPORT")
-                                + "/dataLastUpdated.dat")));
+                BufferedReader dis =
+                        new BufferedReader(
+                                new InputStreamReader(
+                                        new FileInputStream(
+                                                "data/servers/"
+                                                        + Config.getParam("SERVERIP")
+                                                        + "."
+                                                        + Config.getParam("SERVERPORT")
+                                                        + "/dataLastUpdated.dat")));
                 Date lastTS = new Date(Long.parseLong(dis.readLine()));
                 dataFetcher.setLastTimestamp(lastTS);
                 dis.close();
             } catch (Throwable t) {
-                MWLogger.infoLog("Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.");
+                MWLogger.infoLog(
+                        "Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.");
             }
             dataFetcher.setData(Config.getParam("SERVERIP"), getCacheDir());
 
@@ -446,15 +444,17 @@ public final class MWClient extends GameHost implements IClient {
                 dataFetcher.checkForMostRecentOpList();
             } catch (IOException e) {
 
-                Object[] options = { "Exit", "Continue" };
-                int selectedValue = JOptionPane
-                        .showOptionDialog(
+                Object[] options = {"Exit", "Continue"};
+                int selectedValue =
+                        JOptionPane.showOptionDialog(
                                 null,
                                 "No OpList. This usually means that you were unable to "
                                         + "connect to the server to fetch a copy. Do you wish to exit?",
                                 "Startup " + "error!",
                                 JOptionPane.DEFAULT_OPTION,
-                                JOptionPane.ERROR_MESSAGE, null, options,
+                                JOptionPane.ERROR_MESSAGE,
+                                null,
+                                options,
                                 options[0]);
                 if (selectedValue == 0) {
                     System.exit(0); // exit, if they so choose
@@ -468,9 +468,10 @@ public final class MWClient extends GameHost implements IClient {
         // Dedicated servers have no GUI, no signon dialogs, etc.
         else {
             createProtCommands();
-            dataFetcher = new DataFetchClient(Integer.parseInt(Config
-                    .getParam("DATAPORT")), Integer.parseInt(Config
-                    .getParam("SOCKETTIMEOUTDELAY")));
+            dataFetcher =
+                    new DataFetchClient(
+                            Integer.parseInt(Config.getParam("DATAPORT")),
+                            Integer.parseInt(Config.getParam("SOCKETTIMEOUTDELAY")));
             dataFetcher.setData(Config.getParam("SERVERIP"), getCacheDir());
             try {
                 dataFetcher.getServerConfigData(this);
@@ -493,15 +494,13 @@ public final class MWClient extends GameHost implements IClient {
             } catch (Exception ex) {
                 MWLogger.errLog(ex);
             }
-
         }
 
         System.err.println("Get Data Time: " + System.currentTimeMillis());
         System.err.flush();
 
         getData();
-        System.err.println("Done Getting Data Time: "
-                + System.currentTimeMillis());
+        System.err.println("Done Getting Data Time: " + System.currentTimeMillis());
         System.err.flush();
 
         // set New timestamp
@@ -517,8 +516,7 @@ public final class MWClient extends GameHost implements IClient {
         }
 
         dedRestartAt = Integer.parseInt(getConfigParam("DEDAUTORESTART"));
-        savedGamesMaxDays = Integer
-                .parseInt(getConfigParam("MAXSAVEDGAMEDAYS"));
+        savedGamesMaxDays = Integer.parseInt(getConfigParam("MAXSAVEDGAMEDAYS"));
         myDedOwners = getConfigParam("DEDICATEDOWNERNAME");
         myPort = Integer.parseInt(getConfigParam("PORT"));
         IgnorePublic = splitString(Config.getParam("IGNOREPUBLIC"), ",");
@@ -567,12 +565,10 @@ public final class MWClient extends GameHost implements IClient {
         if (!isDedicated()) {
 
             // make the main frame
-            System.err.println("Creating CMainFrame Time: "
-                    + System.currentTimeMillis());
+            System.err.println("Creating CMainFrame Time: " + System.currentTimeMillis());
             System.err.flush();
             MainFrame = new CMainFrame(this);
-            System.err.println("CMainFrame Created Time: "
-                    + System.currentTimeMillis());
+            System.err.println("CMainFrame Created Time: " + System.currentTimeMillis());
             System.err.flush();
 
             try {
@@ -581,8 +577,7 @@ public final class MWClient extends GameHost implements IClient {
                 MWLogger.errLog(ex);
             }
 
-            System.err.println("Packing/Validating CMainFrame Time: "
-                    + System.currentTimeMillis());
+            System.err.println("Packing/Validating CMainFrame Time: " + System.currentTimeMillis());
             System.err.flush();
 
             if (packFrame) {
@@ -590,16 +585,16 @@ public final class MWClient extends GameHost implements IClient {
             } else {
                 MainFrame.validate();
             }
-            System.err.println("done packing/validating CMainFrame Time: "
-                    + System.currentTimeMillis());
+            System.err.println(
+                    "done packing/validating CMainFrame Time: " + System.currentTimeMillis());
             System.err.flush();
 
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             Dimension frameSize = MainFrame.getSize();
 
-            MainFrame.setExtendedState(Integer
-                    .parseInt(getConfigParam("WINDOWSTATE")));
-            MainFrame.setSize(Integer.parseInt(getConfigParam("WINDOWWIDTH")),
+            MainFrame.setExtendedState(Integer.parseInt(getConfigParam("WINDOWSTATE")));
+            MainFrame.setSize(
+                    Integer.parseInt(getConfigParam("WINDOWWIDTH")),
                     Integer.parseInt(getConfigParam("WINDOWHEIGHT")));
             MainFrame.setLocation(
                     Integer.parseInt(getConfigParam("WINDOWLEFT")),
@@ -618,36 +613,29 @@ public final class MWClient extends GameHost implements IClient {
             // set the initial mute value
             setSoundMuted(getConfig().isParam("DISABLEALLSOUND"));
 
-            System.err.println("Attack Menu Update Time: "
-                    + System.currentTimeMillis());
+            System.err.println("Attack Menu Update Time: " + System.currentTimeMillis());
             System.err.flush();
 
             // build the attack menu. at this point we know we have the
             // necessary data.
             MainFrame.updateAttackMenu();
-            System.err.println("Attack Menu Update done Time: "
-                    + System.currentTimeMillis());
+            System.err.println("Attack Menu Update done Time: " + System.currentTimeMillis());
             System.err.flush();
 
-            System.err.println("MainFrame Visible Time: "
-                    + System.currentTimeMillis());
+            System.err.println("MainFrame Visible Time: " + System.currentTimeMillis());
             System.err.flush();
 
-            System.err.println("Creating Browser Time: "
-                    + System.currentTimeMillis());
+            System.err.println("Creating Browser Time: " + System.currentTimeMillis());
             System.err.flush();
 
-            System.err.println("Connecting to Server Time: "
-                    + System.currentTimeMillis());
+            System.err.println("Connecting to Server Time: " + System.currentTimeMillis());
             System.err.flush();
             connectToServer(chatServerIP, chatServerPort);
-            System.err.println("Connected to Server Time: "
-                    + System.currentTimeMillis());
+            System.err.println("Connected to Server Time: " + System.currentTimeMillis());
             System.err.flush();
             // make the main frame visible
             try {
-                System.err.println("making mainframe visible: "
-                        + System.currentTimeMillis());
+                System.err.println("making mainframe visible: " + System.currentTimeMillis());
                 System.err.flush();
                 // init the gui
                 if (splash != null) {
@@ -657,36 +645,29 @@ public final class MWClient extends GameHost implements IClient {
                 MainFrame.setVisible(true);
 
                 if (splash != null) {
-                    System.err.println("splash not null: "
-                            + System.currentTimeMillis());
+                    System.err.println("splash not null: " + System.currentTimeMillis());
                     System.err.flush();
                     splash.getProgressBar().setValue(9);
-                    System.err.println("progress bar set to 9: "
-                            + System.currentTimeMillis());
+                    System.err.println("progress bar set to 9: " + System.currentTimeMillis());
                     System.err.flush();
                     splash.getProgressBar().setVisible(false);
-                    System.err.println("progressbar going bye bye: "
-                            + System.currentTimeMillis());
+                    System.err.println("progressbar going bye bye: " + System.currentTimeMillis());
                     System.err.flush();
                     splash.dispose();
-                    System.err.println("splash going bye bye: "
-                            + System.currentTimeMillis());
+                    System.err.println("splash going bye bye: " + System.currentTimeMillis());
                     System.err.flush();
                 }
-                System.err.println("splash going to null: "
-                        + System.currentTimeMillis());
+                System.err.println("splash going to null: " + System.currentTimeMillis());
                 System.err.flush();
 
-                splash = null;// nuke the splash
-                System.err
-                        .println("splash null: " + System.currentTimeMillis());
+                splash = null; // nuke the splash
+                System.err.println("splash null: " + System.currentTimeMillis());
                 System.err.flush();
             } catch (Exception ex) {
                 MWLogger.errLog(ex);
                 MWLogger.errLog("Error closing splash / opening main frame.");
             }
-            System.err.println("MainFrame Visible Done Time: "
-                    + System.currentTimeMillis());
+            System.err.println("MainFrame Visible Done Time: " + System.currentTimeMillis());
             System.err.flush();
 
             // refresh the GUI views one last time
@@ -700,21 +681,27 @@ public final class MWClient extends GameHost implements IClient {
              * this after the main frame is build and visible will (I hope) fix
              * the "PM Ping Crash" TT users have with Client 0.1.44.5.
              */
-            sendChat(GameHost.CAMPAIGN_PREFIX + "c setclientversion#"
-                    + myUsername.trim() + "#" + CLIENT_VERSION);
+            sendChat(
+                    GameHost.CAMPAIGN_PREFIX
+                            + "c setclientversion#"
+                            + myUsername.trim()
+                            + "#"
+                            + CLIENT_VERSION);
             sendChat("/getsavedmail");
 
             // Lets start the repair thread
             if (Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair"))) {
-                RMT = new RepairManagmentThread(
-                        Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
-                        this);
+                RMT =
+                        new RepairManagmentThread(
+                                Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
+                                this);
                 RMT.start();
             }
             if (Boolean.parseBoolean(getServerConfigs("UsePartsRepair"))) {
-                SMT = new SalvageManagmentThread(
-                        Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
-                        this);
+                SMT =
+                        new SalvageManagmentThread(
+                                Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
+                                this);
                 SMT.start();
             }
         }
@@ -733,7 +720,7 @@ public final class MWClient extends GameHost implements IClient {
                     }
                 }
             }
-        }// end else(is Dedicated host)
+        } // end else(is Dedicated host)
 
         // start checking for timeouts
         TimeOut = Long.parseLong(Config.getParam("TIMEOUT"));
@@ -831,12 +818,10 @@ public final class MWClient extends GameHost implements IClient {
 
             if (!commands.containsKey(task)) {
                 try {
-                    Class<?> cmdClass = Class.forName(getClass().getPackage()
-                            .getName() + ".cmd." + task);
-                    Constructor<?> c = cmdClass
-                            .getConstructor(new Class[] { MWClient.class });
-                    Command cmd = (Command) c
-                            .newInstance(new Object[] { this });
+                    Class<?> cmdClass =
+                            Class.forName(getClass().getPackage().getName() + ".cmd." + task);
+                    Constructor<?> c = cmdClass.getConstructor(new Class[] {MWClient.class});
+                    Command cmd = (Command) c.newInstance(new Object[] {this});
                     commands.put(task, cmd);
                 } catch (Exception e) {
                     MWLogger.errLog(e);
@@ -866,10 +851,13 @@ public final class MWClient extends GameHost implements IClient {
          * process (never have a main frame, so no null check or buffer needed)
          * and call doParseDataHelper() directly.
          */
-        if (data.startsWith("US|") || data.startsWith("NU|")
-                || data.startsWith("UG|") || data.startsWith("RGTS|")
-                || data.startsWith("DSD|") || data.startsWith("USD|")) {
-            doParseDataHelper(data);// bypass the buffering process -
+        if (data.startsWith("US|")
+                || data.startsWith("NU|")
+                || data.startsWith("UG|")
+                || data.startsWith("RGTS|")
+                || data.startsWith("DSD|")
+                || data.startsWith("USD|")) {
+            doParseDataHelper(data); // bypass the buffering process -
             // ded's never have a main fraime
             return;
         }
@@ -879,7 +867,7 @@ public final class MWClient extends GameHost implements IClient {
             return;
         }
 
-        data = data.substring(3);// strip "PM|"
+        data = data.substring(3); // strip "PM|"
         st = new StringTokenizer(data, "|");
         own = new StringTokenizer(myDedOwners, "$");
 
@@ -895,7 +883,7 @@ public final class MWClient extends GameHost implements IClient {
         /*
          * Commands that can be executed by ANY user.
          */
-        if (command.equals("checkrestartcount")) {// check the restart amount.
+        if (command.equals("checkrestartcount")) { // check the restart amount.
             checkForRestart();
             return;
         } else if (command.equals("displaymegameklog")) { // display
@@ -904,14 +892,21 @@ public final class MWClient extends GameHost implements IClient {
             try {
                 File logFile = new File("./logs/megameklog.txt");
                 FileInputStream fis = new FileInputStream(logFile);
-                BufferedReader dis = new BufferedReader(new InputStreamReader(
-                        fis));
-                sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name
-                        + "#MegaMek Log from " + myUsername);
+                BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+                sendChat(
+                        IClient.PROTOCOL_PREFIX
+                                + "c sendtomisc#"
+                                + name
+                                + "#MegaMek Log from "
+                                + myUsername);
                 int counter = 0;
                 while (dis.ready()) {
-                    sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name + "#"
-                            + dis.readLine());
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c sendtomisc#"
+                                    + name
+                                    + "#"
+                                    + dis.readLine());
                     // problems with huge logs getting shoved down players
                     // throats so a 100ms delay should allow
                     // the message queue to breath.
@@ -929,8 +924,12 @@ public final class MWClient extends GameHost implements IClient {
             } catch (Exception ex) {
                 // do nothing?
             }
-            sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                    + " used the display megamek logs command on " + myUsername);
+            sendChat(
+                    IClient.PROTOCOL_PREFIX
+                            + "c mm# "
+                            + name
+                            + " used the display megamek logs command on "
+                            + myUsername);
             return;
         } else if (command.equals("displaydederrorlog")) { // display
             // error.0
@@ -938,14 +937,21 @@ public final class MWClient extends GameHost implements IClient {
             try {
                 File logFile = new File("./logs/errlog.0");
                 FileInputStream fis = new FileInputStream(logFile);
-                BufferedReader dis = new BufferedReader(new InputStreamReader(
-                        fis));
-                sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name
-                        + "#Error Log from " + myUsername);
+                BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+                sendChat(
+                        IClient.PROTOCOL_PREFIX
+                                + "c sendtomisc#"
+                                + name
+                                + "#Error Log from "
+                                + myUsername);
                 int counter = 0;
                 while (dis.ready()) {
-                    sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name + "#"
-                            + dis.readLine());
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c sendtomisc#"
+                                    + name
+                                    + "#"
+                                    + dis.readLine());
                     // problems with huge logs getting shoved down players
                     // throats so a 100ms delay should allow
                     // the message queue to breath.
@@ -963,25 +969,34 @@ public final class MWClient extends GameHost implements IClient {
             } catch (Exception ex) {
                 // do nothing?
             }
-            sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                    + " used the display ded error log command on "
-                    + myUsername);
+            sendChat(
+                    IClient.PROTOCOL_PREFIX
+                            + "c mm# "
+                            + name
+                            + " used the display ded error log command on "
+                            + myUsername);
             return;
         } else if (command.equals("displaydedlog")) { // display
             // log.0
-            MWLogger.infoLog("display ded log command received from "
-                    + name);
+            MWLogger.infoLog("display ded log command received from " + name);
             try {
                 File logFile = new File("./logs/infolog.0");
                 FileInputStream fis = new FileInputStream(logFile);
-                BufferedReader dis = new BufferedReader(new InputStreamReader(
-                        fis));
-                sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name
-                        + "#Ded Log from " + myUsername);
+                BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+                sendChat(
+                        IClient.PROTOCOL_PREFIX
+                                + "c sendtomisc#"
+                                + name
+                                + "#Ded Log from "
+                                + myUsername);
                 int counter = 0;
                 while (dis.ready()) {
-                    sendChat(IClient.PROTOCOL_PREFIX + "c sendtomisc#" + name + "#"
-                            + dis.readLine());
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c sendtomisc#"
+                                    + name
+                                    + "#"
+                                    + dis.readLine());
                     // problems with huge logs getting shoved down players
                     // throats so a 100ms delay should allow
                     // the message queue to breath.
@@ -999,8 +1014,12 @@ public final class MWClient extends GameHost implements IClient {
             } catch (Exception ex) {
                 // do nothing?
             }
-            sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                    + " used the display ded log command on " + myUsername);
+            sendChat(
+                    IClient.PROTOCOL_PREFIX
+                            + "c mm# "
+                            + name
+                            + " used the display ded log command on "
+                            + myUsername);
             return;
         }
 
@@ -1016,7 +1035,8 @@ public final class MWClient extends GameHost implements IClient {
                 owner = "";
             }
 
-            if (myDedOwners.equals("") || name.equals(owner)
+            if (myDedOwners.equals("")
+                    || name.equals(owner)
                     || (getUser(name).getUserlevel() >= 100)) { // if
                 // no
                 // owners
@@ -1029,16 +1049,14 @@ public final class MWClient extends GameHost implements IClient {
                 if (command.equals("restart")) { // Restart the dedicated
                     // server
 
-                    MWLogger.infoLog("Restart command received from "
-                            + name);
-                    stopHost();// kill the host
+                    MWLogger.infoLog("Restart command received from " + name);
+                    stopHost(); // kill the host
 
                     // Remove any MM option files that deds may have.
                     File localGameOptions = new File("./mmconf");
                     try {
                         if (localGameOptions.exists()) {
-                            localGameOptions = new File(
-                                    "./mmconf/gameoptions.xml");
+                            localGameOptions = new File("./mmconf/gameoptions.xml");
                             if (localGameOptions.exists()) {
                                 localGameOptions.delete();
                             }
@@ -1053,18 +1071,20 @@ public final class MWClient extends GameHost implements IClient {
                     } catch (Exception ex) {
                         MWLogger.errLog(ex);
                     }
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the restart command on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the restart command on "
+                                    + myUsername);
 
                     try {
                         Runtime runTime = Runtime.getRuntime();
                         if (new File("MekWarsDed.jar").exists()) {
-                            String[] call = { "java", "-Xmx512m", "-jar",
-                                    "MekWarsDed.jar" };
+                            String[] call = {"java", "-Xmx512m", "-jar", "MekWarsDed.jar"};
                             runTime.exec(call);
                         } else {
-                            String[] call = { "java", "-Xmx512m", "-jar",
-                                    "MekWarsClient.jar" };
+                            String[] call = {"java", "-Xmx512m", "-jar", "MekWarsClient.jar"};
                             runTime.exec(call);
                         }
                         System.exit(0);
@@ -1077,13 +1097,16 @@ public final class MWClient extends GameHost implements IClient {
                 } else if (command.equals("reset")) { // server reset (like
                     // /reset in MM)
 
-                    MWLogger.infoLog("Reset command received from "
-                            + name);
+                    MWLogger.infoLog("Reset command received from " + name);
                     if (myServer != null) {
                         resetGame();
                     }
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the reset command on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the reset command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("die")) { // shut the dedicated down
@@ -1094,13 +1117,16 @@ public final class MWClient extends GameHost implements IClient {
                 } else if (command.equals("start")) { // start hosting a MM
                     // game
 
-                    MWLogger.infoLog("Start command received from "
-                            + name);
+                    MWLogger.infoLog("Start command received from " + name);
                     if (myServer == null) {
                         startHost(true, false, false);
                     }
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the start command on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the start command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("stop")) { // stop MM host, but w/o
@@ -1108,8 +1134,7 @@ public final class MWClient extends GameHost implements IClient {
                     // connection
 
                     // stop the host
-                    MWLogger.infoLog("Stop command received from "
-                            + name);
+                    MWLogger.infoLog("Stop command received from " + name);
                     if (myServer != null) {
                         stopHost();
                     }
@@ -1120,103 +1145,135 @@ public final class MWClient extends GameHost implements IClient {
                     } catch (Exception ex) {
                         MWLogger.errLog(ex);
                     }
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the stop command on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the stop command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("owners")) { // return a list of
                     // owners
 
-                    MWLogger.infoLog("Owners command received from "
-                            + name);
-                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", My owners: "
-                            + myDedOwners.replace('$', ' '));
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the owners command on " + myUsername);
+                    MWLogger.infoLog("Owners command received from " + name);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", My owners: "
+                                    + myDedOwners.replace('$', ' '));
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the owners command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("owner ")) { // add new owner(s)
 
-                    MWLogger.infoLog("Owner command received from "
-                            + name);
+                    MWLogger.infoLog("Owner command received from " + name);
                     if (!myDedOwners.equals("")) {
                         myDedOwners = myDedOwners + "$";
                     }
 
-                    myDedOwners = myDedOwners
-                            + command.substring(("owner ").length()).trim();
+                    myDedOwners = myDedOwners + command.substring(("owner ").length()).trim();
                     getConfig().setParam("DEDICATEDOWNERNAME", myDedOwners);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the owner " + myDedOwners + " command on "
-                            + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the owner "
+                                    + myDedOwners
+                                    + " command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("clearowners")) { // clear owners, and
                     // send feedback.
 
-                    MWLogger.infoLog("Clearowners command received from "
-                                    + name);
+                    MWLogger.infoLog("Clearowners command received from " + name);
                     myDedOwners = "";
-                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", My owners: "
-                            + myDedOwners);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", My owners: "
+                                    + myDedOwners);
                     getConfig().setParam("DEDICATEDOWNERNAME", myDedOwners);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the clear owners command on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the clear owners command on "
+                                    + myUsername);
                     return;
 
-                } else if (command.equals("port")) {// return the server's port
+                } else if (command.equals("port")) { // return the server's port
 
-                    MWLogger.infoLog("Port command received from "
-                            + name);
-                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", My port: "
-                            + myPort);
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the port command on " + myUsername);
+                    MWLogger.infoLog("Port command received from " + name);
+                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", My port: " + myPort);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the port command on "
+                                    + myUsername);
                     return;
 
-                } else if (command.startsWith("port ")) {// new server port
+                } else if (command.startsWith("port ")) { // new server port
 
                     MWLogger.infoLog("Port (set) command received from " + name);
                     try {
-                        port = Integer.parseInt(command.substring(
-                                ("port ").length()).trim());
+                        port = Integer.parseInt(command.substring(("port ").length()).trim());
                     } catch (Exception ex) {
-                        MWLogger.infoLog("Command error: " + command
-                                + ": non-numeral port.");
+                        MWLogger.infoLog("Command error: " + command + ": non-numeral port.");
                         return;
                     }
 
                     if ((port > 0) && (port < 65536)) {
                         myPort = port;
-                    }// check for legal port range
+                    } // check for legal port range
                     else {
-                        MWLogger.infoLog("Command error: " + command
-                                + ": port out of valid range.");
+                        MWLogger.infoLog(
+                                "Command error: " + command + ": port out of valid range.");
                     }
                     String portString = Integer.toString(myPort);
                     getConfig().setParam("PORT", portString);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " changed the port for " + myUsername + " to "
-                            + myPort);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " changed the port for "
+                                    + myUsername
+                                    + " to "
+                                    + myPort);
                     return;
 
-                } else if (command.equals("savegamepurge")) {// server days
+                } else if (command.equals("savegamepurge")) { // server days
                     // to purge
 
-                    MWLogger.infoLog("Save game purge command received from "
-                                    + name);
-                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                            + ", I purge saved games that are "
-                            + savedGamesMaxDays + " days old, or older.");
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the save game purge command on "
-                            + myUsername);
+                    MWLogger.infoLog("Save game purge command received from " + name);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", I purge saved games that are "
+                                    + savedGamesMaxDays
+                                    + " days old, or older.");
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the save game purge command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("savegamepurge ")) { // set
@@ -1227,14 +1284,13 @@ public final class MWClient extends GameHost implements IClient {
                     // called
 
                     int mySavedGamesMaxDays = 7;
-                    MWLogger.infoLog("Savegamepurge command received from "
-                                    + name);
+                    MWLogger.infoLog("Savegamepurge command received from " + name);
                     try {
-                        mySavedGamesMaxDays = Integer.parseInt(command
-                                .substring(("savegamepurge ").length()).trim());
+                        mySavedGamesMaxDays =
+                                Integer.parseInt(
+                                        command.substring(("savegamepurge ").length()).trim());
                     } catch (Exception ex) {
-                        MWLogger.infoLog("Command error: " + command
-                                + ": invalid number.");
+                        MWLogger.infoLog("Command error: " + command + ": invalid number.");
                         return;
                     }
 
@@ -1243,20 +1299,24 @@ public final class MWClient extends GameHost implements IClient {
                     getConfig().saveConfig();
                     setConfig();
                     savedGamesMaxDays = mySavedGamesMaxDays;
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " changed the save game purge for " + myUsername
-                            + " to " + mySavedGamesMaxDays + " days.");
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " changed the save game purge for "
+                                    + myUsername
+                                    + " to "
+                                    + mySavedGamesMaxDays
+                                    + " days.");
                     return;
 
                 } else if (command.equals("displaysavedgames")) { // display
                     // saved
                     // games
 
-                    MWLogger.infoLog("displaysavedgames command received from "
-                                    + name);
+                    MWLogger.infoLog("displaysavedgames command received from " + name);
                     File[] fileList;
-                    String list = "<br><b>Saved files on " + myUsername
-                            + "</b><br>";
+                    String list = "<br><b>Saved files on " + myUsername + "</b><br>";
                     String dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
                     SimpleDateFormat sDF = new SimpleDateFormat(dateTimeFormat);
                     try {
@@ -1265,59 +1325,81 @@ public final class MWClient extends GameHost implements IClient {
                         for (File dateFile : fileList) {
                             Date date = new Date(dateFile.lastModified());
                             String dateTime = sDF.format(date);
-                            list += "<a href=\"MEKMAIL" + myUsername
-                                    + "*loadgamewithfullpath " + dateFile
-                                    + "\">Load " + dateFile + "</a> "
-                                    + dateTime + "<br>";
+                            list +=
+                                    "<a href=\"MEKMAIL"
+                                            + myUsername
+                                            + "*loadgamewithfullpath "
+                                            + dateFile
+                                            + "\">Load "
+                                            + dateFile
+                                            + "</a> "
+                                            + dateTime
+                                            + "<br>";
                         }
                     } catch (Exception ex) {
                         // do something?
                     }
 
                     sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", " + list);
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the display saved games command on "
-                            + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the display saved games command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("update")) { // update the dedicated
                     // host using
                     // MWAutoUpdate
 
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the update command on " + myUsername);
-                    MWLogger.infoLog("Update command received from "
-                            + name);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the update command on "
+                                    + myUsername);
+                    MWLogger.infoLog("Update command received from " + name);
                     try {
                         if (myServer != null) {
                             myServer.die();
                         }
                         goodbye();
                         Runtime runtime = Runtime.getRuntime();
-                        String[] call = { "java", "-jar",
-                                "MekWarsAutoUpdate.jar", "DEDICATED",
-                                getConfigParam("DEDUPDATECOMMANDFILE") };
+                        String[] call = {
+                            "java",
+                            "-jar",
+                            "MekWarsAutoUpdate.jar",
+                            "DEDICATED",
+                            getConfigParam("DEDUPDATECOMMANDFILE")
+                        };
                         runtime.exec(call);
                     } catch (Exception ex) {
                         MWLogger.errLog(ex);
                     }
-                    System.exit(0);// restart the ded
+                    System.exit(0); // restart the ded
                     return;
 
                 } else if (command.equals("ping")) { // ping dedicated
 
-                    MWLogger.infoLog("Ping command received from "
-                            + name);
+                    MWLogger.infoLog("Ping command received from " + name);
                     Version version = MWClient.CLIENT_VERSION;
-                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                            + ", I'm active with version " + version + ".");
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the ping command on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", I'm active with version "
+                                    + version
+                                    + ".");
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the ping command on "
+                                    + myUsername);
                     return;
-
                 }
-                if (command.equals("loadgame")
-                        || command.startsWith("loadgame ")) { // load
+                if (command.equals("loadgame") || command.startsWith("loadgame ")) { // load
                     // game
                     // from
                     // file
@@ -1325,23 +1407,34 @@ public final class MWClient extends GameHost implements IClient {
                     MWLogger.infoLog("Loadgame command received from " + name);
                     String filename = "";
                     if (command.startsWith("loadgame ")) {
-                        filename = command.substring(("loadgame ").length())
-                                .trim();
+                        filename = command.substring(("loadgame ").length()).trim();
                     }
                     if (command.equals("loadgame") || filename.equals("")) {
                         filename = "autosave.sav";
                     }
                     if (myServer != null) {
                         if (!loadGame(filename)) {
-                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                                    + ", Unable to load saved game.");
+                            sendChat(
+                                    IClient.PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", Unable to load saved game.");
                         } else {
-                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                                    + ", Saved game loaded.");
+                            sendChat(
+                                    IClient.PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", Saved game loaded.");
                         }
                     }
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " loaded game " + filename + " on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " loaded game "
+                                    + filename
+                                    + " on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("loadgamewithfullpath ")) { // load
@@ -1352,70 +1445,92 @@ public final class MWClient extends GameHost implements IClient {
                     // full
                     // path
 
-                    MWLogger.infoLog("Loadgamewithfullpath command received from "
-                                    + name);
+                    MWLogger.infoLog("Loadgamewithfullpath command received from " + name);
                     String filename = "";
                     if (command.startsWith("loadgamewithfullpath ")) {
-                        filename = command.substring(
-                                ("loadgamewithfullpath ").length()).trim();
+                        filename = command.substring(("loadgamewithfullpath ").length()).trim();
                     }
-                    if (command.equals("loadgamewithfullpath")
-                            || filename.equals("")) {
+                    if (command.equals("loadgamewithfullpath") || filename.equals("")) {
                         filename = "autosave.sav";
                     }
                     if (myServer != null) {
                         if (!loadGameWithFullPath(filename)) {
-                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                                    + ", Unable to load saved game.");
+                            sendChat(
+                                    IClient.PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", Unable to load saved game.");
                         } else {
-                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                                    + ", Saved game loaded.");
+                            sendChat(
+                                    IClient.PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", Saved game loaded.");
                         }
                     }
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " loaded game " + filename + " on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " loaded game "
+                                    + filename
+                                    + " on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("loadautosave")) { // load the most
                     // recent auto
                     // save file
 
-                    MWLogger.infoLog("Loadautosave command received from "
-                                    + name);
+                    MWLogger.infoLog("Loadautosave command received from " + name);
                     String filename = "autosave.sav";
                     if (myServer != null) {
-                        if (Boolean.parseBoolean(this
-                                .getServerConfigs("MMTimeStampLogFile"))) {
+                        if (Boolean.parseBoolean(this.getServerConfigs("MMTimeStampLogFile"))) {
                             filename = getParanoidAutoSave();
                         }
 
                         if (!loadGame(filename)) {
-                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                                    + ", Unable to load saved game.");
+                            sendChat(
+                                    IClient.PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", Unable to load saved game.");
                         } else {
-                            sendChat(IClient.PROTOCOL_PREFIX + "mail " + name + ", "
-                                    + filename + " loaded.");
+                            sendChat(
+                                    IClient.PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", "
+                                            + filename
+                                            + " loaded.");
                         }
                     }
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name + " loaded "
-                            + filename + " game on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " loaded "
+                                    + filename
+                                    + " game on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("name ")) { // new command
                     // prefix
 
-                    MWLogger.infoLog("Name command received from "
-                            + name);
-                    String myComName = command.substring(("name ").length())
-                            .trim();
+                    MWLogger.infoLog("Name command received from " + name);
+                    String myComName = command.substring(("name ").length()).trim();
                     getConfig().setParam("NAME", myComName);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(IClient.PROTOCOL_PREFIX
-                            + "c mm# "
-                            + name
-                            + " used the set name command to change the name to "
-                            + myComName + " command on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the set name command to change the name to "
+                                    + myComName
+                                    + " command on "
+                                    + myUsername);
                     Config.setParam("NAME", "[Dedicated] " + myComName);
                     myUsername = Config.getParam("NAME");
                     return;
@@ -1423,32 +1538,38 @@ public final class MWClient extends GameHost implements IClient {
                 } else if (command.startsWith("comment ")) { // new command
                     // prefix
 
-                    MWLogger.infoLog("Prefix command received from "
-                            + name);
-                    String myComComment = command.substring(
-                            ("comment ").length()).trim();
+                    MWLogger.infoLog("Prefix command received from " + name);
+                    String myComComment = command.substring(("comment ").length()).trim();
                     getConfig().setParam("COMMENT", myComComment);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " has set the comment to " + myComComment
-                            + " on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " has set the comment to "
+                                    + myComComment
+                                    + " on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("players ")) { // new command
                     // prefix
 
-                    MWLogger.infoLog("Prefix command received from "
-                            + name);
+                    MWLogger.infoLog("Prefix command received from " + name);
                     try {
-                        String numPlayers = command.substring(
-                                ("players ").length()).trim();
+                        String numPlayers = command.substring(("players ").length()).trim();
                         getConfig().setParam("MAXPLAYERS", numPlayers);
                         getConfig().saveConfig();
                         setConfig();
-                        sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                                + " has set the max number of players to "
-                                + numPlayers + " on " + myUsername);
+                        sendChat(
+                                IClient.PROTOCOL_PREFIX
+                                        + "c mm# "
+                                        + name
+                                        + " has set the max number of players to "
+                                        + numPlayers
+                                        + " on "
+                                        + myUsername);
                         return;
                     } catch (Exception ex) {
                         MWLogger.errLog(ex);
@@ -1458,82 +1579,109 @@ public final class MWClient extends GameHost implements IClient {
 
                 } else if (command.equals("restartcount")) { // server port
 
-                    MWLogger.infoLog("Restartcount command received from "
-                                    + name);
-                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                            + ", My restart count is set to " + dedRestartAt
-                            + " my current game count is " + gameCount);
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the restartcount command on " + myUsername);
+                    MWLogger.infoLog("Restartcount command received from " + name);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", My restart count is set to "
+                                    + dedRestartAt
+                                    + " my current game count is "
+                                    + gameCount);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the restartcount command on "
+                                    + myUsername);
                     return;
 
-                } else if (command.startsWith("restartcount ")) {// new
+                } else if (command.startsWith("restartcount ")) { // new
                     // server
                     // port
 
-                    MWLogger.infoLog("restartcount change command received from "
-                                    + name);
+                    MWLogger.infoLog("restartcount change command received from " + name);
                     try {
-                        dedRestartAt = Integer.parseInt(command.substring(
-                                ("restartcount ").length()).trim());
+                        dedRestartAt =
+                                Integer.parseInt(
+                                        command.substring(("restartcount ").length()).trim());
                     } catch (Exception ex) {
-                        MWLogger.infoLog("Command error: " + command
-                                + ": bad counter.");
+                        MWLogger.infoLog("Command error: " + command + ": bad counter.");
                         return;
                     }
                     String restartString = Integer.toString(dedRestartAt);
                     getConfig().setParam("DEDAUTORESTART", restartString);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " changed the restart count for " + myUsername
-                            + " to " + dedRestartAt);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " changed the restart count for "
+                                    + myUsername
+                                    + " to "
+                                    + dedRestartAt);
                     return;
 
-                } else if (command.equals("getupdateurl")) {// find out what url
+                } else if (command.equals("getupdateurl")) { // find out what url
                     // the ded is set to
                     // update with
 
-                    MWLogger.infoLog("GetUpdateUrl command received from "
-                                    + name);
+                    MWLogger.infoLog("GetUpdateUrl command received from " + name);
                     String updateURL = getConfigParam("UPDATEURL");
-                    sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name
-                            + " used the getUpdateURL command on " + myUsername);
-                    sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                            + ", My update URL is " + updateURL + ".");
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the getUpdateURL command on "
+                                    + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", My update URL is "
+                                    + updateURL
+                                    + ".");
                     return;
 
                 } else if (command.startsWith("setupdateurl ")) {
 
-                    MWLogger.infoLog("setUpdateURL command received from "
-                                    + name);
-                    String myUpdateURL = command.substring(
-                            ("setupdateurl ").length()).trim();
+                    MWLogger.infoLog("setUpdateURL command received from " + name);
+                    String myUpdateURL = command.substring(("setupdateurl ").length()).trim();
                     getConfig().setParam("UPDATEURL", myUpdateURL);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(IClient.PROTOCOL_PREFIX
-                            + "c mm# "
-                            + name
-                            + " used the set update url command to change the the update url to "
-                            + myUpdateURL + " on " + myUsername);
+                    sendChat(
+                            IClient.PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the set update url command to change the the update url to "
+                                    + myUpdateURL
+                                    + " on "
+                                    + myUsername);
                     return;
-
                 }
 
-                MWLogger.infoLog("Command error: " + command
-                        + ": unknown command.");
+                MWLogger.infoLog("Command error: " + command + ": unknown command.");
                 return;
             }
         }
 
-        sendChat(IClient.PROTOCOL_PREFIX + "c mm# " + name + " tried to use the "
-                + command + " on " + myUsername
-                + ", but does not have ownership.");
-        sendChat(IClient.PROTOCOL_PREFIX + "mail " + name
-                + ", You do not have management rights for this host!");
-        MWLogger.infoLog("Command error: " + command
-                + ": access denied for " + name + ".");
+        sendChat(
+                IClient.PROTOCOL_PREFIX
+                        + "c mm# "
+                        + name
+                        + " tried to use the "
+                        + command
+                        + " on "
+                        + myUsername
+                        + ", but does not have ownership.");
+        sendChat(
+                IClient.PROTOCOL_PREFIX
+                        + "mail "
+                        + name
+                        + ", You do not have management rights for this host!");
+        MWLogger.infoLog("Command error: " + command + ": access denied for " + name + ".");
     }
 
     public void processGUIInput(String input) {
@@ -1557,27 +1705,34 @@ public final class MWClient extends GameHost implements IClient {
             input = CAMPAIGN_PREFIX + input;
 
             sendChat(input);
-            s = "Sent command: " + '"'
-                    + input.substring(CAMPAIGN_PREFIX.length()) + '"';
+            s = "Sent command: " + '"' + input.substring(CAMPAIGN_PREFIX.length()) + '"';
             addToChat(s, CCommPanel.CHANNEL_PLOG, null);
-        }
-
-        else {
+        } else {
             sendChat(input);
             String color = getUser(myUsername).getColor();
             String addon = getUser(myUsername).getAddon();
             addon = addon.equals("") ? "" : " [" + addon + "]";
-            s = "<font color=\"" + color + "\"><b>" + myUsername + addon
-                    + "</b></font><b>:</b> " + input;
+            s =
+                    "<font color=\""
+                            + color
+                            + "\"><b>"
+                            + myUsername
+                            + addon
+                            + "</b></font><b>:</b> "
+                            + input;
             if (Config.isParam("TIMESTAMP")) {
-                s = "<font color=\"" + Config.isParam("CHATFONTCOLOR") + "\">"
-                        + getShortTime() + "</font>" + s;
-
+                s =
+                        "<font color=\""
+                                + Config.isParam("CHATFONTCOLOR")
+                                + "\">"
+                                + getShortTime()
+                                + "</font>"
+                                + s;
             }
             addToChat(s, CCommPanel.CHANNEL_PLOG, null);
-            chatCaptureForBot(myUsername,addon,input); //@salient
+            chatCaptureForBot(myUsername, addon, input); // @salient
         }
-    }// end processGUIInput
+    } // end processGUIInput
 
     protected void createGUICommands() {
         addGUICommand(new PingGCmd(this));
@@ -1746,12 +1901,11 @@ public final class MWClient extends GameHost implements IClient {
 
         @Override
         public void run() {
-            (MainFrame.getMainPanel().getCommPanel()).setChat(input, channel,
-                    tabName);
+            (MainFrame.getMainPanel().getCommPanel()).setChat(input, channel, tabName);
         }
-        //@salient discord bot chat capture
-        //if i wanted to capture multiple channels
-        //i'd have to do it here?
+        // @salient discord bot chat capture
+        // if i wanted to capture multiple channels
+        // i'd have to do it here?
     }
 
     public void addToChat(String s) {
@@ -1764,17 +1918,22 @@ public final class MWClient extends GameHost implements IClient {
 
     public void addToChat(String s, int channel, String tabName) {
 
-        s = "<BODY  TEXT=\"" + Config.getParam("CHATFONTCOLOR")
-                + "\" BGCOLOR=\"" + Config.getParam("BACKGROUNDCOLOR")
-                + "\"><font size=\"" + Config.getParam("CHATFONTSIZE") + "\">"
-                + s + "</font></BODY>";
+        s =
+                "<BODY  TEXT=\""
+                        + Config.getParam("CHATFONTCOLOR")
+                        + "\" BGCOLOR=\""
+                        + Config.getParam("BACKGROUNDCOLOR")
+                        + "\"><font size=\""
+                        + Config.getParam("CHATFONTSIZE")
+                        + "\">"
+                        + s
+                        + "</font></BODY>";
         // MWLogger.infoLog("String: "+s);
         try {
             SwingUtilities.invokeLater(new CAddToChat(s, channel, tabName));
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-
     }
 
     protected Vector<String> splitString(String string, String splitter) {
@@ -1820,7 +1979,7 @@ public final class MWClient extends GameHost implements IClient {
         if (u.trim().indexOf(" ") != -1) {
             result = u.substring(u.trim().lastIndexOf(" ")).trim();
             u = u.substring(0, u.trim().lastIndexOf(" ")).trim();
-        } else {// The name is the first word.
+        } else { // The name is the first word.
             result = u.trim();
             u = "";
         }
@@ -1832,8 +1991,7 @@ public final class MWClient extends GameHost implements IClient {
         int myLevel = getUser(getPlayer().getName()).getUserlevel();
         for (CUser usr : Users) {
             if (usr.getName().toLowerCase().startsWith(result.toLowerCase())
-                    && (!usr.isInvis() || (usr.isInvis() && (myLevel >= usr
-                            .getUserlevel())))) {
+                    && (!usr.isInvis() || (usr.isInvis() && (myLevel >= usr.getUserlevel())))) {
                 userNames.add(usr.getName());
             }
         }
@@ -1852,11 +2010,10 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     /**
-     * Method which parses OpList.txt in order to set up a tree which conatins
-     * names (as keys) and information (as values) for all game types. Various
-     * portions of the GUI code use this tree to properly draw themselves. Kept
-     * in MWClient in order to be universally available; however, this is poor
-     * design ... *sigh*
+     * Method which parses OpList.txt in order to set up a tree which conatins names (as keys) and
+     * information (as values) for all game types. Various portions of the GUI code use this tree to
+     * properly draw themselves. Kept in MWClient in order to be universally available; however,
+     * this is poor design ... *sigh*
      */
     public void setupAllOps() {
 
@@ -1889,50 +2046,49 @@ public final class MWClient extends GameHost implements IClient {
                 // set up tokenizer and make tree entry
                 StringTokenizer st = new StringTokenizer(currLine, "*");
 
-                String name = st.nextToken();// key
+                String name = st.nextToken(); // key
                 String range = st.nextToken();
                 String color = st.nextToken();
-                String hasLong = st.nextToken();// int, not a boolean
-                String facInfo = st.nextToken();// "all", "only", "none"
-                String homeInfo = st.nextToken();// "all", "only", "none"
-                String launchOn = st.nextToken();// int, percentage
-                String launchFrom = st.nextToken();// int, percentage
-                String minOwn = st.nextToken();// int, percentage
-                String maxOwn = st.nextToken();// int, percentage
-                String reserveOnly = st.nextToken();// boolean
-                String activeOnly = st.nextToken();// boolean
+                String hasLong = st.nextToken(); // int, not a boolean
+                String facInfo = st.nextToken(); // "all", "only", "none"
+                String homeInfo = st.nextToken(); // "all", "only", "none"
+                String launchOn = st.nextToken(); // int, percentage
+                String launchFrom = st.nextToken(); // int, percentage
+                String minOwn = st.nextToken(); // int, percentage
+                String maxOwn = st.nextToken(); // int, percentage
+                String reserveOnly = st.nextToken(); // boolean
+                String activeOnly = st.nextToken(); // boolean
 
                 String legalDefenders = st.nextToken();
                 String allowPlanetFlags = st.nextToken();
                 String disallowPlanetFlags = st.nextToken();
-                String minAccessLevel = st.nextToken();// int
+                String minAccessLevel = st.nextToken(); // int
                 String minOwnIBD = st.nextToken(); // boolean
 
                 // TODO: Replace explicit numerical references with static ints.
-                String[] props = {// value bag
-                range,// 0
-                        color,// 1
-                        hasLong,// 2
-                        facInfo,// 3
-                        homeInfo,// 4
-                        launchOn,// 5
-                        launchFrom,// 6
-                        minOwn,// 7
-                        maxOwn,// 8
-                        legalDefenders,// 9
-                        allowPlanetFlags,// 10
-                        disallowPlanetFlags,// 11
-                        reserveOnly,// 12
-                        activeOnly,// 13
-                        minAccessLevel, // 14
-                        minOwnIBD // 15
+                String[] props = { // value bag
+                    range, // 0
+                    color, // 1
+                    hasLong, // 2
+                    facInfo, // 3
+                    homeInfo, // 4
+                    launchOn, // 5
+                    launchFrom, // 6
+                    minOwn, // 7
+                    maxOwn, // 8
+                    legalDefenders, // 9
+                    allowPlanetFlags, // 10
+                    disallowPlanetFlags, // 11
+                    reserveOnly, // 12
+                    activeOnly, // 13
+                    minAccessLevel, // 14
+                    minOwnIBD // 15
                 };
                 allOps.put(name, props);
 
                 // load next line
                 currLine = br.readLine();
-
-            }// end while (lines remain to tokenize)
+            } // end while (lines remain to tokenize)
 
             br.close();
             in.close();
@@ -1941,11 +2097,11 @@ public final class MWClient extends GameHost implements IClient {
             MWLogger.errLog("Error in setupAllOps()");
             MWLogger.errLog(e);
         }
-    }// end setupAllOps
+    } // end setupAllOps
 
     /**
-     * Method which returns the master list of Operations (as assembled from
-     * OpList.txt) for use in display code.
+     * Method which returns the master list of Operations (as assembled from OpList.txt) for use in
+     * display code.
      */
     public TreeMap<String, String[]> getAllOps() {
         return allOps;
@@ -1986,8 +2142,7 @@ public final class MWClient extends GameHost implements IClient {
             }
 
             if (Config.getParam("LOOKANDFEEL").equalsIgnoreCase("system")) {
-                UIManager.setLookAndFeel(UIManager
-                        .getSystemLookAndFeelClassName());
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } else {
                 UIManager.setLookAndFeel(LAF);
             }
@@ -1996,21 +2151,18 @@ public final class MWClient extends GameHost implements IClient {
                 SwingUtilities.updateComponentTreeUI(MainFrame);
                 // MainFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
                 MainFrame.setVisible(true);
-                getMainFrame().getMainPanel().getUserListPanel()
-                        .resetActivityButton();
+                getMainFrame().getMainPanel().getUserListPanel().resetActivityButton();
             }
 
         } catch (Exception ex) {
             MWLogger.errLog(ex);
             try {
-                UIManager.setLookAndFeel(UIManager
-                        .getSystemLookAndFeelClassName());
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception e) {
                 MWLogger.errLog(e);
             }
-        }// end catch
-
-    }// end setLookAndFeel
+        } // end catch
+    } // end setLookAndFeel
 
     protected class CRefreshGUI implements Runnable {
         protected int mode = -1;
@@ -2023,7 +2175,7 @@ public final class MWClient extends GameHost implements IClient {
         public void run() {
             if (MainFrame == null) {
                 return;
-            }// return if main frame not yet drawn (still fetching data)
+            } // return if main frame not yet drawn (still fetching data)
             try {
                 switch (mode) {
                     case REFRESH_USERLIST:
@@ -2091,13 +2243,14 @@ public final class MWClient extends GameHost implements IClient {
             panel.add(okButton);
             contentPane.add(panel, gridBagConstraints);
 
-            okButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent event) {
-                    dialog.setVisible(false);
-                    dialog.dispose();
-                }
-            });
+            okButton.addActionListener(
+                    new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            dialog.setVisible(false);
+                            dialog.dispose();
+                        }
+                    });
 
             // Show it.
             Dimension d = dialog.getPreferredSize();
@@ -2151,7 +2304,6 @@ public final class MWClient extends GameHost implements IClient {
 
             getConfig().saveConfig();
         }
-
     }
 
     public boolean isMuted() {
@@ -2234,8 +2386,7 @@ public final class MWClient extends GameHost implements IClient {
 
         if (!isDedicated()) {
             String sysColour = getConfigParam("SYSMESSAGECOLOR");
-            message = "<font color=\"" + sysColour + "\"><b>" + message
-                    + "</b></font>";
+            message = "<font color=\"" + sysColour + "\"><b>" + message + "</b></font>";
 
             addToChat(message, CCommPanel.CHANNEL_SLOG);
             if (Config.isParam("MAINCHANNELSM")) {
@@ -2260,13 +2411,13 @@ public final class MWClient extends GameHost implements IClient {
         // MWLogger.infoLog("INCOMING: " + incoming);
         if (incoming.startsWith(IClient.PROTOCOL_PREFIX)) {
             incoming = incoming.substring(IClient.PROTOCOL_PREFIX.length());
-            StringTokenizer ST = new StringTokenizer(incoming,
-                    PROTOCOL_DELIMITER);
+            StringTokenizer ST = new StringTokenizer(incoming, PROTOCOL_DELIMITER);
             String s = ST.nextToken();
             pcommand = getProtCommand(s);
             if ((pcommand != null) && pcommand.check(s)) {
                 if (!pcommand.execute(incoming)) {
-                    MWLogger.infoLog("COMMAND ERROR: wrong protocol command executed or execution failed.");
+                    MWLogger.infoLog(
+                            "COMMAND ERROR: wrong protocol command executed or execution failed.");
                     MWLogger.infoLog("COMMAND RECEIVED: " + incoming);
                 }
                 return;
@@ -2276,8 +2427,8 @@ public final class MWClient extends GameHost implements IClient {
                 MWLogger.infoLog("COMMAND RECEIVED: " + incoming);
                 if (incoming.equalsIgnoreCase("denied    /denied")) {
                     // let them know it's a wrong password
-                    JOptionPane.showMessageDialog(getMainFrame(),
-                            "Unknown Username/Password combination.");
+                    JOptionPane.showMessageDialog(
+                            getMainFrame(), "Unknown Username/Password combination.");
                 }
                 return;
             }
@@ -2312,8 +2463,7 @@ public final class MWClient extends GameHost implements IClient {
 
             // keep retrying every two minutes after the first 90 sec downtime.
             while (Status == STATUS_DISCONNECTED) {
-                connectToServer(Config.getParam("SERVERIP"),
-                        Config.getIntParam("SERVERPORT"));
+                connectToServer(Config.getParam("SERVERIP"), Config.getIntParam("SERVERPORT"));
                 if (Status == STATUS_DISCONNECTED) {
                     MWLogger.infoLog("Couldn't reconnect to server. Retrying in 120 seconds.");
                     try {
@@ -2349,10 +2499,20 @@ public final class MWClient extends GameHost implements IClient {
             passToSend = "1337";
         }
 
-        Connector.send(IClient.PROTOCOL_PREFIX + "signon\t" + getConfigParam("NAME")
-                + "\t" + passToSend + "\t" + getProtocolVersion() + "\t"
-                + Config.getParam("COLOR") + "\t" + CLIENT_VERSION + "\t"
-                + ST.nextToken());
+        Connector.send(
+                IClient.PROTOCOL_PREFIX
+                        + "signon\t"
+                        + getConfigParam("NAME")
+                        + "\t"
+                        + passToSend
+                        + "\t"
+                        + getProtocolVersion()
+                        + "\t"
+                        + Config.getParam("COLOR")
+                        + "\t"
+                        + CLIENT_VERSION
+                        + "\t"
+                        + ST.nextToken());
         Status = STATUS_LOGGEDOUT;
         if (!isDedicated()) {
             refreshGUI(REFRESH_STATUS);
@@ -2363,15 +2523,14 @@ public final class MWClient extends GameHost implements IClient {
         new RewardPointsDialog(this);
     }
 
-    //@Salient
+    // @Salient
     public void influencePointsDialog() {
         new InfluencePointsDialog(this);
     }
 
     // IClient interface
     public void connectToServer() {
-        connectToServer(Config.getParam("SERVERIP"),
-                Config.getIntParam("SERVERPORT"));
+        connectToServer(Config.getParam("SERVERIP"), Config.getIntParam("SERVERPORT"));
     }
 
     public void connectToServer(String ip, int port) {
@@ -2387,28 +2546,36 @@ public final class MWClient extends GameHost implements IClient {
     public void goodbye() {
         SignOff = true;
         if (!isDedicated() && (Status > STATUS_LOGGEDOUT)) {
-            getConfig().setParam(
-                    "PANELDIVIDER",
-                    Integer.toString(getMainFrame().getMainPanel()
-                            .getTabSPane().getDividerLocation()));
-            getConfig().setParam(
-                    "VERTICALDIVIDER",
-                    Integer.toString(getMainFrame().getMainPanel()
-                            .getMainSPane().getDividerLocation()));
-            getConfig().setParam(
-                    "PLAYERPANELDIVIDER",
-                    Integer.toString(getMainFrame().getMainPanel()
-                            .getSideSPane().getDividerLocation()));
-            getConfig().setParam("WINDOWSTATE",
-                    Integer.toString(getMainFrame().getExtendedState()));
-            getConfig().setParam("WINDOWHEIGHT",
-                    Integer.toString(getMainFrame().getHeight()));
-            getConfig().setParam("WINDOWWIDTH",
-                    Integer.toString(getMainFrame().getWidth()));
-            getConfig().setParam("WINDOWLEFT",
-                    Integer.toString(getMainFrame().getX()));
-            getConfig().setParam("WINDOWTOP",
-                    Integer.toString(getMainFrame().getY()));
+            getConfig()
+                    .setParam(
+                            "PANELDIVIDER",
+                            Integer.toString(
+                                    getMainFrame()
+                                            .getMainPanel()
+                                            .getTabSPane()
+                                            .getDividerLocation()));
+            getConfig()
+                    .setParam(
+                            "VERTICALDIVIDER",
+                            Integer.toString(
+                                    getMainFrame()
+                                            .getMainPanel()
+                                            .getMainSPane()
+                                            .getDividerLocation()));
+            getConfig()
+                    .setParam(
+                            "PLAYERPANELDIVIDER",
+                            Integer.toString(
+                                    getMainFrame()
+                                            .getMainPanel()
+                                            .getSideSPane()
+                                            .getDividerLocation()));
+            getConfig()
+                    .setParam("WINDOWSTATE", Integer.toString(getMainFrame().getExtendedState()));
+            getConfig().setParam("WINDOWHEIGHT", Integer.toString(getMainFrame().getHeight()));
+            getConfig().setParam("WINDOWWIDTH", Integer.toString(getMainFrame().getWidth()));
+            getConfig().setParam("WINDOWLEFT", Integer.toString(getMainFrame().getX()));
+            getConfig().setParam("WINDOWTOP", Integer.toString(getMainFrame().getY()));
             getConfig().saveConfig();
         }
         if (Status != STATUS_DISCONNECTED) {
@@ -2423,25 +2590,34 @@ public final class MWClient extends GameHost implements IClient {
         }
     }
 
-    public void startHost(boolean dedicated, boolean deploy,
-            boolean loadSavegame) {
+    public void startHost(boolean dedicated, boolean deploy, boolean loadSavegame) {
 
         ArrayList<Unit> meks;
         ArrayList<CUnit> autoArmy;
-        
-        //@salient - check quirk xml file sizes with server
-        if(Boolean.parseBoolean(getServerConfigs("EnableQuirks")))
-        {
+
+        // @salient - check quirk xml file sizes with server
+        if (Boolean.parseBoolean(getServerConfigs("EnableQuirks"))) {
             File canon = new File("data" + File.separator + "canonUnitQuirks.xml");
-            File custom = new File("data" + File.separator + "mmconf" + File.separator + "unitQuirksOverride.xml");
+            File custom =
+                    new File(
+                            "data"
+                                    + File.separator
+                                    + "mmconf"
+                                    + File.separator
+                                    + "unitQuirksOverride.xml");
             long canonFileLength = canon.length(); // returns 0L if does not exist
-            long customFileLength = custom.length();        
-            sendChat(GameHost.CAMPAIGN_PREFIX + "c QUIRKCHECK#" + canonFileLength + "#" + customFileLength); 
+            long customFileLength = custom.length();
+            sendChat(
+                    GameHost.CAMPAIGN_PREFIX
+                            + "c QUIRKCHECK#"
+                            + canonFileLength
+                            + "#"
+                            + customFileLength);
         }
 
         // reread the config to allow the user to change setting during runtime
         String ip = "127.0.0.1";
-        if (!getConfigParam("IP:").equals("")) {// IP Setting set, override IP
+        if (!getConfigParam("IP:").equals("")) { // IP Setting set, override IP
             // detection.
             try {
                 ip = getConfigParam("IP:");
@@ -2449,31 +2625,32 @@ public final class MWClient extends GameHost implements IClient {
                 // Entries
                 ip = IA.getHostAddress();
             } catch (Exception ex) {
-                showInfoWindow("Couldn't set IP. Please check the spelling of mwconfig.txt's IP value or comment it out to use autodetection.");
+                showInfoWindow(
+                        "Couldn't set IP. Please check the spelling of mwconfig.txt's IP value or comment it out to use autodetection.");
                 return;
             }
         }
 
         Version MMVersion = new Version(getServerConfigs("AllowedMegaMekVersion"));
-        if (!MMVersion.equals("-1")
-                && !MMVersion.is(megamek.MMConstants.VERSION)) {
+        if (!MMVersion.equals("-1") && !MMVersion.is(megamek.MMConstants.VERSION)) {
             if (isDedicated()) {
-                MWLogger.errLog("You are using an invalid version of MegaMek. Please use version "
+                MWLogger.errLog(
+                        "You are using an invalid version of MegaMek. Please use version "
                                 + MMVersion);
                 try {
                     stopHost();
                     goodbye();
                     Runtime runtime = Runtime.getRuntime();
-                    String[] call = { "java", "-jar", "MekWarsAutoUpdate.jar",
-                            "DEDICATED" };
+                    String[] call = {"java", "-jar", "MekWarsAutoUpdate.jar", "DEDICATED"};
                     runtime.exec(call);
                 } catch (Exception ex) {
                     MWLogger.errLog(ex);
                 }
                 System.exit(0);
             } else {
-                showInfoWindow("You are using an invalid version of MegaMek. Please use version "
-                        + MMVersion);
+                showInfoWindow(
+                        "You are using an invalid version of MegaMek. Please use version "
+                                + MMVersion);
             }
             return;
         }
@@ -2522,12 +2699,18 @@ public final class MWClient extends GameHost implements IClient {
             return;
         }
 
-       ((Game)myServer.getGame()).addGameListener(this);
+        ((Game) myServer.getGame()).addGameListener(this);
         // Send the new game info to the Server
-        serverSend("NG|"
-                + new MMGame(myUsername, ip, myPort, MaxPlayers,
-                        MMConstants.VERSION, comment)
-                        .toString());
+        serverSend(
+                "NG|"
+                        + new MMGame(
+                                        myUsername,
+                                        ip,
+                                        myPort,
+                                        MaxPlayers,
+                                        MMConstants.VERSION,
+                                        comment)
+                                .toString());
         if (!dedicated) {
 
             if (deploy) {
@@ -2539,8 +2722,9 @@ public final class MWClient extends GameHost implements IClient {
             }
             MWLogger.infoLog("Joining own game!");
 
-            ClientThread MMGameThread = new ClientThread(myUsername,
-                    myUsername, "127.0.0.1", myPort, this, meks, autoArmy);
+            ClientThread MMGameThread =
+                    new ClientThread(
+                            myUsername, myUsername, "127.0.0.1", myPort, this, meks, autoArmy);
             mmClientThreads.add(MMGameThread);
             ThreadManager.getInstance().runInThreadFromPool(MMGameThread);
             serverSend("JG|" + myUsername);
@@ -2548,14 +2732,13 @@ public final class MWClient extends GameHost implements IClient {
             clearSavedGames();
             purgeOldLogs();
             ClientPreferences cs = PreferenceManager.getClientPreferences();
-            cs.setStampFilenames(Boolean
-                    .parseBoolean(getServerConfigs("MMTimeStampLogFile")));
+            cs.setStampFilenames(Boolean.parseBoolean(getServerConfigs("MMTimeStampLogFile")));
         }
     }
 
     // Stop & send the close game event to the Server
     public void stopHost() {
-        serverSend("CG");// send close game to server
+        serverSend("CG"); // send close game to server
         try {
             myServer.die();
         } catch (Exception ex) {
@@ -2568,16 +2751,15 @@ public final class MWClient extends GameHost implements IClient {
     public void resetGame() { // reset hosted game
         if (myServer != null) {
             myServer.resetGame();
-            ((Game)myServer.getGame()).getGameListeners().clear();
-            ((Game)myServer.getGame()).addGameListener(this);
+            ((Game) myServer.getGame()).getGameListeners().clear();
+            ((Game) myServer.getGame()).addGameListener(this);
         }
     }
 
-    public boolean loadGame(String filename) {// load saved game
+    public boolean loadGame(String filename) { // load saved game
         if ((myServer != null) && (filename != null) && !filename.equals("")) {
-            boolean loaded = myServer.loadGame(new File("./savegames/",
-                    filename));
-                    ((Game)myServer.getGame()).addGameListener(this);
+            boolean loaded = myServer.loadGame(new File("./savegames/", filename));
+            ((Game) myServer.getGame()).addGameListener(this);
             return loaded;
         }
 
@@ -2594,12 +2776,11 @@ public final class MWClient extends GameHost implements IClient {
         return false;
     }
 
-    public boolean loadGameWithFullPath(String filename) {// load saved game
+    public boolean loadGameWithFullPath(String filename) { // load saved game
         if ((myServer != null) && (filename != null) && !filename.equals("")) {
             boolean loaded = myServer.loadGame(new File(filename));
-            ((Game)myServer.getGame()).addGameListener(this);
+            ((Game) myServer.getGame()).addGameListener(this);
             return loaded;
-
         }
 
         // else (null server/filename)
@@ -2625,8 +2806,7 @@ public final class MWClient extends GameHost implements IClient {
         ArrayList<CUnit> autoArmy = new ArrayList<CUnit>();
 
         // If a row is selected
-        if ((servers.size() > 0) && (hostName != null)
-                && (hostName.trim().length() > 0)) {
+        if ((servers.size() > 0) && (hostName != null) && (hostName.trim().length() > 0)) {
 
             // get server from tree
             MMGame toJoin = servers.get(hostName);
@@ -2652,8 +2832,15 @@ public final class MWClient extends GameHost implements IClient {
                 autoArmy = myPlayer.getAutoArmy();
             }
 
-            ClientThread tmpThread = new ClientThread(Config.getParam("NAME"),
-                    hostName, serverip, serverport, this, meks, autoArmy);
+            ClientThread tmpThread =
+                    new ClientThread(
+                            Config.getParam("NAME"),
+                            hostName,
+                            serverip,
+                            serverport,
+                            this,
+                            meks,
+                            autoArmy);
             mmClientThreads.add(tmpThread);
             ThreadManager.getInstance().runInThreadFromPool(tmpThread);
             serverSend("JG|" + toJoin.getHostName());
@@ -2698,7 +2885,6 @@ public final class MWClient extends GameHost implements IClient {
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-
     }
 
     protected class TimeOutThread extends Thread {
@@ -2718,8 +2904,7 @@ public final class MWClient extends GameHost implements IClient {
                     MWLogger.errLog(ex);
                 }
                 if (Status != MWClient.STATUS_DISCONNECTED) {
-                    long timeout = (System.currentTimeMillis() / 1000)
-                            - LastPing;
+                    long timeout = (System.currentTimeMillis() / 1000) - LastPing;
                     if (timeout > TimeOut) {
                         systemMessage("Ping timeout (" + timeout + " s)");
                         Connector.closeConnection();
@@ -2732,10 +2917,10 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     /**
-     * Reloads new planet data from the server. This will be done asynchron, so
-     * you may have to wait a bit ;-)
+     * Reloads new planet data from the server. This will be done asynchron, so you may have to wait
+     * a bit ;-)
      */
-    synchronized public void refreshData() {
+    public synchronized void refreshData() {
 
         // if the map isnt visible, skip the refresh. waste of bandwidth.
         if (!getConfig().isParam("MAPTABVISIBLE")) {
@@ -2759,10 +2944,12 @@ public final class MWClient extends GameHost implements IClient {
         updateDataFetcher = null;
         // refresh the changed set... if more than one place want
         // to know about, maybe a listener system would be better..
-        Map<Integer, Influences> changesSinceLastRefresh = dataFetcher
-                .getChangesSinceLastRefresh();
+        Map<Integer, Influences> changesSinceLastRefresh = dataFetcher.getChangesSinceLastRefresh();
         if (getMainFrame() != null) {
-            getMainFrame().getMainPanel().getMapPanel().getMap()
+            getMainFrame()
+                    .getMainPanel()
+                    .getMapPanel()
+                    .getMap()
                     .dataFetched(changesSinceLastRefresh);
         }
         MWLogger.infoLog("update for new planet data finished");
@@ -2773,9 +2960,8 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     /**
-     * @author jtighe Reload all the server data back into the client. Used when
-     *         the client runs a command that changes the server's data (ie -
-     *         admin makes map change).
+     * @author jtighe Reload all the server data back into the client. Used when the client runs a
+     *     command that changes the server's data (ie - admin makes map change).
      */
     public void reloadData() {
         try {
@@ -2855,7 +3041,8 @@ public final class MWClient extends GameHost implements IClient {
                 // data = dataFetcher.getAllData();
 
                 data = dataFetcher.getCacheData(getCacheDir());
-                if ((data == null) || (data.getAllPlanets().size() == 0)
+                if ((data == null)
+                        || (data.getAllPlanets().size() == 0)
                         || (data.getAllHouses().size() == 0)) {
                     throw new Exception("data still empty");
                 }
@@ -2877,40 +3064,46 @@ public final class MWClient extends GameHost implements IClient {
                     }
                     MWLogger.errLog(e1);
                     MWLogger.errLog(getCacheDir());
-                    Object[] options = { "Exit", "Continue" };
-                    int selectedValue = JOptionPane.showOptionDialog(null,
-                            "Could not connect to server to fetch map data.",
-                            "Connection error!", JOptionPane.DEFAULT_OPTION,
-                            JOptionPane.ERROR_MESSAGE, null, options,
-                            options[0]);
+                    Object[] options = {"Exit", "Continue"};
+                    int selectedValue =
+                            JOptionPane.showOptionDialog(
+                                    null,
+                                    "Could not connect to server to fetch map data.",
+                                    "Connection error!",
+                                    JOptionPane.DEFAULT_OPTION,
+                                    JOptionPane.ERROR_MESSAGE,
+                                    null,
+                                    options,
+                                    options[0]);
                     if (selectedValue == 0) {
-                        System.exit(0);// exit, if they so choose
+                        System.exit(0); // exit, if they so choose
                     }
                 } catch (IOException e1) {
                     if (splash != null) {
                         splash.setStatus(splash.STATUS_DATAERROR);
                     }
                     MWLogger.errLog(e1);
-                    JOptionPane
-                            .showMessageDialog(null,
-                                    "Server is busy while fetching planet data.\nTry again later.");
+                    JOptionPane.showMessageDialog(
+                            null, "Server is busy while fetching planet data.\nTry again later.");
                 } catch (Throwable e1) {
                     if (splash != null) {
                         splash.setStatus(splash.STATUS_DATAERROR);
                     }
                     MWLogger.errLog((Exception) e1);
-                    Object[] options = { "Exit", "Continue" };
-                    int selectedValue = JOptionPane
-                            .showOptionDialog(
+                    Object[] options = {"Exit", "Continue"};
+                    int selectedValue =
+                            JOptionPane.showOptionDialog(
                                     null,
                                     "Unknown error while fetching map data. Please\n"
                                             + "report this bug, and keep your error logs handy.",
                                     "Unknown error!",
                                     JOptionPane.DEFAULT_OPTION,
-                                    JOptionPane.ERROR_MESSAGE, null, options,
+                                    JOptionPane.ERROR_MESSAGE,
+                                    null,
+                                    options,
                                     options[0]);
                     if (selectedValue == 0) {
-                        System.exit(0);// exit, if they so choose
+                        System.exit(0); // exit, if they so choose
                     }
                 }
                 if (splash != null) {
@@ -2942,31 +3135,27 @@ public final class MWClient extends GameHost implements IClient {
     public double getAmmoCost(String ammo) {
         EquipmentType eq = EquipmentType.get(ammo);
 
-
         if (eq == null) {
             return -1;
         }
 
-        if (!getCampaign().getBlackMarketParts().containsKey(
-                eq.getInternalName())) {
+        if (!getCampaign().getBlackMarketParts().containsKey(eq.getInternalName())) {
             return -1;
         }
 
-        if (getCampaign().getBlackMarketParts().get(eq.getInternalName())
-                .getCost() > 0) {
-            return getCampaign().getBlackMarketParts()
-                    .get(eq.getInternalName()).getCost();
+        if (getCampaign().getBlackMarketParts().get(eq.getInternalName()).getCost() > 0) {
+            return getCampaign().getBlackMarketParts().get(eq.getInternalName()).getCost();
         }
 
         return -1.0;
     }
 
-    /**
-     * Does things when a tick is arrived.
-     */
+    /** Does things when a tick is arrived. */
     public void processTick(int time) {
         // set tick counter
-        getMainFrame().getMainPanel().getPlayerPanel()
+        getMainFrame()
+                .getMainPanel()
+                .getPlayerPanel()
                 .setNextTick(System.currentTimeMillis() + time);
         getMainFrame().getMainPanel().getMapPanel().getMap().processTick();
         System.gc(); // Decicded to have the client do a GC every tick as
@@ -2974,14 +3163,14 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     /**
-     * Return the directory, where all cache files can go into. The dirname
-     * depends on the server you connect.
+     * Return the directory, where all cache files can go into. The dirname depends on the server
+     * you connect.
      */
     public String getCacheDir() {
         // if (cacheDir == null) {
         // first access. Check if need to create directory.
-        cacheDir = "data/servers/" + Config.getParam("SERVERIP") + "."
-                + Config.getParam("SERVERPORT");
+        cacheDir =
+                "data/servers/" + Config.getParam("SERVERIP") + "." + Config.getParam("SERVERPORT");
         File dir = new File(cacheDir);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -3000,27 +3189,19 @@ public final class MWClient extends GameHost implements IClient {
 
     public void setIgnorePrivate() {
         IgnorePrivate = splitString(Config.getParam("IGNOREPRIVATE"), ",");
-
     }
 
     public void setKeyWords() {
         KeyWords = splitString(Config.getParam("KEYWORDS"), ",");
     }
 
-    /**
-     * Sets the current advanced terrain and map size that will be used on next
-     * playboard
-     */
+    /** Sets the current advanced terrain and map size that will be used on next playboard */
     public void setAdvancedTerrain(AdvancedTerrain aTerrain) {
         this.aTerrain = aTerrain;
     }
 
-    /**
-     * Sets the current environment, map size and map medium that will be used
-     * on next playboard
-     */
-    public void setEnvironment(PlanetEnvironment pe, Dimension map,
-            int mapMedium) {
+    /** Sets the current environment, map size and map medium that will be used on next playboard */
+    public void setEnvironment(PlanetEnvironment pe, Dimension map, int mapMedium) {
         currentEnvironment = pe;
         MapSize = map;
         this.mapMedium = mapMedium;
@@ -3055,32 +3236,23 @@ public final class MWClient extends GameHost implements IClient {
         // update the activity button
         if (Status == MWClient.STATUS_FIGHTING) {
             // this.getMainFrame().getMainPanel().getUserListPanel().setActivityButton(false);
-            getMainFrame().getMainPanel().getUserListPanel()
-                    .setActivityButtonEnabled(false);
+            getMainFrame().getMainPanel().getUserListPanel().setActivityButtonEnabled(false);
         } else if (Status == MWClient.STATUS_ACTIVE) {
             if (LastStatus != MWClient.STATUS_FIGHTING) {
-                getMainFrame().getMainPanel().getUserListPanel()
-                        .setActivityButton(false);
+                getMainFrame().getMainPanel().getUserListPanel().setActivityButton(false);
             }
-            getMainFrame().getMainPanel().getUserListPanel()
-                    .setActivityButtonEnabled(true);
+            getMainFrame().getMainPanel().getUserListPanel().setActivityButtonEnabled(true);
         } else if (Status == MWClient.STATUS_DISCONNECTED) {
-            getMainFrame().getMainPanel().getUserListPanel()
-                    .setActivateButtonText("Disconnected");
-            getMainFrame().getMainPanel().getUserListPanel()
-                    .setActivityButtonEnabled(false);
+            getMainFrame().getMainPanel().getUserListPanel().setActivateButtonText("Disconnected");
+            getMainFrame().getMainPanel().getUserListPanel().setActivityButtonEnabled(false);
         } else if (Status == MWClient.STATUS_LOGGEDOUT) {
-            getMainFrame().getMainPanel().getUserListPanel()
-                    .setActivateButtonText("Login");
-            getMainFrame().getMainPanel().getUserListPanel()
-                    .setActivityButtonEnabled(true);
+            getMainFrame().getMainPanel().getUserListPanel().setActivateButtonText("Login");
+            getMainFrame().getMainPanel().getUserListPanel().setActivityButtonEnabled(true);
         } else if (Status == MWClient.STATUS_RESERVE) {
             if (LastStatus != MWClient.STATUS_LOGGEDOUT) {
-                getMainFrame().getMainPanel().getUserListPanel()
-                        .setActivityButton(true);
+                getMainFrame().getMainPanel().getUserListPanel().setActivityButton(true);
             }
-            getMainFrame().getMainPanel().getUserListPanel()
-                    .setActivityButtonEnabled(true);
+            getMainFrame().getMainPanel().getUserListPanel().setActivityButtonEnabled(true);
         }
 
         // update the CMainFrame Attack menu
@@ -3093,29 +3265,27 @@ public final class MWClient extends GameHost implements IClient {
 
     public String getServerConfigs(String key) {
         if (CampaignData.cd.getServerConfigs().getProperty(key) == null) {
-            MWLogger.infoLog("You're missing the config variable: "
-                    + key + " in serverconfig!");
+            MWLogger.infoLog("You're missing the config variable: " + key + " in serverconfig!");
             return "-1";
         }
         return CampaignData.cd.getServerConfigs().getProperty(key).trim();
     }
 
-    //@Salient ... ugh... how can i get to the damn house configs
-//    public String getHouseConfigs(String key)
-//    {
-//        //CampaignData.cd.ge
-//        SHouse house = CampaignData.cd.getHouseByName(this.getPlayer().getHouse());
-//
-//        return CampaignData.cd.getServerConfigs().getProperty(key).trim();
-//    }
+    // @Salient ... ugh... how can i get to the damn house configs
+    //    public String getHouseConfigs(String key)
+    //    {
+    //        //CampaignData.cd.ge
+    //        SHouse house = CampaignData.cd.getHouseByName(this.getPlayer().getHouse());
+    //
+    //        return CampaignData.cd.getServerConfigs().getProperty(key).trim();
+    //    }
 
     public Properties getServerConfigs() {
         return CampaignData.cd.getServerConfigs();
     }
 
     public boolean isLeader() {
-        return getUserLevel() >= Integer
-                .parseInt(getServerConfigs("factionLeaderLevel"));
+        return getUserLevel() >= Integer.parseInt(getServerConfigs("factionLeaderLevel"));
     }
 
     public int getUserLevel() {
@@ -3133,11 +3303,10 @@ public final class MWClient extends GameHost implements IClient {
         }
 
         if (gameCount >= dedRestartAt) {
-            MWLogger.infoLog("System has reached " + gameCount
-                    + " games played and is restarting");
+            MWLogger.infoLog("System has reached " + gameCount + " games played and is restarting");
             try {
                 Thread.sleep(5000);
-            }// give people time to vacate
+            } // give people time to vacate
             catch (Exception ex) {
                 MWLogger.errLog(ex);
             }
@@ -3150,12 +3319,10 @@ public final class MWClient extends GameHost implements IClient {
             try {
                 Runtime runTime = Runtime.getRuntime();
                 if (new File("MekWarsDed.jar").exists()) {
-                    String[] call = { "java", "-Xmx512m", "-jar",
-                            "MekWarsDed.jar" };
+                    String[] call = {"java", "-Xmx512m", "-jar", "MekWarsDed.jar"};
                     runTime.exec(call);
                 } else {
-                    String[] call = { "java", "-Xmx512m", "-jar",
-                            "MekWarsClient.jar" };
+                    String[] call = {"java", "-Xmx512m", "-jar", "MekWarsClient.jar"};
                     runTime.exec(call);
                 }
                 System.exit(0);
@@ -3183,10 +3350,13 @@ public final class MWClient extends GameHost implements IClient {
                     && savedFile.isFile()
                     && (lastTime < (System.currentTimeMillis() - daysInSeconds))) {
                 try {
-                    MWLogger.infoLog("Purging File: "
-                            + savedFile.getName() + " Time: " + lastTime
-                            + " purge Time: "
-                            + (System.currentTimeMillis() - daysInSeconds));
+                    MWLogger.infoLog(
+                            "Purging File: "
+                                    + savedFile.getName()
+                                    + " Time: "
+                                    + lastTime
+                                    + " purge Time: "
+                                    + (System.currentTimeMillis() - daysInSeconds));
                     savedFile.delete();
                 } catch (Exception ex) {
                     MWLogger.errLog("Error trying to delete these files!");
@@ -3227,16 +3397,14 @@ public final class MWClient extends GameHost implements IClient {
     public void loadBanTargeting(String line) {
         StringTokenizer st = new StringTokenizer(line, "#");
         while (st.hasMoreTokens()) {
-            getData().getBannedTargetingSystems().add(
-                    Integer.parseInt(st.nextToken()));
+            getData().getBannedTargetingSystems().add(Integer.parseInt(st.nextToken()));
         }
     }
 
     public void saveBannedTargetingSystems(String timestamp) {
         // Save banned targeting systems
         try {
-            FileOutputStream out = new FileOutputStream(cacheDir
-                    + "/bantargeting.dat");
+            FileOutputStream out = new FileOutputStream(cacheDir + "/bantargeting.dat");
             PrintStream p = new PrintStream(out);
             p.println(timestamp);
             for (Integer targetingSytem : getData().getBannedTargetingSystems()) {
@@ -3262,13 +3430,12 @@ public final class MWClient extends GameHost implements IClient {
                 }
             } else {
                 while (st.hasMoreElements()) {
-                    getData().getServerBannedAmmo().put(st.nextToken(),
-                            "Banned");
+                    getData().getServerBannedAmmo().put(st.nextToken(), "Banned");
                 }
             }
         } catch (Exception ex) {
-        }// make it compatible with people that had the old format,without
-         // the timestamp on the first line, the first time and now dont.
+        } // make it compatible with people that had the old format,without
+        // the timestamp on the first line, the first time and now dont.
     }
 
     public void saveBannedAmmo(String timestamp) {
@@ -3276,8 +3443,7 @@ public final class MWClient extends GameHost implements IClient {
         try {
 
             // output streams
-            FileOutputStream out = new FileOutputStream(cacheDir
-                    + "/banammo.dat");
+            FileOutputStream out = new FileOutputStream(cacheDir + "/banammo.dat");
             PrintStream p = new PrintStream(out);
 
             // timestamp
@@ -3290,7 +3456,7 @@ public final class MWClient extends GameHost implements IClient {
                 p.print("#");
             }
 
-            p.println();// newline
+            p.println(); // newline
 
             // faction-only bans
             for (House h : data.getAllHouses()) {
@@ -3322,15 +3488,15 @@ public final class MWClient extends GameHost implements IClient {
      * @param money
      * @param shortname
      * @param amount
-     * @return String Hokey function to return the correct syntax for long and
-     *         short money/flu messages to the user. ClientVersion
+     * @return String Hokey function to return the correct syntax for long and short money/flu
+     *     messages to the user. ClientVersion
      */
     public String moneyOrFluMessage(boolean money, boolean shortname, int amount) {
         return moneyOrFluMessage(money, shortname, amount, false);
     }
 
-    public String moneyOrFluMessage(boolean money, boolean shortname,
-            int amount, boolean showSign) {
+    public String moneyOrFluMessage(
+            boolean money, boolean shortname, int amount, boolean showSign) {
         String result = NumberFormat.getInstance().format(amount);
 
         String moneyShort = getServerConfigs("MoneyShortName");
@@ -3357,17 +3523,16 @@ public final class MWClient extends GameHost implements IClient {
                 } else {
                     result += moneyShort;
                 }
-            } else {// longname
+            } else { // longname
                 if ((amount == 1) && moneyLong.endsWith("s")) {
-                    result += " "
-                            + moneyLong.substring(0, moneyLong.length() - 1);
+                    result += " " + moneyLong.substring(0, moneyLong.length() - 1);
                 } else if ((amount > 1) && !moneyLong.endsWith("s")) {
                     result += " " + moneyLong + "s";
                 } else {
                     result += " " + moneyLong;
                 }
             }
-        } else {// influence
+        } else { // influence
             if (shortname) {
                 result += fluShort;
             } else {
@@ -3396,8 +3561,7 @@ public final class MWClient extends GameHost implements IClient {
             }
             GameOptions gameOptions = new GameOptions();
             gameOptions.loadOptions();
-            GameOptionsDialog MMGOD = new GameOptionsDialog(getMainFrame(),
-                    gameOptions, true);
+            GameOptionsDialog MMGOD = new GameOptionsDialog(getMainFrame(), gameOptions, true);
             MMGOD.update(gameOptions);
             MMGOD.setEditable(true);
             MMGOD.setVisible(true);
@@ -3431,44 +3595,44 @@ public final class MWClient extends GameHost implements IClient {
         for (int critLocation = 0; critLocation < unit.locations(); critLocation++) {
             // These three location have rear armor so the user might be
             // selecting that armor instead of crit.
-            if ((critLocation == Mech.LOC_CT) || (critLocation == Mech.LOC_LT)
+            if ((critLocation == Mech.LOC_CT)
+                    || (critLocation == Mech.LOC_LT)
                     || (critLocation == Mech.LOC_RT)) {
-                if (unit.getArmor(critLocation, false) != unit.getOArmor(
-                        critLocation, false)) {
-                    cost += CUnit.getArmorCost(unit, this, critLocation)
-                            * (unit.getOArmor(critLocation, false) - unit
-                                    .getArmor(critLocation, false));
+                if (unit.getArmor(critLocation, false) != unit.getOArmor(critLocation, false)) {
+                    cost +=
+                            CUnit.getArmorCost(unit, this, critLocation)
+                                    * (unit.getOArmor(critLocation, false)
+                                            - unit.getArmor(critLocation, false));
                 }
-                if (unit.getArmor(critLocation, true) != unit.getOArmor(
-                        critLocation, true)) {
-                    cost += CUnit.getArmorCost(unit, this, critLocation)
-                            * (unit.getOArmor(critLocation, false) - unit
-                                    .getArmor(critLocation, false));
+                if (unit.getArmor(critLocation, true) != unit.getOArmor(critLocation, true)) {
+                    cost +=
+                            CUnit.getArmorCost(unit, this, critLocation)
+                                    * (unit.getOArmor(critLocation, false)
+                                            - unit.getArmor(critLocation, false));
                 }
-                if (unit.getInternal(critLocation) != unit
-                        .getOInternal(critLocation)) {
-                    cost += CUnit.getStructureCost(unit, this)
-                            * (unit.getOInternal(critLocation) - unit
-                                    .getInternal(critLocation));
+                if (unit.getInternal(critLocation) != unit.getOInternal(critLocation)) {
+                    cost +=
+                            CUnit.getStructureCost(unit, this)
+                                    * (unit.getOInternal(critLocation)
+                                            - unit.getInternal(critLocation));
                 }
-            }// end toros armor
+            } // end toros armor
             else {
-                if (unit.getArmor(critLocation, false) != unit.getOArmor(
-                        critLocation, false)) {
-                    cost += CUnit.getArmorCost(unit, this, critLocation)
-                            * (unit.getOArmor(critLocation, false) - unit
-                                    .getArmor(critLocation, false));
+                if (unit.getArmor(critLocation, false) != unit.getOArmor(critLocation, false)) {
+                    cost +=
+                            CUnit.getArmorCost(unit, this, critLocation)
+                                    * (unit.getOArmor(critLocation, false)
+                                            - unit.getArmor(critLocation, false));
                 }
-                if (unit.getInternal(critLocation) != unit
-                        .getOInternal(critLocation)) {
-                    cost += CUnit.getStructureCost(unit, this)
-                            * (unit.getOInternal(critLocation) - unit
-                                    .getInternal(critLocation));
+                if (unit.getInternal(critLocation) != unit.getOInternal(critLocation)) {
+                    cost +=
+                            CUnit.getStructureCost(unit, this)
+                                    * (unit.getOInternal(critLocation)
+                                            - unit.getInternal(critLocation));
                 }
-            }// end armor
+            } // end armor
 
-            for (int critSlot = 0; critSlot < unit
-                    .getNumberOfCriticals(critLocation); critSlot++) {
+            for (int critSlot = 0; critSlot < unit.getNumberOfCriticals(critLocation); critSlot++) {
 
                 CriticalSlot cs = unit.getCritical(critLocation, critSlot);
 
@@ -3491,13 +3655,11 @@ public final class MWClient extends GameHost implements IClient {
                 } else {
                     cost += CUnit.getCritCost(unit, this, cs);
                 }
-            }// end slot for
-        }// end location for
+            } // end slot for
+        } // end location for
 
-        cost += Integer.parseInt(this.getServerConfigs("SystemCritRepairCost"))
-                * systemCrits;
-        cost += Integer.parseInt(this.getServerConfigs("EngineCritRepairCost"))
-                * engineCrits;
+        cost += Integer.parseInt(this.getServerConfigs("SystemCritRepairCost")) * systemCrits;
+        cost += Integer.parseInt(this.getServerConfigs("EngineCritRepairCost")) * engineCrits;
 
         return cost;
     }
@@ -3517,43 +3679,39 @@ public final class MWClient extends GameHost implements IClient {
 
     public int getTechLaborCosts(Entity unit, int techType) {
         int cost = 0;
-        int techCost = Integer.parseInt(getServerConfigs(UnitUtils
-                .techDescription(techType) + "TechRepairCost"));
+        int techCost =
+                Integer.parseInt(
+                        getServerConfigs(UnitUtils.techDescription(techType) + "TechRepairCost"));
         int totalCrits = 0;
         boolean damagedEngine = false;
 
         for (int critLocation = 0; critLocation < unit.locations(); critLocation++) {
             // These three location have rear armor so the user might be
             // selecting that armor instead of crit.
-            if ((critLocation == Mech.LOC_CT) || (critLocation == Mech.LOC_LT)
+            if ((critLocation == Mech.LOC_CT)
+                    || (critLocation == Mech.LOC_LT)
                     || (critLocation == Mech.LOC_RT)) {
-                if (unit.getArmor(critLocation, false) != unit.getOArmor(
-                        critLocation, false)) {
+                if (unit.getArmor(critLocation, false) != unit.getOArmor(critLocation, false)) {
                     cost += techCost;
                 }
-                if (unit.getArmor(critLocation, true) != unit.getOArmor(
-                        critLocation, true)) {
+                if (unit.getArmor(critLocation, true) != unit.getOArmor(critLocation, true)) {
                     cost += techCost;
                 }
-                if (unit.getInternal(critLocation) != unit
-                        .getOInternal(critLocation)) {
+                if (unit.getInternal(critLocation) != unit.getOInternal(critLocation)) {
                     cost += techCost;
                 }
-            }// end toros armor
+            } // end toros armor
             else {
-                if (unit.getArmor(critLocation, false) != unit.getOArmor(
-                        critLocation, false)) {
+                if (unit.getArmor(critLocation, false) != unit.getOArmor(critLocation, false)) {
                     cost += techCost;
                 }
-                if (unit.getInternal(critLocation) != unit
-                        .getOInternal(critLocation)) {
+                if (unit.getInternal(critLocation) != unit.getOInternal(critLocation)) {
                     cost += techCost;
                 }
-            }// end armor
+            } // end armor
 
             // check for damage system crits.
-            for (int critSlot = 0; critSlot < unit
-                    .getNumberOfCriticals(critLocation); critSlot++) {
+            for (int critSlot = 0; critSlot < unit.getNumberOfCriticals(critLocation); critSlot++) {
 
                 CriticalSlot cs = unit.getCritical(critLocation, critSlot);
 
@@ -3574,9 +3732,8 @@ public final class MWClient extends GameHost implements IClient {
                     continue;
                 }
                 totalCrits++;
-
-            }// end slot for
-        }// end location for
+            } // end slot for
+        } // end location for
 
         // check for damaged engines
         if (damagedEngine) {
@@ -3612,7 +3769,6 @@ public final class MWClient extends GameHost implements IClient {
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-
     }
 
     public void retrieveMul(String data) {
@@ -3639,7 +3795,6 @@ public final class MWClient extends GameHost implements IClient {
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-
     }
 
     public boolean isUsingAdvanceRepairs() {
@@ -3693,10 +3848,9 @@ public final class MWClient extends GameHost implements IClient {
     public void updatePartsBlackMarket(String data, int year) {
 
         StringTokenizer ST = new StringTokenizer(data, "#");
-        boolean allowTechCrossOver = Boolean.parseBoolean(this
-                .getServerConfigs("AllowCrossOverTech"));
-        int houseTechLevel = getData().getHouseByName(getPlayer().getHouse())
-                .getTechLevel();
+        boolean allowTechCrossOver =
+                Boolean.parseBoolean(this.getServerConfigs("AllowCrossOverTech"));
+        int houseTechLevel = getData().getHouseByName(getPlayer().getHouse()).getTechLevel();
 
         getCampaign().getBlackMarketParts().clear();
 
@@ -3716,8 +3870,7 @@ public final class MWClient extends GameHost implements IClient {
                 bme.getTech(year);
 
                 if (!allowTechCrossOver
-                        && !UnitUtils
-                                .isSameTech(bme.getTechLevel(), houseTechLevel)) {
+                        && !UnitUtils.isSameTech(bme.getTechLevel(), houseTechLevel)) {
                     disallowed = true;
                 }
             } catch (Exception e) {
@@ -3727,9 +3880,8 @@ public final class MWClient extends GameHost implements IClient {
                 error = true;
             }
 
-            if(!error && !disallowed) {
-                getCampaign().getBlackMarketParts().put(
-                    bme.getEquipmentInternalName(), bme);
+            if (!error && !disallowed) {
+                getCampaign().getBlackMarketParts().put(bme.getEquipmentInternalName(), bme);
             }
         }
 
@@ -3756,7 +3908,7 @@ public final class MWClient extends GameHost implements IClient {
             // this.stopHost();
             goodbye();
             Runtime runtime = Runtime.getRuntime();
-            String[] call = { "java", "-jar", "MekWarsAutoUpdate.jar", "PLAYER" };
+            String[] call = {"java", "-jar", "MekWarsAutoUpdate.jar", "PLAYER"};
             runtime.exec(call);
         } catch (Exception ex) {
             MWLogger.errLog(ex);
@@ -3797,7 +3949,8 @@ public final class MWClient extends GameHost implements IClient {
                                 && savedFile.isFile()
                                 && (lastTime < (System.currentTimeMillis() - twoHours))) {
                             try {
-                                MWLogger.infoLog("Purging File: "
+                                MWLogger.infoLog(
+                                        "Purging File: "
                                                 + savedFile.getName()
                                                 + " Time: "
                                                 + lastTime
@@ -3816,7 +3969,7 @@ public final class MWClient extends GameHost implements IClient {
                 return;
             }
         }
-    }// end PurgeAutoSaves
+    } // end PurgeAutoSaves
 
     public void createNewHouse(StringTokenizer st) {
         House house = new House();
@@ -3837,11 +3990,8 @@ public final class MWClient extends GameHost implements IClient {
         getData().addHouse(house);
     }
 
-    /**
-     * redundant code since MM does not always send a discon event.
-     */
-    public void gamePlayerStatusChange(GameEvent e) {
-    }
+    /** redundant code since MM does not always send a discon event. */
+    public void gamePlayerStatusChange(GameEvent e) {}
 
     protected void sendServerGameUpdate() {
         // Report the mech stat
@@ -3849,7 +3999,7 @@ public final class MWClient extends GameHost implements IClient {
         // Only send data for units currently on the board.
         // any units removed from play will have already sent thier final
         // update.
-        Iterator<Entity> en = ((Game)myServer.getGame()).getEntities();
+        Iterator<Entity> en = ((Game) myServer.getGame()).getEntities();
         while (en.hasNext()) {
             Entity ent = en.next();
             if (ent.getOwner().getName().startsWith("War Bot")
@@ -3857,18 +4007,20 @@ public final class MWClient extends GameHost implements IClient {
                             && !UnitUtils.hasArmorDamage(ent)
                             && !UnitUtils.hasISDamage(ent)
                             && !UnitUtils.hasCriticalDamage(ent)
-                            && !UnitUtils.hasLowAmmo(ent) && !UnitUtils
-                                .hasEmptyAmmo(ent))) {
+                            && !UnitUtils.hasLowAmmo(ent)
+                            && !UnitUtils.hasEmptyAmmo(ent))) {
                 continue;
             }
             if ((ent instanceof Mech) && (ent.getInternal(Mech.LOC_CT) <= 0)) {
-                serverSend("IPU|"
-                        + SerializeEntity.serializeEntity(ent, true, true,
-                                isUsingAdvanceRepairs()));
+                serverSend(
+                        "IPU|"
+                                + SerializeEntity.serializeEntity(
+                                        ent, true, true, isUsingAdvanceRepairs()));
             } else {
-                serverSend("IPU|"
-                        + SerializeEntity.serializeEntity(ent, true, false,
-                                isUsingAdvanceRepairs()));
+                serverSend(
+                        "IPU|"
+                                + SerializeEntity.serializeEntity(
+                                        ent, true, false, isUsingAdvanceRepairs()));
             }
         }
     }
@@ -3878,9 +4030,11 @@ public final class MWClient extends GameHost implements IClient {
             return;
         }
 
-        StringBuilder result = GameReport.prepareReport(
-                new GameWrapper(((Game)myServer.getGame())), isUsingAdvanceRepairs(),
-                getBuildingTemplate());
+        StringBuilder result =
+                GameReport.prepareReport(
+                        new GameWrapper(((Game) myServer.getGame())),
+                        isUsingAdvanceRepairs(),
+                        getBuildingTemplate());
 
         // send the autoreport
         serverSend("CR|" + result.toString());
@@ -3911,25 +4065,24 @@ public final class MWClient extends GameHost implements IClient {
         return mmClientThreads;
     }
 
-    private void chatCaptureForBot(String username, String addon, String input) //@salient
-    {
-        if(!Boolean.parseBoolean(getServerConfigs("Enable_Bot_Chat")))
-            return;
+    private void chatCaptureForBot(String username, String addon, String input) // @salient
+            {
+        if (!Boolean.parseBoolean(getServerConfigs("Enable_Bot_Chat"))) return;
 
         String temp = getShortTime().trim() + username.trim() + addon.trim() + ":" + input;
         temp = String.format("%s%n", temp);
 
-//        if(channel !=0)
-//            return;
+        //        if(channel !=0)
+        //            return;
 
-        //call a new command to capture chat server side
+        // call a new command to capture chat server side
         sendChat(GameHost.CAMPAIGN_PREFIX + "CHATBOT " + temp);
     }
 
     @Override
     public void gameClientFeedbackRequest(GameCFREvent arg0) {
         // TODO Auto-generated method stub
-        
+
     }
 
     public Game getGame() {
@@ -3963,7 +4116,9 @@ class AePlayWave extends Thread {
     private static final int EXTERNAL_BUFFER_SIZE = 524288; // 128Kb
 
     private enum Position {
-        LEFT, RIGHT, NORMAL
+        LEFT,
+        RIGHT,
+        NORMAL
     };
 
     private Position curPosition;
@@ -4014,8 +4169,7 @@ class AePlayWave extends Thread {
         }
 
         if (auline.isControlSupported(FloatControl.Type.PAN)) {
-            FloatControl pan = (FloatControl) auline
-                    .getControl(FloatControl.Type.PAN);
+            FloatControl pan = (FloatControl) auline.getControl(FloatControl.Type.PAN);
             if (curPosition == Position.RIGHT) {
                 pan.setValue(1.0f);
             } else if (curPosition == Position.LEFT) {

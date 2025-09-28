@@ -19,42 +19,41 @@ import java.awt.Color;
 import java.awt.Component;
 import java.text.DecimalFormat;
 import java.util.TreeMap;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
-
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CCampaign;
 import mekwars.common.BMEquipment;
 
-/**
- * Adapted from BlackMarketModel by Steve Hawkins
- */
-
+/** Adapted from BlackMarketModel by Steve Hawkins */
 public class BlackMarketPartsModel extends AbstractTableModel {
 
     private static final long serialVersionUID = -4312857440681697117L;
     public MWClient mwclient;
     CCampaign theCampaign;
     public TreeMap<String, BMEquipment> components; // this collection is backed
-                                                    // by the main map, so it
-                                                    // should always be good
+    // by the main map, so it
+    // should always be good
     public Object[] sortedComponents = null; // not really though, sort is
-                                             // handled elsewhere...
+    // handled elsewhere...
     private String type = "";
 
-    public final static int PART = 0;
-    public final static int TECH = 1;
-    public final static int COST = 2;
-    public final static int AMOUNT = 3;
-    public final static int INTERNALPART = 4;
+    public static final int PART = 0;
+    public static final int TECH = 1;
+    public static final int COST = 2;
+    public static final int AMOUNT = 3;
+    public static final int INTERNALPART = 4;
 
-    final String[] columnNames = { "Part", "Tech", "Cost", "Amount", };
+    final String[] columnNames = {
+        "Part", "Tech", "Cost", "Amount",
+    };
 
-    final String[] longValues = { "XXXXXX-XXXX-XXXXXX", "XXXXXXXXX", "XXXXXXXXX", "XXXXXXXXX", };
+    final String[] longValues = {
+        "XXXXXX-XXXX-XXXXXX", "XXXXXXXXX", "XXXXXXXXX", "XXXXXXXXX",
+    };
 
     public int getColumnCount() {
         return columnNames.length;
@@ -99,7 +98,10 @@ public class BlackMarketPartsModel extends AbstractTableModel {
         BlackMarketPartsModel model = this;
         for (int i = 0; i < getColumnCount(); i++) {
             column = table.getColumnModel().getColumn(i);
-            comp = table.getDefaultRenderer(model.getColumnClass(i)).getTableCellRendererComponent(table, longValues[i], false, false, 0, i);
+            comp =
+                    table.getDefaultRenderer(model.getColumnClass(i))
+                            .getTableCellRendererComponent(
+                                    table, longValues[i], false, false, 0, i);
             cellWidth = comp.getPreferredSize().width;
             column.setPreferredWidth(Math.max(headerWidth, cellWidth));
         }
@@ -131,20 +133,28 @@ public class BlackMarketPartsModel extends AbstractTableModel {
         }
         BMEquipment bme = (BMEquipment) sortedComponents[row];
         switch (col) {
-        case PART:
-            return bme.getEquipmentName();
-        case COST:
-            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-            return df.format(bme.getCost());
-        case TECH:
-            return bme.getTech(Integer.parseInt(mwclient.getServerConfigs("CampaignYear")));
-        case AMOUNT:
-            if (mwclient.getPlayer().getPartsCache().getPartsCritCount(bme.getEquipmentInternalName()) < 1) {
-                return bme.getAmount();
-            }
-            return bme.getAmount() + "(" + mwclient.getPlayer().getPartsCache().getPartsCritCount(bme.getEquipmentInternalName()) + ")";
-        case INTERNALPART:
-            return bme.getEquipmentInternalName();
+            case PART:
+                return bme.getEquipmentName();
+            case COST:
+                DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                return df.format(bme.getCost());
+            case TECH:
+                return bme.getTech(Integer.parseInt(mwclient.getServerConfigs("CampaignYear")));
+            case AMOUNT:
+                if (mwclient.getPlayer()
+                                .getPartsCache()
+                                .getPartsCritCount(bme.getEquipmentInternalName())
+                        < 1) {
+                    return bme.getAmount();
+                }
+                return bme.getAmount()
+                        + "("
+                        + mwclient.getPlayer()
+                                .getPartsCache()
+                                .getPartsCritCount(bme.getEquipmentInternalName())
+                        + ")";
+            case INTERNALPART:
+                return bme.getEquipmentInternalName();
         }
         return "";
     }
@@ -158,19 +168,28 @@ public class BlackMarketPartsModel extends AbstractTableModel {
      */
     class Renderer extends DefaultTableCellRenderer {
 
-        /**
-         *
-         */
+        /** */
         private static final long serialVersionUID = 5506902358006897558L;
 
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component d = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        public Component getTableCellRendererComponent(
+                JTable table,
+                Object value,
+                boolean isSelected,
+                boolean hasFocus,
+                int row,
+                int column) {
+            Component d =
+                    super.getTableCellRendererComponent(
+                            table, value, isSelected, hasFocus, row, column);
             int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
             JLabel c = new JLabel(); // use a new label for everything (should
-                                     // be made better later)
+            // be made better later)
             c.setOpaque(true);
-            if (components.size() < row || row < 0 || !components.containsKey(table.getModel().getValueAt(row, BlackMarketPartsModel.INTERNALPART))) {
+            if (components.size() < row
+                    || row < 0
+                    || !components.containsKey(
+                            table.getModel().getValueAt(row, BlackMarketPartsModel.INTERNALPART))) {
                 return c;
             }
             if (table.getModel().getValueAt(row, column) != null) {
@@ -178,8 +197,19 @@ public class BlackMarketPartsModel extends AbstractTableModel {
             }
             c.setToolTipText("");
 
-            BMEquipment bme = components.get(table.getModel().getValueAt(row, BlackMarketPartsModel.INTERNALPART));
-            String description = "<html><body>" + bme.getEquipmentName() + " C:" + bme.getCost() + " A:" + bme.getAmount() + " T:" + bme.getTech(year) + "<br>";
+            BMEquipment bme =
+                    components.get(
+                            table.getModel().getValueAt(row, BlackMarketPartsModel.INTERNALPART));
+            String description =
+                    "<html><body>"
+                            + bme.getEquipmentName()
+                            + " C:"
+                            + bme.getCost()
+                            + " A:"
+                            + bme.getAmount()
+                            + " T:"
+                            + bme.getTech(year)
+                            + "<br>";
 
             description += "</body></html>";
             c.setToolTipText(description);

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,82 +16,99 @@
 
 package mekwars.server.campaign.commands.admin;
 
-
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
+import megamek.Version;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 
-import megamek.Version;
-
 public class ForcedDefectCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Player Name#Faction Name";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		//vars
-		SPlayer p = null;
-		SHouse h = null;
-		
-		//see if the player is online
-		boolean playerOnline = false;
-		
-		try {
-			
-			String name = command.nextToken();
-			playerOnline = CampaignMain.cm.isLoggedIn(name);
-			
-			p = CampaignMain.cm.getPlayer(name);
-			h = CampaignMain.cm.getHouseFromPartialString(command.nextToken(),null);
-			
-		} catch (Exception e) {
-			CampaignMain.cm.toUser("AM:Improper command. Try: /c forceddefect#player#faction", Username, true);
-			return;
-		}
-		
-		if (p == null) {
-			CampaignMain.cm.toUser("AM:Couldn't find a player with that name.", Username, true);
-			return;
-		}
-		
-		if (h == null) {
-			CampaignMain.cm.toUser("AM:Couldn't find a faction with that name.", Username, true);
-			return;
-		}
-		
-		//make the move
-		Version clientVersion = p.getPlayerClientVersion();
-		p.getMyHouse().removeLeader(p.getName());
-		p.getMyHouse().removePlayer(p,false);
-		p.setMyHouse(h);
-		p.setSubFaction(h.getZeroLevelSubFaction());
-		
-		//log the player into his new faction
-		if (playerOnline) {
-			CampaignMain.cm.getPlayer(p.getName());
-			CampaignMain.cm.doLoginPlayer(p.getName());
-		}
 
-		//send appropraite messages
-		CampaignMain.cm.toUser("AM:"+Username + " forced you to defect to " + h.getName(),p.getName(),true);
-		CampaignMain.cm.toUser("AM:You forced " + p.getName() + " to defect to " + h.getName(),Username,true);
-		CampaignMain.cm.doSendModMail("NOTE",Username + " forced " + p.getName() + " to defect to " + h.getName());
-		p.setPlayerClientVersion(clientVersion);
-		
-	}
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Player Name#Faction Name";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        // vars
+        SPlayer p = null;
+        SHouse h = null;
+
+        // see if the player is online
+        boolean playerOnline = false;
+
+        try {
+
+            String name = command.nextToken();
+            playerOnline = CampaignMain.cm.isLoggedIn(name);
+
+            p = CampaignMain.cm.getPlayer(name);
+            h = CampaignMain.cm.getHouseFromPartialString(command.nextToken(), null);
+
+        } catch (Exception e) {
+            CampaignMain.cm.toUser(
+                    "AM:Improper command. Try: /c forceddefect#player#faction", Username, true);
+            return;
+        }
+
+        if (p == null) {
+            CampaignMain.cm.toUser("AM:Couldn't find a player with that name.", Username, true);
+            return;
+        }
+
+        if (h == null) {
+            CampaignMain.cm.toUser("AM:Couldn't find a faction with that name.", Username, true);
+            return;
+        }
+
+        // make the move
+        Version clientVersion = p.getPlayerClientVersion();
+        p.getMyHouse().removeLeader(p.getName());
+        p.getMyHouse().removePlayer(p, false);
+        p.setMyHouse(h);
+        p.setSubFaction(h.getZeroLevelSubFaction());
+
+        // log the player into his new faction
+        if (playerOnline) {
+            CampaignMain.cm.getPlayer(p.getName());
+            CampaignMain.cm.doLoginPlayer(p.getName());
+        }
+
+        // send appropraite messages
+        CampaignMain.cm.toUser(
+                "AM:" + Username + " forced you to defect to " + h.getName(), p.getName(), true);
+        CampaignMain.cm.toUser(
+                "AM:You forced " + p.getName() + " to defect to " + h.getName(), Username, true);
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " forced " + p.getName() + " to defect to " + h.getName());
+        p.setPlayerClientVersion(clientVersion);
+    }
 }

@@ -1,10 +1,10 @@
 /*
  * MekWars - Copyright (C) 2011
- * 
- * 
+ *
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
 import mekwars.common.util.SpringLayoutHelper;
 
 /**
@@ -27,13 +26,13 @@ import mekwars.common.util.SpringLayoutHelper;
  */
 public class DirectSellPanel extends JPanel {
 
-	private static final long serialVersionUID = 3795966693108854838L;
+    private static final long serialVersionUID = 3795966693108854838L;
     private JTextField baseTextField = new JTextField(5);
     private JCheckBox baseCheckBox = new JCheckBox();
-    
-	public DirectSellPanel() {
-		super();
-		
+
+    public DirectSellPanel() {
+        super();
+
         /*
          * CONSTRUCT MEZZO/Pricemod PANEL
          */
@@ -223,5 +222,5 @@ public class DirectSellPanel extends JPanel {
 
         // SpringLayoutHelper.setupSpringGrid(buySellSpring2 , 1, 3);
         add(buySellSpring2);
-	}
+    }
 }

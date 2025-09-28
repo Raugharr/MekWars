@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2008 
+ * MekWars - Copyright (C) 2008
  *
  * Original author - jtighe (torren@users.sourceforge.net)
  *
@@ -18,15 +18,13 @@ package mekwars.server.campaign.commands.mod;
 
 import java.io.File;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import megamek.common.MechSummaryCache;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
-/**
- * Remove a part from a player.
- */
+/** Remove a part from a player. */
 public class UpdateServerUnitsCacheCommand implements Command {
 
     int accessLevel = IAuthenticator.MODERATOR;
@@ -49,7 +47,14 @@ public class UpdateServerUnitsCacheCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -60,12 +65,10 @@ public class UpdateServerUnitsCacheCommand implements Command {
          * properly.
          */
         File cache = new File("./data/mechfiles/units.cache");
-        if (cache.exists())
-            cache.delete();
+        if (cache.exists()) cache.delete();
 
         MechSummaryCache.getInstance();
-        
-        CampaignMain.cm.doSendModMail("NOTE", Username + " has updated the servers unit cache.");
 
+        CampaignMain.cm.doSendModMail("NOTE", Username + " has updated the servers unit cache.");
     }
 }

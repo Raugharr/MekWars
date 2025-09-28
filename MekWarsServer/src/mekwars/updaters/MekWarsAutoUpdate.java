@@ -15,11 +15,8 @@
  */
 
 /**
- *
  * @author Torren (Jason Tighe) 02.16.06
- *
  */
-
 package updaters;
 
 import java.io.BufferedOutputStream;
@@ -29,7 +26,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Properties;
 import java.util.Vector;
-
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -37,10 +33,9 @@ import javax.swing.JOptionPane;
 public class MekWarsAutoUpdate {
 
     // Main-Method
-    /**
-     * main call. Clean and simple
-     */
+    /** main call. Clean and simple */
     private static final String CONFIG_FILE = "./data/mwconfig.txt";
+
     private static final String logFileName = "./logs/mekwarsautoupdate.log";
     private static final String VERSION = "4.0";
     private Properties config = null;
@@ -50,8 +45,9 @@ public class MekWarsAutoUpdate {
 
         if (logFileName != null) {
             try {
-                PrintStream ps = new PrintStream(new BufferedOutputStream(
-                        new FileOutputStream(logFileName), 64));
+                PrintStream ps =
+                        new PrintStream(
+                                new BufferedOutputStream(new FileOutputStream(logFileName), 64));
                 System.setOut(ps);
                 System.setErr(ps);
             } catch (Exception ex) {
@@ -72,15 +68,16 @@ public class MekWarsAutoUpdate {
 
         if (args.length < 1) {
 
-            Vector<String> selections = new Vector<String>(2,1);
+            Vector<String> selections = new Vector<String>(2, 1);
 
             selections.add("Update");
             selections.add("Create Manifest");
 
             JComboBox combo = new JComboBox(selections);
             combo.setEditable(false);
-            JOptionPane jop = new JOptionPane(combo,
-                    JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+            JOptionPane jop =
+                    new JOptionPane(
+                            combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
             JDialog dlg = jop.createDialog(null, "Select Update Option");
             combo.grabFocus();
@@ -96,7 +93,7 @@ public class MekWarsAutoUpdate {
             }
 
             if (selection == 0) {
-                args = new String[] { "PLAYER" };
+                args = new String[] {"PLAYER"};
             } else {
                 VersionManifest.createListFile();
                 JOptionPane.showMessageDialog(null, "Manifest Created");
@@ -121,8 +118,7 @@ public class MekWarsAutoUpdate {
             }
             String url = config.getProperty("UPDATEURL");
             if (url == null || url.trim().length() < 8 || url.equals("-1")) {
-                System.out
-                        .println("Unable to find UPDATEURL in the .\\mwconfig.txt");
+                System.out.println("Unable to find UPDATEURL in the .\\mwconfig.txt");
                 System.out.flush();
                 System.exit(0);
             }
@@ -146,12 +142,12 @@ public class MekWarsAutoUpdate {
             System.out.flush();
             Runtime runTime = Runtime.getRuntime();
             String memory = config.getProperty("DEDMEMORY");
-            if ( !new File("MekWarsDed.jar").exists() && !args[0].equals("PLAYER")) {
-	            String[] call = { "java", "-Xmx" + memory + "m", "-jar", "MekWarsDed.jar" };
-	            runTime.exec(call);
-            }else {
-	            String[] call = { "java", "-jar", "MekWarsClient.jar" };
-	            runTime.exec(call);
+            if (!new File("MekWarsDed.jar").exists() && !args[0].equals("PLAYER")) {
+                String[] call = {"java", "-Xmx" + memory + "m", "-jar", "MekWarsDed.jar"};
+                runTime.exec(call);
+            } else {
+                String[] call = {"java", "-jar", "MekWarsClient.jar"};
+                runTime.exec(call);
             }
             System.exit(0);
         } catch (Exception ex) {
@@ -179,7 +175,6 @@ public class MekWarsAutoUpdate {
                 }
             }
         }
-
     }
 
     private void loadConfigs() {
@@ -197,18 +192,15 @@ public class MekWarsAutoUpdate {
             return;
         }
     }
-
 }
 
 class JCopy {
 
-    JCopy() {
-    }
+    JCopy() {}
 
     public void copyFile(File in, File out) throws Exception {
 
-        System.err
-                .println("Copying " + in.toString() + " to " + out.toString());
+        System.err.println("Copying " + in.toString() + " to " + out.toString());
         FileInputStream fis = new FileInputStream(in);
         FileOutputStream fos = new FileOutputStream(out);
         try {

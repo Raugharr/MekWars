@@ -18,12 +18,6 @@
 package mekwars.client.gui;
 
 import java.util.StringTokenizer;
-
-import mekwars.client.MWClient;
-import mekwars.client.campaign.CUnit;
-import mekwars.common.Unit;
-import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.TokenReader;
 import megamek.client.generator.RandomGenderGenerator;
 import megamek.common.BattleArmor;
 import megamek.common.Crew;
@@ -33,6 +27,11 @@ import megamek.common.Infantry;
 import megamek.common.Mech;
 import megamek.common.Protomech;
 import megamek.common.QuadMech;
+import mekwars.client.MWClient;
+import mekwars.client.campaign.CUnit;
+import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.TokenReader;
 
 public class HSMek {
     String MekFile;
@@ -42,12 +41,12 @@ public class HSMek {
     String type;
     String battleDamage = "";
 
-    CUnit embeddedUnit;//bury a CUnit in HSMek, a la BMUnit
+    CUnit embeddedUnit; // bury a CUnit in HSMek, a la BMUnit
 
     public HSMek(MWClient mwclient, StringTokenizer tokenizer) {
 
         MekFile = TokenReader.readString(tokenizer);
-        unitID =  TokenReader.readInt(tokenizer);
+        unitID = TokenReader.readInt(tokenizer);
 
         int factionGunnery = TokenReader.readInt(tokenizer);
         int factionPiloting = TokenReader.readInt(tokenizer);
@@ -56,7 +55,7 @@ public class HSMek {
             battleDamage = TokenReader.readString(tokenizer);
         }
 
-        //bury a CUnit
+        // bury a CUnit
         embeddedUnit = new CUnit();
         embeddedUnit.setUnitFilename(MekFile);
         embeddedUnit.createEntity();
@@ -68,7 +67,7 @@ public class HSMek {
          */
         if (embeddedUnit.getType() != Unit.PROTOMEK) {
             if (embeddedUnit.getType() == Unit.INFANTRY) {
-                if (((Infantry)embeddedUnit.getEntity()).canMakeAntiMekAttacks() ) {
+                if (((Infantry) embeddedUnit.getEntity()).canMakeAntiMekAttacks()) {
                     embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, factionPiloting));
                 } else {
                     embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, 5));
@@ -85,22 +84,22 @@ public class HSMek {
          * stringed CUnit BV. The server sends over units without pilot data, so we set
          * a faction-default crew. See CHSPanel.java for usage.
          */
-		//FIXME: Properly set clan flag.
-        Crew newCrew = new Crew(
-                CrewType.SINGLE,
-                "Generic Pilot",
-                1,
-                factionGunnery,
-                factionGunnery,
-                factionGunnery,
-                factionPiloting,
-                RandomGenderGenerator.generate(),
-				mwclient.getPlayer().isClan(),
-                null
-            );
+        // FIXME: Properly set clan flag.
+        Crew newCrew =
+                new Crew(
+                        CrewType.SINGLE,
+                        "Generic Pilot",
+                        1,
+                        factionGunnery,
+                        factionGunnery,
+                        factionGunnery,
+                        factionPiloting,
+                        RandomGenderGenerator.generate(),
+                        mwclient.getPlayer().isClan(),
+                        null);
         embeddedUnit.getEntity().setCrew(newCrew);
 
-        //set type
+        // set type
         Entity e = embeddedUnit.getEntity();
         if ((e instanceof Mech) || (e instanceof QuadMech)) {
             type = "Mek";
@@ -114,16 +113,14 @@ public class HSMek {
             type = "Vehicle";
         }
 
-        //vehicles and inf prepend chassis
+        // vehicles and inf prepend chassis
         if (type.equalsIgnoreCase("Mek")) {
             if (e.isOmni()) {
-                name = e.getChassis() + " " +  e.getModel();
-            }
-            else {
-                if ( e.getModel().trim().length() > 0 ){
+                name = e.getChassis() + " " + e.getModel();
+            } else {
+                if (e.getModel().trim().length() > 0) {
                     name = e.getModel().trim();
-                }
-                else{
+                } else {
                     name = e.getChassis().trim();
                 }
             }
@@ -159,5 +156,4 @@ public class HSMek {
     public int getBV() {
         return embeddedUnit.getEntity().calculateBattleValue();
     }
-
 }

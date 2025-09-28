@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,48 +18,65 @@ package mekwars.server.campaign.commands.admin;
 
 import java.io.File;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminDestroyPlanetCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Planet Name";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		SPlanet p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
-		
-		//remove the world from its owner
-		SHouse h = p.getOwner();
-		if (h != null)
-			h.removePlanet(p);
-		
-		//remove the world from the data in memory
-		CampaignMain.cm.getData().removePlanet(p.getId());
-		
-		//finally, remove the world's flat file
-		File fp = new File("./campaign/planets/" + p.getName().toLowerCase().trim() + ".dat");
-		if (fp.exists())
-			fp.delete();
-		
-		CampaignMain.cm.updateHousePlanetUpdate();
-		//server.MWLogger.modLog(Username + " unleashed the Death Star on " + p.getName() + ". Planet destroyed!");
-		CampaignMain.cm.doSendModMail("NOTE",Username + " unleashed the Death Star on " + p.getName() + ". Planet destroyed!");
-		
-	}
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Planet Name";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        SPlanet p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), Username);
+
+        // remove the world from its owner
+        SHouse h = p.getOwner();
+        if (h != null) h.removePlanet(p);
+
+        // remove the world from the data in memory
+        CampaignMain.cm.getData().removePlanet(p.getId());
+
+        // finally, remove the world's flat file
+        File fp = new File("./campaign/planets/" + p.getName().toLowerCase().trim() + ".dat");
+        if (fp.exists()) fp.delete();
+
+        CampaignMain.cm.updateHousePlanetUpdate();
+        // server.MWLogger.modLog(Username + " unleashed the Death Star on " + p.getName() + ".
+        // Planet
+        // destroyed!");
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username + " unleashed the Death Star on " + p.getName() + ". Planet destroyed!");
+    }
 }

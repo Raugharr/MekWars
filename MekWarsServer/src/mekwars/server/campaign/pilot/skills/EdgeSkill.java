@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,19 +20,19 @@
  */
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-//import mekwars.common.Unit;
-import megamek.common.Entity;
+// import mekwars.common.Unit;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * Reduces the bay-consume of the unit.
- * 
+ *
  * @author Helge Richter
  */
 public class EdgeSkill extends SPilotSkill {
@@ -78,7 +78,9 @@ public class EdgeSkill extends SPilotSkill {
             return 0;
         }
 
-        if (p.getSkills().has(PilotSkill.EdgeSkillID) && (p.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel() > CampaignMain.cm.getIntegerConfig("MaxEdgeChanges"))) {
+        if (p.getSkills().has(PilotSkill.EdgeSkillID)
+                && (p.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel()
+                        > CampaignMain.cm.getIntegerConfig("MaxEdgeChanges"))) {
             return 0;
         }
 
@@ -100,8 +102,7 @@ public class EdgeSkill extends SPilotSkill {
     }
 
     /**
-     * @param level
-     *            The level to set.
+     * @param level The level to set.
      */
     @Override
     public void setLevel(int level) {

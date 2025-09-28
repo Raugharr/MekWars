@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,7 +19,6 @@ package mekwars.server.campaign.commands;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-
 import mekwars.common.House;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -27,47 +26,77 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SmallPlayer;
 
 public class LastOnlineCommand implements Command {
-	
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		String name = command.nextToken().toLowerCase();
-		
-		SmallPlayer smallp = null;
-		Iterator<House> i = CampaignMain.cm.getData().getAllHouses().iterator();
-		boolean playerFound = false;
-		while (i.hasNext() && !playerFound) {
-			SHouse h = (SHouse) i.next();
-			smallp = h.getSmallPlayers().get(name);
-			if (smallp != null)
-				playerFound = true;
-		}//end while(more elements && haven't found target yet)
-		
-		if (smallp == null || smallp.getLastOnline() == 0) {
-			CampaignMain.cm.toUser("AM:Target player doesn't exist, or has not been"
-					+ " online since the last server restart.",Username,true);
-			return;
-		}
-		
-		//smallp exists. send info.
-		Date lastDate = new Date(smallp.getLastOnline());
-		String result = smallp.getName() + " (" + smallp.getMyHouse().getColoredName() + ") was last online: " + lastDate + ". ";
-		result += "That's " + ((System.currentTimeMillis() - smallp.getLastOnline()) /86400000) + " days";
-		result += ", " + ((System.currentTimeMillis() - smallp.getLastOnline()) % 86400000) /3600000 + " hours";
-		CampaignMain.cm.toUser(result,Username,true);
-		
-	}
+
+    int accessLevel = 0;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        String name = command.nextToken().toLowerCase();
+
+        SmallPlayer smallp = null;
+        Iterator<House> i = CampaignMain.cm.getData().getAllHouses().iterator();
+        boolean playerFound = false;
+        while (i.hasNext() && !playerFound) {
+            SHouse h = (SHouse) i.next();
+            smallp = h.getSmallPlayers().get(name);
+            if (smallp != null) playerFound = true;
+        } // end while(more elements && haven't found target yet)
+
+        if (smallp == null || smallp.getLastOnline() == 0) {
+            CampaignMain.cm.toUser(
+                    "AM:Target player doesn't exist, or has not been"
+                            + " online since the last server restart.",
+                    Username,
+                    true);
+            return;
+        }
+
+        // smallp exists. send info.
+        Date lastDate = new Date(smallp.getLastOnline());
+        String result =
+                smallp.getName()
+                        + " ("
+                        + smallp.getMyHouse().getColoredName()
+                        + ") was last online: "
+                        + lastDate
+                        + ". ";
+        result +=
+                "That's "
+                        + ((System.currentTimeMillis() - smallp.getLastOnline()) / 86400000)
+                        + " days";
+        result +=
+                ", "
+                        + ((System.currentTimeMillis() - smallp.getLastOnline()) % 86400000)
+                                / 3600000
+                        + " hours";
+        CampaignMain.cm.toUser(result, Username, true);
+    }
 }

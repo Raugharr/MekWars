@@ -49,7 +49,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -62,14 +61,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import mekwars.client.MWClient;
-import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.client.gui.CMainFrame;
-import mekwars.client.gui.MechInfo;
-import mekwars.common.util.MWLogger;
-import mekwars.common.util.SpringLayoutHelper;
-import mekwars.common.util.UnitUtils;
 import megamek.client.ui.swing.UnitFailureDialog;
 import megamek.client.ui.swing.UnitLoadingDialog;
 import megamek.common.Entity;
@@ -79,20 +70,31 @@ import megamek.common.MechSummaryCache;
 import megamek.common.MechSummaryComparator;
 import megamek.common.MechView;
 import megamek.common.loaders.EntityLoadingException;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.CMainFrame;
+import mekwars.client.gui.MechInfo;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 
 /*
  * Allows a user to sort through a list of MechSummaries and select one
  */
 
-public class RepodSelectorDialog extends JFrame implements ActionListener, KeyListener, ListSelectionListener, Runnable, WindowListener, ItemListener {
+public class RepodSelectorDialog extends JFrame
+        implements ActionListener,
+                KeyListener,
+                ListSelectionListener,
+                Runnable,
+                WindowListener,
+                ItemListener {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -6467246609231845514L;
 
     // how long after a key is typed does a new search begin
-    private final static int KEY_TIMEOUT = 1000;
+    private static final int KEY_TIMEOUT = 1000;
 
     // frame which owns the dialog
     private CMainFrame clientgui;
@@ -129,7 +131,12 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
 
     private boolean global = false;
 
-    public RepodSelectorDialog(CMainFrame cl, UnitLoadingDialog uld, MWClient mwclient, String chassieList, String unitId) {
+    public RepodSelectorDialog(
+            CMainFrame cl,
+            UnitLoadingDialog uld,
+            MWClient mwclient,
+            String chassieList,
+            String unitId) {
         super("Repod Selector");
 
         // save params
@@ -144,7 +151,8 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
                 global = true;
             } else if (tempstr.contains(".")) {
                 String chassieMods = ST.nextToken();
-                // MWLogger.errLog("Chassie: "+tempstr+" mods: "+chassieMods+" ChassieList: "+chassieList);
+                // MWLogger.errLog("Chassie: "+tempstr+" mods: "+chassieMods+" ChassieList:
+                // "+chassieList);
                 this.chassieList.put(tempstr, chassieMods);
             }
         }
@@ -152,19 +160,19 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         this.unitId = unitId;
 
         // construct 2 text boxes
-        mechViewLeft = new JTextPane(); //(22, 29);
-        mechViewRight = new JTextPane(); //(22, 34);
+        mechViewLeft = new JTextPane(); // (22, 29);
+        mechViewRight = new JTextPane(); // (22, 34);
 
         mechViewLeft.setContentType("text/html");
-//        mechViewLeft.set
-        
+        //        mechViewLeft.set
+
         mechViewRight.setContentType("text/html");
-        
+
         // construct a model and list
         defaultModel = new DefaultListModel<String>();
         mechList = new JList<String>(defaultModel);
         listSelectionModel = mechList.getSelectionModel();
-        mechList.setVisibleRowCount(22);// give the list same number of rows as
+        mechList.setVisibleRowCount(22); // give the list same number of rows as
         // the text boxes
         listSelectionModel.addListSelectionListener(this);
 
@@ -179,7 +187,8 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         leftScrollPane.setAlignmentX(LEFT_ALIGNMENT);
         leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         rightScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-        rightScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        rightScrollPane.setHorizontalScrollBarPolicy(
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         mechList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // set fonts
@@ -285,8 +294,8 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
 
                 if ((chassieList.get(model) != null) && !vMechs.contains(mechs[x].getModel())) {
                     vMechs.addElement(mechs[x]);
-                }// end if(chassie)
-            }// end for(all mechs)
+                } // end if(chassie)
+            } // end for(all mechs)
         } catch (Exception ex) {
             MWLogger.errLog(ex);
             System.err.println("mechs size: " + mechs.length + " x: " + x);
@@ -330,15 +339,24 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         // makeLength("" + ms.getBV(),5)+""+
         // ms.getYear();
 
-        String result = makeLength(ms.getModel(), 12) + " " + makeLength(ms.getChassis(), 10) + " " + makeLength("" + ms.getTons(), 3) + " " + makeLength("" + ms.getBV(), 5);
+        String result =
+                makeLength(ms.getModel(), 12)
+                        + " "
+                        + makeLength(ms.getChassis(), 10)
+                        + " "
+                        + makeLength("" + ms.getTons(), 3)
+                        + " "
+                        + makeLength("" + ms.getBV(), 5);
 
         String chassieMods = chassieList.get(UnitUtils.getMechSummaryFileName(ms));
         // MWLogger.errLog("Name: "+ms.getName()+" Mods: "+chassieMods);
 
         StringTokenizer mods = new StringTokenizer(chassieMods, "$");
-        result += " " + makeLength(mods.nextToken() + mwclient.moneyOrFluMessage(true, true, -1), 5);
+        result +=
+                " " + makeLength(mods.nextToken() + mwclient.moneyOrFluMessage(true, true, -1), 5);
         result += " " + makeLength(mods.nextToken() + "cp", 7);
-        result += " " + makeLength(mods.nextToken() + mwclient.moneyOrFluMessage(false, true, -1), 5);
+        result +=
+                " " + makeLength(mods.nextToken() + mwclient.moneyOrFluMessage(false, true, -1), 5);
 
         return result;
         // ms.getYear();
@@ -354,9 +372,11 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
 
                 String unitFile = UnitUtils.getMechSummaryFileName(ms);
                 if (global) {
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#GLOBAL#" + unitFile);
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#GLOBAL#" + unitFile);
                 } else {
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#" + unitFile);
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#" + unitFile);
                 }
                 Thread.sleep(125);
                 dispose();
@@ -368,7 +388,8 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         if (ae.getSource() == bRandom) {
             try {
                 if (global) {
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#GLOBAL#RANDOM");
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#GLOBAL#RANDOM");
                 } else {
                     mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c repod#" + unitId + "#RANDOM");
                 }
@@ -381,9 +402,7 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         }
     }
 
-    /**
-     * for compliance with ListSelectionListener
-     */
+    /** for compliance with ListSelectionListener */
     public void valueChanged(ListSelectionEvent event) {
 
         int selected = mechList.getSelectedIndex();
@@ -397,7 +416,13 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
             Entity entity = new MechFileParser(ms.getSourceFile(), ms.getEntryName()).getEntity();
             previewMech(entity);
         } catch (EntityLoadingException ex) {
-            System.out.println("Unable to load mech: " + ms.getSourceFile() + ": " + ms.getEntryName() + ": " + ex.getMessage());
+            System.out.println(
+                    "Unable to load mech: "
+                            + ms.getSourceFile()
+                            + ": "
+                            + ms.getEntryName()
+                            + ": "
+                            + ex.getMessage());
             MWLogger.errLog(ex);
             clearMechPreview();
             return;
@@ -424,7 +449,6 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
 
         // Remove preview image.
         previewMech(null);
-
     }
 
     void previewMech(Entity entity) {
@@ -437,7 +461,7 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
             try {
                 // MechSummary ms =
                 // MechSummaryCache.getInstance().getMech("Error OMG-UR-FD");
-                currEntity = UnitUtils.createOMG();// new
+                currEntity = UnitUtils.createOMG(); // new
                 // MechFileParser(ms.getSourceFile(),
                 // ms.getEntryName()).getEntity();
                 populateTextFields = false;
@@ -506,29 +530,22 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         searchFor(m_sbSearch.toString().toLowerCase());
     }
 
-    public void keyTyped(java.awt.event.KeyEvent ke) {
-    }
+    public void keyTyped(java.awt.event.KeyEvent ke) {}
 
     // WindowListener
-    public void windowActivated(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowActivated(java.awt.event.WindowEvent windowEvent) {}
 
-    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowClosed(java.awt.event.WindowEvent windowEvent) {}
 
     public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         dispose();
     }
 
-    public void windowDeactivated(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowDeactivated(java.awt.event.WindowEvent windowEvent) {}
 
-    public void windowDeiconified(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowDeiconified(java.awt.event.WindowEvent windowEvent) {}
 
-    public void windowIconified(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowIconified(java.awt.event.WindowEvent windowEvent) {}
 
-    public void windowOpened(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowOpened(java.awt.event.WindowEvent windowEvent) {}
 }

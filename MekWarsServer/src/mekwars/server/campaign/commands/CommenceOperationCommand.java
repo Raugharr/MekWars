@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2006  
+ * MekWars - Copyright (C) 2006
  *
  * Created by Jason Tighe(Torren)
  * This program is free software; you can redistribute it and/or modify it
@@ -16,8 +16,6 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
-import mekwars.common.CampaignData;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
@@ -26,98 +24,126 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.operations.ShortOperation;
 
 /**
- * This command is used for multi player opertionas. the attacker
- * will send this command to start an operation
+ * This command is used for multi player opertionas. the attacker will send this command to start an
+ * operation
  */
 public class CommenceOperationCommand implements Command {
-	
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		//get the Op ID and the Army ID
-		int opID = -1;
-		String confirm;
-		try {
-			opID = Integer.parseInt(command.nextToken());
+
+    int accessLevel = 0;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        // get the Op ID and the Army ID
+        int opID = -1;
+        String confirm;
+        try {
+            opID = Integer.parseInt(command.nextToken());
             confirm = command.nextToken();
-		} catch (Exception e) {
-			CampaignMain.cm.toUser("AM:Improper format. Try: /c commenceOperation#Op number#CONFIRM",Username,true);
-			return;
-		}
-		
-		//get the player
-		SPlayer ap = CampaignMain.cm.getPlayer(Username);
-		if (ap == null) {
-			CampaignMain.cm.toUser("AM:Null player. Report this immediately!",Username,true);
-			return;
-		}
-
-        if ( !confirm.equals("CONFIRM") ){
-            CampaignMain.cm.toUser("AM:This command must be confirmed!",Username,true);
-            return;
-        }
-        
-		//check the attack
-		ShortOperation so = CampaignMain.cm.getOpsManager().getRunningOps().get(opID);
-		if (so == null) {
-			CampaignMain.cm.toUser("AM:Operation #" + opID + " does not exist.",Username,true);
-			return;
-		}
-		
-		//check FFA
-		Operation o = CampaignMain.cm.getOpsManager().getOperation(so.getName());
-        if ( !o.getBooleanValue("FreeForAllOperation")){
-            CampaignMain.cm.toUser("AM:This command can only be used on Free For All Operations!", Username);
+        } catch (Exception e) {
+            CampaignMain.cm.toUser(
+                    "AM:Improper format. Try: /c commenceOperation#Op number#CONFIRM",
+                    Username,
+                    true);
             return;
         }
 
-        if ( !so.getAttackers().containsKey(ap.getName().toLowerCase()) ){
-            CampaignMain.cm.toUser("AM:Only the attacker may commence this operation! ",Username,true);
+        // get the player
+        SPlayer ap = CampaignMain.cm.getPlayer(Username);
+        if (ap == null) {
+            CampaignMain.cm.toUser("AM:Null player. Report this immediately!", Username, true);
             return;
         }
-            
-		//make sure the operation is accepting defenders
-		if (so.getStatus() != ShortOperation.STATUS_WAITING) {
-			
-			if (so.getStatus() == ShortOperation.STATUS_FINISHED) {
-				CampaignMain.cm.toUser("AM:Operation #" + opID + " is finished.",Username,true);
-				return;
-			} 
-			
-			//else
-			CampaignMain.cm.toUser("AM:Operation #" + opID + " has already commenced.",Username,true);
-			return;
-		}
+
+        if (!confirm.equals("CONFIRM")) {
+            CampaignMain.cm.toUser("AM:This command must be confirmed!", Username, true);
+            return;
+        }
+
+        // check the attack
+        ShortOperation so = CampaignMain.cm.getOpsManager().getRunningOps().get(opID);
+        if (so == null) {
+            CampaignMain.cm.toUser("AM:Operation #" + opID + " does not exist.", Username, true);
+            return;
+        }
+
+        // check FFA
+        Operation o = CampaignMain.cm.getOpsManager().getOperation(so.getName());
+        if (!o.getBooleanValue("FreeForAllOperation")) {
+            CampaignMain.cm.toUser(
+                    "AM:This command can only be used on Free For All Operations!", Username);
+            return;
+        }
+
+        if (!so.getAttackers().containsKey(ap.getName().toLowerCase())) {
+            CampaignMain.cm.toUser(
+                    "AM:Only the attacker may commence this operation! ", Username, true);
+            return;
+        }
+
+        // make sure the operation is accepting defenders
+        if (so.getStatus() != ShortOperation.STATUS_WAITING) {
+
+            if (so.getStatus() == ShortOperation.STATUS_FINISHED) {
+                CampaignMain.cm.toUser("AM:Operation #" + opID + " is finished.", Username, true);
+                return;
+            }
+
+            // else
+            CampaignMain.cm.toUser(
+                    "AM:Operation #" + opID + " has already commenced.", Username, true);
+            return;
+        }
 
         int minPlayers = 3;
-        try{
+        try {
             minPlayers = o.getIntValue("MinNumberOfPlayers");
-        }catch ( Exception ex){}
-        
-        if ( (so.getDefenders().size()+so.getAttackers().size()) < minPlayers ){
-            CampaignMain.cm.toUser("AM:Operation #" + opID + " does not have enough players to commence!<br>At least "+minPlayers+" players are needed.",Username,true);
+        } catch (Exception ex) {
+        }
+
+        if ((so.getDefenders().size() + so.getAttackers().size()) < minPlayers) {
+            CampaignMain.cm.toUser(
+                    "AM:Operation #"
+                            + opID
+                            + " does not have enough players to commence!<br>At least "
+                            + minPlayers
+                            + " players are needed.",
+                    Username,
+                    true);
             return;
         }
-            
-		so.changeStatus(ShortOperation.STATUS_INPROGRESS);
-		
-		//tell the defender that he has succesfully joined the attack.
-		MWLogger.gameLog("Operation Commenced: " + so.getShortID() + "/" + ap.getName());
-		CampaignMain.cm.toUser("AM:Operation Commenced!",Username,true);
-		
-	}//end process
-	
-}//end CommenceOperationCommand
+
+        so.changeStatus(ShortOperation.STATUS_INPROGRESS);
+
+        // tell the defender that he has succesfully joined the attack.
+        MWLogger.gameLog("Operation Commenced: " + so.getShortID() + "/" + ap.getName());
+        CampaignMain.cm.toUser("AM:Operation Commenced!", Username, true);
+    } // end process
+} // end CommenceOperationCommand

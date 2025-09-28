@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2007 
- * 
+ * MekWars - Copyright (C) 2007
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,14 +16,13 @@
 
 /*
  * Created on 08.22.2007
- *  
+ *
  */
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
-import mekwars.common.Unit;
 import megamek.common.VTOL;
+import mekwars.common.Unit;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
@@ -33,7 +32,6 @@ import mekwars.server.campaign.SUnit;
 
 /**
  * @author Jason Tighe
- * 
  */
 public class SetUnitCommanderCommand implements Command {
 
@@ -57,7 +55,14 @@ public class SetUnitCommanderCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -74,7 +79,10 @@ public class SetUnitCommanderCommand implements Command {
             commander = Boolean.parseBoolean(command.nextToken());
 
         } catch (Exception e) {
-            CampaignMain.cm.toUser("AM:Incorrect syntax. Try: /setUnitCommander unit ID#army ID#true/false", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Incorrect syntax. Try: /setUnitCommander unit ID#army ID#true/false",
+                    Username,
+                    true);
             return;
         }
 
@@ -92,61 +100,72 @@ public class SetUnitCommanderCommand implements Command {
         }
 
         if (m.getPilot() == null || m.getPilot().getName().equalsIgnoreCase("vacant")) {
-            CampaignMain.cm.toUser("AM:This unit does not have a pilot to be a commander for!", Username);
+            CampaignMain.cm.toUser(
+                    "AM:This unit does not have a pilot to be a commander for!", Username);
             return;
         }
 
         if (!house.getBooleanConfig("allowUnitCommander" + Unit.getTypeClassDesc(m.getType()))) {
-            CampaignMain.cm.toUser(Unit.getTypeClassDesc(m.getType()) + " units are not allowed to be set as unit commanders!", Username);
+            CampaignMain.cm.toUser(
+                    Unit.getTypeClassDesc(m.getType())
+                            + " units are not allowed to be set as unit commanders!",
+                    Username);
             return;
         }
 
         if (!house.getBooleanConfig("allowUnitCommanderVTOL") && m.getEntity() instanceof VTOL) {
-            CampaignMain.cm.toUser("AM:VTOL units are not allowed to be set as unit commanders!", Username);
+            CampaignMain.cm.toUser(
+                    "AM:VTOL units are not allowed to be set as unit commanders!", Username);
             return;
         }
 
         if (m.getEntity().isOffBoard()) {
-            CampaignMain.cm.toUser("AM:Off board units are not allowed to be set as unit commanders!", Username);
+            CampaignMain.cm.toUser(
+                    "AM:Off board units are not allowed to be set as unit commanders!", Username);
             return;
         }
 
         if (p.getAmountOfTimesUnitExistsInArmies(m.getId()) < 1) {
-            CampaignMain.cm.toUser("AM:the " + m.getModelName() + " is not in any armies!", Username);
+            CampaignMain.cm.toUser(
+                    "AM:the " + m.getModelName() + " is not in any armies!", Username);
             return;
         }
 
         if (army.isCommander(m.getId()) && commander) {
-            CampaignMain.cm.toUser("AM:" + m.getModelName() + " is already a unit commander for this army!", Username);
+            CampaignMain.cm.toUser(
+                    "AM:" + m.getModelName() + " is already a unit commander for this army!",
+                    Username);
             return;
         }
-        //start Baruk Khazad!  20151108b
+        // start Baruk Khazad!  20151108b
         boolean isInArmy = false;
         for (SArmy currA : p.getArmies()) {
-             if (currA.isUnitInArmy(m) && !currA.isDisabled()) {
-                   isInArmy = true;
-                   break;
-             }
-        }     
-        if (isInArmy && p.getDutyStatus()!= SPlayer.STATUS_RESERVE) {
-            CampaignMain.cm.toUser("AM:Your army is on patrol or fighting and needs to return to base first.", Username, true);
+            if (currA.isUnitInArmy(m) && !currA.isDisabled()) {
+                isInArmy = true;
+                break;
+            }
+        }
+        if (isInArmy && p.getDutyStatus() != SPlayer.STATUS_RESERVE) {
+            CampaignMain.cm.toUser(
+                    "AM:Your army is on patrol or fighting and needs to return to base first.",
+                    Username,
+                    true);
             return;
         }
-        //end Baruk Khazad!  20151108b
-        
-        
+        // end Baruk Khazad!  20151108b
+
         p.setSave();
 
         if (commander) {
             army.addCommander(m.getId());
-            CampaignMain.cm.toUser("AM:Unit #" + m.getId() + " has been set as unit commander", Username);
+            CampaignMain.cm.toUser(
+                    "AM:Unit #" + m.getId() + " has been set as unit commander", Username);
         } else {
-            CampaignMain.cm.toUser("AM:Unit #" + m.getId() + " has been removed as unit commander", Username);
+            CampaignMain.cm.toUser(
+                    "AM:Unit #" + m.getId() + " has been removed as unit commander", Username);
             army.removeCommander(m.getId());
         }
         CampaignMain.cm.toUser("PL|SAD|" + army.toString(true, "%"), Username, false);
         CampaignMain.cm.getOpsManager().checkOperations(army, true);
-
-    }// end process()
-
-}// end ScrapCommand
+    } // end process()
+} // end ScrapCommand

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,23 +16,18 @@
 
 package mekwars.server.campaign;
 
-
 public class NonConqHouse extends SHouse {
-    
-    /**
-     * 
-     */
+
+    /** */
     private static final long serialVersionUID = 7378173181135107451L;
 
-    public NonConqHouse(String name, String houseColor, int baseGunner, int basePilot, String abbreviation) {
+    public NonConqHouse(
+            String name, String houseColor, int baseGunner, int basePilot, String abbreviation) {
         super(name, houseColor, baseGunner, basePilot, abbreviation);
         setConquerable(false);
     }
-    
-    
-    /**
-     * Used for serialization
-     */
+
+    /** Used for serialization */
     public NonConqHouse() {
         super();
     }
@@ -45,4 +40,3 @@ public class NonConqHouse extends SHouse {
         return result.toString();
     }
 }
-    

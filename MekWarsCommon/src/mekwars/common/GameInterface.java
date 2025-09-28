@@ -3,20 +3,18 @@ package mekwars.common;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-
 import megamek.common.Entity;
 
 public interface GameInterface {
-	List<String> getWinners();
+    List<String> getWinners();
 
-	boolean hasWinner();
+    boolean hasWinner();
 
-	Enumeration<Entity> getDevastatedEntities();
+    Enumeration<Entity> getDevastatedEntities();
 
-	Enumeration<Entity> getGraveyardEntities();
+    Enumeration<Entity> getGraveyardEntities();
 
-	Iterator<Entity> getEntities();
+    Iterator<Entity> getEntities();
 
-	Enumeration<Entity> getRetreatedEntities();
-
+    Enumeration<Entity> getRetreatedEntities();
 }

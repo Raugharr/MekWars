@@ -123,15 +123,16 @@ public class DefaultOperation {
          *
          * TODO: Improve colour options by adding RGB support
          */
-        operationsDefaults.put("OperationColor", "#33FFFF");// aqua-ish
-        operationsDefaults.put("OperationRange", "30");// one jump
+        operationsDefaults.put("OperationColor", "#33FFFF"); // aqua-ish
+        operationsDefaults.put("OperationRange", "30"); // one jump
         operationsDefaults.put("OnlyAgainstFactoryWorlds", "false");
         operationsDefaults.put("OnlyAgainstNonFactoryWorlds", "false");
-        operationsDefaults.put("PercentageToAttackOnWorld", "50");// own or push to attack
-        operationsDefaults.put("PercentageToAttackOffWorld", "50");// own or push to attack
-        operationsDefaults.put("MinPlanetOwnership", "0");// attack anywhere
-        operationsDefaults.put("MinPlanetOwnershipIgnoredByDefender", "false");//Baruk Khazad! - 20151003
-        operationsDefaults.put("MaxPlanetOwnership", "100");// attack anywhere
+        operationsDefaults.put("PercentageToAttackOnWorld", "50"); // own or push to attack
+        operationsDefaults.put("PercentageToAttackOffWorld", "50"); // own or push to attack
+        operationsDefaults.put("MinPlanetOwnership", "0"); // attack anywhere
+        operationsDefaults.put(
+                "MinPlanetOwnershipIgnoredByDefender", "false"); // Baruk Khazad! - 20151003
+        operationsDefaults.put("MaxPlanetOwnership", "100"); // attack anywhere
         operationsDefaults.put("OnlyAgainstHomeWorlds", "false");
         operationsDefaults.put("OnlyAgainstNonHomeWorlds", "false");
         operationsDefaults.put("RealBlindDrop", "false");
@@ -154,789 +155,789 @@ public class DefaultOperation {
         operationsDefaults.put("AutoresolveBattle", "false");
 
         /*
-         * SHORT VARIABLES. These are params which are necessary for
-         * all operations. Note: Short and long variables will often
-         * overlap.
-         *
-         * NOTE: Fail Codes are appended for convenience. These are the
-         *       codes assigned in ShortValidator when a paramater check
-         *       isn't passed. Codes and paramaters are not necessarily
-         *       in the same order, as they're added at different times.
-         *
-         * Variable are:
-         * ------------
-         *
-         * [Construction properties]
-         * -> Read in ShortValidator.checkAttackerConstruction
-         * -> and ShortValidator.checkDefenderConstruction.
-         *
-         * MaxAttackerBV - self evident - AFC=200
-         * MaxDefenderBV - self evident - DFC=400
-         * MinAttackerBV - self evident - AFC=201
-         * MinDefenderBV - self evident - DFC=401
-         *
-         * MaxAttackerMeks - self evident - AFC=202
-         * MaxDefenderMeks - self evident - DFC=402
-         *
-         * MinAttackerMeks - self evident - AFC=203
-         * MinDefenderMeks - self evident - DFC=403
-         *
-         * MaxAttackerVehicles  - self evident - AFC= 239
-         * MaxDefenderVehicles  - self evident - DFC= 437
-         *
-         * MinAttackerVehicles  - self evident - AFC= 240
-         * MinDefenderVehicles  - self evident - DFC= 438
-         *
-         * MaxAttackerInfantry  - self evident - AFC= 241
-         * MaxDefenderInfantry  - self evident - DFC= 439
-         *
-         * MinAttackerInfantry  - self evident - AFC= 242
-         * MinDefenderInfantry  - self evident - DFC= 440
-         *
-         * MaxAttackerAero  - self evident - AFC= 254
-         * MaxDefenderAero  - self evident - DFC= 255
-         *
-         * MinAttackerAero  - self evident - AFC= 455
-         * MinDefenderAero  - self evident - DFC= 456
-         *
-         * MaxAttackerNonInfantry  - self evident - AFC= 250
-         * MaxDefenderNonInfantry  - self evident - DFC= 450
-         *
-         * MinAttackerNonInfantry  - self evident - AFC= 251
-         * MinDefenderNonInfantry  - self evident - DFC= 451
-         *
-         * [CAUTION: Setting these too far apart can create situations
-         *  where players can see each other with check tools but are
-         *  unable to launch attacks, and vice versa]
-         *
-         * MinAttackerWalk - self evident - AFC=204, shared with MinAttackerJump
-         * MinDefenderWalk - self evident - DFC=404, shared with MinDefenderJump
-         *
-         * MinAttackerJump - self evident - AFC=204, shared with MinAttackerWalk
-         * MinDefenderJump - self evident - DFC=404, shared with MinDefenderWalk
-         *
+        * SHORT VARIABLES. These are params which are necessary for
+        * all operations. Note: Short and long variables will often
+        * overlap.
+        *
+        * NOTE: Fail Codes are appended for convenience. These are the
+        *       codes assigned in ShortValidator when a paramater check
+        *       isn't passed. Codes and paramaters are not necessarily
+        *       in the same order, as they're added at different times.
+        *
+        * Variable are:
+        * ------------
+        *
+        * [Construction properties]
+        * -> Read in ShortValidator.checkAttackerConstruction
+        * -> and ShortValidator.checkDefenderConstruction.
+        *
+        * MaxAttackerBV - self evident - AFC=200
+        * MaxDefenderBV - self evident - DFC=400
+        * MinAttackerBV - self evident - AFC=201
+        * MinDefenderBV - self evident - DFC=401
+        *
+        * MaxAttackerMeks - self evident - AFC=202
+        * MaxDefenderMeks - self evident - DFC=402
+        *
+        * MinAttackerMeks - self evident - AFC=203
+        * MinDefenderMeks - self evident - DFC=403
+        *
+        * MaxAttackerVehicles  - self evident - AFC= 239
+        * MaxDefenderVehicles  - self evident - DFC= 437
+        *
+        * MinAttackerVehicles  - self evident - AFC= 240
+        * MinDefenderVehicles  - self evident - DFC= 438
+        *
+        * MaxAttackerInfantry  - self evident - AFC= 241
+        * MaxDefenderInfantry  - self evident - DFC= 439
+        *
+        * MinAttackerInfantry  - self evident - AFC= 242
+        * MinDefenderInfantry  - self evident - DFC= 440
+        *
+        * MaxAttackerAero  - self evident - AFC= 254
+        * MaxDefenderAero  - self evident - DFC= 255
+        *
+        * MinAttackerAero  - self evident - AFC= 455
+        * MinDefenderAero  - self evident - DFC= 456
+        *
+        * MaxAttackerNonInfantry  - self evident - AFC= 250
+        * MaxDefenderNonInfantry  - self evident - DFC= 450
+        *
+        * MinAttackerNonInfantry  - self evident - AFC= 251
+        * MinDefenderNonInfantry  - self evident - DFC= 451
+        *
+        * [CAUTION: Setting these too far apart can create situations
+        *  where players can see each other with check tools but are
+        *  unable to launch attacks, and vice versa]
+        *
+        * MinAttackerWalk - self evident - AFC=204, shared with MinAttackerJump
+        * MinDefenderWalk - self evident - DFC=404, shared with MinDefenderJump
+        *
+        * MinAttackerJump - self evident - AFC=204, shared with MinAttackerWalk
+        * MinDefenderJump - self evident - DFC=404, shared with MinDefenderWalk
+        *
 
-         * [NOTE: A unit can qualify for speed through walk OR jump. Set
-         *  either walk or jump extremely high in order to make this a
-         *  single element check.
-         *
-         *  Examples:
-         *  - set jump to 90 and walk to 7 to ensure a ground MP of 7.
-         *  - set jump to 7 and walk to 9 to allow only units which can
-         *    EITHER jump 7 (Wraith) or cruise/walk 9 (Hermes).
-         *  - set walk to 90 and jump to 5 to ensure that all units in a
-         *    force can jump at least 5 hexes.]
-         *
-         * MaxAttackerUnitTonnage - highest weight for a single unit - AFC=205
-         * MaxDefenderUnitTonnage - highest weight for a single unit - DFC=405
-         *
-         * MinAttackerUnitTonnage - lowest weight for a single unit - AFC=206
-         * MinDefenderUnitTonnage - lowest weight for a single unit - DFC=406
-         *
-         * MaxAttackerUnitBV - highest BV for a single unit - AFC=231
-         * MaxDefenderUnitBV - highest BV for a single unit - DFC=431
-         *
-         * MinAttackerUnitBV - lowest BV for a single unit - AFC=230
-         * MinDefenderUnitBV - lowest BV for a single unit - DFC=430
-         *
-         * MaxAttackerUnitBVSpread - [Spread is the BV difference between the highest
-         * MaxDefenderUnitBVSpread - [unit in a force and the losest unit in a force.
-         * AFC=232; DFC=432          [Set <= 0 to disable. Defaults to 0.
-         *
-         * MinAttackerUnitBVSpread - [Like above, but used to ensure a minimum level
-         * MinDefenderUnitBVSpread - [of difference between units. EG - set to 100 to
-         *                           [ensure that there is a difference of at least 100
-         * AFC=233; DFC=433          [between the highest and lowest units. Probably only
-         *                           [interesting to create "Buddy" games where a high BV
-         *                           [mech has to pair with a low in a tag team.
-         *                           [Set <= 0 to DISABLE. Defaults to 0.
-         *
-         * HighestAttackerPilotSkillTotal - Highest total skill, Gunnery + Piloting, that an
-         *                                    attacking Units pilot can have
-         * LowestAttackerPilotSkillTotal  - Lowest total skill, Gunnery + Piloting, that an
-         *                                    attacking Units pilot can have
-         * HighestAttackerPiloting - Highest Piloting that an
-         *                                    attacking Units pilot can have
-         * LowestAttackerPiloting  - Lowest Piloting that an
-         *                                    attacking Units pilot can have
-         * HighestAttackerGunnery - Highest Gunnery that an
-         *                                    attacking Units pilot can have
-         * LowestAttackerGunnery  - Lowest = Gunnery that an
-         *                                    attacking Units pilot can have
-         *
-         * HighestDefenderPilotSkillTotal - Highest total skill, Gunnery + Piloting, that a
-         *                                    defending Units pilot can have
-         * LowestDefenderPilotSkillTotal  - Lowest total skill, Gunnery + Piloting, that a
-         *                                    defending Units pilot can have
-         * HighestDefenderPiloting - Highest Piloting that an
-         *                                    defending Units pilot can have
-         * LowestDefenderPiloting  - Lowest Piloting that an
-         *                                    defending Units pilot can have
-         * HighestDefenderGunnery - Highest Gunnery that an
-         *                                    defending Units pilot can have
-         * LowestDefenderGunnery  - Lowest = Gunnery that an
-         *                                    defending Units pilot can have
-         *
-         * AttackerAverageArmySkillMax - The Max average total skills for the Attacker army
-         * AttackerAverageArmySkillMin - The Min average total skills for the Attacker army
-         * DefenderAverageArmySkillMax - The Max average total skills for the Defender army
-         * DefenderAverageArmySkillMin - The Min average total skills for the Defender army
-         *
-         * CountVehsForSpread   - self evident
-         * CountProtosForSpread - self evident
-         * CountInfForSpread    - self evident
-         * CountAerosForSpread    - self evident
-         *
-         * [NOTE: Spreads are a very dangerous feature. They're GREAT for stopping high/low
-         *  unit pairs and "init sinks." However, they also make it virtually impossible to
-         *  use infantry and protomeks, or small vehicles like the Vedette. Options exist to
-         *  stop spread checks on these unit types (Meks will always be checked), but these
-         *  may be unbalancing in and of themselves. The recommended solution for servers which
-         *  want to use spreads AND combined arms is to set a very wide spread ... something in
-         *  the range of 1000 BV ... not count protos/BV for spread, and enforce Infantry moves
-         *  with mechs (MM option) and ProtosMustBeGroups (Operations option).]
-         *
-         * MaxTotalAttackerTonnage - max total tonnage for attacking force - AFC=211
-         * MaxTotalDefenderTonnage - max total tonnage for defending force - DFC=411
-         *
-         * MinTotalAttackerTonnage - min total tonnage for attacking force - AFC=212
-         * MinTotalDefenderTonnage - min total tonnage for defending force - DFC=412
-         *
-         * AttackerAllowedMeks - boolean, whether or not attacker can use meks - AFC=207
-         * AttackerAllowedVehs - boolean, whether or not attacker can use vehs - AFC=208
-         * AttackerAllowedInf  - boolean, whether or not attacker can use inf  - AFC=209
-         * AttackerAllowedAeros - boolean, whether or not attacker can use inf  - AFC=256
-         * AttackerOmniMeksOnly- boolean, whether or not attacker must use omnimeks only - AFC=243
-         *
-         * DefenderAllowedMeks - boolean, whether or not defender can use meks - DFC=407
-         * DefenderAllowedVehs - boolean, whether or not defender can use vehs - DFC=408
-         * DefenderAllowedInf  - boolean, whether or not defender can use inf  - DFC=409
-         * DefenderAllowedAeros - boolean, whether or not defender can use inf  - DFC=457
-         * DefenderOmniMeksOnly- boolean, whether or not defender must use omnimeksonly - DFC=443
-         *
-         * ProtosMustbeGrouped - boolean. If enabled, protos must be present in multiples
-         *                       of server wide move group. For example, if the server is
-         *                       set to have protos move in groupd of 5, and someone has 8
-         *                       protos, attacks will fail if ProtosMustbeGrouped is true.
-         *                       CFC=001
-         * RepodOmniUnitsToBase - string. Omni's that where used in this op are repodded back to base configuration
-         *                        Leave blank to disable this option
-         *
-         * MULArmiesOnly        - Players do not need armies to activate or attack/defend. All armies will be created
-         *                        via MUL files.
-         *
-         * AttackerPoweredInfAllowed  - boolean. Overrides AttackerAllowedInf and admits BA/Protos. - AFC=210
-         * DefenderPoweredInfAllowed  - boolean. Overrides DefenderAllowedInf and admits BA/Protos. - DFC=410
-         * AttackerStandardInfAllowed - boolean. Overrides AttackerAllowedInf and admits conventional units - AFC=246
-         * DefenderStandardInfAllowed - boolean. Overrides DefenderAllowedInf and admits conventional units - DFC=446
-         *
-         * [NOTE: Allowances are only checked if infantry are banned, generally. Set Attacker/DefenderAllowedInfantry
-         *  to false first, then enable PoweredInfAllowed or StandardInfAllowed. These values are ignored entirely if
-         *  attacker/defender has "allows" set to true.]
-         *
-         * [Construction done]++
-         *
-         * [Costs]
-         * -> Read in ShortValidator.checkAttackerCosts/checkDefenderCosts
-         * -> Also read on OperationManager.terminate()
-         *
-         * AttackerCostMoney     - monetary charge to attacker  - AFC=213
-         * AttackerCostInfluence - influence charge to attacker - AFC=214
-         * AttackerCostReward    - reward charge to attacker    - AFC=215
-         *
-         * DefenderCostMoney     - charge, in money, for defender to JOIN game     - DFC=413
-         * DefenderCostInfluence - charge, in influence, for defender to JOIN game - DFC=414
-         * DefenderCostReward    - charge, in reward points, for defender to join  - DFC=415
-         *
-         * [CAUTION: Using defender costs in normal operations is STRONGLY
-         *  discouraged. These are best used as overloads from ModifyingOps]
-         *
-         * [Costs done]
-         *
-         * [Player properties - XP, Rating, etc]
-         * -> Read in ShortValidator.checkAttackerMilestones/checkDefenderMilestones
-         *
-         * MaxAttackerRating - self evident - AFC=216
-         * MinAttackerRating - self evident - AFC=217
-         * MaxDefenderRating - self evident - DFC=416
-         * MinDefenderRating - self evident - DFC=417
-         *
-         * MaxAttackerXP - self evident - AFC=218
-         * MinAttackerXP - self evident - AFC=219
-         * MaxDefenderXP - self evident - DFC=418
-         * MinDefenderXP - self evident - DFC=419
-         *
-         * MaxAttackerGamesPlayed - self evident - AFC=220
-         * MinAttackerGamesPlayed - self evident - AFC=221
-         * MaxDefenderGamesPlayed - self evident - DFC=420
-         * MinDefenderGamesPlayed - self evident - DFC=421
-         *
-         * [NOTE: Generally speaking, games played shouldnt be mixed w/ XP. Use
-         *  either, avoid setting both fields in any given operation.]
-         *
-         * [Players done]
-         *
-         * [Scenario values - artillery, etc]
-         * -> Read in ShortOperation's changeStatus() method
-         *
-         * BotControlsAll                - [If true any support units giving to the task
-         *                                 [are given to a bot to be controlled by instead.
-         *                                 [this includes arty gun emplacements and mines
-         *                                 [all players will be given a bot and any support
-         *                                 [that would have gone to that player will goto the bot
-         *                                 [instead. NOTE: the bots will fire upon all players
-         *                                 [and other bots.
-         *
-         * BotsAllOnSameTeam             - [If set all bots will be added to the same team
-         *                                 [This way all bots will attack the players and not
-         *                                 [other bots. Bots unite!
-         *
-         * DefenderReceivesAutoArtillery - [If true, attack/defend players will receive
-         * AttackerReceivesAutoArtillery   [normal autoartillery. Set false to make the
-         *                                 [grant lopsided.
-         *
-         * DefenderFlatArtilleryModifier - Amount of BV to shift defender
-         * AttackerFlatArtilleryModifier - Amount of BV to shift attacker
-         * DefenderPercentArtilleryModifier - % adjustment to relative assignment BV
-         * AttackerPercentArtilleryModifier - % adjustment to relative assignment BV
-         *
-         * MinDefenderArtilleryBV - [Min BV to be presumed for attack/defender player
-         * MinAttackerArtilleryBV   [when assigning autoartillery. Floor for modifiers.
-         * MaxDefenderArtilleryBV - [Max BV to be presumed for attack/def player when
-         * MaxAttackerArtilleryBV   [assigning artillery. Ceiling for modifiers.
-         *
-         * [NOTES (Artillery): These variables are simpler than they may seem. First,
-         *  the true/false Receives variales are used to allow one party to have arty
-         *  while denying it to annother.
-         *
-         *  % and flat modifiers can be used simultaneously. The % modifier is applied
-         *  to the player's combined BV first, then the flat modifier is added. Finally,
-         *  the ceilings and floors are checked.
-         *
-         *  Depending on ceiling and floor settings, and server-configured caps on the
-         *  number of artillery pieces to be assigned, its possible for both players to
-         *  have the same amount of artillery, even when the modifiers and caps are
-         *  weighted in favour of the defender.]
-         *
-         * [Gun Emplacements]
-         *
-         * DefenderReceivesGunEmplacements - [If true, attack/defend players will receive
-         * AttackerReceivesGunEmplacement  - [normal gun emplacement. Set false to make the
-         *                                   [grant lopsided.
-         *
-         * DefenderFlatGunEmplacementModifier - Amount of BV to shift defender
-         * AttackerFlatGunEmplacementModifier - Amount of BV to shift attacker
-         * DefenderPercentGunEmplacementModifier - % adjustment to relative assignment BV
-         * AttackerPercentGunEmplacementModifier - % adjustment to relative assignment BV
-         *
-         * MinDefenderGunEmplacementBV - [Min BV to be presumed for attack/defender player
-         * MinAttackerGunEmplacementBV   [when assigning gun emplacement. Floor for modifiers.
-         * MaxDefenderGunEmplacementBV - [Max BV to be presumed for attack/def player when
-         * MaxAttackerGunEmplacementBV   [assigning gun emplacement. Ceiling for modifiers.
-         *
-         * [NOTES (Gun Emplacement): These variables are simpler than they may seem. First,
-         *  the true/false Receives variales are used to allow one party to have guns
-         *  while denying it to another.
-         *
-         *  % and flat modifiers can be used simultaneously. The % modifier is applied
-         *  to the player's combined BV first, then the flat modifier is added. Finally,
-         *  the ceilings and floors are checked.
-         *
-         *  Depending on ceiling and floor settings, and server-configured caps on the
-         *  number of gun emplacement pieces to be assigned, its possible for both players to
-         *  have the same amount of gun emplacement, even when the modifiers and caps are
-         *  weighted in favour of the defender.]
-         *
-         * [Mines]
-         * DefenderReceivesMines       [Allow attacker or defender to recieve mines
-         * AttackerReceivesMines
-         *
-         * DefenderBVPerConventional   [Set the BV amount for 1 conventional mine i.e set to 100
-         * AttackerBVPerConventional   [and the total of both armies bv is 10k you get 100 mines
-         * DefenderTonPerConventional  [Set the Ton amount for 1 conventional mine i.e set to 100
-         * AttackerTonPerConventional  [and the total of both armies ton is 500 you get 5 mines
-         *
-         * DefenderBVPerVibra   [Set the BV amount for 1 vibra mine i.e set to 100
-         * AttackerBVPerVibra   [and the total of both armies bv is 10k you get 100 mines
-         * DefenderTonPerVibra  [Set the Ton amount for 1 vibra mine i.e set to 100
-         * AttackerTonPerVibra  [and the total of both armies ton is 500 you get 5 mines
-         *
-         * [MUL Armies]
-         * DefenderReceivesMULArmy      [Allow attacker or defender to recieve a full army
-         * AttackerReceivesMULArmy
-         *
-         * MinDefenderMulArmies			[Min number of MUL armies a Defender can receive
-         * MaxDefenderMulArmies			[Max number of MUL armies a Defender can receive
-         *                              [These files exist in the servers data\armies folder]
-         * DefenderMulArmyList			[List of the MUL files to choose from separated by ;
-         *
-         * MinDefenderMulMeks           [Min number of MUL armies a Defender can receive
-         * MaxDefenderMulMeks           [Max number of MUL armies a Defender can receive
-         * DefenderMulMekList           [List of the MUL files to choose from separated by ;
-         *
-         * MinDefenderMulVehicles       [Min number of MUL armies a Defender can receive
-         * MaxDefenderMulVehicles       [Max number of MUL armies a Defender can receive
-         * DefenderMulVehicleList       [List of the MUL files to choose from separated by ;
-         *
-         * MinDefenderMulInf            [Min number of MUL armies a Defender can receive
-         * MaxDefenderMulInf            [Max number of MUL armies a Defender can receive
-         * DefenderMulInfList           [List of the MUL files to choose from separated by ;
-         *
-         * MinDefenderMulBA             [Min number of MUL armies a Defender can receive
-         * MaxDefenderMulBA             [Max number of MUL armies a Defender can receive
-         * DefenderMulBAList            [List of the MUL files to choose from separated by ;
-         *
-         * MinDefenderMulAero           [Min number of MUL armies a Defender can receive
-         * MaxDefenderMulAero           [Max number of MUL armies a Defender can receive
-         * DefenderMulAeroList          [List of the MUL files to choose from separated by ;
-         *
-         * MinDefenderMulProto          [Min number of MUL armies a Defender can receive
-         * MaxDefenderMulProto          [Max number of MUL armies a Defender can receive
-         * DefenderMulProtoList         [List of the MUL files to choose from separated by ;
-         *
-         * MinAttackerMulArmies			[Min number of MUL armies an Attacker can receive
-         * MaxAttackerMulArmies			[Max number of MUL armies an Attacker can receive
-         *                              [These files exist in the servers data\armies folder]
-         * AttackerMulArmyList			[List of the MUL files to choose from separated by ;
-         *
-         * MinAttackerMulMeks           [Min number of MUL armies an Attacker can receive
-         * MaxAttackerMulMeks           [Max number of MUL armies an Attacker can receive
-         * AttackerMulMekList           [List of the MUL files to choose from separated by ;
-         *
-         * MinAttackerMulVehicles       [Min number of MUL armies an Attacker can receive
-         * MaxAttackerMulVehicles       [Max number of MUL armies an Attacker can receive
-         * AttackerMulVehicleList       [List of the MUL files to choose from separated by ;
-         *
-         * MinAttackerMulInf            [Min number of MUL armies an Attacker can receive
-         * MaxAttackerMulInf            [Max number of MUL armies an Attacker can receive
-         * AttackerMulInfList           [List of the MUL files to choose from separated by ;
-         *
-         * MinAttackerMulBA             [Min number of MUL armies an Attacker can receive
-         * MaxAttackerMulBA             [Max number of MUL armies an Attacker can receive
-         * AttackerMulBAList            [List of the MUL files to choose from separated by ;
-         *
-         * MinAttackerMulAero           [Min number of MUL armies an Attacker can receive
-         * MaxAttackerMulAero           [Max number of MUL armies an Attacker can receive
-         * AttackerMulAeroList          [List of the MUL files to choose from separated by ;
-         *
-         * MinAttackerMulProto          [Min number of MUL armies an Attacker can receive
-         * MaxAttackerMulProto          [Max number of MUL armies an Attacker can receive
-         * AttackerMulProtoList         [List of the MUL files to choose from separated by ;
-         *
-         * [Scenario props. finished]
-         *
-         * [player result params - pay, etc]
-         *
-         * BaseAttackerPayCBills - flat amount attacker is paid for participating;
-         * BaseDefenderPayCBills - flat amount defender is paid for participating;
-         * BaseAttackerPayInfluence - as above, but in Flu;
-         * BaseDefenderPayInfluence - as above, but in Flu;
-         * BaseAttackerPayExperience - as above, but in Flu;
-         * BaseDefenderPayExperience - as above, but in Flu;
-         *
-         * AttackerPayBVforCBill - [1 CBill added to Base pay for every complete;
-         * DefenderPayBVforCBill - [increment. ie - if 2, will add BV/2 Cbills to pay;
-         *
-         * AttackerWinModifierCBillsFlat - flat boost to pay for winning attack;
-         * DefenderWinModifierCBillsFlat - flat boost to pay for winning defense;
-         * AttackerLossModifierCBillsFlat - flat drop in pay for losing attack;
-         * DefenderLossModifierCBillsFlat - flat drop to pay for losing defense;
-         *
-         * AttackerWinModifierCBillsPercent  - [double multipliers. the base amounts + bv adjustments +
-         * DefenderWinModifierCBillsPercent  - [flat adjustments are multiplied by these numbers. A Win
-         * AttackerLossModifierCBillsPercent - [Modifier of 100 would double pay. A LossModifier of 50
-         * DefenderLossModifierCBillsPercent - [would reduce payments by half.
-         *
-         * AttackerPayBVforInfluence - as above, but for influence;
-         * DefenderPayBVforInfluence - ditto;
-         *
-         * AttackerWinModifierInfluenceFlat - as above, but for influence;
-         * DefenderWinModifierInfluenceFlat - ditto;
-         * AttackerLossModifierInfluenceFlat - ditto;
-         * DefenderLossModifierInfluenceFlat - ditto;
-         *
-         * AttackerWinModifierInfluencePercent - as above, but for influence;
-         * DefenderWinModifierInfluencePercent - ditto;
-         * AttackerLossModifierInfluencePercent - ditto;
-         * DefenderLossModifierInfluencePercent - ditto;
-         *
-         * AttackerPayBVforExperience - as above, but for experience;
-         * DefenderPayBVforExperience - ditto;
-         *
-         * AttackerWinModifierExperienceFlat - as above, but for experience;
-         * DefenderWinModifierExperienceFlat - ditto;
-         * AttackerLossModifierExperienceFlat - ditto;
-         * DefenderLossModifierExperienceFlat - ditto;
-         *
-         * AttackerWinModifierExperiencePercent - as above, but for experience;
-         * DefenderWinModifierExperiencePercent - ditto;
-         * AttackerLossModifierExperiencePercent - ditto;
-         * DefenderLossModifierExperiencePercent - ditto;
-         *
-         * [NOTE: Be very cautious when using percent modifiers in conjunction with
-         *        the flat adjustments and BV plus ups. Percent modifiers are applied
-         *        after other changes and may result in funky funky pay.]
-         *
-         * RPForWinner - num RP to give winner;
-         * RPForLoser - num RP to give Loser;
-         * RPForDefender - num RP to give Defender(s);
-         * RPForAttacker - num RP to give Attacker(s);
-         * OnlyGiveRPtoWinners - boolean. use to restrict attack/def RP to winning players;
-         *
-         * MinBVDifferenceForFullPay  - This is the min BV difference between the start and end of hte fight
-         *                            - That must be achieved for full payment
-         * BVFailurePaymentModifier   - How much of the full payment players actually get if they do not meet the
-         *                            - Min requirement.
-         *
-         * FledUnitSalvageChance         - Chance, out of 100, that a unit that flees the field is put into the salvage pool. Default 0
-         * FledUnitScrappedChance		 - Chance, out of 100, that a unit that flees the field is scrapped. Default 0.
-         * PushedUnitSalvageChance		 - Chance that a unit that is pushed off the field is put into the salvage pool. Default 0
-         * PushedUnitScrappedChance		 - Chance, out of 100, that a unit that is pushed off the field is scrapped. Default 0.
-         *
-         * EnginedUnitsScrappedChance    - Chance, out of 100, that an engined unit is utterly destroyed while trying to be salvaged. Default 0
-         * ForcedSalvageUnitsScrappedChance - Chance, out of 100, that a legged/gyroed unit is utterly destroyed while trying to be salvaged. Default 0
-         *
-         * [player result params finished]
-         *
-         * [Salvage props]
-         * -> Read in ShortResolver.possibleSalvageFromReport()
-         * -> and in ShortResolver.assembleSalvageStrings()
-         *
-         * WinnerAlwaysSalvagesOwnUnits - boolean, if true winner gets all his salvageables;
-         * SupportUnitsAreSalvageable   - boolean, if true then support units can go into the salvage pool
-         * DefenderAlwaysSalvagesOwnUnits - boolean, if true defender gets all his salvageables;
-         * AttackerAlwaysSalvagesOwnUnits - boolean, if true attacker gets all his salvageables;
-         *
-         * BaseAttackerSalvagePercent - attacker starting salvage rate if he wins;
-         * BaseDefenderSalvagePercent - defender starting salvage rate if he wins;
-         *
-         * AttackerSalvageAdjustment - [Adjustment after each salvage attempt. IE - if base;
-         * DefenderSalvageAdjustment - [is 50, and adjust is 20, 2nd attempt will be 30 or 70;
-         *
-         * BVToBoostAttackerSalvageCost - [UnitBV/BVToBoost is the starting cost of salvage. If
-         * BVToBoostDefenderSalvageCost - [set to 0, salvage will be *FREE*. IMPORTANT!
-         *
-         * AttackerSalvageCostModifier - [salvage cost multiplier. is a double. entry of .75 will
-         * DefenderSalvageCostModifier - [reduct cost by 25%, entry of 2.00 will double the cost
-         *                               [to salvage a unit.  If 0, salvage will be *FREE*
-         *
-         * NOTE: the modifiers are best used with special ops, increasing cost for attacks,
-         *       lowering for certain kinds of special defenses, etc.
-         *
-         * [salvage props finished]
-         *
-         * [NEWBIE setup]
-         *
-         * AllowSOLToUse   - set true to allow a newbie to initiate
-         * AllowAgainstSOL - set true to allow a player to launch this attack against SOL
-         *
-         * AllowNonConqToUse   - set false to forbid non-conquer players from using this attack
-         * AllowAgainstNonConq - set false to forbid players from using this attack against a non-conq player
-         *
-         * SOLPilotsGainXP   - set false to prevent SOL player's units from gaining XP
-         * HousePilotsGainXP - set false to prevent faction units from gaining XP
-         *
-         * SOLPilotsCheckLevelUp   - set false to bar SOL player's units from levelling after game
-         * HousePilotsCheckLevelUp - set false to bar normal player's units from levelling after game
-         *
-         * PayAllAsWinners        - enable to play all players in a game involving a SOL as
-         *                          game winners, regardless of outcome.
-         * PayTechsForGame        - set false to turn off technician payments.
-         * CountGameForRanking    - set to true in order to stop ELO changes.
-         * CountGameForProduction - Double. Controls amount of production players generate
-         *                          Set to 0 to disable production. Defaults to 1.0, the
-         *                          same amount that a solitary army would generate.
-         *
-         * NoStatisticsMode  - if enabled, stats will not be kept in games involving SOLs.
-         *                     Pilot/Unit kills will not be counted or published.
-         * NoDestructionMode - if enabled, no units will be destroyed and no units will
-         *                     be salvaged (essentially sets up a sim-match).
-         * AllowInFaction		 - if enabled then players in the same faction will be able to attack each other
-         *
-         * NOTEs: for a training game, AllowSOLtoUse and AllowAgainsSOL should be
-         *       set true simultaneously, otherwise player would be able to LAUNCH
-         *       attack, but other SOLs would not be able to defend.
-         *
-         *       It is NOT recommended that PayAllAsWinners be used unless NoStats
-         *       and NoDestruction are also enabled.
-         *
-         * [Newbie setup finished]
-         *
-         * [META setup - campaign outcomes]
-         * -> Read in ShortResolver.assembleDescriptionStrings()
-         *
-         * NOTE: Meta outcomes are duplicated as LONG variables (LAttackerBaseConquest,
-         *       for example). If a ShortOperation has a matching LongOperation, it will
-         *       *NOT* have a meta impact, even if the variables below are configured.
-         *
-         * AttackerBaseConquestAmount		- Base % of a planet taken for winning attacker
-         * AttackerConquestBVAdjustment		- Amount of BV needed for extra % point
-         * AttackerConquestUnitAdjustment	- Number of units needed for extra % point
-         *
-         * DefenderBaseConquestAmount		- Base % of a planet taken for winning defender
-         * DefenderConquestBVAdjustment		- Amount of BV needed for extra % point
-         * DefenderConquestUnitAdjustment	- Number of units needed for extra % point
-         *
-         * NOTE: Adjustments are from COMBINED totals, not one player's. This prevents
-         *       players for min/maxing % gains by coming in one BV over/under a threshold.
-         *       This holds for the other meta-outcomes in this section as well.
-         *
-         * AttackerBaseDelayAmount		- Base miniticks delay caused by winning attacker
-         * AttackerDelayBVAdjustment	- Amount of BV needed for extra minitick of delay
-         * AttackerDelayUnitAdjustment	- Number of units needed for extra minitick of delay
-         *
-         * DefenderBaseDelayAmount		- Base miniticks REPAIR caused by winning defender
-         * DefenderDelayBVAdjustment	- Amount of BV needed for extra minitick of REPAIR
-         * DefenderDelayUnitAdjustment	- Number of units needed for extra minitick of REPAIR
-         *
-         * NOTE: Winning defenders can *ENHANCE* productivity. Factories which aren't
-         *       refreshing will go negative, reducing future delays after production.
-         *
-         * AttackerBasePPAmount		- Base production points taken by winning attacker
-         * AttackerPPBVAdjustment	- Amount of BV needed for extra batch of prodpoints
-         * AttackerPPUnitAdjustment	- Number of units needed for extra batch of prodpoints
-         *
-         * DefenderBasePPAmount		- Base production points generated by winning defender
-         * DefenderPPBVAdjustment	- Amount of BV needed for extra batch of prodpoints
-         * DefenderPPUnitAdjustment	- Number of units needed for extra batch of prodpoints
-         *
-         * NOTE: as with delay raids, winning defenses can be configured to have a positive
-         *       outcome. this is a shift from the task-system, which gave no option for
-         *       defender gains in "raid" situations.
-         *
-         * AttackerBaseUnitsTaken		- base number of units taken by winning attacker
-         * AttackerUnitsBVAdjustment	- BV to take an additonal unit
-         * AttackerUnitsUnitAdjustment	- units to take an additional unit (confusing!)
-         *
-         * AttackerBaseFactoryUnitsTaken 		- base number of units taken from factories by winning attacker
-         * AttackerFactoryUnitsBVAdjustment	    - BV to take an additonal unit
-         * AttackerFactoryUnitsUnitAdjustment	- units to take an additional unit (confusing!)
-         * AttackerUnitsTakenBeforeFightStarts  - The units are taken before the fight starts and the player must get them
-         *                                        off the field
-         * AttackerAllowAgainstUnclaimedLand    - If checked then this operation will be launched agianst a planet that has
-         *                                        CP that is unclaimed and the Faction will automatically claim it.
-         *
-         * NOTE: No defender insta-production. Ops might want to consider using PP or
-         *       delay payouts to defenders of unit-raid heavy attacks.
-         *
-         * AttackerTargetOpAdjustment	- adjustment for attacking winner
-         * DefenderTargetOpAdjustment	- adjustment for defending winner
-         *
-         * NOTE: Op Adjustments are used to increase or decrease victory THRESHOLDS for
-         *       targetted long-ops. Not recommended for individual games. Generlly, better
-         *       for use as a long-op (w/ fewer games than target) set up as a counter-assault
-         *       or spoling attack.
-         *
-         * ConquestAmountCap	- Max amount of % to take, regardless of BV/units involved.
-         * DelayAmountCap		- Max amount of delay to apply, regardless of BV/units involved.
-         * PPCapptureCap    	- Max # of PP to take/generate
-         * UnitCaptureCap 		- Ceiling on number of units which may be raided
-         *
-         * NOTE: These caps apply to defenders as well as attackers, which can create situations
-         *       in which attacker gets no benefit for additional BV while defender continues to
-         * 		 gain, or vice versa (based on BV/Units needed for bonus, etc).
-         *
-         *
-         * PPDestructionCap              - Max # of PP that can be destroyed by an Op
-         * UnitDestructionCap            - Max # of units that can be destroyed by an Op.
-         * BaseUnitsDestroyed            - base number of units destroyed by winning attacker
-         * DestroyedUnitsBVAdjustment    - BV to Destroyed an additonal unit
-         * DestroyedUnitsUnitAdjustment  - units to Destroyed an additional unit (confusing!)
-         * BasePPDestroyed               - Base production points destroyed by winning attacker
-         * DestroyedPPBVAdjustment       - Amount of BV needed to destroy extra prodpoints
-         * DestroyedPPUnitAdjustment     - Number of units needed to destroy extra prodpoints
-         *
-         * NOTE: All Destruction parameters are only used by the Attacker and go into effect when the attacker wins.
-         * [Meta setup finished]
-         *
-         * [Chicken/Non-Defender setup]
-         * -> Read in OpsChickenThread class
-         *
-         * TimeToNondefensePenalty  - time, in SECONDS, from attack init to penalty.
-         * LeechesToDeactivate 		- num leeches before a player is moved into reserve.
-         *
-         * FlatRPChickenPenalty				- # of RP to take. double.
-         * FlatExpChickenPenalty			- # of EXP to take. double.
-         * FlatInfluenceChickenPenalty		- # of Inf to take. double.
-         * FlatCBillChickenPenalty			- # of CBills to take. double.
-         *
-         * PercentRPChickenPenalty			- % of RP to take. int.
-         * PercentExpChickenPenalty			- % of EXP to take. int.
-         * PercentInfluenceChickenPenalty	- % of Inf to take. int.
-         * PercentCBillChickenPenalty		- % of CBills to take. int.
-         *
-         * NOTE: Penalties applied for EVERY leech, not only @ deactivation. Take this
-         *       into consideration if allowing >1 leech before deactivation.
-         *
-         * ConquestPerLeech 	- % control transferred on each leech
-         * DelayPerLeech		- delay to on-target facilities w/ each leech
-         * ProdPointsPerLeech	- PP taken with each leech
-         * UnitsPerLeech		- Units taken with each leech
-         * FailurePenalty		- [PP taken if no other penalty is applied. Use it
-         *                        [to ensure that a penalty is always given, even
-         *                        [if there is no % to yeild or factory to delay.
-         *
-         * [Chicken setup finished]
-         *
-         * [Pilot XP setup]
-         * -> Read in ShortResolver.assembleSalvageStrings()
-         *
-         * BaseUnitXP            - XP earned by all surviving units for playing the game
-         * UnitXPUnitsAdjustment - [bonus XP given to all surviving units, based on the starting size of the game
-         *                         [if there are 10 units in game, and Adjust is set to 10, all units will get +1
-         *                         [XP. if there are 10 in game and Adjust is 5, all units will get +2 XP, etc.
-         * UnitXPBVAdjustment    - [bonus XP given to all surviving units, based on the starting size of the game. if
-         *                         [total BV in game is 30,000 and Adjust is 10,000, all units will get +3 XP.
-         * WinnerBonusUnitXP     - bonux XP given to all surviving units owned by a winning player
-         * DefenderBonusUnitXP   - bonus XP given to all surviving units owned by a defending player
-         * KillBonusUnitXP       - [flat amount of XP given to a unit for each kill it earned. this is granted only
-         *                         [to the killing unit, and only if it survives or is salvaged by original owner
-         *                         [with original pilot.
-         * KillBonusXPforBV      - [KilledUnitsBV/KillBonusXPforBV. bonus XP based on the BV of units killed. added
-         *                         [only to the killing unit, and only if the unit survives or is salvaged by its
-         *                         [original owner with original pilot.
-         *
-         * [Pilot XP setup finished]
-         *
-         * [Buildings setup]
-         * This is setup to allow buildings to be both placed on the map and also count towards the operation rewards
-         *
-         * TotalBuildings        - Total number of buildings to place on the map
-         * MinBuildingsForOp     - [Minimum number of buildings the Attack needs to destroy for the op to be a sucess
-         *                         [I.E. 10 buildings 5 min. if the attacker kills only 4 they don't get any of the bonuses.
-         * MinFloors             - Minimum number of floors in each building.
-         * MaxFloors             - Maximum number of floors in each building.
-         * MinCF                 - Minimum Construction Factor each building can have (How many points of damage it'll take)
-         * MaxCF                 - Maximum Construction Factor each building can have (How many points of damage it'll take)
-         * BuildingType          - 1: Light, 2: Medium, 3: Heavy, 4: Hardend
-         * BuildingsStartOnMapEdge - [defaults to true. if selected a random edge is select and the defender is set to that
-         *                           [ and the attacker to the opposite edge. If not selected the buildings will be placed
-         *                           [ randomly around the map.
-         *
-         * DelayPerBuilding      - Number of Delay ticks set to the planet factories for each building destroyed
-         *
-         * AttackerMoneyPerBuilding - Amount of Money the attacker gets for each building destroyed, if they meet the min amount of buildings destroyed.
-         * AttackerExpPerBuilding - Amount of Exp the attacker gets for each building destroyed, if they meet the min amount of buildings destroyed.
-         * AttackerFluPerBuilding - Amount of Flu the attacker gets for each building destroyed, if they meet the min amount of buildings destroyed.
-         * AttackerRPPerBuilding  - Amount of RP the attacker gets for each building destroyed, if they meet the min amount of buildings destroyed.
-         *
-         * DefenderMoneyPerBuilding - Amount of Money the defender gets for each building left standing.
-         * DefenderExpPerBuilding - Amount of Exp the defender gets for each building left standing.
-         * DefenderFluPerBuilding - Amount of Flu the defender gets for each building left standing.
-         * DefenderRPPerBuilding  - Amount of RP the defender gets for each building left standing.
-         *
-         * [Building Setup End]
-         *
-         * [Faction Exclusivity setup]
-         *
-         * LegalAttackFactions   - self evident - AFC=234
-         * IllegalAttackFactions - self evident - AFC=234 (Note: shared message)
-         *
-         * LegalDefendFactions   - self evident - DFC=434
-         * IllegalDefendFactions - self evident - DFC=434 (Note: shared message)
-         *
-         * [NOTE: If "Legal" is set, "Illegal" is not checked. This allows operators to easily
-         *       create games that a small set of factions may use (via legal) or a small group
-         *       of factions may not use (via illegal). Both are CASE SENSITIVE and $ DELIMITED.
-         *
-         *       If both Legal and Illegal are left blank and/or contain only spaces, all facs
-         *       will be able to attack&defend the type. This is the default behaviour.
-         *
-         *       Would work:     Liao$Davion$Steiner
-         *       Would NOT work: Liao,Davion,Steiner
-         *       Would NOT work: liao$davion$steiner]
-         *
-         * [End Faction Exclusivity setup]
-         *
-         * [Begin City Generation]
-         *
-         * [NOTE: This is used to generate a city for a this op using MM's city
-         *        Generation code. Currently ops have been using the Building
-         *        code to genereate cities and it is not pretty.]
-         *
-         * RGCUseCityGenerator      - Use the city generator for this Op.
-         * RGCCityType              - City type are Metro/Grid/Hub
-         * RGCCityBlocks            - Number of city blocks this effects how many roads are created.
-         * RGCRGCMinCF              - Min CF any building can be.
-         * RGCMaxCF                 - Max CF any building can be. buildings will be between min and max
-         *                            This buildings Type will be selected based on the CF generated. L
-         *                            Light/Medium/Heavy/Hardened
-         * RGCMinFloors             - Min number of floors any one building can have
-         * RGCMaxFloors             - Max number of floors any one building can have. Builds height will be generated
-         *                            from a number between Max and Min Floors
-         * RGCCityDensity           - 1-100 This is the % chance that a hex will contain a building the higher the number
-         *                            the more buildings will be generated.
-         *
-         * [End City Generation]
-         *
-         * [Begin Multi Player Variables]
-         *
-         * FreeForAllOperation      - Fun opration Unlimited amount of players can join on their own team
-         *                            The op starts when the attack chooses or when the leech time ends.
-         * MinNumberOfPlayers       - Minimum number of players needed for the FFA to launch.
-         *
-         * TeamOperation		    - Determins if this Operation should be setup for teams
-         *
-         * NumberOfTeams			- The number of teams for  this operation, min 2.
-         *
-         * TeamSize                 - The maximum number of people allowed on each team.
-         *
-         * TeamsMustBeSameFaction   - Boolean if true all team members must be on the same faction
-         *                            defaults to false.
-         *
-         * RandomTeamDetermination  - Players are placed on teams randomly.
-         *
-         * [End Multi Player Variables]
-         *
-         * [Begin Victory Conditions]
-         *
-         * NumberOfVictoryConditions - The number of victory conditions that must be achieved by the winning team.
-         *                           - Default 0 (off)
-         * UseDestroyEnemyBV         - If this is turned on DestroyEnemyBV field well be sent to MM
-         * DestroyEnemyBV            - Destroy/damage a certain percentage of the enemy force to win, measured by current BV / original BV
-         * UseBVRatioPercent         - If this is turned on UseBVRatioPercent field will be sent to MM.
-         * BVRatioPercent            - Friendly forces outnumber enemy forces by a percentage ratio.  Measured by current BV. E.G. 300 means you have 3x the surviving BV of the enemy.
-         * UseUnitCommander			 - If this is turned on the UseUnitCommand field will be sent to MM.
-         * MinimumUnitCommanders     - Minimum Number Of unit commanders players must have to launch/defend this op
-         * MaximumUnitCommanders     - Maximum Number of unit commanders players can have to launch/defend this op
-         *
-         * [End Victory Conditions]
-         *
-         * [Begin Deployment]
-         * RandomDeployment            - Operation picks the map edge for the attackers and defenders
-         * DeployNorthwest				- Chance to deploy Northwest
-         * DeployNorth					- Chance to deploy North
-         * DeployNortheast				- Chance to deploy Northeast
-         * DeployEast					- Chance to deploy East
-         * DeploySoutheast				- Chance to deploy SouthEast
-         * DeploySouth					- Chance to deploy South
-         * DeploySouthwest				- Chance to deploy Southwest
-         * DeployWest					- Chance to deploy West
-         * DeployEdge					- Chance to deploy on the Edge
-         * DeployCenter					- Chance to deploy in the Center
-         * DeployNorthwestdeep			- Chance to deploy Northwest (Deep)
-         * DeployNorthdeep				- Chance to deploy North (Deep)
-         * DeployNortheastdeep			- Chance to deploy Northeast (Deep)
-         * DeployEastdeep				- Chance to deploy East (Deep)
-         * DeploySoutheastdeep			- Chance to deploy Southeast (Deep)
-         * DeploySouthdeep				- Chance to deploy South (Deep)
-         * DeploySouthwestdeep			- Chance to deploy Southwest (Deep)
-         * DeployWestdeep				- Chance to deploy West (Deep)
-         *
-         * [End Deployment
-         *
-         * [Map Settings
-         *
-         * UseOperationMap				- Use the Operation map instead of the terrain on the planet
-         * MapName						- Name of the map to use or surprise/generated if using sizes
-         * BoardSizeX					- Number of maps along the X axis of the Board
-         * BoardSizeY					- Number of maps along the Y axis of the board
-         * MapSizeX						- X Size of the map
-         * MapSizeY						- Y Size of the map
-         * MaxMedium                    - "Ground", "Atmosphere", "Space"
-         *
-         * [End Map Settings
-         */
+        * [NOTE: A unit can qualify for speed through walk OR jump. Set
+        *  either walk or jump extremely high in order to make this a
+        *  single element check.
+        *
+        *  Examples:
+        *  - set jump to 90 and walk to 7 to ensure a ground MP of 7.
+        *  - set jump to 7 and walk to 9 to allow only units which can
+        *    EITHER jump 7 (Wraith) or cruise/walk 9 (Hermes).
+        *  - set walk to 90 and jump to 5 to ensure that all units in a
+        *    force can jump at least 5 hexes.]
+        *
+        * MaxAttackerUnitTonnage - highest weight for a single unit - AFC=205
+        * MaxDefenderUnitTonnage - highest weight for a single unit - DFC=405
+        *
+        * MinAttackerUnitTonnage - lowest weight for a single unit - AFC=206
+        * MinDefenderUnitTonnage - lowest weight for a single unit - DFC=406
+        *
+        * MaxAttackerUnitBV - highest BV for a single unit - AFC=231
+        * MaxDefenderUnitBV - highest BV for a single unit - DFC=431
+        *
+        * MinAttackerUnitBV - lowest BV for a single unit - AFC=230
+        * MinDefenderUnitBV - lowest BV for a single unit - DFC=430
+        *
+        * MaxAttackerUnitBVSpread - [Spread is the BV difference between the highest
+        * MaxDefenderUnitBVSpread - [unit in a force and the losest unit in a force.
+        * AFC=232; DFC=432          [Set <= 0 to disable. Defaults to 0.
+        *
+        * MinAttackerUnitBVSpread - [Like above, but used to ensure a minimum level
+        * MinDefenderUnitBVSpread - [of difference between units. EG - set to 100 to
+        *                           [ensure that there is a difference of at least 100
+        * AFC=233; DFC=433          [between the highest and lowest units. Probably only
+        *                           [interesting to create "Buddy" games where a high BV
+        *                           [mech has to pair with a low in a tag team.
+        *                           [Set <= 0 to DISABLE. Defaults to 0.
+        *
+        * HighestAttackerPilotSkillTotal - Highest total skill, Gunnery + Piloting, that an
+        *                                    attacking Units pilot can have
+        * LowestAttackerPilotSkillTotal  - Lowest total skill, Gunnery + Piloting, that an
+        *                                    attacking Units pilot can have
+        * HighestAttackerPiloting - Highest Piloting that an
+        *                                    attacking Units pilot can have
+        * LowestAttackerPiloting  - Lowest Piloting that an
+        *                                    attacking Units pilot can have
+        * HighestAttackerGunnery - Highest Gunnery that an
+        *                                    attacking Units pilot can have
+        * LowestAttackerGunnery  - Lowest = Gunnery that an
+        *                                    attacking Units pilot can have
+        *
+        * HighestDefenderPilotSkillTotal - Highest total skill, Gunnery + Piloting, that a
+        *                                    defending Units pilot can have
+        * LowestDefenderPilotSkillTotal  - Lowest total skill, Gunnery + Piloting, that a
+        *                                    defending Units pilot can have
+        * HighestDefenderPiloting - Highest Piloting that an
+        *                                    defending Units pilot can have
+        * LowestDefenderPiloting  - Lowest Piloting that an
+        *                                    defending Units pilot can have
+        * HighestDefenderGunnery - Highest Gunnery that an
+        *                                    defending Units pilot can have
+        * LowestDefenderGunnery  - Lowest = Gunnery that an
+        *                                    defending Units pilot can have
+        *
+        * AttackerAverageArmySkillMax - The Max average total skills for the Attacker army
+        * AttackerAverageArmySkillMin - The Min average total skills for the Attacker army
+        * DefenderAverageArmySkillMax - The Max average total skills for the Defender army
+        * DefenderAverageArmySkillMin - The Min average total skills for the Defender army
+        *
+        * CountVehsForSpread   - self evident
+        * CountProtosForSpread - self evident
+        * CountInfForSpread    - self evident
+        * CountAerosForSpread    - self evident
+        *
+        * [NOTE: Spreads are a very dangerous feature. They're GREAT for stopping high/low
+        *  unit pairs and "init sinks." However, they also make it virtually impossible to
+        *  use infantry and protomeks, or small vehicles like the Vedette. Options exist to
+        *  stop spread checks on these unit types (Meks will always be checked), but these
+        *  may be unbalancing in and of themselves. The recommended solution for servers which
+        *  want to use spreads AND combined arms is to set a very wide spread ... something in
+        *  the range of 1000 BV ... not count protos/BV for spread, and enforce Infantry moves
+        *  with mechs (MM option) and ProtosMustBeGroups (Operations option).]
+        *
+        * MaxTotalAttackerTonnage - max total tonnage for attacking force - AFC=211
+        * MaxTotalDefenderTonnage - max total tonnage for defending force - DFC=411
+        *
+        * MinTotalAttackerTonnage - min total tonnage for attacking force - AFC=212
+        * MinTotalDefenderTonnage - min total tonnage for defending force - DFC=412
+        *
+        * AttackerAllowedMeks - boolean, whether or not attacker can use meks - AFC=207
+        * AttackerAllowedVehs - boolean, whether or not attacker can use vehs - AFC=208
+        * AttackerAllowedInf  - boolean, whether or not attacker can use inf  - AFC=209
+        * AttackerAllowedAeros - boolean, whether or not attacker can use inf  - AFC=256
+        * AttackerOmniMeksOnly- boolean, whether or not attacker must use omnimeks only - AFC=243
+        *
+        * DefenderAllowedMeks - boolean, whether or not defender can use meks - DFC=407
+        * DefenderAllowedVehs - boolean, whether or not defender can use vehs - DFC=408
+        * DefenderAllowedInf  - boolean, whether or not defender can use inf  - DFC=409
+        * DefenderAllowedAeros - boolean, whether or not defender can use inf  - DFC=457
+        * DefenderOmniMeksOnly- boolean, whether or not defender must use omnimeksonly - DFC=443
+        *
+        * ProtosMustbeGrouped - boolean. If enabled, protos must be present in multiples
+        *                       of server wide move group. For example, if the server is
+        *                       set to have protos move in groupd of 5, and someone has 8
+        *                       protos, attacks will fail if ProtosMustbeGrouped is true.
+        *                       CFC=001
+        * RepodOmniUnitsToBase - string. Omni's that where used in this op are repodded back to base configuration
+        *                        Leave blank to disable this option
+        *
+        * MULArmiesOnly        - Players do not need armies to activate or attack/defend. All armies will be created
+        *                        via MUL files.
+        *
+        * AttackerPoweredInfAllowed  - boolean. Overrides AttackerAllowedInf and admits BA/Protos. - AFC=210
+        * DefenderPoweredInfAllowed  - boolean. Overrides DefenderAllowedInf and admits BA/Protos. - DFC=410
+        * AttackerStandardInfAllowed - boolean. Overrides AttackerAllowedInf and admits conventional units - AFC=246
+        * DefenderStandardInfAllowed - boolean. Overrides DefenderAllowedInf and admits conventional units - DFC=446
+        *
+        * [NOTE: Allowances are only checked if infantry are banned, generally. Set Attacker/DefenderAllowedInfantry
+        *  to false first, then enable PoweredInfAllowed or StandardInfAllowed. These values are ignored entirely if
+        *  attacker/defender has "allows" set to true.]
+        *
+        * [Construction done]++
+        *
+        * [Costs]
+        * -> Read in ShortValidator.checkAttackerCosts/checkDefenderCosts
+        * -> Also read on OperationManager.terminate()
+        *
+        * AttackerCostMoney     - monetary charge to attacker  - AFC=213
+        * AttackerCostInfluence - influence charge to attacker - AFC=214
+        * AttackerCostReward    - reward charge to attacker    - AFC=215
+        *
+        * DefenderCostMoney     - charge, in money, for defender to JOIN game     - DFC=413
+        * DefenderCostInfluence - charge, in influence, for defender to JOIN game - DFC=414
+        * DefenderCostReward    - charge, in reward points, for defender to join  - DFC=415
+        *
+        * [CAUTION: Using defender costs in normal operations is STRONGLY
+        *  discouraged. These are best used as overloads from ModifyingOps]
+        *
+        * [Costs done]
+        *
+        * [Player properties - XP, Rating, etc]
+        * -> Read in ShortValidator.checkAttackerMilestones/checkDefenderMilestones
+        *
+        * MaxAttackerRating - self evident - AFC=216
+        * MinAttackerRating - self evident - AFC=217
+        * MaxDefenderRating - self evident - DFC=416
+        * MinDefenderRating - self evident - DFC=417
+        *
+        * MaxAttackerXP - self evident - AFC=218
+        * MinAttackerXP - self evident - AFC=219
+        * MaxDefenderXP - self evident - DFC=418
+        * MinDefenderXP - self evident - DFC=419
+        *
+        * MaxAttackerGamesPlayed - self evident - AFC=220
+        * MinAttackerGamesPlayed - self evident - AFC=221
+        * MaxDefenderGamesPlayed - self evident - DFC=420
+        * MinDefenderGamesPlayed - self evident - DFC=421
+        *
+        * [NOTE: Generally speaking, games played shouldnt be mixed w/ XP. Use
+        *  either, avoid setting both fields in any given operation.]
+        *
+        * [Players done]
+        *
+        * [Scenario values - artillery, etc]
+        * -> Read in ShortOperation's changeStatus() method
+        *
+        * BotControlsAll                - [If true any support units giving to the task
+        *                                 [are given to a bot to be controlled by instead.
+        *                                 [this includes arty gun emplacements and mines
+        *                                 [all players will be given a bot and any support
+        *                                 [that would have gone to that player will goto the bot
+        *                                 [instead. NOTE: the bots will fire upon all players
+        *                                 [and other bots.
+        *
+        * BotsAllOnSameTeam             - [If set all bots will be added to the same team
+        *                                 [This way all bots will attack the players and not
+        *                                 [other bots. Bots unite!
+        *
+        * DefenderReceivesAutoArtillery - [If true, attack/defend players will receive
+        * AttackerReceivesAutoArtillery   [normal autoartillery. Set false to make the
+        *                                 [grant lopsided.
+        *
+        * DefenderFlatArtilleryModifier - Amount of BV to shift defender
+        * AttackerFlatArtilleryModifier - Amount of BV to shift attacker
+        * DefenderPercentArtilleryModifier - % adjustment to relative assignment BV
+        * AttackerPercentArtilleryModifier - % adjustment to relative assignment BV
+        *
+        * MinDefenderArtilleryBV - [Min BV to be presumed for attack/defender player
+        * MinAttackerArtilleryBV   [when assigning autoartillery. Floor for modifiers.
+        * MaxDefenderArtilleryBV - [Max BV to be presumed for attack/def player when
+        * MaxAttackerArtilleryBV   [assigning artillery. Ceiling for modifiers.
+        *
+        * [NOTES (Artillery): These variables are simpler than they may seem. First,
+        *  the true/false Receives variales are used to allow one party to have arty
+        *  while denying it to annother.
+        *
+        *  % and flat modifiers can be used simultaneously. The % modifier is applied
+        *  to the player's combined BV first, then the flat modifier is added. Finally,
+        *  the ceilings and floors are checked.
+        *
+        *  Depending on ceiling and floor settings, and server-configured caps on the
+        *  number of artillery pieces to be assigned, its possible for both players to
+        *  have the same amount of artillery, even when the modifiers and caps are
+        *  weighted in favour of the defender.]
+        *
+        * [Gun Emplacements]
+        *
+        * DefenderReceivesGunEmplacements - [If true, attack/defend players will receive
+        * AttackerReceivesGunEmplacement  - [normal gun emplacement. Set false to make the
+        *                                   [grant lopsided.
+        *
+        * DefenderFlatGunEmplacementModifier - Amount of BV to shift defender
+        * AttackerFlatGunEmplacementModifier - Amount of BV to shift attacker
+        * DefenderPercentGunEmplacementModifier - % adjustment to relative assignment BV
+        * AttackerPercentGunEmplacementModifier - % adjustment to relative assignment BV
+        *
+        * MinDefenderGunEmplacementBV - [Min BV to be presumed for attack/defender player
+        * MinAttackerGunEmplacementBV   [when assigning gun emplacement. Floor for modifiers.
+        * MaxDefenderGunEmplacementBV - [Max BV to be presumed for attack/def player when
+        * MaxAttackerGunEmplacementBV   [assigning gun emplacement. Ceiling for modifiers.
+        *
+        * [NOTES (Gun Emplacement): These variables are simpler than they may seem. First,
+        *  the true/false Receives variales are used to allow one party to have guns
+        *  while denying it to another.
+        *
+        *  % and flat modifiers can be used simultaneously. The % modifier is applied
+        *  to the player's combined BV first, then the flat modifier is added. Finally,
+        *  the ceilings and floors are checked.
+        *
+        *  Depending on ceiling and floor settings, and server-configured caps on the
+        *  number of gun emplacement pieces to be assigned, its possible for both players to
+        *  have the same amount of gun emplacement, even when the modifiers and caps are
+        *  weighted in favour of the defender.]
+        *
+        * [Mines]
+        * DefenderReceivesMines       [Allow attacker or defender to recieve mines
+        * AttackerReceivesMines
+        *
+        * DefenderBVPerConventional   [Set the BV amount for 1 conventional mine i.e set to 100
+        * AttackerBVPerConventional   [and the total of both armies bv is 10k you get 100 mines
+        * DefenderTonPerConventional  [Set the Ton amount for 1 conventional mine i.e set to 100
+        * AttackerTonPerConventional  [and the total of both armies ton is 500 you get 5 mines
+        *
+        * DefenderBVPerVibra   [Set the BV amount for 1 vibra mine i.e set to 100
+        * AttackerBVPerVibra   [and the total of both armies bv is 10k you get 100 mines
+        * DefenderTonPerVibra  [Set the Ton amount for 1 vibra mine i.e set to 100
+        * AttackerTonPerVibra  [and the total of both armies ton is 500 you get 5 mines
+        *
+        * [MUL Armies]
+        * DefenderReceivesMULArmy      [Allow attacker or defender to recieve a full army
+        * AttackerReceivesMULArmy
+        *
+        * MinDefenderMulArmies			[Min number of MUL armies a Defender can receive
+        * MaxDefenderMulArmies			[Max number of MUL armies a Defender can receive
+        *                              [These files exist in the servers data\armies folder]
+        * DefenderMulArmyList			[List of the MUL files to choose from separated by ;
+        *
+        * MinDefenderMulMeks           [Min number of MUL armies a Defender can receive
+        * MaxDefenderMulMeks           [Max number of MUL armies a Defender can receive
+        * DefenderMulMekList           [List of the MUL files to choose from separated by ;
+        *
+        * MinDefenderMulVehicles       [Min number of MUL armies a Defender can receive
+        * MaxDefenderMulVehicles       [Max number of MUL armies a Defender can receive
+        * DefenderMulVehicleList       [List of the MUL files to choose from separated by ;
+        *
+        * MinDefenderMulInf            [Min number of MUL armies a Defender can receive
+        * MaxDefenderMulInf            [Max number of MUL armies a Defender can receive
+        * DefenderMulInfList           [List of the MUL files to choose from separated by ;
+        *
+        * MinDefenderMulBA             [Min number of MUL armies a Defender can receive
+        * MaxDefenderMulBA             [Max number of MUL armies a Defender can receive
+        * DefenderMulBAList            [List of the MUL files to choose from separated by ;
+        *
+        * MinDefenderMulAero           [Min number of MUL armies a Defender can receive
+        * MaxDefenderMulAero           [Max number of MUL armies a Defender can receive
+        * DefenderMulAeroList          [List of the MUL files to choose from separated by ;
+        *
+        * MinDefenderMulProto          [Min number of MUL armies a Defender can receive
+        * MaxDefenderMulProto          [Max number of MUL armies a Defender can receive
+        * DefenderMulProtoList         [List of the MUL files to choose from separated by ;
+        *
+        * MinAttackerMulArmies			[Min number of MUL armies an Attacker can receive
+        * MaxAttackerMulArmies			[Max number of MUL armies an Attacker can receive
+        *                              [These files exist in the servers data\armies folder]
+        * AttackerMulArmyList			[List of the MUL files to choose from separated by ;
+        *
+        * MinAttackerMulMeks           [Min number of MUL armies an Attacker can receive
+        * MaxAttackerMulMeks           [Max number of MUL armies an Attacker can receive
+        * AttackerMulMekList           [List of the MUL files to choose from separated by ;
+        *
+        * MinAttackerMulVehicles       [Min number of MUL armies an Attacker can receive
+        * MaxAttackerMulVehicles       [Max number of MUL armies an Attacker can receive
+        * AttackerMulVehicleList       [List of the MUL files to choose from separated by ;
+        *
+        * MinAttackerMulInf            [Min number of MUL armies an Attacker can receive
+        * MaxAttackerMulInf            [Max number of MUL armies an Attacker can receive
+        * AttackerMulInfList           [List of the MUL files to choose from separated by ;
+        *
+        * MinAttackerMulBA             [Min number of MUL armies an Attacker can receive
+        * MaxAttackerMulBA             [Max number of MUL armies an Attacker can receive
+        * AttackerMulBAList            [List of the MUL files to choose from separated by ;
+        *
+        * MinAttackerMulAero           [Min number of MUL armies an Attacker can receive
+        * MaxAttackerMulAero           [Max number of MUL armies an Attacker can receive
+        * AttackerMulAeroList          [List of the MUL files to choose from separated by ;
+        *
+        * MinAttackerMulProto          [Min number of MUL armies an Attacker can receive
+        * MaxAttackerMulProto          [Max number of MUL armies an Attacker can receive
+        * AttackerMulProtoList         [List of the MUL files to choose from separated by ;
+        *
+        * [Scenario props. finished]
+        *
+        * [player result params - pay, etc]
+        *
+        * BaseAttackerPayCBills - flat amount attacker is paid for participating;
+        * BaseDefenderPayCBills - flat amount defender is paid for participating;
+        * BaseAttackerPayInfluence - as above, but in Flu;
+        * BaseDefenderPayInfluence - as above, but in Flu;
+        * BaseAttackerPayExperience - as above, but in Flu;
+        * BaseDefenderPayExperience - as above, but in Flu;
+        *
+        * AttackerPayBVforCBill - [1 CBill added to Base pay for every complete;
+        * DefenderPayBVforCBill - [increment. ie - if 2, will add BV/2 Cbills to pay;
+        *
+        * AttackerWinModifierCBillsFlat - flat boost to pay for winning attack;
+        * DefenderWinModifierCBillsFlat - flat boost to pay for winning defense;
+        * AttackerLossModifierCBillsFlat - flat drop in pay for losing attack;
+        * DefenderLossModifierCBillsFlat - flat drop to pay for losing defense;
+        *
+        * AttackerWinModifierCBillsPercent  - [double multipliers. the base amounts + bv adjustments +
+        * DefenderWinModifierCBillsPercent  - [flat adjustments are multiplied by these numbers. A Win
+        * AttackerLossModifierCBillsPercent - [Modifier of 100 would double pay. A LossModifier of 50
+        * DefenderLossModifierCBillsPercent - [would reduce payments by half.
+        *
+        * AttackerPayBVforInfluence - as above, but for influence;
+        * DefenderPayBVforInfluence - ditto;
+        *
+        * AttackerWinModifierInfluenceFlat - as above, but for influence;
+        * DefenderWinModifierInfluenceFlat - ditto;
+        * AttackerLossModifierInfluenceFlat - ditto;
+        * DefenderLossModifierInfluenceFlat - ditto;
+        *
+        * AttackerWinModifierInfluencePercent - as above, but for influence;
+        * DefenderWinModifierInfluencePercent - ditto;
+        * AttackerLossModifierInfluencePercent - ditto;
+        * DefenderLossModifierInfluencePercent - ditto;
+        *
+        * AttackerPayBVforExperience - as above, but for experience;
+        * DefenderPayBVforExperience - ditto;
+        *
+        * AttackerWinModifierExperienceFlat - as above, but for experience;
+        * DefenderWinModifierExperienceFlat - ditto;
+        * AttackerLossModifierExperienceFlat - ditto;
+        * DefenderLossModifierExperienceFlat - ditto;
+        *
+        * AttackerWinModifierExperiencePercent - as above, but for experience;
+        * DefenderWinModifierExperiencePercent - ditto;
+        * AttackerLossModifierExperiencePercent - ditto;
+        * DefenderLossModifierExperiencePercent - ditto;
+        *
+        * [NOTE: Be very cautious when using percent modifiers in conjunction with
+        *        the flat adjustments and BV plus ups. Percent modifiers are applied
+        *        after other changes and may result in funky funky pay.]
+        *
+        * RPForWinner - num RP to give winner;
+        * RPForLoser - num RP to give Loser;
+        * RPForDefender - num RP to give Defender(s);
+        * RPForAttacker - num RP to give Attacker(s);
+        * OnlyGiveRPtoWinners - boolean. use to restrict attack/def RP to winning players;
+        *
+        * MinBVDifferenceForFullPay  - This is the min BV difference between the start and end of hte fight
+        *                            - That must be achieved for full payment
+        * BVFailurePaymentModifier   - How much of the full payment players actually get if they do not meet the
+        *                            - Min requirement.
+        *
+        * FledUnitSalvageChance         - Chance, out of 100, that a unit that flees the field is put into the salvage pool. Default 0
+        * FledUnitScrappedChance		 - Chance, out of 100, that a unit that flees the field is scrapped. Default 0.
+        * PushedUnitSalvageChance		 - Chance that a unit that is pushed off the field is put into the salvage pool. Default 0
+        * PushedUnitScrappedChance		 - Chance, out of 100, that a unit that is pushed off the field is scrapped. Default 0.
+        *
+        * EnginedUnitsScrappedChance    - Chance, out of 100, that an engined unit is utterly destroyed while trying to be salvaged. Default 0
+        * ForcedSalvageUnitsScrappedChance - Chance, out of 100, that a legged/gyroed unit is utterly destroyed while trying to be salvaged. Default 0
+        *
+        * [player result params finished]
+        *
+        * [Salvage props]
+        * -> Read in ShortResolver.possibleSalvageFromReport()
+        * -> and in ShortResolver.assembleSalvageStrings()
+        *
+        * WinnerAlwaysSalvagesOwnUnits - boolean, if true winner gets all his salvageables;
+        * SupportUnitsAreSalvageable   - boolean, if true then support units can go into the salvage pool
+        * DefenderAlwaysSalvagesOwnUnits - boolean, if true defender gets all his salvageables;
+        * AttackerAlwaysSalvagesOwnUnits - boolean, if true attacker gets all his salvageables;
+        *
+        * BaseAttackerSalvagePercent - attacker starting salvage rate if he wins;
+        * BaseDefenderSalvagePercent - defender starting salvage rate if he wins;
+        *
+        * AttackerSalvageAdjustment - [Adjustment after each salvage attempt. IE - if base;
+        * DefenderSalvageAdjustment - [is 50, and adjust is 20, 2nd attempt will be 30 or 70;
+        *
+        * BVToBoostAttackerSalvageCost - [UnitBV/BVToBoost is the starting cost of salvage. If
+        * BVToBoostDefenderSalvageCost - [set to 0, salvage will be *FREE*. IMPORTANT!
+        *
+        * AttackerSalvageCostModifier - [salvage cost multiplier. is a double. entry of .75 will
+        * DefenderSalvageCostModifier - [reduct cost by 25%, entry of 2.00 will double the cost
+        *                               [to salvage a unit.  If 0, salvage will be *FREE*
+        *
+        * NOTE: the modifiers are best used with special ops, increasing cost for attacks,
+        *       lowering for certain kinds of special defenses, etc.
+        *
+        * [salvage props finished]
+        *
+        * [NEWBIE setup]
+        *
+        * AllowSOLToUse   - set true to allow a newbie to initiate
+        * AllowAgainstSOL - set true to allow a player to launch this attack against SOL
+        *
+        * AllowNonConqToUse   - set false to forbid non-conquer players from using this attack
+        * AllowAgainstNonConq - set false to forbid players from using this attack against a non-conq player
+        *
+        * SOLPilotsGainXP   - set false to prevent SOL player's units from gaining XP
+        * HousePilotsGainXP - set false to prevent faction units from gaining XP
+        *
+        * SOLPilotsCheckLevelUp   - set false to bar SOL player's units from levelling after game
+        * HousePilotsCheckLevelUp - set false to bar normal player's units from levelling after game
+        *
+        * PayAllAsWinners        - enable to play all players in a game involving a SOL as
+        *                          game winners, regardless of outcome.
+        * PayTechsForGame        - set false to turn off technician payments.
+        * CountGameForRanking    - set to true in order to stop ELO changes.
+        * CountGameForProduction - Double. Controls amount of production players generate
+        *                          Set to 0 to disable production. Defaults to 1.0, the
+        *                          same amount that a solitary army would generate.
+        *
+        * NoStatisticsMode  - if enabled, stats will not be kept in games involving SOLs.
+        *                     Pilot/Unit kills will not be counted or published.
+        * NoDestructionMode - if enabled, no units will be destroyed and no units will
+        *                     be salvaged (essentially sets up a sim-match).
+        * AllowInFaction		 - if enabled then players in the same faction will be able to attack each other
+        *
+        * NOTEs: for a training game, AllowSOLtoUse and AllowAgainsSOL should be
+        *       set true simultaneously, otherwise player would be able to LAUNCH
+        *       attack, but other SOLs would not be able to defend.
+        *
+        *       It is NOT recommended that PayAllAsWinners be used unless NoStats
+        *       and NoDestruction are also enabled.
+        *
+        * [Newbie setup finished]
+        *
+        * [META setup - campaign outcomes]
+        * -> Read in ShortResolver.assembleDescriptionStrings()
+        *
+        * NOTE: Meta outcomes are duplicated as LONG variables (LAttackerBaseConquest,
+        *       for example). If a ShortOperation has a matching LongOperation, it will
+        *       *NOT* have a meta impact, even if the variables below are configured.
+        *
+        * AttackerBaseConquestAmount		- Base % of a planet taken for winning attacker
+        * AttackerConquestBVAdjustment		- Amount of BV needed for extra % point
+        * AttackerConquestUnitAdjustment	- Number of units needed for extra % point
+        *
+        * DefenderBaseConquestAmount		- Base % of a planet taken for winning defender
+        * DefenderConquestBVAdjustment		- Amount of BV needed for extra % point
+        * DefenderConquestUnitAdjustment	- Number of units needed for extra % point
+        *
+        * NOTE: Adjustments are from COMBINED totals, not one player's. This prevents
+        *       players for min/maxing % gains by coming in one BV over/under a threshold.
+        *       This holds for the other meta-outcomes in this section as well.
+        *
+        * AttackerBaseDelayAmount		- Base miniticks delay caused by winning attacker
+        * AttackerDelayBVAdjustment	- Amount of BV needed for extra minitick of delay
+        * AttackerDelayUnitAdjustment	- Number of units needed for extra minitick of delay
+        *
+        * DefenderBaseDelayAmount		- Base miniticks REPAIR caused by winning defender
+        * DefenderDelayBVAdjustment	- Amount of BV needed for extra minitick of REPAIR
+        * DefenderDelayUnitAdjustment	- Number of units needed for extra minitick of REPAIR
+        *
+        * NOTE: Winning defenders can *ENHANCE* productivity. Factories which aren't
+        *       refreshing will go negative, reducing future delays after production.
+        *
+        * AttackerBasePPAmount		- Base production points taken by winning attacker
+        * AttackerPPBVAdjustment	- Amount of BV needed for extra batch of prodpoints
+        * AttackerPPUnitAdjustment	- Number of units needed for extra batch of prodpoints
+        *
+        * DefenderBasePPAmount		- Base production points generated by winning defender
+        * DefenderPPBVAdjustment	- Amount of BV needed for extra batch of prodpoints
+        * DefenderPPUnitAdjustment	- Number of units needed for extra batch of prodpoints
+        *
+        * NOTE: as with delay raids, winning defenses can be configured to have a positive
+        *       outcome. this is a shift from the task-system, which gave no option for
+        *       defender gains in "raid" situations.
+        *
+        * AttackerBaseUnitsTaken		- base number of units taken by winning attacker
+        * AttackerUnitsBVAdjustment	- BV to take an additonal unit
+        * AttackerUnitsUnitAdjustment	- units to take an additional unit (confusing!)
+        *
+        * AttackerBaseFactoryUnitsTaken 		- base number of units taken from factories by winning attacker
+        * AttackerFactoryUnitsBVAdjustment	    - BV to take an additonal unit
+        * AttackerFactoryUnitsUnitAdjustment	- units to take an additional unit (confusing!)
+        * AttackerUnitsTakenBeforeFightStarts  - The units are taken before the fight starts and the player must get them
+        *                                        off the field
+        * AttackerAllowAgainstUnclaimedLand    - If checked then this operation will be launched agianst a planet that has
+        *                                        CP that is unclaimed and the Faction will automatically claim it.
+        *
+        * NOTE: No defender insta-production. Ops might want to consider using PP or
+        *       delay payouts to defenders of unit-raid heavy attacks.
+        *
+        * AttackerTargetOpAdjustment	- adjustment for attacking winner
+        * DefenderTargetOpAdjustment	- adjustment for defending winner
+        *
+        * NOTE: Op Adjustments are used to increase or decrease victory THRESHOLDS for
+        *       targetted long-ops. Not recommended for individual games. Generlly, better
+        *       for use as a long-op (w/ fewer games than target) set up as a counter-assault
+        *       or spoling attack.
+        *
+        * ConquestAmountCap	- Max amount of % to take, regardless of BV/units involved.
+        * DelayAmountCap		- Max amount of delay to apply, regardless of BV/units involved.
+        * PPCapptureCap    	- Max # of PP to take/generate
+        * UnitCaptureCap 		- Ceiling on number of units which may be raided
+        *
+        * NOTE: These caps apply to defenders as well as attackers, which can create situations
+        *       in which attacker gets no benefit for additional BV while defender continues to
+        * 		 gain, or vice versa (based on BV/Units needed for bonus, etc).
+        *
+        *
+        * PPDestructionCap              - Max # of PP that can be destroyed by an Op
+        * UnitDestructionCap            - Max # of units that can be destroyed by an Op.
+        * BaseUnitsDestroyed            - base number of units destroyed by winning attacker
+        * DestroyedUnitsBVAdjustment    - BV to Destroyed an additonal unit
+        * DestroyedUnitsUnitAdjustment  - units to Destroyed an additional unit (confusing!)
+        * BasePPDestroyed               - Base production points destroyed by winning attacker
+        * DestroyedPPBVAdjustment       - Amount of BV needed to destroy extra prodpoints
+        * DestroyedPPUnitAdjustment     - Number of units needed to destroy extra prodpoints
+        *
+        * NOTE: All Destruction parameters are only used by the Attacker and go into effect when the attacker wins.
+        * [Meta setup finished]
+        *
+        * [Chicken/Non-Defender setup]
+        * -> Read in OpsChickenThread class
+        *
+        * TimeToNondefensePenalty  - time, in SECONDS, from attack init to penalty.
+        * LeechesToDeactivate 		- num leeches before a player is moved into reserve.
+        *
+        * FlatRPChickenPenalty				- # of RP to take. double.
+        * FlatExpChickenPenalty			- # of EXP to take. double.
+        * FlatInfluenceChickenPenalty		- # of Inf to take. double.
+        * FlatCBillChickenPenalty			- # of CBills to take. double.
+        *
+        * PercentRPChickenPenalty			- % of RP to take. int.
+        * PercentExpChickenPenalty			- % of EXP to take. int.
+        * PercentInfluenceChickenPenalty	- % of Inf to take. int.
+        * PercentCBillChickenPenalty		- % of CBills to take. int.
+        *
+        * NOTE: Penalties applied for EVERY leech, not only @ deactivation. Take this
+        *       into consideration if allowing >1 leech before deactivation.
+        *
+        * ConquestPerLeech 	- % control transferred on each leech
+        * DelayPerLeech		- delay to on-target facilities w/ each leech
+        * ProdPointsPerLeech	- PP taken with each leech
+        * UnitsPerLeech		- Units taken with each leech
+        * FailurePenalty		- [PP taken if no other penalty is applied. Use it
+        *                        [to ensure that a penalty is always given, even
+        *                        [if there is no % to yeild or factory to delay.
+        *
+        * [Chicken setup finished]
+        *
+        * [Pilot XP setup]
+        * -> Read in ShortResolver.assembleSalvageStrings()
+        *
+        * BaseUnitXP            - XP earned by all surviving units for playing the game
+        * UnitXPUnitsAdjustment - [bonus XP given to all surviving units, based on the starting size of the game
+        *                         [if there are 10 units in game, and Adjust is set to 10, all units will get +1
+        *                         [XP. if there are 10 in game and Adjust is 5, all units will get +2 XP, etc.
+        * UnitXPBVAdjustment    - [bonus XP given to all surviving units, based on the starting size of the game. if
+        *                         [total BV in game is 30,000 and Adjust is 10,000, all units will get +3 XP.
+        * WinnerBonusUnitXP     - bonux XP given to all surviving units owned by a winning player
+        * DefenderBonusUnitXP   - bonus XP given to all surviving units owned by a defending player
+        * KillBonusUnitXP       - [flat amount of XP given to a unit for each kill it earned. this is granted only
+        *                         [to the killing unit, and only if it survives or is salvaged by original owner
+        *                         [with original pilot.
+        * KillBonusXPforBV      - [KilledUnitsBV/KillBonusXPforBV. bonus XP based on the BV of units killed. added
+        *                         [only to the killing unit, and only if the unit survives or is salvaged by its
+        *                         [original owner with original pilot.
+        *
+        * [Pilot XP setup finished]
+        *
+        * [Buildings setup]
+        * This is setup to allow buildings to be both placed on the map and also count towards the operation rewards
+        *
+        * TotalBuildings        - Total number of buildings to place on the map
+        * MinBuildingsForOp     - [Minimum number of buildings the Attack needs to destroy for the op to be a sucess
+        *                         [I.E. 10 buildings 5 min. if the attacker kills only 4 they don't get any of the bonuses.
+        * MinFloors             - Minimum number of floors in each building.
+        * MaxFloors             - Maximum number of floors in each building.
+        * MinCF                 - Minimum Construction Factor each building can have (How many points of damage it'll take)
+        * MaxCF                 - Maximum Construction Factor each building can have (How many points of damage it'll take)
+        * BuildingType          - 1: Light, 2: Medium, 3: Heavy, 4: Hardend
+        * BuildingsStartOnMapEdge - [defaults to true. if selected a random edge is select and the defender is set to that
+        *                           [ and the attacker to the opposite edge. If not selected the buildings will be placed
+        *                           [ randomly around the map.
+        *
+        * DelayPerBuilding      - Number of Delay ticks set to the planet factories for each building destroyed
+        *
+        * AttackerMoneyPerBuilding - Amount of Money the attacker gets for each building destroyed, if they meet the min amount of buildings destroyed.
+        * AttackerExpPerBuilding - Amount of Exp the attacker gets for each building destroyed, if they meet the min amount of buildings destroyed.
+        * AttackerFluPerBuilding - Amount of Flu the attacker gets for each building destroyed, if they meet the min amount of buildings destroyed.
+        * AttackerRPPerBuilding  - Amount of RP the attacker gets for each building destroyed, if they meet the min amount of buildings destroyed.
+        *
+        * DefenderMoneyPerBuilding - Amount of Money the defender gets for each building left standing.
+        * DefenderExpPerBuilding - Amount of Exp the defender gets for each building left standing.
+        * DefenderFluPerBuilding - Amount of Flu the defender gets for each building left standing.
+        * DefenderRPPerBuilding  - Amount of RP the defender gets for each building left standing.
+        *
+        * [Building Setup End]
+        *
+        * [Faction Exclusivity setup]
+        *
+        * LegalAttackFactions   - self evident - AFC=234
+        * IllegalAttackFactions - self evident - AFC=234 (Note: shared message)
+        *
+        * LegalDefendFactions   - self evident - DFC=434
+        * IllegalDefendFactions - self evident - DFC=434 (Note: shared message)
+        *
+        * [NOTE: If "Legal" is set, "Illegal" is not checked. This allows operators to easily
+        *       create games that a small set of factions may use (via legal) or a small group
+        *       of factions may not use (via illegal). Both are CASE SENSITIVE and $ DELIMITED.
+        *
+        *       If both Legal and Illegal are left blank and/or contain only spaces, all facs
+        *       will be able to attack&defend the type. This is the default behaviour.
+        *
+        *       Would work:     Liao$Davion$Steiner
+        *       Would NOT work: Liao,Davion,Steiner
+        *       Would NOT work: liao$davion$steiner]
+        *
+        * [End Faction Exclusivity setup]
+        *
+        * [Begin City Generation]
+        *
+        * [NOTE: This is used to generate a city for a this op using MM's city
+        *        Generation code. Currently ops have been using the Building
+        *        code to genereate cities and it is not pretty.]
+        *
+        * RGCUseCityGenerator      - Use the city generator for this Op.
+        * RGCCityType              - City type are Metro/Grid/Hub
+        * RGCCityBlocks            - Number of city blocks this effects how many roads are created.
+        * RGCRGCMinCF              - Min CF any building can be.
+        * RGCMaxCF                 - Max CF any building can be. buildings will be between min and max
+        *                            This buildings Type will be selected based on the CF generated. L
+        *                            Light/Medium/Heavy/Hardened
+        * RGCMinFloors             - Min number of floors any one building can have
+        * RGCMaxFloors             - Max number of floors any one building can have. Builds height will be generated
+        *                            from a number between Max and Min Floors
+        * RGCCityDensity           - 1-100 This is the % chance that a hex will contain a building the higher the number
+        *                            the more buildings will be generated.
+        *
+        * [End City Generation]
+        *
+        * [Begin Multi Player Variables]
+        *
+        * FreeForAllOperation      - Fun opration Unlimited amount of players can join on their own team
+        *                            The op starts when the attack chooses or when the leech time ends.
+        * MinNumberOfPlayers       - Minimum number of players needed for the FFA to launch.
+        *
+        * TeamOperation		    - Determins if this Operation should be setup for teams
+        *
+        * NumberOfTeams			- The number of teams for  this operation, min 2.
+        *
+        * TeamSize                 - The maximum number of people allowed on each team.
+        *
+        * TeamsMustBeSameFaction   - Boolean if true all team members must be on the same faction
+        *                            defaults to false.
+        *
+        * RandomTeamDetermination  - Players are placed on teams randomly.
+        *
+        * [End Multi Player Variables]
+        *
+        * [Begin Victory Conditions]
+        *
+        * NumberOfVictoryConditions - The number of victory conditions that must be achieved by the winning team.
+        *                           - Default 0 (off)
+        * UseDestroyEnemyBV         - If this is turned on DestroyEnemyBV field well be sent to MM
+        * DestroyEnemyBV            - Destroy/damage a certain percentage of the enemy force to win, measured by current BV / original BV
+        * UseBVRatioPercent         - If this is turned on UseBVRatioPercent field will be sent to MM.
+        * BVRatioPercent            - Friendly forces outnumber enemy forces by a percentage ratio.  Measured by current BV. E.G. 300 means you have 3x the surviving BV of the enemy.
+        * UseUnitCommander			 - If this is turned on the UseUnitCommand field will be sent to MM.
+        * MinimumUnitCommanders     - Minimum Number Of unit commanders players must have to launch/defend this op
+        * MaximumUnitCommanders     - Maximum Number of unit commanders players can have to launch/defend this op
+        *
+        * [End Victory Conditions]
+        *
+        * [Begin Deployment]
+        * RandomDeployment            - Operation picks the map edge for the attackers and defenders
+        * DeployNorthwest				- Chance to deploy Northwest
+        * DeployNorth					- Chance to deploy North
+        * DeployNortheast				- Chance to deploy Northeast
+        * DeployEast					- Chance to deploy East
+        * DeploySoutheast				- Chance to deploy SouthEast
+        * DeploySouth					- Chance to deploy South
+        * DeploySouthwest				- Chance to deploy Southwest
+        * DeployWest					- Chance to deploy West
+        * DeployEdge					- Chance to deploy on the Edge
+        * DeployCenter					- Chance to deploy in the Center
+        * DeployNorthwestdeep			- Chance to deploy Northwest (Deep)
+        * DeployNorthdeep				- Chance to deploy North (Deep)
+        * DeployNortheastdeep			- Chance to deploy Northeast (Deep)
+        * DeployEastdeep				- Chance to deploy East (Deep)
+        * DeploySoutheastdeep			- Chance to deploy Southeast (Deep)
+        * DeploySouthdeep				- Chance to deploy South (Deep)
+        * DeploySouthwestdeep			- Chance to deploy Southwest (Deep)
+        * DeployWestdeep				- Chance to deploy West (Deep)
+        *
+        * [End Deployment
+        *
+        * [Map Settings
+        *
+        * UseOperationMap				- Use the Operation map instead of the terrain on the planet
+        * MapName						- Name of the map to use or surprise/generated if using sizes
+        * BoardSizeX					- Number of maps along the X axis of the Board
+        * BoardSizeY					- Number of maps along the Y axis of the board
+        * MapSizeX						- X Size of the map
+        * MapSizeY						- Y Size of the map
+        * MaxMedium                    - "Ground", "Atmosphere", "Space"
+        *
+        * [End Map Settings
+        */
 
         // army contruction
         operationsDefaults.put("MaxAttackerBV", "10000000");
@@ -945,9 +946,9 @@ public class DefaultOperation {
         operationsDefaults.put("MinDefenderBV", "0");
 
         operationsDefaults.put("MaxAttackerMeks", "10000000");
-        operationsDefaults.put("MinAttackerMeks", "1");// must have at least one unit
+        operationsDefaults.put("MinAttackerMeks", "1"); // must have at least one unit
         operationsDefaults.put("MaxDefenderMeks", "10000000");
-        operationsDefaults.put("MinDefenderMeks", "1");// must have at least one unit
+        operationsDefaults.put("MinDefenderMeks", "1"); // must have at least one unit
 
         operationsDefaults.put("MaxAttackerVehicles", "10000000");
         operationsDefaults.put("MinAttackerVehicles", "0");
@@ -1260,7 +1261,7 @@ public class DefaultOperation {
         operationsDefaults.put("DefenderAlwaysSalvagesOwnUnits", "false");
         operationsDefaults.put("AttackerAlwaysSalvagesOwnUnits", "false");
 
-        operationsDefaults.put("DestroyAllSalvage", "false"); //@salient
+        operationsDefaults.put("DestroyAllSalvage", "false"); // @salient
 
         operationsDefaults.put("BaseAttackerSalvagePercent", "50");
         operationsDefaults.put("BaseDefenderSalvagePercent", "50");
@@ -1428,7 +1429,7 @@ public class DefaultOperation {
         operationsDefaults.put("RCGCityBlocks", "4");
         operationsDefaults.put("RCGMinCF", "20");
         operationsDefaults.put("RCGMaxCF", "40");
-        operationsDefaults.put("RCGMinFloors", "1");// must have at least one floor
+        operationsDefaults.put("RCGMinFloors", "1"); // must have at least one floor
         operationsDefaults.put("RCGMaxFloors", "3");
         operationsDefaults.put("RCGCityDensity", "50");
 
@@ -1618,7 +1619,6 @@ public class DefaultOperation {
         operationsDefaults.put("MinDefenderNonSupportUnits", "0");
         operationsDefaults.put("MaxDefenderNonSupportUnits", "999");
 
-
         // Flags
         operationsDefaults.put("AttackerFlags", "");
         operationsDefaults.put("DefenderFlags", "");
@@ -1627,11 +1627,8 @@ public class DefaultOperation {
     }
 
     // METHODS
-    /**
-     * Method which returns the default value of a given operation paramater. @urgru 5/30/05
-     */
+    /** Method which returns the default value of a given operation paramater. @urgru 5/30/05 */
     public String getDefault(String valToGet) {
         return operationsDefaults.get(valToGet);
     }
-
-}// end OperationsManager class
+} // end OperationsManager class

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -53,7 +53,7 @@ public class Updater {
 
         Version version = new Version(cmd.getOptionValue("version"));
         VersionUpdaterPicker updatePicker = new VersionUpdaterPicker();
-        
+
         if (!updatePicker.migrate(version)) {
             System.out.println("Invalid version. Unable to upgrade");
             System.exit(0);

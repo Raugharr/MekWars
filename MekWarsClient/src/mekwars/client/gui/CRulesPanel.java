@@ -21,11 +21,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.net.URL;
-
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import mekwars.client.MWClient;
 
 /**
@@ -33,15 +31,12 @@ import mekwars.client.MWClient;
  *
  * @author Salient
  */
-
-public class CRulesPanel extends JPanel
-{
+public class CRulesPanel extends JPanel {
     private static final long serialVersionUID = 5547551469995402891L;
 
     MWClient mwclient;
 
-    public CRulesPanel(MWClient client)
-    {
+    public CRulesPanel(MWClient client) {
         mwclient = client;
 
         setLayout(new BorderLayout());
@@ -51,10 +46,14 @@ public class CRulesPanel extends JPanel
         URL rulesURL = CRulesPanel.class.getResource(rulesLocation);
 
         if (rulesURL != null) {
-            try { editorPane.setPage(rulesURL); }
-            catch (IOException e)  { System.err.println("Bad URL: " + rulesURL); }
+            try {
+                editorPane.setPage(rulesURL);
+            } catch (IOException e) {
+                System.err.println("Bad URL: " + rulesURL);
+            }
+        } else {
+            System.err.println("Couldn't find: ServerRules.html");
         }
-        else { System.err.println("Couldn't find: ServerRules.html"); }
 
         JScrollPane editorScrollPane = new JScrollPane(editorPane);
         editorScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

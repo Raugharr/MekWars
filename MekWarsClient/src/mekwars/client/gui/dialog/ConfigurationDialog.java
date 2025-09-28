@@ -23,7 +23,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -38,7 +37,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
 import megamek.client.ui.dialogs.CamoChooserDialog;
 import megamek.common.Configuration;
 import megamek.common.icons.Camouflage;
@@ -54,12 +52,12 @@ public final class ConfigurationDialog implements ActionListener {
     // store the client backlink for other things to use
     private MWClient mwclient = null;
 
-    private final static String okayCommand = "Okay";
-    private final static String cancelCommand = "Cancel";
-    private final static String camoCommand = "Camo";
-    private final static String lookAndFeelCommand = "LAF";
+    private static final String okayCommand = "Okay";
+    private static final String cancelCommand = "Cancel";
+    private static final String camoCommand = "Camo";
+    private static final String lookAndFeelCommand = "LAF";
 
-    private final static String windowName = "MekWars Configuration";
+    private static final String windowName = "MekWars Configuration";
 
     // BUTTONS
     private final JButton okayButton = new JButton("OK");
@@ -69,7 +67,7 @@ public final class ConfigurationDialog implements ActionListener {
     // TEXT FIELDS
     // tab names
     private final JTextField hqTabNameField = new JTextField(10);
-    private final JTextField rulesTabNameField = new JTextField(10); //@salient
+    private final JTextField rulesTabNameField = new JTextField(10); // @salient
     private final JTextField bmTabNameField = new JTextField(10);
     private final JTextField bmeTabNameField = new JTextField(10);
     private final JTextField hsTabNameField = new JTextField(10);
@@ -85,7 +83,7 @@ public final class ConfigurationDialog implements ActionListener {
 
     // tab mnemonic
     private final JTextField hqTabMnemonicField = new JTextField(1);
-    private final JTextField rulesTabMnemonicField = new JTextField(1); //@salient
+    private final JTextField rulesTabMnemonicField = new JTextField(1); // @salient
     private final JTextField bmTabMnemonicField = new JTextField(1);
     private final JTextField bmeTabMnemonicField = new JTextField(1);
     private final JTextField hsTabMnemonicField = new JTextField(1);
@@ -149,37 +147,52 @@ public final class ConfigurationDialog implements ActionListener {
     private final JTextField f5Field = new JTextField(30);
 
     // COMBO BOXES
-    private final String[] schemeChoices = { "Grey", "Tan", "Classic" };
+    private final String[] schemeChoices = {"Grey", "Tan", "Classic"};
     private final JComboBox schemeComboBox = new JComboBox(schemeChoices);
 
-    private final String[] lookandFeelChoices = { "Native", "CDE/Motif", "Java/Ocean", "Metouia", "Plastic (Desert)", "Plastic (Sky)", "Plastic XP", "Steel", "Windows - J", "Skins" };
+    private final String[] lookandFeelChoices = {
+        "Native",
+        "CDE/Motif",
+        "Java/Ocean",
+        "Metouia",
+        "Plastic (Desert)",
+        "Plastic (Sky)",
+        "Plastic XP",
+        "Steel",
+        "Windows - J",
+        "Skins"
+    };
     private final JComboBox lookandfeelComboBox = new JComboBox(lookandFeelChoices);
 
-    private final String[] playerChatColorChoices = { "Player Defined", "Faction Colors", "Mixed (Faction Tag)", "Mixed (Faction Name)" };
+    private final String[] playerChatColorChoices = {
+        "Player Defined", "Faction Colors", "Mixed (Faction Tag)", "Mixed (Faction Name)"
+    };
     private final JComboBox playerChatColorComboBox = new JComboBox(playerChatColorChoices);
 
-    private final String[] sysMessageColorChoices = { "Dark Green", "Gold", "Indigo", "Navy", "Orange", "Red", "Teal", "Black" };
+    private final String[] sysMessageColorChoices = {
+        "Dark Green", "Gold", "Indigo", "Navy", "Orange", "Red", "Teal", "Black"
+    };
     private final JComboBox sysMessageColorComboBox = new JComboBox(sysMessageColorChoices);
 
-    private final String[] playerMessageTabChoices = { "Main", "Misc", "System", "Personal" };
+    private final String[] playerMessageTabChoices = {"Main", "Misc", "System", "Personal"};
     private final JComboBox playerMessageTabComboBox = new JComboBox(playerMessageTabChoices);
 
     private JComboBox skinComboBox = null;
     // CHECK BOXEN
     // tab visibility
     private final JCheckBox hqTabVisBox = new JCheckBox();
-    private final JCheckBox rulesTabVisBox = new JCheckBox(); //@salient , top only?
+    private final JCheckBox rulesTabVisBox = new JCheckBox(); // @salient , top only?
     private final JCheckBox bmTabVisBox = new JCheckBox();
     private final JCheckBox bmeTabVisBox = new JCheckBox();
     private final JCheckBox hsTabVisBox = new JCheckBox();
     private final JCheckBox batTabVisBox = new JCheckBox();
     private final JCheckBox mapTabVisBox = new JCheckBox();
-    private final JCheckBox hmTabVisBox = new JCheckBox();// bottom only
-    private final JCheckBox pmTabVisBox = new JCheckBox();// bottom only
-    private final JCheckBox pLogTabVisBox = new JCheckBox();// bottom only
-    private final JCheckBox sysLogTabVisBox = new JCheckBox();// bottom only
-    private final JCheckBox miscTabVisBox = new JCheckBox();// bottom only
-    private final JCheckBox RPGTabVisBox = new JCheckBox();// bottom only
+    private final JCheckBox hmTabVisBox = new JCheckBox(); // bottom only
+    private final JCheckBox pmTabVisBox = new JCheckBox(); // bottom only
+    private final JCheckBox pLogTabVisBox = new JCheckBox(); // bottom only
+    private final JCheckBox sysLogTabVisBox = new JCheckBox(); // bottom only
+    private final JCheckBox miscTabVisBox = new JCheckBox(); // bottom only
+    private final JCheckBox RPGTabVisBox = new JCheckBox(); // bottom only
 
     // tab location
     private final JCheckBox hqTabonTopBox = new JCheckBox();
@@ -292,14 +305,14 @@ public final class ConfigurationDialog implements ActionListener {
         camoButton.setToolTipText("Select Camo to be Preloaded in MegaMek");
 
         // CREATE THE PANELS
-        JPanel playerPanel = new JPanel();// player name, etc
-        JPanel chatPanel = new JPanel();// ignore options, into main options
-        JPanel soundPanel = new JPanel();// sound options
-        JPanel tabVisibilityPanel = new JPanel();// tab visibility and redirects
-        JPanel tabNamingPanel = new JPanel();// naming and mnemonics
-        JPanel keyBindPanel = new JPanel();// Funtion key binds
-        JPanel dedicatedHostPanel = new JPanel();// Dedicated Host Panel
-        JPanel unitHUDLayoutPanel = new JPanel();// Unit Status Panel
+        JPanel playerPanel = new JPanel(); // player name, etc
+        JPanel chatPanel = new JPanel(); // ignore options, into main options
+        JPanel soundPanel = new JPanel(); // sound options
+        JPanel tabVisibilityPanel = new JPanel(); // tab visibility and redirects
+        JPanel tabNamingPanel = new JPanel(); // naming and mnemonics
+        JPanel keyBindPanel = new JPanel(); // Funtion key binds
+        JPanel dedicatedHostPanel = new JPanel(); // Dedicated Host Panel
+        JPanel unitHUDLayoutPanel = new JPanel(); // Unit Status Panel
         JPanel devPanel = new JPanel(); // Dev options
         JPanel miscPanel = new JPanel(); // @salient - misc options
 
@@ -317,12 +330,14 @@ public final class ConfigurationDialog implements ActionListener {
         // Make a dimension which sets the max vertical size same
         // as min vertical size.
         Dimension newDim = new Dimension();
-        newDim.setSize(uNameField.getMaximumSize().getWidth(), uNameField.getMaximumSize().getHeight());
+        newDim.setSize(
+                uNameField.getMaximumSize().getWidth(), uNameField.getMaximumSize().getHeight());
         // newDim.setSize(90,100);
 
         playerFieldsPanel.add(new JLabel("User Name:", SwingConstants.TRAILING));
         uNameField.setMaximumSize(newDim);
-        uNameField.setToolTipText("<HTML><BODY>User Name. Leave blank to be prompted<br>for a username/pass when connecting.</BODY></HTML>");
+        uNameField.setToolTipText(
+                "<HTML><BODY>User Name. Leave blank to be prompted<br>for a username/pass when connecting.</BODY></HTML>");
         playerFieldsPanel.add(uNameField);
 
         playerFieldsPanel.add(new JLabel("Password:", SwingConstants.TRAILING));
@@ -332,22 +347,26 @@ public final class ConfigurationDialog implements ActionListener {
 
         playerFieldsPanel.add(new JLabel("Name Color:", SwingConstants.TRAILING));
         chatNameColorField.setMaximumSize(newDim);
-        chatNameColorField.setToolTipText("<HTML>Chat name colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
+        chatNameColorField.setToolTipText(
+                "<HTML>Chat name colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
         playerFieldsPanel.add(chatNameColorField);
 
         playerFieldsPanel.add(new JLabel("Text Color:", SwingConstants.TRAILING));
         foregroundColorField.setMaximumSize(newDim);
-        foregroundColorField.setToolTipText("<HTML>Foreground text colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
+        foregroundColorField.setToolTipText(
+                "<HTML>Foreground text colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
         playerFieldsPanel.add(foregroundColorField);
 
         playerFieldsPanel.add(new JLabel("Back Ground:", SwingConstants.TRAILING));
         backgroundColorField.setMaximumSize(newDim);
-        backgroundColorField.setToolTipText("<HTML>Background colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
+        backgroundColorField.setToolTipText(
+                "<HTML>Background colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
         playerFieldsPanel.add(backgroundColorField);
 
         playerFieldsPanel.add(new JLabel("Chat Font:", SwingConstants.TRAILING));
         chatFontField.setMaximumSize(newDim);
-        chatFontField.setToolTipText("<HTML>Chat font size. Use +10 -10 or even size number</HTML>");
+        chatFontField.setToolTipText(
+                "<HTML>Chat font size. Use +10 -10 or even size number</HTML>");
         playerFieldsPanel.add(chatFontField);
 
         if (mwclient.getConfig().isParam("HQTABVISIBLE")) {
@@ -358,14 +377,19 @@ public final class ConfigurationDialog implements ActionListener {
 
             playerFieldsPanel.add(new JLabel("New Army Name:", SwingConstants.TRAILING));
             defaultArmyNameField.setMaximumSize(newDim);
-            defaultArmyNameField.setToolTipText("<HTML>" + "Name given to each newly created army. Useful<br>" + "for starter strings. For example, start all new<br>" + "armies as 'Tau Ceti Rangers,' adding lance and<br>" + "company descriptions afterwards.</HTML>");
+            defaultArmyNameField.setToolTipText(
+                    "<HTML>"
+                            + "Name given to each newly created army. Useful<br>"
+                            + "for starter strings. For example, start all new<br>"
+                            + "armies as 'Tau Ceti Rangers,' adding lance and<br>"
+                            + "company descriptions afterwards.</HTML>");
             playerFieldsPanel.add(defaultArmyNameField);
-
         }
 
         if (new File("./data/mapoverlay.txt").exists()) {
             playerFieldsPanel.add(new JLabel("Map Overlay Color:", SwingConstants.TRAILING));
-            mapOverLayField.setToolTipText("<HTML>Set the color of the star maps overlaying boarders</HTML>");
+            mapOverLayField.setToolTipText(
+                    "<HTML>Set the color of the star maps overlaying boarders</HTML>");
             playerFieldsPanel.add(mapOverLayField);
         }
 
@@ -402,17 +426,26 @@ public final class ConfigurationDialog implements ActionListener {
         // status is irrelevant
         if (upperCBoxesCounter != 0) {
             useStatusForIconBox.setText("Status For Icon");
-            useStatusForIconBox.setToolTipText("<HTML>" + "If checked, the server icon will be replaced with<br>" + "an activity status image. This can be helpful, but<br>" + "can make it harder to find the client window when<br>" + "moving between multiple servers or programs.<br>" + "<br>" + "REQUIRES RESTART. DOES NOT WORK ON ALL PLATFORMS!</HTML>");
+            useStatusForIconBox.setToolTipText(
+                    "<HTML>"
+                            + "If checked, the server icon will be replaced with<br>"
+                            + "an activity status image. This can be helpful, but<br>"
+                            + "can make it harder to find the client window when<br>"
+                            + "moving between multiple servers or programs.<br>"
+                            + "<br>"
+                            + "REQUIRES RESTART. DOES NOT WORK ON ALL PLATFORMS!</HTML>");
             playerUpperCBoxesPanel.add(useStatusForIconBox);
             upperCBoxesCounter++;
         }
 
         showUnitTechBaseCheckBox.setText("Show Unit Tech Base");
-        showUnitTechBaseCheckBox.setToolTipText("<html>When checked, unit Tool Tip will include Clan/IS indication.</html>");
+        showUnitTechBaseCheckBox.setToolTipText(
+                "<html>When checked, unit Tool Tip will include Clan/IS indication.</html>");
         playerUpperCBoxesPanel.add(showUnitTechBaseCheckBox);
 
         showUnitBaseBVCheckBox.setText("Show Base BV");
-        showUnitBaseBVCheckBox.setToolTipText("<html>If selected, BV without pilot skills will be shown in the unit display</html>");
+        showUnitBaseBVCheckBox.setToolTipText(
+                "<html>If selected, BV without pilot skills will be shown in the unit display</html>");
         playerUpperCBoxesPanel.add(showUnitBaseBVCheckBox);
 
         SpringLayoutHelper.setupSpringGrid(playerUpperCBoxesPanel, 2);
@@ -422,7 +455,9 @@ public final class ConfigurationDialog implements ActionListener {
         schemeWrapper.setLayout(new BoxLayout(schemeWrapper, BoxLayout.Y_AXIS));
 
         Dimension comboDim = new Dimension();
-        comboDim.setSize(lookandfeelComboBox.getMinimumSize().getWidth() * 1.6, uNameField.getMinimumSize().getHeight() + 2);
+        comboDim.setSize(
+                lookandfeelComboBox.getMinimumSize().getWidth() * 1.6,
+                uNameField.getMinimumSize().getHeight() + 2);
         lookandfeelComboBox.addActionListener(this);
         lookandfeelComboBox.setActionCommand(lookAndFeelCommand);
 
@@ -480,22 +515,32 @@ public final class ConfigurationDialog implements ActionListener {
 
         // set the checkboxes up
         autoConnectBox.setText("Autoconnect");
-        autoConnectBox.setToolTipText("<HTML>" + "Check to send username and password automatically. If<br>" + "username and password are not saved, the signon dialog<br>" + "will be shown normally.</HTML>");
+        autoConnectBox.setToolTipText(
+                "<HTML>"
+                        + "Check to send username and password automatically. If<br>"
+                        + "username and password are not saved, the signon dialog<br>"
+                        + "will be shown normally.</HTML>");
 
         timeStampBox.setText("Timestamps");
         timeStampBox.setToolTipText("If enabled, timestamps will be shown in chat.");
 
         viewUnitFluffBox.setText("View Unit Fluff");
-        viewUnitFluffBox.setToolTipText("<html>View the TRO test of units with HMP files<br>This is displayed in the unit viewer</html>");
+        viewUnitFluffBox.setToolTipText(
+                "<html>View the TRO test of units with HMP files<br>This is displayed in the unit viewer</html>");
 
         viewLogoBox.setText("View Logo");
-        viewLogoBox.setToolTipText("<html>When checked this will show your logo or your faction<br>logo in your player panel</html>");
+        viewLogoBox.setToolTipText(
+                "<html>When checked this will show your logo or your faction<br>logo in your player panel</html>");
 
         armyPopUpBox.setText("Army Dialog");
-        armyPopUpBox.setToolTipText("<html>" + "If checked, an army dialog selection will open when<br>" + "you attack or have the opportunity to defend.</html>");
+        armyPopUpBox.setToolTipText(
+                "<html>"
+                        + "If checked, an army dialog selection will open when<br>"
+                        + "you attack or have the opportunity to defend.</html>");
 
         autoReOrder.setText("Auto ReOrder");
-        autoReOrder.setToolTipText("<Html>If checked the system will continue to reorder parts<br>from the market while trying to repair your units</html>");
+        autoReOrder.setToolTipText(
+                "<Html>If checked the system will continue to reorder parts<br>from the market while trying to repair your units</html>");
 
         playerLowerCBoxesPanel.add(autoConnectBox);
         playerLowerCBoxesPanel.add(timeStampBox);
@@ -557,12 +602,23 @@ public final class ConfigurationDialog implements ActionListener {
 
         genOptSpring.add(new JLabel("Port:", SwingConstants.TRAILING));
         portField.setMaximumSize(newDim);
-        portField.setToolTipText("<HTML>" + "The port which will be used to host.<br>" + "Must open this port if you are using<br>" + "a firewall and forwarded if you are<br>" + "behind a router.</HTML>");
+        portField.setToolTipText(
+                "<HTML>"
+                        + "The port which will be used to host.<br>"
+                        + "Must open this port if you are using<br>"
+                        + "a firewall and forwarded if you are<br>"
+                        + "behind a router.</HTML>");
         genOptSpring.add(portField);
 
         genOptSpring.add(new JLabel("Socket Timeout:", SwingConstants.TRAILING));
         socketTimeOutField.setMaximumSize(newDim);
-        socketTimeOutField.setToolTipText("<HTML>" + "This is how long, in miliseconds,<br>" + "a data socket will wait for a response<br>" + "before closing. Increase this number if<br>" + "you are not downloading all the data from the server.<br>" + "Requires a reboot to take effect.</HTML>");
+        socketTimeOutField.setToolTipText(
+                "<HTML>"
+                        + "This is how long, in miliseconds,<br>"
+                        + "a data socket will wait for a response<br>"
+                        + "before closing. Increase this number if<br>"
+                        + "you are not downloading all the data from the server.<br>"
+                        + "Requires a reboot to take effect.</HTML>");
         genOptSpring.add(socketTimeOutField);
 
         SpringLayoutHelper.setupSpringGrid(genOptSpring, 2);
@@ -573,15 +629,25 @@ public final class ConfigurationDialog implements ActionListener {
         hostPanelWrapper.add(new JLabel("\n"));
 
         // now, dedicated only options
-        JLabel dedicatedServiceHeader = new JLabel("<HTML><body><CENTER><b>" + "Warning: Do not set or change the options<br>" + "below unless you want to use this client as<br>" + "a dedicated host. Options above are general<br>" + "and may be set any time.</b></CENTER></body></HTML>");
+        JLabel dedicatedServiceHeader =
+                new JLabel(
+                        "<HTML><body><CENTER><b>"
+                                + "Warning: Do not set or change the options<br>"
+                                + "below unless you want to use this client as<br>"
+                                + "a dedicated host. Options above are general<br>"
+                                + "and may be set any time.</b></CENTER></body></HTML>");
         dedicatedServiceHeader.setForeground(Color.RED);
         dedicatedServiceHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
-        dedicatedServiceHeader.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 1), BorderFactory.createEmptyBorder(4, 5, 4, 5)));
+        dedicatedServiceHeader.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.BLACK, 1),
+                        BorderFactory.createEmptyBorder(4, 5, 4, 5)));
         hostPanelWrapper.add(dedicatedServiceHeader);
         hostPanelWrapper.add(new JLabel("\n"));
 
         enableDedicatedServerCB.setText("Convert Client To Dedicated Host");
-        enableDedicatedServerCB.setToolTipText("<HTML>Warning: Only check this box if you<BR> want this client to be turned into a dedicated host!</HTML>");
+        enableDedicatedServerCB.setToolTipText(
+                "<HTML>Warning: Only check this box if you<BR> want this client to be turned into a dedicated host!</HTML>");
         enableDedicatedServerCB.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         dedInfoPanel.add(new JLabel("Dedicated Name:", SwingConstants.TRAILING));
@@ -591,17 +657,22 @@ public final class ConfigurationDialog implements ActionListener {
 
         dedInfoPanel.add(new JLabel("Restart Games:", SwingConstants.TRAILING));
         restartField.setMaximumSize(newDim);
-        restartField.setToolTipText("<HTML>" + "Number of games to be played before<br>" + "the ded automatically restarts.</HTML>");
+        restartField.setToolTipText(
+                "<HTML>"
+                        + "Number of games to be played before<br>"
+                        + "the ded automatically restarts.</HTML>");
         dedInfoPanel.add(restartField);
 
         dedInfoPanel.add(new JLabel("Ded Owners:", SwingConstants.TRAILING));
         ownersField.setMaximumSize(newDim);
-        ownersField.setToolTipText("<HTML>List of people, sperated by $,<br>that you want to give control of your ded too</HTML>");
+        ownersField.setToolTipText(
+                "<HTML>List of people, sperated by $,<br>that you want to give control of your ded too</HTML>");
         dedInfoPanel.add(ownersField);
 
         dedInfoPanel.add(new JLabel("Memory:", SwingConstants.TRAILING));
         memoryField.setMaximumSize(newDim);
-        memoryField.setToolTipText("<HTML>The Maximum amount of memory, in MBs, that you want the ded to use<br> Note this will be translated into the -Xmx#m command line</HTML>");
+        memoryField.setToolTipText(
+                "<HTML>The Maximum amount of memory, in MBs, that you want the ded to use<br> Note this will be translated into the -Xmx#m command line</HTML>");
         dedInfoPanel.add(memoryField);
 
         // run the spring layout
@@ -623,7 +694,7 @@ public final class ConfigurationDialog implements ActionListener {
 
         // make the sub panels.
         JPanel ignorePanel = new JPanel(new SpringLayout());
-        JPanel inMainPanel = new JPanel();// put check boxes in a grid
+        JPanel inMainPanel = new JPanel(); // put check boxes in a grid
         JPanel mailDirectionPanel = new JPanel();
         JPanel miscChatBoxesPanel = new JPanel();
 
@@ -639,19 +710,23 @@ public final class ConfigurationDialog implements ActionListener {
 
         ignorePanel.add(new JLabel("Keywords:", SwingConstants.TRAILING));
         ignorePanel.add(keywordsField);
-        keywordsField.setToolTipText("<html>Enter words or phrases you want to be pinged on received in chat<br>The phrases are comma delimited i.e. cat,Play ball,dog</html>");
+        keywordsField.setToolTipText(
+                "<html>Enter words or phrases you want to be pinged on received in chat<br>The phrases are comma delimited i.e. cat,Play ball,dog</html>");
 
         ignorePanel.add(new JLabel("Challenge Text:", SwingConstants.TRAILING));
         ignorePanel.add(challengeStringField);
-        challengeStringField.setToolTipText("The string text which precedes auto-generated match requests.");
+        challengeStringField.setToolTipText(
+                "The string text which precedes auto-generated match requests.");
 
         ignorePanel.add(new JLabel("Max Mail Text:", SwingConstants.TRAILING));
         ignorePanel.add(maxMailTabStringField);
-        maxMailTabStringField.setToolTipText("<html>If someone tries to mail you when you have<br>the max number of tabs open this message is sent to them</html>");
+        maxMailTabStringField.setToolTipText(
+                "<html>If someone tries to mail you when you have<br>the max number of tabs open this message is sent to them</html>");
 
         ignorePanel.add(new JLabel("Max Mail Tabs:", SwingConstants.TRAILING));
         ignorePanel.add(maxNumberOfMailTabsField);
-        maxNumberOfMailTabsField.setToolTipText("<html>This is the maximum number of mail tabs you<br>want to have open at one time.<br>If Someone tries to send you mail<br>while you have this many mail tabs<br>open they will get the<br>Max Mail Tab Message as a reply.</html>");
+        maxNumberOfMailTabsField.setToolTipText(
+                "<html>This is the maximum number of mail tabs you<br>want to have open at one time.<br>If Someone tries to send you mail<br>while you have this many mail tabs<br>open they will get the<br>Max Mail Tab Message as a reply.</html>");
 
         // run the spring layout
         SpringLayoutHelper.setupSpringGrid(ignorePanel, 2);
@@ -677,14 +752,17 @@ public final class ConfigurationDialog implements ActionListener {
         pmReplyToSender.setText("To Last Sender");
         pmReplyToReciever.setText("To Last Recipient");
         pmUseMultipleTabs.setText("Use Multiple Mail Tabs");
-        pmUseMultipleTabs.setToolTipText("Check this to have a mail tab for each user you are mailing");
+        pmUseMultipleTabs.setToolTipText(
+                "Check this to have a mail tab for each user you are mailing");
 
         mailDirectionPanel.add(pmReplyToSender);
         mailDirectionPanel.add(pmReplyToReciever);
         mailDirectionPanel.add(pmUseMultipleTabs);
 
         // set up the chat color combo box
-        comboDim.setSize(playerChatColorComboBox.getMinimumSize().getWidth() * 1.2, playerChatColorComboBox.getMinimumSize().getHeight() + 2);
+        comboDim.setSize(
+                playerChatColorComboBox.getMinimumSize().getWidth() * 1.2,
+                playerChatColorComboBox.getMinimumSize().getHeight() + 2);
 
         JLabel chatNameColorHeader = new JLabel("Chat Name Color Modes:");
         chatNameColorHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -699,13 +777,19 @@ public final class ConfigurationDialog implements ActionListener {
         showEnterExitBox.setToolTipText("Uncheck to suppress Enter and Exit messages in chat.");
 
         blockImagesBox.setText("Block Images");
-        blockImagesBox.setToolTipText("<HTML>" + "If checked, images in faction, private, rp and mod chat will<br>" + "be blocked. Images in userlist fluff will are also removed.</HTML>");
+        blockImagesBox.setToolTipText(
+                "<HTML>"
+                        + "If checked, images in faction, private, rp and mod chat will<br>"
+                        + "be blocked. Images in userlist fluff will are also removed.</HTML>");
 
         mapOnClickBox.setText("Click to Map");
-        mapOnClickBox.setToolTipText("If checked, clicking planet name links will activate the map tab.");
+        mapOnClickBox.setToolTipText(
+                "If checked, clicking planet name links will activate the map tab.");
 
         // set up the chat tab combo box
-        comboDim.setSize(playerMessageTabComboBox.getMinimumSize().getWidth() * 1.2, playerMessageTabComboBox.getMinimumSize().getHeight() + 2);
+        comboDim.setSize(
+                playerMessageTabComboBox.getMinimumSize().getWidth() * 1.2,
+                playerMessageTabComboBox.getMinimumSize().getHeight() + 2);
 
         JLabel playerMessageTabHeader = new JLabel("Tick Info Tab:");
         playerMessageTabHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -811,7 +895,8 @@ public final class ConfigurationDialog implements ActionListener {
 
         // set up additional checkboxes
         systemMessageKeyword.setText("Check System Messages for Keywords");
-        systemMessageKeyword.setToolTipText("If enabled, all text in all channels will be searched for keywords.");
+        systemMessageKeyword.setToolTipText(
+                "If enabled, all text in all channels will be searched for keywords.");
         soundCBoxPanel.add(systemMessageKeyword);
 
         SpringLayoutHelper.setupSpringGrid(soundCBoxPanel, 1, 1);
@@ -883,7 +968,7 @@ public final class ConfigurationDialog implements ActionListener {
         JPanel tabVisibilitySpring = new JPanel(new SpringLayout());
 
         tabVisibilitySpring.add(new JLabel(""));
-        tabVisibilitySpring.add(new JLabel(" Visible:  ", SwingConstants.CENTER));// extra
+        tabVisibilitySpring.add(new JLabel(" Visible:  ", SwingConstants.CENTER)); // extra
         // spaces
         // are
         // for
@@ -976,7 +1061,7 @@ public final class ConfigurationDialog implements ActionListener {
         dopeCBox6.setHorizontalAlignment(SwingConstants.CENTER);
         tabVisibilitySpring.add(dopeCBox6);
 
-        tabVisibilitySpring.add(new JLabel("Rules:", SwingConstants.TRAILING)); //@salient
+        tabVisibilitySpring.add(new JLabel("Rules:", SwingConstants.TRAILING)); // @salient
         rulesTabVisBox.setHorizontalAlignment(SwingConstants.CENTER);
         rulesTabonTopBox.setHorizontalAlignment(SwingConstants.CENTER);
         tabVisibilitySpring.add(rulesTabVisBox);
@@ -1082,7 +1167,7 @@ public final class ConfigurationDialog implements ActionListener {
             tabNamingSpring.add(bmeTabMnemonicField);
         }
 
-        tabNamingSpring.add(new JLabel("Rules:", SwingConstants.TRAILING)); //@salient
+        tabNamingSpring.add(new JLabel("Rules:", SwingConstants.TRAILING)); // @salient
         tabNamingSpring.add(rulesTabNameField);
         tabNamingSpring.add(rulesTabMnemonicField);
 
@@ -1188,15 +1273,21 @@ public final class ConfigurationDialog implements ActionListener {
         ConfigPane.addTab("Miscellaneous", null, miscPanel, "Miscellaneous Options");
         ConfigPane.addTab("Developer Options", null, devPanel, "Developer Options");
 
-
         // Create the panel that will hold the entire UI
         JPanel mainConfigPanel = new JPanel();
 
         // Set the user's options
-        Object[] options = { okayButton, cancelButton };
+        Object[] options = {okayButton, cancelButton};
 
         // Create the pane containing the buttons
-        pane = new JOptionPane(ConfigPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, options, uNameField);
+        pane =
+                new JOptionPane(
+                        ConfigPane,
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.DEFAULT_OPTION,
+                        null,
+                        options,
+                        uNameField);
 
         // Create the main dialog and set the default button
         dialog = pane.createDialog(mainConfigPanel, windowName);
@@ -1246,7 +1337,7 @@ public final class ConfigurationDialog implements ActionListener {
             schemeComboBox.setSelectedIndex(1);
         } else if (scheme.equals("grey")) {
             schemeComboBox.setSelectedIndex(0);
-        } else {// scheme is classic
+        } else { // scheme is classic
             schemeComboBox.setSelectedIndex(2);
         }
 
@@ -1254,17 +1345,17 @@ public final class ConfigurationDialog implements ActionListener {
         // sysMessageColorChoices = {"DarkGreen", "Gold", "Indigo", "Navy",
         // "Orange", "Red", "Teal"};
         String sysColor = mwclient.getConfigParam("SYSMESSAGECOLOR");
-        if (sysColor.equals("#006400")) {// dark green
+        if (sysColor.equals("#006400")) { // dark green
             sysMessageColorComboBox.setSelectedIndex(0);
-        } else if (sysColor.equals("#FFD700")) {// gold
+        } else if (sysColor.equals("#FFD700")) { // gold
             sysMessageColorComboBox.setSelectedIndex(1);
-        } else if (sysColor.equals("#4B0082")) {// indigo
+        } else if (sysColor.equals("#4B0082")) { // indigo
             sysMessageColorComboBox.setSelectedIndex(2);
         } else if (sysColor.equals("navy")) {
             sysMessageColorComboBox.setSelectedIndex(3);
-        } else if (sysColor.equals("#FFA500")) {// orange
+        } else if (sysColor.equals("#FFA500")) { // orange
             sysMessageColorComboBox.setSelectedIndex(4);
-        } else if (sysColor.equals("red")) {// red
+        } else if (sysColor.equals("red")) { // red
             sysMessageColorComboBox.setSelectedIndex(5);
         } else if (sysColor.equals("teal")) {
             sysMessageColorComboBox.setSelectedIndex(6);
@@ -1276,7 +1367,7 @@ public final class ConfigurationDialog implements ActionListener {
         String skin = mwclient.getConfigParam("LOOKANDFEEL").toLowerCase();
         if (skin.equals("motif")) {
             lookandfeelComboBox.setSelectedIndex(1);
-        } else if (skin.equals("metal")) {// note: this is actually Ocean in 1.5
+        } else if (skin.equals("metal")) { // note: this is actually Ocean in 1.5
             lookandfeelComboBox.setSelectedIndex(2);
         } else if (skin.equals("metouia")) {
             lookandfeelComboBox.setSelectedIndex(3);
@@ -1292,7 +1383,7 @@ public final class ConfigurationDialog implements ActionListener {
             lookandfeelComboBox.setSelectedIndex(8);
         } else if (skin.equals("skins")) {
             lookandfeelComboBox.setSelectedIndex(9);
-        } else {// scheme is system
+        } else { // scheme is system
             lookandfeelComboBox.setSelectedIndex(0);
         }
 
@@ -1304,25 +1395,25 @@ public final class ConfigurationDialog implements ActionListener {
             playerChatColorComboBox.setSelectedIndex(2);
         } else if (chatNameColorMode.equals("factionall")) {
             playerChatColorComboBox.setSelectedIndex(1);
-        } else {// use the default, player choice
+        } else { // use the default, player choice
             playerChatColorComboBox.setSelectedIndex(0);
         }
 
         // set the chat tab mode
         int playerTabMode = Integer.parseInt(mwclient.getConfigParam("USERDEFINDMESSAGETAB"));
         switch (playerTabMode) {
-        case 3:
-            playerMessageTabComboBox.setSelectedIndex(3);
-            break;
-        case 4:
-            playerMessageTabComboBox.setSelectedIndex(2);
-            break;
-        case 5:
-            playerMessageTabComboBox.setSelectedIndex(1);
-            break;
-        default:
-            playerMessageTabComboBox.setSelectedIndex(0);
-            break;
+            case 3:
+                playerMessageTabComboBox.setSelectedIndex(3);
+                break;
+            case 4:
+                playerMessageTabComboBox.setSelectedIndex(2);
+                break;
+            case 5:
+                playerMessageTabComboBox.setSelectedIndex(1);
+                break;
+            default:
+                playerMessageTabComboBox.setSelectedIndex(0);
+                break;
         }
 
         enableSoundOnCall.setSelected(mwclient.getConfig().isParam("ENABLECALLSOUND"));
@@ -1332,7 +1423,8 @@ public final class ConfigurationDialog implements ActionListener {
         enableSoundOnBMWin.setSelected(mwclient.getConfig().isParam("ENABLEBMSOUND"));
         enableSoundOnActivate.setSelected(mwclient.getConfig().isParam("ENABLEACTIVATESOUND"));
         enableSoundOnDeactivate.setSelected(mwclient.getConfig().isParam("ENABLEDEACTIVATESOUND"));
-        enableSoundOnEnemyDetected.setSelected(mwclient.getConfig().isParam("ENABLEENEMYDETECTEDSOUND"));
+        enableSoundOnEnemyDetected.setSelected(
+                mwclient.getConfig().isParam("ENABLEENEMYDETECTEDSOUND"));
         enableSoundOnExitClient.setSelected(mwclient.getConfig().isParam("ENABLEEXITCLIENTSOUND"));
         enableSoundOnMenuPopup.setSelected(mwclient.getConfig().isParam("ENABLEMENUPOPUPSOUND"));
         enableSoundOnMenu.setSelected(mwclient.getConfig().isParam("ENABLEMENUSOUND"));
@@ -1353,7 +1445,7 @@ public final class ConfigurationDialog implements ActionListener {
         hqTabonTopBox.setSelected(mwclient.getConfig().isParam("HQINTOPROW"));
         hqTabVisBox.setSelected(mwclient.getConfig().isParam("HQTABVISIBLE"));
 
-        rulesTabNameField.setText(mwclient.getConfig().getParam("RULESTABNAME")); //@salient
+        rulesTabNameField.setText(mwclient.getConfig().getParam("RULESTABNAME")); // @salient
         rulesTabMnemonicField.setText(mwclient.getConfig().getParam("RULESMNEMONIC"));
         rulesTabonTopBox.setSelected(mwclient.getConfig().isParam("RULESINTOPROW"));
         rulesTabVisBox.setSelected(mwclient.getConfig().isParam("RULESTABVISIBLE"));
@@ -1478,16 +1570,25 @@ public final class ConfigurationDialog implements ActionListener {
         if (pane.getValue() == okayButton) {
 
             mwclient.getConfig().setParam("UNITHEX", Boolean.toString(showHexinHQBox.isSelected()));
-            mwclient.getConfig().setParam("STATUSINTRAYICON", Boolean.toString(useStatusForIconBox.isSelected()));
-            mwclient.getConfig().setParam("ShowUnitTechBase", Boolean.toString(showUnitTechBaseCheckBox.isSelected()));
-            mwclient.getConfig().setParam("ShowUnitBaseBV", Boolean.toString(showUnitBaseBVCheckBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "STATUSINTRAYICON", Boolean.toString(useStatusForIconBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ShowUnitTechBase",
+                            Boolean.toString(showUnitTechBaseCheckBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ShowUnitBaseBV",
+                            Boolean.toString(showUnitBaseBVCheckBox.isSelected()));
             mwclient.getConfig().setParam("DARKERMAP", Boolean.toString(darkenMapBox.isSelected()));
-            mwclient.getConfig().setParam("BMPREVIEWIMAGE", Boolean.toString(bmPreviewImageBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("BMPREVIEWIMAGE", Boolean.toString(bmPreviewImageBox.isSelected()));
 
             // don't let people do stupid things with the Columns and crash the
             // client.
             if (Integer.parseInt(hqColumnsField.getText()) < 1) {
-                hqColumnsField.setText("8");// no negatives or 0's allowed
+                hqColumnsField.setText("8"); // no negatives or 0's allowed
             }
 
             mwclient.getConfig().setParam("UNITAMOUNT", hqColumnsField.getText());
@@ -1502,10 +1603,13 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("IGNOREPUBLIC", ignorePublicField.getText());
             mwclient.getConfig().setParam("CHALLENGESTRING", challengeStringField.getText());
             mwclient.getConfig().setParam("TIMESTAMP", Boolean.toString(timeStampBox.isSelected()));
-            mwclient.getConfig().setParam("VIEWFLUFF", Boolean.toString(viewUnitFluffBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("VIEWFLUFF", Boolean.toString(viewUnitFluffBox.isSelected()));
             mwclient.getConfig().setParam("LOGO", Boolean.toString(viewLogoBox.isSelected()));
-            mwclient.getConfig().setParam("POPUPONATTACK", Boolean.toString(armyPopUpBox.isSelected()));
-            mwclient.getConfig().setParam("AUTOCONNECT", Boolean.toString(autoConnectBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("POPUPONATTACK", Boolean.toString(armyPopUpBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("AUTOCONNECT", Boolean.toString(autoConnectBox.isSelected()));
             mwclient.getConfig().setParam("SOUNDONCALL", soundOnCallField.getText());
             mwclient.getConfig().setParam("SOUNDONKEYWORD", soundOnKeywordField.getText());
             mwclient.getConfig().setParam("SOUNDONMESSAGE", soundOnMessageField.getText());
@@ -1513,7 +1617,8 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("SOUNDONBMWIN", soundOnBMWinField.getText());
             mwclient.getConfig().setParam("SOUNDONACTIVATE", soundOnActivateField.getText());
             mwclient.getConfig().setParam("SOUNDONDEACTIVATE", soundOnDeactivateField.getText());
-            mwclient.getConfig().setParam("SOUNDONENEMYDETECTED", soundOnEnemyDetectedField.getText());
+            mwclient.getConfig()
+                    .setParam("SOUNDONENEMYDETECTED", soundOnEnemyDetectedField.getText());
             mwclient.getConfig().setParam("SOUNDONEXITCLIENT", soundOnExitClientField.getText());
             mwclient.getConfig().setParam("SOUNDONMENUPOPUP", soundOnMenuPopupField.getText());
             mwclient.getConfig().setParam("SOUNDONMENU", soundOnMenuField.getText());
@@ -1524,8 +1629,14 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("MAXPMMESSAGE", maxMailTabStringField.getText());
             mwclient.getConfig().setParam("MAXPMTABS", maxNumberOfMailTabsField.getText());
 
-            mwclient.getConfig().setParam("USETESTBUILDTABLEVIEWER", Boolean.toString(testBuildTableBox.isSelected()));
-            mwclient.getConfig().setParam("EXPANDEDUNITTOOLTIP", Boolean.toString(expandedUnitToolTipBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "USETESTBUILDTABLEVIEWER",
+                            Boolean.toString(testBuildTableBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "EXPANDEDUNITTOOLTIP",
+                            Boolean.toString(expandedUnitToolTipBox.isSelected()));
 
             // set the HQCOLORSCHEME based on selected button.
             // private final String[] schemeChoices = {"Grey", "Tan",
@@ -1534,7 +1645,7 @@ public final class ConfigurationDialog implements ActionListener {
                 mwclient.getConfig().setParam("HQCOLORSCHEME", "tan");
             } else if (schemeComboBox.getSelectedIndex() == 0) {
                 mwclient.getConfig().setParam("HQCOLORSCHEME", "grey");
-            } else {// scheme is classic
+            } else { // scheme is classic
                 mwclient.getConfig().setParam("HQCOLORSCHEME", "classic");
             }
 
@@ -1542,7 +1653,7 @@ public final class ConfigurationDialog implements ActionListener {
             if (lookandfeelComboBox.getSelectedIndex() == 1) {
                 mwclient.getConfig().setParam("LOOKANDFEEL", "motif");
             } else if (lookandfeelComboBox.getSelectedIndex() == 2) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "metal");// note:
+                mwclient.getConfig().setParam("LOOKANDFEEL", "metal"); // note:
                 // this is
                 // actually
                 // "Ocean"
@@ -1562,8 +1673,9 @@ public final class ConfigurationDialog implements ActionListener {
                 mwclient.getConfig().setParam("LOOKANDFEEL", "jwindows");
             } else if (lookandfeelComboBox.getSelectedIndex() == 9) {
                 mwclient.getConfig().setParam("LOOKANDFEEL", "skins");
-                mwclient.getConfig().setParam("LOOKANDFEELSKIN", skinComboBox.getSelectedItem().toString());
-            } else {// skin is system
+                mwclient.getConfig()
+                        .setParam("LOOKANDFEELSKIN", skinComboBox.getSelectedItem().toString());
+            } else { // skin is system
                 mwclient.getConfig().setParam("LOOKANDFEEL", "system");
             }
 
@@ -1571,19 +1683,19 @@ public final class ConfigurationDialog implements ActionListener {
             // sysMessageColorChoices = {"Dark Green", "Gold", "Indigo", "Navy",
             // "Orange", "Red", "Teal"};
             if (sysMessageColorComboBox.getSelectedIndex() == 0) {
-                mwclient.getConfig().setParam("SYSMESSAGECOLOR", "#006400");// dark
+                mwclient.getConfig().setParam("SYSMESSAGECOLOR", "#006400"); // dark
                 // green
             } else if (sysMessageColorComboBox.getSelectedIndex() == 1) {
-                mwclient.getConfig().setParam("SYSMESSAGECOLOR", "#FFD700");// gold
+                mwclient.getConfig().setParam("SYSMESSAGECOLOR", "#FFD700"); // gold
             } else if (sysMessageColorComboBox.getSelectedIndex() == 2) {
-                mwclient.getConfig().setParam("SYSMESSAGECOLOR", "#4B0082");// indigo
+                mwclient.getConfig().setParam("SYSMESSAGECOLOR", "#4B0082"); // indigo
             } else if (sysMessageColorComboBox.getSelectedIndex() == 3) {
                 mwclient.getConfig().setParam("SYSMESSAGECOLOR", "navy");
             } else if (sysMessageColorComboBox.getSelectedIndex() == 4) {
-                mwclient.getConfig().setParam("SYSMESSAGECOLOR", "#FFA500");// orange
+                mwclient.getConfig().setParam("SYSMESSAGECOLOR", "#FFA500"); // orange
             } else if (sysMessageColorComboBox.getSelectedIndex() == 6) {
                 mwclient.getConfig().setParam("SYSMESSAGECOLOR", "teal");
-            } else if (sysMessageColorComboBox.getSelectedIndex() == 5) {// colour
+            } else if (sysMessageColorComboBox.getSelectedIndex() == 5) { // colour
                 // is
                 // red
                 mwclient.getConfig().setParam("SYSMESSAGECOLOR", "red");
@@ -1601,115 +1713,177 @@ public final class ConfigurationDialog implements ActionListener {
                 mwclient.getConfig().setParam("PLAYERCHATCOLORMODE", "factionall");
             } else if (playerChatColorComboBox.getSelectedIndex() == 3) {
                 mwclient.getConfig().setParam("PLAYERCHATCOLORMODE", "factionname");
-            } else {// skin is system
+            } else { // skin is system
                 mwclient.getConfig().setParam("PLAYERCHATCOLORMODE", "playercolors");
             }
 
             switch (playerMessageTabComboBox.getSelectedIndex()) {
-            case 1:
-                mwclient.getConfig().setParam("USERDEFINDMESSAGETAB", "5");
-                break;
-            case 2:
-                mwclient.getConfig().setParam("USERDEFINDMESSAGETAB", "4");
-                break;
-            case 3:
-                mwclient.getConfig().setParam("USERDEFINDMESSAGETAB", "3");
-                break;
-            default:
-                mwclient.getConfig().setParam("USERDEFINDMESSAGETAB", "0");
-
+                case 1:
+                    mwclient.getConfig().setParam("USERDEFINDMESSAGETAB", "5");
+                    break;
+                case 2:
+                    mwclient.getConfig().setParam("USERDEFINDMESSAGETAB", "4");
+                    break;
+                case 3:
+                    mwclient.getConfig().setParam("USERDEFINDMESSAGETAB", "3");
+                    break;
+                default:
+                    mwclient.getConfig().setParam("USERDEFINDMESSAGETAB", "0");
             }
 
-            mwclient.getConfig().setParam("ENABLECALLSOUND", Boolean.toString(enableSoundOnCall.isSelected()));
-            mwclient.getConfig().setParam("ENABLEMESSAGESOUND", Boolean.toString(enableSoundOnMessage.isSelected()));
-            mwclient.getConfig().setParam("ENABLEATTACKSOUND", Boolean.toString(enableSoundOnAttack.isSelected()));
-            mwclient.getConfig().setParam("ENABLEKEYWORDSOUND", Boolean.toString(enableSoundOnKeyword.isSelected()));
-            mwclient.getConfig().setParam("ENABLEBMSOUND", Boolean.toString(enableSoundOnBMWin.isSelected()));
-            mwclient.getConfig().setParam("ENABLEACTIVATESOUND", Boolean.toString(enableSoundOnActivate.isSelected()));
-            mwclient.getConfig().setParam("ENABLEDEACTIVATESOUND", Boolean.toString(enableSoundOnDeactivate.isSelected()));
-            mwclient.getConfig().setParam("ENABLEENEMYDETECTEDSOUND", Boolean.toString(enableSoundOnEnemyDetected.isSelected()));
-            mwclient.getConfig().setParam("ENABLEEXITCLIENTSOUND", Boolean.toString(enableSoundOnExitClient.isSelected()));
-            mwclient.getConfig().setParam("ENABLEMENUSOUND", Boolean.toString(enableSoundOnMenu.isSelected()));
-            mwclient.getConfig().setParam("ENABLEMENUPOPUPSOUND", Boolean.toString(enableSoundOnMenuPopup.isSelected()));
-            mwclient.getConfig().setParam("SOUNDSFROMSYSMESSAGES", Boolean.toString(systemMessageKeyword.isSelected()));
-            mwclient.getConfig().setParam("COLOREDEMOTES", Boolean.toString(colorEmotesBox.isSelected()));
-            mwclient.getConfig().setParam("SHOWENTERANDEXIT", Boolean.toString(showEnterExitBox.isSelected()));
-            mwclient.getConfig().setParam("NOIMGINCHAT", Boolean.toString(blockImagesBox.isSelected()));
-            mwclient.getConfig().setParam("MAPTABONCLICK", Boolean.toString(mapOnClickBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("ENABLECALLSOUND", Boolean.toString(enableSoundOnCall.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ENABLEMESSAGESOUND",
+                            Boolean.toString(enableSoundOnMessage.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ENABLEATTACKSOUND",
+                            Boolean.toString(enableSoundOnAttack.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ENABLEKEYWORDSOUND",
+                            Boolean.toString(enableSoundOnKeyword.isSelected()));
+            mwclient.getConfig()
+                    .setParam("ENABLEBMSOUND", Boolean.toString(enableSoundOnBMWin.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ENABLEACTIVATESOUND",
+                            Boolean.toString(enableSoundOnActivate.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ENABLEDEACTIVATESOUND",
+                            Boolean.toString(enableSoundOnDeactivate.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ENABLEENEMYDETECTEDSOUND",
+                            Boolean.toString(enableSoundOnEnemyDetected.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ENABLEEXITCLIENTSOUND",
+                            Boolean.toString(enableSoundOnExitClient.isSelected()));
+            mwclient.getConfig()
+                    .setParam("ENABLEMENUSOUND", Boolean.toString(enableSoundOnMenu.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "ENABLEMENUPOPUPSOUND",
+                            Boolean.toString(enableSoundOnMenuPopup.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "SOUNDSFROMSYSMESSAGES",
+                            Boolean.toString(systemMessageKeyword.isSelected()));
+            mwclient.getConfig()
+                    .setParam("COLOREDEMOTES", Boolean.toString(colorEmotesBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("SHOWENTERANDEXIT", Boolean.toString(showEnterExitBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("NOIMGINCHAT", Boolean.toString(blockImagesBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("MAPTABONCLICK", Boolean.toString(mapOnClickBox.isSelected()));
 
-            mwclient.getConfig().setParam("INVERTCHATCOLOR", Boolean.toString(invertChatColors.isSelected()));
+            mwclient.getConfig()
+                    .setParam("INVERTCHATCOLOR", Boolean.toString(invertChatColors.isSelected()));
 
             mwclient.getConfig().setParam("HQTABNAME", hqTabNameField.getText());
             mwclient.getConfig().setParam("HQMNEMONIC", hqTabMnemonicField.getText());
-            mwclient.getConfig().setParam("HQINTOPROW", Boolean.toString(hqTabonTopBox.isSelected()));
-            mwclient.getConfig().setParam("HQTABVISIBLE", Boolean.toString(hqTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("HQINTOPROW", Boolean.toString(hqTabonTopBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("HQTABVISIBLE", Boolean.toString(hqTabVisBox.isSelected()));
 
-            mwclient.getConfig().setParam("RULESTABNAME", rulesTabNameField.getText()); //@salient
+            mwclient.getConfig().setParam("RULESTABNAME", rulesTabNameField.getText()); // @salient
             mwclient.getConfig().setParam("RULESMNEMONIC", rulesTabMnemonicField.getText());
-            mwclient.getConfig().setParam("RULESINTOPROW", Boolean.toString(rulesTabonTopBox.isSelected()));
-            mwclient.getConfig().setParam("RULESTABVISIBLE", Boolean.toString(rulesTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("RULESINTOPROW", Boolean.toString(rulesTabonTopBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("RULESTABVISIBLE", Boolean.toString(rulesTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("BMTABNAME", bmTabNameField.getText());
             mwclient.getConfig().setParam("BMMNEMONIC", bmTabMnemonicField.getText());
-            mwclient.getConfig().setParam("BMINTOPROW", Boolean.toString(bmTabonTopBox.isSelected()));
-            mwclient.getConfig().setParam("BMTABVISIBLE", Boolean.toString(bmTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("BMINTOPROW", Boolean.toString(bmTabonTopBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("BMTABVISIBLE", Boolean.toString(bmTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("BMETABNAME", bmeTabNameField.getText());
             mwclient.getConfig().setParam("BMEMNEMONIC", bmeTabMnemonicField.getText());
-            mwclient.getConfig().setParam("BMEINTOPROW", Boolean.toString(bmeTabonTopBox.isSelected()));
-            mwclient.getConfig().setParam("BMETABVISIBLE", Boolean.toString(bmeTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("BMEINTOPROW", Boolean.toString(bmeTabonTopBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("BMETABVISIBLE", Boolean.toString(bmeTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("HSTATUSTABNAME", hsTabNameField.getText());
             mwclient.getConfig().setParam("HSTATUSMNEMONIC", hsTabMnemonicField.getText());
-            mwclient.getConfig().setParam("HSTATUSINTOPROW", Boolean.toString(hsTabonTopBox.isSelected()));
-            mwclient.getConfig().setParam("HSTATUSTABVISIBLE", Boolean.toString(hsTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("HSTATUSINTOPROW", Boolean.toString(hsTabonTopBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("HSTATUSTABVISIBLE", Boolean.toString(hsTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("BATTLETABNAME", batTabNameField.getText());
             mwclient.getConfig().setParam("BATTLEMNEMONIC", batTabMnemonicField.getText());
-            mwclient.getConfig().setParam("BATTLEINTOPROW", Boolean.toString(batTabonTopBox.isSelected()));
-            mwclient.getConfig().setParam("BATTLETABVISIBLE", Boolean.toString(batTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("BATTLEINTOPROW", Boolean.toString(batTabonTopBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("BATTLETABVISIBLE", Boolean.toString(batTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("MAPTABNAME", mapTabNameField.getText());
             mwclient.getConfig().setParam("MAPMNEMONIC", mapTabMnemonicField.getText());
-            mwclient.getConfig().setParam("MAPINTOPROW", Boolean.toString(mapTabonTopBox.isSelected()));
-            mwclient.getConfig().setParam("MAPTABVISIBLE", Boolean.toString(mapTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("MAPINTOPROW", Boolean.toString(mapTabonTopBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("MAPTABVISIBLE", Boolean.toString(mapTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("MAINCHANNELTABNAME", mcTabNameField.getText());
             mwclient.getConfig().setParam("MAINCHANNELMNEMONIC", mcTabMnemonicField.getText());
 
             mwclient.getConfig().setParam("HOUSEMAILTABNAME", hmTabNameField.getText());
             mwclient.getConfig().setParam("HOUSEMAILMNEMONIC", hmTabMnemonicField.getText());
-            mwclient.getConfig().setParam("HOUSEMAILVISIBLE", Boolean.toString(hmTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("HOUSEMAILVISIBLE", Boolean.toString(hmTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("PRIVATEMAILTABNAME", pmTabNameField.getText());
             mwclient.getConfig().setParam("PRIVATEMAILMNEMONIC", pmTabMnemonicField.getText());
-            mwclient.getConfig().setParam("PRIVATEMAILVISIBLE", Boolean.toString(pmTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("PRIVATEMAILVISIBLE", Boolean.toString(pmTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("PERSONALLOGTABNAME", pLogTabNameField.getText());
             mwclient.getConfig().setParam("PERSONALLOGMNEMONIC", pLogTabMnemonicField.getText());
-            mwclient.getConfig().setParam("PERSONALLOGVISIBLE", Boolean.toString(pLogTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("PERSONALLOGVISIBLE", Boolean.toString(pLogTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("SYSTEMLOGTABNAME", sysLogTabNameField.getText());
             mwclient.getConfig().setParam("SYSTEMLOGMNEMONIC", sysLogTabMnemonicField.getText());
-            mwclient.getConfig().setParam("SYSTEMLOGVISIBLE", Boolean.toString(sysLogTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("SYSTEMLOGVISIBLE", Boolean.toString(sysLogTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("MISCELLANEOUSTABNAME", miscTabNameField.getText());
             mwclient.getConfig().setParam("MISCELLANEOUSMNEMONIC", miscTabMnemonicField.getText());
-            mwclient.getConfig().setParam("MISCELLANEOUSVISIBLE", Boolean.toString(miscTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("MISCELLANEOUSVISIBLE", Boolean.toString(miscTabVisBox.isSelected()));
 
             mwclient.getConfig().setParam("RPGTABNAME", RPGTabNameField.getText());
             mwclient.getConfig().setParam("RPGMNEMONIC", RPGTabMnemonicField.getText());
-            mwclient.getConfig().setParam("RPGVISIBLE", Boolean.toString(RPGTabVisBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("RPGVISIBLE", Boolean.toString(RPGTabVisBox.isSelected()));
 
-            mwclient.getConfig().setParam("MAINCHANNELHM", Boolean.toString(hmInMainBox.isSelected()));
-            mwclient.getConfig().setParam("MAINCHANNELPM", Boolean.toString(pmInMainBox.isSelected()));
-            mwclient.getConfig().setParam("MAINCHANNELSM", Boolean.toString(sysLogInMainBox.isSelected()));
-            mwclient.getConfig().setParam("MAINCHANNELMISC", Boolean.toString(miscInMainBox.isSelected()));
-            mwclient.getConfig().setParam("MAINCHANNELRPG", Boolean.toString(RPGInMainBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("MAINCHANNELHM", Boolean.toString(hmInMainBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("MAINCHANNELPM", Boolean.toString(pmInMainBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("MAINCHANNELSM", Boolean.toString(sysLogInMainBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("MAINCHANNELMISC", Boolean.toString(miscInMainBox.isSelected()));
+            mwclient.getConfig()
+                    .setParam("MAINCHANNELRPG", Boolean.toString(RPGInMainBox.isSelected()));
 
-            mwclient.getConfig().setParam("REPLYTOSENDER", Boolean.toString(pmReplyToSender.isSelected()));
-            mwclient.getConfig().setParam("REPLYTORECEIVER", Boolean.toString(pmReplyToReciever.isSelected()));
-            mwclient.getConfig().setParam("USEMULTIPLEPM", Boolean.toString(pmUseMultipleTabs.isSelected()));
+            mwclient.getConfig()
+                    .setParam("REPLYTOSENDER", Boolean.toString(pmReplyToSender.isSelected()));
+            mwclient.getConfig()
+                    .setParam("REPLYTORECEIVER", Boolean.toString(pmReplyToReciever.isSelected()));
+            mwclient.getConfig()
+                    .setParam("USEMULTIPLEPM", Boolean.toString(pmUseMultipleTabs.isSelected()));
             mwclient.getConfig().setParam("COLOR", chatNameColorField.getText());
             mwclient.getConfig().setParam("CHATFONTCOLOR", foregroundColorField.getText());
             mwclient.getConfig().setParam("BACKGROUNDCOLOR", backgroundColorField.getText());
@@ -1722,9 +1896,11 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("F5BIND", f5Field.getText());
 
             // Dedicated Host
-            mwclient.getConfig().setParam("DEDICATED", Boolean.toString(enableDedicatedServerCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("DEDICATED", Boolean.toString(enableDedicatedServerCB.isSelected()));
             mwclient.getConfig().setParam("PORT", portField.getText().trim());
-            mwclient.getConfig().setParam("SOCKETTIMEOUTDELAY", socketTimeOutField.getText().trim());
+            mwclient.getConfig()
+                    .setParam("SOCKETTIMEOUTDELAY", socketTimeOutField.getText().trim());
 
             // only save a new host name if Dedicated is in use
             if (enableDedicatedServerCB.isSelected()) {
@@ -1736,23 +1912,40 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("DEDMEMORY", memoryField.getText().trim());
 
             // Right Column
-            mwclient.getConfig().setParam("RIGHTCOLUMNDYNAMIC", Boolean.toString(rightColumnDynamicCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTPILOTEJECT", Boolean.toString(rightPilotEjectCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTREPAIR", Boolean.toString(rightRepairCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTENGINE", Boolean.toString(rightEngineCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTEQUIPMENT", Boolean.toString(rightEquipmentCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTARMOR", Boolean.toString(rightArmorCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "RIGHTCOLUMNDYNAMIC",
+                            Boolean.toString(rightColumnDynamicCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("RIGHTPILOTEJECT", Boolean.toString(rightPilotEjectCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("RIGHTREPAIR", Boolean.toString(rightRepairCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("RIGHTENGINE", Boolean.toString(rightEngineCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("RIGHTEQUIPMENT", Boolean.toString(rightEquipmentCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("RIGHTARMOR", Boolean.toString(rightArmorCB.isSelected()));
             mwclient.getConfig().setParam("RIGHTAMMO", Boolean.toString(rightAmmoCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTCOMMANDER", Boolean.toString(rightCommanderCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("RIGHTCOMMANDER", Boolean.toString(rightCommanderCB.isSelected()));
             // Left Column
-            mwclient.getConfig().setParam("LEFTCOLUMNDYNAMIC", Boolean.toString(leftColumnDynamicCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTPILOTEJECT", Boolean.toString(leftPilotEjectCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTREPAIR", Boolean.toString(leftRepairCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTENGINE", Boolean.toString(leftEngineCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTEQUIPMENT", Boolean.toString(leftEquipmentCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam(
+                            "LEFTCOLUMNDYNAMIC",
+                            Boolean.toString(leftColumnDynamicCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("LEFTPILOTEJECT", Boolean.toString(leftPilotEjectCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("LEFTREPAIR", Boolean.toString(leftRepairCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("LEFTENGINE", Boolean.toString(leftEngineCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("LEFTEQUIPMENT", Boolean.toString(leftEquipmentCB.isSelected()));
             mwclient.getConfig().setParam("LEFTARMOR", Boolean.toString(leftArmorCB.isSelected()));
             mwclient.getConfig().setParam("LEFTAMMO", Boolean.toString(leftAmmoCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTCOMMANDER", Boolean.toString(leftCommanderCB.isSelected()));
+            mwclient.getConfig()
+                    .setParam("LEFTCOMMANDER", Boolean.toString(leftCommanderCB.isSelected()));
 
             mwclient.setIgnoreHouse();
             mwclient.setIgnorePrivate();
@@ -1763,7 +1956,8 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "color " + chatNameColorField.getText());
 
             if (mwclient.getPlayer().getAutoReorder() != autoReOrder.isSelected()) {
-                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "setautoreorder " + autoReOrder.isSelected());
+                mwclient.sendChat(
+                        GameHost.CAMPAIGN_PREFIX + "setautoreorder " + autoReOrder.isSelected());
             }
 
             mwclient.getMainFrame().getMainPanel().recreateMainTPane(mwclient.getMainFrame());
@@ -1779,7 +1973,10 @@ public final class ConfigurationDialog implements ActionListener {
             boolean unitHexChanged = false;
             boolean mapBrightnessChanged = false;
 
-            if (!mwclient.getConfigParam("LOOKANDFEEL").equalsIgnoreCase(originalLookAndFeel) || (mwclient.getConfigParam("LOOKANDFEEL").equalsIgnoreCase("skins") && !mwclient.getConfigParam("LOOKANDFEELSKIN").equalsIgnoreCase(originalSkin))) {
+            if (!mwclient.getConfigParam("LOOKANDFEEL").equalsIgnoreCase(originalLookAndFeel)
+                    || (mwclient.getConfigParam("LOOKANDFEEL").equalsIgnoreCase("skins")
+                            && !mwclient.getConfigParam("LOOKANDFEELSKIN")
+                                    .equalsIgnoreCase(originalSkin))) {
                 mwclient.setLookAndFeel(true);
             }
 
@@ -1815,7 +2012,12 @@ public final class ConfigurationDialog implements ActionListener {
                 mwclient.getMainFrame().getMainPanel().getBMPanel().resetButtonBar();
             }
 
-            mwclient.addToChat("</BODY></html><html><BODY  TEXT=\"" + mwclient.getConfig().getParam("CHATFONTCOLOR") + "\" BGCOLOR=\"" + mwclient.getConfig().getParam("BACKGROUNDCOLOR") + "\"></BODY>");
+            mwclient.addToChat(
+                    "</BODY></html><html><BODY  TEXT=\""
+                            + mwclient.getConfig().getParam("CHATFONTCOLOR")
+                            + "\" BGCOLOR=\""
+                            + mwclient.getConfig().getParam("BACKGROUNDCOLOR")
+                            + "\"></BODY>");
         } else {
             dialog.dispose();
         }
@@ -1830,15 +2032,28 @@ public final class ConfigurationDialog implements ActionListener {
             pane.setValue(cancelButton);
             dialog.dispose();
         } else if (command.equals(camoCommand)) {
-            FileCamouflage fileCamouflage = new FileCamouflage(new File(Configuration.camoDir(), mwclient.getConfigParam("UNITCAMO")));
-            CamoChooserDialog camoDialog = new CamoChooserDialog(mwclient.getMainFrame(), fileCamouflage);
+            FileCamouflage fileCamouflage =
+                    new FileCamouflage(
+                            new File(Configuration.camoDir(), mwclient.getConfigParam("UNITCAMO")));
+            CamoChooserDialog camoDialog =
+                    new CamoChooserDialog(mwclient.getMainFrame(), fileCamouflage);
             if (camoDialog.showDialog().isConfirmed()) {
                 Camouflage selectedItem = camoDialog.getSelectedItem();
-                mwclient.getConfig().setParam("UNITCAMO", selectedItem.getCategory() + selectedItem.getFilename());
+                mwclient.getConfig()
+                        .setParam(
+                                "UNITCAMO",
+                                selectedItem.getCategory() + selectedItem.getFilename());
                 mwclient.getConfig().saveConfig();
                 mwclient.setConfig();
                 // then reload images and update the GUI
-                mwclient.getConfig().loadImage(GUIClientConfig.CAMO_PATH + selectedItem.getCategory() + selectedItem.getFilename(), "CAMO", 84, 72);
+                mwclient.getConfig()
+                        .loadImage(
+                                GUIClientConfig.CAMO_PATH
+                                        + selectedItem.getCategory()
+                                        + selectedItem.getFilename(),
+                                "CAMO",
+                                84,
+                                72);
                 mwclient.getMainFrame().getMainPanel().selectFirstTab();
                 mwclient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
             }
@@ -1850,5 +2065,4 @@ public final class ConfigurationDialog implements ActionListener {
             }
         }
     }
-
-}// end ConfigPage.java
+} // end ConfigPage.java

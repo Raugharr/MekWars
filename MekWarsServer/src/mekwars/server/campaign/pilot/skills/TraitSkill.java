@@ -16,18 +16,13 @@
 package mekwars.server.campaign.pilot.skills;
 
 import java.util.Vector;
-
+import megamek.common.Entity;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 
-/**
- * Pilot traits for use with moding the gaining of other traits
- *
- * @@author Torren (Jason Tighe)
- */
+/** Pilot traits for use with moding the gaining of other traits @@author Torren (Jason Tighe) */
 public class TraitSkill extends SPilotSkill {
 
     public TraitSkill(int id) {

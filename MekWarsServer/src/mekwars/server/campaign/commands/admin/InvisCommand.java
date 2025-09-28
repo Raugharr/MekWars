@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,51 +16,71 @@
 
 package mekwars.server.campaign.commands.admin;
 
-
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 
 public class InvisCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-        SPlayer player = CampaignMain.cm.getPlayer(Username);
-        if (player == null)
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
-        
-        if (player.getDutyStatus() != SPlayer.STATUS_RESERVE) {
-        	CampaignMain.cm.toUser("AM:You must be in reserve to change visibility.",Username,true);
-        	return;
         }
-        
+
+        SPlayer player = CampaignMain.cm.getPlayer(Username);
+        if (player == null) return;
+
+        if (player.getDutyStatus() != SPlayer.STATUS_RESERVE) {
+            CampaignMain.cm.toUser(
+                    "AM:You must be in reserve to change visibility.", Username, true);
+            return;
+        }
+
         player.setInvisible(!player.isInvisible());
 
-        MWServ.getInstance().sendRemoveUserToAll(Username,false);
+        MWServ.getInstance().sendRemoveUserToAll(Username, false);
 
         MWServ.getInstance().getUser(Username).setInvis(player.isInvisible());
-        MWServ.getInstance().sendNewUserToAll(Username,false);
-        
-        //Fix for BUG 1491951: post-invisibility status
-        CampaignMain.cm.sendPlayerStatusUpdate(player,true);
+        MWServ.getInstance().sendNewUserToAll(Username, false);
 
-        CampaignMain.cm.toUser("AM:You have become "+ (player.isInvisible()?"invisible":"visible"),Username,true);
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has become " + (player.isInvisible()?"invisible":"visible"));		
-	}
+        // Fix for BUG 1491951: post-invisibility status
+        CampaignMain.cm.sendPlayerStatusUpdate(player, true);
+
+        CampaignMain.cm.toUser(
+                "AM:You have become " + (player.isInvisible() ? "invisible" : "visible"),
+                Username,
+                true);
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username + " has become " + (player.isInvisible() ? "invisible" : "visible"));
+    }
 }

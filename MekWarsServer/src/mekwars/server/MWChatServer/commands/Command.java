@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet),
  * which based its code on classes from NFCChat, a GPL chat client/server.
  * Original NFC code can be found @ http://nfcchat.sourceforge.net
@@ -19,28 +19,29 @@ package mekwars.server.MWChatServer.commands;
 
 import mekwars.common.comm.TransportCodec;
 import mekwars.common.util.MWLogger;
-import mekwars.server.ServerWrapper;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
+import mekwars.server.ServerWrapper;
 
 /**
- *
- * @author  Administrator
+ * @author Administrator
  */
 public class Command extends CommandBase implements ICommands {
-  
-  /** @return true if this message should be distributed to other clients
-   */
-  public boolean process(MWChatClient client, String[] args) {
-    try {
-		((ServerWrapper)client.getServer()).processCommand(client.getUserId(), TransportCodec.unescape(args[1]));
-    } catch (Exception e) {
-      MWLogger.errLog(e);
-      MWLogger.errLog("Not supposed to happen");
+
+    /**
+     * @return true if this message should be distributed to other clients
+     */
+    public boolean process(MWChatClient client, String[] args) {
+        try {
+            ((ServerWrapper) client.getServer())
+                    .processCommand(client.getUserId(), TransportCodec.unescape(args[1]));
+        } catch (Exception e) {
+            MWLogger.errLog(e);
+            MWLogger.errLog("Not supposed to happen");
+        }
+        return false;
     }
-    return false;
-  }
-  
-  public void processDistributed(String client, String origin, String[] args, MWChatServer server) {
-  }  
+
+    public void processDistributed(
+            String client, String origin, String[] args, MWChatServer server) {}
 }

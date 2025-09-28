@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,10 +20,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,7 +33,7 @@ public abstract class FileUpdater<T> {
 
     private String inFilename;
     private String outFilename;
-    
+
     public FileUpdater(String filename) {
         this.inFilename = filename;
         this.outFilename = filename;
@@ -68,10 +68,9 @@ public abstract class FileUpdater<T> {
         }
 
         Files.copy(
-            Paths.get(getInFilename()),
-            Paths.get(getBackupFilename()),
-            StandardCopyOption.REPLACE_EXISTING
-        );
+                Paths.get(getInFilename()),
+                Paths.get(getBackupFilename()),
+                StandardCopyOption.REPLACE_EXISTING);
     }
 
     protected abstract ArrayList<T> deserialize();

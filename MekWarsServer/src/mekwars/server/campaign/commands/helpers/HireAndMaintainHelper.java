@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Original Author - Nathan Morris (urgru)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,17 +15,15 @@
  */
 
 /**
- * A simple helper which takes in data for 2 commands, and fires
- * their process() methods. Used to provide html/links which hire
- * and maintain units simultaneousnly (previously had to present
- * the users with 2 links, one for each command operation).
- * 
+ * A simple helper which takes in data for 2 commands, and fires their process() methods. Used to
+ * provide html/links which hire and maintain units simultaneousnly (previously had to present the
+ * users with 2 links, one for each command operation).
+ *
  * @urgru
  */
-
 package mekwars.server.campaign.commands.helpers;
 
-//imports
+// imports
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -34,32 +32,48 @@ import mekwars.server.campaign.commands.HireTechsCommand;
 import mekwars.server.campaign.commands.SetMaintainedCommand;
 
 public class HireAndMaintainHelper implements Command {
-	
-	int accessLevel = 0;
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	String syntax = "";
-	public String getSyntax() { return syntax;}
 
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		//get things from the command.
-		String numtohire = command.nextToken();
-		String numtoset = command.nextToken();
-		
-		HireTechsCommand hireCommand = new HireTechsCommand();
-		hireCommand.process(new StringTokenizer(numtohire), Username);
-		
-		SetMaintainedCommand setMaintainedCommand = new SetMaintainedCommand();
-		setMaintainedCommand.process(new StringTokenizer(numtoset), Username);
-	}//end process()
-	
-}//end HireAndMaintainHelper()
+    int accessLevel = 0;
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    String syntax = "";
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        // get things from the command.
+        String numtohire = command.nextToken();
+        String numtoset = command.nextToken();
+
+        HireTechsCommand hireCommand = new HireTechsCommand();
+        hireCommand.process(new StringTokenizer(numtohire), Username);
+
+        SetMaintainedCommand setMaintainedCommand = new SetMaintainedCommand();
+        setMaintainedCommand.process(new StringTokenizer(numtoset), Username);
+    } // end process()
+} // end HireAndMaintainHelper()

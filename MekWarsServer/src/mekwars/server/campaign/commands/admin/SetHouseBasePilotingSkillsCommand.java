@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2006 
- * 
+ * MekWars - Copyright (C) 2006
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,58 +17,89 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.common.Unit;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.commands.Command;
 
-//Syntax sethousebasepilotingskills house#pilotType#Skill$Skill
+// Syntax sethousebasepilotingskills house#pilotType#Skill$Skill
 public class SetHouseBasePilotingSkillsCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Faction Name#[Mek,Vehicle,Infantry,Proto,BattleArmor,Aero]#PilotingSkill$PilotingSkill";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
 
-            SHouse house;
-            int pilotType;
-            String skills = "";
-            
-            try{
-                house = CampaignMain.cm.getHouseFromPartialString(command.nextToken(), Username);
-                pilotType = Unit.getTypeIDForName(command.nextToken());
-                skills = command.nextToken()+"$";
-            }catch (Exception ex ){
-                CampaignMain.cm.toUser(syntax, Username);
-                return;
-            }
-    
-            if ( house == null )
-                return;
-            
-            if ( pilotType >= Unit.MAXBUILD || pilotType < 0){
-                CampaignMain.cm.toUser(syntax, Username);
-                return;
-            }
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax =
+            "Faction Name#[Mek,Vehicle,Infantry,Proto,BattleArmor,Aero]#PilotingSkill$PilotingSkill";
 
-            house.getPilotQueues().setBasePilotSkill(skills, pilotType);
-            
-            house.updated();
-            //log, and inform mods.
-            CampaignMain.cm.toUser("You added a piloting skill for unit "+Unit.getTypeClassDesc(pilotType)+" for house "+house.getName()+" to "+skills,Username);
-            CampaignMain.cm.doSendModMail("NOTE",Username + " has added a piloting skill for unit "+Unit.getTypeClassDesc(pilotType)+" for house "+house.getName()+" to "+skills+ ".");
-		
-	}//end process
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        SHouse house;
+        int pilotType;
+        String skills = "";
+
+        try {
+            house = CampaignMain.cm.getHouseFromPartialString(command.nextToken(), Username);
+            pilotType = Unit.getTypeIDForName(command.nextToken());
+            skills = command.nextToken() + "$";
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser(syntax, Username);
+            return;
+        }
+
+        if (house == null) return;
+
+        if (pilotType >= Unit.MAXBUILD || pilotType < 0) {
+            CampaignMain.cm.toUser(syntax, Username);
+            return;
+        }
+
+        house.getPilotQueues().setBasePilotSkill(skills, pilotType);
+
+        house.updated();
+        // log, and inform mods.
+        CampaignMain.cm.toUser(
+                "You added a piloting skill for unit "
+                        + Unit.getTypeClassDesc(pilotType)
+                        + " for house "
+                        + house.getName()
+                        + " to "
+                        + skills,
+                Username);
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username
+                        + " has added a piloting skill for unit "
+                        + Unit.getTypeClassDesc(pilotType)
+                        + " for house "
+                        + house.getName()
+                        + " to "
+                        + skills
+                        + ".");
+    } // end process
 }

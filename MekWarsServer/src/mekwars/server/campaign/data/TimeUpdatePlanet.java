@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,16 +17,13 @@
 package mekwars.server.campaign.data;
 
 import java.util.Date;
-
 import mekwars.common.Influences;
 import mekwars.common.Planet;
 import mekwars.common.util.Position;
 
-
-
 /**
  * Adds the ability to trace the last change time to a planet.
- * 
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class TimeUpdatePlanet extends Planet {
@@ -39,9 +36,7 @@ public class TimeUpdatePlanet extends Planet {
         super();
     }
 
-    /**
-     * The time at which this data was changed last.
-     */
+    /** The time at which this data was changed last. */
     private Date timestamp;
 
     /**
@@ -50,42 +45,28 @@ public class TimeUpdatePlanet extends Planet {
     public Date getLastChanged() {
         return timestamp;
     }
-    
-    /**
-     * Mark the data as updated.
-     */
+
+    /** Mark the data as updated. */
     public void updated() {
         timestamp = new Date();
     }
-    
-	/**
-	 * @param timestamp The timestamp to set.
-	 */
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-	
+
     /**
-     * Writing itself into a stream
-     *
-    @Override
-	public void binOut(TreeWriter out) {
-        super.binOut(out);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        out.write(sdf.format(getLastChanged()),"lastChanged");
+     * @param timestamp The timestamp to set.
+     */
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     /**
-     * Reading itself from a stream
+     * Writing itself into a stream @Override public void binOut(TreeWriter out) {
+     * super.binOut(out); SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+     * out.write(sdf.format(getLastChanged()),"lastChanged"); }
      *
-    @Override
-	public void binIn(TreeReader in, CampaignData data) throws IOException {
-        super.binIn(in, data);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        try {
-			timestamp = sdf.parse(in.readString("lastChanged"));
-		} catch (ParseException e) {
-			throw new IOException("corrupted date format");
-		}
-    }*/
+     * <p>/** Reading itself from a stream @Override public void binIn(TreeReader in, CampaignData
+     * data) throws IOException { super.binIn(in, data); SimpleDateFormat sdf = new
+     * SimpleDateFormat("yyyyMMddHHmmss"); try { timestamp =
+     * sdf.parse(in.readString("lastChanged")); } catch (ParseException e) { throw new
+     * IOException("corrupted date format"); } }
+     */
 }

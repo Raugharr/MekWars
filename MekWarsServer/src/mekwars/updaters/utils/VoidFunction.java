@@ -1,8 +1,8 @@
 /*
  * $Id: VoidFunction.java,v 1.1 2006/05/22 19:42:34 torren Exp $
  *
- * Integerated autoupdater into MekWarsAutoupdate --Torren 
- * 
+ * Integerated autoupdater into MekWarsAutoupdate --Torren
+ *
  * $Log: VoidFunction.java,v $
  * Revision 1.1  2006/05/22 19:42:34  torren
  * + Added new MekWarsAutoUpdate.jar run in stand alone this can be used to update
@@ -44,14 +44,12 @@ package updaters.utils;
 
 import java.io.Serializable;
 
+public interface VoidFunction extends Serializable {
 
-
-public interface VoidFunction extends Serializable
-{
-
-	/**
-	 * Return the result of executing
-	 * @return The result of processing the input parameters.
-	 */
-	Object execute();
+    /**
+     * Return the result of executing
+     *
+     * @return The result of processing the input parameters.
+     */
+    Object execute();
 }

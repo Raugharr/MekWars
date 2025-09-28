@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,7 +18,6 @@ package mekwars.server.campaign.commands;
 
 import java.io.File;
 import java.util.StringTokenizer;
-
 import mekwars.common.Unit;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
@@ -52,7 +51,14 @@ public class RequestDonatedCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -62,7 +68,7 @@ public class RequestDonatedCommand implements Command {
          * mech (XP/Cbills/IP, etc) and generates a string which describes the
          * outcome of the request. Note that donated units cost HALF as much as
          * new units in terms of Cbills and influence.
-         * 
+         *
          * USAGE: /c requestdonated#WEIGHTCLASS#TYPEID
          */
 
@@ -94,8 +100,10 @@ public class RequestDonatedCommand implements Command {
         // tell newbs they cant buy hangar units, but give them a link to
         // request new units.
         if (p.getMyHouse().isNewbieHouse()) {
-            result.append("AM:Players in the training faction may not purchase used/donated units; however, they may reset their units.");
-            result.append("AM:<br><a href=\"MEKWARS/c request#resetunits\">Click here to request a reset of your units.</a>");
+            result.append(
+                    "AM:Players in the training faction may not purchase used/donated units; however, they may reset their units.");
+            result.append(
+                    "AM:<br><a href=\"MEKWARS/c request#resetunits\">Click here to request a reset of your units.</a>");
             CampaignMain.cm.toUser(result.toString(), Username, true);
             return;
         }
@@ -106,7 +114,10 @@ public class RequestDonatedCommand implements Command {
             SPilot pilot = house.getNewPilot(unit.getType());
             unit.setPilot(pilot);
             p.addUnit(unit, true);
-            CampaignMain.cm.toUser("AM:High Command has given you a Mek from its welfare rolls to help you get back on your feet!", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:High Command has given you a Mek from its welfare rolls to help you get back on your feet!",
+                    Username,
+                    true);
 
             return;
         }
@@ -120,37 +131,59 @@ public class RequestDonatedCommand implements Command {
         }
 
         if (!p.hasRoomForUnit(type_id, weightclass)) {
-            CampaignMain.cm.toUser("AM:Sorry, you already have the maximum number of " + Unit.getWeightClassDesc(weightclass) + " " + Unit.getTypeClassDesc(type_id) + "s", Username);
+            CampaignMain.cm.toUser(
+                    "AM:Sorry, you already have the maximum number of "
+                            + Unit.getWeightClassDesc(weightclass)
+                            + " "
+                            + Unit.getTypeClassDesc(type_id)
+                            + "s",
+                    Username);
             return;
         }
 
         // get the unit from the faction vector. break out if there is no unit
         // to be had.
         SUnit u = house.getEntity(weightclass, type_id);
-        if (u == null) {// if getEntity returned null, there is none to give the
+        if (u == null) { // if getEntity returned null, there is none to give the
             // player
             result.append("AM:There is no unit of the requested weight class/type avaliable");
             CampaignMain.cm.toUser(result.toString(), Username, true);
             return;
         }
 
-        if (!Boolean.parseBoolean(p.getSubFaction().getConfig("CanBuyUsed" + Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id)))) {
-        	
-            CampaignMain.cm.toUser("AM:Sorry as a member of " + p.getSubFactionName() + " you are unable to purchase this unit.", Username);
+        if (!Boolean.parseBoolean(
+                p.getSubFaction()
+                        .getConfig(
+                                "CanBuyUsed"
+                                        + Unit.getWeightClassDesc(weightclass)
+                                        + Unit.getTypeClassDesc(type_id)))) {
+
+            CampaignMain.cm.toUser(
+                    "AM:Sorry as a member of "
+                            + p.getSubFactionName()
+                            + " you are unable to purchase this unit.",
+                    Username);
             return;
         }
 
         // boot the player's request if he has unmaintained units
         if (p.hasUnmaintainedUnit()) {
-            result.append("AM:Your faction refuses to assign additional units to you force while existing resources are not being properly maintained!");
-            house.addUnit(u, false);// add the retrieved mech back to the pool
+            result.append(
+                    "AM:Your faction refuses to assign additional units to you force while existing resources are not being properly maintained!");
+            house.addUnit(u, false); // add the retrieved mech back to the pool
             CampaignMain.cm.toUser(result.toString(), Username, true);
             return;
-        }// end if(has an unmaintained unit)
+        } // end if(has an unmaintained unit)
 
         // get money and inf costs.
-        int unitCbills = Math.round(Float.parseFloat(house.getConfig("UsedPurchaseCostMulti")) * house.getPriceForUnit(u.getWeightclass(), u.getType()));
-        int unitInfluence = Math.round(Float.parseFloat(house.getConfig("UsedPurchaseCostMulti")) * house.getInfluenceForUnit(u.getWeightclass(), u.getType()));
+        int unitCbills =
+                Math.round(
+                        Float.parseFloat(house.getConfig("UsedPurchaseCostMulti"))
+                                * house.getPriceForUnit(u.getWeightclass(), u.getType()));
+        int unitInfluence =
+                Math.round(
+                        Float.parseFloat(house.getConfig("UsedPurchaseCostMulti"))
+                                * house.getInfluenceForUnit(u.getWeightclass(), u.getType()));
         if (unitCbills < 0) {
             unitCbills = 0;
         }
@@ -170,30 +203,56 @@ public class RequestDonatedCommand implements Command {
         }
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
             if (!UnitUtils.canStartUp(u.getEntity())) {
-                unitCbills = Math.round(unitCbills * Float.parseFloat(house.getConfig("CostModifierToBuyEnginedUnit")));
+                unitCbills =
+                        Math.round(
+                                unitCbills
+                                        * Float.parseFloat(
+                                                house.getConfig("CostModifierToBuyEnginedUnit")));
             } else if (UnitUtils.hasCriticalDamage(u.getEntity())) {
-                unitCbills = Math.round(unitCbills * Float.parseFloat(house.getConfig("CostModifierToBuyCritDamagedUnit")));
+                unitCbills =
+                        Math.round(
+                                unitCbills
+                                        * Float.parseFloat(
+                                                house.getConfig(
+                                                        "CostModifierToBuyCritDamagedUnit")));
             } else if (UnitUtils.hasArmorDamage(u.getEntity())) {
-                unitCbills = Math.round(unitCbills * Float.parseFloat(house.getConfig("CostModifierToBuyArmorDamagedUnit")));
+                unitCbills =
+                        Math.round(
+                                unitCbills
+                                        * Float.parseFloat(
+                                                house.getConfig(
+                                                        "CostModifierToBuyArmorDamagedUnit")));
             }
         }
 
         // Add penalty if the player is over a sliding limit
         if (p.willHaveHangarPenalty(type_id, weightclass)) {
-        	int costPenalty = p.calculateHangarPenaltyForNextPurchase(type_id, weightclass);
-        	unitCbills += costPenalty;
+            int costPenalty = p.calculateHangarPenaltyForNextPurchase(type_id, weightclass);
+            unitCbills += costPenalty;
         }
-        
+
         if (unitCbills > p.getMoney() || unitInfluence > p.getInfluence()) {
-            house.addUnit(u, false);// add the retrieved mech back to the pool
-            CampaignMain.cm.toUser("AM:You cannot afford to purchase " + StringUtils.aOrAn(Unit.getWeightClassDesc(u.getWeightclass()), true) + " " + Unit.getTypeClassDesc(u.getType()) + " from the faction bay (Requires " + CampaignMain.cm.moneyOrFluMessage(true, false, unitCbills) + ", " + CampaignMain.cm.moneyOrFluMessage(false, true, unitInfluence) + ").", Username, true);
+            house.addUnit(u, false); // add the retrieved mech back to the pool
+            CampaignMain.cm.toUser(
+                    "AM:You cannot afford to purchase "
+                            + StringUtils.aOrAn(Unit.getWeightClassDesc(u.getWeightclass()), true)
+                            + " "
+                            + Unit.getTypeClassDesc(u.getType())
+                            + " from the faction bay (Requires "
+                            + CampaignMain.cm.moneyOrFluMessage(true, false, unitCbills)
+                            + ", "
+                            + CampaignMain.cm.moneyOrFluMessage(false, true, unitInfluence)
+                            + ").",
+                    Username,
+                    true);
             return;
         }
 
         // check to make sure the player has enough support for the unit
         // requested. if not, send hire and buy links.
-        int spaceTaken = SUnit.getHangarSpaceRequired(type_id, weightclass, 0, "null", p.getMyHouse());
-        if (spaceTaken > p.getFreeBays()) {// if only needs more technicians
+        int spaceTaken =
+                SUnit.getHangarSpaceRequired(type_id, weightclass, 0, "null", p.getMyHouse());
+        if (spaceTaken > p.getFreeBays()) { // if only needs more technicians
             int techCost = p.getTechHiringFee();
             if (useBays) {
                 techCost = Integer.parseInt(house.getConfig("CostToBuyNewBay"));
@@ -205,26 +264,29 @@ public class RequestDonatedCommand implements Command {
 
             if (totalCost > p.getMoney()) {
                 if (useBays) {
-                    result.append("AM:Command will not assign the requested unit to your force unless support is in place; however, you cannot afford to buy the unit *and* purchase bays. Total cost would be ");
+                    result.append(
+                            "AM:Command will not assign the requested unit to your force unless support is in place; however, you cannot afford to buy the unit *and* purchase bays. Total cost would be ");
                     result.append(CampaignMain.cm.moneyOrFluMessage(true, false, totalCost));
                     result.append(" and you only have ");
-                    result.append(+ p.getMoney());
+                    result.append(+p.getMoney());
                     result.append(".");
                 } else {
-                    result.append("AM:Command will not assign the requested unit to your force unless support is in place; however, you cannot afford to buy the unit *and* hire technicians. Total cost would be ");
+                    result.append(
+                            "AM:Command will not assign the requested unit to your force unless support is in place; however, you cannot afford to buy the unit *and* hire technicians. Total cost would be ");
                     result.append(CampaignMain.cm.moneyOrFluMessage(true, false, totalCost));
                     result.append(" and you only have ");
                     result.append(p.getMoney());
                     result.append(".");
                 }
-                house.addUnit(u, false);// couldnt afford, so add the retrieved
+                house.addUnit(u, false); // couldnt afford, so add the retrieved
                 // mech back to the pool
                 CampaignMain.cm.toUser(result.toString(), Username, true);
                 return;
             }
 
             if (useBays) {
-                result.append("AM:Quartermaster command will not release the requested unit to your force unless support resources are in place. You will need to purchase ");
+                result.append(
+                        "AM:Quartermaster command will not release the requested unit to your force unless support resources are in place. You will need to purchase ");
                 result.append(numTechs);
                 result.append(" more bays (total cost: ");
                 result.append(CampaignMain.cm.moneyOrFluMessage(true, true, techCost));
@@ -241,14 +303,16 @@ public class RequestDonatedCommand implements Command {
                 result.append(type_id);
                 result.append("\">Click here to purchase the bays and purchase the unit.</a>");
             } else {
-                result.append("AM:Quartermaster command will not release the requested unit to your force unless support resources are in place. You will need to hire ");
+                result.append(
+                        "AM:Quartermaster command will not release the requested unit to your force unless support resources are in place. You will need to hire ");
                 result.append(numTechs);
                 result.append(" more technicians (total tech cost: ");
                 result.append(CampaignMain.cm.moneyOrFluMessage(true, true, techCost));
-                result.append("). Combined cost of the requested unit and necessary technicians is ");
-                result.append( CampaignMain.cm.moneyOrFluMessage(true, true, totalCost));
+                result.append(
+                        "). Combined cost of the requested unit and necessary technicians is ");
+                result.append(CampaignMain.cm.moneyOrFluMessage(true, true, totalCost));
                 result.append(" and ");
-                result.append( CampaignMain.cm.moneyOrFluMessage(false, true, unitInfluence));
+                result.append(CampaignMain.cm.moneyOrFluMessage(false, true, unitInfluence));
                 result.append(".");
                 result.append("<br><a href=\"MEKWARS/c hireandrequestused#");
                 result.append(numTechs);
@@ -259,19 +323,21 @@ public class RequestDonatedCommand implements Command {
                 result.append("\">Click here to hire the technicians and purchase the unit.</a>");
             }
 
-            house.addUnit(u, false);// didnt complete the buy, so add the
+            house.addUnit(u, false); // didnt complete the buy, so add the
             // retrieved mech back to the pool
             CampaignMain.cm.toUser(result.toString(), Username, true);
-            return;// break out ...
-        }// end if (needsMoreTechs)
+            return; // break out ...
+        } // end if (needsMoreTechs)
 
-        if (u.hasVacantPilot() && (!u.isSinglePilotUnit() || !CampaignMain.cm.getBooleanConfig("AllowPersonalPilotQueues"))) {
+        if (u.hasVacantPilot()
+                && (!u.isSinglePilotUnit()
+                        || !CampaignMain.cm.getBooleanConfig("AllowPersonalPilotQueues"))) {
             u.setPilot(p.getMyHouse().getNewPilot(type_id));
         }
 
-        p.addUnit(u, true);// if both tests were passed, give the unit
-        p.addMoney(-unitCbills);// then take away money
-        p.addInfluence(-unitInfluence);// and take away influence
+        p.addUnit(u, true); // if both tests were passed, give the unit
+        p.addMoney(-unitCbills); // then take away money
+        p.addInfluence(-unitInfluence); // and take away influence
 
         result.append("AM:You've been granted a ");
         result.append(u.getModelName());
@@ -289,15 +355,14 @@ public class RequestDonatedCommand implements Command {
         CampaignMain.cm.doSendHouseMail(house, "NOTE", result.toString());
 
         // entity removed from SHouse. Send update to effected players
-        CampaignMain.cm.doSendToAllOnlinePlayers(house, "HS|" + house.getHSUnitRemovalString(u), false);
-
-    }// end process()
+        CampaignMain.cm.doSendToAllOnlinePlayers(
+                house, "HS|" + house.getHSUnitRemovalString(u), false);
+    } // end process()
 
     /**
-     * Private method which builds a welfare unit. Duplicated in RequestCommand.
-     * Kept private in these classes in order to ensure that ONLY requests
-     * generate welfare units (had previously been a public call in
-     * CampaignMain).
+     * Private method which builds a welfare unit. Duplicated in RequestCommand. Kept private in
+     * these classes in order to ensure that ONLY requests generate welfare units (had previously
+     * been a public call in CampaignMain).
      */
     private SUnit buildWelfareMek(String producer) {
         String Filename = "./data/buildtables/standard/" + producer + "_Welfare.txt";
@@ -312,5 +377,4 @@ public class RequestDonatedCommand implements Command {
 
         return cm;
     }
-
-}// end RequestDonatedCommand
+} // end RequestDonatedCommand

@@ -1,13 +1,13 @@
 /*
  * MekWars - Copyright (C) 2006
- * 
+ *
  * Original author - Jason Tighe (torren@users.sourceforge.net)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
@@ -17,121 +17,132 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWClientInfo;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
-
 
 /**
  * Moving the Me command from MWServ into the normal command structure.
  *
- * Syntax  /c me blah
+ * <p>Syntax /c me blah
  */
 public class MeCommand implements Command {
-	
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-        
+
+    int accessLevel = 0;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
         StringBuilder buffer = new StringBuilder();
-        
-        //grab the first command
-        if ( command.hasMoreTokens() )
-        	buffer.append(command.nextToken());
-        
-        while (command.hasMoreTokens()){
-        	buffer.append("#");
+
+        // grab the first command
+        if (command.hasMoreTokens()) buffer.append(command.nextToken());
+
+        while (command.hasMoreTokens()) {
+            buffer.append("#");
             buffer.append(command.nextToken());
         }
 
-        
-        StringTokenizer channels = new StringTokenizer(buffer.toString(),"|");
+        StringTokenizer channels = new StringTokenizer(buffer.toString(), "|");
 
         String toSend = "";
         String channel = "";
 
-        if ( channels.hasMoreTokens() )
-        	toSend = channels.nextToken();
-        else
-        	toSend = buffer.toString();
-        
-    	if (toSend.trim().length() == 0)
-			return;
-        if (channels.hasMoreTokens())
-        	channel = channels.nextToken();
+        if (channels.hasMoreTokens()) toSend = channels.nextToken();
+        else toSend = buffer.toString();
 
-        //if client is somehow null, just send the message
+        if (toSend.trim().length() == 0) return;
+        if (channels.hasMoreTokens()) channel = channels.nextToken();
+
+        // if client is somehow null, just send the message
         MWClientInfo client = MWServ.getInstance().getUser(Username);
         if (client == null) {
-        	CampaignMain.cm.doSendToAllOnlinePlayers(Username + "|#me " + toSend,true);
-        	return;
+            CampaignMain.cm.doSendToAllOnlinePlayers(Username + "|#me " + toSend, true);
+            return;
         }
-        
-        //check to see if the player is muted
+
+        // check to see if the player is muted
         boolean generalMute = MWServ.getInstance().getIgnoreList().indexOf(client.getName()) > -1;
-        boolean factionMute = MWServ.getInstance().getFactionLeaderIgnoreList().indexOf(client.getName()) > -1;
-       
+        boolean factionMute =
+                MWServ.getInstance().getFactionLeaderIgnoreList().indexOf(client.getName()) > -1;
+
         if (generalMute || factionMute)
-            CampaignMain.cm.toUser("AM:You've been set to ignore mode and cannot participate in chat.", Username,true);
-        else
-		if ( channel.equalsIgnoreCase("hm") ){
-			SPlayer player = CampaignMain.cm.getPlayer(Username);
-			CampaignMain.cm.doSendHouseMail(player.getHouseFightingFor(),Username,"#me " + toSend);
-		}
-		else if ( channel.equalsIgnoreCase("mm") ){
-			CampaignMain.cm.doSendModMail(Username,"#me " + toSend);
-		}
-		else if ( channel.equalsIgnoreCase("ic") ){
-			CampaignMain.cm.doSendToAllOnlinePlayers("(In Character)"+Username + ":#me " + toSend,true);
-		}
-		else if ( channel.equalsIgnoreCase("mail") ){
-			String reciever = channels.nextToken();
-			MWServ.getInstance().doStoreMail(reciever+",#me " + toSend, Username);
-		}
-		else {
-	        CampaignMain.cm.doSendToAllOnlinePlayers(Username+"|#me " + toSend,true);
-	        //captureAllChatForBot(Username, toSend);
-		}
-	}
-	
-	//this works, but needs a bit of touch up, copy code from other command @salient
-//	private void captureAllChatForBot(String Username, String chatMsg)
-//	{
-//		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_Bot_Chat"))) 
-//			return;
-//		
-//		File file = new File(CampaignMain.cm.getConfig("Bot_Buffer_Location")); 
-//		
-//		try 
-//		{
-//			Files.write(Paths.get(file.toURI()), chatMsg.getBytes("utf-8"), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-//			CampaignMain.cm.toUser(chatMsg,Username,true);
-//
-//		} 
-//		catch (UnsupportedEncodingException e) 
-//		{
-//			MWLogger.errLog(e);
-//			CampaignMain.cm.toUser(e.toString(),Username,true);
-//
-//		} 
-//		catch (IOException e) 
-//		{
-//			MWLogger.errLog(e);
-//			CampaignMain.cm.toUser(e.toString(),Username,true);
-//
-//		}
-//	}
+            CampaignMain.cm.toUser(
+                    "AM:You've been set to ignore mode and cannot participate in chat.",
+                    Username,
+                    true);
+        else if (channel.equalsIgnoreCase("hm")) {
+            SPlayer player = CampaignMain.cm.getPlayer(Username);
+            CampaignMain.cm.doSendHouseMail(
+                    player.getHouseFightingFor(), Username, "#me " + toSend);
+        } else if (channel.equalsIgnoreCase("mm")) {
+            CampaignMain.cm.doSendModMail(Username, "#me " + toSend);
+        } else if (channel.equalsIgnoreCase("ic")) {
+            CampaignMain.cm.doSendToAllOnlinePlayers(
+                    "(In Character)" + Username + ":#me " + toSend, true);
+        } else if (channel.equalsIgnoreCase("mail")) {
+            String reciever = channels.nextToken();
+            MWServ.getInstance().doStoreMail(reciever + ",#me " + toSend, Username);
+        } else {
+            CampaignMain.cm.doSendToAllOnlinePlayers(Username + "|#me " + toSend, true);
+            // captureAllChatForBot(Username, toSend);
+        }
+    }
+
+    // this works, but needs a bit of touch up, copy code from other command @salient
+    //	private void captureAllChatForBot(String Username, String chatMsg)
+    //	{
+    //		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_Bot_Chat")))
+    //			return;
+    //
+    //		File file = new File(CampaignMain.cm.getConfig("Bot_Buffer_Location"));
+    //
+    //		try
+    //		{
+    //			Files.write(Paths.get(file.toURI()), chatMsg.getBytes("utf-8"), StandardOpenOption.CREATE,
+    // StandardOpenOption.APPEND);
+    //			CampaignMain.cm.toUser(chatMsg,Username,true);
+    //
+    //		}
+    //		catch (UnsupportedEncodingException e)
+    //		{
+    //			MWLogger.errLog(e);
+    //			CampaignMain.cm.toUser(e.toString(),Username,true);
+    //
+    //		}
+    //		catch (IOException e)
+    //		{
+    //			MWLogger.errLog(e);
+    //			CampaignMain.cm.toUser(e.toString(),Username,true);
+    //
+    //		}
+    //	}
 }

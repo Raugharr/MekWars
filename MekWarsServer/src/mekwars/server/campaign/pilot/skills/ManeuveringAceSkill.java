@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,24 +20,25 @@
  */
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * Maneuvering like a quad.
- * 
+ *
  * @author Helge Richter and Immanuel Scholz
  */
 public class ManeuveringAceSkill extends SPilotSkill {
 
     public ManeuveringAceSkill(int id) {
         super(id, "Maneuvering Ace", "MA");
-        setDescription("Enables the unit to move laterally like a Quad. Units also receive a -1 BTH to rolls against skidding.");
+        setDescription(
+                "Enables the unit to move laterally like a Quad. Units also receive a -1 BTH to rolls against skidding.");
     }
 
     public ManeuveringAceSkill() {

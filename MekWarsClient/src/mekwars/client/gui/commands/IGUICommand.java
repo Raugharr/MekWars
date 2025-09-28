@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -17,13 +17,16 @@
 
 package mekwars.client.gui.commands;
 
-public interface IGUICommand
-{
-  // check if this is proper command
-  public boolean check(String name);
-  // invoked when command is executed
-  public boolean execute(String input);
-  public String getName();
-  public String getAlias();
-  public boolean isAlias();
+public interface IGUICommand {
+    // check if this is proper command
+    public boolean check(String name);
+
+    // invoked when command is executed
+    public boolean execute(String input);
+
+    public String getName();
+
+    public String getAlias();
+
+    public boolean isAlias();
 }

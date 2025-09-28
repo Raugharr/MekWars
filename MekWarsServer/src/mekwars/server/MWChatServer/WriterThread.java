@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,30 +15,26 @@
  */
 
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
  */
 /**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
+ * @author Torren (Jason Tighe) 11.5.05
  */
-
 package mekwars.server.MWChatServer;
 
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.zip.Deflater;
-
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommands;
 import mekwars.server.campaign.CampaignMain;
 
 /**
- * Constantly reads from the BufferedReader. Notifies the MWChatServerLocal via
- * the incomingMessage() method
+ * Constantly reads from the BufferedReader. Notifies the MWChatServerLocal via the
+ * incomingMessage() method
  */
 public class WriterThread extends Thread {
     protected static final int MAX_DEFLATED_SIZE = 29999;
@@ -70,7 +66,11 @@ public class WriterThread extends Thread {
             if (_keepGoing) {
                 try {
 
-                    if ((_socket == null) || _socket.isClosed() || !_socket.isConnected() || _socket.isInputShutdown() || _socket.isOutputShutdown()) {
+                    if ((_socket == null)
+                            || _socket.isClosed()
+                            || !_socket.isConnected()
+                            || _socket.isInputShutdown()
+                            || _socket.isOutputShutdown()) {
                         pleaseStop();
                         return;
                     }
@@ -90,9 +90,8 @@ public class WriterThread extends Thread {
     }
 
     /**
-     * Called by dispatcher. Sends queued messages to a downstream client. Small
-     * messages are sent uncompressed, but large items are GZIP'ed before
-     * transmission.
+     * Called by dispatcher. Sends queued messages to a downstream client. Small messages are sent
+     * uncompressed, but large items are GZIP'ed before transmission.
      */
     public void flush() {
 
@@ -107,7 +106,6 @@ public class WriterThread extends Thread {
          * whether the contents should be sent raw or be compressed.
          */
         synchronized (_messages) {
-
             StringBuilder sb = new StringBuilder();
             while (!_messages.isEmpty()) {
 
@@ -163,9 +161,8 @@ public class WriterThread extends Thread {
 
     /**
      * Deflate a string, then send it to the downstream client.
-     * 
-     * @param s
-     *            - String to deflate
+     *
+     * @param s - String to deflate
      */
     private void deflateAndSend(String s) {
 
@@ -176,9 +173,9 @@ public class WriterThread extends Thread {
             _deflater.setInput(rawBytes);
             _deflater.finish();
 
-            int n = _deflater.deflate(_deflatedBytes);// should always be
-                                                      // nonzero since we called
-                                                      // finish()
+            int n = _deflater.deflate(_deflatedBytes); // should always be
+            // nonzero since we called
+            // finish()
 
             // MWLogger.warnLog("Deflating Message for " +
             // _client.getUserId()+ "/" + _client.getHost() + " from " +
@@ -186,7 +183,7 @@ public class WriterThread extends Thread {
 
             /*
              * @NFC comment
-             * 
+             *
              * we need to include the number of bytes so client can easily read
              * the deflated section into a byte array and decompress. (At first
              * I wanted to just create an InflaterInputStream over the socket on
@@ -201,13 +198,25 @@ public class WriterThread extends Thread {
              * with a delimiter and the byte array, then print to the
              * PrintWriter.
              */
-            String o = ICommands.DEFLATED + ICommands.DELIMITER + n + ICommands.DELIMITER + s.length() + "\n";
+            String o =
+                    ICommands.DEFLATED
+                            + ICommands.DELIMITER
+                            + n
+                            + ICommands.DELIMITER
+                            + s.length()
+                            + "\n";
             _out.print(o);
 
             /*
              * End of NFC prinln, resumption of deflateAndSend.
              */
-            MWLogger.debugLog("Sending deflated data to " + _host + ":Size:" + s.length() + ":Deflated Size:" + Integer.toString(n));
+            MWLogger.debugLog(
+                    "Sending deflated data to "
+                            + _host
+                            + ":Size:"
+                            + s.length()
+                            + ":Deflated Size:"
+                            + Integer.toString(n));
             _out.flush();
             _socket.getOutputStream().write(_deflatedBytes, 0, n);
             _socket.getOutputStream().flush();
@@ -225,11 +234,9 @@ public class WriterThread extends Thread {
             // readerthread code. --Torren
             // shutdown(true);
         }
-
     }
 
     void pleaseStop() {
         _keepGoing = false;
     }
-
 }

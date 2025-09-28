@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2007 
+ * MekWars - Copyright (C) 2007
  *
  * Original author - jtighe (torren@users.sourceforge.net)
  *
@@ -21,68 +21,85 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
-//Syntax retrievealloperations#optype
+// Syntax retrievealloperations#optype
 public class RetrieveAllOperationsCommand implements Command {
-    
+
     int accessLevel = IAuthenticator.ADMIN;
-    public int getExecutionLevel(){return accessLevel;}
-    public void setExecutionLevel(int i) {accessLevel = i;}
-	String syntax = "optype[Short/Long/Speical]";
-	public String getSyntax() { return syntax;}
 
-    public void process(StringTokenizer command,String Username) {
-        
-        //access level check
-        int userLevel = MWServ.getInstance().getUserLevel(Username);
-        if(userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-            return;
-        }
-        
-        String opType;
-        
-        try{
-            opType = command.nextToken();
-        }catch (Exception ex){
-            CampaignMain.cm.toUser("Syntax retrievealloperations#optype",Username,true);
-            return;
-        }
-        
-        File opFiles = new File("./data/operations/"+opType);
-
-        
-        if ( !opFiles.exists() ){
-            CampaignMain.cm.toUser("No files found for Op type "+opType,Username,true);
-            return;
-        }
-            
-        StringBuilder opData = new StringBuilder();
-        
-    	for (File opFile : opFiles.listFiles()){
-    		try{
-	            FileInputStream fis = new FileInputStream(opFile);
-	            BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
-	            opData.append(opFile.getName().substring(0,opFile.getName().lastIndexOf(".txt"))+"#");
-	            while (dis.ready()){
-	                opData.append(dis.readLine().replaceAll("#","(pound)")+"#");
-	            }
-	            dis.close();
-	            fis.close();
-	            CampaignMain.cm.doSendModMail("NOTE",Username+" has retrieved "+opFile.getName());
-	            
-	            CampaignMain.cm.toUser("PL|RSOD|"+opData.toString(),Username,false);
-	            //Clean it out for use again.
-	            opData.setLength(0);
-	        }catch(Exception ex){
-	            CampaignMain.cm.toUser("Unable to read "+opFile.getName(),Username,true);
-	            return;
-	        }
-    	}
-        
+    public int getExecutionLevel() {
+        return accessLevel;
     }
-}//end RetrieveAllOperations
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    String syntax = "optype[Short/Long/Speical]";
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        String opType;
+
+        try {
+            opType = command.nextToken();
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser("Syntax retrievealloperations#optype", Username, true);
+            return;
+        }
+
+        File opFiles = new File("./data/operations/" + opType);
+
+        if (!opFiles.exists()) {
+            CampaignMain.cm.toUser("No files found for Op type " + opType, Username, true);
+            return;
+        }
+
+        StringBuilder opData = new StringBuilder();
+
+        for (File opFile : opFiles.listFiles()) {
+            try {
+                FileInputStream fis = new FileInputStream(opFile);
+                BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+                opData.append(
+                        opFile.getName().substring(0, opFile.getName().lastIndexOf(".txt")) + "#");
+                while (dis.ready()) {
+                    opData.append(dis.readLine().replaceAll("#", "(pound)") + "#");
+                }
+                dis.close();
+                fis.close();
+                CampaignMain.cm.doSendModMail(
+                        "NOTE", Username + " has retrieved " + opFile.getName());
+
+                CampaignMain.cm.toUser("PL|RSOD|" + opData.toString(), Username, false);
+                // Clean it out for use again.
+                opData.setLength(0);
+            } catch (Exception ex) {
+                CampaignMain.cm.toUser("Unable to read " + opFile.getName(), Username, true);
+                return;
+            }
+        }
+    }
+} // end RetrieveAllOperations

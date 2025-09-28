@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * original author: N. Morris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,10 +17,9 @@
 package mekwars.server.campaign.market2;
 
 /**
- * A simple interface which defines the auction method. Sort of pointless,
- * but necessary in order to have Market.java call getWinner() on a myriad
- * of auction types.
+ * A simple interface which defines the auction method. Sort of pointless, but necessary in order to
+ * have Market.java call getWinner() on a myriad of auction types.
  */
 public interface IAuction {
-	public abstract MarketBid getWinner(MarketListing listing, boolean hiddenBM);
+    public abstract MarketBid getWinner(MarketListing listing, boolean hiddenBM);
 }

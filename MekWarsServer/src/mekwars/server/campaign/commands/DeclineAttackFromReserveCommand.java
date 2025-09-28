@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2005  
+ * MekWars - Copyright (C) 2005
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -19,46 +19,70 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 
 public class DeclineAttackFromReserveCommand implements Command {
-	
-	int accessLevel = 2;
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	String syntax = "";
-	public String getSyntax() { return syntax;}
 
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
+    int accessLevel = 2;
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    String syntax = "";
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
 
         SPlayer ap = null;
-        
-        try{
+
+        try {
             ap = CampaignMain.cm.getPlayer(command.nextToken());
-        }catch(Exception ex){
+        } catch (Exception ex) {
             return;
         }
-        
+
         Long launchTime = ap.getLastAttackFromReserve();
-        
-        if ( launchTime + (Long.parseLong(CampaignMain.cm.getConfig("AttackFromReserveResponseTime"))*60000) < System.currentTimeMillis() ){
-            CampaignMain.cm.toUser("AM:Sorry but this offer has already expired.",Username,true);
+
+        if (launchTime
+                        + (Long.parseLong(
+                                        CampaignMain.cm.getConfig("AttackFromReserveResponseTime"))
+                                * 60000)
+                < System.currentTimeMillis()) {
+            CampaignMain.cm.toUser("AM:Sorry but this offer has already expired.", Username, true);
             return;
         }
-        
-        //else
-        
-        ap.setLastAttackFromReserve(launchTime-(Long.parseLong(CampaignMain.cm.getConfig("AttackFromReserveResponseTime"))*60000));
-        
-        CampaignMain.cm.toUser("AM:"+Username+" has declined your proposal.",ap.getName(),true);
-        CampaignMain.cm.toUser("AM:You have declined "+ap.getName()+"'s proposal.",Username,true);
-        
-	}//end process
-	
-}//end AttackFromReserveCommand
+
+        // else
+
+        ap.setLastAttackFromReserve(
+                launchTime
+                        - (Long.parseLong(
+                                        CampaignMain.cm.getConfig("AttackFromReserveResponseTime"))
+                                * 60000));
+
+        CampaignMain.cm.toUser(
+                "AM:" + Username + " has declined your proposal.", ap.getName(), true);
+        CampaignMain.cm.toUser(
+                "AM:You have declined " + ap.getName() + "'s proposal.", Username, true);
+    } // end process
+} // end AttackFromReserveCommand

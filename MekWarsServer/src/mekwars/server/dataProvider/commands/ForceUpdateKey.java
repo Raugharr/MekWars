@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Original Author: nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,20 +17,16 @@
 package mekwars.server.dataProvider.commands;
 
 import java.util.Date;
-
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.dataProvider.ServerCommand;
 
-/**
- * Retrieve the MD5 of the current campaignconfig file.
- */
+/** Retrieve the MD5 of the current campaignconfig file. */
 public class ForceUpdateKey implements ServerCommand {
 
     public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
-    	
+
         out.println(CampaignMain.cm.getConfig("ForceUpdateKey"), "ForceUpdateKey");
     }
-
 }

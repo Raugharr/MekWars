@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,35 +18,49 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.campaign.util.HouseRankingHelpContainer;
 
 public class AdminResetHouseRankingsCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		TreeSet<HouseRankingHelpContainer> s = CampaignMain.cm.getHouseRanking();
-		for (HouseRankingHelpContainer h : s)
-			h.getHouse().setInitialHouseRanking(h.getAmount());
-		
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has reset the faction rankings");
-		CampaignMain.cm.toUser("You have reset the faction rankings",Username,true);
-		
-	}
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        TreeSet<HouseRankingHelpContainer> s = CampaignMain.cm.getHouseRanking();
+        for (HouseRankingHelpContainer h : s) h.getHouse().setInitialHouseRanking(h.getAmount());
+
+        CampaignMain.cm.doSendModMail("NOTE", Username + " has reset the faction rankings");
+        CampaignMain.cm.toUser("You have reset the faction rankings", Username, true);
+    }
 }

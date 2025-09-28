@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2007 
- * 
+ * MekWars - Copyright (C) 2007
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original Author - JTighe (Torren@users.sourceforge.net)
  *
@@ -15,49 +15,62 @@
  * for more details.
  */
 
-
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 
 public class SetAutoReorderCommand implements Command {
-	
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		if ( !CampaignMain.cm.getBooleanConfig("UsePartsRepair") )
-			return;
-		 	
-		SPlayer p = CampaignMain.cm.getPlayer(Username);
-		
-		try {
-			p.setAutoReorder(Boolean.parseBoolean(command.nextToken()));
-			CampaignMain.cm.toUser("PL|ROP|"+p.getAutoReorder(), Username,false);
-		}//end try
-		catch (Exception ex) {
-			CampaignMain.cm.toUser("AM:SetAutoAutoReorder command failed. Check your input. It should be something like this: /c setAutoReorder#True/False",Username);
-			return;
-		}//end catch
-		
-		CampaignMain.cm.toUser("AM:Auto Reorder set.",Username,true);
-		
-	}//end process() 
-}//end SetAutoEjectCommand class
 
+    int accessLevel = 0;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        if (!CampaignMain.cm.getBooleanConfig("UsePartsRepair")) return;
+
+        SPlayer p = CampaignMain.cm.getPlayer(Username);
+
+        try {
+            p.setAutoReorder(Boolean.parseBoolean(command.nextToken()));
+            CampaignMain.cm.toUser("PL|ROP|" + p.getAutoReorder(), Username, false);
+        } // end try
+        catch (Exception ex) {
+            CampaignMain.cm.toUser(
+                    "AM:SetAutoAutoReorder command failed. Check your input. It should be something like this: /c setAutoReorder#True/False",
+                    Username);
+            return;
+        } // end catch
+
+        CampaignMain.cm.toUser("AM:Auto Reorder set.", Username, true);
+    } // end process()
+} // end SetAutoEjectCommand class

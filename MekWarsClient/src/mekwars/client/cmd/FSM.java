@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -18,29 +18,28 @@
 package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.client.MWClient;
+
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class FSM extends Command {
 
-	/**
-	 * @see Command#Command(MMClient)
-	 */
-	public FSM(MWClient mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @see Command#Command(MMClient)
+     */
+    public FSM(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-        if (st.hasMoreElements())
-        {
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        if (st.hasMoreElements()) {
             mwclient.systemMessage(st.nextToken());
         }
-	}
+    }
 }

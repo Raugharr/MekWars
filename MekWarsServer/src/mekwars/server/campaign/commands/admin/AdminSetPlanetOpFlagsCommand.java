@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2006 
- * 
+ * MekWars - Copyright (C) 2006
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,60 +18,80 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
 
-
 public class AdminSetPlanetOpFlagsCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Planet Name#FlagCode#FlagCode#...<br>NOTE: you can repeat FlagCode multiple times.<br>NOTE:This will reset all the flags for the planet to these flags!";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-        if ( !command.hasMoreTokens() ){
-            CampaignMain.cm.toUser("Syntax AdminSetPlanetOpFlags#Planet#FlagCode#FlagCode#...<br>NOTE: you can repeat FlagCode multiple times.<br>NOTE:This will reset all the flags for the planet to these flags!" , Username);
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax =
+            "Planet Name#FlagCode#FlagCode#...<br>NOTE: you can repeat FlagCode multiple times.<br>NOTE:This will reset all the flags for the planet to these flags!";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
-        
-		SPlanet planet =  (SPlanet) CampaignMain.cm.getData().getPlanetByName(command.nextToken());
-		if ( planet == null ) {
-			CampaignMain.cm.toUser("Unknown Planet",Username,true);
-			return;
-		}
-		
+
+        if (!command.hasMoreTokens()) {
+            CampaignMain.cm.toUser(
+                    "Syntax AdminSetPlanetOpFlags#Planet#FlagCode#FlagCode#...<br>NOTE: you can repeat FlagCode multiple times.<br>NOTE:This will reset all the flags for the planet to these flags!",
+                    Username);
+            return;
+        }
+
+        SPlanet planet = (SPlanet) CampaignMain.cm.getData().getPlanetByName(command.nextToken());
+        if (planet == null) {
+            CampaignMain.cm.toUser("Unknown Planet", Username, true);
+            return;
+        }
+
         TreeMap<String, String> map = new TreeMap<String, String>();
-        try{
-            while (command.hasMoreTokens()){
+        try {
+            while (command.hasMoreTokens()) {
                 String key = command.nextToken();
-                if ( CampaignMain.cm.getData().getPlanetOpFlags().containsKey(key) )
+                if (CampaignMain.cm.getData().getPlanetOpFlags().containsKey(key))
                     map.put(key, CampaignMain.cm.getData().getPlanetOpFlags().get(key));
-                else
-                    CampaignMain.cm.toUser(key+" is not a valid plant ops flag!", Username);
+                else CampaignMain.cm.toUser(key + " is not a valid plant ops flag!", Username);
             }
-        }catch (Exception ex){
-            CampaignMain.cm.toUser("Syntax AdminSetPlanetOpFlags#Planet#FlagCode#FlagCode#...<br>NOTE: you can repeat FlagCode multiple times.<br>NOTE:This will reset all the flags for the planet to these flags!" , Username);
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser(
+                    "Syntax AdminSetPlanetOpFlags#Planet#FlagCode#FlagCode#...<br>NOTE: you can repeat FlagCode multiple times.<br>NOTE:This will reset all the flags for the planet to these flags!",
+                    Username);
             return;
         }
-        
+
         planet.setPlanetFlags(map);
-		CampaignMain.cm.toUser("Op flags set for "+planet.getName(),Username,true);
-		//server.MWLogger.modLog(Username + " set the op flags for "+planet.getName());
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has set the op flags for "+planet.getName());
-		
+        CampaignMain.cm.toUser("Op flags set for " + planet.getName(), Username, true);
+        // server.MWLogger.modLog(Username + " set the op flags for "+planet.getName());
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has set the op flags for " + planet.getName());
+
         planet.updated();
-	}
+    }
 }

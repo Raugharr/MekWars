@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -24,20 +24,20 @@ import mekwars.dedicatedhost.MWDedHost;
  */
 public class SAS extends Command {
 
-	/**
-	 * @param client
-	 */
-	public SAS(MWDedHost mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @param client
+     */
+    public SAS(MWDedHost mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-	    String line = decode(input).nextToken();
-	    mwclient.serverSend("CH|"+line);
-	    //dclient.addToChat();
-	}
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        String line = decode(input).nextToken();
+        mwclient.serverSend("CH|" + line);
+        // dclient.addToChat();
+    }
 }

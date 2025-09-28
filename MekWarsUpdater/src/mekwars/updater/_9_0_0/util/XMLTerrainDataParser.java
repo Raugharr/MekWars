@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -21,20 +21,18 @@
  */
 package mekwars.updater._9_0_0.util;
 
+import gd.xml.ParseException;
+import gd.xml.XMLParser;
+import gd.xml.XMLResponder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Hashtable;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
-
 import mekwars.common.PlanetEnvironment;
 import mekwars.common.Terrain;
-import gd.xml.ParseException;
-import gd.xml.XMLParser;
-import gd.xml.XMLResponder;
-import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -118,7 +116,7 @@ public class XMLTerrainDataParser implements XMLResponder {
     int PlantedFieldMaxSpots;
     int PlantedFieldMinHexes;
     int PlantedFieldMaxHexes;
-    
+
     // Fortified
     int FortifiedMinSpots;
     int FortifiedMaxSpots;
@@ -157,8 +155,8 @@ public class XMLTerrainDataParser implements XMLResponder {
     int CliffProbability;
     int InvertNegativeTerrain;
     int environmentProbability = 1;
-    
-    //static maps
+
+    // static maps
     int xmap = 1;
     int ymap = 1;
     int xboard = 16;
@@ -166,10 +164,9 @@ public class XMLTerrainDataParser implements XMLResponder {
     boolean map = false;
     String mapname = "";
 
-    
     String Theme = "";
     Terrain planetTerrain = new Terrain();
-    
+
     public XMLTerrainDataParser(String filename) {
         this.filename = filename;
         try {
@@ -180,25 +177,22 @@ public class XMLTerrainDataParser implements XMLResponder {
         }
     }
 
-    public void recordNotationDeclaration(String name, String pubID, String sysID) throws ParseException {
+    public void recordNotationDeclaration(String name, String pubID, String sysID)
+            throws ParseException {
         System.out.print(prefix + "!NOTATION: " + name);
-        if (pubID != null)
-            System.out.print("  pubID = " + pubID);
-        if (sysID != null)
-            System.out.print("  sysID = " + sysID);
+        if (pubID != null) System.out.print("  pubID = " + pubID);
+        if (sysID != null) System.out.print("  sysID = " + sysID);
         logger.info("");
     }
 
-    public void recordEntityDeclaration(String name, String value, String pubID, String sysID, String notation) throws ParseException {
+    public void recordEntityDeclaration(
+            String name, String value, String pubID, String sysID, String notation)
+            throws ParseException {
         System.out.print(prefix + "!ENTITY: " + name);
-        if (value != null)
-            System.out.print("  value = " + value);
-        if (pubID != null)
-            System.out.print("  pubID = " + pubID);
-        if (sysID != null)
-            System.out.print("  sysID = " + sysID);
-        if (notation != null)
-            System.out.print("  notation = " + notation);
+        if (value != null) System.out.print("  value = " + value);
+        if (pubID != null) System.out.print("  pubID = " + pubID);
+        if (sysID != null) System.out.print("  sysID = " + sysID);
+        if (notation != null) System.out.print("  notation = " + notation);
         logger.info("");
     }
 
@@ -207,7 +201,9 @@ public class XMLTerrainDataParser implements XMLResponder {
         logger.info("  content = " + content);
     }
 
-    public void recordAttlistDeclaration(String element, String attr, boolean notation, String type, String defmod, String def) throws ParseException {
+    public void recordAttlistDeclaration(
+            String element, String attr, boolean notation, String type, String defmod, String def)
+            throws ParseException {
         System.out.print(prefix + "!ATTLIST: " + element);
         System.out.print("  attr = " + attr);
         System.out.print("  type = " + ((notation) ? "NOTATIONS " : "") + type);
@@ -215,20 +211,18 @@ public class XMLTerrainDataParser implements XMLResponder {
         logger.info((def == null) ? "" : "  def = " + notation);
     }
 
-    public void recordDoctypeDeclaration(String name, String pubID, String sysID) throws ParseException {
+    public void recordDoctypeDeclaration(String name, String pubID, String sysID)
+            throws ParseException {
         System.out.print(prefix + "!DOCTYPE: " + name);
-        if (pubID != null)
-            System.out.print("  pubID = " + pubID);
-        if (sysID != null)
-            System.out.print("  sysID = " + sysID);
+        if (pubID != null) System.out.print("  pubID = " + pubID);
+        if (sysID != null) System.out.print("  sysID = " + sysID);
         logger.info("");
         prefix = "";
     }
 
     /* DOC METHDODS */
 
-    public void recordDocStart() {
-    }
+    public void recordDocStart() {}
 
     public void recordDocEnd() {
         logger.info("");
@@ -293,12 +287,12 @@ public class XMLTerrainDataParser implements XMLResponder {
             PE.setSandMaxSpots(SandMaxSpots);
             PE.setSandMinHexes(SandMinHexes);
             PE.setSandMaxHexes(SandMaxHexes);
-            
+
             PE.setPlantedFieldMinSpots(PlantedFieldMinSpots);
             PE.setPlantedFieldMaxSpots(PlantedFieldMaxSpots);
             PE.setPlantedFieldMinHexes(PlantedFieldMinHexes);
             PE.setPlantedFieldMaxHexes(PlantedFieldMaxHexes);
-            
+
             PE.setFortifiedMinSpots(FortifiedMinSpots);
             PE.setFortifiedMaxSpots(FortifiedMaxSpots);
             PE.setFortifiedMinHexes(FortifiedMinHexes);
@@ -335,7 +329,7 @@ public class XMLTerrainDataParser implements XMLResponder {
             PE.setInvertNegativeTerrain(InvertNegativeTerrain);
             PE.setEnvironmentalProbability(environmentProbability);
             PE.setName(name);
-            
+
             PE.setStaticMap(map);
             PE.setStaticMapName(mapname);
             PE.setXBoardSize(xboard);
@@ -343,7 +337,6 @@ public class XMLTerrainDataParser implements XMLResponder {
             PE.setYBoardSize(yboard);
             PE.setYSize(ymap);
 
-            
             planetTerrain.getEnvironments().add(PE);
             // Reset Variables
             doResetEnvironmentVariables();
@@ -362,7 +355,6 @@ public class XMLTerrainDataParser implements XMLResponder {
 
     private void doResetEnvironmentVariables() {
 
-        
         environmentProbability = 1;
         CraterProbability = 0;
         CraterMinNum = 0;
@@ -480,8 +472,7 @@ public class XMLTerrainDataParser implements XMLResponder {
         // logger.info(prefix+charData);
         if (!charData.equalsIgnoreCase("")) {
             // do nothing; //logger.info(lastElement + " --> " + charData);
-        } else
-            lastElement = "";
+        } else lastElement = "";
         if (lastElement.equalsIgnoreCase("NAME")) {
             name = charData;
             logger.info(name);
@@ -499,8 +490,7 @@ public class XMLTerrainDataParser implements XMLResponder {
             Hillyness = Integer.parseInt(charData);
             // fix for new version of MM RMG no uses a range of 0-99
             // Torren 05/27/05 MM version 0.29.79+
-            if (Hillyness > 100)
-                Hillyness /= 10;
+            if (Hillyness > 100) Hillyness /= 10;
         } else if (lastElement.equalsIgnoreCase("HILLELEVATIONRANGE"))
             HillElevationRange = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("HILLINVERTPROB"))
@@ -541,7 +531,6 @@ public class XMLTerrainDataParser implements XMLResponder {
             SwampMinHexes = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("SWAMPMAXHEXES"))
             SwampMaxHexes = Integer.parseInt(charData);
-
         else if (lastElement.equalsIgnoreCase("PAVEMENTMINSPOTS"))
             PavementMinSpots = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("PAVEMENTMAXSPOTS"))
@@ -550,7 +539,6 @@ public class XMLTerrainDataParser implements XMLResponder {
             PavementMinHexes = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("PAVEMENTMAXHEXES"))
             PavementMaxHexes = Integer.parseInt(charData);
-
         else if (lastElement.equalsIgnoreCase("ICEMINSPOTS"))
             IceMinSpots = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("ICEMAXSPOTS"))
@@ -559,7 +547,6 @@ public class XMLTerrainDataParser implements XMLResponder {
             IceMinHexes = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("ICEMAXHEXES"))
             IceMaxHexes = Integer.parseInt(charData);
-
         else if (lastElement.equalsIgnoreCase("RUBBLEMINSPOTS"))
             RubbleMinSpots = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("RUBBLEMAXSPOTS"))
@@ -568,7 +555,6 @@ public class XMLTerrainDataParser implements XMLResponder {
             RubbleMinHexes = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("RUBBLEMAXHEXES"))
             RubbleMaxHexes = Integer.parseInt(charData);
-
         else if (lastElement.equalsIgnoreCase("SANDMINSPOTS"))
             SandMinSpots = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("SANDMAXSPOTS"))
@@ -577,7 +563,6 @@ public class XMLTerrainDataParser implements XMLResponder {
             SandMinHexes = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("SANDMAXHEXES"))
             SandMaxHexes = Integer.parseInt(charData);
-        
         else if (lastElement.equalsIgnoreCase("PLANTEDFIELDMINSPOTS"))
             PlantedFieldMinSpots = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("PLANTEDFIELDMAXSPOTS"))
@@ -586,7 +571,6 @@ public class XMLTerrainDataParser implements XMLResponder {
             PlantedFieldMinHexes = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("PLANTEDFIELDMAXHEXES"))
             PlantedFieldMaxHexes = Integer.parseInt(charData);
-        
         else if (lastElement.equalsIgnoreCase("FORTIFIEDMINSPOTS"))
             FortifiedMinSpots = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("FORTIFIEDMAXSPOTS"))
@@ -595,24 +579,15 @@ public class XMLTerrainDataParser implements XMLResponder {
             FortifiedMinHexes = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("FORTIFIEDMAXHEXES"))
             FortifiedMaxHexes = Integer.parseInt(charData);
-
-        else if (lastElement.equalsIgnoreCase("CITYBLOCKS"))
-            Roads = Integer.parseInt(charData);
-        else if (lastElement.equalsIgnoreCase("MINCF"))
-            MinCF = Integer.parseInt(charData);
-        else if (lastElement.equalsIgnoreCase("MAXCF"))
-            MaxCF = Integer.parseInt(charData);
-        else if (lastElement.equalsIgnoreCase("MINFLOORS"))
-            MinFloors = Integer.parseInt(charData);
-        else if (lastElement.equalsIgnoreCase("MAXFLOORS"))
-            MaxFloors = Integer.parseInt(charData);
+        else if (lastElement.equalsIgnoreCase("CITYBLOCKS")) Roads = Integer.parseInt(charData);
+        else if (lastElement.equalsIgnoreCase("MINCF")) MinCF = Integer.parseInt(charData);
+        else if (lastElement.equalsIgnoreCase("MAXCF")) MaxCF = Integer.parseInt(charData);
+        else if (lastElement.equalsIgnoreCase("MINFLOORS")) MinFloors = Integer.parseInt(charData);
+        else if (lastElement.equalsIgnoreCase("MAXFLOORS")) MaxFloors = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("CITYDENSITY"))
             CityDensity = Integer.parseInt(charData);
-        else if (lastElement.equalsIgnoreCase("CITYTYPE"))
-            CityType = charData;
-        else if (lastElement.equalsIgnoreCase("TOWNSIZE"))
-            TownSize = Integer.parseInt(charData);
-
+        else if (lastElement.equalsIgnoreCase("CITYTYPE")) CityType = charData;
+        else if (lastElement.equalsIgnoreCase("TOWNSIZE")) TownSize = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("MOUNTPEAKS"))
             MountPeaks = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("MOUNTWIDTHMIN"))
@@ -625,9 +600,7 @@ public class XMLTerrainDataParser implements XMLResponder {
             MountHeightMax = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("MOUNTSTYLE"))
             MountStyle = Integer.parseInt(charData);
-
-        else if (lastElement.equalsIgnoreCase("FXMOD"))
-            FxMod = Integer.parseInt(charData);
+        else if (lastElement.equalsIgnoreCase("FXMOD")) FxMod = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("PROBFORESTFIRE"))
             ForestFireProbability = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("PROBFREEZE"))
@@ -636,9 +609,7 @@ public class XMLTerrainDataParser implements XMLResponder {
             FloodProbability = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("PROBDROUGHT"))
             DroughtProbability = Integer.parseInt(charData);
-
-        else if (lastElement.equalsIgnoreCase("THEME"))
-            Theme = charData;
+        else if (lastElement.equalsIgnoreCase("THEME")) Theme = charData;
         else if (lastElement.equalsIgnoreCase("ROADPROB"))
             RoadProbability = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("CLIFFPROB"))
@@ -647,22 +618,20 @@ public class XMLTerrainDataParser implements XMLResponder {
             InvertNegativeTerrain = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("RIVERPROB"))
             RiverProbability = Integer.parseInt(charData);
-        else if (lastElement.equalsIgnoreCase("ALGORITHM"))
-            Algorithm = Integer.parseInt(charData);
+        else if (lastElement.equalsIgnoreCase("ALGORITHM")) Algorithm = Integer.parseInt(charData);
         else if (lastElement.equalsIgnoreCase("staticmap")) {
-            map =  Boolean.parseBoolean(charData);
+            map = Boolean.parseBoolean(charData);
         } else if (lastElement.equalsIgnoreCase("mapname")) {
             mapname = charData;
         } else if (lastElement.equalsIgnoreCase("xmap")) {
-            xmap =  Integer.parseInt(charData);
+            xmap = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("ymap")) {
-            ymap =  Integer.parseInt(charData);
+            ymap = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("xboard")) {
-            xboard =  Integer.parseInt(charData);
+            xboard = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("yboard")) {
-            yboard =  Integer.parseInt(charData);
-        }
-        else if (lastElement.equalsIgnoreCase("ENVIRONMENTPROBABILITY"))
+            yboard = Integer.parseInt(charData);
+        } else if (lastElement.equalsIgnoreCase("ENVIRONMENTPROBABILITY"))
             environmentProbability = Integer.parseInt(charData);
     }
 
@@ -680,7 +649,8 @@ public class XMLTerrainDataParser implements XMLResponder {
         }
     }
 
-    public InputStream resolveExternalEntity(String name, String pubID, String sysID) throws ParseException {
+    public InputStream resolveExternalEntity(String name, String pubID, String sysID)
+            throws ParseException {
         if (sysID != null) {
             File f = new File((new File(filename)).getParent(), sysID);
             try {
@@ -693,7 +663,8 @@ public class XMLTerrainDataParser implements XMLResponder {
         return null;
     }
 
-    public InputStream resolveDTDEntity(String name, String pubID, String sysID) throws ParseException {
+    public InputStream resolveDTDEntity(String name, String pubID, String sysID)
+            throws ParseException {
         return resolveExternalEntity(name, pubID, sysID);
     }
 
@@ -702,8 +673,7 @@ public class XMLTerrainDataParser implements XMLResponder {
         String result = new String();
         while (tokened.hasMoreElements()) {
             result += tokened.nextElement();
-            if (tokened.hasMoreElements())
-                result += "<BR>";
+            if (tokened.hasMoreElements()) result += "<BR>";
         }
         return result;
     }

@@ -13,12 +13,11 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SArmy;       //Baruk Khazad! 20150929
+import mekwars.server.campaign.SArmy; // Baruk Khazad! 20150929
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
@@ -51,7 +50,14 @@ public class PromotePilotCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -81,14 +87,20 @@ public class PromotePilotCommand implements Command {
         }
 
         if (unit.hasVacantPilot()) {
-            CampaignMain.cm.toUser("AM:Unit " + unit.getModelName() + " has no pilot to promote!", Username);
+            CampaignMain.cm.toUser(
+                    "AM:Unit " + unit.getModelName() + " has no pilot to promote!", Username);
             return;
         }
 
         pilot = (SPilot) unit.getPilot();
 
-        if (player.getMyHouse().getIntegerConfig("MaxPilotUpgrades") >= 0 && pilot.getSkills().size() >= player.getMyHouse().getIntegerConfig("MaxPilotUpgrades")) {
-            CampaignMain.cm.toUser("AM:" + pilot.getName() + " already has the maximum allowed skills", Username, true);
+        if (player.getMyHouse().getIntegerConfig("MaxPilotUpgrades") >= 0
+                && pilot.getSkills().size()
+                        >= player.getMyHouse().getIntegerConfig("MaxPilotUpgrades")) {
+            CampaignMain.cm.toUser(
+                    "AM:" + pilot.getName() + " already has the maximum allowed skills",
+                    Username,
+                    true);
             return;
         }
 
@@ -96,22 +108,25 @@ public class PromotePilotCommand implements Command {
             CampaignMain.cm.toUser("AM:A skill needs to be provided", Username, true);
             return;
         }
-        
-        //start code section 1 of 2 - Baruk Khazad! 20150929
-        //disallow Promotion if unit is in army and player is not in reserve
-        //this code belongs in both PromotePilotCommand.java and DemotePilotCommand.java
+
+        // start code section 1 of 2 - Baruk Khazad! 20150929
+        // disallow Promotion if unit is in army and player is not in reserve
+        // this code belongs in both PromotePilotCommand.java and DemotePilotCommand.java
         boolean isInArmy = false;
         for (SArmy currA : player.getArmies()) {
-             if (currA.isUnitInArmy(unit)) {
-                   isInArmy = true;
-                   break;
-             }
+            if (currA.isUnitInArmy(unit)) {
+                isInArmy = true;
+                break;
+            }
         }
-        if (isInArmy && player.getDutyStatus()!= SPlayer.STATUS_RESERVE) {
-             CampaignMain.cm.toUser("AM:Your pilot is on patrol or fighting and needs to return to base for this training.", Username, true);
-             return;
+        if (isInArmy && player.getDutyStatus() != SPlayer.STATUS_RESERVE) {
+            CampaignMain.cm.toUser(
+                    "AM:Your pilot is on patrol or fighting and needs to return to base for this training.",
+                    Username,
+                    true);
+            return;
         }
-        //end code section 1 of 2 - Baruk Khazad! 20150929
+        // end code section 1 of 2 - Baruk Khazad! 20150929
 
         if (skill.equalsIgnoreCase("gunnery")) {
             int gun = pilot.getGunnery();
@@ -125,12 +140,16 @@ public class PromotePilotCommand implements Command {
                 piloting++;
             }
 
-            if (piloting - (gun - 1) > 1 && player.getMyHouse().getBooleanConfig("PilotsMustLevelEvenly")) {
-                CampaignMain.cm.toUser("AM:You must evenly level your pilots skills. Try leveling piloting first.", Username);
+            if (piloting - (gun - 1) > 1
+                    && player.getMyHouse().getBooleanConfig("PilotsMustLevelEvenly")) {
+                CampaignMain.cm.toUser(
+                        "AM:You must evenly level your pilots skills. Try leveling piloting first.",
+                        Username);
                 return;
             }
 
-            // Since the max base skill is 10 no reason to make your total skill 10 or higher so you always have
+            // Since the max base skill is 10 no reason to make your total skill 10 or higher so you
+            // always have
             // to pay the min exp.
             int totalSkill = Math.min(9, gun + piloting);
 
@@ -150,8 +169,11 @@ public class PromotePilotCommand implements Command {
                 piloting++;
             }
 
-            if (gun - (piloting - 1) > 1 && player.getMyHouse().getBooleanConfig("PilotsMustLevelEvenly")) {
-                CampaignMain.cm.toUser("AM:You must evenly level your pilots skills. Try leveling gunnery first.", Username);
+            if (gun - (piloting - 1) > 1
+                    && player.getMyHouse().getBooleanConfig("PilotsMustLevelEvenly")) {
+                CampaignMain.cm.toUser(
+                        "AM:You must evenly level your pilots skills. Try leveling gunnery first.",
+                        Username);
                 return;
             }
 
@@ -165,33 +187,54 @@ public class PromotePilotCommand implements Command {
             ps = SPilotSkills.getPilotSkill(skill);
 
             skill = ps.getName();
-            if (pilot.getSkills().has(ps.getId()) && pilot.getSkills().getPilotSkill(ps.getId()).getLevel() >= 0) {
+            if (pilot.getSkills().has(ps.getId())
+                    && pilot.getSkills().getPilotSkill(ps.getId()).getLevel() >= 0) {
                 if (ps.getId() == PilotSkill.AstechSkillID) {
 
                     ps = (SPilotSkill) pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID);
                     if (ps.getLevel() >= 2) {
-                        CampaignMain.cm.toUser("AM:You cannot raise your pilots AstechSkill any higher!", Username);
+                        CampaignMain.cm.toUser(
+                                "AM:You cannot raise your pilots AstechSkill any higher!",
+                                Username);
                         return;
                     }
 
-                    cost = player.getMyHouse().getIntegerConfig("chancefor" + ps.getAbbreviation() + "for" + Unit.getTypeClassDesc(unit.getType()));
+                    cost =
+                            player.getMyHouse()
+                                    .getIntegerConfig(
+                                            "chancefor"
+                                                    + ps.getAbbreviation()
+                                                    + "for"
+                                                    + Unit.getTypeClassDesc(unit.getType()));
                     cost *= ps.getLevel() + 2;
                 } else if (ps.getId() == PilotSkill.EdgeSkillID) {
                     ps = (SPilotSkill) pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID);
                     if (ps.getLevel() >= player.getMyHouse().getIntegerConfig("MaxEdgeChanges")) {
-                        CampaignMain.cm.toUser("AM:You cannot raise your pilots Edge any higher!", Username);
+                        CampaignMain.cm.toUser(
+                                "AM:You cannot raise your pilots Edge any higher!", Username);
                         return;
                     }
-                    cost = player.getMyHouse().getIntegerConfig("chancefor" + ps.getAbbreviation() + "for" + Unit.getTypeClassDesc(unit.getType()));
+                    cost =
+                            player.getMyHouse()
+                                    .getIntegerConfig(
+                                            "chancefor"
+                                                    + ps.getAbbreviation()
+                                                    + "for"
+                                                    + Unit.getTypeClassDesc(unit.getType()));
                     cost *= ps.getLevel() + 1;
                 } else {
                     CampaignMain.cm.toUser("AM:Your pilot already has that skill!", Username);
                     return;
                 }
             } else {
-                cost = player.getMyHouse().getIntegerConfig("chancefor" + ps.getAbbreviation() + "for" + Unit.getTypeClassDesc(unit.getType()));
+                cost =
+                        player.getMyHouse()
+                                .getIntegerConfig(
+                                        "chancefor"
+                                                + ps.getAbbreviation()
+                                                + "for"
+                                                + Unit.getTypeClassDesc(unit.getType()));
             }
-
         }
 
         if (pilot.getSkills().has(PilotSkill.GiftedID)) {
@@ -199,12 +242,17 @@ public class PromotePilotCommand implements Command {
         }
 
         if (cost <= 0) {
-            CampaignMain.cm.toUser("AM:" + pilot.getName() + " can not purchase that skill", Username);
+            CampaignMain.cm.toUser(
+                    "AM:" + pilot.getName() + " can not purchase that skill", Username);
             return;
         }
 
         if (pilot.getExperience() < cost) {
-            CampaignMain.cm.toUser("AM:" + pilot.getName() + " does not have enough experience to purchase that skill", Username);
+            CampaignMain.cm.toUser(
+                    "AM:"
+                            + pilot.getName()
+                            + " does not have enough experience to purchase that skill",
+                    Username);
             return;
         }
 
@@ -236,19 +284,28 @@ public class PromotePilotCommand implements Command {
 
         unit.setPilot(pilot);
 
-        CampaignMain.cm.toUser("AM:Skill " + skill + " purchased for pilot " + pilot.getName() + " for " + cost + " exp.", Username);
-        CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), Username, false);
-        //start code section 2 of 2 - Baruk Khazad! 20150929
+        CampaignMain.cm.toUser(
+                "AM:Skill "
+                        + skill
+                        + " purchased for pilot "
+                        + pilot.getName()
+                        + " for "
+                        + cost
+                        + " exp.",
+                Username);
+        CampaignMain.cm.toUser(
+                "PL|UU|" + unit.getId() + "|" + unit.toString(true), Username, false);
+        // start code section 2 of 2 - Baruk Khazad! 20150929
         // correct the BV of any army which contains the unit
         for (SArmy currA : player.getArmies()) {
-             if (currA.isUnitInArmy(unit)) {
-                  currA.setBV(0);
-                  CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), player.getName(), false);
-                  CampaignMain.cm.getOpsManager().checkOperations(currA, true);
-             }
+            if (currA.isUnitInArmy(unit)) {
+                currA.setBV(0);
+                CampaignMain.cm.toUser(
+                        "PL|SAD|" + currA.toString(true, "%"), player.getName(), false);
+                CampaignMain.cm.getOpsManager().checkOperations(currA, true);
+            }
         }
-        //end code section 2 of 2 - Baruk Khazad! 20150929
+        // end code section 2 of 2 - Baruk Khazad! 20150929
 
-    }// end process()
-
+    } // end process()
 }

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -19,7 +19,6 @@ package mekwars.client;
 
 import java.awt.Color;
 import java.util.StringTokenizer;
-
 import mekwars.common.House;
 import mekwars.common.campaign.clientutils.IClientUser;
 import mekwars.common.util.MWLogger;
@@ -61,9 +60,7 @@ public class CUser implements Comparable<Object>, IClientUser {
 
     protected String subFaction = "";
 
-    /**
-     * Empty CUser.
-     */
+    /** Empty CUser. */
     public CUser() {
         Name = "";
         Addon = "";
@@ -79,9 +76,7 @@ public class CUser implements Comparable<Object>, IClientUser {
         isInvis = false;
     }
 
-    /**
-     * New CUser w/ data. Called NU|MWClientInfo.toString()|NEW/NONE command.
-     */
+    /** New CUser w/ data. Called NU|MWClientInfo.toString()|NEW/NONE command. */
     public CUser(String data) {
 
         StringTokenizer ST = null;
@@ -202,18 +197,13 @@ public class CUser implements Comparable<Object>, IClientUser {
             Rating = Float.parseFloat(ST.nextToken());
             setStatus(Integer.parseInt(ST.nextToken()));
 
-            if (ST.hasMoreTokens())
-                Fluff = ST.nextToken();
-            if (Fluff.equals(" ") || Fluff.equals("0"))
-                Fluff = "";
+            if (ST.hasMoreTokens()) Fluff = ST.nextToken();
+            if (Fluff.equals(" ") || Fluff.equals("0")) Fluff = "";
 
-            if (ST.hasMoreTokens())
-                PlayerHouse = ST.nextToken();
-            if (ST.hasMoreElements())
-                isMerc = Boolean.parseBoolean(ST.nextToken());
+            if (ST.hasMoreTokens()) PlayerHouse = ST.nextToken();
+            if (ST.hasMoreElements()) isMerc = Boolean.parseBoolean(ST.nextToken());
 
-            if (ST.hasMoreElements())
-                subFaction = ST.nextToken();
+            if (ST.hasMoreElements()) subFaction = ST.nextToken();
 
             // Abbreviation and Color from House (sed to be sent as part of
             // player update)
@@ -243,7 +233,9 @@ public class CUser implements Comparable<Object>, IClientUser {
             LoggedIn = false;
             clearCampaignData();
         } else {
-            if (Status == MWClient.STATUS_RESERVE || Status == MWClient.STATUS_ACTIVE || Status == MWClient.STATUS_FIGHTING) {
+            if (Status == MWClient.STATUS_RESERVE
+                    || Status == MWClient.STATUS_ACTIVE
+                    || Status == MWClient.STATUS_FIGHTING) {
                 LoggedIn = true;
             }
         }
@@ -325,8 +317,7 @@ public class CUser implements Comparable<Object>, IClientUser {
                     int start = Fluff.toLowerCase().indexOf("<img");
                     int finish = -1;
 
-                    if (start != -1)
-                        finish = Fluff.indexOf(">", start);
+                    if (start != -1) finish = Fluff.indexOf(">", start);
 
                     if (start != -1 && finish != -1) {
                         String firstHalf = Fluff.substring(0, start);
@@ -335,8 +326,7 @@ public class CUser implements Comparable<Object>, IClientUser {
                         info.append(firstHalf);
                         info.append("(img blocked)");
                         info.append(secondHalf);
-                    } else
-                        info.append(Fluff);
+                    } else info.append(Fluff);
 
                 }
 
@@ -346,22 +336,17 @@ public class CUser implements Comparable<Object>, IClientUser {
                     info.append(Fluff);
                 }
             }
-
         }
         info.append("</body></html>");
         return info.toString();
     }
 
-    /**
-     * Comparable, for PlayerNameDialog. Don't use elsewhere =)
-     */
+    /** Comparable, for PlayerNameDialog. Don't use elsewhere =) */
     @Override
-	public int compareTo(Object o) {
-        if (!(o instanceof CUser))
-            return 0;
+    public int compareTo(Object o) {
+        if (!(o instanceof CUser)) return 0;
 
         CUser u = (CUser) o;
         return this.getName().compareTo(u.getName());
     }
-
 }

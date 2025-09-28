@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,8 +17,8 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
@@ -27,57 +27,91 @@ import mekwars.server.campaign.mercenaries.ContractInfo;
 import mekwars.server.campaign.mercenaries.MercHouse;
 
 public class TerminateContractCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Player Name";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		//forcibly cancel a mercenary contract, returning escrow funds to hiring faction.
-		SPlayer p = CampaignMain.cm.getPlayer(command.nextToken());
-		SHouse faction = p.getMyHouse();
-		
-		if (!faction.isMercHouse()) {
-			CampaignMain.cm.toUser("Only mercenary players have contracts. Nice try, though.", Username, true);
-			return;
-		}
-		
-		//cast the house and load the contract
-		MercHouse mercFaction = (MercHouse)faction;
-		ContractInfo contract = mercFaction.getContractInfo(p);
-		
-		if (contract == null) {
-			CampaignMain.cm.toUser(p.getName() + " has no contract to cancel", Username, true);
-			return;
-		}
-		
-		//contract exists. terminate and return monies.
-		int payment = contract.getPayment();
-		SHouse employer = contract.getEmployingHouse();
-		int refund = (int) (payment * .5);
-		
-		SPlayer contractingPlayer = contract.getOfferingPlayer();
-		if (contractingPlayer != null) {
-			contractingPlayer.addMoney(refund);
-			CampaignMain.cm.toUser(Username + " abrogated your contract with"
-					+ contract.getEmployingHouse().getName() + ". Funds returned from escrow (" 
-					+ CampaignMain.cm.moneyOrFluMessage(true,true,refund,true) + ").", p.getName(), true);
-		} else
-			contract.getEmployingHouse().setMoney(employer.getMoney() + refund);
-		
-		mercFaction.endContract(p);
-		CampaignMain.cm.toUser(Username + " abrogated your contract with" + contract.getEmployingHouse().getName() + ".", p.getName(), true);
-		CampaignMain.cm.toUser("You revoked " + p.getName() + "'s contract with" + contract.getEmployingHouse().getName() + ".", Username, true);
-		
-	}//end process()
-}//end TerminateContract
+
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Player Name";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        // forcibly cancel a mercenary contract, returning escrow funds to hiring faction.
+        SPlayer p = CampaignMain.cm.getPlayer(command.nextToken());
+        SHouse faction = p.getMyHouse();
+
+        if (!faction.isMercHouse()) {
+            CampaignMain.cm.toUser(
+                    "Only mercenary players have contracts. Nice try, though.", Username, true);
+            return;
+        }
+
+        // cast the house and load the contract
+        MercHouse mercFaction = (MercHouse) faction;
+        ContractInfo contract = mercFaction.getContractInfo(p);
+
+        if (contract == null) {
+            CampaignMain.cm.toUser(p.getName() + " has no contract to cancel", Username, true);
+            return;
+        }
+
+        // contract exists. terminate and return monies.
+        int payment = contract.getPayment();
+        SHouse employer = contract.getEmployingHouse();
+        int refund = (int) (payment * .5);
+
+        SPlayer contractingPlayer = contract.getOfferingPlayer();
+        if (contractingPlayer != null) {
+            contractingPlayer.addMoney(refund);
+            CampaignMain.cm.toUser(
+                    Username
+                            + " abrogated your contract with"
+                            + contract.getEmployingHouse().getName()
+                            + ". Funds returned from escrow ("
+                            + CampaignMain.cm.moneyOrFluMessage(true, true, refund, true)
+                            + ").",
+                    p.getName(),
+                    true);
+        } else contract.getEmployingHouse().setMoney(employer.getMoney() + refund);
+
+        mercFaction.endContract(p);
+        CampaignMain.cm.toUser(
+                Username
+                        + " abrogated your contract with"
+                        + contract.getEmployingHouse().getName()
+                        + ".",
+                p.getName(),
+                true);
+        CampaignMain.cm.toUser(
+                "You revoked "
+                        + p.getName()
+                        + "'s contract with"
+                        + contract.getEmployingHouse().getName()
+                        + ".",
+                Username,
+                true);
+    } // end process()
+} // end TerminateContract

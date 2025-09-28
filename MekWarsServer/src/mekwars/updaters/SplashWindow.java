@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original File: GraphicGimicks.java
  *
@@ -23,7 +23,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -68,22 +67,27 @@ public class SplashWindow {
         // load and scale the splash image
         ImageIcon splashImage = null;
         boolean useJPGImage = new File("data/images/mekwarssplash.jpg").exists();
-        if (useJPGImage)
-            splashImage = new ImageIcon("data/images/mekwarssplash.jpg");
-        else
-            splashImage = new ImageIcon("data/images/mekwarssplash.gif");
+        if (useJPGImage) splashImage = new ImageIcon("data/images/mekwarssplash.jpg");
+        else splashImage = new ImageIcon("data/images/mekwarssplash.gif");
         Image tempImage = splashImage.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
         splashImage.setImage(tempImage);
 
         // format the label
-        imageLabel = new JLabel("<HTML><CENTER>Updating MekWars Client<br>Please Wait</CENTER></HTML>", splashImage, SwingConstants.CENTER);
+        imageLabel =
+                new JLabel(
+                        "<HTML><CENTER>Updating MekWars Client<br>Please Wait</CENTER></HTML>",
+                        splashImage,
+                        SwingConstants.CENTER);
         imageLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
         imageLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         imageLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
         imageLabel.setIconTextGap(6);
 
         // create a version label
-        versionLabel = new JLabel("<HTML><CENTER><b>Initializing<br>\u25cf</b></CENTER></HTML>", SwingConstants.CENTER);
+        versionLabel =
+                new JLabel(
+                        "<HTML><CENTER><b>Initializing<br>\u25cf</b></CENTER></HTML>",
+                        SwingConstants.CENTER);
 
         // place the labels in a panel
         JPanel windowPanel = new JPanel();
@@ -105,7 +109,10 @@ public class SplashWindow {
         windowPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         // give the panel an attractive border
-        windowPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 1), BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+        windowPanel.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.BLACK, 1),
+                        BorderFactory.createEmptyBorder(6, 6, 6, 6)));
 
         splashWindow.getContentPane().add(windowPanel);
         splashWindow.getContentPane().add(progressBar, BorderLayout.SOUTH);
@@ -147,7 +154,6 @@ public class SplashWindow {
     public AnimationThread getAnimator() {
         return animator;
     }
-
 }
 
 class AnimationThread extends Thread {
@@ -193,7 +199,9 @@ class AnimationThread extends Thread {
                 }
 
                 int currStatus = splash.getStatus();
-                if (currStatus == splash.STATUS_DATAERROR || currStatus == splash.STATUS_INPUTWAIT || currStatus == splash.STATUS_CONNECTFAILED) {
+                if (currStatus == splash.STATUS_DATAERROR
+                        || currStatus == splash.STATUS_INPUTWAIT
+                        || currStatus == splash.STATUS_CONNECTFAILED) {
                     // do not advanced the progress meter. roll back the cycle.
                     cycle--;
                 } else if (cycle == 0) {
@@ -205,15 +213,12 @@ class AnimationThread extends Thread {
 
                 updateProgress();
 
-                if (!splash.shouldAnimate())
-                    return;
+                if (!splash.shouldAnimate()) return;
 
             } catch (Exception e) {
                 splash.getImageLabel().setText("Error in animation thread!");
                 return;
             }
-
-        }// end while
-
-    }// end run()
-}// end CheckAttackThread
+        } // end while
+    } // end run()
+} // end CheckAttackThread

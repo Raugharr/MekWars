@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2005  
+ * MekWars - Copyright (C) 2005
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -15,7 +15,6 @@ package mekwars.server.campaign.commands;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.server.MWServ;
@@ -27,10 +26,9 @@ import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 import mekwars.server.campaign.util.ExclusionList;
 
 /**
- * AttackCommand is used to initiate ShortOperations. Checks the validity of the
- * attacking force, checks to ensure that the defenders available to the
- * attacking force can defend the target op type, and then creates the operation
- * and gives attackers their "Special" options. Syntax
+ * AttackCommand is used to initiate ShortOperations. Checks the validity of the attacking force,
+ * checks to ensure that the defenders available to the attacking force can defend the target op
+ * type, and then creates the operation and gives attackers their "Special" options. Syntax
  * attackfromreserve#opname#armyid#planet#defender
  */
 public class AttackFromReserveCommand implements Command {
@@ -56,7 +54,14 @@ public class AttackFromReserveCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -64,30 +69,50 @@ public class AttackFromReserveCommand implements Command {
         I_OperationManager manager = CampaignMain.cm.getOpsManager();
         SPlayer ap = CampaignMain.cm.getPlayer(Username);
         if (ap == null) {
-            CampaignMain.cm.toUser("AM:Null player. Contact an administrator to report this, immediately!", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Null player. Contact an administrator to report this, immediately!",
+                    Username,
+                    true);
             return;
         }
 
         if (!CampaignMain.cm.getBooleanConfig("AllowAttackFromReserve")) {
-            CampaignMain.cm.toUser("AM:Sorry but attack from reserve is not allowed in this campaign!", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Sorry but attack from reserve is not allowed in this campaign!",
+                    Username,
+                    true);
             return;
         }
 
         // Fix for BUG 1491934: AFR possible when campaign locked
         if (Boolean.parseBoolean(CampaignMain.cm.getConfig("CampaignLock")) == true) {
-            CampaignMain.cm.toUser("AM:The campaign is currently locked. Attacks are disabled until the campaign is unlocked.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:The campaign is currently locked. Attacks are disabled until the campaign is unlocked.",
+                    Username,
+                    true);
             return;
         }
 
         // check time limits
-        if (ap.getLastAttackFromReserve() + (Long.parseLong(CampaignMain.cm.getConfig("AttackFromReserveSleepTime")) * 60000) > System.currentTimeMillis()) {
-            CampaignMain.cm.toUser("AM:Sorry but you may only attack from reserve once every " + CampaignMain.cm.getConfig("AttackFromReserveSleepTime") + " mins.", Username, true);
+        if (ap.getLastAttackFromReserve()
+                        + (Long.parseLong(CampaignMain.cm.getConfig("AttackFromReserveSleepTime"))
+                                * 60000)
+                > System.currentTimeMillis()) {
+            CampaignMain.cm.toUser(
+                    "AM:Sorry but you may only attack from reserve once every "
+                            + CampaignMain.cm.getConfig("AttackFromReserveSleepTime")
+                            + " mins.",
+                    Username,
+                    true);
             return;
         }
 
         // throw up if the player is not in reserve
         if (ap.getDutyStatus() == SPlayer.STATUS_ACTIVE) {
-            CampaignMain.cm.toUser("AM:You are currently active. You must deactivate in order to attack from reserve.)", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:You are currently active. You must deactivate in order to attack from reserve.)",
+                    Username,
+                    true);
             return;
         }
 
@@ -100,34 +125,52 @@ public class AttackFromReserveCommand implements Command {
         // must leave/cancel any prior attacks to initiate new attack
         int altID = CampaignMain.cm.getOpsManager().playerIsAnAttacker(ap);
         if (altID >= 0) {
-            CampaignMain.cm.toUser("AM:You're only allowed to attack once, and are already in Attack #" + altID + ".", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:You're only allowed to attack once, and are already in Attack #"
+                            + altID
+                            + ".",
+                    Username,
+                    true);
             return;
         }
 
         // can't AFR while a listed defendant elsewhere
         altID = CampaignMain.cm.getOpsManager().playerIsADefender(ap);
         if (altID >= 0) {
-            CampaignMain.cm.toUser("AM:You're already defending against Attack #" + altID + ".", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:You're already defending against Attack #" + altID + ".", Username, true);
             return;
         }
 
         // Check if the SOs have disabled AFR while in negative bays
-        if ((CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForAFR") > -1) && ((ap.getFreeBays() + CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForAFR")) < 0)) {
-        	CampaignMain.cm.toUser("AM:You cannot attack from reserve with more than " + CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForAFR")  + " negative bays.  How about you share the wealth with your housemates.", Username, true);
-        	return;
+        if ((CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForAFR") > -1)
+                && ((ap.getFreeBays() + CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForAFR"))
+                        < 0)) {
+            CampaignMain.cm.toUser(
+                    "AM:You cannot attack from reserve with more than "
+                            + CampaignMain.cm.getIntegerConfig("MaxNegativeBaysForAFR")
+                            + " negative bays.  How about you share the wealth with your housemates.",
+                    Username,
+                    true);
+            return;
         }
-        
+
         // Check if the SOs have disabled activation while over unit limits
-        if (CampaignMain.cm.getBooleanConfig("DisableAFRIfOverHangarLimits") && ap.isOverAnyUnitLimits()) {
-        	CampaignMain.cm.toUser("AM: You have exceeded one or more hangar limits.  Activation is disabled until you get under those limits.", Username, true);
-        	return;
+        if (CampaignMain.cm.getBooleanConfig("DisableAFRIfOverHangarLimits")
+                && ap.isOverAnyUnitLimits()) {
+            CampaignMain.cm.toUser(
+                    "AM: You have exceeded one or more hangar limits.  Activation is disabled until you get under those limits.",
+                    Username,
+                    true);
+            return;
         }
-        
+
         // get the operation type
         String opName = command.nextToken();
         Operation o = manager.getOperation(opName);
         if (o == null) {
-            CampaignMain.cm.toUser("AM:Operation Type: " + opName + " does not exist.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Operation Type: " + opName + " does not exist.", Username, true);
             return;
         }
 
@@ -141,29 +184,39 @@ public class AttackFromReserveCommand implements Command {
         }
 
         SArmy aa = ap.getArmy(armyID);
-        boolean mulArmy = o.getBooleanValue("MULArmiesOnly"); 
+        boolean mulArmy = o.getBooleanValue("MULArmiesOnly");
         if (aa == null) {
             if (mulArmy) {
                 aa = new SArmy(-1, Username);
             } else {
-                CampaignMain.cm.toUser("AM:You do not have an army with ID #" + armyID + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:You do not have an army with ID #" + armyID + ".", Username, true);
                 return;
             }
         }
         if (aa.getBV() == 0 && !mulArmy) {
-            CampaignMain.cm.toUser("AM:Army #" + armyID + " has a BV of 0 and may not be used to attack.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Army #" + armyID + " has a BV of 0 and may not be used to attack.",
+                    Username,
+                    true);
             return;
         }
 
         if (aa.isDisabled()) {
-            CampaignMain.cm.toUser("AM:Army #" + armyID + " is disabled and may not be used to attack.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Army #" + armyID + " is disabled and may not be used to attack.",
+                    Username,
+                    true);
             return;
         }
 
         // return if any unpiloted units in attacking army.
         for (Unit currU : aa.getUnits()) {
             if (currU.hasVacantPilot()) {
-                CampaignMain.cm.toUser("AM:You may not attack using an army with pilotless units.", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:You may not attack using an army with pilotless units.",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -178,13 +231,30 @@ public class AttackFromReserveCommand implements Command {
 
         // check to see if the attacker has enough Flu/RP/Money
         ArrayList<Integer> failureReasons = new ArrayList<Integer>();
-        CampaignMain.cm.getOpsManager().getShortValidator().checkAttackerRange(failureReasons, ap, o, target);
-        CampaignMain.cm.getOpsManager().getShortValidator().checkAttackerMilestones(failureReasons, ap, o);
-        CampaignMain.cm.getOpsManager().getShortValidator().checkAttackerCosts(failureReasons, ap, o);
-        CampaignMain.cm.getOpsManager().getShortValidator().checkAttackerConstruction(failureReasons, aa, o);
+        CampaignMain.cm
+                .getOpsManager()
+                .getShortValidator()
+                .checkAttackerRange(failureReasons, ap, o, target);
+        CampaignMain.cm
+                .getOpsManager()
+                .getShortValidator()
+                .checkAttackerMilestones(failureReasons, ap, o);
+        CampaignMain.cm
+                .getOpsManager()
+                .getShortValidator()
+                .checkAttackerCosts(failureReasons, ap, o);
+        CampaignMain.cm
+                .getOpsManager()
+                .getShortValidator()
+                .checkAttackerConstruction(failureReasons, aa, o);
 
         if (failureReasons.size() > 0) {
-            CampaignMain.cm.toUser(CampaignMain.cm.getOpsManager().getShortValidator().failuresToString(failureReasons), Username);
+            CampaignMain.cm.toUser(
+                    CampaignMain.cm
+                            .getOpsManager()
+                            .getShortValidator()
+                            .failuresToString(failureReasons),
+                    Username);
             return;
         }
 
@@ -193,47 +263,62 @@ public class AttackFromReserveCommand implements Command {
         SPlayer dp = CampaignMain.cm.getPlayer(toFind);
 
         if (dp == null) {
-            CampaignMain.cm.toUser("AM:Could not find a player named " + toFind + ". Try again?", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Could not find a player named " + toFind + ". Try again?", Username, true);
             return;
         }
 
         if (ap.equals(dp)) {
-            CampaignMain.cm.toUser("AM:You cannot attack yourself. Nice try though.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:You cannot attack yourself. Nice try though.", Username, true);
             return;
         }
 
         // check for modnoplays
-        if (ap.getExclusionList().checkExclude(dp.getName()) == ExclusionList.ADMIN_EXCLUDED || dp.getExclusionList().checkExclude(ap.getName()) == ExclusionList.ADMIN_EXCLUDED) {
-            CampaignMain.cm.toUser("AM:A moderator-added no play stops you from playing with " + dp.getName() + ".", Username, true);
+        if (ap.getExclusionList().checkExclude(dp.getName()) == ExclusionList.ADMIN_EXCLUDED
+                || dp.getExclusionList().checkExclude(ap.getName())
+                        == ExclusionList.ADMIN_EXCLUDED) {
+            CampaignMain.cm.toUser(
+                    "AM:A moderator-added no play stops you from playing with "
+                            + dp.getName()
+                            + ".",
+                    Username,
+                    true);
             return;
         }
 
         // Check that the opponent is not on the same IP
         if (CampaignMain.cm.getBooleanConfig("IPCheck")) {
-        	String apip = MWServ.getInstance().getIP(ap.getName()).toString();
-        	String dpip = MWServ.getInstance().getIP(dp.getName()).toString();
-        	if(apip.equalsIgnoreCase(dpip)) {
-        		CampaignMain.cm.toUser("AM: You cannot attack a player on the same IP as you.", Username, true);
-        		return;
-        	}
+            String apip = MWServ.getInstance().getIP(ap.getName()).toString();
+            String dpip = MWServ.getInstance().getIP(dp.getName()).toString();
+            if (apip.equalsIgnoreCase(dpip)) {
+                CampaignMain.cm.toUser(
+                        "AM: You cannot attack a player on the same IP as you.", Username, true);
+                return;
+            }
         }
         // Make Sure the defenders faction owns part of the target
         if (target.getInfluence().getInfluence(dp.getHouseFightingFor().getId()) < 1) {
-            CampaignMain.cm.toUser(dp.getName() + " cannot defend " + target.getName(), Username, true);
+            CampaignMain.cm.toUser(
+                    dp.getName() + " cannot defend " + target.getName(), Username, true);
             return;
         }
 
         // build list of all armies target player has that may defend
         ArrayList<SArmy> defendingArmies = new ArrayList<SArmy>();
         for (SArmy currArmy : dp.getArmies()) {
-            ArrayList<Integer> defenderFails = manager.getShortValidator().validateShortDefender(dp, currArmy, o, target);
-            if (defenderFails.size() == 0 && aa.matches(currArmy, o))// if army can defend, add
-                defendingArmies.add(currArmy);
+            ArrayList<Integer> defenderFails =
+                    manager.getShortValidator().validateShortDefender(dp, currArmy, o, target);
+            if (defenderFails.size() == 0 && aa.matches(currArmy, o)) // if army can defend, add
+            defendingArmies.add(currArmy);
         }
 
         // if target player can't defend, return
         if (defendingArmies.size() == 0) {
-            CampaignMain.cm.toUser("AM:" + dp.getName() + " cannot defend your attack with his current force(s).", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:" + dp.getName() + " cannot defend your attack with his current force(s).",
+                    Username,
+                    true);
             return;
         }
 
@@ -241,8 +326,21 @@ public class AttackFromReserveCommand implements Command {
         ap.setLastAttackFromReserve(System.currentTimeMillis());
 
         // send messages informing the involved players
-        CampaignMain.cm.toUser("AM:Your attack proposal was sent to " + dp.getName(), Username, true);
-        StringBuilder toSend = new StringBuilder("AM:" + ap.getName() + " proposes you a game of " + o.getName() + " on planet " + target.getNameAsColoredLink() + " with " + aa.getAmountOfUnits() + " units totalling " + aa.getBV() + " BV. You may accept with:  <br>");
+        CampaignMain.cm.toUser(
+                "AM:Your attack proposal was sent to " + dp.getName(), Username, true);
+        StringBuilder toSend =
+                new StringBuilder(
+                        "AM:"
+                                + ap.getName()
+                                + " proposes you a game of "
+                                + o.getName()
+                                + " on planet "
+                                + target.getNameAsColoredLink()
+                                + " with "
+                                + aa.getAmountOfUnits()
+                                + " units totalling "
+                                + aa.getBV()
+                                + " BV. You may accept with:  <br>");
 
         // give clickables to potential defender
         for (SArmy currArmy : defendingArmies) {
@@ -251,15 +349,36 @@ public class AttackFromReserveCommand implements Command {
             int aBV = currArmy.getOperationsBV(null);
             int aUnits = currArmy.getAmountOfUnits();
 
-            toSend.append("<a href=\"MEKWARS/c acceptattackfromreserve#" + ap.getName() + "#" + aa.getID() + "#" + aID + "#" + opName + "#" + target.getName() + "\">Army #" + aID + " </a> (Units: " + aUnits + " / BV: " + aBV + ")<br>");
+            toSend.append(
+                    "<a href=\"MEKWARS/c acceptattackfromreserve#"
+                            + ap.getName()
+                            + "#"
+                            + aa.getID()
+                            + "#"
+                            + aID
+                            + "#"
+                            + opName
+                            + "#"
+                            + target.getName()
+                            + "\">Army #"
+                            + aID
+                            + " </a> (Units: "
+                            + aUnits
+                            + " / BV: "
+                            + aBV
+                            + ")<br>");
         }
 
         toSend.delete(toSend.lastIndexOf("<br>"), toSend.length());
-        toSend.append("<br>Or <a href=\"MEKWARS/c declineattackfromreserve#" + ap.getName() + "\">decline</a>.");
+        toSend.append(
+                "<br>Or <a href=\"MEKWARS/c declineattackfromreserve#"
+                        + ap.getName()
+                        + "\">decline</a>.");
 
-        toSend.append("<br>You have " + CampaignMain.cm.getConfig("AttackFromReserveResponseTime") + " mins to accept, or the attack will be automatically declined.");
+        toSend.append(
+                "<br>You have "
+                        + CampaignMain.cm.getConfig("AttackFromReserveResponseTime")
+                        + " mins to accept, or the attack will be automatically declined.");
         CampaignMain.cm.toUser(toSend.toString(), dp.getName(), true);
-
-    }// end process
-
-}// end AttackFromReserveCommand
+    } // end process
+} // end AttackFromReserveCommand

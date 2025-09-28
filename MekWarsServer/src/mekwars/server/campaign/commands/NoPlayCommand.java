@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * original author - nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -45,7 +45,14 @@ public class NoPlayCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -67,7 +74,10 @@ public class NoPlayCommand implements Command {
             mode = command.nextToken().toLowerCase();
             excludeName = command.nextToken();
         } catch (Exception e) {
-            CampaignMain.cm.toUser("AM:Improper format. Try: /c noplay#add#name or /c noplay#remove#name.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Improper format. Try: /c noplay#add#name or /c noplay#remove#name.",
+                    Username,
+                    true);
             return;
         }
 
@@ -76,7 +86,10 @@ public class NoPlayCommand implements Command {
             try {
                 commandConfirmed = command.nextToken().equals("CONFIRM");
             } catch (Exception e) {
-                CampaignMain.cm.toUser("AM:Improper format. Try: /c noplay#add#name#CONFIRM or /c noplay#remove#name#CONFIRM", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Improper format. Try: /c noplay#add#name#CONFIRM or /c noplay#remove#name#CONFIRM",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -84,7 +97,10 @@ public class NoPlayCommand implements Command {
         // load the exlusion list
         ExclusionList exList = p.getExclusionList();
         if (exList == null) {
-            CampaignMain.cm.toUser("AM:ERROR. Your no-play list was null. Report this to an admin.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:ERROR. Your no-play list was null. Report this to an admin.",
+                    Username,
+                    true);
             return;
         }
 
@@ -96,7 +112,8 @@ public class NoPlayCommand implements Command {
         int removeRPCost = CampaignMain.cm.getIntegerConfig("NoPlayRPCost");
         int removeFluCost = CampaignMain.cm.getIntegerConfig("NoPlayInfluenceCost");
         int removeMUCost = CampaignMain.cm.getIntegerConfig("NoPlayMUCost");
-        boolean adminListCountsForCap = Boolean.parseBoolean(CampaignMain.cm.getConfig("NoPlaysFromAdminsCountForMax"));
+        boolean adminListCountsForCap =
+                Boolean.parseBoolean(CampaignMain.cm.getConfig("NoPlaysFromAdminsCountForMax"));
 
         // check player's values
         boolean hasEnoughRP = false;
@@ -132,7 +149,7 @@ public class NoPlayCommand implements Command {
         if (hasEnoughRP && hasEnoughInfluence && hasEnoughMU) {
             costBlock += " will ";
             canAffordRemove = true;
-        } else {// can't afford
+        } else { // can't afford
             costBlock += " would ";
         }
 
@@ -167,28 +184,41 @@ public class NoPlayCommand implements Command {
 
             // check to make sure the player who will be excluded exists
             boolean playerExists = false;
-            playerExists = new File("./campaign/players/" + excludeName.toLowerCase() + ".dat").exists();
+            playerExists =
+                    new File("./campaign/players/" + excludeName.toLowerCase() + ".dat").exists();
 
             if (!playerExists) {
-                CampaignMain.cm.toUser(excludeName + " does not have a player file. cannot add to your no-play list.", Username, true);
+                CampaignMain.cm.toUser(
+                        excludeName
+                                + " does not have a player file. cannot add to your no-play list.",
+                        Username,
+                        true);
                 return;
             }
 
             // check to see is the given player is already excluded
             if (exclusionStatus != ExclusionList.NO_EXCLUSION) {
-                CampaignMain.cm.toUser(excludeName + " is already on your no-play list.", Username, true);
+                CampaignMain.cm.toUser(
+                        excludeName + " is already on your no-play list.", Username, true);
                 return;
             }
 
             // check to make sure the player isn't no-play'ing himself
             if (p.getName().toLowerCase().equals(excludeName)) {
-                CampaignMain.cm.toUser("AM:You can't put your own name on your no-play list. Jackass.", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:You can't put your own name on your no-play list. Jackass.",
+                        Username,
+                        true);
                 return;
             }
 
             // check the current list size [adminList only]
             if (adminListCountsForCap && (exList.getAdminExcludes().size() >= maxSize)) {
-                CampaignMain.cm.toUser("AM:Moderators/Admins have filled your no-play list. You may not add" + " any players on your own at this time.", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Moderators/Admins have filled your no-play list. You may not add"
+                                + " any players on your own at this time.",
+                        Username,
+                        true);
                 return;
             }
 
@@ -200,18 +230,38 @@ public class NoPlayCommand implements Command {
             if ((currentSize >= maxSize) && (exList.getPlayerExcludes().size() > 0)) {
 
                 if (canAffordRemove) {
-                    String toUser = "AM:You must remove a player from your no-play list in order to add " + excludeName + ". Removing " + costBlock + "<br>";
+                    String toUser =
+                            "AM:You must remove a player from your no-play list in order to add "
+                                    + excludeName
+                                    + ". Removing "
+                                    + costBlock
+                                    + "<br>";
 
                     // loop through and make links to remove
                     for (String currName : exList.getPlayerExcludes()) {
-                        toUser += "<a href=\"MEKWARS/c removeandaddnoplay#" + currName + "#" + excludeName + "\">Click here to remove " + currName + " and add " + excludeName + "</a>.<br>";
+                        toUser +=
+                                "<a href=\"MEKWARS/c removeandaddnoplay#"
+                                        + currName
+                                        + "#"
+                                        + excludeName
+                                        + "\">Click here to remove "
+                                        + currName
+                                        + " and add "
+                                        + excludeName
+                                        + "</a>.<br>";
                     }
                     CampaignMain.cm.toUser(toUser, Username, true);
                     return;
                 }
 
                 // else, its too expensive
-                String toUser = "AM:You must remove a player from your no-play list before adding " + excludeName + "; however, you cannot " + "afford a removal at this time. Removing costs " + shortCost + ".<br>";
+                String toUser =
+                        "AM:You must remove a player from your no-play list before adding "
+                                + excludeName
+                                + "; however, you cannot "
+                                + "afford a removal at this time. Removing costs "
+                                + shortCost
+                                + ".<br>";
                 CampaignMain.cm.toUser(toUser, Username, true);
                 return;
             }
@@ -220,38 +270,66 @@ public class NoPlayCommand implements Command {
             if (commandConfirmed) {
                 try {
                     exList.addExclude(false, excludeName);
-                    CampaignMain.cm.toUser(excludeName + " was added to your no-play list.", Username, true);
-                    CampaignMain.cm.toUser("PL|PEU|" + p.getExclusionList().playerExcludeToString("$"), Username, false);
+                    CampaignMain.cm.toUser(
+                            excludeName + " was added to your no-play list.", Username, true);
+                    CampaignMain.cm.toUser(
+                            "PL|PEU|" + p.getExclusionList().playerExcludeToString("$"),
+                            Username,
+                            false);
                     p.setSave();
                     return;
                 } catch (Exception e) {
-                    CampaignMain.cm.toUser("AM:Error while adding " + excludeName + " to your no-play list. Report this to an admin.", Username, true);
+                    CampaignMain.cm.toUser(
+                            "AM:Error while adding "
+                                    + excludeName
+                                    + " to your no-play list. Report this to an admin.",
+                            Username,
+                            true);
                     return;
                 }
             }
 
             // else, request confirmation
-            String toUser = "AM:Are you sure you want to add " + excludeName + " to your no-play list? <br><a " + "href=\"MEKWARS/c noplay#add#" + excludeName + "#CONFIRM\">Click here to confirm the addition " + "of " + excludeName + " to your no-play list</a>.<br>";
+            String toUser =
+                    "AM:Are you sure you want to add "
+                            + excludeName
+                            + " to your no-play list? <br><a "
+                            + "href=\"MEKWARS/c noplay#add#"
+                            + excludeName
+                            + "#CONFIRM\">Click here to confirm the addition "
+                            + "of "
+                            + excludeName
+                            + " to your no-play list</a>.<br>";
             CampaignMain.cm.toUser(toUser, Username, true);
             return;
 
-        }// end if(mode == add)
-
+        } // end if(mode == add)
         else if (mode.equals("remove")) {
 
             if (exclusionStatus == ExclusionList.NO_EXCLUSION) {
-                CampaignMain.cm.toUser(excludeName + " is not on your no-play list.", Username, true);
+                CampaignMain.cm.toUser(
+                        excludeName + " is not on your no-play list.", Username, true);
                 return;
             }
 
             if (exclusionStatus == ExclusionList.ADMIN_EXCLUDED) {
-                CampaignMain.cm.toUser("AM:You cannot remove " + excludeName + " from your no-play list. He/she " + "was added to the list by a Mod or Admin.", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:You cannot remove "
+                                + excludeName
+                                + " from your no-play list. He/she "
+                                + "was added to the list by a Mod or Admin.",
+                        Username,
+                        true);
                 return;
             }
 
             // check costs
             if (!canAffordRemove) {
-                String toUser = "AM:You cannot afford to remove " + excludeName + " from your no-play list. Removal " + costBlock;
+                String toUser =
+                        "AM:You cannot afford to remove "
+                                + excludeName
+                                + " from your no-play list. Removal "
+                                + costBlock;
                 CampaignMain.cm.toUser(toUser, Username, true);
                 return;
             }
@@ -260,30 +338,53 @@ public class NoPlayCommand implements Command {
             if (commandConfirmed) {
                 try {
                     exList.removeExclude(false, excludeName);
-                    CampaignMain.cm.toUser(excludeName + "was removed from your no-play list (-" + shortCost + ").", Username, true);
+                    CampaignMain.cm.toUser(
+                            excludeName
+                                    + "was removed from your no-play list (-"
+                                    + shortCost
+                                    + ").",
+                            Username,
+                            true);
                     p.addMoney(-removeMUCost);
                     p.addReward(-removeRPCost);
                     p.addInfluence(-removeFluCost);
-                    CampaignMain.cm.toUser("PL|PEU|" + p.getExclusionList().playerExcludeToString("$"), Username, false);
+                    CampaignMain.cm.toUser(
+                            "PL|PEU|" + p.getExclusionList().playerExcludeToString("$"),
+                            Username,
+                            false);
                     p.setSave();
                     return;
                 } catch (Exception e) {
-                    CampaignMain.cm.toUser("AM:Error while removing " + excludeName + " from your no-play list. Report this to an admin.", Username, true);
+                    CampaignMain.cm.toUser(
+                            "AM:Error while removing "
+                                    + excludeName
+                                    + " from your no-play list. Report this to an admin.",
+                            Username,
+                            true);
                     return;
                 }
             }
 
             // else, request confirmation
-            String toUser = "AM:Are you sure you want to remove " + excludeName + " from your no-play list? Removal " + costBlock + "<br><a " + "href=\"MEKWARS/c noplay#remove#" + excludeName + "#CONFIRM\">Click here to confirm the removal</a>.<br>";
+            String toUser =
+                    "AM:Are you sure you want to remove "
+                            + excludeName
+                            + " from your no-play list? Removal "
+                            + costBlock
+                            + "<br><a "
+                            + "href=\"MEKWARS/c noplay#remove#"
+                            + excludeName
+                            + "#CONFIRM\">Click here to confirm the removal</a>.<br>";
             CampaignMain.cm.toUser(toUser, Username, true);
             return;
 
-        }// end (if mode == remove)
-
-        else {// mode is gibberish. alert the user.
-            CampaignMain.cm.toUser("AM:Improper format. Try: /c noplay#add#name or /c noplay#remove#name.", Username, true);
+        } // end (if mode == remove)
+        else { // mode is gibberish. alert the user.
+            CampaignMain.cm.toUser(
+                    "AM:Improper format. Try: /c noplay#add#name or /c noplay#remove#name.",
+                    Username,
+                    true);
             return;
         }
-
     }
 }

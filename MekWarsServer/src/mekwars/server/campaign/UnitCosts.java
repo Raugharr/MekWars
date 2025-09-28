@@ -1,7 +1,7 @@
 /*
  * MekWars - Copyright (C) 2005
- * 
- * Original author - nmorris (urgru@users.sourceforge.net)  
+ *
+ * Original author - nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -22,13 +22,12 @@ import java.io.FileNotFoundException;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
+import mekwars.common.Unit;
+import mekwars.common.util.MWLogger;
 
 /**
  * @version 2016.10.26
@@ -101,12 +100,22 @@ public class UnitCosts {
             try {
                 MechSummary[] units = MechSummaryCache.getInstance().getAllMechs();
                 for (MechSummary unit : units) {
-                    Entity ent = new MechFileParser(unit.getSourceFile(), unit.getEntryName()).getEntity();
+                    Entity ent =
+                            new MechFileParser(unit.getSourceFile(), unit.getEntryName())
+                                    .getEntity();
                     double cost = unit.getCost();
-                    double maxCost = getMaxCostValue(Unit.getEntityWeight(ent), Unit.getEntityType(ent));
-                    double minCost = getMinCostValue(Unit.getEntityWeight(ent), Unit.getEntityType(ent));
-                    addMaxCost(Unit.getEntityWeight(ent), Unit.getEntityType(ent), Math.max(cost, maxCost));
-                    addMinCost(Unit.getEntityWeight(ent), Unit.getEntityType(ent), Math.min(cost, minCost));
+                    double maxCost =
+                            getMaxCostValue(Unit.getEntityWeight(ent), Unit.getEntityType(ent));
+                    double minCost =
+                            getMinCostValue(Unit.getEntityWeight(ent), Unit.getEntityType(ent));
+                    addMaxCost(
+                            Unit.getEntityWeight(ent),
+                            Unit.getEntityType(ent),
+                            Math.max(cost, maxCost));
+                    addMinCost(
+                            Unit.getEntityWeight(ent),
+                            Unit.getEntityType(ent),
+                            Math.min(cost, minCost));
                 }
             } catch (Exception ex) {
 
@@ -170,7 +179,6 @@ public class UnitCosts {
                 if (minCost == 0 || cost < minCost) {
                     addMinCost(unit.getWeightclass(), unit.getType(), cost);
                 }
-
             }
 
             zipFile.close();
@@ -202,7 +210,6 @@ public class UnitCosts {
                 if (minCost == 0 || cost < minCost) {
                     addMinCost(unit.getWeightclass(), unit.getType(), cost);
                 }
-
             }
 
             zipFile.close();
@@ -220,7 +227,15 @@ public class UnitCosts {
         StringBuilder result = new StringBuilder("<b>Max Costs</b><br>");
         for (int weight = 0; weight <= Unit.ASSAULT; weight++) {
             for (int type = 0; type < Unit.MAXBUILD; type++) {
-                result.append(Unit.getWeightClassDesc(weight) + " " + Unit.getTypeClassDesc(type) + " MaxCost: " + getMaxCostValue(weight, type) + " MinCost: " + getMinCostValue(weight, type) + ".<br>");
+                result.append(
+                        Unit.getWeightClassDesc(weight)
+                                + " "
+                                + Unit.getTypeClassDesc(type)
+                                + " MaxCost: "
+                                + getMaxCostValue(weight, type)
+                                + " MinCost: "
+                                + getMinCostValue(weight, type)
+                                + ".<br>");
             }
         }
         return result.toString();

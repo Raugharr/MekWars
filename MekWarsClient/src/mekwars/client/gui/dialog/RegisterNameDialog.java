@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2006 
- * 
+ * MekWars - Copyright (C) 2006
+ *
  * Original author: nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,7 +19,6 @@ package mekwars.client.gui.dialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -29,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.util.StringUtils;
@@ -79,7 +77,11 @@ public final class RegisterNameDialog implements ActionListener {
         fieldPanel.add(passwordField2);
 
         JPanel messagePanel = new JPanel();
-        messagePanel.add(new JLabel("<HTML><b><center>" + "Note: password will be stored<br>" + "and transmitted in plain text.</b></center></HTML>"));
+        messagePanel.add(
+                new JLabel(
+                        "<HTML><b><center>"
+                                + "Note: password will be stored<br>"
+                                + "and transmitted in plain text.</b></center></HTML>"));
 
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
@@ -90,10 +92,17 @@ public final class RegisterNameDialog implements ActionListener {
         JPanel mainPanel = new JPanel(false);
 
         // Set the user's options
-        Object[] options = { okayButton, cancelButton };
+        Object[] options = {okayButton, cancelButton};
 
         // Create the pane containing the buttons
-        pane = new JOptionPane(textPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, options, passwordField1);
+        pane =
+                new JOptionPane(
+                        textPanel,
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.DEFAULT_OPTION,
+                        null,
+                        options,
+                        passwordField1);
 
         // Create the main dialog and set the default button
         dialog = pane.createDialog(mainPanel, "Register Nickname");
@@ -117,7 +126,8 @@ public final class RegisterNameDialog implements ActionListener {
             StringBuilder toUser = new StringBuilder();
 
             if (passValid.trim().length() > 0) {
-                toUser.append("CH|CLIENT: Invalid Characters in the password.  Registration failed.<br>");
+                toUser.append(
+                        "CH|CLIENT: Invalid Characters in the password.  Registration failed.<br>");
                 pass2 = "";
             }
 
@@ -128,12 +138,22 @@ public final class RegisterNameDialog implements ActionListener {
             }
 
             if (passwordValid) {
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "register " + usernameField.getText() + "," + String.valueOf(passwordField1.getPassword()));
+                mwclient.sendChat(
+                        GameHost.CAMPAIGN_PREFIX
+                                + "register "
+                                + usernameField.getText()
+                                + ","
+                                + String.valueOf(passwordField1.getPassword()));
             } else {
                 mwclient.doParseDataInput(toUser.toString());
             }
         }
-        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setclientversion#" + mwclient.myUsername.trim() + "#" + MWClient.CLIENT_VERSION);
+        mwclient.sendChat(
+                GameHost.CAMPAIGN_PREFIX
+                        + "c setclientversion#"
+                        + mwclient.myUsername.trim()
+                        + "#"
+                        + MWClient.CLIENT_VERSION);
 
         dialog.dispose();
     }

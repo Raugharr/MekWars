@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -18,7 +18,6 @@
 package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.client.MWClient;
 import mekwars.client.gui.CCommPanel;
 
@@ -27,25 +26,22 @@ import mekwars.client.gui.CCommPanel;
  */
 public class SM extends Command {
 
-	/**
-	 * @see Command#Command(MMClient)
-	 */
-	public SM(MWClient mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @see Command#Command(MMClient)
+     */
+    public SM(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-        if (st.hasMoreElements())
-        {
-            if (mwclient.getConfig().isParam("MAINCHANNELMISC"))
-            	mwclient.addToChat(st.nextToken());
-            else
-            	mwclient.addToChat(st.nextToken(),CCommPanel.CHANNEL_MISC);
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        if (st.hasMoreElements()) {
+            if (mwclient.getConfig().isParam("MAINCHANNELMISC")) mwclient.addToChat(st.nextToken());
+            else mwclient.addToChat(st.nextToken(), CCommPanel.CHANNEL_MISC);
         }
-	}
+    }
 }

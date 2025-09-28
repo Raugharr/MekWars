@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,19 +20,17 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-
+import megamek.common.Entity;
 import mekwars.common.GameInterface;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.SerializeEntity;
-
-import megamek.common.Entity;
 
 /*
  * This class is responsible for reports that are generated on both the client and server.
  */
 public class GameReport {
-    public static StringBuilder prepareReport(GameInterface myGame,
-            boolean usingAdvancedRepairs, Buildings buildingTemplate) {
+    public static StringBuilder prepareReport(
+            GameInterface myGame, boolean usingAdvancedRepairs, Buildings buildingTemplate) {
         StringBuilder result = new StringBuilder();
         String name = "";
         // Parse the real playername from the Modified In game one..
@@ -66,9 +64,7 @@ public class GameReport {
                 winnerName = winnerName.substring(0, winnerName.length() - 1);
             }
             winnerName += "#";
-        }
-
-        else {
+        } else {
             winnerName = "DRAW#";
         }
 
@@ -81,8 +77,7 @@ public class GameReport {
             if (ent.getOwner().getName().startsWith("War Bot")) {
                 continue;
             }
-            result.append(SerializeEntity.serializeEntity(ent, true, false,
-                    usingAdvancedRepairs));
+            result.append(SerializeEntity.serializeEntity(ent, true, false, usingAdvancedRepairs));
             result.append("#");
         }
         en = myGame.getGraveyardEntities();
@@ -91,10 +86,8 @@ public class GameReport {
             if (ent.getOwner().getName().startsWith("War Bot")) {
                 continue;
             }
-            result.append(SerializeEntity.serializeEntity(ent, true, false,
-                    usingAdvancedRepairs));
+            result.append(SerializeEntity.serializeEntity(ent, true, false, usingAdvancedRepairs));
             result.append("#");
-
         }
         Iterator<Entity> en2 = myGame.getEntities();
         while (en2.hasNext()) {
@@ -102,8 +95,7 @@ public class GameReport {
             if (ent.getOwner().getName().startsWith("War Bot")) {
                 continue;
             }
-            result.append(SerializeEntity.serializeEntity(ent, true, false,
-                    usingAdvancedRepairs));
+            result.append(SerializeEntity.serializeEntity(ent, true, false, usingAdvancedRepairs));
             result.append("#");
         }
         en = myGame.getRetreatedEntities();
@@ -112,8 +104,7 @@ public class GameReport {
             if (ent.getOwner().getName().startsWith("War Bot")) {
                 continue;
             }
-            result.append(SerializeEntity.serializeEntity(ent, true, false,
-                    usingAdvancedRepairs));
+            result.append(SerializeEntity.serializeEntity(ent, true, false, usingAdvancedRepairs));
             result.append("#");
         }
 

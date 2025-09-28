@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2009  
+ * MekWars - Copyright (C) 2009
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -41,7 +41,14 @@ public class CreateChatRoomCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -49,7 +56,12 @@ public class CreateChatRoomCommand implements Command {
         // check if they player already owns a ChatRoom 1 per player.
         for (ChatRoom room : CampaignMain.cm.getChatRoomList()) {
             if (room.isOwner(Username)) {
-                CampaignMain.cm.toUser("AM:You already own a chat room " + room.getRoomName() + " and cannot own another.", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:You already own a chat room "
+                                + room.getRoomName()
+                                + " and cannot own another.",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -64,4 +76,4 @@ public class CreateChatRoomCommand implements Command {
             return;
         }
     }
-}// end DefendCommand
+} // end DefendCommand

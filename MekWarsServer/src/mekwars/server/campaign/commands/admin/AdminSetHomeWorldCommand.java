@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,54 +16,78 @@
 
 /*
  * Created on 10.26.2005
- *  
+ *
  */
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminSetHomeWorldCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Planet Name#[true/false]";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-        boolean homeworld = false;
-        SPlanet planet = null ;
-        
-        try{
-        	planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
-            if ( command.hasMoreTokens() )
-                homeworld = Boolean.parseBoolean(command.nextToken());
-            else
-            	homeworld = !planet.isHomeWorld();
-        }catch (Exception ex){
-        	CampaignMain.cm.toUser("Invalid syntax. Try: adminsethomeworld#Planet#[true/false]",Username);
-        }
-        
-        if ( planet == null )
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Planet Name#[true/false]";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
-        
+        }
+
+        boolean homeworld = false;
+        SPlanet planet = null;
+
+        try {
+            planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), Username);
+            if (command.hasMoreTokens()) homeworld = Boolean.parseBoolean(command.nextToken());
+            else homeworld = !planet.isHomeWorld();
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser(
+                    "Invalid syntax. Try: adminsethomeworld#Planet#[true/false]", Username);
+        }
+
+        if (planet == null) return;
+
         planet.setHomeWorld(homeworld);
-        
-		CampaignMain.cm.toUser(planet.getName()+"'s homeworld status set to: " + homeworld + ".",Username,true);
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has set " + planet.getName() +"'s homeworld status to: " + homeworld + ".");
-		planet.updated();
-	}
+
+        CampaignMain.cm.toUser(
+                planet.getName() + "'s homeworld status set to: " + homeworld + ".",
+                Username,
+                true);
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username
+                        + " has set "
+                        + planet.getName()
+                        + "'s homeworld status to: "
+                        + homeworld
+                        + ".");
+        planet.updated();
+    }
 }

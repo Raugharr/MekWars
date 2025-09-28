@@ -16,9 +16,9 @@
 
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 
 /**
  * @author Helge Richter
@@ -31,7 +31,8 @@ public class ClanPilotTrainingSkill extends SPilotSkill {
 
     public ClanPilotTrainingSkill(int id) {
         super(id, "Clan Pilot Training", "CPT");
-        setDescription("Pilot has a +1 penalty for physical attacks, because clans do not train for dishonourable combat.");
+        setDescription(
+                "Pilot has a +1 penalty for physical attacks, because clans do not train for dishonourable combat.");
     }
 
     @Override
@@ -51,5 +52,4 @@ public class ClanPilotTrainingSkill extends SPilotSkill {
 
         return 0;
     }
-
 }

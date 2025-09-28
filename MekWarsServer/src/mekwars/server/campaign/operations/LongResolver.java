@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,18 +20,17 @@
  */
 package mekwars.server.campaign.operations;
 
-//IMPORTS
-
+// IMPORTS
 
 public class LongResolver {
-	
-	//IVARS
-	
-	//CONSTRUCTORS
-	public LongResolver() {
-		//contents
-	}
 
-	//METHODS
-	
-}//end OperationsManager class
+    // IVARS
+
+    // CONSTRUCTORS
+    public LongResolver() {
+        // contents
+    }
+
+    // METHODS
+
+} // end OperationsManager class

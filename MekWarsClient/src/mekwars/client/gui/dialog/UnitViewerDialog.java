@@ -53,7 +53,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Vector;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -72,14 +71,6 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import mekwars.client.MWClient;
-import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.client.gui.CMainFrame;
-import mekwars.client.gui.MechInfo;
-import mekwars.common.util.MWLogger;
-import mekwars.common.util.SpringLayoutHelper;
-import mekwars.common.util.UnitUtils;
 import megamek.client.ui.swing.UnitFailureDialog;
 import megamek.client.ui.swing.UnitLoadingDialog;
 import megamek.common.Entity;
@@ -96,19 +87,31 @@ import megamek.common.TechConstants;
 import megamek.common.UnitType;
 import megamek.common.WeaponType;
 import megamek.common.loaders.EntityLoadingException;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.CMainFrame;
+import mekwars.client.gui.MechInfo;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 
 /*
  * Allows a user to sort through a list of MechSummaries and select one
  */
 
-public class UnitViewerDialog extends JFrame implements ActionListener, KeyListener, ListSelectionListener, Runnable, WindowListener, ItemListener {
+public class UnitViewerDialog extends JFrame
+        implements ActionListener,
+                KeyListener,
+                ListSelectionListener,
+                Runnable,
+                WindowListener,
+                ItemListener {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -7210333306969855153L;
+
     // how long after a key is typed does a new search begin
-    private final static int KEY_TIMEOUT = 1000;
+    private static final int KEY_TIMEOUT = 1000;
     public static final int UNIT_VIEWER = 0;
     public static final int OMNI_VARIANT_SELECTOR = 1;
     public static final int UNIT_SELECTOR = 2;
@@ -116,8 +119,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
 
     // these indices should match up with the static values in the
     // MechSummaryComparator
-    private String[] saSorts =
-        { "Name", "Ref", "Weight", "BV" };// , "Year"
+    private String[] saSorts = {"Name", "Ref", "Weight", "BV"}; // , "Year"
     // };
 
     // frame which owns the dialog
@@ -219,7 +221,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         defaultModel = new DefaultListModel<String>();
         mechList = new JList<String>(defaultModel);
         listSelectionModel = mechList.getSelectionModel();
-        mechList.setVisibleRowCount(17);// give the list same number of rows as
+        mechList.setVisibleRowCount(17); // give the list same number of rows as
         // the text boxes
         listSelectionModel.addListSelectionListener(this);
 
@@ -235,10 +237,12 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         leftScrollPane.setAlignmentX(LEFT_ALIGNMENT);
         leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         rightScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-        rightScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        rightScrollPane.setHorizontalScrollBarPolicy(
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         fluffScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-        fluffScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        fluffScrollPane.setHorizontalScrollBarPolicy(
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         fluffScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         mechList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -383,7 +387,6 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
             m_pSouthParams.add(m_pOpenAdvanced);
         }
         paintScreen(false);
-
     }
 
     private void toggleAdvanced() {
@@ -457,16 +460,32 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                     continue;
                 }
 
-                if (/* Weight */
-                ((nClass == EntityWeightClass.SIZE) || (mechs[x].getWeightClass() == nClass)) &&
-                /*
-                 * Technology Level
-                 */
-                ((nType == TechConstants.T_ALL) || (nType == mechs[x].getType()) || ((nType == TechConstants.T_IS_TW_ALL) && ((mechs[x].getType() <= TechConstants.T_IS_TW_NON_BOX) || (mechs[x].getType() == TechConstants.T_INTRO_BOXSET))) || ((nType == TechConstants.T_TW_ALL) && ((mechs[x].getType() <= TechConstants.T_IS_TW_NON_BOX) || (mechs[x].getType() <= TechConstants.T_INTRO_BOXSET) || (mechs[x].getType() <= TechConstants.T_CLAN_TW)))) &&
-                /*
-                 * Unit Type (Mek, Infantry, etc.)
-                 */
-                ((nUnitType == UnitType.SIZE) || mechs[x].getUnitType().equals(UnitType.getTypeName(nUnitType)))) {
+                if (
+                /* Weight */
+                ((nClass == EntityWeightClass.SIZE) || (mechs[x].getWeightClass() == nClass))
+                        &&
+                        /*
+                         * Technology Level
+                         */
+                        ((nType == TechConstants.T_ALL)
+                                || (nType == mechs[x].getType())
+                                || ((nType == TechConstants.T_IS_TW_ALL)
+                                        && ((mechs[x].getType() <= TechConstants.T_IS_TW_NON_BOX)
+                                                || (mechs[x].getType()
+                                                        == TechConstants.T_INTRO_BOXSET)))
+                                || ((nType == TechConstants.T_TW_ALL)
+                                        && ((mechs[x].getType() <= TechConstants.T_IS_TW_NON_BOX)
+                                                || (mechs[x].getType()
+                                                        <= TechConstants.T_INTRO_BOXSET)
+                                                || (mechs[x].getType()
+                                                        <= TechConstants.T_CLAN_TW))))
+                        &&
+                        /*
+                         * Unit Type (Mek, Infantry, etc.)
+                         */
+                        ((nUnitType == UnitType.SIZE)
+                                || mechs[x].getUnitType()
+                                        .equals(UnitType.getTypeName(nUnitType)))) {
                     vMechs.add(mechs[x]);
                 }
             }
@@ -491,7 +510,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         for (int i = 0; i < EntityWeightClass.SIZE; i++) {
             chWeightClass.addItem(EntityWeightClass.getClassName(i));
         }
-        chWeightClass.addItem("All"); //$NON-NLS-1$
+        chWeightClass.addItem("All"); // $NON-NLS-1$
         chWeightClass.setSelectedIndex(0);
 
         for (int i = 0; i < TechConstants.SIZE; i++) {
@@ -502,7 +521,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         for (int i = 0; i < UnitType.SIZE; i++) {
             chUnitType.addItem(UnitType.getTypeDisplayableName(i));
         }
-        chUnitType.addItem("All"); //$NON-NLS-1$
+        chUnitType.addItem("All"); // $NON-NLS-1$
         chUnitType.setSelectedIndex(0);
 
         m_cWalk.addItem("At Least");
@@ -522,7 +541,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
     }
 
     private void populateWeaponsAndEquipmentChoices() {
-    	int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
+        int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
         m_cWeapons1.removeAllItems();
         m_cWeapons2.removeAllItems();
         m_cEquipment.removeAllItems();
@@ -531,16 +550,46 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         m_chkEquipment.setSelected(false);
         int nType = chType.getSelectedIndex();
         int nUnitType = chUnitType.getSelectedIndex();
-        for (Enumeration<EquipmentType> e = EquipmentType.getAllTypes(); e.hasMoreElements();) {
+        for (Enumeration<EquipmentType> e = EquipmentType.getAllTypes(); e.hasMoreElements(); ) {
             EquipmentType et = e.nextElement();
-            if ((et instanceof WeaponType) && ((et.getTechLevel(year) == nType) || (nType == TechConstants.T_ALL) || ((nType == TechConstants.T_IS_TW_ALL) && ((et.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX) || (et.getTechLevel(year) == TechConstants.T_IS_ADVANCED) || (et.getTechLevel(year) == TechConstants.T_CLAN_ADVANCED))) || (((nType == TechConstants.T_IS_TW_ALL) || (nType == TechConstants.T_IS_ADVANCED)) && ((et.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX) || (et.getTechLevel(year) == TechConstants.T_IS_ADVANCED))))) {
-                if (!(nUnitType == UnitType.SIZE) && ((UnitType.getTypeName(nUnitType).equals("Mek") || UnitType.getTypeName(nUnitType).equals("Tank")) && (et.hasFlag(WeaponType.F_INFANTRY) || et.hasFlag(WeaponType.F_INFANTRY_ONLY)))) {
+            if ((et instanceof WeaponType)
+                    && ((et.getTechLevel(year) == nType)
+                            || (nType == TechConstants.T_ALL)
+                            || ((nType == TechConstants.T_IS_TW_ALL)
+                                    && ((et.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)
+                                            || (et.getTechLevel(year)
+                                                    == TechConstants.T_IS_ADVANCED)
+                                            || (et.getTechLevel(year)
+                                                    == TechConstants.T_CLAN_ADVANCED)))
+                            || (((nType == TechConstants.T_IS_TW_ALL)
+                                            || (nType == TechConstants.T_IS_ADVANCED))
+                                    && ((et.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)
+                                            || (et.getTechLevel(year)
+                                                    == TechConstants.T_IS_ADVANCED))))) {
+                if (!(nUnitType == UnitType.SIZE)
+                        && ((UnitType.getTypeName(nUnitType).equals("Mek")
+                                        || UnitType.getTypeName(nUnitType).equals("Tank"))
+                                && (et.hasFlag(WeaponType.F_INFANTRY)
+                                        || et.hasFlag(WeaponType.F_INFANTRY_ONLY)))) {
                     continue;
                 }
                 m_cWeapons1.addItem(et.getName());
                 m_cWeapons2.addItem(et.getName());
             }
-            if ((et instanceof MiscType) && ((et.getTechLevel(year) == nType) || (nType == TechConstants.T_ALL) || ((nType == TechConstants.T_TW_ALL) && ((et.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX) || (et.getTechLevel(year) == TechConstants.T_IS_ADVANCED) || (et.getTechLevel(year) == TechConstants.T_CLAN_ADVANCED))) || (((nType == TechConstants.T_IS_TW_ALL) || (nType == TechConstants.T_IS_ADVANCED)) && ((et.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX) || (et.getTechLevel(year) == TechConstants.T_IS_ADVANCED))))) {
+            if ((et instanceof MiscType)
+                    && ((et.getTechLevel(year) == nType)
+                            || (nType == TechConstants.T_ALL)
+                            || ((nType == TechConstants.T_TW_ALL)
+                                    && ((et.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)
+                                            || (et.getTechLevel(year)
+                                                    == TechConstants.T_IS_ADVANCED)
+                                            || (et.getTechLevel(year)
+                                                    == TechConstants.T_CLAN_ADVANCED)))
+                            || (((nType == TechConstants.T_IS_TW_ALL)
+                                            || (nType == TechConstants.T_IS_ADVANCED))
+                                    && ((et.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)
+                                            || (et.getTechLevel(year)
+                                                    == TechConstants.T_IS_ADVANCED))))) {
                 m_cEquipment.addItem(et.getName());
             }
         }
@@ -598,7 +647,14 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
     private String formatMech(MechSummary ms) {
 
         String result = "";
-        result = makeLength(ms.getModel(), 12) + " " + makeLength(ms.getChassis(), 10) + " " + makeLength(Double.toString(ms.getTons()), 3) + " " + makeLength(Integer.toString(ms.getBV()), 5);
+        result =
+                makeLength(ms.getModel(), 12)
+                        + " "
+                        + makeLength(ms.getChassis(), 10)
+                        + " "
+                        + makeLength(Double.toString(ms.getTons()), 3)
+                        + " "
+                        + makeLength(Integer.toString(ms.getBV()), 5);
 
         if (Boolean.parseBoolean(mwclient.getServerConfigs("UseCalculatedCosts"))) {
             result += makeLength(NumberFormat.getInstance().format(ms.getCost()), 10);
@@ -619,28 +675,40 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                     MechSummary ms = mechsCurrent[mechList.getSelectedIndex()];
                     String unit = ms.getName();
                     setVisible(false);
-                    String moneyMod = JOptionPane.showInputDialog(clientgui, "Money Mod for " + unit, 0);
+                    String moneyMod =
+                            JOptionPane.showInputDialog(clientgui, "Money Mod for " + unit, 0);
 
                     if ((moneyMod == null) || (moneyMod.length() == 0)) {
                         dispose();
                         return;
                     }
 
-                    String compMod = JOptionPane.showInputDialog(clientgui, "Comp Mod for " + unit, 0);
+                    String compMod =
+                            JOptionPane.showInputDialog(clientgui, "Comp Mod for " + unit, 0);
 
                     if ((compMod == null) || (compMod.length() == 0)) {
                         dispose();
                         return;
                     }
 
-                    String fluMod = JOptionPane.showInputDialog(clientgui, "Flu Mod for " + unit, 0);
+                    String fluMod =
+                            JOptionPane.showInputDialog(clientgui, "Flu Mod for " + unit, 0);
 
                     if ((fluMod == null) || (fluMod.length() == 0)) {
                         dispose();
                         return;
                     }
 
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AddOmniVariantMod#" + unit + "#" + moneyMod + "$" + compMod + "$" + fluMod);
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX
+                                    + "c AddOmniVariantMod#"
+                                    + unit
+                                    + "#"
+                                    + moneyMod
+                                    + "$"
+                                    + compMod
+                                    + "$"
+                                    + fluMod);
 
                     dispose();
                 } catch (Exception ex) {
@@ -648,7 +716,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                     // MMClient.mwClientLog.clientErrLog("Problem with
                     // actionPerformed in RepodDialog");
                 }
-            }// end omni selector if
+            } // end omni selector if
             else if (viewerType == UnitViewerDialog.UNIT_SELECTOR) {
                 try {
                     MechSummary ms = mechsCurrent[mechList.getSelectedIndex()];
@@ -658,10 +726,9 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                     int weightClass = chWeightClass.getSelectedIndex();
                     // Item "All" takes up Weight Class 0, so this is usually 1 off.
                     if (weightClass > 0) {
-                    	weightClass -= 1;
+                        weightClass -= 1;
                     }
                     unitFile = UnitUtils.getMechSummaryFileName(ms);
-
 
                     String fluff = JOptionPane.showInputDialog(clientgui, "Fluff text for " + unit);
 
@@ -670,14 +737,16 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                         return;
                     }
 
-                    String gunnery = JOptionPane.showInputDialog(clientgui, "Gunnery skill for " + unit, 99);
+                    String gunnery =
+                            JOptionPane.showInputDialog(clientgui, "Gunnery skill for " + unit, 99);
 
                     if ((gunnery == null) || (gunnery.length() == 0)) {
                         dispose();
                         return;
                     }
 
-                    String piloting = JOptionPane.showInputDialog(clientgui, "Piloting Mod for " + unit, 99);
+                    String piloting =
+                            JOptionPane.showInputDialog(clientgui, "Piloting Mod for " + unit, 99);
 
                     if ((piloting == null) || (piloting.length() == 0)) {
                         dispose();
@@ -685,14 +754,29 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
                     }
 
                     String skills = null;
-                    skills = JOptionPane.showInputDialog(clientgui, "Skills Mod for " + unit + " (comma delimited)");
+                    skills =
+                            JOptionPane.showInputDialog(
+                                    clientgui, "Skills Mod for " + unit + " (comma delimited)");
 
                     if (skills == null) {
                         dispose();
                         return;
                     }
 
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c createunit#" + unitFile + "#" + fluff + "#" + gunnery + "#" + piloting + "#" + weightClass + "#" + skills);
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX
+                                    + "c createunit#"
+                                    + unitFile
+                                    + "#"
+                                    + fluff
+                                    + "#"
+                                    + gunnery
+                                    + "#"
+                                    + piloting
+                                    + "#"
+                                    + weightClass
+                                    + "#"
+                                    + skills);
 
                     dispose();
                 } catch (Exception ex) {
@@ -740,7 +824,8 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         for (int i = 0; i < mechsCurrent.length; i++) {
             MechSummary ms = mechsCurrent[i];
             try {
-                Entity entity = new MechFileParser(ms.getSourceFile(), ms.getEntryName()).getEntity();
+                Entity entity =
+                        new MechFileParser(ms.getSourceFile(), ms.getEntryName()).getEntity();
                 if (isMatch(entity)) {
                     vMatches.add(ms);
                 }
@@ -912,12 +997,9 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         populateWeaponsAndEquipmentChoices();
         filterMechs(false);
         paintScreen(false);
-
     }
 
-    /**
-     * for compliance with ListSelectionListener
-     */
+    /** for compliance with ListSelectionListener */
     public void valueChanged(ListSelectionEvent event) {
 
         int selected = mechList.getSelectedIndex();
@@ -931,7 +1013,13 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
             Entity entity = new MechFileParser(ms.getSourceFile(), ms.getEntryName()).getEntity();
             previewMech(entity);
         } catch (EntityLoadingException ex) {
-            System.out.println("Unable to load mech: " + ms.getSourceFile() + ": " + ms.getEntryName() + ": " + ex.getMessage());
+            System.out.println(
+                    "Unable to load mech: "
+                            + ms.getSourceFile()
+                            + ": "
+                            + ms.getEntryName()
+                            + ": "
+                            + ex.getMessage());
             MWLogger.errLog(ex);
             clearMechPreview();
             return;
@@ -944,7 +1032,9 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
 
         if (ie.getSource() == chSort) {
             sortMechs();
-        } else if ((ie.getSource() == chWeightClass) || (ie.getSource() == chType) || (ie.getSource() == chUnitType)) {
+        } else if ((ie.getSource() == chWeightClass)
+                || (ie.getSource() == chType)
+                || (ie.getSource() == chUnitType)) {
             filterMechs();
         }
 
@@ -964,7 +1054,6 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
 
         // Remove preview image.
         previewMech(null);
-
     }
 
     void previewMech(Entity entity) {
@@ -979,7 +1068,7 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
             try {
                 // MechSummary ms =
                 // MechSummaryCache.getInstance().getMech("Error OMG-UR-FD");
-                currEntity = UnitUtils.createOMG();// new
+                currEntity = UnitUtils.createOMG(); // new
                 // MechFileParser(ms.getSourceFile(),
                 // ms.getEntryName()).getEntity();
                 populateTextFields = false;
@@ -1003,8 +1092,8 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
             mechViewRight.setText(mechView.getMechReadoutLoadout());
             if ((currEntity.getFluff() != null) && viewFluff) {
                 unitFluff.setEditable(false);
-                //unitFluff.setLineWrap(true);
-                //unitFluff.setWrapStyleWord(true);
+                // unitFluff.setLineWrap(true);
+                // unitFluff.setWrapStyleWord(true);
                 unitFluff.setText(currEntity.getFluff().getHistory());
                 unitFluff.setCaretPosition(0);
 
@@ -1100,33 +1189,25 @@ public class UnitViewerDialog extends JFrame implements ActionListener, KeyListe
         this.repaint();
 
         mechList.grabFocus();
-
     }
 
-    public void keyTyped(java.awt.event.KeyEvent ke) {
-    }
+    public void keyTyped(java.awt.event.KeyEvent ke) {}
 
     // WindowListener
-    public void windowActivated(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowActivated(java.awt.event.WindowEvent windowEvent) {}
 
-    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowClosed(java.awt.event.WindowEvent windowEvent) {}
 
     public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         saveComboBoxSettings();
         dispose();
     }
 
-    public void windowDeactivated(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowDeactivated(java.awt.event.WindowEvent windowEvent) {}
 
-    public void windowDeiconified(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowDeiconified(java.awt.event.WindowEvent windowEvent) {}
 
-    public void windowIconified(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowIconified(java.awt.event.WindowEvent windowEvent) {}
 
-    public void windowOpened(java.awt.event.WindowEvent windowEvent) {
-    }
+    public void windowOpened(java.awt.event.WindowEvent windowEvent) {}
 }

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -20,7 +20,6 @@ package mekwars.dedicatedhost.cmd;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.StringTokenizer;
-
 import mekwars.common.util.MWLogger;
 import mekwars.dedicatedhost.MWDedHost;
 
@@ -29,27 +28,32 @@ import mekwars.dedicatedhost.MWDedHost;
  */
 public class TL extends Command {
 
-	/**
-	 * @param client
-	 */
-	public TL(MWDedHost mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @param client
+     */
+    public TL(MWDedHost mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-        if(!st.hasMoreElements()) { return; } // sanity check
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        if (!st.hasMoreElements()) {
+            return;
+        } // sanity check
         try {
-            FileWriter out = new FileWriter ("./logs/gamedata.log", true); // opened in APPEND mode; will be controlled by config setting
+            FileWriter out =
+                    new FileWriter(
+                            "./logs/gamedata.log",
+                            true); // opened in APPEND mode; will be controlled by config setting
             out.write(st.nextToken()); // dump actual task data as sent by the server
             out.write("\n");
             out.close();
         } catch (IOException e) {
             MWLogger.errLog(e);
         }
-	}
+    }
 }

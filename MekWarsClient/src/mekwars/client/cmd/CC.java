@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -24,21 +24,21 @@ import mekwars.client.MWClient;
  */
 public class CC extends Command {
 
-	/**
-	 * @param client
-	 */
-	public CC(MWClient mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @param client
+     */
+    public CC(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		mwclient.getCampaign().decodeCommand(input);
-		mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
-		mwclient.refreshGUI(MWClient.REFRESH_PLAYERPANEL);
-		mwclient.refreshGUI(MWClient.REFRESH_BMPANEL);
-	}
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        mwclient.getCampaign().decodeCommand(input);
+        mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
+        mwclient.refreshGUI(MWClient.REFRESH_PLAYERPANEL);
+        mwclient.refreshGUI(MWClient.REFRESH_BMPANEL);
+    }
 }

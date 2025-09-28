@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,34 +16,30 @@
 
 package mekwars.updater._9_0_0.util;
 
+import gd.xml.ParseException;
+import gd.xml.XMLParser;
+import gd.xml.XMLResponder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import java.util.ArrayList;
-
 import megamek.common.planetaryconditions.Atmosphere;
 import megamek.common.planetaryconditions.EMI;
 import megamek.common.planetaryconditions.Fog;
 import megamek.common.planetaryconditions.Light;
-import megamek.common.planetaryconditions.PlanetaryConditions;
-import megamek.common.planetaryconditions.Weather;
 import megamek.common.planetaryconditions.Wind;
 import megamek.common.planetaryconditions.WindDirection;
 import mekwars.common.AdvancedTerrain;
-import gd.xml.ParseException;
-import gd.xml.XMLParser;
-import gd.xml.XMLResponder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
  * @author mike
- *
  */
-public class XMLAdvancedTerrainDataParser implements XMLResponder{
+public class XMLAdvancedTerrainDataParser implements XMLResponder {
     private static final Logger logger = LogManager.getLogger(XMLAdvancedTerrainDataParser.class);
 
     private String prefix;
@@ -52,7 +48,7 @@ public class XMLAdvancedTerrainDataParser implements XMLResponder{
     String lastElement = "";
     String name;
     String filename;
-    
+
     int lowtemp = 25;
     int hitemp = 25;
     double gravity = 1.0;
@@ -95,14 +91,14 @@ public class XMLAdvancedTerrainDataParser implements XMLResponder{
     private int iceStormChance;
     private int heavyHailChance;
     private int heavyFogChance;
-    private int fogChance; 
-    
+    private int fogChance;
+
     private AdvancedTerrain planetTerrain;
     private ArrayList<AdvancedTerrain> advancedTerrains = new ArrayList();
-    
+
     public XMLAdvancedTerrainDataParser(String filename) {
         this.filename = filename;
-        if (!(new File(filename).exists())){
+        if (!(new File(filename).exists())) {
             return;
         }
         try {
@@ -112,32 +108,28 @@ public class XMLAdvancedTerrainDataParser implements XMLResponder{
             logger.error("Error parsing " + filename);
             logger.error(ex);
         }
-    }    
+    }
 
     public ArrayList<AdvancedTerrain> getAdvancedTerrains() {
         return advancedTerrains;
     }
-    
-    public void recordNotationDeclaration(String name, String pubID, String sysID) throws ParseException {
+
+    public void recordNotationDeclaration(String name, String pubID, String sysID)
+            throws ParseException {
         System.out.print(prefix + "!NOTATION: " + name);
-        if (pubID != null)
-            System.out.print("  pubID = " + pubID);
-        if (sysID != null)
-            System.out.print("  sysID = " + sysID);
+        if (pubID != null) System.out.print("  pubID = " + pubID);
+        if (sysID != null) System.out.print("  sysID = " + sysID);
         logger.info("");
     }
-    
 
-    public void recordEntityDeclaration(String name, String value, String pubID, String sysID, String notation) throws ParseException {
+    public void recordEntityDeclaration(
+            String name, String value, String pubID, String sysID, String notation)
+            throws ParseException {
         System.out.print(prefix + "!ENTITY: " + name);
-        if (value != null)
-            System.out.print("  value = " + value);
-        if (pubID != null)
-            System.out.print("  pubID = " + pubID);
-        if (sysID != null)
-            System.out.print("  sysID = " + sysID);
-        if (notation != null)
-            System.out.print("  notation = " + notation);
+        if (value != null) System.out.print("  value = " + value);
+        if (pubID != null) System.out.print("  pubID = " + pubID);
+        if (sysID != null) System.out.print("  sysID = " + sysID);
+        if (notation != null) System.out.print("  notation = " + notation);
         logger.info("");
     }
 
@@ -146,7 +138,9 @@ public class XMLAdvancedTerrainDataParser implements XMLResponder{
         logger.info("  content = " + content);
     }
 
-    public void recordAttlistDeclaration(String element, String attr, boolean notation, String type, String defmod, String def) throws ParseException {
+    public void recordAttlistDeclaration(
+            String element, String attr, boolean notation, String type, String defmod, String def)
+            throws ParseException {
         System.out.print(prefix + "!ATTLIST: " + element);
         System.out.print("  attr = " + attr);
         System.out.print("  type = " + ((notation) ? "NOTATIONS " : "") + type);
@@ -154,20 +148,18 @@ public class XMLAdvancedTerrainDataParser implements XMLResponder{
         logger.info((def == null) ? "" : "  def = " + notation);
     }
 
-    public void recordDoctypeDeclaration(String name, String pubID, String sysID) throws ParseException {
+    public void recordDoctypeDeclaration(String name, String pubID, String sysID)
+            throws ParseException {
         System.out.print(prefix + "!DOCTYPE: " + name);
-        if (pubID != null)
-            System.out.print("  pubID = " + pubID);
-        if (sysID != null)
-            System.out.print("  sysID = " + sysID);
+        if (pubID != null) System.out.print("  pubID = " + pubID);
+        if (sysID != null) System.out.print("  sysID = " + sysID);
         logger.info("");
         prefix = "";
     }
 
     /* DOC METHDODS */
 
-    public void recordDocStart() {
-    }
+    public void recordDocStart() {}
 
     public void recordDocEnd() {
         logger.info("");
@@ -230,8 +222,7 @@ public class XMLAdvancedTerrainDataParser implements XMLResponder{
             advancedTerrains.add(planetTerrain);
             name = "reset";
         }
-        if (tagName.equals("ADVTERRAIN")) {
-        }
+        if (tagName.equals("ADVTERRAIN")) {}
     }
 
     @Override
@@ -255,93 +246,93 @@ public class XMLAdvancedTerrainDataParser implements XMLResponder{
         if (lastElement.equalsIgnoreCase("NAME")) {
             name = charData;
             logger.info(name);
-        }  else if (lastElement.equalsIgnoreCase("lowtemp")) {
-            lowtemp =  Integer.parseInt(charData);
+        } else if (lastElement.equalsIgnoreCase("lowtemp")) {
+            lowtemp = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("hitemp")) {
-            hitemp =  Integer.parseInt(charData);
+            hitemp = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("gravity")) {
-            gravity =  Double.parseDouble(charData);        
+            gravity = Double.parseDouble(charData);
         } else if (lastElement.equalsIgnoreCase("vacuum")) {
-            vacuum =  Boolean.parseBoolean(charData);
+            vacuum = Boolean.parseBoolean(charData);
         } else if (lastElement.equalsIgnoreCase("nightchance")) {
-            nightchance =  Integer.parseInt(charData);
+            nightchance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("nightmod")) {
-            nightmod =  Integer.parseInt(charData);
+            nightmod = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("blizzardchance")) {
-            blizzardChance =  Integer.parseInt(charData);
+            blizzardChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("blowingsandchance")) {
-            blowingSandChance =  Integer.parseInt(charData);
+            blowingSandChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("heavysnowfallchance")) {
-            heavySnowfallChance =  Integer.parseInt(charData);
+            heavySnowfallChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("lightRainfallChance")) {
-            lightRainfallChance =  Integer.parseInt(charData);
+            lightRainfallChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("heavyRainfallChance")) {
-            heavyRainfallChance =  Integer.parseInt(charData);
+            heavyRainfallChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("moderateWindsChance")) {
-            moderateWindsChance =  Integer.parseInt(charData);
+            moderateWindsChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("highWindsChance")) {
-            highWindsChance =  Integer.parseInt(charData);
+            highWindsChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("downPourChance")) {
-            downPourChance =  Integer.parseInt(charData);
+            downPourChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("duskChance")) {
-            duskChance =  Integer.parseInt(charData);
+            duskChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("atmosphere")) {
-            atmo =  Integer.parseInt(charData);
+            atmo = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("emiChance")) {
-            emiChance =  Integer.parseInt(charData);
+            emiChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("emi")) {
-            emi =  Boolean.parseBoolean(charData);
+            emi = Boolean.parseBoolean(charData);
         } else if (lastElement.equalsIgnoreCase("windStrength")) {
-            windStrength =  Integer.parseInt(charData);
+            windStrength = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("windDir")) {
-            windDir =  Integer.parseInt(charData);
+            windDir = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("tornadoF4WindChance")) {
-            tornadoF4WindChance =  Integer.parseInt(charData);
+            tornadoF4WindChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("tornadoF13WindChance")) {
-            tornadoF13WindChance =  Integer.parseInt(charData);
+            tornadoF13WindChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("effectTerrain")) {
-            effectTerrain =  Boolean.parseBoolean(charData);
+            effectTerrain = Boolean.parseBoolean(charData);
         } else if (lastElement.equalsIgnoreCase("stormWindsChance")) {
-            stormWindsChance =  Integer.parseInt(charData);
+            stormWindsChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("strongWindsChance")) {
-            strongWindsChance =  Integer.parseInt(charData);
+            strongWindsChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("temp")) {
-            temp =  Integer.parseInt(charData);
+            temp = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("sleetchance")) {
-            sleetChance =  Integer.parseInt(charData);
+            sleetChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("shiftingwindstrength")) {
-            shiftingWindStrength =  Boolean.parseBoolean(charData);
+            shiftingWindStrength = Boolean.parseBoolean(charData);
         } else if (lastElement.equalsIgnoreCase("shiftingWindDirection")) {
-            shiftingWindDirection =  Boolean.parseBoolean(charData);
+            shiftingWindDirection = Boolean.parseBoolean(charData);
         } else if (lastElement.equalsIgnoreCase("pitchBlackChance")) {
-            pitchBlackChance =  Integer.parseInt(charData);
+            pitchBlackChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("moonlessNightChance")) {
-            moonlessNightChance =  Integer.parseInt(charData);
+            moonlessNightChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("moderateSnowFallChance")) {
-            moderateSnowFallChance =  Integer.parseInt(charData);
+            moderateSnowFallChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("moderateRainFallChance")) {
-            moderateRainFallChance =  Integer.parseInt(charData);
+            moderateRainFallChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("maxWindsStrength")) {
-            maxWindStrength =  Integer.parseInt(charData);
+            maxWindStrength = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("lightWindChance")) {
-            lightWindChance =  Integer.parseInt(charData);
+            lightWindChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("ligthSnowfallChance")) {
-            lightSnowfallChance =  Integer.parseInt(charData);
+            lightSnowfallChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("lightHailChance")) {
-            lightHailChance =  Integer.parseInt(charData);
+            lightHailChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("lightFogChance")) {
-            lightFogChance =  Integer.parseInt(charData);
+            lightFogChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("lightConditions")) {
-            lightConditions =  Integer.parseInt(charData);
+            lightConditions = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("iceStormChance")) {
-            iceStormChance =  Integer.parseInt(charData);
+            iceStormChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("HeavyHailChance")) {
-            heavyHailChance =  Integer.parseInt(charData);
+            heavyHailChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("HeavyFogChance")) {
-            heavyFogChance =  Integer.parseInt(charData);
+            heavyFogChance = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("fogChance")) {
-            fogChance=  Integer.parseInt(charData);
-        } 
+            fogChance = Integer.parseInt(charData);
+        }
     }
 
     @Override
@@ -350,13 +341,12 @@ public class XMLAdvancedTerrainDataParser implements XMLResponder{
     }
 
     @Override
-
     public void recordPI(String name, String pValue) {
         logger.info(prefix + "*" + name + " PI: " + pValue);
     }
 
-
-    public InputStream resolveDTDEntity(String name, String pubID, String sysID) throws ParseException {
+    public InputStream resolveDTDEntity(String name, String pubID, String sysID)
+            throws ParseException {
         return resolveExternalEntity(name, pubID, sysID);
     }
 
@@ -372,9 +362,9 @@ public class XMLAdvancedTerrainDataParser implements XMLResponder{
         return result;
     }
 
-
     @Override
-    public InputStream resolveExternalEntity(String name, String pubID, String sysID) throws ParseException {
+    public InputStream resolveExternalEntity(String name, String pubID, String sysID)
+            throws ParseException {
         if (sysID != null) {
             File f = new File((new File(filename)).getParent(), sysID);
             try {

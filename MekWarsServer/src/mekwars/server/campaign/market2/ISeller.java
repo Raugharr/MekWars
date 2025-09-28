@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * original author: nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,15 +19,16 @@ package mekwars.server.campaign.market2;
 import mekwars.server.campaign.SUnit;
 
 /**
- * Interface which defines the methods needed by an actor
- * who is able to sell units using the market. Both SHouse
- * and SPlayer implement ISeller.
+ * Interface which defines the methods needed by an actor who is able to sell units using the
+ * market. Both SHouse and SPlayer implement ISeller.
  */
 public interface ISeller {
-	
-	public abstract void addMoney(int amountToAdd);
-	public abstract String removeUnit(SUnit unitToRemove, boolean sendUpdate);
-	public abstract SUnit getUnit(int unitID);
-	public abstract boolean isHuman();
-	
+
+    public abstract void addMoney(int amountToAdd);
+
+    public abstract String removeUnit(SUnit unitToRemove, boolean sendUpdate);
+
+    public abstract SUnit getUnit(int unitID);
+
+    public abstract boolean isHuman();
 }

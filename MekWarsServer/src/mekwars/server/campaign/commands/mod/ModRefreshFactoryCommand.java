@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2007 
- * 
+ * MekWars - Copyright (C) 2007
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,60 +17,89 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.commands.Command;
 
-//modrefreshfactory#planet#factory
+// modrefreshfactory#planet#factory
 public class ModRefreshFactoryCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Planet Name#Factory Name";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		String planetName;
-		String factoryName;
-		try {
-			planetName = command.nextToken();
-			factoryName = command.nextToken();
-		} catch (Exception e) {
-			CampaignMain.cm.toUser("Improper format. Try: /c modrefreshfactory#planetname#factoryname",Username,true);
-			return;   
-		}
-		
-		SPlanet p = (SPlanet)CampaignMain.cm.getData().getPlanetByName(planetName);
-		if (p == null){
-			CampaignMain.cm.toUser("Could not find planet: " + planetName + ".",Username,true);
-			return;   
-		}
-		
-		SUnitFactory uf = (SUnitFactory)CampaignMain.cm.getData().getFactoryByName(p,factoryName);
-		if (uf == null){
-			CampaignMain.cm.toUser("Could not find factory: " + factoryName + ".",Username,true);
-			return;               
-		}
-		
-		int ticksToRemove = uf.getTicksUntilRefresh();
-		String refresh = uf.addRefresh(-ticksToRemove, true);//use get and add instead of set b/c add sends HS update
 
-		
-		//send update to all players
-		if ( p.getOwner() != null )
-			CampaignMain.cm.doSendToAllOnlinePlayers(p.getOwner(), "HS|" + refresh, false);
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Planet Name#Factory Name";
 
-		CampaignMain.cm.doSendModMail("NOTE",Username+" has refreshed factory "+uf.getName()+" on planet "+p.getName()+"!");	}
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        String planetName;
+        String factoryName;
+        try {
+            planetName = command.nextToken();
+            factoryName = command.nextToken();
+        } catch (Exception e) {
+            CampaignMain.cm.toUser(
+                    "Improper format. Try: /c modrefreshfactory#planetname#factoryname",
+                    Username,
+                    true);
+            return;
+        }
+
+        SPlanet p = (SPlanet) CampaignMain.cm.getData().getPlanetByName(planetName);
+        if (p == null) {
+            CampaignMain.cm.toUser("Could not find planet: " + planetName + ".", Username, true);
+            return;
+        }
+
+        SUnitFactory uf = (SUnitFactory) CampaignMain.cm.getData().getFactoryByName(p, factoryName);
+        if (uf == null) {
+            CampaignMain.cm.toUser("Could not find factory: " + factoryName + ".", Username, true);
+            return;
+        }
+
+        int ticksToRemove = uf.getTicksUntilRefresh();
+        String refresh =
+                uf.addRefresh(
+                        -ticksToRemove,
+                        true); // use get and add instead of set b/c add sends HS update
+
+        // send update to all players
+        if (p.getOwner() != null)
+            CampaignMain.cm.doSendToAllOnlinePlayers(p.getOwner(), "HS|" + refresh, false);
+
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username
+                        + " has refreshed factory "
+                        + uf.getName()
+                        + " on planet "
+                        + p.getName()
+                        + "!");
+    }
 }

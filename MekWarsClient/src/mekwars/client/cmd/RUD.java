@@ -18,11 +18,10 @@
 package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
-
+import megamek.client.ui.swing.UnitLoadingDialog;
 import mekwars.client.MWClient;
 import mekwars.client.gui.dialog.RepodSelectorDialog;
 import mekwars.common.util.MWLogger;
-import megamek.client.ui.swing.UnitLoadingDialog;
 
 /**
  * @@author jtighe
@@ -48,16 +47,20 @@ public class RUD extends Command {
             String unitId = ST.nextToken();
 
             if (!ST.hasMoreTokens()) {
-                String toUser = "CH|CLIENT: Your faction has no repod options for Unit "
-                        + unitId + ".";
+                String toUser =
+                        "CH|CLIENT: Your faction has no repod options for Unit " + unitId + ".";
                 mwclient.doParseDataInput(toUser);
             } else {
                 String chassieList = ST.nextToken();
-                UnitLoadingDialog unitLoadingDialog = new UnitLoadingDialog(
-                        mwclient.getMainFrame());
-                RepodSelectorDialog repodSelector = new RepodSelectorDialog(
-                        mwclient.getMainFrame(), unitLoadingDialog, mwclient,
-                        chassieList, unitId);
+                UnitLoadingDialog unitLoadingDialog =
+                        new UnitLoadingDialog(mwclient.getMainFrame());
+                RepodSelectorDialog repodSelector =
+                        new RepodSelectorDialog(
+                                mwclient.getMainFrame(),
+                                unitLoadingDialog,
+                                mwclient,
+                                chassieList,
+                                unitId);
                 Thread.sleep(125);
                 new Thread(repodSelector).start();
             }

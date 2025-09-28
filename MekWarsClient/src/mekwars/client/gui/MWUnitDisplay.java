@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -28,17 +28,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
-import megamek.client.ui.swing.ClientGUI;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
-import megamek.client.ui.swing.util.MegaMekController;
 import megamek.common.Entity;
 import megamek.common.MechView;
-import megamek.common.Player;
 import megamek.common.TechConstants;
-import megamek.common.UnitType;
-import megamek.common.equipment.AmmoMounted;
-import megamek.common.equipment.WeaponMounted;
-import mekwars.client.MWClient;
 
 public class MWUnitDisplay extends JPanel {
     private Entity entity;
@@ -47,10 +39,7 @@ public class MWUnitDisplay extends JPanel {
     public MWUnitDisplay(Entity entity) {
         super();
         this.entity = entity;
-        resourceMap = ResourceBundle.getBundle(
-                "mekwars.UnitViewDisplay",
-                Locale.US
-            );
+        resourceMap = ResourceBundle.getBundle("mekwars.UnitViewDisplay", Locale.US);
         try {
             initComponents();
         } catch (Exception e) {
@@ -92,16 +81,17 @@ public class MWUnitDisplay extends JPanel {
         mechReadout.setContentType("text/html");
         mechReadout.setEditable(false);
         mechReadout.setFont(Font.decode("Monospaced-Plan-12"));
-        mechReadout.setText("<div style='font: 12pt monospaced'>"
-                + mechView.getMechReadoutBasic()
-                + "<br>"
-                + mechView.getMechReadoutLoadout()
-                + "</div>"
-            );
+        mechReadout.setText(
+                "<div style='font: 12pt monospaced'>"
+                        + mechView.getMechReadoutBasic()
+                        + "<br>"
+                        + mechView.getMechReadoutLoadout()
+                        + "</div>");
         String technicalReadoutResource = resourceMap.getString("technicalReadoutLabel.text");
-        mechReadout.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder(technicalReadoutResource),
-                BorderFactory.createEmptyBorder(0, 2, 2, 2)));
+        mechReadout.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder(technicalReadoutResource),
+                        BorderFactory.createEmptyBorder(0, 2, 2, 2)));
         add(mechReadout, gridBagConstraints);
         // FIXME: Check for EnableQuirks config and add quirks.
     }

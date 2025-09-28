@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,16 +15,13 @@
  */
 
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
  */
 /**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
+ * @author Torren (Jason Tighe) 11.5.05
  */
-
 package mekwars.server.MWChatServer;
 
 import java.io.IOException;
@@ -32,19 +29,17 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.ThreadManager;
 
 /**
- * The keeper of the Socket on the server side. Spawns a thread for reading from
- * the socket.
- * 
- * As each line is read from the socket, the server is notified, via the
- * IConnectionListener interface
- * 
- * Outgoing messages are passed by ChatServer to the Dispatcher who queues them
- * up and calls flush on the different CHes in turn.
+ * The keeper of the Socket on the server side. Spawns a thread for reading from the socket.
+ *
+ * <p>As each line is read from the socket, the server is notified, via the IConnectionListener
+ * interface
+ *
+ * <p>Outgoing messages are passed by ChatServer to the Dispatcher who queues them up and calls
+ * flush on the different CHes in turn.
  */
 public class ConnectionHandler extends AbstractConnectionHandler {
 
@@ -62,13 +57,10 @@ public class ConnectionHandler extends AbstractConnectionHandler {
 
     /**
      * Construct a ConnectionHandler for the given socket
-     * 
-     * @param s
-     *            - the socket
-     * @param listener
-     *            - object that will be notified with incoming messages
-     * @exception IOException
-     *                - if there is a problem reading or writing to the socket
+     *
+     * @param s - the socket
+     * @param listener - object that will be notified with incoming messages
+     * @exception IOException - if there is a problem reading or writing to the socket
      */
     public ConnectionHandler(Socket socket, MWChatClient client) throws IOException {
 
@@ -85,8 +77,8 @@ public class ConnectionHandler extends AbstractConnectionHandler {
     }
 
     /**
-     * Called from MWChatClient. Start reading incoming chat and sending to an
-     * associated dispatcher.
+     * Called from MWChatClient. Start reading incoming chat and sending to an associated
+     * dispatcher.
      */
     void init() {
 
@@ -132,12 +124,11 @@ public class ConnectionHandler extends AbstractConnectionHandler {
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-
-    }// end init()
+    } // end init()
 
     /**
-     * Bypass the message queue to send something immediately. This is used for
-     * pings and to kill clients (bad chars, banned folks, etc).
+     * Bypass the message queue to send something immediately. This is used for pings and to kill
+     * clients (bad chars, banned folks, etc).
      */
     @Override
     public void queuePriorityMessage(String message) {
@@ -151,10 +142,9 @@ public class ConnectionHandler extends AbstractConnectionHandler {
     }
 
     /**
-     * @param notify
-     *            to notify the ConnectionListener. Should be true for
-     *            unexpected shutdowns (like if there is a socket error), and
-     *            false otherwise (if client called this method on purpose)
+     * @param notify to notify the ConnectionListener. Should be true for unexpected shutdowns (like
+     *     if there is a socket error), and false otherwise (if client called this method on
+     *     purpose)
      */
     @Override
     public synchronized void shutdown(boolean notify) {
@@ -179,7 +169,7 @@ public class ConnectionHandler extends AbstractConnectionHandler {
 
             super.shutdown(notify);
         }
-    }// end shutdown()
+    } // end shutdown()
 
     @Override
     public void queueMessage(String message) {
@@ -187,5 +177,4 @@ public class ConnectionHandler extends AbstractConnectionHandler {
             _writer.queueMessage(message);
         }
     }
-
 }

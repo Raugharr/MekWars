@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2013 
- * 
+ * MekWars - Copyright (C) 2013
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,5 +18,5 @@
 package mekwars.client.gui.dialog.opviewer;
 
 public interface IOpViewerPane {
-	public void setHTMLContents (String s); 
+    public void setHTMLContents(String s);
 }

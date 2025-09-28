@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
 import mekwars.common.Unit;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
@@ -53,11 +52,18 @@ public class RequestCommand implements Command {
 
     public void process(StringTokenizer command, String Username) {
 
-    	int userLevel = MWServ.getInstance().getUserLevel(Username);
-    	
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+
         if (accessLevel != 0) {
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -84,7 +90,7 @@ public class RequestCommand implements Command {
         // set some defaults ...
         SPlanet planet = null;
         SUnitFactory factory = null;
-        boolean needsMoreTechs = false;// used to make clickthrough
+        boolean needsMoreTechs = false; // used to make clickthrough
 
         String result = "";
 
@@ -101,16 +107,21 @@ public class RequestCommand implements Command {
             }
 
             // else
-            result = CampaignMain.cm.getConfig("NewbieHouseName") + " players may not purchase new units; however, they may reset their units.";
-            result += "<br><a href=\"MEKWARS/c request#resetunits\">Click here to request a reset of your units.</a>";
+            result =
+                    CampaignMain.cm.getConfig("NewbieHouseName")
+                            + " players may not purchase new units; however, they may reset their units.";
+            result +=
+                    "<br><a href=\"MEKWARS/c request#resetunits\">Click here to request a reset of your units.</a>";
             CampaignMain.cm.toUser(result, Username, true);
             return;
-
         }
 
         // boot the player's request if he has unmaintained units
         if (p.hasUnmaintainedUnit()) {
-            CampaignMain.cm.toUser("AM:Your faction refuses to assign new units to you force while units in your hangar are unmaintained!", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Your faction refuses to assign new units to you force while units in your hangar are unmaintained!",
+                    Username,
+                    true);
             return;
         }
 
@@ -122,39 +133,62 @@ public class RequestCommand implements Command {
             SPilot pilot = house.getNewPilot(unit.getType());
             unit.setPilot(pilot);
             p.addUnit(unit, true);
-            CampaignMain.cm.toUser("AM:High Command has given you a new unit from its welfare rolls to help you get back on your feet!", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:High Command has given you a new unit from its welfare rolls to help you get back on your feet!",
+                    Username,
+                    true);
             return;
         }
 
         int weightclass;
-        try {// try as an int (eg - 4 for assault)
+        try { // try as an int (eg - 4 for assault)
             weightclass = Integer.parseInt(weightstring);
-        } catch (Exception ex) {// formatting error. look for a string.
+        } catch (Exception ex) { // formatting error. look for a string.
             weightclass = Unit.getWeightIDForName(weightstring.toUpperCase());
         }
 
         // get the requested unit type
-        int type_id = Unit.MEK;// default to Mek
+        int type_id = Unit.MEK; // default to Mek
         String typestring = command.nextToken();
-        try {// try as int
+        try { // try as int
             type_id = Integer.parseInt(typestring);
-        } catch (Exception ex) {// ex, so retry as string
+        } catch (Exception ex) { // ex, so retry as string
             type_id = Unit.getTypeIDForName(typestring);
         }
 
         // break out if player lacks experience to buy weightclass
         if (!p.mayUse(weightclass)) {
-            CampaignMain.cm.toUser("AM:You are not experienced enough to use " + Unit.getWeightClassDesc(weightclass) + " units.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:You are not experienced enough to use "
+                            + Unit.getWeightClassDesc(weightclass)
+                            + " units.",
+                    Username,
+                    true);
             return;
         }
 
-        if (!Boolean.parseBoolean(p.getSubFaction().getConfig("CanBuyNew" + Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id)))) {
-            CampaignMain.cm.toUser("AM:Sorry as a member of " + p.getSubFactionName() + " you are unable to purchase this unit.", Username);
+        if (!Boolean.parseBoolean(
+                p.getSubFaction()
+                        .getConfig(
+                                "CanBuyNew"
+                                        + Unit.getWeightClassDesc(weightclass)
+                                        + Unit.getTypeClassDesc(type_id)))) {
+            CampaignMain.cm.toUser(
+                    "AM:Sorry as a member of "
+                            + p.getSubFactionName()
+                            + " you are unable to purchase this unit.",
+                    Username);
             return;
         }
 
         if (!p.hasRoomForUnit(type_id, weightclass)) {
-            CampaignMain.cm.toUser("AM:Sorry, you already have the maximum number of " + Unit.getWeightClassDesc(weightclass) + " " + Unit.getTypeClassDesc(type_id) + "s", Username);
+            CampaignMain.cm.toUser(
+                    "AM:Sorry, you already have the maximum number of "
+                            + Unit.getWeightClassDesc(weightclass)
+                            + " "
+                            + Unit.getTypeClassDesc(type_id)
+                            + "s",
+                    Username);
             return;
         }
 
@@ -171,19 +205,24 @@ public class RequestCommand implements Command {
             planetName = command.nextToken();
             planet = (SPlanet) CampaignMain.cm.getData().getPlanetByName(planetName);
             if (planet == null) {
-                CampaignMain.cm.toUser("AM:Could not find planet: " + planetName + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Could not find planet: " + planetName + ".", Username, true);
                 return;
             }
 
             // make sure the player's faction owns the world
             if (!planet.getOwner().equals(p.getMyHouse())) {
-                CampaignMain.cm.toUser("AM:Your faction does not control " + planetName + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Your faction does not control " + planetName + ".", Username, true);
                 return;
             }
 
             // make sure the planet makes units of the desired weightclass
             if (planet.getFactoriesOfWeighclass(weightclass).size() == 0) {
-                CampaignMain.cm.toUser(planetName + " does not produce units of the weight class specified.", Username, true);
+                CampaignMain.cm.toUser(
+                        planetName + " does not produce units of the weight class specified.",
+                        Username,
+                        true);
                 return;
             }
 
@@ -191,14 +230,22 @@ public class RequestCommand implements Command {
             try {
                 factoryName = command.nextToken();
             } catch (NoSuchElementException e) {
-                CampaignMain.cm.toUser("AM:You requested a unit from " + planetName + ", but did not specifiy which factory to use.", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:You requested a unit from "
+                                + planetName
+                                + ", but did not specifiy which factory to use.",
+                        Username,
+                        true);
                 return;
             }
 
             // make sure the named factory exists
             Vector<SUnitFactory> namedFactories = planet.getFactoriesByName(factoryName);
             if (namedFactories.size() == 0) {
-                CampaignMain.cm.toUser("AM:There is no " + factoryName + " on " + planetName + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:There is no " + factoryName + " on " + planetName + ".",
+                        Username,
+                        true);
                 return;
             }
 
@@ -217,35 +264,63 @@ public class RequestCommand implements Command {
                 }
             }
             if (factory == null) {
-                CampaignMain.cm.toUser(factoryName + " on " + planetName + " does not produce units of the requested weightclass.", Username, true);
+                CampaignMain.cm.toUser(
+                        factoryName
+                                + " on "
+                                + planetName
+                                + " does not produce units of the requested weightclass.",
+                        Username,
+                        true);
                 return;
             }
 
-            //Enforce_Subfaction_Factory_Access
-            //@Salient
-            if (CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Access") &&
-            	factory.getAccessLevel() != p.getSubFactionAccess())
-            {
-                CampaignMain.cm.toUser("You do not have the correct rank to purchase a unit from " + factoryName + " on " + planetName + ".", Username);
+            // Enforce_Subfaction_Factory_Access
+            // @Salient
+            if (CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Access")
+                    && factory.getAccessLevel() != p.getSubFactionAccess()) {
+                CampaignMain.cm.toUser(
+                        "You do not have the correct rank to purchase a unit from "
+                                + factoryName
+                                + " on "
+                                + planetName
+                                + ".",
+                        Username);
                 return;
             }
 
-            if (!CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Access") &&
-            	factory.getAccessLevel() > p.getSubFactionAccess())
-            {
-                CampaignMain.cm.toUser("You do not have sufficient rank to purchase a unit from " + factoryName + " on " + planetName + ".", Username);
+            if (!CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Access")
+                    && factory.getAccessLevel() > p.getSubFactionAccess()) {
+                CampaignMain.cm.toUser(
+                        "You do not have sufficient rank to purchase a unit from "
+                                + factoryName
+                                + " on "
+                                + planetName
+                                + ".",
+                        Username);
                 return;
             }
 
             // make sure the named factory can produce the requested type
             if (!factory.canProduce(type_id)) {
-                CampaignMain.cm.toUser(factoryName + " on " + planetName + " does not produce units of the requested type.", Username, true);
+                CampaignMain.cm.toUser(
+                        factoryName
+                                + " on "
+                                + planetName
+                                + " does not produce units of the requested type.",
+                        Username,
+                        true);
                 return;
             }
 
             // return if the factory is refreshing
             if (factory.getTicksUntilRefresh() > 0) {
-                CampaignMain.cm.toUser(factoryName + " is currently refreshing. " + factory.getTicksUntilRefresh() + " miniticks remaining.", Username, true);
+                CampaignMain.cm.toUser(
+                        factoryName
+                                + " is currently refreshing. "
+                                + factory.getTicksUntilRefresh()
+                                + " miniticks remaining.",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -256,25 +331,29 @@ public class RequestCommand implements Command {
          * we should return a failure.
          */
         else {
-        	//@salient Enforce_Subfaction_Factory_Access
-        	if(CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Access"))
-        	{
-                factory = p.getMyHouse().getNativeAccessableFactoryForProduction(type_id, weightclass, p.getSubFactionAccess(), Username);
-                if (factory != null) 
-                {
+            // @salient Enforce_Subfaction_Factory_Access
+            if (CampaignMain.cm.getBooleanConfig("Enforce_Subfaction_Factory_Access")) {
+                factory =
+                        p.getMyHouse()
+                                .getNativeAccessableFactoryForProduction(
+                                        type_id, weightclass, p.getSubFactionAccess(), Username);
+                if (factory != null) {
                     planet = factory.getPlanet();
                 }
-        	}
-        	else
-        	{
-        		factory = p.getMyHouse().getNativeFactoryForProduction(type_id, weightclass, true);
-        		if (factory != null) {
-        			planet = factory.getPlanet();
-        		}        		
-        	}
+            } else {
+                factory = p.getMyHouse().getNativeFactoryForProduction(type_id, weightclass, true);
+                if (factory != null) {
+                    planet = factory.getPlanet();
+                }
+            }
         }
         if (planet == null || factory == null) {
-            CampaignMain.cm.toUser("AM:No " + p.getMyHouse().getName() + " factory is available to fill your order at this time (Click on icon in House Status to use captured factories).", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:No "
+                            + p.getMyHouse().getName()
+                            + " factory is available to fill your order at this time (Click on icon in House Status to use captured factories).",
+                    Username,
+                    true);
             return;
         }
 
@@ -286,15 +365,26 @@ public class RequestCommand implements Command {
         // adjust by multipliers if this is a non-original owner.
         SHouse playerHouse = p.getMyHouse();
         if (!factory.getFounder().equalsIgnoreCase(playerHouse.getName())) {
-            mechCbills = Math.round(mechCbills * CampaignMain.cm.getFloatConfig("NonOriginalCBillMultiplier"));
-            mechInfluence = Math.round(mechInfluence * CampaignMain.cm.getFloatConfig("NonOriginalInfluenceMultiplier"));
-            mechPP = Math.round(mechPP * CampaignMain.cm.getFloatConfig("NonOriginalComponentMultiplier"));
+            mechCbills =
+                    Math.round(
+                            mechCbills
+                                    * CampaignMain.cm.getFloatConfig("NonOriginalCBillMultiplier"));
+            mechInfluence =
+                    Math.round(
+                            mechInfluence
+                                    * CampaignMain.cm.getFloatConfig(
+                                            "NonOriginalInfluenceMultiplier"));
+            mechPP =
+                    Math.round(
+                            mechPP
+                                    * CampaignMain.cm.getFloatConfig(
+                                            "NonOriginalComponentMultiplier"));
         }
 
         // Add penalty if the player is over a sliding limit
         if (p.willHaveHangarPenalty(type_id, weightclass)) {
-        	int costPenalty = p.calculateHangarPenaltyForNextPurchase(type_id, weightclass);
-        	mechCbills += costPenalty;
+            int costPenalty = p.calculateHangarPenaltyForNextPurchase(type_id, weightclass);
+            mechCbills += costPenalty;
         }
 
         // reduce flu cost to ceiling if over
@@ -321,7 +411,8 @@ public class RequestCommand implements Command {
 
             // check to make sure the player has enough support for the unit
             // requested
-            int spaceTaken = SUnit.getHangarSpaceRequired(type_id, weightclass, 0, "null", p.getMyHouse());
+            int spaceTaken =
+                    SUnit.getHangarSpaceRequired(type_id, weightclass, 0, "null", p.getMyHouse());
             if (spaceTaken > p.getFreeBays()) {
                 needsMoreTechs = true;
             }
@@ -348,33 +439,60 @@ public class RequestCommand implements Command {
                 // so and return w/o a link.
                 if (totalCost > p.getMoney()) {
 
-                    toSend.append("AM:Command will not release a new unit to you unless support is in place; however, you cannot afford to buy the unit *and* ");
+                    toSend.append(
+                            "AM:Command will not release a new unit to you unless support is in place; however, you cannot afford to buy the unit *and* ");
                     if (useBays) {
                         toSend.append(" purchase the necessary bayspace");
                     } else {
                         toSend.append(" hire technicians");
                     }
-                    toSend.append(". The total cost would be " + CampaignMain.cm.moneyOrFluMessage(true, true, totalCost) + ", but you only have " + CampaignMain.cm.moneyOrFluMessage(true, true, p.getMoney()) + ".");
+                    toSend.append(
+                            ". The total cost would be "
+                                    + CampaignMain.cm.moneyOrFluMessage(true, true, totalCost)
+                                    + ", but you only have "
+                                    + CampaignMain.cm.moneyOrFluMessage(true, true, p.getMoney())
+                                    + ".");
 
                     CampaignMain.cm.toUser(toSend.toString(), Username, true);
                     return;
                 }
 
-                toSend.append("AM:Quartermaster command will not send a new unit to your force until support resources are in place. You will need to ");
+                toSend.append(
+                        "AM:Quartermaster command will not send a new unit to your force until support resources are in place. You will need to ");
                 if (useBays) {
                     toSend.append("purchase " + numTechs + " more bays");
                 } else {
                     toSend.append("hire " + numTechs + " more technicians");
                 }
 
-                toSend.append(" at a cost of " + CampaignMain.cm.moneyOrFluMessage(true, true, techCost) + ". Combined cost of the new unit and necessary ");
+                toSend.append(
+                        " at a cost of "
+                                + CampaignMain.cm.moneyOrFluMessage(true, true, techCost)
+                                + ". Combined cost of the new unit and necessary ");
                 if (useBays) {
                     toSend.append("bays");
                 } else {
                     toSend.append("techs");
                 }
-                toSend.append(" is " + CampaignMain.cm.moneyOrFluMessage(true, true, (mechCbills + techCost)) + " and " + CampaignMain.cm.moneyOrFluMessage(false, true, mechInfluence) + ".");
-                toSend.append("<br><a href=\"MEKWARS/c hireandrequestnew#" + numTechs + "#" + Unit.getWeightClassDesc(weightclass) + "#" + type_id + "#" + planet.getName() + "#" + factory.getName() + "\">Click here to purchase both the unit and the needed support.</a>");
+                toSend.append(
+                        " is "
+                                + CampaignMain.cm.moneyOrFluMessage(
+                                        true, true, (mechCbills + techCost))
+                                + " and "
+                                + CampaignMain.cm.moneyOrFluMessage(false, true, mechInfluence)
+                                + ".");
+                toSend.append(
+                        "<br><a href=\"MEKWARS/c hireandrequestnew#"
+                                + numTechs
+                                + "#"
+                                + Unit.getWeightClassDesc(weightclass)
+                                + "#"
+                                + type_id
+                                + "#"
+                                + planet.getName()
+                                + "#"
+                                + factory.getName()
+                                + "\">Click here to purchase both the unit and the needed support.</a>");
 
                 CampaignMain.cm.toUser(toSend.toString(), Username, true);
 
@@ -392,18 +510,22 @@ public class RequestCommand implements Command {
                 if (playerHouse.getBooleanConfig("UseCalculatedCosts")) {
                     double unitCost = mech.getEntity().getCost(false);
                     if (unitCost < 1) {
-                        unitCost = playerHouse.getPriceForUnit(mech.getWeightclass(), mech.getType());
+                        unitCost =
+                                playerHouse.getPriceForUnit(mech.getWeightclass(), mech.getType());
                     }
                     double costMod = playerHouse.getDoubleConfig("CostModifier");
 
                     mechCbills += (int) Math.round(unitCost * costMod);
                     if (mechCbills > p.getMoney()) {
-                        CampaignMain.cm.toUser("You could not afford the selected unit. Please try again", Username);
+                        CampaignMain.cm.toUser(
+                                "You could not afford the selected unit. Please try again",
+                                Username);
                         return;
                     }
                 }
 
-                if (CampaignMain.cm.getBooleanConfig("AllowPersonalPilotQueues") && mech.isSinglePilotUnit()) {
+                if (CampaignMain.cm.getBooleanConfig("AllowPersonalPilotQueues")
+                        && mech.isSinglePilotUnit()) {
                     SPilot pilot1 = (SPilot) mech.getPilot();
                     SPilot pilot2 = new SPilot("Vacant", 99, 99);
                     mech.setPilot(pilot2);
@@ -413,59 +535,94 @@ public class RequestCommand implements Command {
                     }
                 }
 
-                p.addUnit(mech, true);// give the actual unit...
+                p.addUnit(mech, true); // give the actual unit...
                 results.append(mech.getModelName());
                 results.append(", ");
             }
 
             results.delete(results.length() - 2, results.length());
-            p.addMoney(-mechCbills);// then take away money
-            p.addInfluence(-mechInfluence);// and take away influence
+            p.addMoney(-mechCbills); // then take away money
+            p.addInfluence(-mechInfluence); // and take away influence
 
             // we're going to build the unit. set up a houseupdate string.
             StringBuilder hsUpdates = new StringBuilder();
 
             // set the refresh miniticks
-            hsUpdates.append(factory.addRefresh((CampaignMain.cm.getIntegerConfig(Unit.getWeightClassDesc(factory.getWeightclass()) + "Refresh") * 100) / factory.getRefreshSpeed(), false));
-            hsUpdates.append(playerHouse.addPP(weightclass, type_id, -mechPP, false));// remove
-                                                                                      // PP
-                                                                                      // from
-                                                                                      // the
-                                                                                      // faction
+            hsUpdates.append(
+                    factory.addRefresh(
+                            (CampaignMain.cm.getIntegerConfig(
+                                                    Unit.getWeightClassDesc(
+                                                                    factory.getWeightclass())
+                                                            + "Refresh")
+                                            * 100)
+                                    / factory.getRefreshSpeed(),
+                            false));
+            hsUpdates.append(playerHouse.addPP(weightclass, type_id, -mechPP, false)); // remove
+            // PP
+            // from
+            // the
+            // faction
 
             result = "AM:You've been granted the following " + results.toString() + ". (-";
-            result += CampaignMain.cm.moneyOrFluMessage(true, false, mechCbills) + " / -" + CampaignMain.cm.moneyOrFluMessage(false, true, mechInfluence) + ")";
-            MWLogger.mainLog(p.getName() + " bought the following " + results.toString() + " from " + factory.getName() + " on " + planet.getName());
+            result +=
+                    CampaignMain.cm.moneyOrFluMessage(true, false, mechCbills)
+                            + " / -"
+                            + CampaignMain.cm.moneyOrFluMessage(false, true, mechInfluence)
+                            + ")";
+            MWLogger.mainLog(
+                    p.getName()
+                            + " bought the following "
+                            + results.toString()
+                            + " from "
+                            + factory.getName()
+                            + " on "
+                            + planet.getName());
             CampaignMain.cm.toUser(result, Username, true);
-            CampaignMain.cm.doSendHouseMail(playerHouse, "NOTE", p.getName() + " bought the following " + results.toString() + " from " + factory.getName() + " on " + planet.getName() + "!");
+            CampaignMain.cm.doSendHouseMail(
+                    playerHouse,
+                    "NOTE",
+                    p.getName()
+                            + " bought the following "
+                            + results.toString()
+                            + " from "
+                            + factory.getName()
+                            + " on "
+                            + planet.getName()
+                            + "!");
 
             // send update to all players
-            CampaignMain.cm.doSendToAllOnlinePlayers(playerHouse, "HS|" + hsUpdates.toString(), false);
+            CampaignMain.cm.doSendToAllOnlinePlayers(
+                    playerHouse, "HS|" + hsUpdates.toString(), false);
 
             return;
-        }// end if(enough money/influence/pp)
-
-        else if (!hasEnoughMoney || !hasEnoughInfluence) {// tell the player
-                                                          // what he needs to
-                                                          // buy the unit
-            result = "AM:You need at least " + CampaignMain.cm.moneyOrFluMessage(true, false, mechCbills) + " and " + CampaignMain.cm.moneyOrFluMessage(false, true, mechInfluence) + " to request a " + Unit.getTypeClassDesc(type_id) + " of this weight class from a factory.";
+        } // end if(enough money/influence/pp)
+        else if (!hasEnoughMoney || !hasEnoughInfluence) { // tell the player
+            // what he needs to
+            // buy the unit
+            result =
+                    "AM:You need at least "
+                            + CampaignMain.cm.moneyOrFluMessage(true, false, mechCbills)
+                            + " and "
+                            + CampaignMain.cm.moneyOrFluMessage(false, true, mechInfluence)
+                            + " to request a "
+                            + Unit.getTypeClassDesc(type_id)
+                            + " of this weight class from a factory.";
             CampaignMain.cm.toUser(result, Username, true);
-            return;// break out ...
-        }// end else(player has too few money or too little Influence)
-        else if (!factionHasEnoughPP) {// tell the player that the faction needs
-                                       // more PP
-            result = "AM:Your faction does not have the components needed to produce such a unit at this time. Wait for your faction to gather more resources.";
+            return; // break out ...
+        } // end else(player has too few money or too little Influence)
+        else if (!factionHasEnoughPP) { // tell the player that the faction needs
+            // more PP
+            result =
+                    "AM:Your faction does not have the components needed to produce such a unit at this time. Wait for your faction to gather more resources.";
             CampaignMain.cm.toUser(result, Username, true);
-            return;// break out ...
-        }// end else (not enough PP in faction)
-
-    }// end process()
+            return; // break out ...
+        } // end else (not enough PP in faction)
+    } // end process()
 
     /**
-     * Private method which builds a welfare unit. Duplicated in RequestCommand.
-     * Kept private in these classes in order to ensure that ONLY requests
-     * generate welfare units (had previously been a public call in
-     * CampaignMain).
+     * Private method which builds a welfare unit. Duplicated in RequestCommand. Kept private in
+     * these classes in order to ensure that ONLY requests generate welfare units (had previously
+     * been a public call in CampaignMain).
      */
     private SUnit buildWelfareMek(String producer) {
         String Filename = "./data/buildtables/standard/" + producer + "_Welfare.txt";
@@ -480,5 +637,4 @@ public class RequestCommand implements Command {
 
         return cm;
     }
-
-}// end RequestCommand class
+} // end RequestCommand class

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,50 +17,67 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.commands.Command;
 
 // comand /c AdminSetHouseFluFile#House#message
 public class AdminSetHouseFluFileCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Faction Name#Flu File Name";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		String HouseName = "";
-		String fluString = "";
-		
-		try {
-			HouseName = command.nextToken();
-			fluString = command.nextToken();
-		} catch (Exception e) {
-			CampaignMain.cm.toUser("Improper command. Try: /c sethouseflufile#faction#flufile", Username, true);
-			return;
-		}
-		
-		SHouse faction = CampaignMain.cm.getHouseFromPartialString(HouseName,Username);
-		if (faction == null) {
-			CampaignMain.cm.toUser("Couldn't find a faction with that name.", Username, true);
-			return;
-		}
-		
-		faction.setHouseFluFile(fluString);
-		//server.MWLogger.modLog(Username + " has changed the flu message file for " + HouseName);
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has changed the flu message file for " + HouseName);
-		
-	}
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Faction Name#Flu File Name";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        String HouseName = "";
+        String fluString = "";
+
+        try {
+            HouseName = command.nextToken();
+            fluString = command.nextToken();
+        } catch (Exception e) {
+            CampaignMain.cm.toUser(
+                    "Improper command. Try: /c sethouseflufile#faction#flufile", Username, true);
+            return;
+        }
+
+        SHouse faction = CampaignMain.cm.getHouseFromPartialString(HouseName, Username);
+        if (faction == null) {
+            CampaignMain.cm.toUser("Couldn't find a faction with that name.", Username, true);
+            return;
+        }
+
+        faction.setHouseFluFile(fluString);
+        // server.MWLogger.modLog(Username + " has changed the flu message file for " + HouseName);
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has changed the flu message file for " + HouseName);
+    }
 }

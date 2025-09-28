@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -19,37 +19,30 @@ package mekwars.client.gui.commands;
 
 import java.awt.event.ActionEvent;
 import java.util.StringTokenizer;
-
 import mekwars.client.MWClient;
 
-/**
- * Ping command
- */
-public class PingGCmd extends CGUICommand
-{
-	/**
-     * 
-     */
+/** Ping command */
+public class PingGCmd extends CGUICommand {
+    /** */
     private static final long serialVersionUID = -1052902282489028283L;
 
-    public PingGCmd(MWClient mwclient)
-	{
-		super(mwclient);
-		name = "ping";
-		command = "ping";
-	}
+    public PingGCmd(MWClient mwclient) {
+        super(mwclient);
+        name = "ping";
+        command = "ping";
+    }
 
-	@Override
-	public boolean execute(String input) {
-		StringTokenizer ST = new StringTokenizer(input, " ");
-		if (check(ST.nextToken())) {
-			input = decompose(input);
-			send(input + delimiter + String.valueOf(System.currentTimeMillis()));
-			return true;
-		}
-		//else {
-		return false;
-	}
+    @Override
+    public boolean execute(String input) {
+        StringTokenizer ST = new StringTokenizer(input, " ");
+        if (check(ST.nextToken())) {
+            input = decompose(input);
+            send(input + delimiter + String.valueOf(System.currentTimeMillis()));
+            return true;
+        }
+        // else {
+        return false;
+    }
 
-	public void actionPerformed(ActionEvent e) {}
+    public void actionPerformed(ActionEvent e) {}
 }

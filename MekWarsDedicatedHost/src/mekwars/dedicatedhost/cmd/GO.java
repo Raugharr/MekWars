@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -19,55 +19,58 @@ package mekwars.dedicatedhost.cmd;
 
 import java.io.File;
 import java.util.StringTokenizer;
-
-import mekwars.dedicatedhost.MWDedHost;
 import megamek.common.options.GameOptions;
 import megamek.common.options.Option;
+import mekwars.dedicatedhost.MWDedHost;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
-
 public class GO extends Command {
-	
-	public GO(MWDedHost mwclient) {
-		super(mwclient);
-	}
-	
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-		mwclient.getGameOptions().clear();
-		mwclient.loadServerMegaMekGameOptions();
-		
+
+    public GO(MWDedHost mwclient) {
+        super(mwclient);
+    }
+
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        mwclient.getGameOptions().clear();
+        mwclient.loadServerMegaMekGameOptions();
+
         File mmconf = new File("./mmconf");
-        
-        if ( !mmconf.exists() ){
+
+        if (!mmconf.exists()) {
             mmconf.mkdir();
         }
-        
-		while (st.hasMoreElements()) {
-			String option = st.nextToken();
+
+        while (st.hasMoreElements()) {
+            String option = st.nextToken();
             String value = st.nextToken();
-            
-            
-            try{
-                mwclient.getGameOptions().add(new Option(new GameOptions(),option,Integer.parseInt(value)));
-            }catch (Exception ex){
-                try{
-                    mwclient.getGameOptions().add(new Option(new GameOptions(),option, Float.parseFloat(value)));
-                }catch (Exception ex1){
-                    try{
-                        mwclient.getGameOptions().add(new Option(new GameOptions(),option,Boolean.parseBoolean(value)));
-                    }catch (Exception ex2){
-                        mwclient.getGameOptions().add(new Option(new GameOptions(),option,value));
+
+            try {
+                mwclient.getGameOptions()
+                        .add(new Option(new GameOptions(), option, Integer.parseInt(value)));
+            } catch (Exception ex) {
+                try {
+                    mwclient.getGameOptions()
+                            .add(new Option(new GameOptions(), option, Float.parseFloat(value)));
+                } catch (Exception ex1) {
+                    try {
+                        mwclient.getGameOptions()
+                                .add(
+                                        new Option(
+                                                new GameOptions(),
+                                                option,
+                                                Boolean.parseBoolean(value)));
+                    } catch (Exception ex2) {
+                        mwclient.getGameOptions().add(new Option(new GameOptions(), option, value));
                     }
                 }
             }
-		}//end while
-		
-	}//end execute
-}//end GO.java
+        } // end while
+    } // end execute
+} // end GO.java

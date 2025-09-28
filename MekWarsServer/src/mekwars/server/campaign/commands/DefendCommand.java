@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2005  
+ * MekWars - Copyright (C) 2005
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -15,8 +15,6 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-
-import mekwars.common.CampaignData;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
@@ -28,8 +26,8 @@ import mekwars.server.campaign.operations.OpsChickenThread;
 import mekwars.server.campaign.operations.ShortOperation;
 
 /**
- * DefendCommand is analagous to the Task system's "join" command - it allows a
- * player to register himself as the defender for an attack.
+ * DefendCommand is analagous to the Task system's "join" command - it allows a player to register
+ * himself as the defender for an attack.
  */
 public class DefendCommand implements Command {
 
@@ -53,7 +51,14 @@ public class DefendCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
@@ -63,7 +68,7 @@ public class DefendCommand implements Command {
         int armyID = -1;
         int teamNumber = -1;
         boolean isAttacker = false;
-        
+
         try {
             opID = Integer.parseInt(command.nextToken());
             armyID = Integer.parseInt(command.nextToken());
@@ -84,7 +89,8 @@ public class DefendCommand implements Command {
         ShortOperation so = CampaignMain.cm.getOpsManager().getRunningOps().get(opID);
 
         if (so == null) {
-            CampaignMain.cm.toUser("AM:Defend failed. Attack #" + opID + " does not exist.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Defend failed. Attack #" + opID + " does not exist.", Username, true);
             return;
         }
 
@@ -94,9 +100,10 @@ public class DefendCommand implements Command {
         SArmy da = dp.getArmy(armyID);
         if (da == null) {
             if (o.getBooleanValue("MULArmiesOnly")) {
-                da = new SArmy(-1,Username);
+                da = new SArmy(-1, Username);
             } else {
-                CampaignMain.cm.toUser("AM:Defend failed. Army #" + armyID + " does not exist.", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Defend failed. Army #" + armyID + " does not exist.", Username, true);
                 return;
             }
         }
@@ -109,13 +116,21 @@ public class DefendCommand implements Command {
 
         // Don't defend with a disabled army
         if (da != null && da.isDisabled()) {
-            CampaignMain.cm.toUser("AM: Defend failed.  Army #" + armyID + " is disabled and cannot be used to defend.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM: Defend failed.  Army #"
+                            + armyID
+                            + " is disabled and cannot be used to defend.",
+                    Username,
+                    true);
             return;
         }
 
         // check the player's activity
         if (dp.getDutyStatus() != SPlayer.STATUS_ACTIVE) {
-            CampaignMain.cm.toUser("AM:Defend failed. You must be active to defend against an attack.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Defend failed. You must be active to defend against an attack.",
+                    Username,
+                    true);
             return;
         }
 
@@ -123,14 +138,15 @@ public class DefendCommand implements Command {
         if (so.getStatus() != ShortOperation.STATUS_WAITING) {
 
             if (so.getStatus() == ShortOperation.STATUS_FINISHED) {
-                CampaignMain.cm.toUser("AM:Defend failed. Attack #" + opID + " is finished.", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Defend failed. Attack #" + opID + " is finished.", Username, true);
                 return;
             }
 
             // else, neither waiting nor finished. assume running.
-            CampaignMain.cm.toUser("AM:Defend failed. Attack #" + opID + " is already defended.", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Defend failed. Attack #" + opID + " is already defended.", Username, true);
             return;
-
         }
 
         /*
@@ -158,7 +174,15 @@ public class DefendCommand implements Command {
             }
 
             if (!isAnOpponent) {
-                CampaignMain.cm.toUser("AM:Defend failed. Army #" + da.getID() + " is not an opponent " + "for the army in Attack #" + so.getShortID() + ". BV's do not match.", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Defend failed. Army #"
+                                + da.getID()
+                                + " is not an opponent "
+                                + "for the army in Attack #"
+                                + so.getShortID()
+                                + ". BV's do not match.",
+                        Username,
+                        true);
                 return;
             }
 
@@ -171,15 +195,20 @@ public class DefendCommand implements Command {
         }
         // Let's try setting teams manually
         if (!o.getBooleanValue("TeamOperation")) {
-        	teamNumber = 2;
-        	CampaignMain.cm.toUser("PL|STN|" + teamNumber, Username, false);
+            teamNumber = 2;
+            CampaignMain.cm.toUser("PL|STN|" + teamNumber, Username, false);
             dp.setTeamNumber(teamNumber);
         }
         if (o.getBooleanValue("TeamOperation")) {
 
             if (teamNumber < 1 || teamNumber > 8) {
                 CampaignMain.cm.toUser("Invalid Team Number! Try again!", Username);
-                CampaignMain.cm.toUser(so.getChickenThreads().get(Username.toLowerCase()).generateAttackDialogCall(), Username, false);
+                CampaignMain.cm.toUser(
+                        so.getChickenThreads()
+                                .get(Username.toLowerCase())
+                                .generateAttackDialogCall(),
+                        Username,
+                        false);
                 return;
             }
             int bv = 0;
@@ -190,7 +219,12 @@ public class DefendCommand implements Command {
                 message = so.checkTeam(teamNumber, bv, false);
                 if (message.trim().length() > 0) {
                     CampaignMain.cm.toUser(message, Username);
-                    CampaignMain.cm.toUser(so.getChickenThreads().get(Username.toLowerCase()).generateAttackDialogCall(), Username, false);
+                    CampaignMain.cm.toUser(
+                            so.getChickenThreads()
+                                    .get(Username.toLowerCase())
+                                    .generateAttackDialogCall(),
+                            Username,
+                            false);
                     return;
                 }
 
@@ -206,32 +240,32 @@ public class DefendCommand implements Command {
                 }
 
                 if (teamNumber > numberOfTeams) {
-                    CampaignMain.cm.toUser("Sorry but a team could not be found for you.", Username);
+                    CampaignMain.cm.toUser(
+                            "Sorry but a team could not be found for you.", Username);
                     return;
                 }
             }
 
             dp.setTeamNumber(teamNumber);
             CampaignMain.cm.toUser("PL|STN|" + teamNumber, Username, false);
-            CampaignMain.cm.toUser("AM:You've been assigned to team #" + teamNumber + ".", Username);
-
+            CampaignMain.cm.toUser(
+                    "AM:You've been assigned to team #" + teamNumber + ".", Username);
         }
 
         // If you join the attackers team then you will be added to the
         // attackers array.
 
-        if (teamNumber > 0 && so.getAttackersTeam() == teamNumber){
+        if (teamNumber > 0 && so.getAttackersTeam() == teamNumber) {
             so.addAttacker(dp, da, "");
             /*
              * At this point, we can assume that we have a valid army - Add the
-             * player to the ShortOperation as an attacker. 
+             * player to the ShortOperation as an attacker.
              * This stops any running chicken threads and may cancel other attacks.
              */
             CampaignMain.cm.getOpsManager().removePlayerFromAllDefenderLists(dp, so, true);
             isAttacker = true;
-        }
-        else{
-            so.addDefender(dp, da, "");// add defender
+        } else {
+            so.addDefender(dp, da, ""); // add defender
             /*
              * At this point, we can assume that we have a valid army - Add the
              * defender to the ShortOperation. - Remove the defender from any other
@@ -257,14 +291,14 @@ public class DefendCommand implements Command {
         int rp = o.getIntValue("DefenderCostReward");
 
         String toSend = "AM:You are now ";
-        
-        if ( isAttacker ){
+
+        if (isAttacker) {
             toSend += "joining ";
         } else {
             toSend += "defending ";
         }
-        
-        toSend +=  "Attack #" + opID;
+
+        toSend += "Attack #" + opID;
         boolean hasCost = false;
 
         if (money > 0) {
@@ -274,41 +308,39 @@ public class DefendCommand implements Command {
         }
         if (flu > 0) {
             dp.addInfluence(-flu);
-            if (hasCost)
-                toSend += ", ";
-            else
-                toSend += "(";
+            if (hasCost) toSend += ", ";
+            else toSend += "(";
             toSend += CampaignMain.cm.moneyOrFluMessage(false, true, flu);
             hasCost = true;
         }
         if (rp > 0) {
             dp.addReward(-rp);
-            if (hasCost)
-                toSend += ", ";
-            else
-                toSend += "(";
+            if (hasCost) toSend += ", ";
+            else toSend += "(";
             toSend += "-" + rp + " " + CampaignMain.cm.getConfig("RPShortName");
             hasCost = true;
         }
 
-        if (hasCost)
-            toSend += ").";
-        else
-            toSend += ".";
+        if (hasCost) toSend += ").";
+        else toSend += ".";
 
         // tell the defender that he has successfully joined the attack.
-        MWLogger.gameLog("Defend: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
+        MWLogger.gameLog(
+                "Defend: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
         CampaignMain.cm.toUser(toSend, Username, true);
 
         if (o.getBooleanValue("FreeForAllOperation")) {
             toSend = "AM:" + dp.getName() + " has joined the operation, as ";
-            if ( isAttacker ){
+            if (isAttacker) {
                 toSend += "an attacker.";
-            } else{
+            } else {
                 toSend += "a defender.";
             }
-            
-            toSend += " <a href=\"MEKWARS/c commenceoperation#" + opID + "#CONFIRM\">Click here to commence</a>";
+
+            toSend +=
+                    " <a href=\"MEKWARS/c commenceoperation#"
+                            + opID
+                            + "#CONFIRM\">Click here to commence</a>";
             CampaignMain.cm.toUser(toSend, so.getInitiator().getName(), true);
         }
 
@@ -317,9 +349,9 @@ public class DefendCommand implements Command {
         int altID = CampaignMain.cm.getOpsManager().playerIsAnAttacker(dp);
         if (altID > 0) {
             ShortOperation attackingOp = CampaignMain.cm.getOpsManager().getRunningOps().get(altID);
-            CampaignMain.cm.getOpsManager().terminateOperation(attackingOp, OperationManager.TERM_NOATTACKERS, null);
+            CampaignMain.cm
+                    .getOpsManager()
+                    .terminateOperation(attackingOp, OperationManager.TERM_NOATTACKERS, null);
         }
-
-    }// end process
-
-}// end DefendCommand
+    } // end process
+} // end DefendCommand

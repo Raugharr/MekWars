@@ -16,9 +16,8 @@
 
 package mekwars.server;
 
-//The MegaMek.NET Master Server Application
-//@Author: Helge Richter (McWizard@gmx.de)
-import java.io.BufferedOutputStream;
+// The MegaMek.NET Master Server Application
+// @Author: Helge Richter (McWizard@gmx.de)
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,9 +37,6 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.Vector;
 import megamek.Version;
-import mekwars.server.campaign.ImmunityThread;
-import mekwars.server.campaign.SliceThread;
-import mekwars.server.campaign.TickThread;
 import megamek.common.EquipmentType;
 import megamek.common.MechSummaryCache;
 import mekwars.common.MMGame;
@@ -52,19 +48,20 @@ import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.DefaultServerOptions;
+import mekwars.server.campaign.ImmunityThread;
 import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SliceThread;
+import mekwars.server.campaign.TickThread;
 import mekwars.server.dataProvider.Server;
 import mekwars.server.util.AutomaticBackup;
 import mekwars.server.util.IpCountry;
 import mekwars.server.util.RepairTrackingThread;
 import mekwars.server.util.TrackerThread;
+import mekwars.server.util.discord.DiscordMessageHandler;
 import mekwars.server.util.rss.Feed;
 import mekwars.server.util.rss.FeedMessage;
-import mekwars.server.util.discord.DiscordMessageHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import megamek.Version;
-import megamek.common.EquipmentType;
 
 public class MWServ {
     private static final Logger logger = LogManager.getLogger(MWServ.class);
@@ -76,11 +73,13 @@ public class MWServ {
     private ServerWrapper myCommunicator;
     private Hashtable<String, MMGame> games = new Hashtable<String, MMGame>();
     private Hashtable<String, MWClientInfo> users = new Hashtable<String, MWClientInfo>();
-    private Hashtable<InetAddress, Vector<MWClientInfo>> ips = new Hashtable<InetAddress, Vector<MWClientInfo>>();
+    private Hashtable<InetAddress, Vector<MWClientInfo>> ips =
+            new Hashtable<InetAddress, Vector<MWClientInfo>>();
     private Hashtable<InetAddress, Long> banips = new Hashtable<InetAddress, Long>();
     private Hashtable<String, String> banaccounts = new Hashtable<String, String>();
     private Hashtable<String, Long> ISPlog = new Hashtable<String, Long>();
-    private Hashtable<MWClientInfo, InetAddress> iphelp = new Hashtable<MWClientInfo, InetAddress>();
+    private Hashtable<MWClientInfo, InetAddress> iphelp =
+            new Hashtable<MWClientInfo, InetAddress>();
     private Properties config = new Properties();
     private Hashtable<String, String> mails = new Hashtable<String, String>();
     private Hashtable<InetAddress, String> iplog = new Hashtable<InetAddress, String>();
@@ -96,7 +95,7 @@ public class MWServ {
     private RepairTrackingThread RTT;
     private AutomaticBackup aub = new AutomaticBackup(System.currentTimeMillis());
     private TrackerThread trackerThread;
-    
+
     // private boolean debug = true;
 
     /*
@@ -119,8 +118,8 @@ public class MWServ {
         MWServ.getInstance();
         // start the TrackerThread if using tracker
         MWServ.getInstance().startTracker();
-        
-        //start server
+
+        // start server
         MWLogger.mainLog("Entering main loop cycle. Starting the server...");
         MWServ.getInstance().startServer();
     }
@@ -128,9 +127,9 @@ public class MWServ {
     public static void stop() {
         System.exit(0);
     }
-    
-    public synchronized static MWServ getInstance() {
-        if(instance == null) {
+
+    public static synchronized MWServ getInstance() {
+        if (instance == null) {
             instance = new MWServ();
         }
         return instance;
@@ -157,7 +156,7 @@ public class MWServ {
         campaign = new CampaignMain(getConfigParam("CAMPAIGNCONFIG"));
         campaign.start();
         MWLogger.mainLog("Environment created.");
-        //this.addToNewsFeed("MekWars Server Started!", "Server News", "");
+        // this.addToNewsFeed("MekWars Server Started!", "Server News", "");
         // create & start a data provider
         int dataport = -1;
         try {
@@ -167,7 +166,8 @@ public class MWServ {
             logger.error(e);
             dataport = 4867;
         } finally {
-            dataProviderServer = new Server(campaign.getData(), dataport, getConfigParam("SERVERIP"));
+            dataProviderServer =
+                    new Server(campaign.getData(), dataport, getConfigParam("SERVERIP"));
             Thread t = new Thread(dataProviderServer);
             t.start();
         }
@@ -186,15 +186,21 @@ public class MWServ {
         MWLogger.tickLog("Tick report log touched.");
 
         // start tick, slice and immunity threads
-        TThread = new TickThread(campaign, campaign.getCampaignOptions().getIntegerConfig("TickTime"));
+        TThread =
+                new TickThread(
+                        campaign, campaign.getCampaignOptions().getIntegerConfig("TickTime"));
         TThread.start();
-        SThread = new SliceThread(campaign, campaign.getCampaignOptions().getIntegerConfig("SliceTime"));
+        SThread =
+                new SliceThread(
+                        campaign, campaign.getCampaignOptions().getIntegerConfig("SliceTime"));
         SThread.start(); // it slices, it dices, it chops!
         IThread = new ImmunityThread();
         IThread.start();
 
         // start Advanced Repair, if enabled
-        boolean isUsing = campaign.getBooleanConfig("UseAdvanceRepair") || campaign.getBooleanConfig("UseSimpleRepair");
+        boolean isUsing =
+                campaign.getBooleanConfig("UseAdvanceRepair")
+                        || campaign.getBooleanConfig("UseSimpleRepair");
         if (isUsing && RTT == null) {
             RTT = new RepairTrackingThread(campaign.getLongConfig("TimeForEachRepairPoint") * 1000);
             RTT.start();
@@ -206,8 +212,8 @@ public class MWServ {
 
     public void startTracker() {
         if (Boolean.parseBoolean(getCampaign().getConfig("UseTracker"))) {
-            
-            if(this.trackerThread != null) {
+
+            if (this.trackerThread != null) {
                 this.trackerThread.interrupt();
             }
             MWLogger.infoLog("Attempting to create TrackerThread in MWServ.");
@@ -216,17 +222,19 @@ public class MWServ {
             this.trackerThread = trackT;
         }
     }
-    
+
     public void loadConfig() {
         try {
             config.load(new FileInputStream("./data/serverconfig.txt"));
         } catch (Exception e) {
-            config.setProperty("INFOMESSAGE", "For MekWars project info, visit http://www.sourceforge.net/projects/mekwars");
+            config.setProperty(
+                    "INFOMESSAGE",
+                    "For MekWars project info, visit http://www.sourceforge.net/projects/mekwars");
             config.setProperty("RESOLVECOUNTRY", "true");
             config.setProperty("CAMPAIGNCONFIG", "./data/campaignconfig.txt");
             config.setProperty("DATAPORT", "4867");
-            config.setProperty("SERVERIP", "-1");// this binds to all local IPs
-                                                    // in MWChatServer.java
+            config.setProperty("SERVERIP", "-1"); // this binds to all local IPs
+            // in MWChatServer.java
             try {
                 config.store(new FileOutputStream("./data/serverconfig.txt"), "Server config File");
             } catch (Exception e1) {
@@ -289,7 +297,6 @@ public class MWServ {
         InetAddress hisip = getIP(name);
         MWChatClient client = myCommunicator.getClient(name);
 
-        
         MWLogger.ipLog("Connection from " + getIP(name) + " (" + name + ")");
         // Double account check
         // Don't worry about deds or nobodies.
@@ -301,23 +308,50 @@ public class MWServ {
 
                     SPlayer a = getCampaign().getPlayer(name);
                     if (a != null) {
-                        nametmp += " " + getCampaign().getPlayer(name).getMyHouse().getAbbreviation();
+                        nametmp +=
+                                " " + getCampaign().getPlayer(name).getMyHouse().getAbbreviation();
                     }
 
                     SPlayer b = getCampaign().getPlayer(logname);
                     if (b != null) {
-                        logname += " " + getCampaign().getPlayer(logname).getMyHouse().getAbbreviation();
+                        logname +=
+                                " "
+                                        + getCampaign()
+                                                .getPlayer(logname)
+                                                .getMyHouse()
+                                                .getAbbreviation();
                     }
                     if ((a != null) && (b != null)) {
-                        if (a.getGroupAllowance() != 0 && a.getGroupAllowance() != b.getGroupAllowance()) {
+                        if (a.getGroupAllowance() != 0
+                                && a.getGroupAllowance() != b.getGroupAllowance()) {
                             // MWLogger.modLog("Double Accounting: " +
                             // nametmp + " and " + logname + " IP: " + hisip);
-                            getCampaign().doSendModMail("NOTE:", "Double Accounting: " + nametmp + " Group: " + a.getGroupAllowance() + " and " + logname + " Group: " + b.getGroupAllowance() + " IP: " + hisip);
+                            getCampaign()
+                                    .doSendModMail(
+                                            "NOTE:",
+                                            "Double Accounting: "
+                                                    + nametmp
+                                                    + " Group: "
+                                                    + a.getGroupAllowance()
+                                                    + " and "
+                                                    + logname
+                                                    + " Group: "
+                                                    + b.getGroupAllowance()
+                                                    + " IP: "
+                                                    + hisip);
                         }
                     } else {
                         // MWLogger.modLog("Double Accounting: " +
                         // nametmp + " and " + logname + " IP: " + hisip);
-                        getCampaign().doSendModMail("NOTE:", "Double Accounting: " + nametmp + " and " + logname + " IP: " + hisip);
+                        getCampaign()
+                                .doSendModMail(
+                                        "NOTE:",
+                                        "Double Accounting: "
+                                                + nametmp
+                                                + " and "
+                                                + logname
+                                                + " IP: "
+                                                + hisip);
                     }
                 }
             }
@@ -329,8 +363,17 @@ public class MWServ {
             Long until = banips.get(hisip);
             if (until.longValue() > System.currentTimeMillis() || until.longValue() == 0) {
                 if (until.longValue() != 0) {
-                    clientSend("CH|You are banned. You may not join this server until " + new Date(until.longValue()).toString(), name);
-                    getCampaign().doSendModMail("NOTE:", name + " (IP: " + hisip + ") tried to gain access to the server");
+                    clientSend(
+                            "CH|You are banned. You may not join this server until "
+                                    + new Date(until.longValue()).toString(),
+                            name);
+                    getCampaign()
+                            .doSendModMail(
+                                    "NOTE:",
+                                    name
+                                            + " (IP: "
+                                            + hisip
+                                            + ") tried to gain access to the server");
                 }
                 try {
                     Thread.sleep(125);
@@ -350,8 +393,17 @@ public class MWServ {
             Long until = Long.valueOf(banaccounts.get(name.toLowerCase()));
             if (until.longValue() > System.currentTimeMillis() || until.longValue() == 0) {
                 if (until.longValue() != 0) {
-                    clientSend("CH|You are banned. You may not join this server until " + new Date(until.longValue()).toString(), name);
-                    getCampaign().doSendModMail("NOTE:", name + " (IP: " + hisip + ") tried to gain access to the server");
+                    clientSend(
+                            "CH|You are banned. You may not join this server until "
+                                    + new Date(until.longValue()).toString(),
+                            name);
+                    getCampaign()
+                            .doSendModMail(
+                                    "NOTE:",
+                                    name
+                                            + " (IP: "
+                                            + hisip
+                                            + ") tried to gain access to the server");
                 }
                 try {
                     Thread.sleep(125);
@@ -370,8 +422,17 @@ public class MWServ {
             Long until = ISPlog.get(client.getClientVersion());
             if (until > System.currentTimeMillis() || until == 0) {
                 if (until.longValue() != 0) {
-                    clientSend("CH|You have been banned. You may not join this server until " + new Date(until.longValue()).toString(), name);
-                    getCampaign().doSendModMail("NOTE:", name + " (IP: " + hisip + ") tried to gain access to the server");
+                    clientSend(
+                            "CH|You have been banned. You may not join this server until "
+                                    + new Date(until.longValue()).toString(),
+                            name);
+                    getCampaign()
+                            .doSendModMail(
+                                    "NOTE:",
+                                    name
+                                            + " (IP: "
+                                            + hisip
+                                            + ") tried to gain access to the server");
                 }
                 try {
                     Thread.sleep(125);
@@ -396,14 +457,22 @@ public class MWServ {
         if (getCampaign().getPlayer(name) != null) {
             invis = getCampaign().getPlayer(name).isInvisible();
         }
-        MWClientInfo newUser = new MWClientInfo(originalName, getIP(name), System.currentTimeMillis(), status, invis);
-        MWLogger.infoLog(originalName + " logged in from " + getIP(name).toString() + " at " + new Date(System.currentTimeMillis()).toString());
+        MWClientInfo newUser =
+                new MWClientInfo(
+                        originalName, getIP(name), System.currentTimeMillis(), status, invis);
+        MWLogger.infoLog(
+                originalName
+                        + " logged in from "
+                        + getIP(name).toString()
+                        + " at "
+                        + new Date(System.currentTimeMillis()).toString());
 
         // Double IP Check
         if (!originalName.startsWith("[Dedicated]")) {
             if (ips.get(hisip) != null) {
                 Vector<MWClientInfo> allthose = ips.get(hisip);
-                StringBuilder result = new StringBuilder("Warning: " + originalName + " has the same IP as ");
+                StringBuilder result =
+                        new StringBuilder("Warning: " + originalName + " has the same IP as ");
                 boolean allowed = true;
                 int groupid = 0;
                 for (int i = 0; i < allthose.size(); i++) {
@@ -444,7 +513,15 @@ public class MWServ {
             iphelp.put(newUser, hisip);
         }
 
-        clientSend("CH|Welcome to " + getCampaign().getConfig("ServerName") + " (Server Version: " + SERVER_VERSION + ", Compatible Clients: " + SERVER_VERSION.toString() + ")", name);
+        clientSend(
+                "CH|Welcome to "
+                        + getCampaign().getConfig("ServerName")
+                        + " (Server Version: "
+                        + SERVER_VERSION
+                        + ", Compatible Clients: "
+                        + SERVER_VERSION.toString()
+                        + ")",
+                name);
         clientSend("CH|" + getConfigParam("INFOMESSAGE"), name);
 
         // send MMGame info for currently open hosts. future updates
@@ -497,7 +574,6 @@ public class MWServ {
             }
         }
         return false;
-
     }
 
     public boolean isModerator(String username) {
@@ -541,8 +617,7 @@ public class MWServ {
                 if (all.size() == 1) {
                     ips.remove(hisip);
                 } else {
-                    while (all.remove(user)) {
-                    }
+                    while (all.remove(user)) {}
                 }
             }
             iphelp.remove(user);
@@ -553,7 +628,7 @@ public class MWServ {
 
         if (hisip != null) {
             sendRemoveUserToAll(name, true, hisip.toString());
-        } else { 
+        } else {
             sendRemoveUserToAll(name, true);
         }
         MWLogger.infoLog("Client " + name + "logged out.");
@@ -603,7 +678,7 @@ public class MWServ {
              * Commands related to hosting.
              */
             if (task.equals("NG")) { // new game in hosts list.
-                                        // NG|<MMGame.toString()>
+                // NG|<MMGame.toString()>
 
                 MMGame newGame = new MMGame(st.nextToken());
 
@@ -616,7 +691,7 @@ public class MWServ {
                 myCommunicator.broadcastComm("SL|NG|" + newGame.toString());
 
             } else if (task.equals("CG")) { // close game command, received from
-                                            // player
+                // player
                 MMGame game = games.remove(name);
                 doCloseGame(game);
             } else if (task.equals("LG")) { // player leaving game
@@ -624,31 +699,38 @@ public class MWServ {
                 if (toUpdate != null) {
                     doRemoveUserFromGame(name, toUpdate);
                 }
-            } else if (task.equals("JG")) {// join a specified host. JG|HostName
+            } else if (task.equals("JG")) { // join a specified host. JG|HostName
 
                 String hostName = st.nextToken();
                 MMGame toUpdate = games.get(hostName);
                 if (toUpdate != null) {
                     if (toUpdate.getCurrentPlayers().add(name)) {
-                        myCommunicator.broadcastComm("SL|JG|" + toUpdate.getHostName() + "|" + name);
+                        myCommunicator.broadcastComm(
+                                "SL|JG|" + toUpdate.getHostName() + "|" + name);
                     }
                 }
 
                 if (hostName.startsWith("[Dedicated]")) {
-                    clientSend("PM|SERVER|You joined " + hostName + ". Please remember where you parked.", name);
+                    clientSend(
+                            "PM|SERVER|You joined "
+                                    + hostName
+                                    + ". Please remember where you parked.",
+                            name);
                 }
 
-            } else if (task.equals("SHS")) { //@salient - i found this elsewhere -> Set Host Status (SHS|<GameID>|<Status>) US = Users
+            } else if (task.equals("SHS")) { // @salient - i found this elsewhere -> Set Host Status
+                // (SHS|<GameID>|<Status>)
+                // US = Users
 
                 MMGame toUpdate = games.get(st.nextToken());
-                if (toUpdate.getHostName().startsWith("[Dedicated]") || name.equals(toUpdate.getHostName())) {
+                if (toUpdate.getHostName().startsWith("[Dedicated]")
+                        || name.equals(toUpdate.getHostName())) {
                     toUpdate.setStatus(st.nextToken());
-                    myCommunicator.broadcastComm("SL|SHS|" + toUpdate.getHostName() + "|" + toUpdate.getStatus());
+                    myCommunicator.broadcastComm(
+                            "SL|SHS|" + toUpdate.getHostName() + "|" + toUpdate.getStatus());
                 }
 
-            }
-
-            else if (task.equals("CH")) {
+            } else if (task.equals("CH")) {
                 // CHAT
                 String text = st.nextToken();
 
@@ -688,22 +770,24 @@ public class MWServ {
                 } else {
                     MWClientInfo client = getUser(name);
                     if (client != null) {
-                        if (!ignoreList.contains(client.getName()) && !factionLeaderIgnoreList.contains(client.getName())) {
+                        if (!ignoreList.contains(client.getName())
+                                && !factionLeaderIgnoreList.contains(client.getName())) {
                             sendChat(name + "|" + text);
                         } else {
-                            clientSend("CH|You've been set to ignore mode and cannot participate in chat.", name);
+                            clientSend(
+                                    "CH|You've been set to ignore mode and cannot participate in chat.",
+                                    name);
                         }
                     } else {
                         sendChat(name + "|" + text);
                     }
-
                 }
             } else if (task.equals("CR")) {
                 String result = st.nextToken();
                 MWLogger.gameLog("Starting report process by " + name);
                 MWLogger.gameLog(name + " reported: " + lineIn);
                 getCampaign().doProcessAutomaticReport(result, name);
-            } else if (task.equals("IPU")) {// InProgressUpdate
+            } else if (task.equals("IPU")) { // InProgressUpdate
                 String result = st.nextToken();
                 getCampaign().addInProgressUpdate(result, name);
             } else {
@@ -716,7 +800,9 @@ public class MWServ {
             if (!lineIn.equals("GB")) {
                 // Most propably an out of date client. Send him the request to
                 // update
-                clientSend("CH|Your Client sent a false packet or caused a server error. You probably entered an illegal server command.", name);
+                clientSend(
+                        "CH|Your Client sent a false packet or caused a server error. You probably entered an illegal server command.",
+                        name);
                 MWLogger.errLog("False packet/illegal command (from " + name + "):");
                 MWLogger.errLog(ex);
             }
@@ -753,7 +839,9 @@ public class MWServ {
                 while (dis.ready()) {
                     String player = dis.readLine();
                     if (player.equalsIgnoreCase(name)) {
-                        String provderName = newFile.getName().substring(0, newFile.getName().lastIndexOf(".prv"));
+                        String provderName =
+                                newFile.getName()
+                                        .substring(0, newFile.getName().lastIndexOf(".prv"));
                         MWLogger.errLog("Provider: " + provderName);
                         ISPlog.put(provderName, time);
                         in.close();
@@ -768,7 +856,7 @@ public class MWServ {
             } catch (Exception ex) {
                 // Do something?
             }
-        }// end For
+        } // end For
     }
 
     public void sendRemoveUserToAll(String name, boolean userGone, String ip) {
@@ -779,7 +867,7 @@ public class MWServ {
         }
         myCommunicator.broadcastComm("UG|" + getUser(name) + (userGone ? "|GONE" : ""));
     }
-    
+
     public void sendRemoveUserToAll(String name, boolean userGone) {
         if (userGone) {
             MWLogger.infoLog(name + " left the room.");
@@ -799,14 +887,13 @@ public class MWServ {
     // Check for new Mail
     public void checkAndSendMail(String name) {
         if (mails.get(name.toLowerCase()) != null) {
-            clientSend("PM|SERVER|You have stored mail.[<a href=\"MEKWARS/c requestservermail\">Read</a>]", name);
+            clientSend(
+                    "PM|SERVER|You have stored mail.[<a href=\"MEKWARS/c requestservermail\">Read</a>]",
+                    name);
         }
     }
 
-    /**
-     * Method which returns the number of users who are not Dedicated hosts or
-     * Nobodies.
-     */
+    /** Method which returns the number of users who are not Dedicated hosts or Nobodies. */
     public int userCount(boolean includeDeds) {
 
         if (includeDeds) {
@@ -817,13 +904,13 @@ public class MWServ {
         synchronized (users) {
             int toReturn = users.size();
             for (String client : users.keySet()) {
-                if (client.toLowerCase().indexOf("[dedicated]") >= 0 || client.toLowerCase().startsWith("nobody")) {
-                    toReturn--;// decrease count
+                if (client.toLowerCase().indexOf("[dedicated]") >= 0
+                        || client.toLowerCase().startsWith("nobody")) {
+                    toReturn--; // decrease count
                 }
             }
             return toReturn;
         }
-
     }
 
     public Hashtable<String, MWClientInfo> getUsers() {
@@ -903,7 +990,16 @@ public class MWServ {
             Calendar now = new GregorianCalendar(pdt);
             Date currentTime = new Date();
             now.setTime(currentTime);
-            text = (now.get(Calendar.MONTH) + 1) + "/" + now.get(Calendar.DATE) + " " + now.get(Calendar.HOUR) + ":" + now.get(Calendar.MINUTE) + " " + text;
+            text =
+                    (now.get(Calendar.MONTH) + 1)
+                            + "/"
+                            + now.get(Calendar.DATE)
+                            + " "
+                            + now.get(Calendar.HOUR)
+                            + ":"
+                            + now.get(Calendar.MINUTE)
+                            + " "
+                            + text;
         }
         if (mails.get(name.toLowerCase()) == null) {
             mails.put(name.toLowerCase(), text);
@@ -928,7 +1024,8 @@ public class MWServ {
                 }
                 text = text + mailtext;
                 if (getUser(target).getName().equalsIgnoreCase(target)) {
-                    if (getUser(target).isInvis() && getUser(target).getLevel() > getUser(name).getLevel()) {
+                    if (getUser(target).isInvis()
+                            && getUser(target).getLevel() > getUser(name).getLevel()) {
                         clientSend("CH|AM:Saved mail to " + target + ".", name);
                     }
                     clientSend("PM|" + name + "|" + mailtext, target);
@@ -939,14 +1036,29 @@ public class MWServ {
 
                 if (campaign.getPlayer(name) != null) {
                     if (campaign.getPlayer(target) != null) {
-                        MWLogger.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + "[" + campaign.getPlayer(target).getMyHouse().getAbbreviation() + "]: " + mailtext);
+                        MWLogger.pmLog(
+                                name
+                                        + "["
+                                        + campaign.getPlayer(name).getMyHouse().getAbbreviation()
+                                        + "] -> "
+                                        + target
+                                        + "["
+                                        + campaign.getPlayer(target).getMyHouse().getAbbreviation()
+                                        + "]: "
+                                        + mailtext);
                     } else {
-                        MWLogger.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + ": " + mailtext);
+                        MWLogger.pmLog(
+                                name
+                                        + "["
+                                        + campaign.getPlayer(name).getMyHouse().getAbbreviation()
+                                        + "] -> "
+                                        + target
+                                        + ": "
+                                        + mailtext);
                     }
                 } else {
                     MWLogger.pmLog(name + " -> " + target + ": " + mailtext);
                 }
-
             }
         }
     }
@@ -1023,15 +1135,15 @@ public class MWServ {
     }
 
     /**
-     * Method to update the two ban files (to be used everytime bans are
-     * updated, to keep the file in sync with the in-mem status)
+     * Method to update the two ban files (to be used everytime bans are updated, to keep the file
+     * in sync with the in-mem status)
      */
     public void bansUpdate() {
         try {
             // Updating ban file for account names
             FileOutputStream out = new FileOutputStream("./data/accountbans.txt");
             PrintStream p = new PrintStream(out);
-            for (Enumeration<String> e = banaccounts.keys(); e.hasMoreElements();) {
+            for (Enumeration<String> e = banaccounts.keys(); e.hasMoreElements(); ) {
                 Object q = e.nextElement();
                 p.println(q + "=" + banaccounts.get(q));
             }
@@ -1040,7 +1152,7 @@ public class MWServ {
             // Updating ban file for IP addresses
             out = new FileOutputStream("./data/ipbans.txt");
             p = new PrintStream(out);
-            for (Enumeration<InetAddress> e = banips.keys(); e.hasMoreElements();) {
+            for (Enumeration<InetAddress> e = banips.keys(); e.hasMoreElements(); ) {
                 Object q = e.nextElement();
                 p.println(q + "=" + banips.get(q));
             }
@@ -1181,7 +1293,10 @@ public class MWServ {
     }
 
     public void killClient(String toKick, String kicker) {
-        myCommunicator.kill(toKick, myCommunicator.getClient(MWChatServer.clientKey(myCommunicator.getClient(kicker))), "");
+        myCommunicator.kill(
+                toKick,
+                myCommunicator.getClient(MWChatServer.clientKey(myCommunicator.getClient(kicker))),
+                "");
     }
 
     public MWChatClient getClient(String name) {
@@ -1199,26 +1314,27 @@ public class MWServ {
     public Hashtable<String, String> getBanAccounts() {
         return banaccounts;
     }
-    
+
     public void saveConfigs() {
         DefaultServerOptions dso = new DefaultServerOptions();
         dso.createConfig();
     }
 
-    synchronized public void addToNewsFeed(String s) {
+    public synchronized void addToNewsFeed(String s) {
         addToNewsFeed(s, "", "");
     }
 
-    synchronized public void addToNewsFeed(String title, String category, String body) {
+    public synchronized void addToNewsFeed(String title, String category, String body) {
         newsFeed.addMessage(new FeedMessage(title, category, body));
     }
 
     /**
      * Send a message to a Discord Webhook
+     *
      * @param message the message to send
      */
     public void postToDiscord(String message) {
-        if(!CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
+        if (!CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
             return;
         }
         DiscordMessageHandler handler = new DiscordMessageHandler();
@@ -1238,7 +1354,9 @@ public class MWServ {
     }
 
     public void restartRTT() {
-        boolean isUsing = campaign.getBooleanConfig("UseAdvanceRepair") || campaign.getBooleanConfig("UseSimpleRepair");
+        boolean isUsing =
+                campaign.getBooleanConfig("UseAdvanceRepair")
+                        || campaign.getBooleanConfig("UseSimpleRepair");
         if (isUsing) {
             RTT = null;
             RTT = new RepairTrackingThread(campaign.getLongConfig("TimeForEachRepairPoint") * 1000);

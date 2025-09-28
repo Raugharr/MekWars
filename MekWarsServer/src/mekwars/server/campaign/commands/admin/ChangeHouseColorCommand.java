@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,55 +17,72 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 
 public class ChangeHouseColorCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Faction Name#htmlhexcolor";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		SHouse h = null;
-		String newColor = "";
-		SPlayer player = CampaignMain.cm.getPlayer(Username);
-		
-		try {
-			h = CampaignMain.cm.getHouseFromPartialString(command.nextToken(),null);
-			newColor = command.nextToken();
-		} catch (Exception e) {
-			CampaignMain.cm.toUser("AM:Improper command. Try: /c changehousecolor#faction#htmlhexcolor", Username, true);
-			return;
-		}
-		
-		if (h == null) {
-			CampaignMain.cm.toUser("AM:Couldn't find a faction with that name.", Username, true);
-			return;
-		}
-		
-		if ( userLevel < IAuthenticator.MODERATOR )
-		    h = player.getMyHouse();
-		
-		//make the change & update timestampe
-		h.setHouseColor(newColor);
-		h.updated();
-		
-		CampaignMain.cm.toUser(h.getName() + " color changed!",Username,true);
-		
-	}
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Faction Name#htmlhexcolor";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        SHouse h = null;
+        String newColor = "";
+        SPlayer player = CampaignMain.cm.getPlayer(Username);
+
+        try {
+            h = CampaignMain.cm.getHouseFromPartialString(command.nextToken(), null);
+            newColor = command.nextToken();
+        } catch (Exception e) {
+            CampaignMain.cm.toUser(
+                    "AM:Improper command. Try: /c changehousecolor#faction#htmlhexcolor",
+                    Username,
+                    true);
+            return;
+        }
+
+        if (h == null) {
+            CampaignMain.cm.toUser("AM:Couldn't find a faction with that name.", Username, true);
+            return;
+        }
+
+        if (userLevel < IAuthenticator.MODERATOR) h = player.getMyHouse();
+
+        // make the change & update timestampe
+        h.setHouseColor(newColor);
+        h.updated();
+
+        CampaignMain.cm.toUser(h.getName() + " color changed!", Username, true);
+    }
 }

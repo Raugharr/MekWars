@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,23 +17,21 @@
 package mekwars.server.dataProvider;
 
 import java.util.Date;
-
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
 
 /**
  * Executes an command for the dataProvider-Server.
- * 
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public interface ServerCommand {
-    
+
     /**
-     * Executes the command. 
-     * 
+     * Executes the command.
+     *
      * @param timestamp The date at which the client retrieved data last.
      * @param out The output to write the result for the client to.
      */
-    public void execute(Date timestamp, BinWriter out, CampaignData data)
-            throws Exception;
+    public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception;
 }

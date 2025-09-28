@@ -3,8 +3,8 @@
  * Used by permission
  */
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,22 +18,17 @@
  * for more details.
  */
 
-
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
- */ 
-/**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
  */
-
+/**
+ * @author Torren (Jason Tighe) 11.5.05
+ */
 package mekwars.server.MWChatServer.auth;
 
 import java.io.IOException;
-
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
@@ -41,54 +36,50 @@ import mekwars.server.util.MWPasswd;
 import mekwars.server.util.MWPasswdRecord;
 
 /**
- * Authenitcator that reads from a password file.<p>
+ * Authenitcator that reads from a password file.
  *
- * The file is made up of colon-delimited fields:
- * <userId>:<access_level>:<password>
- * <p>
- * If a user if found in the password file, his password is checked.
- * If a user is not found in the password file, the access level IAuthenticator.USER
- * is returned.
+ * <p>The file is made up of colon-delimited fields: <userId>:<access_level>:<password>
+ *
+ * <p>If a user if found in the password file, his password is checked. If a user is not found in
+ * the password file, the access level IAuthenticator.USER is returned.
  */
 public class PasswdAuthenticator extends NullAuthenticator {
-	
-	public PasswdAuthenticator(MWChatServer server, boolean allowGuests, boolean storeGuests) {
-		super(server, allowGuests, storeGuests);
-	}
-			
+
+    public PasswdAuthenticator(MWChatServer server, boolean allowGuests, boolean storeGuests) {
+        super(server, allowGuests, storeGuests);
+    }
+
     @Override
-	public Auth authenticate(MWChatClient client, String password) throws Exception {
-    	String userId = client.getUserId();
+    public Auth authenticate(MWChatClient client, String password) throws Exception {
+        String userId = client.getUserId();
         try {
             MWPasswdRecord record = MWPasswd.getRecord(userId, password);
-            
+
             if (record == null) {
-            	MWLogger.debugLog("record is null for: "+userId);
-            	if (_allowGuests) {
-            		Auth auth = super.authenticate(client, password);
-            		if (_storeGuests) {
-		            	MWPasswd.writeRecord(auth.getUserId(), IAuthenticator.GUEST, password);
-            		}
-    	            return auth;
-            	} 
-            	//else
-            	throw new Exception(userId);
+                MWLogger.debugLog("record is null for: " + userId);
+                if (_allowGuests) {
+                    Auth auth = super.authenticate(client, password);
+                    if (_storeGuests) {
+                        MWPasswd.writeRecord(auth.getUserId(), IAuthenticator.GUEST, password);
+                    }
+                    return auth;
+                }
+                // else
+                throw new Exception(userId);
             }
-            
-            //else
+
+            // else
             return new Auth(userId, record.access);
-            
-        }
-        catch (IOException e) {
+
+        } catch (IOException e) {
             MWLogger.errLog(e);
             throw new Exception(userId);
         }
     }
-    
-	/** checks all stored users besides just those currently logged on */
+
+    /** checks all stored users besides just those currently logged on */
     @Override
-	public String getUserId(String target) {
-    	return MWPasswd.getUserId(target);
+    public String getUserId(String target) {
+        return MWPasswd.getUserId(target);
     }
-    
 }

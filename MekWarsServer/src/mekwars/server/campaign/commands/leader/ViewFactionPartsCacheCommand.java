@@ -1,13 +1,13 @@
 /*
  * MekWars - Copyright (C) 2008
- * 
+ *
  * Original author - jtighe (torren@users.sourceforge.net)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
@@ -45,24 +45,30 @@ public class ViewFactionPartsCacheCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
-        
+
         int year = CampaignMain.cm.getIntegerConfig("CampaignYear");
-        
+
         SPlayer player = CampaignMain.cm.getPlayer(Username);
         SHouse house = player.getMyHouse();
-        
-        if ( command.hasMoreElements() && MWServ.getInstance().isModerator(Username) )
-            house = CampaignMain.cm.getHouseFromPartialString(command.nextToken(),Username);
-        
-        if ( house == null )
-            return;
-        
-        String results = "SM|"+house.getUnitParts().tableizeComponents(year);
-        
-        CampaignMain.cm.toUser(results, Username,false);
+
+        if (command.hasMoreElements() && MWServ.getInstance().isModerator(Username))
+            house = CampaignMain.cm.getHouseFromPartialString(command.nextToken(), Username);
+
+        if (house == null) return;
+
+        String results = "SM|" + house.getUnitParts().tableizeComponents(year);
+
+        CampaignMain.cm.toUser(results, Username, false);
     }
-}// end RequestSubFactionPromotionCommand class
+} // end RequestSubFactionPromotionCommand class

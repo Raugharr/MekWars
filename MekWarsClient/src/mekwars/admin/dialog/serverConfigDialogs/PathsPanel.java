@@ -7,20 +7,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
 import mekwars.common.util.SpringLayoutHelper;
 
 public class PathsPanel extends JPanel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5411927593664279713L;
+    /** */
+    private static final long serialVersionUID = 5411927593664279713L;
+
     private JTextField baseTextField = new JTextField(5);
     private JCheckBox BaseCheckBox = new JCheckBox();
-	
-	public PathsPanel() {
-		
+
+    public PathsPanel() {
+
         JPanel pathsBox = new JPanel();
         pathsBox.setLayout(new BoxLayout(pathsBox, BoxLayout.Y_AXIS));
 
@@ -45,7 +43,7 @@ public class PathsPanel extends JPanel {
         baseTextField.setToolTipText("Path to News.rdf (News Feed)");
         baseTextField.setName("NewsPath");
         pathsSubPanel.add(baseTextField);
-        
+
         baseTextField = new JTextField(5);
         pathsSubPanel.add(new JLabel("News URL:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("URL to News.rdf");
@@ -69,20 +67,19 @@ public class PathsPanel extends JPanel {
         baseTextField.setToolTipText("Path to Mechstats.htm");
         baseTextField.setName("MechstatPath");
         pathsSubPanel.add(baseTextField);
-        
+
         baseTextField = new JTextField(5);
         pathsSubPanel.add(new JLabel("HTML Who Path:", SwingConstants.TRAILING));
         baseTextField.setToolTipText("Path to who.html");
         baseTextField.setName("HTMLWhoPath");
         pathsSubPanel.add(baseTextField);
 
-        
-        
-//        baseTextField = new JTextField();
-//        pathsSubPanel.add(new JLabel("Discord Webhook Address", SwingConstants.TRAILING));
-//        baseTextField.setToolTipText("Address for the webhook to which game results and such should be sent.");
-//        baseTextField.setName("DiscordWebHookAddress");
-//        pathsSubPanel.add(baseTextField);
+        //        baseTextField = new JTextField();
+        //        pathsSubPanel.add(new JLabel("Discord Webhook Address", SwingConstants.TRAILING));
+        //        baseTextField.setToolTipText("Address for the webhook to which game results and
+        // such should be sent.");
+        //        baseTextField.setName("DiscordWebHookAddress");
+        //        pathsSubPanel.add(baseTextField);
 
         // do the spring layout.
         SpringLayoutHelper.setupSpringGrid(pathsSubPanel, 2);
@@ -97,12 +94,13 @@ public class PathsPanel extends JPanel {
         BaseCheckBox.setToolTipText("Uncheck to disable html output [ranking, etc.]");
         BaseCheckBox.setName("HTMLOUTPUT");
         pathsBox.add(BaseCheckBox);
-                
-//        BaseCheckBox = new JCheckBox("Enable Discord Integration");
-//        BaseCheckBox.setName("DiscordEnable");
-//        BaseCheckBox.setToolTipText("Enable rankings and game output to be sent to a Discord channel");
-//        pathsBox.add(BaseCheckBox);
-        
+
+        //        BaseCheckBox = new JCheckBox("Enable Discord Integration");
+        //        BaseCheckBox.setName("DiscordEnable");
+        //        BaseCheckBox.setToolTipText("Enable rankings and game output to be sent to a
+        // Discord channel");
+        //        pathsBox.add(BaseCheckBox);
+
         this.add(pathsBox);
-	}
+    }
 }

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,10 +23,9 @@ package mekwars.server.campaign.commands.admin;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.UUID;
-import java.util.Vector;
-import mekwars.server.MWServ;
 import mekwars.common.UnitFactory;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
@@ -34,54 +33,74 @@ import mekwars.server.campaign.commands.Command;
 
 /**
  * @author Helge Richter
- *
  */
-
 public class AdminCreateFactoryCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "planet name#factory name#size#faction#type#subfolder#SubfactionAccessLevel";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
-		String name = command.nextToken();
-		String size = command.nextToken();
-		String faction = command.nextToken();
-		String buildTableFolder = "0";
-		int accessLevel = 0;
 
-		int type = Integer.parseInt(command.nextToken());
-		
-		if ( command.hasMoreElements() )
-			buildTableFolder = command.nextToken();
-		if ( command.hasMoreElements() )
-			accessLevel = Integer.parseInt(command.nextToken());
-		
-		SUnitFactory fac = new SUnitFactory(name,planet,size,faction,0,100,type,buildTableFolder,accessLevel);
-		
-		fac.setID(UUID.randomUUID().toString());
-        
-		ArrayList<UnitFactory> uf = planet.getUnitFactories();
-		uf.add(fac);
-		fac.setPlanet(planet);
-		if (planet.getOwner() != null) {
-			planet.getOwner().removePlanet(planet);
-			planet.getOwner().addPlanet(planet);
-		}
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "planet name#factory name#size#faction#type#subfolder#SubfactionAccessLevel";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+        SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), Username);
+        String name = command.nextToken();
+        String size = command.nextToken();
+        String faction = command.nextToken();
+        String buildTableFolder = "0";
+        int accessLevel = 0;
+
+        int type = Integer.parseInt(command.nextToken());
+
+        if (command.hasMoreElements()) buildTableFolder = command.nextToken();
+        if (command.hasMoreElements()) accessLevel = Integer.parseInt(command.nextToken());
+
+        SUnitFactory fac =
+                new SUnitFactory(
+                        name, planet, size, faction, 0, 100, type, buildTableFolder, accessLevel);
+
+        fac.setID(UUID.randomUUID().toString());
+
+        ArrayList<UnitFactory> uf = planet.getUnitFactories();
+        uf.add(fac);
+        fac.setPlanet(planet);
+        if (planet.getOwner() != null) {
+            planet.getOwner().removePlanet(planet);
+            planet.getOwner().addPlanet(planet);
+        }
         planet.updated();
 
-		CampaignMain.cm.toUser("Factory created!",Username,true);
+        CampaignMain.cm.toUser("Factory created!", Username, true);
 
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has created factory " + fac.getName()+" on planet "+planet.getName());
-	}
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username
+                        + " has created factory "
+                        + fac.getName()
+                        + " on planet "
+                        + planet.getName());
+    }
 }

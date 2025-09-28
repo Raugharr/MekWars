@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2013 
- * 
+ * MekWars - Copyright (C) 2013
+ *
  * Original author - Spork (billypinhead@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,11 +16,11 @@
 package mekwars.server.campaign.operations.validation;
 
 /**
- * @author 	Spork
- * @version	1.0
- * @since	2013-06-19
+ * @author Spork
+ * @version 1.0
+ * @since 2013-06-19
  */
 public interface I_SpreadCalculator {
-	public static int SPREADTYPE_BV = 0;
-	public static int SPREADTYPE_TONNAGE = 1;
+    public static int SPREADTYPE_BV = 0;
+    public static int SPREADTYPE_TONNAGE = 1;
 }

@@ -23,83 +23,83 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.StringTokenizer;
-
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 
-/**
- * used for capturing chat to a file a discord bot can manipulate
- */
+/** used for capturing chat to a file a discord bot can manipulate */
 public class ChatBotHelperCommand implements Command {
 
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
+    int accessLevel = 0;
+    String syntax = "";
 
-	public void process(StringTokenizer command,String Username) {
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
 
-		if(!accessChecks(Username))
-			return;	
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (!accessChecks(Username)) return;
 
         StringBuilder buffer = new StringBuilder();
 
-        //Should be all i need?
-        if ( command.hasMoreTokens() )
-        	buffer.append(command.nextToken());
-        
+        // Should be all i need?
+        if (command.hasMoreTokens()) buffer.append(command.nextToken());
+
         captureAllChatForBot(Username, buffer.toString());
+    }
 
-	}
-	
-	private Boolean accessChecks(String Username)  
-	{
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		
-		if(userLevel < getExecutionLevel()) 
-		{
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return false;
-		}
-		
-		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_Bot_Chat"))) 
-		{
-			CampaignMain.cm.toUser("AM:This command is disabled on this server.",Username,true);
-			return false;
-		}
-		
-		return true;
-	}
+    private Boolean accessChecks(String Username) {
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
 
-	private void captureAllChatForBot(String Username, String chatMsg)
-	{
-		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_Bot_Chat")))
-			return;
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return false;
+        }
 
-		File file = new File(CampaignMain.cm.getConfig("Bot_Buffer_Location"));
+        if (!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_Bot_Chat"))) {
+            CampaignMain.cm.toUser("AM:This command is disabled on this server.", Username, true);
+            return false;
+        }
 
+        return true;
+    }
 
-		try(FileWriter fw = new FileWriter(CampaignMain.cm.getConfig("Bot_Buffer_Location"), true);
-			    BufferedWriter bw = new BufferedWriter(fw);
-			    PrintWriter out = new PrintWriter(bw))
-		{
+    private void captureAllChatForBot(String Username, String chatMsg) {
+        if (!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_Bot_Chat"))) return;
 
-		    out.println(chatMsg);
+        File file = new File(CampaignMain.cm.getConfig("Bot_Buffer_Location"));
 
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			MWLogger.errLog(e);
-			//CampaignMain.cm.toUser(e.toString(),Username,true);
+        try (FileWriter fw =
+                        new FileWriter(CampaignMain.cm.getConfig("Bot_Buffer_Location"), true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
 
-		}
-		catch (IOException e)
-		{
-			MWLogger.errLog(e);
-			//CampaignMain.cm.toUser(e.toString(),Username,true);
+            out.println(chatMsg);
 
-		}
-	}
+        } catch (UnsupportedEncodingException e) {
+            MWLogger.errLog(e);
+            // CampaignMain.cm.toUser(e.toString(),Username,true);
+
+        } catch (IOException e) {
+            MWLogger.errLog(e);
+            // CampaignMain.cm.toUser(e.toString(),Username,true);
+
+        }
+    }
 }

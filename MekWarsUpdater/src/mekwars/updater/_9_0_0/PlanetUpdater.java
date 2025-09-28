@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,9 +20,7 @@ import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
-import mekwars.server.common.util.SMMNetXStream;
 import mekwars.updater.FileUpdater;
-import mekwars.updater.Updater;
 import mekwars.updater._9_0_0.util.XMLPlanetDataParser;
 
 public class PlanetUpdater extends FileUpdater<SPlanet> {
@@ -35,7 +33,7 @@ public class PlanetUpdater extends FileUpdater<SPlanet> {
     }
 
     protected String serialize(ArrayList<SPlanet> elements) {
-        XStream xstream = CampaignMain.cm.getXStream(); 
+        XStream xstream = CampaignMain.cm.getXStream();
         SPlanet[] elementList = elements.toArray(new SPlanet[elements.size()]);
 
         return xstream.toXML(elementList);

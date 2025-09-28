@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
-
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
 import mekwars.server.MWServ;
@@ -30,31 +29,30 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Retrieve all planet information (if the data cache is lost at client side)
- * 
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class ServerConfig implements ServerCommand {
     private static final Logger logger = LogManager.getLogger(ServerConfig.class);
 
     /**
-     * @see server.dataProvider.ServerCommand#execute(java.util.Date,
-     *      java.io.PrintWriter, common.CampaignData)
+     * @see server.dataProvider.ServerCommand#execute(java.util.Date, java.io.PrintWriter,
+     *     common.CampaignData)
      */
-    public void execute(Date timestamp, BinWriter out, CampaignData data)
-            throws Exception {
+    public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
         try {
             String campaignConfig = MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG");
             FileInputStream configFile = new FileInputStream(campaignConfig);
             BufferedReader config = new BufferedReader(new InputStreamReader(configFile));
-             
+
             while (config.ready()) {
-                out.println(config.readLine(),"ConfigLine");
+                out.println(config.readLine(), "ConfigLine");
             }
-        
+
             config.close();
         } catch (Exception ex) {
-           logger.error("ServerConfig failed"); 
-           logger.error(ex); 
+            logger.error("ServerConfig failed");
+            logger.error(ex);
         }
     }
 }

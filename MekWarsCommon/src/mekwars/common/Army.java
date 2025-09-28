@@ -26,9 +26,8 @@ import java.util.Vector;
 
 /**
  * A virtual army which can contain any combination of units
- * 
+ *
  * @author Helge Richter
- * 
  */
 public class Army {
 
@@ -102,8 +101,7 @@ public class Army {
     }
 
     /**
-     * @param locked
-     *            The locked to set.
+     * @param locked The locked to set.
      */
     public void setLocked(boolean b) {
         locked = b;
@@ -122,8 +120,7 @@ public class Army {
     }
 
     /**
-     * @param bv
-     *            The bV to set.
+     * @param bv The bV to set.
      */
     public void setBV(int i) {
         bv = i;
@@ -137,8 +134,7 @@ public class Army {
     }
 
     /**
-     * @param lowerLimit
-     *            The lowerLimit to set.
+     * @param lowerLimit The lowerLimit to set.
      */
     public void setLowerLimiter(int lowerLimit) {
         lowerLimiter = lowerLimit;
@@ -152,8 +148,7 @@ public class Army {
     }
 
     /**
-     * @param name
-     *            The name to set.
+     * @param name The name to set.
      */
     public void setName(String s) {
         name = s.trim();
@@ -161,7 +156,7 @@ public class Army {
 
     /**
      * Add a unit to a specific position.
-     * 
+     *
      * @param unit
      * @param Position
      */
@@ -171,7 +166,7 @@ public class Army {
 
     /**
      * add units to the army vector.
-     * 
+     *
      * @param unit
      */
     public void addUnit(Unit unit) {
@@ -186,11 +181,10 @@ public class Army {
     }
 
     /**
-     * This will pull The number of unit types this army holds i.e. type =
-     * Unit.MEK all meks will be counted.
-     * 
-     * @param type
-     *            The unit type to check against. MEK VEHICLE
+     * This will pull The number of unit types this army holds i.e. type = Unit.MEK all meks will be
+     * counted.
+     *
+     * @param type The unit type to check against. MEK VEHICLE
      * @return number of unit type that exist in this army
      */
     public int getNumberOfUnitTypes(int type) {
@@ -204,45 +198,41 @@ public class Army {
 
         return count;
     }
-    
+
     /**
-     * This will pull The number of unit types this army holds i.e. type =
-     * Unit.MEK all meks will be counted.
-     *  
-     * @param type
-     * 	The unit type to check against.
-     * @param countSupport
-     *  Whether or not to count Support Units.
+     * This will pull The number of unit types this army holds i.e. type = Unit.MEK all meks will be
+     * counted.
+     *
+     * @param type The unit type to check against.
+     * @param countSupport Whether or not to count Support Units.
      * @return
      */
-    
     public int getNumberOfUnitTypes(int type, boolean countSupport) {
         int count = 0;
 
         for (Unit unit : getUnits()) {
             if (unit.getType() == type) {
-            	if (!unit.isSupportUnit() || (unit.isSupportUnit() && countSupport) ) {
-                count++;
-            	}
+                if (!unit.isSupportUnit() || (unit.isSupportUnit() && countSupport)) {
+                    count++;
+                }
             }
         }
-        return count;    	
+        return count;
     }
-    
+
     /**
      * This method will return the total number of support units in the army
-     * 
-     * @return
-     * 	Total number of support units in the army
+     *
+     * @return Total number of support units in the army
      */
     public int getTotalSupportUnits() {
-    	int count = 0;
-    	for (Unit unit : getUnits()) {
-    		if (unit.isSupportUnit()) {
-    			count++;
-    		}
-    	}
-    	return count;
+        int count = 0;
+        for (Unit unit : getUnits()) {
+            if (unit.isSupportUnit()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -253,8 +243,7 @@ public class Army {
     }
 
     /**
-     * @param upperLimit
-     *            The upperLimit to set.
+     * @param upperLimit The upperLimit to set.
      */
     public void setUpperLimiter(int upperLimit) {
         upperLimiter = upperLimit;
@@ -279,8 +268,7 @@ public class Army {
     }
 
     /**
-     * @param id
-     *            The iD to set.
+     * @param id The iD to set.
      */
     public void setID(int id) {
         this.id = id;
@@ -345,8 +333,7 @@ public class Army {
     }
 
     /**
-     * @param c3Network
-     *            The C3Networks to set.
+     * @param c3Network The C3Networks to set.
      */
     public void setC3Network(Hashtable<Integer, Integer> network) {
         c3Network = network;
@@ -367,12 +354,11 @@ public class Army {
                 i.remove();
             }
         }
-
     }
 
     /**
      * Finds out if unitOne and unitTwo are in the ame c3 Network
-     * 
+     *
      * @param unitOne
      * @param unitTwo
      * @return
@@ -399,7 +385,7 @@ public class Army {
 
     /**
      * Return the number of C3 networks in this army.
-     * 
+     *
      * @return
      */
     public int getNumberOfNetworks() {
@@ -414,7 +400,6 @@ public class Army {
                 }
             } catch (Exception ex) {
             }
-
         }
 
         return Math.max(1, count);
@@ -453,5 +438,4 @@ public class Army {
         commanders.add(id);
         commanders.trimToSize();
     }
-
 }

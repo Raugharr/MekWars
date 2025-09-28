@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2006 
- * 
+ * MekWars - Copyright (C) 2006
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,48 +17,67 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
-
 public class AdminAddServerOpFlagsCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "FlagCode#FlagName#...";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-        if ( !command.hasMoreTokens() ){
-            CampaignMain.cm.toUser("Syntax AdminAddServerOpFlags#FlagCode#FlagName#...<br>NOTE: you can repeat FlagCode and FlagName multiple times." , Username);
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "FlagCode#FlagName#...";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
-        
-        try{
-            while (command.hasMoreTokens()){
+
+        if (!command.hasMoreTokens()) {
+            CampaignMain.cm.toUser(
+                    "Syntax AdminAddServerOpFlags#FlagCode#FlagName#...<br>NOTE: you can repeat FlagCode and FlagName multiple times.",
+                    Username);
+            return;
+        }
+
+        try {
+            while (command.hasMoreTokens()) {
                 String key = command.nextToken();
                 String value = command.nextToken();
                 CampaignMain.cm.getData().getPlanetOpFlags().put(key, value);
-                CampaignMain.cm.toUser("Op flag "+key+"/"+value+" added to the server.",Username,true);
-                //server.MWLogger.modLog(Username + " added op flag "+key+"/"+value+".");
-                CampaignMain.cm.doSendModMail("NOTE",Username + " added op flag "+key+"/"+value+".");
+                CampaignMain.cm.toUser(
+                        "Op flag " + key + "/" + value + " added to the server.", Username, true);
+                // server.MWLogger.modLog(Username + " added op flag "+key+"/"+value+".");
+                CampaignMain.cm.doSendModMail(
+                        "NOTE", Username + " added op flag " + key + "/" + value + ".");
             }
-        }catch (Exception ex){
-            CampaignMain.cm.toUser("Syntax AdminAddServerOpFlags#FlagCode#FlagName#...<br>NOTE: you can repeat FlagCode and FlagName multiple times." , Username);
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser(
+                    "Syntax AdminAddServerOpFlags#FlagCode#FlagName#...<br>NOTE: you can repeat FlagCode and FlagName multiple times.",
+                    Username);
             return;
         }
-        
-		
-	}
+    }
 }

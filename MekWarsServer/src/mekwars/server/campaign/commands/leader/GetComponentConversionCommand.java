@@ -1,13 +1,13 @@
 /*
  * MekWars - Copyright (C) 2007
- * 
+ *
  * Original author - jtighe (torren@users.sourceforge.net)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
@@ -16,7 +16,6 @@
 package mekwars.server.campaign.commands.leader;
 
 import java.util.StringTokenizer;
-
 import mekwars.common.util.ComponentToCritsConverter;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -47,23 +46,29 @@ public class GetComponentConversionCommand implements Command {
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(Username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
                 return;
             }
         }
-        
+
         SPlayer player = CampaignMain.cm.getPlayer(Username);
         SHouse house = player.getMyHouse();
-        
-        if ( MWServ.getInstance().isModerator(Username) && command.hasMoreElements() )
-            house = CampaignMain.cm.getHouseFromPartialString(command.nextToken(),Username);
-        
-        
+
+        if (MWServ.getInstance().isModerator(Username) && command.hasMoreElements())
+            house = CampaignMain.cm.getHouseFromPartialString(command.nextToken(), Username);
+
         StringBuffer results = new StringBuffer("PL|CCC|");
-        for ( ComponentToCritsConverter converter :  house.getComponentConverter().values() ) {
+        for (ComponentToCritsConverter converter : house.getComponentConverter().values()) {
             results.append(converter.toString("#"));
         }
-        
+
         CampaignMain.cm.toUser(results.toString(), Username, false);
     }
 }

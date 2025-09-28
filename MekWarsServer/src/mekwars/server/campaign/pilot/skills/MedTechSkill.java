@@ -15,9 +15,9 @@
  */
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 
@@ -25,7 +25,6 @@ import mekwars.server.campaign.SHouse;
  * If a pilot has this skill, it levels as if it had one level less of the ability
  *
  * @author Helge Richter
- *
  */
 public class MedTechSkill extends SPilotSkill {
     public MedTechSkill(int id) {
@@ -62,5 +61,4 @@ public class MedTechSkill extends SPilotSkill {
     public int getBVMod(Entity unit) {
         return 0;
     }
-
 }

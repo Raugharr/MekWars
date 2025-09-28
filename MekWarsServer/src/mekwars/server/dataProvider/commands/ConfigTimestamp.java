@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Original Author: nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -21,44 +21,40 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
-
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
-//import java.io.BufferedReader;
-//import java.io.FileInputStream;
-//import java.io.InputStreamReader;
-//import mekwars.server.campaign.CampaignMain;
+// import java.io.BufferedReader;
+// import java.io.FileInputStream;
+// import java.io.InputStreamReader;
+// import mekwars.server.campaign.CampaignMain;
 import mekwars.common.util.MWLogger;
 import mekwars.server.dataProvider.ServerCommand;
 
-/**
- * Retrieve the MD5 of the current campaignconfig file.
- */
+/** Retrieve the MD5 of the current campaignconfig file. */
 public class ConfigTimestamp implements ServerCommand {
 
     public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
-    	
-    	String serverConfigTimestamp = "-1";
+
+        String serverConfigTimestamp = "-1";
         File serverConfig = new File("./data/campaignconfig.txt");
-    	
+
         if (serverConfig.exists()) {
-        	 
-			try {
-				FileInputStream in = new FileInputStream("./data/campaignconfig.txt");
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
-				String tempTime = br.readLine();
-				br.close();
-				in.close();
-				
-				serverConfigTimestamp = tempTime.substring(11);//remove "#Timestamp="
-			} catch (Exception e) {
-				MWLogger.infoLog("Error reading first line from campaignconfig.txt");       
-			}
-    	} 
-        
-        else
-        	MWLogger.infoLog("campaignconfig.txt didn't exist. returning ficticious timestamp to requesting client.");       
-        
+
+            try {
+                FileInputStream in = new FileInputStream("./data/campaignconfig.txt");
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                String tempTime = br.readLine();
+                br.close();
+                in.close();
+
+                serverConfigTimestamp = tempTime.substring(11); // remove "#Timestamp="
+            } catch (Exception e) {
+                MWLogger.infoLog("Error reading first line from campaignconfig.txt");
+            }
+        } else
+            MWLogger.infoLog(
+                    "campaignconfig.txt didn't exist. returning ficticious timestamp to requesting client.");
+
         out.println(serverConfigTimestamp, "ConfigTimestamp");
     }
 }

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,15 +20,22 @@ import java.util.StringTokenizer;
 import mekwars.server.campaign.CampaignMain;
 
 public class LoginCommand implements Command {
-	
-	//conforming methods
-	public int getExecutionLevel(){return 0;}
-	public void setExecutionLevel(int i) {}
-	String syntax = "";
-	public String getSyntax() { return syntax;}
 
-	public void process(StringTokenizer command,String Username) {	
-		CampaignMain.cm.getPlayer(Username);
-		CampaignMain.cm.doLoginPlayer(Username);
-	}
+    // conforming methods
+    public int getExecutionLevel() {
+        return 0;
+    }
+
+    public void setExecutionLevel(int i) {}
+
+    String syntax = "";
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+        CampaignMain.cm.getPlayer(Username);
+        CampaignMain.cm.doLoginPlayer(Username);
+    }
 }

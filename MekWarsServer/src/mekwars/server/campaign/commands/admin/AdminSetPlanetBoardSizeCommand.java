@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,42 +18,58 @@ package mekwars.server.campaign.commands.admin;
 
 import java.awt.Dimension;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminSetPlanetBoardSizeCommand implements Command {
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Planet Name#X#Y";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		SPlanet planet =  (SPlanet) CampaignMain.cm.getData().getPlanetByName(command.nextToken());
-		if ( planet == null ) {
-			CampaignMain.cm.toUser("Unknown Planet",Username,true);
-			return;
-		}
-		int x = Integer.parseInt(command.nextToken());
-		int y = Integer.parseInt(command.nextToken());
-		
-		planet.setBoardSize(new Dimension(x,y));
-		planet.updated();
-		
-		CampaignMain.cm.toUser("Board size set for planet "+planet.getName(),Username,true);
-		//server.MWLogger.modLog(Username + " set the board size for planet "+planet.getName());
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has set the board size for planet "+planet.getName());
-		
-	}
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Planet Name#X#Y";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        SPlanet planet = (SPlanet) CampaignMain.cm.getData().getPlanetByName(command.nextToken());
+        if (planet == null) {
+            CampaignMain.cm.toUser("Unknown Planet", Username, true);
+            return;
+        }
+        int x = Integer.parseInt(command.nextToken());
+        int y = Integer.parseInt(command.nextToken());
+
+        planet.setBoardSize(new Dimension(x, y));
+        planet.updated();
+
+        CampaignMain.cm.toUser("Board size set for planet " + planet.getName(), Username, true);
+        // server.MWLogger.modLog(Username + " set the board size for planet "+planet.getName());
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has set the board size for planet " + planet.getName());
+    }
 }

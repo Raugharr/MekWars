@@ -1,7 +1,6 @@
 package mekwars.server.campaign.operations.newopmanager;
 
 import java.util.TreeMap;
-
 import mekwars.common.campaign.operations.Operation;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SHouse;
@@ -15,10 +14,10 @@ import mekwars.server.campaign.operations.ShortValidator;
 public class NewOperationManager extends AbstractOperationManager implements I_OperationManager {
 
     private OperationManager tempOpManager = new OperationManager();
-    
+
     private int nextShortID = 0;
     private int nextLongID = 0;
-    
+
     @Override
     public String tick() {
         // TODO Auto-generated method stub
@@ -28,13 +27,14 @@ public class NewOperationManager extends AbstractOperationManager implements I_O
     @Override
     public void resolveShortAttack(Operation o, ShortOperation so, String report) {
         // TODO Auto-generated method stub
-        tempOpManager.resolveShortAttack(o,so,report);
+        tempOpManager.resolveShortAttack(o, so, report);
     }
 
     @Override
-    public void resolveShortAttack(Operation o, ShortOperation so, String winnerName, String loserName) {
+    public void resolveShortAttack(
+            Operation o, ShortOperation so, String winnerName, String loserName) {
         // TODO Auto-generated method stub
-        tempOpManager.resolveShortAttack(o,  so,  winnerName, loserName);
+        tempOpManager.resolveShortAttack(o, so, winnerName, loserName);
     }
 
     @Override
@@ -86,7 +86,8 @@ public class NewOperationManager extends AbstractOperationManager implements I_O
     }
 
     @Override
-    public void terminateOperation(ShortOperation so, int termCode, SPlayer terminator, boolean ignoreStatus) {
+    public void terminateOperation(
+            ShortOperation so, int termCode, SPlayer terminator, boolean ignoreStatus) {
         // TODO Auto-generated method stub
         tempOpManager.terminateOperation(so, termCode, terminator, ignoreStatus);
     }
@@ -140,9 +141,9 @@ public class NewOperationManager extends AbstractOperationManager implements I_O
     }
 
     /**
-     * Method to get a short ID.  In order to stop the issue we're seeing where scrap is being sent to the wrong
-     * players, I am not reusing IDs
-     * 
+     * Method to get a short ID. In order to stop the issue we're seeing where scrap is being sent
+     * to the wrong players, I am not reusing IDs
+     *
      * @return the next available ShortID
      */
     @Override
@@ -151,11 +152,10 @@ public class NewOperationManager extends AbstractOperationManager implements I_O
     }
 
     /**
-     * Method to get a long ID.  In order to stop the issue we're seeing where scrap is being sent to the wrong
-     * players, I am not reusing IDs
-     * 
-     * @return the next available LongID
+     * Method to get a long ID. In order to stop the issue we're seeing where scrap is being sent to
+     * the wrong players, I am not reusing IDs
      *
+     * @return the next available LongID
      */
     @Override
     public int getFreeLongID() {
@@ -182,8 +182,8 @@ public class NewOperationManager extends AbstractOperationManager implements I_O
     }
 
     @Override
-    public String validateShortAttack(SPlayer ap, SArmy aa, Operation o, SPlanet target, int longID,
-            boolean joiningAttack) {
+    public String validateShortAttack(
+            SPlayer ap, SArmy aa, Operation o, SPlanet target, int longID, boolean joiningAttack) {
         // TODO Auto-generated method stub
         return tempOpManager.validateShortAttack(ap, aa, o, target, longID, joiningAttack);
     }
@@ -217,5 +217,4 @@ public class NewOperationManager extends AbstractOperationManager implements I_O
         // TODO Auto-generated method stub
         return tempOpManager.hasLongOnPlanet(h, p);
     }
-
 }

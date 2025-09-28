@@ -40,8 +40,6 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
-
-import mekwars.dedicatedhost.cmd.Command;
 import megamek.MMConstants;
 import megamek.common.Entity;
 import megamek.common.Game;
@@ -62,7 +60,6 @@ import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
-import mekwars.dedicatedhost.protocol.DataFetchClient;
 import mekwars.common.GameInterface;
 import mekwars.common.GameWrapper;
 import mekwars.common.MMGame;
@@ -70,7 +67,8 @@ import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.SerializeEntity;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
-
+import mekwars.dedicatedhost.cmd.Command;
+import mekwars.dedicatedhost.protocol.DataFetchClient;
 
 // This is the Client used for connecting to the master server.
 // @Author: Helge Richter (McWizard@gmx.de)
@@ -86,7 +84,6 @@ public final class MWDedHost extends GameHost implements IClient {
     TimeOutThread TO;
     Collection<CUser> Users;
     Vector<IOption> GameOptions = new Vector<IOption>(1, 1);
-
 
     boolean SignOff = false;
     String password = "";
@@ -110,8 +107,8 @@ public final class MWDedHost extends GameHost implements IClient {
     Dimension BoardSize;
 
     /**
-     * Maps the task prefixes as HS, PL, SP etc. to a command under package cmd.
-     * key: String, value: cmd.Command
+     * Maps the task prefixes as HS, PL, SP etc. to a command under package cmd. key: String, value:
+     * cmd.Command
      */
     HashMap<String, Command> commands = new HashMap<String, Command>();
 
@@ -124,7 +121,6 @@ public final class MWDedHost extends GameHost implements IClient {
     public Properties serverConfigs = new Properties();
 
     private static MWLogger logger;
-    
 
     // Main-Method
     public static void main(String[] args) {
@@ -141,7 +137,9 @@ public final class MWDedHost extends GameHost implements IClient {
         String logFileName = "./logs/megameklog.txt";
 
         try {
-            PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(logFileName), 64));
+            PrintStream ps =
+                    new PrintStream(
+                            new BufferedOutputStream(new FileOutputStream(logFileName), 64));
             System.setOut(ps);
             System.setErr(ps);
         } catch (Exception ex) {
@@ -166,7 +164,7 @@ public final class MWDedHost extends GameHost implements IClient {
             /*
              * Config files have been loaded, and command line args have been
              * parsed. Construct the actual client.
-             * 
+             *
              * NOTE: Client constrtuctor attempts to pull the oplist, campaign
              * config and other non-interactive data over the DATAPORT before
              * client.start() attempts to connect to the chat server on the
@@ -184,7 +182,7 @@ public final class MWDedHost extends GameHost implements IClient {
     public MWDedHost(DedConfig config) {
 
         ProtCommands = new TreeMap<String, IProtCommand>();
-        
+
         Config = config;
 
         Connector = new CConnector(this);
@@ -192,7 +190,10 @@ public final class MWDedHost extends GameHost implements IClient {
         Users = Collections.synchronizedList(new Vector<CUser>(1, 1));
 
         createProtCommands();
-        dataFetcher = new DataFetchClient(Integer.parseInt(Config.getParam("DATAPORT")), Integer.parseInt(Config.getParam("SOCKETTIMEOUTDELAY")));
+        dataFetcher =
+                new DataFetchClient(
+                        Integer.parseInt(Config.getParam("DATAPORT")),
+                        Integer.parseInt(Config.getParam("SOCKETTIMEOUTDELAY")));
         dataFetcher.setData(Config.getParam("SERVERIP"), getCacheDir());
         dataFetcher.closeDataConnection();
 
@@ -277,15 +278,15 @@ public final class MWDedHost extends GameHost implements IClient {
 
     /*
      * NOTE: this list is ancient. sometimes useful. often out of date.
-     * 
+     *
      * List of Abreviations for the protocol used by the client only: NG = New
      * Game (NG|<IP>|<Port>|<MaxPlayers>|<Version>|<Comment>) CG = Close Game
      * (CG) GB = Goodbye (Client exit) (GB) SO = Sign-On
      * (SO|<Version>|<UserName>)
-     * 
+     *
      * Used by Both: CH = Chat Server news:(CH|<text>) Client Chat:
      * (CH|<UserName>|<Color>|<Text>)
-     * 
+     *
      * Used only by the Server: SL|NG = Games
      * (GS|<MMGame.toString()>|<MMGame.toString()|...) SL|CG = close game SL|JG
      * = add a player to game list SL|LG = remove a player from game list SL|SHS
@@ -322,7 +323,7 @@ public final class MWDedHost extends GameHost implements IClient {
      * part, this was called directly. Now we buffer all incoming non-data chat
      * and spit it out at once when the GUI draws. Once the GUI is up, this is
      * called by a simple pass through from doParseDataInput(), above.
-     * 
+     *
      * Ded's call the helper directly to bypass the buffer.
      */
     private void doParseDataHelper(String input) {
@@ -345,11 +346,10 @@ public final class MWDedHost extends GameHost implements IClient {
 
             if (!commands.containsKey(task)) {
                 try {
-                    Class<?> cmdClass = Class.forName(getClass().getPackage().getName() + ".cmd." + task);
-                    Constructor<?> c = cmdClass.getConstructor(new Class[]
-                        { MWDedHost.class });
-                    Command cmd = (Command) c.newInstance(new Object[]
-                        { this });
+                    Class<?> cmdClass =
+                            Class.forName(getClass().getPackage().getName() + ".cmd." + task);
+                    Constructor<?> c = cmdClass.getConstructor(new Class[] {MWDedHost.class});
+                    Command cmd = (Command) c.newInstance(new Object[] {this});
                     commands.put(task, cmd);
                 } catch (Exception e) {
                     MWLogger.errLog(e);
@@ -376,13 +376,18 @@ public final class MWDedHost extends GameHost implements IClient {
          * New users, report requests and data should be sent to standard
          * processor. PM's are checked below, and all other commands are tossed
          * (e.g. - CH).
-         * 
+         *
          * Note that ded's bypass the doParseDeda() buffering process (never
          * have a main frame, so no null check or buffer needed) and call
          * doParseDataHelper() directly.
          */
-        if (data.startsWith("US|") || data.startsWith("NU|") || data.startsWith("UG|") || data.startsWith("RGTS|") || data.startsWith("DSD|") || data.startsWith("USD|")) {
-            doParseDataHelper(data);// bypass the buffering process -
+        if (data.startsWith("US|")
+                || data.startsWith("NU|")
+                || data.startsWith("UG|")
+                || data.startsWith("RGTS|")
+                || data.startsWith("DSD|")
+                || data.startsWith("USD|")) {
+            doParseDataHelper(data); // bypass the buffering process -
             // ded's never have a main fraime
             return;
         }
@@ -392,7 +397,7 @@ public final class MWDedHost extends GameHost implements IClient {
             return;
         }
 
-        data = data.substring(3);// strip "PM|"
+        data = data.substring(3); // strip "PM|"
         st = new StringTokenizer(data, "|");
         own = new StringTokenizer(myDedOwners, "$");
 
@@ -408,7 +413,7 @@ public final class MWDedHost extends GameHost implements IClient {
         /*
          * Commands that can be executed by ANY user.
          */
-        if (command.equals("checkrestartcount")) {// check the restart amount.
+        if (command.equals("checkrestartcount")) { // check the restart amount.
             checkForRestart();
             return;
         } else if (command.equals("displaymegameklog")) { // display
@@ -418,7 +423,12 @@ public final class MWDedHost extends GameHost implements IClient {
                 File logFile = new File("./logs/megameklog.txt");
                 FileInputStream fis = new FileInputStream(logFile);
                 BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
-                sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name + "#MegaMek Log from " + myUsername);
+                sendChat(
+                        PROTOCOL_PREFIX
+                                + "c sendtomisc#"
+                                + name
+                                + "#MegaMek Log from "
+                                + myUsername);
                 int counter = 0;
                 while (dis.ready()) {
                     sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name + "#" + dis.readLine());
@@ -439,7 +449,12 @@ public final class MWDedHost extends GameHost implements IClient {
             } catch (Exception ex) {
                 // do nothing?
             }
-            sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the display megamek logs command on " + myUsername);
+            sendChat(
+                    PROTOCOL_PREFIX
+                            + "c mm# "
+                            + name
+                            + " used the display megamek logs command on "
+                            + myUsername);
             return;
         } else if (command.equals("displaydederrorlog")) { // display
             // error.0
@@ -448,7 +463,8 @@ public final class MWDedHost extends GameHost implements IClient {
                 File logFile = new File("./logs/errlog.0");
                 FileInputStream fis = new FileInputStream(logFile);
                 BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
-                sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name + "#Error Log from " + myUsername);
+                sendChat(
+                        PROTOCOL_PREFIX + "c sendtomisc#" + name + "#Error Log from " + myUsername);
                 int counter = 0;
                 while (dis.ready()) {
                     sendChat(PROTOCOL_PREFIX + "c sendtomisc#" + name + "#" + dis.readLine());
@@ -469,7 +485,12 @@ public final class MWDedHost extends GameHost implements IClient {
             } catch (Exception ex) {
                 // do nothing?
             }
-            sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the display ded error log command on " + myUsername);
+            sendChat(
+                    PROTOCOL_PREFIX
+                            + "c mm# "
+                            + name
+                            + " used the display ded error log command on "
+                            + myUsername);
             return;
         } else if (command.equals("displaydedlog")) { // display
             // log.0
@@ -499,7 +520,12 @@ public final class MWDedHost extends GameHost implements IClient {
             } catch (Exception ex) {
                 // do nothing?
             }
-            sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the display ded log command on " + myUsername);
+            sendChat(
+                    PROTOCOL_PREFIX
+                            + "c mm# "
+                            + name
+                            + " used the display ded log command on "
+                            + myUsername);
             return;
         }
 
@@ -515,14 +541,16 @@ public final class MWDedHost extends GameHost implements IClient {
                 owner = "";
             }
 
-            if (myDedOwners.equals("") || name.equals(owner) || (getUser(name).getUserlevel() >= 100)) {
+            if (myDedOwners.equals("")
+                    || name.equals(owner)
+                    || (getUser(name).getUserlevel() >= 100)) {
                 // if no owners set, anyone can send commands
 
                 if (command.equals("restart")) { // Restart the dedicated
                     // server
 
                     MWLogger.infoLog("Restart command received from " + name);
-                    stopHost();// kill the host
+                    stopHost(); // kill the host
 
                     // Remove any MM option files that deds may have.
                     File localGameOptions = new File("./mmconf");
@@ -543,7 +571,12 @@ public final class MWDedHost extends GameHost implements IClient {
                     } catch (Exception ex) {
                         MWLogger.errLog(ex);
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the restart command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the restart command on "
+                                    + myUsername);
                     restartDed();
                     return;
 
@@ -554,7 +587,12 @@ public final class MWDedHost extends GameHost implements IClient {
                     if (myServer != null) {
                         resetGame();
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the reset command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the reset command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("die")) { // shut the dedicated down
@@ -569,7 +607,12 @@ public final class MWDedHost extends GameHost implements IClient {
                     if (myServer == null) {
                         startHost(true, false, false);
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the start command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the start command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("stop")) { // stop MM host, but w/o
@@ -588,15 +631,30 @@ public final class MWDedHost extends GameHost implements IClient {
                     } catch (Exception ex) {
                         MWLogger.errLog(ex);
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the stop command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the stop command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("owners")) { // return a list of
                     // owners
 
                     MWLogger.infoLog("Owners command received from " + name);
-                    sendChat(PROTOCOL_PREFIX + "mail " + name + ", My owners: " + myDedOwners.replace('$', ' '));
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the owners command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", My owners: "
+                                    + myDedOwners.replace('$', ' '));
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the owners command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("owner ")) { // add new owner(s)
@@ -610,7 +668,14 @@ public final class MWDedHost extends GameHost implements IClient {
                     getConfig().setParam("DEDICATEDOWNERNAME", myDedOwners);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the owner " + myDedOwners + " command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the owner "
+                                    + myDedOwners
+                                    + " command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("clearowners")) { // clear owners, and
@@ -622,17 +687,27 @@ public final class MWDedHost extends GameHost implements IClient {
                     getConfig().setParam("DEDICATEDOWNERNAME", myDedOwners);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the clear owners command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the clear owners command on "
+                                    + myUsername);
                     return;
 
-                } else if (command.equals("port")) {// return the server's port
+                } else if (command.equals("port")) { // return the server's port
 
                     MWLogger.infoLog("Port command received from " + name);
                     sendChat(PROTOCOL_PREFIX + "mail " + name + ", My port: " + myPort);
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the port command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the port command on "
+                                    + myUsername);
                     return;
 
-                } else if (command.startsWith("port ")) {// new server port
+                } else if (command.startsWith("port ")) { // new server port
 
                     MWLogger.infoLog("Port (set) command received from " + name);
                     try {
@@ -644,23 +719,42 @@ public final class MWDedHost extends GameHost implements IClient {
 
                     if ((port > 0) && (port < 65536)) {
                         myPort = port;
-                    }// check for legal port range
+                    } // check for legal port range
                     else {
-                        MWLogger.infoLog("Command error: " + command + ": port out of valid range.");
+                        MWLogger.infoLog(
+                                "Command error: " + command + ": port out of valid range.");
                     }
                     String portString = Integer.toString(myPort);
                     getConfig().setParam("PORT", portString);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " changed the port for " + myUsername + " to " + myPort);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " changed the port for "
+                                    + myUsername
+                                    + " to "
+                                    + myPort);
                     return;
 
-                } else if (command.equals("savegamepurge")) {// server days
+                } else if (command.equals("savegamepurge")) { // server days
                     // to purge
 
                     MWLogger.infoLog("Save game purge command received from " + name);
-                    sendChat(PROTOCOL_PREFIX + "mail " + name + ", I purge saved games that are " + savedGamesMaxDays + " days old, or older.");
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the save game purge command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", I purge saved games that are "
+                                    + savedGamesMaxDays
+                                    + " days old, or older.");
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the save game purge command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("savegamepurge ")) { // set
@@ -673,7 +767,9 @@ public final class MWDedHost extends GameHost implements IClient {
                     int mySavedGamesMaxDays = 7;
                     MWLogger.infoLog("Savegamepurge command received from " + name);
                     try {
-                        mySavedGamesMaxDays = Integer.parseInt(command.substring(("savegamepurge ").length()).trim());
+                        mySavedGamesMaxDays =
+                                Integer.parseInt(
+                                        command.substring(("savegamepurge ").length()).trim());
                     } catch (Exception ex) {
                         MWLogger.infoLog("Command error: " + command + ": invalid number.");
                         return;
@@ -684,7 +780,15 @@ public final class MWDedHost extends GameHost implements IClient {
                     getConfig().saveConfig();
                     setConfig();
                     savedGamesMaxDays = mySavedGamesMaxDays;
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " changed the save game purge for " + myUsername + " to " + mySavedGamesMaxDays + " days.");
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " changed the save game purge for "
+                                    + myUsername
+                                    + " to "
+                                    + mySavedGamesMaxDays
+                                    + " days.");
                     return;
 
                 } else if (command.equals("displaysavedgames")) { // display
@@ -702,21 +806,40 @@ public final class MWDedHost extends GameHost implements IClient {
                         for (File dateFile : fileList) {
                             Date date = new Date(dateFile.lastModified());
                             String dateTime = sDF.format(date);
-                            list += "<a href=\"MEKMAIL" + myUsername + "*loadgamewithfullpath " + dateFile + "\">Load " + dateFile + "</a> " + dateTime + "<br>";
+                            list +=
+                                    "<a href=\"MEKMAIL"
+                                            + myUsername
+                                            + "*loadgamewithfullpath "
+                                            + dateFile
+                                            + "\">Load "
+                                            + dateFile
+                                            + "</a> "
+                                            + dateTime
+                                            + "<br>";
                         }
                     } catch (Exception ex) {
                         // do something?
                     }
 
                     sendChat(PROTOCOL_PREFIX + "mail " + name + ", " + list);
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the display saved games command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the display saved games command on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("update")) { // update the dedicated
                     // host using
                     // MWAutoUpdate
 
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the update command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the update command on "
+                                    + myUsername);
                     MWLogger.infoLog("Update command received from " + name);
                     stopHost();
                     updateDed();
@@ -726,10 +849,20 @@ public final class MWDedHost extends GameHost implements IClient {
 
                     MWLogger.infoLog("Ping command received from " + name);
                     String version = MWDedHost.CLIENT_VERSION;
-                    sendChat(PROTOCOL_PREFIX + "mail " + name + ", I'm active with version " + version + ".");
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the ping command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", I'm active with version "
+                                    + version
+                                    + ".");
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the ping command on "
+                                    + myUsername);
                     return;
-
                 }
                 if (command.equals("loadgame") || command.startsWith("loadgame ")) { // load
                     // game
@@ -746,12 +879,23 @@ public final class MWDedHost extends GameHost implements IClient {
                     }
                     if (myServer != null) {
                         if (!loadGame(filename)) {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name + ", Unable to load saved game.");
+                            sendChat(
+                                    PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", Unable to load saved game.");
                         } else {
                             sendChat(PROTOCOL_PREFIX + "mail " + name + ", Saved game loaded.");
                         }
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " loaded game " + filename + " on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " loaded game "
+                                    + filename
+                                    + " on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("loadgamewithfullpath ")) { // load
@@ -772,12 +916,23 @@ public final class MWDedHost extends GameHost implements IClient {
                     }
                     if (myServer != null) {
                         if (!loadGameWithFullPath(filename)) {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name + ", Unable to load saved game.");
+                            sendChat(
+                                    PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", Unable to load saved game.");
                         } else {
                             sendChat(PROTOCOL_PREFIX + "mail " + name + ", Saved game loaded.");
                         }
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " loaded game " + filename + " on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " loaded game "
+                                    + filename
+                                    + " on "
+                                    + myUsername);
                     return;
 
                 } else if (command.equals("loadautosave")) { // load the most
@@ -789,12 +944,29 @@ public final class MWDedHost extends GameHost implements IClient {
                     if (myServer != null) {
                         filename = getParanoidAutoSave();
                         if (!loadGame(filename)) {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name + ", Unable to load saved game.");
+                            sendChat(
+                                    PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", Unable to load saved game.");
                         } else {
-                            sendChat(PROTOCOL_PREFIX + "mail " + name + ", " + filename + " loaded.");
+                            sendChat(
+                                    PROTOCOL_PREFIX
+                                            + "mail "
+                                            + name
+                                            + ", "
+                                            + filename
+                                            + " loaded.");
                         }
                     }
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " loaded " + filename + " game on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " loaded "
+                                    + filename
+                                    + " game on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("name ")) { // new command
@@ -805,7 +977,14 @@ public final class MWDedHost extends GameHost implements IClient {
                     getConfig().setParam("NAME", myComName);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the set name command to change the name to " + myComName + " command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the set name command to change the name to "
+                                    + myComName
+                                    + " command on "
+                                    + myUsername);
                     Config.setParam("NAME", "[Dedicated] " + myComName);
                     myUsername = Config.getParam("NAME");
                     return;
@@ -818,7 +997,14 @@ public final class MWDedHost extends GameHost implements IClient {
                     getConfig().setParam("COMMENT", myComComment);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " has set the comment to " + myComComment + " on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " has set the comment to "
+                                    + myComComment
+                                    + " on "
+                                    + myUsername);
                     return;
 
                 } else if (command.startsWith("players ")) { // new command
@@ -830,7 +1016,14 @@ public final class MWDedHost extends GameHost implements IClient {
                         getConfig().setParam("MAXPLAYERS", numPlayers);
                         getConfig().saveConfig();
                         setConfig();
-                        sendChat(PROTOCOL_PREFIX + "c mm# " + name + " has set the max number of players to " + numPlayers + " on " + myUsername);
+                        sendChat(
+                                PROTOCOL_PREFIX
+                                        + "c mm# "
+                                        + name
+                                        + " has set the max number of players to "
+                                        + numPlayers
+                                        + " on "
+                                        + myUsername);
                         return;
                     } catch (Exception ex) {
                         MWLogger.errLog(ex);
@@ -841,17 +1034,31 @@ public final class MWDedHost extends GameHost implements IClient {
                 } else if (command.equals("restartcount")) { // server port
 
                     MWLogger.infoLog("Restartcount command received from " + name);
-                    sendChat(PROTOCOL_PREFIX + "mail " + name + ", My restart count is set to " + dedRestartAt + " my current game count is " + gameCount);
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the restartcount command on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", My restart count is set to "
+                                    + dedRestartAt
+                                    + " my current game count is "
+                                    + gameCount);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the restartcount command on "
+                                    + myUsername);
                     return;
 
-                } else if (command.startsWith("restartcount ")) {// new
+                } else if (command.startsWith("restartcount ")) { // new
                     // server
                     // port
 
                     MWLogger.infoLog("restartcount change command received from " + name);
                     try {
-                        dedRestartAt = Integer.parseInt(command.substring(("restartcount ").length()).trim());
+                        dedRestartAt =
+                                Integer.parseInt(
+                                        command.substring(("restartcount ").length()).trim());
                     } catch (Exception ex) {
                         MWLogger.infoLog("Command error: " + command + ": bad counter.");
                         return;
@@ -860,17 +1067,35 @@ public final class MWDedHost extends GameHost implements IClient {
                     getConfig().setParam("DEDAUTORESTART", restartString);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " changed the restart count for " + myUsername + " to " + dedRestartAt);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " changed the restart count for "
+                                    + myUsername
+                                    + " to "
+                                    + dedRestartAt);
                     return;
 
-                } else if (command.equals("getupdateurl")) {// find out what url
+                } else if (command.equals("getupdateurl")) { // find out what url
                     // the ded is set to
                     // update with
 
                     MWLogger.infoLog("GetUpdateUrl command received from " + name);
                     String updateURL = getConfigParam("UPDATEURL");
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the getUpdateURL command on " + myUsername);
-                    sendChat(PROTOCOL_PREFIX + "mail " + name + ", My update URL is " + updateURL + ".");
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the getUpdateURL command on "
+                                    + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "mail "
+                                    + name
+                                    + ", My update URL is "
+                                    + updateURL
+                                    + ".");
                     return;
 
                 } else if (command.startsWith("setupdateurl ")) {
@@ -880,9 +1105,15 @@ public final class MWDedHost extends GameHost implements IClient {
                     getConfig().setParam("UPDATEURL", myUpdateURL);
                     getConfig().saveConfig();
                     setConfig();
-                    sendChat(PROTOCOL_PREFIX + "c mm# " + name + " used the set update url command to change the the update url to " + myUpdateURL + " on " + myUsername);
+                    sendChat(
+                            PROTOCOL_PREFIX
+                                    + "c mm# "
+                                    + name
+                                    + " used the set update url command to change the the update url to "
+                                    + myUpdateURL
+                                    + " on "
+                                    + myUsername);
                     return;
-
                 }
 
                 MWLogger.infoLog("Command error: " + command + ": unknown command.");
@@ -890,8 +1121,20 @@ public final class MWDedHost extends GameHost implements IClient {
             }
         }
 
-        sendChat(PROTOCOL_PREFIX + "c mm# " + name + " tried to use the " + command + " on " + myUsername + ", but does not have ownership.");
-        sendChat(PROTOCOL_PREFIX + "mail " + name + ", You do not have management rights for this host!");
+        sendChat(
+                PROTOCOL_PREFIX
+                        + "c mm# "
+                        + name
+                        + " tried to use the "
+                        + command
+                        + " on "
+                        + myUsername
+                        + ", but does not have ownership.");
+        sendChat(
+                PROTOCOL_PREFIX
+                        + "mail "
+                        + name
+                        + ", You do not have management rights for this host!");
         MWLogger.infoLog("Command error: " + command + ": access denied for " + name + ".");
     }
 
@@ -947,7 +1190,6 @@ public final class MWDedHost extends GameHost implements IClient {
         String result = "[" + s.nextElement() + ":" + s.nextElement() + "] ";
         return result;
     }
-
 
     protected Vector<String> splitString(String string, String splitter) {
         Vector<String> vector = new Vector<String>(1, 1);
@@ -1048,7 +1290,8 @@ public final class MWDedHost extends GameHost implements IClient {
             pcommand = getProtCommand(s);
             if ((pcommand != null) && pcommand.check(s)) {
                 if (!pcommand.execute(incoming)) {
-                    MWLogger.infoLog("COMMAND ERROR: wrong protocol command executed or execution failed.");
+                    MWLogger.infoLog(
+                            "COMMAND ERROR: wrong protocol command executed or execution failed.");
                     MWLogger.infoLog("COMMAND RECEIVED: " + incoming);
                 }
                 return;
@@ -1114,7 +1357,7 @@ public final class MWDedHost extends GameHost implements IClient {
         /*
          * If password is blank, send a filler password instead of an empty
          * token. This prevents the no-password "whitescreen" error. HACKY.
-         * 
+         *
          * It would be probably be better to actually fix the server SignOn so
          * an empty password creates a nobody, but this does the trick ...
          */
@@ -1123,7 +1366,20 @@ public final class MWDedHost extends GameHost implements IClient {
             passToSend = "1337";
         }
 
-        Connector.send(PROTOCOL_PREFIX + "signon\t" + getConfigParam("NAME") + "\t" + passToSend + "\t" + getProtocolVersion() + "\t" + Config.getParam("COLOR") + "\t" + CLIENT_VERSION + "\t" + ST.nextToken());
+        Connector.send(
+                PROTOCOL_PREFIX
+                        + "signon\t"
+                        + getConfigParam("NAME")
+                        + "\t"
+                        + passToSend
+                        + "\t"
+                        + getProtocolVersion()
+                        + "\t"
+                        + Config.getParam("COLOR")
+                        + "\t"
+                        + CLIENT_VERSION
+                        + "\t"
+                        + ST.nextToken());
         Status = STATUS_LOGGEDOUT;
     }
 
@@ -1150,14 +1406,13 @@ public final class MWDedHost extends GameHost implements IClient {
             dataFetcher.closeDataConnection();
             Connector.closeConnection();
         }
-
     }
 
     public void startHost(boolean dedicated, boolean deploy, boolean loadSavegame) {
 
         // reread the config to allow the user to change setting during runtime
         String ip = "127.0.0.1";
-        if (!getConfigParam("IP:").equals("")) {// IP Setting set, override IP
+        if (!getConfigParam("IP:").equals("")) { // IP Setting set, override IP
             // detection.
             try {
                 ip = getConfigParam("IP:");
@@ -1170,8 +1425,10 @@ public final class MWDedHost extends GameHost implements IClient {
         }
 
         String MMVersion = getServerConfigs("AllowedMegaMekVersion");
-        if (!MMVersion.equals("-1") && !MMVersion.equalsIgnoreCase(megamek.MMConstants.VERSION.toString())) {
-            MWLogger.errLog("You are using an invalid version of MegaMek. Please use version " + MMVersion);
+        if (!MMVersion.equals("-1")
+                && !MMVersion.equalsIgnoreCase(megamek.MMConstants.VERSION.toString())) {
+            MWLogger.errLog(
+                    "You are using an invalid version of MegaMek. Please use version " + MMVersion);
             stopHost();
             updateDed();
             return;
@@ -1215,9 +1472,18 @@ public final class MWDedHost extends GameHost implements IClient {
             return;
         }
 
-        ((Game)myServer.getGame()).addGameListener(this);
+        ((Game) myServer.getGame()).addGameListener(this);
         // Send the new game info to the Server
-        serverSend("NG|" + new MMGame(myUsername, ip, myPort, MaxPlayers, MMConstants.VERSION, comment).toString());
+        serverSend(
+                "NG|"
+                        + new MMGame(
+                                        myUsername,
+                                        ip,
+                                        myPort,
+                                        MaxPlayers,
+                                        MMConstants.VERSION,
+                                        comment)
+                                .toString());
         clearSavedGames();
         purgeOldLogs();
         ClientPreferences cs = PreferenceManager.getClientPreferences();
@@ -1227,7 +1493,7 @@ public final class MWDedHost extends GameHost implements IClient {
     // Stop & send the close game event to the Server
     public void stopHost() {
 
-        serverSend("CG");// send close game to server
+        serverSend("CG"); // send close game to server
         try {
             if (myServer != null) {
                 myServer.die();
@@ -1242,15 +1508,15 @@ public final class MWDedHost extends GameHost implements IClient {
     public void resetGame() { // reset hosted game
         if (myServer != null) {
             myServer.resetGame();
-            ((Game)myServer.getGame()).getGameListeners().clear();
-            ((Game)myServer.getGame()).addGameListener(this);
+            ((Game) myServer.getGame()).getGameListeners().clear();
+            ((Game) myServer.getGame()).addGameListener(this);
         }
     }
 
-    public boolean loadGame(String filename) {// load saved game
+    public boolean loadGame(String filename) { // load saved game
         if ((myServer != null) && (filename != null) && !filename.equals("")) {
             boolean loaded = myServer.loadGame(new File("./savegames/", filename));
-            ((Game)myServer.getGame()).addGameListener(this);
+            ((Game) myServer.getGame()).addGameListener(this);
             return loaded;
         }
 
@@ -1267,12 +1533,11 @@ public final class MWDedHost extends GameHost implements IClient {
         return false;
     }
 
-    public boolean loadGameWithFullPath(String filename) {// load saved game
+    public boolean loadGameWithFullPath(String filename) { // load saved game
         if ((myServer != null) && (filename != null) && !filename.equals("")) {
             boolean loaded = myServer.loadGame(new File(filename));
-            ((Game)myServer.getGame()).addGameListener(this);
+            ((Game) myServer.getGame()).addGameListener(this);
             return loaded;
-
         }
 
         // else (null server/filename)
@@ -1352,13 +1617,14 @@ public final class MWDedHost extends GameHost implements IClient {
     }
 
     /**
-     * Return the directory, where all cache files can go into. The dirname
-     * depends on the server you connect.
+     * Return the directory, where all cache files can go into. The dirname depends on the server
+     * you connect.
      */
     public String getCacheDir() {
         // if (cacheDir == null) {
         // first access. Check if need to create directory.
-        cacheDir = "data/servers/" + Config.getParam("SERVERIP") + "." + Config.getParam("SERVERPORT");
+        cacheDir =
+                "data/servers/" + Config.getParam("SERVERIP") + "." + Config.getParam("SERVERPORT");
         File dir = new File(cacheDir);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -1369,7 +1635,7 @@ public final class MWDedHost extends GameHost implements IClient {
 
     /**
      * Changes the duty to a new status.
-     * 
+     *
      * @param newStatus
      */
     public void changeStatus(int newStatus) {
@@ -1390,14 +1656,14 @@ public final class MWDedHost extends GameHost implements IClient {
             MWLogger.infoLog("System has reached " + gameCount + " games played and is restarting");
             try {
                 Thread.sleep(5000);
-            }// give people time to vacate
+            } // give people time to vacate
             catch (Exception ex) {
                 MWLogger.errLog(ex);
             }
             try {
                 stopHost();
                 Thread.sleep(5000);
-            }// give people time to vacate
+            } // give people time to vacate
             catch (Exception ex) {
                 MWLogger.errLog(ex);
             }
@@ -1418,9 +1684,17 @@ public final class MWDedHost extends GameHost implements IClient {
         File[] fileList = saveFiles.listFiles();
         for (File savedFile : fileList) {
             long lastTime = savedFile.lastModified();
-            if (savedFile.exists() && savedFile.isFile() && (lastTime < (System.currentTimeMillis() - daysInSeconds))) {
+            if (savedFile.exists()
+                    && savedFile.isFile()
+                    && (lastTime < (System.currentTimeMillis() - daysInSeconds))) {
                 try {
-                    MWLogger.infoLog("Purging File: " + savedFile.getName() + " Time: " + lastTime + " purge Time: " + (System.currentTimeMillis() - daysInSeconds));
+                    MWLogger.infoLog(
+                            "Purging File: "
+                                    + savedFile.getName()
+                                    + " Time: "
+                                    + lastTime
+                                    + " purge Time: "
+                                    + (System.currentTimeMillis() - daysInSeconds));
                     savedFile.delete();
                 } catch (Exception ex) {
                     MWLogger.errLog("Error trying to delete these files!");
@@ -1446,8 +1720,6 @@ public final class MWDedHost extends GameHost implements IClient {
         return saveFile;
     }
 
-
-
     public void retrieveOpData(String type, String data) {
 
         StringTokenizer st = new StringTokenizer(data, "#");
@@ -1472,7 +1744,6 @@ public final class MWDedHost extends GameHost implements IClient {
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-
     }
 
     public void retrieveMul(String data) {
@@ -1499,7 +1770,6 @@ public final class MWDedHost extends GameHost implements IClient {
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-
     }
 
     public boolean isDedicated() {
@@ -1521,7 +1791,8 @@ public final class MWDedHost extends GameHost implements IClient {
     }
 
     public boolean isUsingAdvanceRepairs() {
-        return Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair")) || Boolean.parseBoolean(getServerConfigs("UseSimpleRepair"));
+        return Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair"))
+                || Boolean.parseBoolean(getServerConfigs("UseSimpleRepair"));
     }
 
     /*
@@ -1551,9 +1822,17 @@ public final class MWDedHost extends GameHost implements IClient {
                     File[] fileList = saveFiles.listFiles(filter);
                     for (File savedFile : fileList) {
                         long lastTime = savedFile.lastModified();
-                        if (savedFile.exists() && savedFile.isFile() && (lastTime < (System.currentTimeMillis() - twoHours))) {
+                        if (savedFile.exists()
+                                && savedFile.isFile()
+                                && (lastTime < (System.currentTimeMillis() - twoHours))) {
                             try {
-                                MWLogger.infoLog("Purging File: " + savedFile.getName() + " Time: " + lastTime + " purge Time: " + (System.currentTimeMillis() - twoHours));
+                                MWLogger.infoLog(
+                                        "Purging File: "
+                                                + savedFile.getName()
+                                                + " Time: "
+                                                + lastTime
+                                                + " purge Time: "
+                                                + (System.currentTimeMillis() - twoHours));
                                 savedFile.delete();
                             } catch (Exception ex) {
                                 MWLogger.errLog("Error trying to delete these files!");
@@ -1567,7 +1846,7 @@ public final class MWDedHost extends GameHost implements IClient {
                 return;
             }
         }
-    }// end PurgeAutoSaves
+    } // end PurgeAutoSaves
 
     public void errorMessage(String message) {
         // TODO Auto-generated method stub
@@ -1609,8 +1888,7 @@ public final class MWDedHost extends GameHost implements IClient {
         try {
             String memory = Config.getParam("DEDMEMORY");
             Runtime runTime = Runtime.getRuntime();
-            String[] call =
-                { "java", "-Xmx" + memory + "m", "-jar", "MekWarsDed.jar" };
+            String[] call = {"java", "-Xmx" + memory + "m", "-jar", "MekWarsDed.jar"};
             runTime.exec(call);
             System.exit(0);
 
@@ -1626,13 +1904,18 @@ public final class MWDedHost extends GameHost implements IClient {
             }
             goodbye();
             Runtime runtime = Runtime.getRuntime();
-            String[] call =
-                { "java", "-jar", "MekWarsAutoUpdate.jar", "DEDICATED", getConfigParam("DEDUPDATECOMMANDFILE") };
+            String[] call = {
+                "java",
+                "-jar",
+                "MekWarsAutoUpdate.jar",
+                "DEDICATED",
+                getConfigParam("DEDUPDATECOMMANDFILE")
+            };
             runtime.exec(call);
         } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
-        System.exit(0);// restart the ded
+        System.exit(0); // restart the ded
     }
 
     protected void sendServerGameUpdate() {
@@ -1641,7 +1924,7 @@ public final class MWDedHost extends GameHost implements IClient {
         // Only send data for units currently on the board.
         // any units removed from play will have already sent thier final
         // update.
-        Iterator<Entity> en = ((Game)myServer.getGame()).getEntities();
+        Iterator<Entity> en = ((Game) myServer.getGame()).getEntities();
         while (en.hasNext()) {
             Entity ent = en.next();
             if (ent.getOwner().getName().startsWith("War Bot")
@@ -1649,23 +1932,26 @@ public final class MWDedHost extends GameHost implements IClient {
                             && !UnitUtils.hasArmorDamage(ent)
                             && !UnitUtils.hasISDamage(ent)
                             && !UnitUtils.hasCriticalDamage(ent)
-                            && !UnitUtils.hasLowAmmo(ent) && !UnitUtils
-                                .hasEmptyAmmo(ent))) {
+                            && !UnitUtils.hasLowAmmo(ent)
+                            && !UnitUtils.hasEmptyAmmo(ent))) {
                 continue;
             }
             if ((ent instanceof Mech) && (ent.getInternal(Mech.LOC_CT) <= 0)) {
-                serverSend("IPU|"
-                        + SerializeEntity.serializeEntity(ent, true, true,
-                                isUsingAdvanceRepairs()));
+                serverSend(
+                        "IPU|"
+                                + SerializeEntity.serializeEntity(
+                                        ent, true, true, isUsingAdvanceRepairs()));
             } else {
-                serverSend("IPU|"
-                        + SerializeEntity.serializeEntity(ent, true, false,
-                                isUsingAdvanceRepairs()));
+                serverSend(
+                        "IPU|"
+                                + SerializeEntity.serializeEntity(
+                                        ent, true, false, isUsingAdvanceRepairs()));
             }
         }
     }
 
-    public static StringBuilder prepareReport(GameInterface myGame, boolean usingAdvancedRepairs, Buildings buildingTemplate) {
+    public static StringBuilder prepareReport(
+            GameInterface myGame, boolean usingAdvancedRepairs, Buildings buildingTemplate) {
         StringBuilder result = new StringBuilder();
         String name = "";
         // Parse the real playername from the Modified In game one..
@@ -1675,12 +1961,12 @@ public final class MWDedHost extends GameHost implements IClient {
             int numberOfWinners = 0;
             // Multiple Winners
             List<String> winners = myGame.getWinners();
-            
-            //TODO: Winners is sometimes coming up empty.  Let's see why
+
+            // TODO: Winners is sometimes coming up empty.  Let's see why
             MWLogger.errLog("Finding winners:");
             MWLogger.errLog(winners.toString());
-            
-            for (String winner: winners){
+
+            for (String winner : winners) {
                 StringTokenizer st = new StringTokenizer(winner, "~");
                 name = "";
                 while (st.hasMoreElements()) {
@@ -1699,9 +1985,7 @@ public final class MWDedHost extends GameHost implements IClient {
                 winnerName = winnerName.substring(0, winnerName.length() - 1);
             }
             winnerName += "#";
-        }
-
-        else {
+        } else {
             winnerName = "DRAW#";
         }
 
@@ -1725,7 +2009,6 @@ public final class MWDedHost extends GameHost implements IClient {
             }
             result.append(SerializeEntity.serializeEntity(ent, true, false, usingAdvancedRepairs));
             result.append("#");
-
         }
         Iterator<Entity> en2 = myGame.getEntities();
         while (en2.hasNext()) {
@@ -1757,13 +2040,17 @@ public final class MWDedHost extends GameHost implements IClient {
         if (myServer == null) {
             return;
         }
-        
-        //GameReporter.prepareReport(myGame, usingAdvancedRepairs, buildingTemplate)
 
-        StringBuilder result = prepareReport(new GameWrapper(((Game)myServer.getGame())), isUsingAdvanceRepairs(), buildingTemplate);
+        // GameReporter.prepareReport(myGame, usingAdvancedRepairs, buildingTemplate)
+
+        StringBuilder result =
+                prepareReport(
+                        new GameWrapper(((Game) myServer.getGame())),
+                        isUsingAdvanceRepairs(),
+                        buildingTemplate);
         serverSend("CR|" + result.toString());
-        
-/*        StringBuilder result = new StringBuilder();
+
+        /*        StringBuilder result = new StringBuilder();
         String name = "";
         // Parse the real playername from the Modified In game one..
         String winnerName = "";
@@ -1874,6 +2161,6 @@ public final class MWDedHost extends GameHost implements IClient {
     @Override
     public void gameClientFeedbackRequest(GameCFREvent arg0) {
         // TODO Auto-generated method stub
-        
+
     }
 }

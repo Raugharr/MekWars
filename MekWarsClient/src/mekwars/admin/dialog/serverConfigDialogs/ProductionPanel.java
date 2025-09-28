@@ -1,10 +1,10 @@
 /*
  * MekWars - Copyright (C) 2011
- * 
- * 
+ *
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
@@ -12,7 +12,6 @@
 package mekwars.admin.dialog.serverConfigDialogs;
 
 import java.awt.GridLayout;
-
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -20,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
 import mekwars.common.util.SpringLayoutHelper;
 
 /**
@@ -29,14 +27,14 @@ import mekwars.common.util.SpringLayoutHelper;
  */
 public class ProductionPanel extends JPanel {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 9048716063514829354L;
-	private JTextField baseTextField = new JTextField(5);
+    /** */
+    private static final long serialVersionUID = 9048716063514829354L;
+
+    private JTextField baseTextField = new JTextField(5);
     private JCheckBox BaseCheckBox = new JCheckBox();
+
     public ProductionPanel() {
-		super();
+        super();
         /*
          * PRODUCTION/FACTORY PANEL CONSTRUCTION
          */
@@ -112,19 +110,24 @@ public class ProductionPanel extends JPanel {
 
         baseTextField = new JTextField(5);
         prodMiscPanel.add(new JLabel("Comp Gain Every:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<HTML>" + "Number of ticks which should pass before component gains<br>" + "are aggregated and displayed to a faction. Recommended: 4</HTML>");
+        baseTextField.setToolTipText(
+                "<HTML>"
+                        + "Number of ticks which should pass before component gains<br>"
+                        + "are aggregated and displayed to a faction. Recommended: 4</HTML>");
         baseTextField.setName("ShowComponentGainEvery");
         prodMiscPanel.add(baseTextField);
 
         baseTextField = new JTextField(5);
         prodMiscPanel.add(new JLabel("Disputed Planet Color:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>Hex color a planet will show up as<br>When no single faction owns more<br>then the minimum amount of land.</html");
+        baseTextField.setToolTipText(
+                "<html>Hex color a planet will show up as<br>When no single faction owns more<br>then the minimum amount of land.</html");
         baseTextField.setName("DisputedPlanetColor");
         prodMiscPanel.add(baseTextField);
 
         baseTextField = new JTextField(5);
         prodMiscPanel.add(new JLabel("Min Planet OwnerShip:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>The Least amount of land a Faction own on a planet to control it");
+        baseTextField.setToolTipText(
+                "<html>The Least amount of land a Faction own on a planet to control it");
         baseTextField.setName("MinPlanetOwnerShip");
         prodMiscPanel.add(baseTextField);
 
@@ -136,13 +139,15 @@ public class ProductionPanel extends JPanel {
         // Check Box Spring
         BaseCheckBox = new JCheckBox();
         prodCBoxSpring.add(new JLabel("Produce w/o factory:", SwingConstants.TRAILING));
-        BaseCheckBox.setToolTipText("If checked, components will be produced even if no factory of a type/weightclass is owned");
+        BaseCheckBox.setToolTipText(
+                "If checked, components will be produced even if no factory of a type/weightclass is owned");
         BaseCheckBox.setName("ProduceComponentsWithNoFactory");
         prodCBoxSpring.add(BaseCheckBox);
 
         BaseCheckBox = new JCheckBox();
         prodCBoxSpring.add(new JLabel("Output Multipliers:", SwingConstants.TRAILING));
-        BaseCheckBox.setToolTipText("If checked, personal production multipliers will be shown on ticks");
+        BaseCheckBox.setToolTipText(
+                "If checked, personal production multipliers will be shown on ticks");
         BaseCheckBox.setName("ShowOutputMultiplierOnTick");
         prodCBoxSpring.add(BaseCheckBox);
 
@@ -160,13 +165,15 @@ public class ProductionPanel extends JPanel {
 
         baseTextField = new JTextField(5);
         prodCrit.add(new JLabel("Component Vehicle Mod:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>Modifer for Vehicle Components to the base cost</html>");
+        baseTextField.setToolTipText(
+                "<html>Modifer for Vehicle Components to the base cost</html>");
         baseTextField.setName("ComponentToPartsModifierVehicle");
         prodCrit.add(baseTextField);
 
         baseTextField = new JTextField(5);
         prodCrit.add(new JLabel("Component Infantry Mod:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>Modifer for Infantry Components to the base cost</html>");
+        baseTextField.setToolTipText(
+                "<html>Modifer for Infantry Components to the base cost</html>");
         baseTextField.setName("ComponentToPartsModifierInfantry");
         prodCrit.add(baseTextField);
 
@@ -178,7 +185,8 @@ public class ProductionPanel extends JPanel {
 
         baseTextField = new JTextField(5);
         prodCrit.add(new JLabel("Component Proto Mod:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>Modifer for ProtoMek Components to the base cost</html>");
+        baseTextField.setToolTipText(
+                "<html>Modifer for ProtoMek Components to the base cost</html>");
         baseTextField.setName("ComponentToPartsModifierProtoMek");
         prodCrit.add(baseTextField);
 
@@ -202,7 +210,8 @@ public class ProductionPanel extends JPanel {
 
         baseTextField = new JTextField(5);
         prodCrit.add(new JLabel("Component Assault Mod:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>Modifer for Assault Components to the base cost</html>");
+        baseTextField.setToolTipText(
+                "<html>Modifer for Assault Components to the base cost</html>");
         baseTextField.setName("ComponentToPartsModifierAssault");
         prodCrit.add(baseTextField);
 
@@ -226,5 +235,5 @@ public class ProductionPanel extends JPanel {
         add(prodGrid);
         add(prodCBoxSpring);
         add(prodCrit);
-	}
+    }
 }

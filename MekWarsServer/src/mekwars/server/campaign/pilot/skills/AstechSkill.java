@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,16 +19,17 @@
  */
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-//import mekwars.common.Unit;
-import megamek.common.Entity;
+// import mekwars.common.Unit;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 
 /**
  * Reduces the bay-consume of the unit.
+ *
  * @author Helge Richter
  */
 public class AstechSkill extends SPilotSkill {
@@ -37,40 +38,38 @@ public class AstechSkill extends SPilotSkill {
         super(id, "Astech", "AT");
         setDescription("Reduces the number of techs needed to repair a unit by 1");
     }
-    
-    public AstechSkill(){
-    	//TODO: Remove when no longer necessary
+
+    public AstechSkill() {
+        // TODO: Remove when no longer necessary
     }
 
     @Override
-	public void modifyPilot(Pilot p) {
-        if ( !CampaignMain.cm.isUsingAdvanceRepair() )
-            p.setBayModifier(p.getBayModifier() - 1);
-	}
-    
+    public void modifyPilot(Pilot p) {
+        if (!CampaignMain.cm.isUsingAdvanceRepair()) p.setBayModifier(p.getBayModifier() - 1);
+    }
+
     @Override
-	public int getBVMod(Entity unit){
+    public int getBVMod(Entity unit) {
         return 0;
     }
-    
-	@Override
-	public int getChance(int unitType, Pilot p) {
-    	if (p.getSkills().has(PilotSkill.AstechSkillID))
-    		return 0;
-    	
-    	String chance = "chancefor"+this.getAbbreviation()+"for"+Unit.getTypeClassDesc(unitType);
 
-		SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
-		
-		if ( house == null )
-			return CampaignMain.cm.getIntegerConfig(chance);
-		
-		return house.getIntegerConfig(chance);
-	}
-	
     @Override
-	public void addToPilot(Pilot pilot) {
-        //this.setLevel(-1);
+    public int getChance(int unitType, Pilot p) {
+        if (p.getSkills().has(PilotSkill.AstechSkillID)) return 0;
+
+        String chance =
+                "chancefor" + this.getAbbreviation() + "for" + Unit.getTypeClassDesc(unitType);
+
+        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
+
+        if (house == null) return CampaignMain.cm.getIntegerConfig(chance);
+
+        return house.getIntegerConfig(chance);
+    }
+
+    @Override
+    public void addToPilot(Pilot pilot) {
+        // this.setLevel(-1);
         pilot.getSkills().add(this);
     }
 
@@ -78,16 +77,13 @@ public class AstechSkill extends SPilotSkill {
      * @param level The level to set.
      */
     @Override
-	public void setLevel(int level) {
-        
-        if ( CampaignMain.cm.isUsingAdvanceRepair() ){
-            if ( level == -1 )
-                super.setLevel(0);
-            //if ( level > super.getLevel() )
-            else
-                super.setLevel(level);
-        }
-        else{
+    public void setLevel(int level) {
+
+        if (CampaignMain.cm.isUsingAdvanceRepair()) {
+            if (level == -1) super.setLevel(0);
+            // if ( level > super.getLevel() )
+            else super.setLevel(level);
+        } else {
             super.setLevel(-1);
         }
     }

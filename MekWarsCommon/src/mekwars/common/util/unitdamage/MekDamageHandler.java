@@ -2,9 +2,6 @@ package mekwars.common.util.unitdamage;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
-
-import mekwars.common.util.MWLogger;
-import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -14,6 +11,8 @@ import megamek.common.MiscType;
 import megamek.common.Mounted;
 import megamek.common.equipment.AmmoMounted;
 import megamek.common.equipment.MiscMounted;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 
 public class MekDamageHandler extends AbstractUnitDamageHandler {
     @Override
@@ -39,7 +38,6 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                     result.append(unit.getArmor(loc));
                 }
                 result.append(delimiter2);
-
             }
             if (unit.getArmor(Mech.LOC_CT, true) != unit.getOArmor(Mech.LOC_CT, true)) {
                 result.append(UnitUtils.LOC_CTR);
@@ -95,7 +93,6 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                 }
                 result.append(delimiter2);
                 hasData = true;
-
             }
             if (!hasData) {
                 result.append(delimiter2);
@@ -113,7 +110,7 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                 // MW purposes.  If it's missing, and there is IS left, it should
                 // be unmarked instead.
                 boolean hasISLeft = (unit.getInternal(x) > 0);
-                
+
                 for (int y = 0; y < unit.getNumberOfCriticals(x); y++) {
                     CriticalSlot cs = unit.getCritical(x, y);
 
@@ -129,10 +126,11 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                     if ((mounted != null) && (mounted.getType() instanceof MiscType)) {
                         MiscMounted miscMounted = (MiscMounted) mounted;
 
-                           if (miscMounted.getType().isShield()
-                               && (miscMounted.getBaseDamageCapacity() != miscMounted.getCurrentDamageCapacity(unit, x))
-                               && (shieldHitsLeft == -1)
-                               && ((x == Mech.LOC_LARM) || (x == Mech.LOC_RARM))) {
+                        if (miscMounted.getType().isShield()
+                                && (miscMounted.getBaseDamageCapacity()
+                                        != miscMounted.getCurrentDamageCapacity(unit, x))
+                                && (shieldHitsLeft == -1)
+                                && ((x == Mech.LOC_LARM) || (x == Mech.LOC_RARM))) {
 
                             float shieldcrits = Math.max(1, UnitUtils.getNumberOfCrits(unit, cs));
                             float basePoints = miscMounted.getBaseDamageCapacity();
@@ -166,7 +164,8 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                     }
 
                     // Crit can only be missing or damaged or Breached.
-                    if (cs.isDamaged()) { // Moving this to the head of the line - isMissing seems to be overriding damaged.
+                    if (cs.isDamaged()) { // Moving this to the head of the line - isMissing seems
+                        // to be overriding damaged.
                         result.append(x);
                         result.append(delimiter2);
                         result.append(y);
@@ -174,7 +173,9 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                         result.append("^");
                         result.append(delimiter2);
                         hasData = true;
-                    } else if (cs.isMissing() && !hasISLeft) {  // Experimental addition of hasISLeft - if testing doesn't work, remove it
+                    } else if (cs.isMissing()
+                            && !hasISLeft) { // Experimental addition of hasISLeft - if testing
+                        // doesn't work, remove it
                         result.append(x);
                         result.append(delimiter2);
                         result.append(y);
@@ -254,12 +255,11 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
             return "%%-%%-%%";
         }
         return result.toString();
-
     }
 
     @Override
     public void applyDamageString(Entity unit, String report, boolean isRepairing) {
-        
+
         StringTokenizer entry = new StringTokenizer(report, "-");
 
         StringTokenizer externalArmor = new StringTokenizer(entry.nextToken(), "%");

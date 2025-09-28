@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,23 +16,20 @@
 
 package mekwars.server.campaign.util;
 
-public class ELORanking
-{
+public class ELORanking {
 
-  public static double calcWinProp(double PlayerRating, double OponentRating)
-  {
-    return 1 / (Math.pow(10,((OponentRating - PlayerRating) / 400)) + 1);
-  }
+    public static double calcWinProp(double PlayerRating, double OponentRating) {
+        return 1 / (Math.pow(10, ((OponentRating - PlayerRating) / 400)) + 1);
+    }
 
-  public static double getNewRatingWinner(double WinnerRating,double LoserRating,int KValue)
-  {
-    return WinnerRating + (KValue*(1-calcWinProp(WinnerRating,LoserRating)));
-  }
-  public static double getNewRatingLoser(double WinnerRating,double LoserRating,int KValue)
-  {
-    //K-Value of the loser is one less than the winner, so scale slowly rises
-/*    if (KValue > 1)
-      KValue--;*/
-    return LoserRating + (KValue*(0-calcWinProp(LoserRating,WinnerRating)));
-  }
+    public static double getNewRatingWinner(double WinnerRating, double LoserRating, int KValue) {
+        return WinnerRating + (KValue * (1 - calcWinProp(WinnerRating, LoserRating)));
+    }
+
+    public static double getNewRatingLoser(double WinnerRating, double LoserRating, int KValue) {
+        // K-Value of the loser is one less than the winner, so scale slowly rises
+        /*    if (KValue > 1)
+        KValue--;*/
+        return LoserRating + (KValue * (0 - calcWinProp(LoserRating, WinnerRating)));
+    }
 }

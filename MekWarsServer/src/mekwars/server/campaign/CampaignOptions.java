@@ -13,8 +13,8 @@
 package mekwars.server.campaign;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -46,8 +46,12 @@ public class CampaignOptions {
             // MMNet, and probably other servers are, as well.
             ArrayList<String> keysToRemove = new ArrayList<String>();
             for (Object key : config.keySet()) {
-                if (!defaultOptions.getServerDefaults().keySet().contains(key) && !((String)key).endsWith("RewardPointMultiplier")) {
-                    logger.error("Key " + (String)key + " does not exist in DefaultServerConfig.  Pruning from configs.");
+                if (!defaultOptions.getServerDefaults().keySet().contains(key)
+                        && !((String) key).endsWith("RewardPointMultiplier")) {
+                    logger.error(
+                            "Key "
+                                    + (String) key
+                                    + " does not exist in DefaultServerConfig.  Pruning from configs.");
                     keysToRemove.add((String) key);
                 }
             }
@@ -68,8 +72,8 @@ public class CampaignOptions {
                 System.exit(1);
             }
 
-        defaultOptions.createConfig(); // save the cofig file so any missed defaults are
-        // added
+            defaultOptions.createConfig(); // save the cofig file so any missed defaults are
+            // added
         }
     }
 

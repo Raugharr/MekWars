@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2008 
- * 
+ * MekWars - Copyright (C) 2008
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,8 +17,8 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.commands.Command;
@@ -44,7 +44,14 @@ public class GrantTechPointsCommand implements Command {
 
         int userLevel = MWServ.getInstance().getUserLevel(Username);
         if (userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
 
@@ -53,16 +60,27 @@ public class GrantTechPointsCommand implements Command {
         if (faction != null) {
             faction.addTechResearchPoint(amount);
 
-            String toRecipient = "AM:" + Username + " granted you " + amount + " Tech Research Points";
+            String toRecipient =
+                    "AM:" + Username + " granted you " + amount + " Tech Research Points";
 
             CampaignMain.cm.doSendHouseMail(faction, "NOTE", toRecipient);
-            if (faction.getTechResearchPoints() >= CampaignMain.cm.getIntegerConfig("TechPointsNeedToLevel")) {
+            if (faction.getTechResearchPoints()
+                    >= CampaignMain.cm.getIntegerConfig("TechPointsNeedToLevel")) {
                 faction.updateHouseTechLevel();
-                CampaignMain.cm.doSendHouseMail(faction, "NOTE", Username + " has increased your factions Tech Level!");
+                CampaignMain.cm.doSendHouseMail(
+                        faction, "NOTE", Username + " has increased your factions Tech Level!");
             }
-            CampaignMain.cm.toUser("AM:You granted " + amount + " Tech Research Points to " + faction.getName(), Username, true);
-            CampaignMain.cm.doSendModMail("NOTE", Username + " granted " + amount + " Tech Research Points to " + faction.getName());
+            CampaignMain.cm.toUser(
+                    "AM:You granted " + amount + " Tech Research Points to " + faction.getName(),
+                    Username,
+                    true);
+            CampaignMain.cm.doSendModMail(
+                    "NOTE",
+                    Username
+                            + " granted "
+                            + amount
+                            + " Tech Research Points to "
+                            + faction.getName());
         }
-    }// end process()
-
+    } // end process()
 }

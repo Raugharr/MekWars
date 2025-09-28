@@ -14,18 +14,12 @@
  */
 
 /**
- * @author jtighe
- * This command is used to set Black Market Settings
- * for max/min cost and production.
- *
+ * @author jtighe This command is used to set Black Market Settings for max/min cost and production.
  */
 package mekwars.server.campaign.commands.admin;
 
 import java.util.Enumeration;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
-import mekwars.common.Equipment;
-import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
@@ -33,14 +27,18 @@ import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.TechConstants;
 import megamek.common.equipment.ArmorType;
+import mekwars.common.Equipment;
+import mekwars.common.util.UnitUtils;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 public class AutoFillBlackMarketSettingCommand implements Command {
 
     int accessLevel = IAuthenticator.ADMIN;
-    String syntax = "Min Cost Modifer#Max Cost Modifer#Min Production#Max Production#Unit Weight(optional)";
+    String syntax =
+            "Min Cost Modifer#Max Cost Modifer#Min Production#Max Production#Unit Weight(optional)";
 
     public int getExecutionLevel() {
         return accessLevel;
@@ -59,7 +57,14 @@ public class AutoFillBlackMarketSettingCommand implements Command {
         // access level check
         int userLevel = MWServ.getInstance().getUserLevel(Username);
         if (userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
 
@@ -98,8 +103,9 @@ public class AutoFillBlackMarketSettingCommand implements Command {
             if (eq instanceof AmmoType) {
                 crits = ((AmmoType) eq).getRackSize();
             } else if (eq instanceof ArmorType) {
-                //TODO: Test this.
-                // crits = 16.0 * EquipmentType.getArmorPointMultiplier(EquipmentType.getArmorType(eq));
+                // TODO: Test this.
+                // crits = 16.0 *
+                // EquipmentType.getArmorPointMultiplier(EquipmentType.getArmorType(eq));
                 crits = 16.0 * ArmorType.of(eq.getArmorType(eq), eq.isClan()).getPointsPerTon();
             } else if (isStructure(eq)) {
                 crits = 8;
@@ -115,7 +121,9 @@ public class AutoFillBlackMarketSettingCommand implements Command {
             baseCost = eq.getCost(ent, false, -1);
 
             if (eq instanceof ArmorType) {
-                baseCost = ((ArmorType) eq).getCost(); //EquipmentType.getCost(EquipmentType.getArmorType(eq));
+                baseCost =
+                        ((ArmorType) eq)
+                                .getCost(); // EquipmentType.getCost(EquipmentType.getArmorType(eq));
             } else if (isStructure(eq)) {
                 baseCost = EquipmentType.getStructureCost(EquipmentType.getStructureType(eq));
             } else if (eq instanceof MiscType) {
@@ -179,7 +187,9 @@ public class AutoFillBlackMarketSettingCommand implements Command {
 
         bme = new Equipment();
         bme.setEquipmentInternalName("IS (STD)");
-        baseCost = EquipmentType.getStructureCost(EquipmentType.T_STRUCTURE_STANDARD) * ent.getWeight();
+        baseCost =
+                EquipmentType.getStructureCost(EquipmentType.T_STRUCTURE_STANDARD)
+                        * ent.getWeight();
         baseCost /= 8;
         minCost = baseCost * minCostMod;
         maxCost = baseCost * maxCostMod;
@@ -312,7 +322,8 @@ public class AutoFillBlackMarketSettingCommand implements Command {
 
         bme = new Equipment();
         bme.setEquipmentInternalName(Mech.getGyroTypeString(Mech.GYRO_XL));
-        baseCost = 750000 * (int) Math.ceil((ent.getOriginalWalkMP() * ent.getWeight()) / 100f) * 0.5;
+        baseCost =
+                750000 * (int) Math.ceil((ent.getOriginalWalkMP() * ent.getWeight()) / 100f) * 0.5;
         minCost = baseCost * minCostMod;
         maxCost = baseCost * maxCostMod;
         bme.setMinCost(minCost);
@@ -323,7 +334,8 @@ public class AutoFillBlackMarketSettingCommand implements Command {
 
         bme = new Equipment();
         bme.setEquipmentInternalName(Mech.getGyroTypeString(Mech.GYRO_COMPACT));
-        baseCost = 400000 * (int) Math.ceil((ent.getOriginalWalkMP() * ent.getWeight()) / 100f) * 1.5;
+        baseCost =
+                400000 * (int) Math.ceil((ent.getOriginalWalkMP() * ent.getWeight()) / 100f) * 1.5;
         minCost = baseCost * minCostMod;
         maxCost = baseCost * maxCostMod;
         bme.setMinCost(minCost);

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -18,19 +18,14 @@
 package mekwars.client.gui.commands;
 
 import javax.swing.AbstractAction;
-
-import mekwars.client.common.campaign.clientutils.protocol.CConnector;
 import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
 
-/**
- * Abstract class for GUI Commands
- */
-
+/** Abstract class for GUI Commands */
 public abstract class CGUICommand extends AbstractAction implements IGUICommand {
-    /**
-     * 
-     */
+    /** */
     private static final long serialVersionUID = -8448209123971531879L;
+
     String name = "";
     String alias = "";
     String command = ""; // name of command sent to server (lyrisoft chat layer)
@@ -63,8 +58,7 @@ public abstract class CGUICommand extends AbstractAction implements IGUICommand 
     }
 
     // echo command in GUI
-    protected void echo(String input) {
-    }
+    protected void echo(String input) {}
 
     // send command to server (directly through connector)
     protected void send(String input) {

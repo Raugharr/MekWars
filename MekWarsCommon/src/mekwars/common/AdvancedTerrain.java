@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -19,31 +19,27 @@ package mekwars.common;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
-
-import mekwars.common.util.BinReader;
-import mekwars.common.util.BinWriter;
-import mekwars.common.util.TokenReader;
 import megamek.common.planetaryconditions.Atmosphere;
 import megamek.common.planetaryconditions.EMI;
 import megamek.common.planetaryconditions.Fog;
 import megamek.common.planetaryconditions.Light;
-import megamek.common.planetaryconditions.PlanetaryConditions;
 import megamek.common.planetaryconditions.Weather;
 import megamek.common.planetaryconditions.Wind;
 import megamek.common.planetaryconditions.WindDirection;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
+import mekwars.common.util.TokenReader;
 
 /**
- * Advanced Environment for planets.
- * 
- * @@author Torren (Jason Tighe) allows So's to set up each individual terrain on a planet.
+ * Advanced Environment for planets. @@author Torren (Jason Tighe) allows So's to set up each
+ * individual terrain on a planet.
  */
-
-final public class AdvancedTerrain {
+public final class AdvancedTerrain {
     private String displayName = "none";
     private int id = 0;
     private String name = "none";
-    
-    //NOTE: These fields are unused and kept to keep the xml file consistent
+
+    // NOTE: These fields are unused and kept to keep the xml file consistent
     private int blizzardChance = 0;
     private int blowingSandChance = 0;
     private int highWindChance = 0;
@@ -302,11 +298,9 @@ final public class AdvancedTerrain {
         setEMI(EMI.values()[TokenReader.readInt(command)]);
         setTerrainAffected(TokenReader.readBoolean(command));
         setMaxWindStrength(Wind.values()[TokenReader.readInt(command)]);
-
     }
 
-    public AdvancedTerrain() {
-    }
+    public AdvancedTerrain() {}
 
     public String getDisplayName() {
         return displayName;
@@ -314,7 +308,7 @@ final public class AdvancedTerrain {
 
     public void setDisplayName(String name) {
         displayName = name;
-        this.name = name; 
+        this.name = name;
     }
 
     @Deprecated
@@ -590,7 +584,7 @@ final public class AdvancedTerrain {
         clone.setWeatherConditions(weatherConditions);
         clone.setWindDirection(windDirection);
         clone.setWindStrength(windStrength);
-       
+
         return clone;
     }
 
@@ -749,21 +743,21 @@ final public class AdvancedTerrain {
     }
 
     public void setId(int unusedTerrainID) {
-        id = unusedTerrainID;        
+        id = unusedTerrainID;
     }
 
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         displayName = name;
         this.name = name;
     }
 
     public String toImageDescription() {
-         StringBuilder results = new StringBuilder();
-        
+        StringBuilder results = new StringBuilder();
+
         results.append("<table><TR>");
         results.append("<TD>");
         results.append("lightConditions");
@@ -786,7 +780,7 @@ final public class AdvancedTerrain {
         results.append("</TD><TD>");
         results.append("terrainAffected");
         results.append("</TD><TD>");
-        results.append("maxWindStrength");        
+        results.append("maxWindStrength");
         results.append("</TD></TR><TR><TD>");
         results.append(lightConditions.toString());
         results.append("</TD><TD>");
@@ -810,15 +804,11 @@ final public class AdvancedTerrain {
         results.append("</TD><TD>");
         results.append(maxWindStrength.toString());
         results.append("</TR><table>");
-        
-        
-        
-        return results.toString();
 
+        return results.toString();
     }
 
-    public String WeatherForcast()
-    {
+    public String WeatherForcast() {
         Light worstLight = Light.DAY;
         float worstLightProb = 0;
         Light likelyLight = Light.DAY;
@@ -831,10 +821,10 @@ final public class AdvancedTerrain {
         float worstWindProb = 0;
         Wind likelyWind = Wind.CALM;
         float windProb = 0;
-        
+
         StringBuilder results = new StringBuilder();
-        
-        //find the worst light conditions and the most likely conditions (other than day)
+
+        // find the worst light conditions and the most likely conditions (other than day)
         if (duskChance > 0) {
             likelyLight = worstLight = Light.DUSK;
             lightProb = worstLightProb = duskChance;
@@ -848,7 +838,7 @@ final public class AdvancedTerrain {
             worstLightProb = fullMoonChance;
         }
         if (moonlessNightChance > 0) {
-            if (moonlessNightChance > lightProb)  {
+            if (moonlessNightChance > lightProb) {
                 likelyLight = Light.MOONLESS;
                 lightProb = moonlessNightChance;
             }
@@ -866,32 +856,32 @@ final public class AdvancedTerrain {
 
         results.append("likely / worst <br>");
         results.append("Light:");
-        if (lightProb > 0){
-            results.append(lightProb/10);
+        if (lightProb > 0) {
+            results.append(lightProb / 10);
             results.append("% ");
             results.append(likelyLight.toString());
             results.append(" / ");
             results.append(worstLightProb / 10);
             results.append("% ");
             results.append(worstLight.toString());
-            results.append("<br>");            
+            results.append("<br>");
         } else {
-            results.append("100% Daylight");            
-            results.append("<br>");                        
+            results.append("100% Daylight");
+            results.append("<br>");
         }
-            
+
         if (lightRainfallChance > 0) {
             likelyWeather = worstWeather = Weather.LIGHT_RAIN;
             weatherProb = worstWeatherProb = lightRainfallChance;
         }
         if (lightSnowfallChance > 0) {
             if (lightSnowfallChance > weatherProb) {
-                likelyWeather= Weather.LIGHT_SNOW;
+                likelyWeather = Weather.LIGHT_SNOW;
                 weatherProb = lightSnowfallChance;
             }
             worstWeather = Weather.LIGHT_SNOW;
             worstWeatherProb = lightSnowfallChance;
-        }    
+        }
         if (moderateRainfallChance > 0) {
             if (moderateRainfallChance > weatherProb) {
                 likelyWeather = Weather.MOD_RAIN;
@@ -899,7 +889,7 @@ final public class AdvancedTerrain {
             }
             worstWeather = Weather.MOD_RAIN;
             worstWeatherProb = moderateRainfallChance;
-        }    
+        }
         if (moderateSnowfallChance > 0) {
             if (moderateSnowfallChance > weatherProb) {
                 likelyWeather = Weather.MOD_SNOW;
@@ -907,7 +897,7 @@ final public class AdvancedTerrain {
             }
             worstWeather = Weather.MOD_SNOW;
             worstWeatherProb = moderateSnowfallChance;
-        }    
+        }
         if (heavyRainfallChance > 0) {
             if (heavyRainfallChance > weatherProb) {
                 likelyWeather = Weather.HEAVY_RAIN;
@@ -915,7 +905,7 @@ final public class AdvancedTerrain {
             }
             worstWeather = Weather.HEAVY_RAIN;
             worstWeatherProb = heavyRainfallChance;
-        }    
+        }
         if (heavySnowfallChance > 0) {
             if (heavySnowfallChance > weatherProb) {
                 likelyWeather = Weather.HEAVY_SNOW;
@@ -923,7 +913,7 @@ final public class AdvancedTerrain {
             }
             worstWeather = Weather.HEAVY_SNOW;
             worstWeatherProb = heavySnowfallChance;
-        }    
+        }
         if (downPourChance > 0) {
             if (downPourChance > weatherProb) {
                 likelyWeather = Weather.DOWNPOUR;
@@ -931,7 +921,7 @@ final public class AdvancedTerrain {
             }
             worstWeather = Weather.DOWNPOUR;
             worstWeatherProb = downPourChance;
-        }    
+        }
 
         results.append("Weather:");
         if (weatherProb > 0) {
@@ -942,18 +932,15 @@ final public class AdvancedTerrain {
             results.append(worstWeatherProb / 10);
             results.append("% ");
             results.append(worstWeather.toString());
-            if (lightHailChance > 0 || heavyHailChance > 0)
-                results.append(" (hail)");                            
-            if (sleetChance > 0)
-                results.append(" (sleet)");        
-            if (iceStormChance > 0)
-                results.append(" (ice storm)");        
-            results.append("<br>");                                    
+            if (lightHailChance > 0 || heavyHailChance > 0) results.append(" (hail)");
+            if (sleetChance > 0) results.append(" (sleet)");
+            if (iceStormChance > 0) results.append(" (ice storm)");
+            results.append("<br>");
         } else {
-            results.append("100% CLEAR");            
-            results.append("<br>");                        
+            results.append("100% CLEAR");
+            results.append("<br>");
         }
-        
+
         if (lightWindChance > 0) {
             likelyWind = worstWind = Wind.LIGHT_GALE;
             windProb = worstWindProb = lightWindChance;
@@ -965,7 +952,7 @@ final public class AdvancedTerrain {
             }
             worstWind = Wind.MOD_GALE;
             worstWindProb = moderateWindChance;
-        }    
+        }
         if (strongWindChance > 0) {
             if (strongWindChance > weatherProb) {
                 likelyWind = Wind.STRONG_GALE;
@@ -973,7 +960,7 @@ final public class AdvancedTerrain {
             }
             worstWind = Wind.STRONG_GALE;
             worstWindProb = strongWindChance;
-        }    
+        }
         if (stormWindChance > 0) {
             if (stormWindChance > weatherProb) {
                 likelyWind = Wind.STORM;
@@ -981,7 +968,7 @@ final public class AdvancedTerrain {
             }
             worstWind = Wind.STORM;
             worstWindProb = stormWindChance;
-        }    
+        }
         if (tornadoF13WindChance > 0) {
             if (tornadoF13WindChance > weatherProb) {
                 likelyWind = Wind.TORNADO_F1_TO_F3;
@@ -989,7 +976,7 @@ final public class AdvancedTerrain {
             }
             worstWind = Wind.TORNADO_F1_TO_F3;
             worstWindProb = tornadoF13WindChance;
-        }    
+        }
         if (tornadoF4WindChance > 0) {
             if (tornadoF4WindChance > weatherProb) {
                 likelyWind = Wind.TORNADO_F4;
@@ -997,7 +984,7 @@ final public class AdvancedTerrain {
             }
             worstWind = Wind.TORNADO_F4;
             worstWindProb = tornadoF4WindChance;
-        }    
+        }
 
         results.append("Wind:");
         if (windProb > 0) {
@@ -1008,28 +995,26 @@ final public class AdvancedTerrain {
             results.append(worstWindProb / 10);
             results.append("% ");
             results.append(worstWind.toString());
-            results.append("<br>");            
+            results.append("<br>");
         } else {
-            results.append("100% Calm");            
-            results.append("<br>");                        
+            results.append("100% Calm");
+            results.append("<br>");
         }
-        
-        
+
         if (lightFogChance > 0 || heavyFogChance > 0) {
             results.append("Fog:");
             results.append((float) Math.max(lightFogChance, heavyFogChance) / 10);
             results.append("% ");
         }
-        results.append("<br>");                        
-        
-        
+        results.append("<br>");
+
         return results.toString();
     }
 
     public String getHumanReadableWeather() {
         StringBuilder results = new StringBuilder();
         int adverse = 0;
-        
+
         results.append(lightConditions.toString());
         results.append("/" + weatherConditions.toString());
         results.append("/" + windStrength.toString());
@@ -1043,9 +1028,9 @@ final public class AdvancedTerrain {
         if (fog != Fog.FOG_NONE) adverse++;
         if (atmosphere != Atmosphere.STANDARD) adverse++;
         if (gravity != 1.0) adverse++;
-        
+
         results.append("/" + adverse);
-        
+
         return results.toString();
     }
 }

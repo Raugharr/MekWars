@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,7 +18,6 @@ package mekwars.server.dataProvider.commands;
 
 import java.util.Date;
 import java.util.Vector;
-
 import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.common.util.BinWriter;
@@ -28,34 +27,32 @@ import mekwars.server.dataProvider.ServerCommand;
 
 /**
  * Retrieve all planet information (if the data cache is lost at client side)
- * 
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class ServerTrait implements ServerCommand {
 
     /**
-     * @see server.dataProvider.ServerCommand#execute(java.util.Date,
-     *      java.io.PrintWriter, common.CampaignData)
+     * @see server.dataProvider.ServerCommand#execute(java.util.Date, java.io.PrintWriter,
+     *     common.CampaignData)
      */
-    public void execute(Date timestamp, BinWriter out, CampaignData data)
-            throws Exception {
+    public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
         String factionName = "common";
         Vector<String> traits = CampaignMain.cm.getFactionTraits(factionName);
-        out.println(factionName,"TraitLine");
-        out.println(traits.size(),"TraitLine");
-        for ( int i = 0; i < traits.size(); i++){
-            out.println(traits.elementAt(i),"TraitLine");
+        out.println(factionName, "TraitLine");
+        out.println(traits.size(), "TraitLine");
+        for (int i = 0; i < traits.size(); i++) {
+            out.println(traits.elementAt(i), "TraitLine");
         }
-        
-        
-        for ( House f : CampaignMain.cm.getData().getAllHouses()){
+
+        for (House f : CampaignMain.cm.getData().getAllHouses()) {
             SHouse faction = (SHouse) f;
             factionName = faction.getName().toLowerCase();
             traits = CampaignMain.cm.getFactionTraits(factionName);
-            out.println(factionName,"TraitLine");
-            out.println(traits.size(),"TraitLine");
-            for ( int i = 0; i < traits.size(); i++){
-                out.println(traits.elementAt(i),"TraitLine");
+            out.println(factionName, "TraitLine");
+            out.println(traits.size(), "TraitLine");
+            for (int i = 0; i < traits.size(); i++) {
+                out.println(traits.elementAt(i), "TraitLine");
             }
         }
     }

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,60 +17,83 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminSetHouseAmmoBanCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Faction Name#Munition Number";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		String faction = "";
-		String ammoName = "";
-		try{
-		    faction = command.nextToken();
-			ammoName = command.nextToken();
-		}
-		catch (Exception ex){
-			CampaignMain.cm.toUser("Invalid syntax. Try: adminsethouseammoban#faction#munitionnumber",Username,true);
-		}
-		
-		SHouse h = CampaignMain.cm.getHouseFromPartialString(faction,Username);
-		
-		if ( h == null )
-		    return;
-		 
-		//Hashtable munitions = CampaignMain.cm.getData().getMunitionsByNumber();
-		
-		if ( h.getBannedAmmo().get(ammoName)!= null ){
-		    h.getBannedAmmo().remove(ammoName);
-			ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
-			CampaignMain.cm.toUser("Ban on " + ammoName + " lifted for "+h.getName() + ".",Username,true);
-			CampaignMain.cm.doSendModMail("NOTE",Username + " lifted the ban on " + ammoName+ " for " + h.getName() + ".");
-		}
-		else {
-		    h.getBannedAmmo().put(ammoName,"banned");
-			ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
-			CampaignMain.cm.toUser("Banned " + ammoName + " for "+h.getName() + ".",Username,true);
-			CampaignMain.cm.doSendModMail("NOTE",Username + " banned " + ammoName+ " for " + h.getName() + ".");
-		}
-	
-		h.updated();
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Faction Name#Munition Number";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        String faction = "";
+        String ammoName = "";
+        try {
+            faction = command.nextToken();
+            ammoName = command.nextToken();
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser(
+                    "Invalid syntax. Try: adminsethouseammoban#faction#munitionnumber",
+                    Username,
+                    true);
+        }
+
+        SHouse h = CampaignMain.cm.getHouseFromPartialString(faction, Username);
+
+        if (h == null) return;
+
+        // Hashtable munitions = CampaignMain.cm.getData().getMunitionsByNumber();
+
+        if (h.getBannedAmmo().get(ammoName) != null) {
+            h.getBannedAmmo().remove(ammoName);
+            ammoName =
+                    CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
+            CampaignMain.cm.toUser(
+                    "Ban on " + ammoName + " lifted for " + h.getName() + ".", Username, true);
+            CampaignMain.cm.doSendModMail(
+                    "NOTE",
+                    Username + " lifted the ban on " + ammoName + " for " + h.getName() + ".");
+        } else {
+            h.getBannedAmmo().put(ammoName, "banned");
+            ammoName =
+                    CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
+            CampaignMain.cm.toUser(
+                    "Banned " + ammoName + " for " + h.getName() + ".", Username, true);
+            CampaignMain.cm.doSendModMail(
+                    "NOTE", Username + " banned " + ammoName + " for " + h.getName() + ".");
+        }
+
+        h.updated();
         CampaignMain.cm.saveBannedAmmo();
-	}
+    }
 }

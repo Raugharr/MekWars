@@ -18,14 +18,13 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-
-import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
 import megamek.common.Mech;
-import mekwars.server.MWServ;
+import mekwars.common.util.UnitUtils;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
@@ -58,8 +57,12 @@ public class AdminGetUnitComponentsCommand implements Command {
         if (userLevel < getExecutionLevel()) {
             CampaignMain.cm.toUser(
                     "AM:Insufficient access level for command. Level: "
-                            + userLevel + ". Required: " + accessLevel + ".",
-                    Username, true);
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
 
@@ -74,8 +77,7 @@ public class AdminGetUnitComponentsCommand implements Command {
 
             if (target == null) {
                 CampaignMain.cm.toUser(
-                        "Target player could not be found. Try again.",
-                        Username, true);
+                        "Target player could not be found. Try again.", Username, true);
                 return;
             }
 
@@ -92,11 +94,15 @@ public class AdminGetUnitComponentsCommand implements Command {
                 target.getUnitParts().add(getUnitComponents(m.getEntity()));
 
                 CampaignMain.cm.toUser(
-                        "All useable parts from " + m.getModelName()
-                                + " where added to " + target.getName()
-                                + "'s parts stockpile", Username);
+                        "All useable parts from "
+                                + m.getModelName()
+                                + " where added to "
+                                + target.getName()
+                                + "'s parts stockpile",
+                        Username);
                 CampaignMain.cm.toUser(
-                        "All useable parts from " + m.getModelName()
+                        "All useable parts from "
+                                + m.getModelName()
                                 + " where added to your parts stockpile",
                         target.getName());
             } else {
@@ -108,16 +114,16 @@ public class AdminGetUnitComponentsCommand implements Command {
                 // break out if the player doesn't have a unit with that id
                 if (m == null) {
                     CampaignMain.cm.toUser(
-                            "Target player doesn't have a unit with ID# "
-                                    + unitID + ".", Username, true);
+                            "Target player doesn't have a unit with ID# " + unitID + ".",
+                            Username,
+                            true);
                     return;
                 }
                 Entity ent = m.getEntity();
 
                 components.putAll(getUnitComponents(ent));
 
-                result.append("Component list for #" + unitID + " "
-                        + m.getModelName() + "<br>");
+                result.append("Component list for #" + unitID + " " + m.getModelName() + "<br>");
                 result.append("<table><tr><th>Component</th><th># of Crits</th></tr>");
 
                 for (String key : components.keySet()) {
@@ -130,12 +136,11 @@ public class AdminGetUnitComponentsCommand implements Command {
                 result.append("</table>");
 
                 CampaignMain.cm.toUser(result.toString(), Username);
-
             }
         } catch (Exception ex) {
-            CampaignMain.cm
-                    .toUser("Invalid Syntax: /admingetunitcomponents TargetPlayer#Option[BreakDownUnit,DisplayParts,AddParts]#Unit[ID,FileName]",
-                            Username);
+            CampaignMain.cm.toUser(
+                    "Invalid Syntax: /admingetunitcomponents TargetPlayer#Option[BreakDownUnit,DisplayParts,AddParts]#Unit[ID,FileName]",
+                    Username);
         }
     }
 
@@ -171,17 +176,12 @@ public class AdminGetUnitComponentsCommand implements Command {
                 }
             }
             components.put(
-                    "Armor: "
-                            + EquipmentType.getArmorTypeName(ent
-                                    .getArmorType(location)), armor + rear);
+                    "Armor: " + EquipmentType.getArmorTypeName(ent.getArmorType(location)),
+                    armor + rear);
         }
 
-        components.put(
-                "IS: "
-                        + EquipmentType.getStructureTypeName(ent
-                                .getStructureType()), IS);
+        components.put("IS: " + EquipmentType.getStructureTypeName(ent.getStructureType()), IS);
 
         return components;
-
     }
-}// end AdminGetUnitComponentsCommand
+} // end AdminGetUnitComponentsCommand

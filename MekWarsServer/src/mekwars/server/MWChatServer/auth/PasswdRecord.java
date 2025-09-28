@@ -4,8 +4,8 @@
  */
 
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,31 +19,23 @@
  * for more details.
  */
 
-
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
- */ 
-/**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
  */
-
+/**
+ * @author Torren (Jason Tighe) 11.5.05
+ */
 package mekwars.server.MWChatServer.auth;
 
-/**
- * Represents a line in the passwd file.  All fields are public
- */
+/** Represents a line in the passwd file. All fields are public */
 public class PasswdRecord {
     public String userId;
     public String passwd;
     public int access;
 
-    /**
-     * Constructor for convenience
-     */
+    /** Constructor for convenience */
     public PasswdRecord(String userId, int access, String cryptedPasswd) {
         this.userId = userId;
         this.access = access;

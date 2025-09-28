@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2007 
+ * MekWars - Copyright (C) 2007
  *
  * Original author - jtighe (torren@users.sourceforge.net)
  *
@@ -17,52 +17,67 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 
-/**
- * Add Parts to a player
- */
+/** Add Parts to a player */
 public class AddPartsCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Player Name#Part Name#Amount";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		if ( !CampaignMain.cm.getBooleanConfig("UsePartsRepair") ){
-            CampaignMain.cm.toUser("AM:Parts repair not used on this server!",Username);
-            return;
-		}
-		SPlayer p;
-		String part;
-		int amount;
-		try{
-			p = CampaignMain.cm.getPlayer(command.nextToken());
-			part = command.nextToken();
-			amount = Integer.parseInt(command.nextToken());
-		}
-		catch(Exception ex){
-            CampaignMain.cm.toUser("AM:Syntax: AddParts#Name#PartName#Amount",Username);
-            return;
-		}
 
-		p.updatePartsCache(part, amount);
-		
-        CampaignMain.cm.doSendModMail("NOTE",Username+" has added "+amount+" "+part+" to "+p.getName()+".");	
-	}
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Player Name#Part Name#Amount";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        if (!CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
+            CampaignMain.cm.toUser("AM:Parts repair not used on this server!", Username);
+            return;
+        }
+        SPlayer p;
+        String part;
+        int amount;
+        try {
+            p = CampaignMain.cm.getPlayer(command.nextToken());
+            part = command.nextToken();
+            amount = Integer.parseInt(command.nextToken());
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser("AM:Syntax: AddParts#Name#PartName#Amount", Username);
+            return;
+        }
+
+        p.updatePartsCache(part, amount);
+
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username + " has added " + amount + " " + part + " to " + p.getName() + ".");
+    }
 }

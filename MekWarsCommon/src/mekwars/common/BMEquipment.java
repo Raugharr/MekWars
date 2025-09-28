@@ -21,9 +21,7 @@ import megamek.common.EquipmentType;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
 
-/**
- * Unit Equipment Container
- */
+/** Unit Equipment Container */
 public class BMEquipment {
 
     private String equipmentInternalName = "";
@@ -35,10 +33,10 @@ public class BMEquipment {
     private String tech = "";
     private int techLevel = TechConstants.T_ALL;
 
-    static public String PART_AMMO = "Ammo";
-    static public String PART_WEAPON = "Weapons";
-    static public String PART_MISC = "Misc";
-    static public String PART_ARMOR = "Armor";
+    public static String PART_AMMO = "Ammo";
+    public static String PART_WEAPON = "Weapons";
+    public static String PART_MISC = "Misc";
+    public static String PART_ARMOR = "Armor";
 
     public void setEquipmentInternalName(String name) {
         equipmentInternalName = name;
@@ -62,7 +60,11 @@ public class BMEquipment {
             if (eq == null) {
                 setEquipmentName(getEquipmentInternalName());
 
-                if ((getEquipmentName().toLowerCase().indexOf("armor") > -1) || getEquipmentName().equalsIgnoreCase("IS (STD)") || (EquipmentType.getArmorType(eq) != EquipmentType.T_ARMOR_UNKNOWN) || (EquipmentType.getStructureType(eq) != EquipmentType.T_STRUCTURE_UNKNOWN)) {
+                if ((getEquipmentName().toLowerCase().indexOf("armor") > -1)
+                        || getEquipmentName().equalsIgnoreCase("IS (STD)")
+                        || (EquipmentType.getArmorType(eq) != EquipmentType.T_ARMOR_UNKNOWN)
+                        || (EquipmentType.getStructureType(eq)
+                                != EquipmentType.T_STRUCTURE_UNKNOWN)) {
                     setEquipmentType(BMEquipment.PART_ARMOR);
                 } else {
                     setEquipmentType(BMEquipment.PART_MISC);
@@ -78,13 +80,15 @@ public class BMEquipment {
                     if (eq.hasFlag(WeaponType.F_BA_WEAPON)) {
                         setEquipmentName(eq.getName() + " (BA)");
                     }
-                } else if ((getEquipmentName().toLowerCase().indexOf("armor") > -1) || (EquipmentType.getArmorType(eq) != EquipmentType.T_ARMOR_UNKNOWN) || (EquipmentType.getStructureType(eq) != EquipmentType.T_STRUCTURE_UNKNOWN)) {
+                } else if ((getEquipmentName().toLowerCase().indexOf("armor") > -1)
+                        || (EquipmentType.getArmorType(eq) != EquipmentType.T_ARMOR_UNKNOWN)
+                        || (EquipmentType.getStructureType(eq)
+                                != EquipmentType.T_STRUCTURE_UNKNOWN)) {
                     setEquipmentType(BMEquipment.PART_ARMOR);
                 } else {
                     setEquipmentType(BMEquipment.PART_MISC);
                 }
             }
-
         }
         return equipmentName;
     }
@@ -130,17 +134,19 @@ public class BMEquipment {
     }
 
     public String getTech(int year) {
-    	if (tech.trim().length() > 0) {
+        if (tech.trim().length() > 0) {
             return tech;
         }
 
         EquipmentType eq = EquipmentType.get(getEquipmentInternalName());
 
         if (eq == null) {
-            if ((getEquipmentInternalName().indexOf("Engine") > 0) && getEquipmentInternalName().startsWith("Clan")) {
+            if ((getEquipmentInternalName().indexOf("Engine") > 0)
+                    && getEquipmentInternalName().startsWith("Clan")) {
                 tech = "Clan";
                 techLevel = TechConstants.T_CLAN_TW;
-            } else if ((getEquipmentInternalName().indexOf("Engine") > 0) && getEquipmentInternalName().startsWith("IS")) {
+            } else if ((getEquipmentInternalName().indexOf("Engine") > 0)
+                    && getEquipmentInternalName().startsWith("IS")) {
                 tech = "IS";
                 techLevel = TechConstants.T_IS_TW_ALL;
             } else {
@@ -148,9 +154,13 @@ public class BMEquipment {
                 techLevel = TechConstants.T_ALL;
             }
         } else {
-            if ((eq.getTechLevel(year) == TechConstants.T_CLAN_ADVANCED) || (eq.getTechLevel(year) == TechConstants.T_CLAN_EXPERIMENTAL) || (eq.getTechLevel(year) == TechConstants.T_CLAN_TW) || (eq.getTechLevel(year) == TechConstants.T_CLAN_UNOFFICIAL)) {
+            if ((eq.getTechLevel(year) == TechConstants.T_CLAN_ADVANCED)
+                    || (eq.getTechLevel(year) == TechConstants.T_CLAN_EXPERIMENTAL)
+                    || (eq.getTechLevel(year) == TechConstants.T_CLAN_TW)
+                    || (eq.getTechLevel(year) == TechConstants.T_CLAN_UNOFFICIAL)) {
                 tech = "Clan";
-            } else if ((eq.getTechLevel(year) == TechConstants.T_ALL) || (eq.getTechLevel(year) < TechConstants.T_INTRO_BOXSET)) {
+            } else if ((eq.getTechLevel(year) == TechConstants.T_ALL)
+                    || (eq.getTechLevel(year) < TechConstants.T_INTRO_BOXSET)) {
                 tech = "All";
             } else {
                 tech = "IS";
@@ -160,7 +170,6 @@ public class BMEquipment {
 
         return tech;
     }
-
 
     public BMEquipment clone(int year) {
         BMEquipment clone = new BMEquipment();
@@ -175,5 +184,4 @@ public class BMEquipment {
 
         return clone;
     }
-
 }

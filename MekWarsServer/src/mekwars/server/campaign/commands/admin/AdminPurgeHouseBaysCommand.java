@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,9 +18,9 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 import java.util.Vector;
-import mekwars.server.MWServ;
 import mekwars.common.Unit;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SUnit;
@@ -48,7 +48,14 @@ public class AdminPurgeHouseBaysCommand implements Command {
         // access level check
         int userLevel = MWServ.getInstance().getUserLevel(Username);
         if (userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
 
@@ -62,7 +69,10 @@ public class AdminPurgeHouseBaysCommand implements Command {
             faction = command.nextToken();
             strType = command.nextToken();
         } catch (Exception ex) {
-            CampaignMain.cm.toUser("Invalid syntax. Try: AdminPurgeHouseBays#faction#[ALL]unittype#[ALL]unitsize", Username, true);
+            CampaignMain.cm.toUser(
+                    "Invalid syntax. Try: AdminPurgeHouseBays#faction#[ALL]unittype#[ALL]unitsize",
+                    Username,
+                    true);
             return;
         }
 
@@ -79,7 +89,7 @@ public class AdminPurgeHouseBaysCommand implements Command {
                         hangers.elementAt(size).clear();
                     }
                 }
-            }// else select a unit type
+            } // else select a unit type
             else {
                 strClass = command.nextToken();
                 unitType = Integer.parseInt(strType);
@@ -89,18 +99,21 @@ public class AdminPurgeHouseBaysCommand implements Command {
                     for (int size = Unit.LIGHT; size <= Unit.ASSAULT; size++) {
                         hanger.elementAt(size).clear();
                     }
-                }// else one unit size
+                } // else one unit size
                 else {
                     unitClass = Integer.parseInt(strClass);
                     hanger.elementAt(unitClass).clear();
                 }
             }
         } catch (Exception ex) {
-            CampaignMain.cm.toUser("Invalid syntax. Try: AdminPurgeHouseBays#faction#[ALL]unittype#[ALL]unitsize", Username, true);
+            CampaignMain.cm.toUser(
+                    "Invalid syntax. Try: AdminPurgeHouseBays#faction#[ALL]unittype#[ALL]unitsize",
+                    Username,
+                    true);
             return;
         }
 
         h.updated();
         CampaignMain.cm.doSendModMail("NOTE", Username + " has purged bays for " + h.getName());
     }
-}// end AdminPurgeHouseBaysCommand
+} // end AdminPurgeHouseBaysCommand

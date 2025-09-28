@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -21,28 +21,46 @@ import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 
 public class MyStatusCommand implements Command {
-	
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		//Send status to player (SM means Send to Miscellaneous Tab)
-		if (CampaignMain.cm.getPlayer(Username) != null)
-			CampaignMain.cm.toUser("SM|" + CampaignMain.cm.getPlayer(Username).getReadableStatus(false),Username,false);
-		else
-			CampaignMain.cm.toUser("AM:You are not participating in the campaign!",Username,true);
-	}//end process()
-	
+
+    int accessLevel = 0;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        // Send status to player (SM means Send to Miscellaneous Tab)
+        if (CampaignMain.cm.getPlayer(Username) != null)
+            CampaignMain.cm.toUser(
+                    "SM|" + CampaignMain.cm.getPlayer(Username).getReadableStatus(false),
+                    Username,
+                    false);
+        else
+            CampaignMain.cm.toUser("AM:You are not participating in the campaign!", Username, true);
+    } // end process()
 }

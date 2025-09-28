@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,8 +20,6 @@ import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
 import mekwars.common.Terrain;
 import mekwars.server.campaign.CampaignMain;
-import mekwars.server.common.util.SMMNetXStream;
-import mekwars.updater.Updater;
 import mekwars.updater.FileUpdater;
 import mekwars.updater._9_0_0.util.XMLTerrainDataParser;
 
@@ -41,8 +39,8 @@ public class TerrainUpdater extends FileUpdater<Terrain> {
     }
 
     protected String serialize(ArrayList<Terrain> elements) {
-        XStream xstream = CampaignMain.cm.getXStream(); 
-        
+        XStream xstream = CampaignMain.cm.getXStream();
+
         return xstream.toXML(elements.toArray(new Terrain[elements.size()]));
     }
 }

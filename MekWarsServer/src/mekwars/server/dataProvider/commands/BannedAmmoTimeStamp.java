@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Original Author: nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -21,40 +21,35 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
-
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.MWLogger;
 import mekwars.server.dataProvider.ServerCommand;
 
-/**
- * Retrieve the MD5 of the current campaignconfig file.
- */
+/** Retrieve the MD5 of the current campaignconfig file. */
 public class BannedAmmoTimeStamp implements ServerCommand {
 
     public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
-    	
+
         String bannedAmmoTimestamp = "-1";
         File bannedAmmo = new File("./campaign/banammo.dat");
-        
+
         if (bannedAmmo.exists()) {
-            
+
             try {
                 FileInputStream in = new FileInputStream(bannedAmmo);
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 bannedAmmoTimestamp = br.readLine();
                 br.close();
                 in.close();
-                
+
             } catch (Exception e) {
-                MWLogger.infoLog("Error reading first line from banammo.dat");       
+                MWLogger.infoLog("Error reading first line from banammo.dat");
             }
-        } 
-        
-        else
-            MWLogger.infoLog("banammo.dat didn't exist. returning ficticious timestamp to requesting client.");       
-        
+        } else
+            MWLogger.infoLog(
+                    "banammo.dat didn't exist. returning ficticious timestamp to requesting client.");
+
         out.println(bannedAmmoTimestamp, "BannedAmmoTimeStamp");
     }
-
 }

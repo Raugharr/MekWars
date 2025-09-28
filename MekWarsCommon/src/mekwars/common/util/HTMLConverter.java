@@ -20,15 +20,16 @@ package mekwars.common.util;
 
 import java.util.StringTokenizer;
 
-
 /**
  * Helper class for various HTML convertations
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class HTMLConverter {
 
     /**
      * Convert all CR/LF into html-br-tags
+     *
      * @param str The string to be converted
      * @return The converted string
      */
@@ -37,14 +38,14 @@ public class HTMLConverter {
         StringBuilder result = new StringBuilder();
         while (tokened.hasMoreTokens()) {
             result.append(tokened.nextToken());
-            if (tokened.hasMoreTokens())
-                result.append("<br>");
+            if (tokened.hasMoreTokens()) result.append("<br>");
         }
         return result.toString();
     }
 
     /**
      * Convert all html-br-tags into CR/LF
+     *
      * @param str The string to be converted
      * @return The converted string
      */
@@ -54,13 +55,10 @@ public class HTMLConverter {
         String temp = "";
         while (tokened.hasMoreTokens()) {
             temp += tokened.nextToken();
-            if (temp.length() > 3 && temp.startsWith("BR>"))
-                result += temp.substring(3);
-            else
-                result += temp;
+            if (temp.length() > 3 && temp.startsWith("BR>")) result += temp.substring(3);
+            else result += temp;
             if (tokened.hasMoreTokens()) result += "\n";
         }
         return result;
     }
 }
-

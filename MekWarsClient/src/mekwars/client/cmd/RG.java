@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -20,32 +20,28 @@ package mekwars.client.cmd;
 import mekwars.client.MWClient;
 
 /**
- * @author Salient 
- * RG = Refresh GUI
- * just a command that makes the mwclient refresh
- * I'm sure there was some preexisting way of doing this
- * but I looked, and got tired of looking
- * So...
+ * @author Salient RG = Refresh GUI just a command that makes the mwclient refresh I'm sure there
+ *     was some preexisting way of doing this but I looked, and got tired of looking So...
  */
 public class RG extends Command {
 
-	/**
-	 * @param client
-	 */
-	public RG(MWClient mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @param client
+     */
+    public RG(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
-		mwclient.refreshGUI(MWClient.REFRESH_PLAYERPANEL);
-		mwclient.refreshGUI(MWClient.REFRESH_BMPANEL);
-		mwclient.refreshGUI(MWClient.REFRESH_STATUS);
-		mwclient.refreshGUI(MWClient.REFRESH_BATTLETABLE);
-		mwclient.refreshGUI(MWClient.REFRESH_USERLIST);
-	}
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
+        mwclient.refreshGUI(MWClient.REFRESH_PLAYERPANEL);
+        mwclient.refreshGUI(MWClient.REFRESH_BMPANEL);
+        mwclient.refreshGUI(MWClient.REFRESH_STATUS);
+        mwclient.refreshGUI(MWClient.REFRESH_BATTLETABLE);
+        mwclient.refreshGUI(MWClient.REFRESH_USERLIST);
+    }
 }

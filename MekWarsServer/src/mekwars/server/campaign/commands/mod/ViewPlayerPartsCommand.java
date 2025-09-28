@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2007 
+ * MekWars - Copyright (C) 2007
  *
  * Original author - jtighe (torren@users.sourceforge.net)
  *
@@ -17,52 +17,68 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 
-/**
- * Return a human readable string that describes the 
- * player's Parts cache.
- */
+/** Return a human readable string that describes the player's Parts cache. */
 public class ViewPlayerPartsCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Player Name";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		if ( !CampaignMain.cm.getBooleanConfig("UsePartsRepair") ){
-            CampaignMain.cm.toUser("Parts repair not used on this server!",Username);
-            return;
-		}
-		//get the player you wish to use
-        
-        if ( !command.hasMoreTokens() ){
-            CampaignMain.cm.toUser("Syntax: ViewPlayerParts#Name#",Username);
+
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Player Name";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        if (!CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
+            CampaignMain.cm.toUser("Parts repair not used on this server!", Username);
             return;
         }
-		SPlayer p = CampaignMain.cm.getPlayer(command.nextToken());
+        // get the player you wish to use
 
-		StringBuffer toReturn = new StringBuffer("Parts cache for "+p.getName()+".<br>");
-		
-		toReturn.append(p.getUnitParts().tableizeComponents(CampaignMain.cm.getIntegerConfig("CampaignYear")));
+        if (!command.hasMoreTokens()) {
+            CampaignMain.cm.toUser("Syntax: ViewPlayerParts#Name#", Username);
+            return;
+        }
+        SPlayer p = CampaignMain.cm.getPlayer(command.nextToken());
 
-		CampaignMain.cm.toUser("SM|"+toReturn.toString(),Username,false);
-	
-        CampaignMain.cm.doSendModMail("NOTE",Username+" has viewed "+p.getName()+"'s parts cache.");
-	}
+        StringBuffer toReturn = new StringBuffer("Parts cache for " + p.getName() + ".<br>");
+
+        toReturn.append(
+                p.getUnitParts()
+                        .tableizeComponents(CampaignMain.cm.getIntegerConfig("CampaignYear")));
+
+        CampaignMain.cm.toUser("SM|" + toReturn.toString(), Username, false);
+
+        CampaignMain.cm.doSendModMail(
+                "NOTE", Username + " has viewed " + p.getName() + "'s parts cache.");
+    }
 }

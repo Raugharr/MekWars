@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,44 +18,66 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
-
 public class AdminSetCommandLevelCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Command#Level";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		
-		Hashtable<String,Command> commandTable = CampaignMain.cm.getServerCommands();
-		
-		String commandName = command.nextToken().toUpperCase();
-		int commandLevel = Integer.parseInt(command.nextToken());
-		
-		if ( commandTable.containsKey(commandName) )
-		    commandTable.get(commandName).setExecutionLevel(commandLevel);
-		else{
-		    CampaignMain.cm.toUser("Command "+commandName+" not found!",Username,true);
-		    return;
-		}
 
-		CampaignMain.cm.toUser("Command level changed on "+commandName.toLowerCase()+" to "+commandLevel,Username,true);
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has changed the command level for "+commandName.toLowerCase()+" to "+commandLevel);
-		
-	}
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Command#Level";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        Hashtable<String, Command> commandTable = CampaignMain.cm.getServerCommands();
+
+        String commandName = command.nextToken().toUpperCase();
+        int commandLevel = Integer.parseInt(command.nextToken());
+
+        if (commandTable.containsKey(commandName))
+            commandTable.get(commandName).setExecutionLevel(commandLevel);
+        else {
+            CampaignMain.cm.toUser("Command " + commandName + " not found!", Username, true);
+            return;
+        }
+
+        CampaignMain.cm.toUser(
+                "Command level changed on " + commandName.toLowerCase() + " to " + commandLevel,
+                Username,
+                true);
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username
+                        + " has changed the command level for "
+                        + commandName.toLowerCase()
+                        + " to "
+                        + commandLevel);
+    }
 }

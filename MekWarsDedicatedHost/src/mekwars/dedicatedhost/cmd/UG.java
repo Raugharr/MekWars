@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -18,7 +18,6 @@
 package mekwars.dedicatedhost.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.dedicatedhost.CUser;
 import mekwars.dedicatedhost.MWDedHost;
 
@@ -27,25 +26,26 @@ import mekwars.dedicatedhost.MWDedHost;
  */
 public class UG extends Command {
 
-	/**
-	 * @param client
-	 */
-	public UG(MWDedHost mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @param client
+     */
+    public UG(MWDedHost mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-        //UG = User Gone (UG|<MMClientInfo.toString>|[Gone]) Gone is used when the client didn't just change his name
-        //Create a new MMClienrInfo-Object from the String
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        // UG = User Gone (UG|<MMClientInfo.toString>|[Gone]) Gone is used when the client didn't
+        // just change his name
+        // Create a new MMClienrInfo-Object from the String
         CUser mmci = new CUser((String) st.nextElement());
-        if (mwclient.isDedicated()){
-        	mwclient.getUsers().remove(mwclient.getUser(mmci.getName()));
+        if (mwclient.isDedicated()) {
+            mwclient.getUsers().remove(mwclient.getUser(mmci.getName()));
             return;
         }
-	}        
+    }
 }

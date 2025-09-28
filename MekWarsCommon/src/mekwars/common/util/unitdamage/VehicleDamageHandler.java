@@ -2,20 +2,19 @@ package mekwars.common.util.unitdamage;
 
 import java.util.Iterator;
 import java.util.StringTokenizer;
-
-import mekwars.common.util.MWLogger;
-import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.IArmorState;
 import megamek.common.Mounted;
 import megamek.common.Tank;
 import megamek.common.equipment.AmmoMounted;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.UnitUtils;
 
 public class VehicleDamageHandler extends AbstractUnitDamageHandler {
 
-	@Override
-	public String buildDamageString(Entity unit, boolean sendAmmo) {
+    @Override
+    public String buildDamageString(Entity unit, boolean sendAmmo) {
         StringBuilder result = new StringBuilder();
         String delimiter = "-";
         String delimiter2 = "%";
@@ -37,7 +36,6 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
                     result.append(unit.getArmor(loc));
                 }
                 result.append(delimiter2);
-
             }
             if (!hasData) {
                 result.append(delimiter2);
@@ -60,7 +58,6 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
                 }
                 result.append(delimiter2);
                 hasData = true;
-
             }
             if (!hasData) {
                 result.append(delimiter2);
@@ -181,12 +178,12 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
             return "%%-%%-%%";
         }
         return result.toString();
+    }
 
-	}
-
-	@Override
-	public void applyDamageString(Entity unit, String report, boolean isRepairing) {
-		// MWLogger.errLog(System.currentTimeMillis()+" Unit "+unit.getModel()+" applyBattleDamage: "+report);
+    @Override
+    public void applyDamageString(Entity unit, String report, boolean isRepairing) {
+        // MWLogger.errLog(System.currentTimeMillis()+" Unit "+unit.getModel()+" applyBattleDamage:
+        // "+report);
         StringTokenizer entry = new StringTokenizer(report, "-");
 
         StringTokenizer externalArmor = new StringTokenizer(entry.nextToken(), "%");
@@ -296,6 +293,5 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
                 }
             }
         }
-	}
-
+    }
 }

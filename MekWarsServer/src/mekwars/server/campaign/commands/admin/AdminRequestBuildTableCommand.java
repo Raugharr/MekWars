@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2007 
- * 
+ * MekWars - Copyright (C) 2007
+ *
  * Original author - Bob Eldred (billypinhead@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,9 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
@@ -60,7 +60,14 @@ public class AdminRequestBuildTableCommand implements Command {
         // access level check
         int userLevel = MWServ.getInstance().getUserLevel(Username);
         if (userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
             return;
         }
         String subcommand = command.nextToken();
@@ -68,7 +75,7 @@ public class AdminRequestBuildTableCommand implements Command {
             StringBuilder toReturn = new StringBuilder();
             String folderDelimiter = "?";
             String fileDelimiter = "*";
-            String[] folderList = { "standard", "rare", "reward" };
+            String[] folderList = {"standard", "rare", "reward"};
 
             boolean viewer = false;
 
@@ -80,8 +87,7 @@ public class AdminRequestBuildTableCommand implements Command {
                 File currF = new File("./data/buildtables/" + folderList[i]);
                 toReturn.append(folderList[i]);
                 toReturn.append(folderDelimiter);
-                if (!currF.exists() || !currF.isDirectory())
-                    continue;
+                if (!currF.exists() || !currF.isDirectory()) continue;
                 File fileNames[] = currF.listFiles();
 
                 for (File currFile : fileNames) {
@@ -92,7 +98,7 @@ public class AdminRequestBuildTableCommand implements Command {
                 }
                 toReturn.append(folderDelimiter);
             }
-            CampaignMain.cm.toUser("BT|LS|" + toReturn.toString()+"|"+viewer, Username, false);
+            CampaignMain.cm.toUser("BT|LS|" + toReturn.toString() + "|" + viewer, Username, false);
 
             return;
         } else if (subcommand.equalsIgnoreCase("get")) {
@@ -100,29 +106,33 @@ public class AdminRequestBuildTableCommand implements Command {
             String folder = "";
             String table = "";
             long time = 0;
-            
-            if (command.hasMoreTokens())
-                folder = command.nextToken();
-            if (command.hasMoreTokens())
-                table = command.nextToken();
-            if ( command.hasMoreTokens() ) {
+
+            if (command.hasMoreTokens()) folder = command.nextToken();
+            if (command.hasMoreTokens()) table = command.nextToken();
+            if (command.hasMoreTokens()) {
                 time = Long.parseLong(command.nextToken());
             }
 
             if (folder.length() == 0 || table.length() == 0) {
-                CampaignMain.cm.toUser("Bad Build Table Request: " + (folder.length() == 0 ? "Empty folder name" : "Empty file name"), Username, true);
+                CampaignMain.cm.toUser(
+                        "Bad Build Table Request: "
+                                + (folder.length() == 0 ? "Empty folder name" : "Empty file name"),
+                        Username,
+                        true);
                 return;
             }
             File file = new File("./data/buildtables/" + folder + "/" + table);
             if (!file.exists()) {
-                CampaignMain.cm.toUser("Bad Build Table Request: " + folder + "/" + table + " does not exist.", Username, true);
+                CampaignMain.cm.toUser(
+                        "Bad Build Table Request: " + folder + "/" + table + " does not exist.",
+                        Username,
+                        true);
                 return;
             }
 
-            if ( time >= file.lastModified() ) {
+            if (time >= file.lastModified()) {
                 return;
             }
-            
 
             // The request is good, so send it.
             try {
@@ -141,7 +151,8 @@ public class AdminRequestBuildTableCommand implements Command {
                 // TODO Auto-generated catch block
                 MWLogger.errLog(e);
             }
-            CampaignMain.cm.toUser("BT|BT|" + folder + "|" + table + toReturn.toString(), Username, false);
+            CampaignMain.cm.toUser(
+                    "BT|BT|" + folder + "|" + table + toReturn.toString(), Username, false);
 
         } else if (subcommand.equalsIgnoreCase("view")) {
             CampaignMain.cm.toUser("BT|VS|", Username, false);

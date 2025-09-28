@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -24,14 +24,15 @@
 package mekwars.common.comm;
 
 /**
- *
- * @author  Administrator
+ * @author Administrator
  */
 public interface ICommand {
-  
-  public String getPrefix();
-  public boolean hasError();
-  public String getErrorMessage();
-  public void reset();
 
+    public String getPrefix();
+
+    public boolean hasError();
+
+    public String getErrorMessage();
+
+    public void reset();
 }

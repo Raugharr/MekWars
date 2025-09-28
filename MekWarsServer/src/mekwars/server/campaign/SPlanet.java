@@ -1,5 +1,5 @@
 /*
- * 
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,7 +23,6 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
-
 import mekwars.common.AdvancedTerrain;
 import mekwars.common.CampaignData;
 import mekwars.common.Continent;
@@ -40,10 +39,9 @@ import mekwars.server.campaign.util.SerializedMessage;
 
 public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparable<Object> {
 
-    /**
-     * 
-     */
+    /** */
     private static final long serialVersionUID = -2266871107987235842L;
+
     private SHouse owner = null;
 
     @Override
@@ -59,16 +57,14 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
                 // SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
                 result.append(((SUnitFactory) factory).toString());
             }
-        } else
-            result.append("0");
+        } else result.append("0");
 
         result.append(getPosition().getX());
         result.append(getPosition().getY());
         StringBuilder houseString = new StringBuilder();
         for (House house : getInfluence().getHouses()) {
             SHouse next = (SHouse) house;
-            if (next == null)
-                continue;
+            if (next == null) continue;
             houseString.append(next.getName());
             houseString.append("$"); // change for unusual influence
             houseString.append(getInfluence().getInfluence(next.getId()));
@@ -77,10 +73,10 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         // No Influences then set influence to NewbieHouse so the planet will
         // load.
         if (getInfluence().getHouses().size() < 1) {
-        	houseString.append(CampaignMain.cm.getConfig("NewbieHouseName"));
-        	houseString.append("$");
-        	houseString.append(this.getConquestPoints());
-        	houseString.append("$");
+            houseString.append(CampaignMain.cm.getConfig("NewbieHouseName"));
+            houseString.append("$");
+            houseString.append(this.getConquestPoints());
+            houseString.append("$");
         }
 
         result.append(houseString.toString());
@@ -88,15 +84,13 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         for (Continent t : getEnvironments().toArray()) {
             result.append(t.getSize());
             result.append(t.getEnvironment().getName());
-            
-            if(t.getAdvancedTerrain() != null)
-            	if(t.getAdvancedTerrain().getName() != null)
-            result.append(t.getAdvancedTerrain().getName());
+
+            if (t.getAdvancedTerrain() != null)
+                if (t.getAdvancedTerrain().getName() != null)
+                    result.append(t.getAdvancedTerrain().getName());
         }
-        if (getDescription().equals(""))
-            result.append(" ");
-        else
-            result.append(getDescription());
+        if (getDescription().equals("")) result.append(" ");
+        else result.append(getDescription());
         result.append(this.getBaysProvided());
         result.append(this.isConquerable());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -110,17 +104,14 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             for (String key : this.getPlanetFlags().keySet()) {
                 result.append(key + "^");
             }
-        } else
-            result.append("^^");
+        } else result.append("^^");
 
         result.append(this.getConquestPoints());
 
         return result.toString();
     }
 
-    /**
-     * 
-     */
+    /** */
     public String fromString(String s, Random r, CampaignData data) {
         // debug
 
@@ -135,7 +126,8 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         for (int i = 0; i < hasMF; i++) {
             SUnitFactory mft = new SUnitFactory();
             mft.fromString(TokenReader.readString(ST), this, r);
-            if (singleFaction && CampaignMain.cm.getHouseFromPartialString(mft.getFounder()) == null)
+            if (singleFaction
+                    && CampaignMain.cm.getHouseFromPartialString(mft.getFounder()) == null)
                 continue;
             getUnitFactories().add(mft);
         }
@@ -151,10 +143,8 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
                     String HouseName = TokenReader.readString(influences);
                     SHouse h = (SHouse) data.getHouseByName(HouseName);
                     int HouseInf = TokenReader.readInt(influences);
-                    if (h != null)
-                        influence.put(h.getId(), HouseInf);
-                    else
-                        MWLogger.errLog("House not found: " + HouseName);
+                    if (h != null) influence.put(h.getId(), HouseInf);
+                    else MWLogger.errLog("House not found: " + HouseName);
                 }
             }
             setInfluence(new Influences(influence));
@@ -170,7 +160,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             int terrainNumber = 0;
             int advTerrainNumber = 0;
             Terrain planetEnvironment = null;
-            AdvancedTerrain planetWeather = null; 
+            AdvancedTerrain planetWeather = null;
             /*
              * Bug reported if you screw with the positions of the terrains in terrain.xml you'll screw up the planet terrains this will now allow you to load via int and then save via name so the terrain will always be correct no matter the position of the terrain in the terrain.xml.
              */
@@ -179,24 +169,22 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
                 planetEnvironment = data.getTerrain(terrainNumber);
             } catch (Exception ex) {
                 planetEnvironment = data.getTerrainByName(terrain);
-            }            
-            
-            if ( planetEnvironment == null )
-                planetEnvironment = data.getTerrain(0);
-
-            try{
-            	advTerrainNumber = Integer.parseInt(advTerrain);
-            	planetWeather = data.getAdvancedTerrain(advTerrainNumber);
-            } catch (Exception ex) {
-            	MWLogger.mainLog("advTerrain is " + advTerrain);                	
-
-            	planetWeather = data.getAdvancedTerrainByName(advTerrain);
             }
-            
-            if (planetWeather == null)
-            	planetWeather  = data.getAdvancedTerrain(0);
-            
-            Continent PE = new Continent(size, planetEnvironment, planetWeather);                       
+
+            if (planetEnvironment == null) planetEnvironment = data.getTerrain(0);
+
+            try {
+                advTerrainNumber = Integer.parseInt(advTerrain);
+                planetWeather = data.getAdvancedTerrain(advTerrainNumber);
+            } catch (Exception ex) {
+                MWLogger.mainLog("advTerrain is " + advTerrain);
+
+                planetWeather = data.getAdvancedTerrainByName(advTerrain);
+            }
+
+            if (planetWeather == null) planetWeather = data.getAdvancedTerrain(0);
+
+            Continent PE = new Continent(size, planetEnvironment, planetWeather);
             getEnvironments().add(PE);
         }
 
@@ -209,17 +197,20 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             setTimestamp(sdf.parse(TokenReader.readString(ST)));
         } catch (Exception ex) {
             // No biggy, but will cause senseless Data transfer, so:
-            MWLogger.errLog("The following excepion on planet " + getName() + " is not critical, but will cause useless bandwith usage: please fix!");
+            MWLogger.errLog(
+                    "The following excepion on planet "
+                            + getName()
+                            + " is not critical, but will cause useless bandwith usage: please fix!");
             MWLogger.errLog(ex);
             setTimestamp(new Date(System.currentTimeMillis()));
         }
 
         int id = TokenReader.readInt(ST);
         if (id == -1) {
-        	id = CampaignData.cd.getUnusedPlanetID();
+            id = CampaignData.cd.getUnusedPlanetID();
         }
         setId(id);
-       setMinPlanetOwnerShip(TokenReader.readInt(ST));
+        setMinPlanetOwnerShip(TokenReader.readInt(ST));
 
         setHomeWorld(TokenReader.readBoolean(ST));
 
@@ -242,7 +233,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
 
             if (isNullOwner()) {
                 this.setConquestPoints(100);
-                //this.setCompProduction(0);
+                // this.setCompProduction(0);
                 this.setBaysProvided(0);
                 SHouse house = CampaignMain.cm.getHouseById(-1);
                 this.getInfluence().moveInfluence(house, house, 100, 100);
@@ -255,7 +246,8 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
     }
 
     /**
-     * Use the other constructor as soon as you do not need the manual serialization support through fromString() anymore.
+     * Use the other constructor as soon as you do not need the manual serialization support through
+     * fromString() anymore.
      */
     public SPlanet() {
         // super(CampaignMain.cm.getData().getUnusedPlanetID(),"", new
@@ -273,26 +265,23 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
     }
 
     public SUnitFactory getRandomUnitFactory() {
-        if (getUnitFactories().size() == 0)
-            return null;
+        if (getUnitFactories().size() == 0) return null;
         // else
-        return (SUnitFactory) getUnitFactories().get(CampaignMain.cm.getRandomNumber(getUnitFactories().size()));
+        return (SUnitFactory)
+                getUnitFactories().get(CampaignMain.cm.getRandomNumber(getUnitFactories().size()));
     }
 
     public SUnitFactory getBestUnitFactory() {
-        if (getUnitFactories().size() == 0)
-            return null;
+        if (getUnitFactories().size() == 0) return null;
         SUnitFactory result = null;
         for (int i = 0; i < getUnitFactories().size(); i++) {
             SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
-            if (result == null)
-                result = MF;
+            if (result == null) result = MF;
             else {
                 if (MF.getWeightclass() > result.getWeightclass()) {
                     result = MF;
                 } else if (MF.getWeightclass() == result.getWeightclass()) {
-                    if (MF.getBestTypeProducable() < result.getBestTypeProducable())
-                        result = MF;
+                    if (MF.getBestTypeProducable() < result.getBestTypeProducable()) result = MF;
                 }
             }
         }
@@ -303,8 +292,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         Vector<SUnitFactory> result = new Vector<SUnitFactory>(getUnitFactories().size(), 1);
         for (int i = 0; i < getUnitFactories().size(); i++) {
             SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
-            if (MF.getName().equals(s))
-                result.add(MF);
+            if (MF.getName().equals(s)) result.add(MF);
         }
         return result;
     }
@@ -313,15 +301,13 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         Vector<SUnitFactory> result = new Vector<SUnitFactory>(getUnitFactories().size(), 1);
         for (int i = 0; i < getUnitFactories().size(); i++) {
             SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
-            if (MF.getWeightclass() == weightclass)
-                result.add(MF);
+            if (MF.getWeightclass() == weightclass) result.add(MF);
         }
         return result;
     }
 
     /**
-     * @param Attacker -
-     *            attacking faction
+     * @param Attacker - attacking faction
      * @return potential defending houses (ie - those with territory on the world)
      */
     public Vector<House> getDefenders(SHouse Attacker) {
@@ -343,34 +329,33 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             return false;
         }
 
-        if (o == null)
-            return false;
+        if (o == null) return false;
 
         return p.getId() == this.getId();
     }
 
     /**
-     * Do a tick - call tick on he planets MF, if it has one, and return the amount of income generated by the planet Income = base income * the number of miniticks registered at a tick
+     * Do a tick - call tick on he planets MF, if it has one, and return the amount of income
+     * generated by the planet Income = base income * the number of miniticks registered at a tick
      */
     public String tick(int refreshminiticks) {
-    	MWLogger.debugLog("Ticking " + getName() + " checking for factories and adding " + refreshminiticks + " miniticks.");
+        MWLogger.debugLog(
+                "Ticking "
+                        + getName()
+                        + " checking for factories and adding "
+                        + refreshminiticks
+                        + " miniticks.");
         // Tick all Factories
         StringBuilder hsUpdates = new StringBuilder();
         for (int i = 0; i < getUnitFactories().size(); i++) {
             SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
             int total = 0;
-            if (MF.canProduce(Unit.MEK))
-                total += refreshminiticks;
-            if (MF.canProduce(Unit.VEHICLE))
-                total += refreshminiticks;
-            if (MF.canProduce(Unit.INFANTRY))
-                total += refreshminiticks;
-            if (MF.canProduce(Unit.PROTOMEK))
-                total += refreshminiticks;
-            if (MF.canProduce(Unit.BATTLEARMOR))
-                total += refreshminiticks;
-            if (MF.canProduce(Unit.AERO))
-                total += refreshminiticks;
+            if (MF.canProduce(Unit.MEK)) total += refreshminiticks;
+            if (MF.canProduce(Unit.VEHICLE)) total += refreshminiticks;
+            if (MF.canProduce(Unit.INFANTRY)) total += refreshminiticks;
+            if (MF.canProduce(Unit.PROTOMEK)) total += refreshminiticks;
+            if (MF.canProduce(Unit.BATTLEARMOR)) total += refreshminiticks;
+            if (MF.canProduce(Unit.AERO)) total += refreshminiticks;
             hsUpdates.append(MF.addRefresh(-total, false));
         }
         return hsUpdates.toString();
@@ -379,24 +364,21 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
     public String getSmallStatus(boolean useHTML) {
 
         StringBuilder result = new StringBuilder();
-        if (useHTML)
-            result.append(this.getNameAsColoredLink());
-        else
-            result.append(getName());
+        if (useHTML) result.append(this.getNameAsColoredLink());
+        else result.append(getName());
 
         for (int i = 0; i < getUnitFactories().size(); i++) {
             SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
-            result.append(" [" + MF.getSize() + "," + MF.getFounder() + "," + MF.getTypeString() + "]");
+            result.append(
+                    " [" + MF.getSize() + "," + MF.getFounder() + "," + MF.getTypeString() + "]");
         }
 
         result.append(":");
         for (House h : getInfluence().getHouses()) {
             result.append(h.getName() + "(" + getInfluence().getInfluence(h.getId()) + "cp)");
             result.append(", ");
-
         }
-        if (useHTML)
-            result.replace(result.length() - 2, result.length(), "<br>");
+        if (useHTML) result.replace(result.length() - 2, result.length(), "<br>");
         return result.toString();
     }
 
@@ -410,13 +392,11 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         SHouse h = null;
         Integer houseID = this.getInfluence().getOwner();
 
-        if (houseID == null)
-            return null;
+        if (houseID == null) return null;
 
         h = (SHouse) CampaignMain.cm.getData().getHouse(houseID);
 
-        if (this.getInfluence().getInfluence(houseID) < this.getMinPlanetOwnerShip())
-            return null;
+        if (this.getInfluence().getInfluence(houseID) < this.getMinPlanetOwnerShip()) return null;
 
         return h;
     }
@@ -425,29 +405,26 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         /*
          * Null owner is possible, but should be uncommon. Check the owner again to make sure the this is true before returning.
          */
-        if (owner == null)
-            checkOwner();
+        if (owner == null) checkOwner();
         return owner;
     }
 
     public void setOwner(SHouse oldOwner, SHouse newOwner, boolean sendHouseUpdates) {
 
-        if (owner != null)// this is the same as oldowner in most cases
-            owner.removePlanet(this);
+        if (owner != null) // this is the same as oldowner in most cases
+        owner.removePlanet(this);
 
         if (newOwner != null) {
             owner = newOwner;
             owner.addPlanet(this);
         }
 
-        if (sendHouseUpdates)
-            this.sendHouseStatusUpdate(oldOwner, newOwner);
+        if (sendHouseUpdates) this.sendHouseStatusUpdate(oldOwner, newOwner);
     }
 
     public int doGainInfluence(SHouse winner, SHouse loser, int amount, boolean adminExchange) {
 
-        if (!winner.isConquerable() && !adminExchange)
-            return 0;
+        if (!winner.isConquerable() && !adminExchange) return 0;
 
         int infgain = getInfluence().moveInfluence(winner, loser, amount, this.getConquestPoints());
         // dont bother with updates if land has not changed hands.
@@ -470,17 +447,24 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
     private void sendHouseStatusUpdate(SHouse oldOwner, SHouse newOwner) {
 
         // don't do anything if there's no change is ownership
-        if (oldOwner != null && oldOwner.equals(newOwner))
-            return;
-        else if (oldOwner == null && newOwner == null)
-            return;
+        if (oldOwner != null && oldOwner.equals(newOwner)) return;
+        else if (oldOwner == null && newOwner == null) return;
 
         // if the world has factories, build strings to send
         StringBuilder oldOwnerHSUpdates = new StringBuilder();
         StringBuilder newOwnerHSUpdates = new StringBuilder();
         for (UnitFactory currUF : getUnitFactories()) {
 
-            oldOwnerHSUpdates.append("RF|" + currUF.getWeightclass() + "$" + currUF.getType() + "$" + this.getName() + "$" + currUF.getName() + "|");
+            oldOwnerHSUpdates.append(
+                    "RF|"
+                            + currUF.getWeightclass()
+                            + "$"
+                            + currUF.getType()
+                            + "$"
+                            + this.getName()
+                            + "$"
+                            + currUF.getName()
+                            + "|");
 
             newOwnerHSUpdates.append("AF|" + currUF.getWeightclass());
             newOwnerHSUpdates.append("$");
@@ -503,10 +487,11 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         // send updates to non-null houses, so long as update strings have
         // length > 0 (real updates)
         if (oldOwner != null && oldOwnerHSUpdates.length() > 0)
-            CampaignMain.cm.doSendToAllOnlinePlayers(oldOwner, "HS|" + oldOwnerHSUpdates.toString(), false);
+            CampaignMain.cm.doSendToAllOnlinePlayers(
+                    oldOwner, "HS|" + oldOwnerHSUpdates.toString(), false);
         if (newOwner != null && newOwnerHSUpdates.length() > 0)
-            CampaignMain.cm.doSendToAllOnlinePlayers(newOwner, "HS|" + newOwnerHSUpdates.toString(), false);
-
+            CampaignMain.cm.doSendToAllOnlinePlayers(
+                    newOwner, "HS|" + newOwnerHSUpdates.toString(), false);
     }
 
     public String getShortDescription(boolean withTerrain) {
@@ -519,9 +504,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
                 result.append(" " + pe.getEnvironments().get(0).toImageDescription());
                 result.append(" " + pe.getEnvironments().get(0).getName());
             }
-            if (ape != null )
-                result.append(" " + ape.WeatherForcast());
-            	
+            if (ape != null) result.append(" " + ape.WeatherForcast());
 
             if (this.getUnitFactories().size() > 0) {
                 for (int i = 0; i < this.getUnitFactories().size(); i++) {
@@ -530,26 +513,29 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
                 }
             }
             if (pe != null && getEnvironments().getTotalEnivronmentPropabilities() > 0)
-                result.append(" (" + Math.round((double) p.getSize() * 100 / getEnvironments().getTotalEnivronmentPropabilities()) + "% correct)");
-            else
-                result.append(" (100% correct)");
+                result.append(
+                        " ("
+                                + Math.round(
+                                        (double) p.getSize()
+                                                * 100
+                                                / getEnvironments()
+                                                        .getTotalEnivronmentPropabilities())
+                                + "% correct)");
+            else result.append(" (100% correct)");
         }
         return result.toString();
     }
 
-    /**
-     * Method which returns a coloured link name for a planet.
-     */
+    /** Method which returns a coloured link name for a planet. */
     public String getNameAsColoredLink() {
 
         String colorString = "";
         if (owner == null) {
-            colorString = CampaignMain.cm.getConfig("DisputedPlanetColor");// malformed
+            colorString = CampaignMain.cm.getConfig("DisputedPlanetColor"); // malformed
             // gets
             // you
             // black?
-        } else
-            colorString = owner.getHouseColor();
+        } else colorString = owner.getHouseColor();
 
         String toReturn = "<font color=\"" + colorString + "\">" + getNameAsLink() + "</font>";
         return toReturn;
@@ -559,18 +545,15 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
     public int getMinPlanetOwnerShip() {
 
         int ownership = super.getMinPlanetOwnerShip();
-        if (ownership < 0)
-            ownership = CampaignMain.cm.getIntegerConfig("MinPlanetOwnerShip");
+        if (ownership < 0) ownership = CampaignMain.cm.getIntegerConfig("MinPlanetOwnerShip");
 
         return ownership;
     }
 
     public boolean isNullOwner() {
 
-        if (this.getInfluence().getInfluence(-1) == this.getConquestPoints())
-            return true;
+        if (this.getInfluence().getInfluence(-1) == this.getConquestPoints()) return true;
 
         return false;
     }
-
 }

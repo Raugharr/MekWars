@@ -20,7 +20,6 @@ package mekwars.client.campaign;
 import java.io.File;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-
 import mekwars.client.MWClient;
 import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.dialog.ArmyViewerDialog;
@@ -30,26 +29,31 @@ import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 
 /**
- * Class for Campaign object used by Client
- * TODO: Rewrite command decoding. Its crazy right now.
+ * Class for Campaign object used by Client TODO: Rewrite command decoding. Its crazy right now.
  * TODO: Properly comment this class.
  */
 public class CCampaign {
 
     MWClient mwclient;
     CPlayer Player;
-    TreeMap<Integer,CBMUnit> BlackMarket = new TreeMap<Integer,CBMUnit>();
-    TreeMap<String,BMEquipment> BlackMarketParts = new TreeMap<String, BMEquipment>();
-    TreeMap<String, ComponentToCritsConverter> ComponentConverter = new TreeMap<String, ComponentToCritsConverter>();
+    TreeMap<Integer, CBMUnit> BlackMarket = new TreeMap<Integer, CBMUnit>();
+    TreeMap<String, BMEquipment> BlackMarketParts = new TreeMap<String, BMEquipment>();
+    TreeMap<String, ComponentToCritsConverter> ComponentConverter =
+            new TreeMap<String, ComponentToCritsConverter>();
 
     public CCampaign(MWClient client) {
         mwclient = client;
         Player = new CPlayer(mwclient);
         File f = new File(MWClient.CAMPAIGN_PATH);
-        if (f.exists() && !f.isDirectory()) {f.delete();}
+        if (f.exists() && !f.isDirectory()) {
+            f.delete();
+        }
         if (!f.exists()) {
-            try {f.mkdirs();}
-            catch (Exception e) {MWLogger.errLog(e);}
+            try {
+                f.mkdirs();
+            } catch (Exception e) {
+                MWLogger.errLog(e);
+            }
         }
     }
 
@@ -60,36 +64,49 @@ public class CCampaign {
         ST = new StringTokenizer(command, "|");
         element = TokenReader.readString(ST);
         /*    if (!element.equals("CC")) {return(false);}
-         element = TokenReader.readString(ST);*/
+        element = TokenReader.readString(ST);*/
         command = command.substring(3);
 
         if (element.equals("PS")) {
             if (!Player.setData(command)) {
                 mwclient.addToChat("Player data load failed!<br>");
-                return(false);
+                return (false);
             }
-            return(true);
+            return (true);
         }
 
         if (element.equals("CC")) // Campaign Command
         {
             String commandid = TokenReader.readString(ST);
-            if (commandid.equals("AT")) {//incoming attack
+            if (commandid.equals("AT")) { // incoming attack
 
                 if (mwclient.getConfig().isParam("ENABLEATTACKSOUND")) {
                     mwclient.doPlaySound(mwclient.getConfigParam("SOUNDONATTACK"));
                 }
 
-                mwclient.addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_HMAIL);
-                mwclient.addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_PMAIL,"Server");
+                mwclient.addToChat(
+                        "<font color=\"red\"><b>Your forces are under attack!</b></font>",
+                        CCommPanel.CHANNEL_HMAIL);
+                mwclient.addToChat(
+                        "<font color=\"red\"><b>Your forces are under attack!</b></font>",
+                        CCommPanel.CHANNEL_PMAIL,
+                        "Server");
                 if (mwclient.getConfig().isParam("POPUPONATTACK")) {
                     int opID = TokenReader.readInt(ST);
                     int teams = TokenReader.readInt(ST);
-                    //mwclient.showInfoWindow("Your forces are under attack!");
-                    new ArmyViewerDialog(mwclient,null,ST,ArmyViewerDialog.AVD_DEFEND,null,null,opID,teams);
+                    // mwclient.showInfoWindow("Your forces are under attack!");
+                    new ArmyViewerDialog(
+                            mwclient,
+                            null,
+                            ST,
+                            ArmyViewerDialog.AVD_DEFEND,
+                            null,
+                            null,
+                            opID,
+                            teams);
                 }
             }
-            if (commandid.equals("NT")) {//next tick
+            if (commandid.equals("NT")) { // next tick
 
                 int time = TokenReader.readInt(ST);
                 boolean decrement = TokenReader.readBoolean(ST);
@@ -108,117 +125,125 @@ public class CCampaign {
             }
             return (true);
         }
-        if (element.equals("CA"))
-        {
-            if (!setData(command))
-            {
+        if (element.equals("CA")) {
+            if (!setData(command)) {
                 mwclient.addToChat("<b>Error: Campaign data load failed.</b><br>");
-                return(false);
+                return (false);
             }
-            return(true);
+            return (true);
         }
-        if (element.equals("PL"))
-        {
-            if (!Player.decodeCommand(command))
-            {
+        if (element.equals("PL")) {
+            if (!Player.decodeCommand(command)) {
                 mwclient.addToChat("<b>Error: Player data load failed.</b><br>");
-                return(false);
+                return (false);
             }
-            return(true);
+            return (true);
         }
-        if (element.equals("MS"))
-        {
-            if (!showMsg(command))
-            {
+        if (element.equals("MS")) {
+            if (!showMsg(command)) {
                 mwclient.addToChat("<b>Error: Message show failed.</b><br>");
-                return(false);
+                return (false);
             }
-            return(true);
+            return (true);
         }
-        if (element.equals("ST"))
-        {
-            if (!showStatus(command))
-            {
+        if (element.equals("ST")) {
+            if (!showStatus(command)) {
                 mwclient.addToChat("<b>Error: Status show failed.</b><br>");
-                return(false);
+                return (false);
             }
-            return(true);
+            return (true);
         }
 
         mwclient.addToChat("<b>Error: Wrong campaign command from server.</b><br>");
-        return(false);
+        return (false);
     }
 
     protected boolean setData(String command) {
-        return(true);
+        return (true);
     }
 
     /**
-     * Method that reads data generated by Market2.getAutoMarketStatus()
-     * on the server. All data for all BM units sent at once. "|" used
-     * to seperate units, * used to seperate fields inside each unit.
+     * Method that reads data generated by Market2.getAutoMarketStatus() on the server. All data for
+     * all BM units sent at once. "|" used to seperate units, * used to seperate fields inside each
+     * unit.
      */
     public void setBMData(String command) {
 
-        //create tokenizer
+        // create tokenizer
         StringTokenizer mainTokenizer = new StringTokenizer(command, "$");
 
-        //clear all current BM data
+        // clear all current BM data
         BlackMarket.clear();
 
-        while(mainTokenizer.hasMoreTokens()) {
+        while (mainTokenizer.hasMoreTokens()) {
             boolean hidden = Boolean.parseBoolean(mwclient.getServerConfigs("HiddenBMUnits"));
             CBMUnit currBMUnit = new CBMUnit(TokenReader.readString(mainTokenizer), this, hidden);
             BlackMarket.put(currBMUnit.getAuctionID(), currBMUnit);
         }
     }
 
-    /**
-     * Method that removes a unit from the Client's BM representation.
-     */
+    /** Method that removes a unit from the Client's BM representation. */
     public void removeBMUnit(String command) {
         BlackMarket.remove(Integer.valueOf(command));
     }
 
-    /**
-     * Method that adds a unit to the client's BM representation.
-     */
+    /** Method that adds a unit to the client's BM representation. */
     public void addBMUnit(String command) {
-        CBMUnit bmUnit = new CBMUnit(command, this, Boolean.parseBoolean(mwclient.getServerConfigs("HiddenBMUnits")));
+        CBMUnit bmUnit =
+                new CBMUnit(
+                        command,
+                        this,
+                        Boolean.parseBoolean(mwclient.getServerConfigs("HiddenBMUnits")));
         BlackMarket.put(bmUnit.getAuctionID(), bmUnit);
     }
 
     /**
-     * Method that repaces a CBMUnit. Called after a player bids
-     * on a unit in order to change colors and show amount.
+     * Method that repaces a CBMUnit. Called after a player bids on a unit in order to change colors
+     * and show amount.
      */
     public void changeBMUnit(String command) {
-        CBMUnit bmUnit = new CBMUnit(command, this, Boolean.parseBoolean(mwclient.getServerConfigs("HiddenBMUnits")));
+        CBMUnit bmUnit =
+                new CBMUnit(
+                        command,
+                        this,
+                        Boolean.parseBoolean(mwclient.getServerConfigs("HiddenBMUnits")));
         BlackMarket.remove(bmUnit.getAuctionID());
         BlackMarket.put(bmUnit.getAuctionID(), bmUnit);
     }
 
     protected boolean showMsg(String command) {
-        return(true);
+        return (true);
     }
 
     protected boolean showStatus(String command) {
         mwclient.addToChat(command);
-        return(true);
+        return (true);
     }
 
-    //public MWClient getClient() {return mwclient;}
-    public void setPlayer(CPlayer tplayer) {Player = tplayer;}
-    public CPlayer getPlayer() {return Player;}
-    public TreeMap<Integer,CBMUnit> getBlackMarket() {return BlackMarket;}
+    // public MWClient getClient() {return mwclient;}
+    public void setPlayer(CPlayer tplayer) {
+        Player = tplayer;
+    }
 
-    public TreeMap<String,BMEquipment> getBlackMarketParts() { return BlackMarketParts; }
+    public CPlayer getPlayer() {
+        return Player;
+    }
 
-    public TreeMap<String, ComponentToCritsConverter> getComponentConverter() { return ComponentConverter; }
+    public TreeMap<Integer, CBMUnit> getBlackMarket() {
+        return BlackMarket;
+    }
+
+    public TreeMap<String, BMEquipment> getBlackMarketParts() {
+        return BlackMarketParts;
+    }
+
+    public TreeMap<String, ComponentToCritsConverter> getComponentConverter() {
+        return ComponentConverter;
+    }
 
     public void setComponentConverter(String converterData) {
         try {
-            StringTokenizer st = new StringTokenizer(converterData,"#");
+            StringTokenizer st = new StringTokenizer(converterData, "#");
 
             ComponentConverter.clear();
             while (st.hasMoreTokens()) {
@@ -230,7 +255,7 @@ public class CCampaign {
                 ComponentConverter.put(converter.getCritName(), converter);
             }
             mwclient.setWaiting(false);
-        }catch(Exception ex) {
+        } catch (Exception ex) {
             MWLogger.errLog(ex);
         }
     }

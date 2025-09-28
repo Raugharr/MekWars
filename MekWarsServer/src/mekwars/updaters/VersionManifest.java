@@ -13,9 +13,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
 import javax.swing.JFileChooser;
-
 import mekwars.common.util.MWLogger;
 import updaters.utils.IOUtil;
 
@@ -78,7 +76,8 @@ public class VersionManifest {
                 } catch (FileNotFoundException fnfe) {
                     // File does not exist in tmp directory, proceed
                     // as usual.
-                    System.err.println("File " + file.getLocalOffset() + " is not in the temp directory.");
+                    System.err.println(
+                            "File " + file.getLocalOffset() + " is not in the temp directory.");
                 }
 
                 InputStream is = updater.getLocalFileStream(file);
@@ -86,30 +85,48 @@ public class VersionManifest {
                 is.close();
 
                 if (localCRC != file.getCRC32()) {
-                    System.err.println("Noting difference between remote file " + file.getRemoteOffset() + " and local file " + file.getLocalOffset());
+                    System.err.println(
+                            "Noting difference between remote file "
+                                    + file.getRemoteOffset()
+                                    + " and local file "
+                                    + file.getLocalOffset());
 
                     // If there is not a difference between the remote and
                     // local temporary file, set flag so we don't download.
                     if (tempCRC == file.getCRC32()) {
                         file.setTempFileUpToDate(true);
-                        System.err.println("The file " + file.getLocalOffset() + " is different, but there is an up to date " + " file in the tmp directory.");
+                        System.err.println(
+                                "The file "
+                                        + file.getLocalOffset()
+                                        + " is different, but there is an up to date "
+                                        + " file in the tmp directory.");
                     } else {
                         file.setTempFileUpToDate(false);
                     }
                     retval.add(file);
                 } else {
-                    System.err.println("Remote file " + file.getRemoteOffset() + " and local file " + file.getLocalOffset() + " appear to be the same.");
+                    System.err.println(
+                            "Remote file "
+                                    + file.getRemoteOffset()
+                                    + " and local file "
+                                    + file.getLocalOffset()
+                                    + " appear to be the same.");
                 }
             }
             // File does not exist locally; retrieve it
             catch (FileNotFoundException e) {
-                System.err.println("File " + file.getLocalOffset() + " doesn't exist locally.  Retrieving.");
+                System.err.println(
+                        "File " + file.getLocalOffset() + " doesn't exist locally.  Retrieving.");
 
                 // check the temp CRC to see if we need to flag for
                 // no download
                 if (tempCRC == file.getCRC32()) {
                     file.setTempFileUpToDate(true);
-                    System.err.println("File " + file.getLocalOffset() + " doesn't exist locally, but it is up " + "to date in the temp directory, no need to download.");
+                    System.err.println(
+                            "File "
+                                    + file.getLocalOffset()
+                                    + " doesn't exist locally, but it is up "
+                                    + "to date in the temp directory, no need to download.");
                 } else {
                     file.setTempFileUpToDate(false);
                 }
@@ -122,10 +139,7 @@ public class VersionManifest {
         return retval;
     }
 
-    /**
-     * Returns a list of all of the files that this manifest specifies should be
-     * on the client.
-     */
+    /** Returns a list of all of the files that this manifest specifies should be on the client. */
     public List<String> getClientFileStructure() {
         System.err.println("Getting client file structure");
 
@@ -138,11 +152,10 @@ public class VersionManifest {
     }
 
     /**
-     * Returns a list of directories that this manifest specifies must be
-     * cleaned up; i.e. all files in one of these directories that is not also
-     * in the manifest should be deleted.
+     * Returns a list of directories that this manifest specifies must be cleaned up; i.e. all files
+     * in one of these directories that is not also in the manifest should be deleted.
      */
-    public List<String>/* String */getDirectoriesToCleanUp() {
+    public List<String> /* String */ getDirectoriesToCleanUp() {
         return dirsToCleanUp_;
     }
 
@@ -151,23 +164,22 @@ public class VersionManifest {
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.setCurrentDirectory(new File("./"));
         fc.setApproveButtonText("Create List");
-        fc.setApproveButtonToolTipText("<html>Select the folder where the file list<br>and manifest will be crated.</html>");
+        fc.setApproveButtonToolTipText(
+                "<html>Select the folder where the file list<br>and manifest will be crated.</html>");
         int selection = fc.showOpenDialog(null);
 
-        if (selection != JFileChooser.APPROVE_OPTION)
-            return;
+        if (selection != JFileChooser.APPROVE_OPTION) return;
         /*
          * FileDialog fDialog = new FileDialog(new JDialog(),"File
          * Path",FileDialog.LOAD); fDialog.setVisible(true);
-         * 
+         *
          * String rootDir = fDialog.getDirectory();
          */
         String rootDir = fc.getSelectedFile().getPath() + File.separatorChar;
         String outFileName = rootDir + "files.txt";
 
         // Remove old manifest files
-        if (new File(outFileName).exists())
-            new File(outFileName).delete();
+        if (new File(outFileName).exists()) new File(outFileName).delete();
         if (new File(rootDir + "Manifest.txt").exists())
             new File(rootDir + "Manifest.txt").delete();
         // if ( new File(rootDir+"Manifest.txt.jar").exists() )
@@ -182,8 +194,7 @@ public class VersionManifest {
 
             File[] listFiles = new File(rootDir).listFiles();
 
-            for (File file : listFiles)
-                VersionManifest.printOutFiles(ps, file, rootDir);
+            for (File file : listFiles) VersionManifest.printOutFiles(ps, file, rootDir);
             ps.flush();
             out.flush();
             ps.close();
@@ -199,15 +210,13 @@ public class VersionManifest {
         try {
             if (file.isDirectory()) {
                 // Dont bother sending the logs folder.
-                if (file.getAbsolutePath().endsWith("logs") 
-                        || file.getAbsolutePath().endsWith("servers") 
-                        || file.getAbsolutePath().endsWith("campaign") 
-                        || file.getAbsolutePath().endsWith("mmconf"))
-                    return;
+                if (file.getAbsolutePath().endsWith("logs")
+                        || file.getAbsolutePath().endsWith("servers")
+                        || file.getAbsolutePath().endsWith("campaign")
+                        || file.getAbsolutePath().endsWith("mmconf")) return;
 
                 File[] listFiles = file.listFiles();
-                for (File newFile : listFiles)
-                    VersionManifest.printOutFiles(ps, newFile, root);
+                for (File newFile : listFiles) VersionManifest.printOutFiles(ps, newFile, root);
             } else {
 
                 String path = file.getAbsolutePath();
@@ -215,14 +224,18 @@ public class VersionManifest {
                 // Dont want any windows Thumbs.db files
                 // are mwconfig files as those could
                 // screw over the end users.
-                if (path.endsWith("Thumbs.db") || path.endsWith("mwconfig.txt") || path.endsWith("mwconfig.txt.bak") || path.endsWith("files.txt") || path.endsWith("Manifest.txt") || path.endsWith("units.cache"))
+                if (path.endsWith("Thumbs.db")
+                        || path.endsWith("mwconfig.txt")
+                        || path.endsWith("mwconfig.txt.bak")
+                        || path.endsWith("files.txt")
+                        || path.endsWith("Manifest.txt")
+                        || path.endsWith("units.cache"))
                     // || path.endsWith("Manifest.txt.jar"))
                     return;
 
                 int index = path.indexOf(root);
 
-                if (index > -1)
-                    path = "./" + path.substring(index + root.length());
+                if (index > -1) path = "./" + path.substring(index + root.length());
                 ps.println(path);
                 ps.flush();
             }
@@ -242,11 +255,13 @@ public class VersionManifest {
     }
 
     private static void createManifestFile(String outPutFileName) {
-    	BufferedReader manifestList = null;
-    	try {
+        BufferedReader manifestList = null;
+        try {
             manifestList = new BufferedReader(new FileReader(outPutFileName));
 
-            String manifestFileName = outPutFileName.substring(0, outPutFileName.indexOf("files.txt")) + "Manifest.txt";
+            String manifestFileName =
+                    outPutFileName.substring(0, outPutFileName.indexOf("files.txt"))
+                            + "Manifest.txt";
             FileOutputStream out = new FileOutputStream(manifestFileName);
             PrintStream ps = new PrintStream(out);
 
@@ -281,11 +296,11 @@ public class VersionManifest {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-        	try {
-				manifestList.close();
-			} catch (IOException e) {
-				MWLogger.errLog(e);
-			}
+            try {
+                manifestList.close();
+            } catch (IOException e) {
+                MWLogger.errLog(e);
+            }
         }
     }
 

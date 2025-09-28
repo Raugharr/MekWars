@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,49 +15,45 @@
  */
 
 package mekwars.server.campaign.util;
+
 import mekwars.server.campaign.SHouse;
 
-public class HouseRankingHelpContainer implements Comparable<Object>
+public class HouseRankingHelpContainer implements Comparable<Object> {
 
-{
-  SHouse faction;
-  int amount;
+    SHouse faction;
+    int amount;
 
-  public HouseRankingHelpContainer(SHouse h)
-  {
-    this.faction = h;
-    amount = 0;
-  }
+    public HouseRankingHelpContainer(SHouse h) {
+        this.faction = h;
+        amount = 0;
+    }
 
-  public void addAmount (int a)
-  {
-    amount += a;
-  }
+    public void addAmount(int a) {
+        amount += a;
+    }
 
-   public int compareTo(Object o)
-  {
-    HouseRankingHelpContainer h = (HouseRankingHelpContainer)o;
-    if (amount - faction.getInitialHouseRanking() > h.getAmount() - h.getHouse().getInitialHouseRanking())
-      return 1;
-    else if (amount - faction.getInitialHouseRanking() < h.getAmount() - h.getHouse().getInitialHouseRanking())
-      return -1;
-    return this.getHouse().compareTo(h.getHouse());
-  }
-  public int getAmount()
-  {
-    return amount;
-  }
-  public void setAmount(int amount)
-  {
-    this.amount = amount;
-  }
-  public SHouse getHouse()
-  {
-    return faction;
-  }
-  public void setHouse(SHouse h)
-  {
-    this.faction = h;
-  }
+    public int compareTo(Object o) {
+        HouseRankingHelpContainer h = (HouseRankingHelpContainer) o;
+        if (amount - faction.getInitialHouseRanking()
+                > h.getAmount() - h.getHouse().getInitialHouseRanking()) return 1;
+        else if (amount - faction.getInitialHouseRanking()
+                < h.getAmount() - h.getHouse().getInitialHouseRanking()) return -1;
+        return this.getHouse().compareTo(h.getHouse());
+    }
 
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public SHouse getHouse() {
+        return faction;
+    }
+
+    public void setHouse(SHouse h) {
+        this.faction = h;
+    }
 }

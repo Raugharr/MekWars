@@ -13,7 +13,6 @@ package mekwars.admin.dialog.serverConfigDialogs;
 
 import java.awt.Component;
 import java.awt.GridLayout;
-
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -21,18 +20,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
 import mekwars.client.MWClient;
 import mekwars.common.util.SpringLayoutHelper;
 
 /**
  * @author jtighe
  * @author Spork
- *
- * Server Configuration Page. All new Server Options need to be added to this page or subPanels as well.
+ *     <p>Server Configuration Page. All new Server Options need to be added to this page or
+ *     subPanels as well.
  */
 public class RewardPanel extends JPanel {
-
 
     private static final long serialVersionUID = 3402880281077089882L;
 
@@ -93,7 +90,8 @@ public class RewardPanel extends JPanel {
 
         BaseCheckBox = new JCheckBox("Repods");
 
-        BaseCheckBox.setToolTipText("<html>Check to allow players to repod units with RP<br>This allows a player to repod a unit<br>even if its not on their build table<br>Random repod options based<br>on the random repod settings</html>");
+        BaseCheckBox.setToolTipText(
+                "<html>Check to allow players to repod units with RP<br>This allows a player to repod a unit<br>even if its not on their build table<br>Random repod options based<br>on the random repod settings</html>");
         BaseCheckBox.setName("GlobalRepodAllowed");
         rewardCBoxGrid.add(BaseCheckBox);
 
@@ -130,20 +128,33 @@ public class RewardPanel extends JPanel {
         rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
-        rewardSpring1.add(new JLabel("Techs per " + mwclient.getServerConfigs("RPShortName"), SwingConstants.TRAILING));
+        rewardSpring1.add(
+                new JLabel(
+                        "Techs per " + mwclient.getServerConfigs("RPShortName"),
+                        SwingConstants.TRAILING));
         baseTextField.setToolTipText("Number of techs hired with 1 RP");
         baseTextField.setName("TechsForARewardPoint");
         rewardSpring1.add(baseTextField);
 
         baseTextField = new JTextField(5);
-        rewardSpring1.add(new JLabel(mwclient.moneyOrFluMessage(false, true, -1) + " per " + mwclient.getServerConfigs("RPShortName"), SwingConstants.TRAILING));
+        rewardSpring1.add(
+                new JLabel(
+                        mwclient.moneyOrFluMessage(false, true, -1)
+                                + " per "
+                                + mwclient.getServerConfigs("RPShortName"),
+                        SwingConstants.TRAILING));
         baseTextField.setToolTipText("Amount of flu given in exhcange for 1 RP");
         baseTextField.setName("InfluenceForARewardPoint");
         rewardSpring1.add(baseTextField);
 
         // @Author Salient (mwosux@gmail.com) , Add RP for CBills
         baseTextField = new JTextField(5);
-        rewardSpring1.add(new JLabel(mwclient.moneyOrFluMessage(true, true, -1) + " per " + mwclient.getServerConfigs("RPShortName"), SwingConstants.TRAILING));
+        rewardSpring1.add(
+                new JLabel(
+                        mwclient.moneyOrFluMessage(true, true, -1)
+                                + " per "
+                                + mwclient.getServerConfigs("RPShortName"),
+                        SwingConstants.TRAILING));
         baseTextField.setToolTipText("Amount of CBills given in exhcange for 1 RP");
         baseTextField.setName("CBillsForARewardPoint");
         rewardSpring1.add(baseTextField);
@@ -156,7 +167,8 @@ public class RewardPanel extends JPanel {
 
         baseTextField = new JTextField(5);
         rewardSpring1.add(new JLabel("NonHouse Multiplier:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("How much should the unit cost be multiplied by if not using faction build tables");
+        baseTextField.setToolTipText(
+                "How much should the unit cost be multiplied by if not using faction build tables");
         baseTextField.setName("RewardPointNonHouseMultiplier");
         rewardSpring1.add(baseTextField);
 
@@ -175,15 +187,16 @@ public class RewardPanel extends JPanel {
 
             baseTextField = new JTextField(5);
             rewardSpring1.add(new JLabel("RP to Repair a crit:", SwingConstants.TRAILING));
-            baseTextField.setToolTipText("<html>RP to repair 1 crit.<br>NOTE: this is a double field!</html>");
+            baseTextField.setToolTipText(
+                    "<html>RP to repair 1 crit.<br>NOTE: this is a double field!</html>");
             baseTextField.setName("RewardPointsForCritRepair");
             rewardSpring1.add(baseTextField);
-
         }
 
         baseTextField = new JTextField(5);
         rewardSpring1.add(new JLabel("Repod Cost:", SwingConstants.TRAILING));
-        baseTextField.setToolTipText("<html>How much should the repod cost<br>Random repods cost 1/2 this</html>");
+        baseTextField.setToolTipText(
+                "<html>How much should the repod cost<br>Random repods cost 1/2 this</html>");
         baseTextField.setName("GlobalRepodWithRPCost");
         rewardSpring1.add(baseTextField);
 
@@ -214,7 +227,6 @@ public class RewardPanel extends JPanel {
             baseTextField.setToolTipText("RP to repair 1 unit.");
             baseTextField.setName("RewardPointsForRepair");
             rewardSpring2.add(baseTextField);
-
         }
 
         baseTextField = new JTextField(5);

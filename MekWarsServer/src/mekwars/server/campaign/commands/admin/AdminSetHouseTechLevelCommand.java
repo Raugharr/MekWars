@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2007 
- * 
+ * MekWars - Copyright (C) 2007
+ *
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -14,53 +14,76 @@
  */
 
 /**
- * @author jtighe
- * This command is used to set the tech level of a faction.
+ * @author jtighe This command is used to set the tech level of a faction.
  */
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import megamek.common.TechConstants;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.commands.Command;
 
-
 // comand /c AdminSetHouseTechLevel#House#TechLevel
 public class AdminSetHouseTechLevelCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Faction Name#TechLevel";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		SHouse house = null;
-		int techLevel;
-		
-		try {
-			house = CampaignMain.cm.getHouseFromPartialString(command.nextToken());
-			techLevel = Integer.parseInt(command.nextToken());
-		} catch (Exception e) {
-			CampaignMain.cm.toUser("Improper command. Try: /c adminsethousetechlevel#faction#techlevel", Username, true);
-			return;
-		}
-		
-		house.setTechLevel(techLevel);
-		house.updated();
-		
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has set " + house.getName()+ "'s tech level to " + TechConstants.getLevelDisplayableName(techLevel)+".");
-		
-	}
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Faction Name#TechLevel";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        SHouse house = null;
+        int techLevel;
+
+        try {
+            house = CampaignMain.cm.getHouseFromPartialString(command.nextToken());
+            techLevel = Integer.parseInt(command.nextToken());
+        } catch (Exception e) {
+            CampaignMain.cm.toUser(
+                    "Improper command. Try: /c adminsethousetechlevel#faction#techlevel",
+                    Username,
+                    true);
+            return;
+        }
+
+        house.setTechLevel(techLevel);
+        house.updated();
+
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username
+                        + " has set "
+                        + house.getName()
+                        + "'s tech level to "
+                        + TechConstants.getLevelDisplayableName(techLevel)
+                        + ".");
+    }
 }

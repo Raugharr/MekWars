@@ -1,4 +1,3 @@
-
 /*
  * MekWars - Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009
  *
@@ -44,11 +43,8 @@ import mekwars.common.util.SpringLayoutHelper;
 
 public class TextEditorDialog extends JDialog implements ActionListener, KeyListener {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -3851019509649287454L;
-
 
     private JButton bCancel = new JButton("Close");
     private JButton bSave = new JButton("Save");
@@ -58,11 +54,10 @@ public class TextEditorDialog extends JDialog implements ActionListener, KeyList
     private OperationsDialog opDialog = null;
 
     public TextEditorDialog(OperationsDialog opDialog, JTextField textBox) {
-        //save params
+        // save params
         this.textBox = textBox;
         this.opDialog = opDialog;
         textField.setText(textBox.getText());
-
 
         Dimension maxSize = new Dimension(200, 200);
         textField.setMaximumSize(maxSize);
@@ -71,7 +66,7 @@ public class TextEditorDialog extends JDialog implements ActionListener, KeyList
         textField.setWrapStyleWord(true);
         textField.setLineWrap(true);
 
-        //set up a formatting holder for the cancel button
+        // set up a formatting holder for the cancel button
         JPanel buttonHolder = new JPanel();
         buttonHolder.add(bSave);
         buttonHolder.add(bCancel);
@@ -84,7 +79,7 @@ public class TextEditorDialog extends JDialog implements ActionListener, KeyList
         addKeyListener(this);
         textField.addKeyListener(this);
 
-        //set up the overall SpringLayout
+        // set up the overall SpringLayout
         JPanel springHolder = new JPanel(new SpringLayout());
         springHolder.add(textField);
         springHolder.add(buttonHolder);
@@ -112,7 +107,8 @@ public class TextEditorDialog extends JDialog implements ActionListener, KeyList
             dispose();
         } else if (ae.getSource() == bSave) {
             textBox.setText(textField.getText());
-            opDialog.keyPressed(new KeyEvent(textBox, 0, KeyEvent.KEY_PRESSED, 0, KeyEvent.VK_0, '0'));
+            opDialog.keyPressed(
+                    new KeyEvent(textBox, 0, KeyEvent.KEY_PRESSED, 0, KeyEvent.VK_0, '0'));
             dispose();
         }
     }
@@ -130,7 +126,5 @@ public class TextEditorDialog extends JDialog implements ActionListener, KeyList
 
     }
 
-    public void keyTyped(KeyEvent ke) {
-
-    }
+    public void keyTyped(KeyEvent ke) {}
 }

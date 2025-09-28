@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2004 
+ * MekWars - Copyright (C) 2004
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -15,36 +15,33 @@
 package mekwars.dedicatedhost.cmd;
 
 import java.util.StringTokenizer;
-
 import mekwars.common.campaign.Buildings;
 import mekwars.dedicatedhost.MWDedHost;
 
 /**
  * @@author Torren (Jason Tighe)
- * 
- * Used for Randomn Building Placement on RMG's
- * 
+ *
+ * <p>Used for Randomn Building Placement on RMG's
  */
-
 public class RBP extends Command {
 
-	/**
-	 * @see Command#Command(MMClient)
-	 */
-	public RBP(MWDedHost mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @see Command#Command(MMClient)
+     */
+    public RBP(MWDedHost mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-		Buildings building = new Buildings();
-		
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        Buildings building = new Buildings();
+
         building.fromString(st);
-        
+
         mwclient.setBuildingTemplate(building);
-	}
+    }
 }

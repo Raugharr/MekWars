@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,39 +18,26 @@ package mekwars.common;
 
 import java.util.Collection;
 
-
 /**
- * This interface enables the class to provide information about terrains. It
- * is used, as example by PlanetEnvironments to retrieve the real terrains 
- * behind the terrain id.
+ * This interface enables the class to provide information about terrains. It is used, as example by
+ * PlanetEnvironments to retrieve the real terrains behind the terrain id.
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public interface TerrainProvider {
-    /**
-     * Return the terrain to a given id.
-     */
+    /** Return the terrain to a given id. */
     public Terrain getTerrain(int id);
 
-    /**
-     * Return all terrains
-     */
+    /** Return all terrains */
     public Collection<Terrain> getAllTerrains();
 
-    /**
-     * Add a terrain to the list
-     */
+    /** Add a terrain to the list */
     public void addAdvancedTerrain(AdvancedTerrain terrain);
-    
+
     /*add the advanced terrain provisions*/
-    /**
-     * Return the terrain to a given id.
-     */
+    /** Return the terrain to a given id. */
     public AdvancedTerrain getAdvancedTerrain(int id);
 
-    /**
-     * Return all terrains
-     */
+    /** Return all terrains */
     public Collection<AdvancedTerrain> getAllAdvancedTerrains();
-
-    
 }

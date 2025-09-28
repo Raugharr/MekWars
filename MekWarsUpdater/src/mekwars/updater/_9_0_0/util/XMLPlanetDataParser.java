@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,28 +16,25 @@
 
 package mekwars.updater._9_0_0.util;
 
+import gd.xml.ParseException;
+import gd.xml.XMLParser;
+import gd.xml.XMLResponder;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import java.util.ArrayList;
-
 import mekwars.common.AdvancedTerrain;
-import mekwars.common.CampaignData;
 import mekwars.common.Continent;
 import mekwars.common.Influences;
 import mekwars.common.PlanetEnvironments;
 import mekwars.common.UnitFactory;
-import gd.xml.ParseException;
-import gd.xml.XMLParser;
-import gd.xml.XMLResponder;
 import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.CampaignOptions;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
@@ -65,7 +62,7 @@ public class XMLPlanetDataParser implements XMLResponder {
 
     int accessLevel = 0;
 
-    HashMap<Integer, Integer> Influence = new HashMap<Integer, Integer>();// House
+    HashMap<Integer, Integer> Influence = new HashMap<Integer, Integer>(); // House
     // ID,
     // Amount
     ArrayList<SPlanet> planets = new ArrayList<SPlanet>();
@@ -77,7 +74,8 @@ public class XMLPlanetDataParser implements XMLResponder {
     private String Description = "";
     private PlanetEnvironments PlanEnv = new PlanetEnvironments();
     private AdvancedTerrain AdvTerr = null;
-    public TreeMap<Integer, AdvancedTerrain> AdvTerrTreeMap = new TreeMap<Integer, AdvancedTerrain>();
+    public TreeMap<Integer, AdvancedTerrain> AdvTerrTreeMap =
+            new TreeMap<Integer, AdvancedTerrain>();
     private TreeMap<String, String> OpFlags = new TreeMap<String, String>();
     boolean conquerable = true;
     private int counter = 1;
@@ -122,9 +120,10 @@ public class XMLPlanetDataParser implements XMLResponder {
     public XMLPlanetDataParser(String filename) {
 
         this.filename = filename;
-        
+
         OriginalOwner = CampaignMain.cm.getCampaignOptions().getConfig("NewbieHouseName");
-        singlePlayerFactions = CampaignMain.cm.getCampaignOptions().getBooleanConfig("AllowSinglePlayerFactions");
+        singlePlayerFactions =
+                CampaignMain.cm.getCampaignOptions().getBooleanConfig("AllowSinglePlayerFactions");
         try {
             XMLParser xp = new XMLParser();
             xp.parseXML(this);
@@ -140,7 +139,8 @@ public class XMLPlanetDataParser implements XMLResponder {
 
     /* DTD METHODS */
 
-    public void recordNotationDeclaration(String name, String pubID, String sysID) throws ParseException {
+    public void recordNotationDeclaration(String name, String pubID, String sysID)
+            throws ParseException {
         System.out.print(prefix + "!NOTATION: " + name);
         if (sysID != null) {
             System.out.print("  sysID = " + sysID);
@@ -148,7 +148,9 @@ public class XMLPlanetDataParser implements XMLResponder {
         logger.info("");
     }
 
-    public void recordEntityDeclaration(String name, String value, String pubID, String sysID, String notation) throws ParseException {
+    public void recordEntityDeclaration(
+            String name, String value, String pubID, String sysID, String notation)
+            throws ParseException {
         System.out.print(prefix + "!ENTITY: " + name);
         if (value != null) {
             System.out.print("  value = " + value);
@@ -170,7 +172,9 @@ public class XMLPlanetDataParser implements XMLResponder {
         logger.info("  content = " + content);
     }
 
-    public void recordAttlistDeclaration(String element, String attr, boolean notation, String type, String defmod, String def) throws ParseException {
+    public void recordAttlistDeclaration(
+            String element, String attr, boolean notation, String type, String defmod, String def)
+            throws ParseException {
         System.out.print(prefix + "!ATTLIST: " + element);
         System.out.print("  attr = " + attr);
         System.out.print("  type = " + ((notation) ? "NOTATIONS " : "") + type);
@@ -178,7 +182,8 @@ public class XMLPlanetDataParser implements XMLResponder {
         logger.info((def == null) ? "" : "  def = " + notation);
     }
 
-    public void recordDoctypeDeclaration(String name, String pubID, String sysID) throws ParseException {
+    public void recordDoctypeDeclaration(String name, String pubID, String sysID)
+            throws ParseException {
         System.out.print(prefix + "!DOCTYPE: " + name);
         if (pubID != null) {
             System.out.print("  pubID = " + pubID);
@@ -192,8 +197,7 @@ public class XMLPlanetDataParser implements XMLResponder {
 
     /* DOC METHDODS */
 
-    public void recordDocStart() {
-    }
+    public void recordDocStart() {}
 
     public void recordDocEnd() {
         logger.info("");
@@ -231,7 +235,17 @@ public class XMLPlanetDataParser implements XMLResponder {
                 // if (Type == 0)
                 // Type = Unit.MEK;
 
-                SUnitFactory mf = new SUnitFactory(MFName, null, MFSize, MFFounder, MFTicksUntilRefresh, MFRefreshSpeed, Type, buildTableFolder, accessLevel);
+                SUnitFactory mf =
+                        new SUnitFactory(
+                                MFName,
+                                null,
+                                MFSize,
+                                MFFounder,
+                                MFTicksUntilRefresh,
+                                MFRefreshSpeed,
+                                Type,
+                                buildTableFolder,
+                                accessLevel);
                 unitFactories.add(mf);
 
                 // RESET VARIABLES
@@ -246,11 +260,29 @@ public class XMLPlanetDataParser implements XMLResponder {
             }
         }
         if (name.equalsIgnoreCase("CONTINENT")) {
-          //TODO remove this later MDR
-            logger.info("continent to try and add is: "+ terrainProb +"% " +terrainName + "[" + CampaignMain.cm.getData().getTerrainByName(terrainName).getId() + "]"
-                    + "(" + advTerrainName +"[" + CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainName).getId() + "])");
-            
-            Continent cont = new Continent(terrainProb, CampaignMain.cm.getData().getTerrainByName(terrainName), CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainName));
+            // TODO remove this later MDR
+            logger.info(
+                    "continent to try and add is: "
+                            + terrainProb
+                            + "% "
+                            + terrainName
+                            + "["
+                            + CampaignMain.cm.getData().getTerrainByName(terrainName).getId()
+                            + "]"
+                            + "("
+                            + advTerrainName
+                            + "["
+                            + CampaignMain.cm
+                                    .getData()
+                                    .getAdvancedTerrainByName(advTerrainName)
+                                    .getId()
+                            + "])");
+
+            Continent cont =
+                    new Continent(
+                            terrainProb,
+                            CampaignMain.cm.getData().getTerrainByName(terrainName),
+                            CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainName));
             PlanEnv.add(cont);
             terrainProb = 0;
             terrainName = "";
@@ -267,7 +299,13 @@ public class XMLPlanetDataParser implements XMLResponder {
         if (name.equalsIgnoreCase("PLANET")) {
             logger.info("PLANET READ");
             SPlanet p;
-            p = new SPlanet(Name, new Influences(Influence), CompProduction, Double.parseDouble(XCood), Double.parseDouble(YCood));
+            p =
+                    new SPlanet(
+                            Name,
+                            new Influences(Influence),
+                            CompProduction,
+                            Double.parseDouble(XCood),
+                            Double.parseDouble(YCood));
             for (int i = 0; i < unitFactories.size(); i++) {
                 SUnitFactory MF = (SUnitFactory) unitFactories.get(i);
                 MF.setPlanet(p);
@@ -286,7 +324,9 @@ public class XMLPlanetDataParser implements XMLResponder {
              * for ( Integer id: AdvTerrTreeMap.keySet() ){
              * p.getAdvancedTerrain().put(id,AdvTerrTreeMap.get(id)); }
              */
-            if (singlePlayerFactions && !OriginalOwner.equalsIgnoreCase(CampaignMain.cm.getCampaignOptions().getConfig("NewbieHouseName"))) {
+            if (singlePlayerFactions
+                    && !OriginalOwner.equalsIgnoreCase(
+                            CampaignMain.cm.getCampaignOptions().getConfig("NewbieHouseName"))) {
                 p.setOriginalOwner("None");
             } else {
                 p.setOriginalOwner(OriginalOwner);
@@ -338,7 +378,6 @@ public class XMLPlanetDataParser implements XMLResponder {
             OriginalOwner = CampaignMain.cm.getCampaignOptions().getConfig("NewbieHouseName");
             AdvTerr = null;
             AdvTerrTreeMap.clear();
-
         }
         if (name.equalsIgnoreCase("WAREHOUSE")) {
             inWarehouse = false;
@@ -370,20 +409,20 @@ public class XMLPlanetDataParser implements XMLResponder {
             Warehousesize = Integer.parseInt(charData);
         } else if (lastElement.equalsIgnoreCase("FACTION")) {
             lastInfFaction = charData;
-            if (singlePlayerFactions && !lastInfFaction.equalsIgnoreCase(CampaignMain.cm.getCampaignOptions().getConfig("NewbieHouseName"))) {
+            if (singlePlayerFactions
+                    && !lastInfFaction.equalsIgnoreCase(
+                            CampaignMain.cm.getCampaignOptions().getConfig("NewbieHouseName"))) {
                 lastInfFaction = "None";
             }
         } else if (lastElement.equalsIgnoreCase("AMOUNT")) {
             SHouse h = (SHouse) CampaignMain.cm.getHouseFromPartialString(lastInfFaction);
             if (h != null) {
                 Influence.put(h.getId(), Integer.parseInt(charData));
-                //logger.info("Parsed: " + h.toString() + " - " + charData);
+                // logger.info("Parsed: " + h.toString() + " - " + charData);
             } else {
                 logger.info("ERROR READING FACTION: " + lastInfFaction);
             }
-        }
-
-        else if (lastElement.equalsIgnoreCase("FACTORYNAME")) {
+        } else if (lastElement.equalsIgnoreCase("FACTORYNAME")) {
             MFName = charData;
         } else if (lastElement.equalsIgnoreCase("FOUNDER")) {
             MFFounder = charData;
@@ -478,7 +517,6 @@ public class XMLPlanetDataParser implements XMLResponder {
         } else if (lastElement.endsWith("HIGHWINDSCHANCE")) {
             highWindsChance = Integer.parseInt(charData);
         }
-
     }
 
     public void recordComment(String comment) {
@@ -494,7 +532,8 @@ public class XMLPlanetDataParser implements XMLResponder {
         }
     }
 
-    public InputStream resolveExternalEntity(String name, String pubID, String sysID) throws ParseException {
+    public InputStream resolveExternalEntity(String name, String pubID, String sysID)
+            throws ParseException {
         if (sysID != null) {
             File f = new File((new File(filename)).getParent(), sysID);
             try {
@@ -507,7 +546,8 @@ public class XMLPlanetDataParser implements XMLResponder {
         return null;
     }
 
-    public InputStream resolveDTDEntity(String name, String pubID, String sysID) throws ParseException {
+    public InputStream resolveDTDEntity(String name, String pubID, String sysID)
+            throws ParseException {
         return resolveExternalEntity(name, pubID, sysID);
     }
 
@@ -522,5 +562,4 @@ public class XMLPlanetDataParser implements XMLResponder {
         }
         return result;
     }
-
 }

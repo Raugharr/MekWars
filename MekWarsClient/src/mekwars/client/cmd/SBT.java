@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2010 
- * 
+ * MekWars - Copyright (C) 2010
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -19,7 +19,6 @@ package mekwars.client.cmd;
 
 import java.util.StringTokenizer;
 import java.util.Vector;
-
 import mekwars.client.MWClient;
 
 /**
@@ -27,28 +26,28 @@ import mekwars.client.MWClient;
  */
 public class SBT extends Command {
 
-	/**
-	 * @see Command#Command(MMClient)
-	 */
-	public SBT(MWClient mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @see Command#Command(MMClient)
+     */
+    public SBT(MWClient mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-		mwclient.getData().getBannedTargetingSystems().clear();
-		Vector<Integer> bans = new Vector<Integer>(1,1);
-		while(st.hasMoreTokens()) {
-			int ban = Integer.parseInt(st.nextToken());
-			if (ban != 0 ) {
-				// Don't ban standard TS
-				bans.add(ban);
-			}
-		}
-		mwclient.getData().setBannedTargetingSystems(bans);
-	}
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        mwclient.getData().getBannedTargetingSystems().clear();
+        Vector<Integer> bans = new Vector<Integer>(1, 1);
+        while (st.hasMoreTokens()) {
+            int ban = Integer.parseInt(st.nextToken());
+            if (ban != 0) {
+                // Don't ban standard TS
+                bans.add(ban);
+            }
+        }
+        mwclient.getData().setBannedTargetingSystems(bans);
+    }
 }

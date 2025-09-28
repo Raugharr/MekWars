@@ -2,10 +2,8 @@
 
 package updaters;
 
-public abstract class FileDiff
-{
+public abstract class FileDiff {
     public abstract void apply(AutoUpdater updater, Repository repository);
 
     public abstract void setTempFileUpToDate(boolean isLatest);
 }
-

@@ -1,6 +1,6 @@
 /*
  * MekWars - Copyright (C) 2009
- * 
+ *
  * original author: jtighe (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -64,7 +64,6 @@ public class ChatRoom {
 
     public Vector<String> getRoomVector() {
         return roomList;
-
     }
 
     public void addPlayer(String player) {

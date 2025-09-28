@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,39 +17,57 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 
 public class SetEloCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Player Name#Raiting";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		SPlayer p = CampaignMain.cm.getPlayer(command.nextToken());
-		double amount = Double.parseDouble(command.nextToken());
-		if (p != null) {
-			p.setRating(amount);
-			CampaignMain.cm.toUser("AM:"+Username + " set your ELO to: " + amount + ".", p.getName(), true);
-			CampaignMain.cm.toUser("AM:You set " + p.getName() +  "'s ELO to "  + amount + ".",Username,true);
-			//server.MWLogger.modLog(Username + " set " + p.getName() + "'s ELO to " + amount + ".");
-			CampaignMain.cm.doSendModMail("NOTE",Username + " set " + p.getName() +  "'s ELO to "  + amount + ".");
-		}
-		
-	}//end process()
-	
+
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Player Name#Raiting";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        SPlayer p = CampaignMain.cm.getPlayer(command.nextToken());
+        double amount = Double.parseDouble(command.nextToken());
+        if (p != null) {
+            p.setRating(amount);
+            CampaignMain.cm.toUser(
+                    "AM:" + Username + " set your ELO to: " + amount + ".", p.getName(), true);
+            CampaignMain.cm.toUser(
+                    "AM:You set " + p.getName() + "'s ELO to " + amount + ".", Username, true);
+            // server.MWLogger.modLog(Username + " set " + p.getName() + "'s ELO to " + amount +
+            // ".");
+            CampaignMain.cm.doSendModMail(
+                    "NOTE", Username + " set " + p.getName() + "'s ELO to " + amount + ".");
+        }
+    } // end process()
 }

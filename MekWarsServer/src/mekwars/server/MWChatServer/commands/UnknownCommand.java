@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -14,16 +14,13 @@
  * for more details.
  */
 
-
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
- */ 
+ */
 /**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
+ * @author Torren (Jason Tighe) 11.5.05
  */
 package mekwars.server.MWChatServer.commands;
 
@@ -31,13 +28,12 @@ import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.Translator;
 
-
 public class UnknownCommand extends CommandBase {
     public boolean process(MWChatClient client, String[] args) {
         client.generalError(Translator.getMessage("unknown_command"));
         return false;
     }
 
-    public void processDistributed(String client, String origin, String[] args, MWChatServer server) { 
-    }
+    public void processDistributed(
+            String client, String origin, String[] args, MWChatServer server) {}
 }

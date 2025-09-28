@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2007 
- * 
+ * MekWars - Copyright (C) 2007
+ *
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -15,9 +15,7 @@
 
 /**
  * @author jtighe
- * 
  */
-
 package mekwars.admin.dialog;
 
 import java.awt.event.ActionEvent;
@@ -26,7 +24,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Hashtable;
 import java.util.TreeSet;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -35,132 +32,133 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-
 import mekwars.client.MWClient;
 import mekwars.common.House;
 import mekwars.common.util.SpringLayoutHelper;
 
-public final class FactionToFactionRewardPointMultiplierDialog implements ActionListener, KeyListener{
-    
-    private final static String okayCommand = "okay";
-    private final static String cancelCommand = "cancel";
+public final class FactionToFactionRewardPointMultiplierDialog
+        implements ActionListener, KeyListener {
+
+    private static final String okayCommand = "okay";
+    private static final String cancelCommand = "cancel";
     private String windowName = "";
-    
+
     private JTextField multiplierText = new JTextField(5);
-    
+
     private final JButton okayButton = new JButton("OK");
     private final JButton cancelButton = new JButton("Cancel");
-    
+
     private JDialog dialog;
     private JOptionPane pane;
-    
+
     private JComboBox faction1 = null;
     private JComboBox faction2 = null;
-    private Hashtable<String,String> configChanges = new Hashtable<String, String>();
-    
+    private Hashtable<String, String> configChanges = new Hashtable<String, String>();
+
     MWClient mwclient = null;
+
     /**
      * @author jtighe
-     * 
-     * Opens the server config page in the client.
+     *     <p>Opens the server config page in the client.
      * @param client
      */
-    
     public FactionToFactionRewardPointMultiplierDialog(MWClient mwclient) {
-        
+
         this.mwclient = mwclient;
         this.windowName = "MekWars Faction to Faction Reward Point Multiplier";
-        
-        //TAB PANELS (these are added to the root pane as tabs)
+
+        // TAB PANELS (these are added to the root pane as tabs)
         JPanel mainPanel = new JPanel();
         JPanel mainBoxPanel = new JPanel(new SpringLayout());
-        
-        TreeSet<String>factionNames = new TreeSet<String>();
-        
-        for ( House faction : mwclient.getData().getAllHouses() )
-            factionNames.add(faction.getName());
-        
+
+        TreeSet<String> factionNames = new TreeSet<String>();
+
+        for (House faction : mwclient.getData().getAllHouses()) factionNames.add(faction.getName());
+
         faction1 = new JComboBox(factionNames.toArray());
         faction1.setSelectedIndex(0);
         faction1.addActionListener(this);
         faction2 = new JComboBox(factionNames.toArray());
         faction2.addActionListener(this);
         faction2.setSelectedIndex(0);
-        
+
         multiplierText.addKeyListener(this);
-        
-        //finalize the layout.
+
+        // finalize the layout.
         mainBoxPanel.add(faction1);
         mainBoxPanel.add(new JLabel(" to "));
         mainBoxPanel.add(faction2);
         mainBoxPanel.add(new JLabel(" multipler "));
         mainBoxPanel.add(multiplierText);
 
-        SpringLayoutHelper.setupSpringGrid(mainBoxPanel,5);
+        SpringLayoutHelper.setupSpringGrid(mainBoxPanel, 5);
         mainPanel.add(mainBoxPanel);
-        
+
         // Set the actions to generate
         okayButton.setActionCommand(okayCommand);
         cancelButton.setActionCommand(cancelCommand);
         okayButton.addActionListener(this);
         cancelButton.addActionListener(this);
-        
+
         /*
          * NEW OPTIONS - need to be sorted into proper menus.
          */
-        
-        // Set tool tips (balloon help)    
+
+        // Set tool tips (balloon help)
         okayButton.setToolTipText("Save Options");
         cancelButton.setToolTipText("Exit without saving options");
-    
-        //Create the panel that will hold the entire UI
+
+        // Create the panel that will hold the entire UI
         JPanel mainConfigPanel = new JPanel();
-        
+
         mainConfigPanel.add(mainPanel);
         // Set the user's options
-        Object[] options = { okayButton, cancelButton };
-        
+        Object[] options = {okayButton, cancelButton};
+
         // Create the pane containing the buttons
-        pane = new JOptionPane(mainConfigPanel, JOptionPane.PLAIN_MESSAGE,
-                JOptionPane.DEFAULT_OPTION, null, options, null);
-        
+        pane =
+                new JOptionPane(
+                        mainConfigPanel,
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.DEFAULT_OPTION,
+                        null,
+                        options,
+                        null);
+
         // Create the main dialog and set the default button
         dialog = pane.createDialog(mainConfigPanel, windowName);
         dialog.getRootPane().setDefaultButton(cancelButton);
-        
-        
-        //Show the dialog and get the user's input
+
+        // Show the dialog and get the user's input
         dialog.setLocationRelativeTo(mwclient.getMainFrame());
         dialog.setModal(true);
         dialog.pack();
         dialog.setVisible(true);
-        
-        if (pane.getValue() == okayButton)
-        {
-            
-            if ( configChanges.size() > 0){
+
+        if (pane.getValue() == okayButton) {
+
+            if (configChanges.size() > 0) {
                 StringBuffer changes = new StringBuffer();
-                for (String key : configChanges.keySet() ){
+                for (String key : configChanges.keySet()) {
                     changes.append(key);
                     changes.append("#");
                     changes.append(configChanges.get(key));
-                    mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c SetFactionToFactionRewardPointMultiplier#"+changes.toString());
+                    mwclient.sendChat(
+                            MWClient.CAMPAIGN_PREFIX
+                                    + "c SetFactionToFactionRewardPointMultiplier#"
+                                    + changes.toString());
                     changes.setLength(0);
                 }
-            
             }
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c adminsaveserverconfigs");
+            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsaveserverconfigs");
             mwclient.getServerConfigData();
-            
-        }
-        else{ 
+
+        } else {
             dialog.dispose();
-            if ( configChanges.size() > 0)
-                mwclient.getServerConfigData();
+            if (configChanges.size() > 0) mwclient.getServerConfigData();
         }
     }
 
-    
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         if (command.equals(okayCommand)) {
@@ -171,29 +169,34 @@ public final class FactionToFactionRewardPointMultiplierDialog implements Action
             pane.setValue(cancelButton);
             dialog.dispose();
         } else {
-            String config = faction1.getSelectedItem().toString()+"To"+faction2.getSelectedItem().toString()+"RewardPointMultiplier";
+            String config =
+                    faction1.getSelectedItem().toString()
+                            + "To"
+                            + faction2.getSelectedItem().toString()
+                            + "RewardPointMultiplier";
             multiplierText.setText(mwclient.getServerConfigs(config));
         }
     }
-    
-    public void saveChanges(){
-        String config = faction1.getSelectedItem().toString()+"To"+faction2.getSelectedItem().toString()+"RewardPointMultiplier";
-        mwclient.getServerConfigs().put(config,multiplierText.getText());
-        configChanges.put(faction1.getSelectedItem().toString()+"#"+faction2.getSelectedItem().toString(),multiplierText.getText());
-    }
 
+    public void saveChanges() {
+        String config =
+                faction1.getSelectedItem().toString()
+                        + "To"
+                        + faction2.getSelectedItem().toString()
+                        + "RewardPointMultiplier";
+        mwclient.getServerConfigs().put(config, multiplierText.getText());
+        configChanges.put(
+                faction1.getSelectedItem().toString() + "#" + faction2.getSelectedItem().toString(),
+                multiplierText.getText());
+    }
 
     public void keyPressed(KeyEvent e) {
         saveChanges();
-        
     }
-
 
     public void keyReleased(KeyEvent e) {
         saveChanges();
-        
     }
-
 
     public void keyTyped(KeyEvent e) {
         saveChanges();

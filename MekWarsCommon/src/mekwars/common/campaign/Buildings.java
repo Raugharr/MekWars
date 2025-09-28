@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -15,23 +15,20 @@
 
 /**
  * @author jtighe
- *
- * Building data for RMG's
- * 
+ *     <p>Building data for RMG's
  */
-
 package mekwars.common.campaign;
 
 import java.util.StringTokenizer;
 
+public final class Buildings {
 
-public final class Buildings{
-    
     public static final int EDGE_UNKNOWN = -1;
-    //Have to follow MM starting postion protocals. Left out NW, NE, SW, SE for easier computations.
+    // Have to follow MM starting postion protocals. Left out NW, NE, SW, SE for easier
+    // computations.
     public static final int NORTHWEST = 1;
     public static final int NORTH = 2;
-    public static final int NORTHEAST= 3;
+    public static final int NORTHEAST = 3;
     public static final int EAST = 4;
     public static final int SOUTHEAST = 5;
     public static final int SOUTH = 6;
@@ -43,7 +40,7 @@ public final class Buildings{
 
     public static final int NORTHWESTDEEP = 11;
     public static final int NORTHDEEP = 12;
-    public static final int NORTHEASTDEEP= 13;
+    public static final int NORTHEASTDEEP = 13;
     public static final int EASTDEEP = 14;
     public static final int SOUTHEASTDEEP = 15;
     public static final int SOUTHDEEP = 16;
@@ -56,99 +53,99 @@ public final class Buildings{
     private int maxFloors = 0;
     private int minCF = 0;
     private int maxCF = 0;
-    private int startingEdge = EDGE_UNKNOWN; 
+    private int startingEdge = EDGE_UNKNOWN;
     private String buildingType = "1";
     private String cityType = "NONE";
     private int cityBlocks = 0;
-    
-    public Buildings(){
+
+    public Buildings() {
         super();
     }
-    
-    public void setTotalBuildings(int total){
+
+    public void setTotalBuildings(int total) {
         totalBuildings = total;
     }
-    
-    public int getTotalBuildings(){
+
+    public int getTotalBuildings() {
         return totalBuildings;
     }
-    
-    public void setMinBuildings(int min){
+
+    public void setMinBuildings(int min) {
         minBuildings = min;
     }
-    
-    public int getMinBuildings(){
+
+    public int getMinBuildings() {
         return minBuildings;
     }
-    
-    public void setMinFloors(int min){
+
+    public void setMinFloors(int min) {
         minFloors = min;
     }
-    
-    public int getMinFloors(){
+
+    public int getMinFloors() {
         return minFloors;
     }
-    
-    public void setMaxFloors(int max){
+
+    public void setMaxFloors(int max) {
         maxFloors = max;
     }
-    
-    public int getMaxFloors(){
+
+    public int getMaxFloors() {
         return maxFloors;
     }
-    
-    public void setMinCF(int cf){
+
+    public void setMinCF(int cf) {
         minCF = cf;
     }
-    
-    public int getMinCF(){
+
+    public int getMinCF() {
         return minCF;
     }
-    
-    public void setMaxCF(int cf){
+
+    public void setMaxCF(int cf) {
         maxCF = cf;
     }
-    
-    public int getMaxCF(){
+
+    public int getMaxCF() {
         return maxCF;
     }
-    
-    public void setStartingEdge(int edge){
+
+    public void setStartingEdge(int edge) {
         startingEdge = edge;
     }
-    
-    public int getStartingEdge(){
+
+    public int getStartingEdge() {
         return startingEdge;
     }
-    
-    public void setBuildingType(String type){
+
+    public void setBuildingType(String type) {
         buildingType = type;
     }
-    
-    public String getBuildingType(){
+
+    public String getBuildingType() {
         return buildingType;
     }
-    
-    public void setCityType(String type){
+
+    public void setCityType(String type) {
         cityType = type;
     }
-    
-    public String getCityType(){
+
+    public String getCityType() {
         return cityType;
     }
-    
-    public void setCityBlocks(int blocks){
+
+    public void setCityBlocks(int blocks) {
         cityBlocks = blocks;
     }
-    
-    public int getCityBlocks(){
+
+    public int getCityBlocks() {
         return cityBlocks;
     }
-    
+
     @Override
-	public String toString(){
+    public String toString() {
         String result = "";
-     
+
         result += getTotalBuildings();
         result += "|";
         result += getMinBuildings();
@@ -165,12 +162,12 @@ public final class Buildings{
         result += "|";
         result += getStartingEdge();
         result += "|";
-        
+
         return result;
     }
-    
-    public void fromString(StringTokenizer buildingTemplate){
-        
+
+    public void fromString(StringTokenizer buildingTemplate) {
+
         setTotalBuildings(Integer.valueOf(buildingTemplate.nextToken()));
         setMinBuildings(Integer.valueOf(buildingTemplate.nextToken()));
         setMinFloors(Integer.valueOf(buildingTemplate.nextToken()));
@@ -179,7 +176,5 @@ public final class Buildings{
         setMaxCF(Integer.valueOf(buildingTemplate.nextToken()));
         setBuildingType(buildingTemplate.nextToken());
         setStartingEdge(Integer.valueOf(buildingTemplate.nextToken()));
-        
     }
 }
-

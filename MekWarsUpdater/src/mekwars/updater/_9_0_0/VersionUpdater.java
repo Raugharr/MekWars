@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -32,7 +32,7 @@ public class VersionUpdater extends AbstractVersionUpdater {
         advancedTerrainUpdater.process();
         planetUpdater.process();
     }
-    
+
     public Version getVersion() {
         return version;
     }

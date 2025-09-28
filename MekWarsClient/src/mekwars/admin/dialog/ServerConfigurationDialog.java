@@ -12,10 +12,9 @@
 /**
  * @author jtighe
  * @author Spork
- *
- * Server Configuration Page. All new Server Options need to be added to this page or subPanels as well.
+ *     <p>Server Configuration Page. All new Server Options need to be added to this page or
+ *     subPanels as well.
  */
-
 package mekwars.admin.dialog;
 
 import java.awt.Dimension;
@@ -26,7 +25,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -39,9 +37,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
-
-import org.jdatepicker.impl.JDatePickerImpl;
-
 import mekwars.admin.dialog.serverConfigDialogs.AdvancedRepairPanel;
 import mekwars.admin.dialog.serverConfigDialogs.ArtilleryPanel;
 import mekwars.admin.dialog.serverConfigDialogs.AutoProdPanel;
@@ -84,12 +79,13 @@ import mekwars.admin.dialog.serverConfigDialogs.VotingPanel;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.util.MWLogger;
+import org.jdatepicker.impl.JDatePickerImpl;
 
 public final class ServerConfigurationDialog implements ActionListener {
 
-    private final static String okayCommand = "okay";
-    private final static String cancelCommand = "cancel";
-    private final static String windowName = "MekWars Server Configuration";
+    private static final String okayCommand = "okay";
+    private static final String cancelCommand = "cancel";
+    private static final String windowName = "MekWars Server Configuration";
 
     private final JButton okayButton = new JButton("OK");
     private final JButton cancelButton = new JButton("Cancel");
@@ -109,15 +105,17 @@ public final class ServerConfigurationDialog implements ActionListener {
      */
 
     /**
-     * @author Torren (Jason Tighe) 12/29/2005 I've completely redone how the Server config dialog works There are 2 basic fields now baseTextField which is a
-     *         JTextField and baseCheckBox which is a JCheckBox. When you add a new server config add the labels to the tab then use the base fields to add the
-     *         ver. make sure to set the base field's name method this is used to populate and save. ex: BaseTextField.setName("DefaultServerOptionsVariable");
-     *         Two recursive methods populate and save the data to the server findAndPopulateTextAndCheckBoxes(JPanel) findAndSaveConfigs(JPanel) This change to
-     *         the code removes the tediousness of having to add a new var to 3 locations when it is use. Now only 1 location needs to added and that is the
-     *         vars placement on the tab in the UI.
-     *
-     * @author Spork - refactored this completely, breaking each panel into its own class.
-     *         This file was well over 5000 lines long, impossible to find anything in.
+     * @author Torren (Jason Tighe) 12/29/2005 I've completely redone how the Server config dialog
+     *     works There are 2 basic fields now baseTextField which is a JTextField and baseCheckBox
+     *     which is a JCheckBox. When you add a new server config add the labels to the tab then use
+     *     the base fields to add the ver. make sure to set the base field's name method this is
+     *     used to populate and save. ex: BaseTextField.setName("DefaultServerOptionsVariable"); Two
+     *     recursive methods populate and save the data to the server
+     *     findAndPopulateTextAndCheckBoxes(JPanel) findAndSaveConfigs(JPanel) This change to the
+     *     code removes the tediousness of having to add a new var to 3 locations when it is use.
+     *     Now only 1 location needs to added and that is the vars placement on the tab in the UI.
+     * @author Spork - refactored this completely, breaking each panel into its own class. This file
+     *     was well over 5000 lines long, impossible to find anything in.
      */
     public ServerConfigurationDialog(MWClient mwclient) {
 
@@ -126,17 +124,17 @@ public final class ServerConfigurationDialog implements ActionListener {
         // Get the screen dimensions - the Units tab is too tall for smaller than 1280 x 1024
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         screenSize = toolkit.getScreenSize();
-        
+
         // @salient adding tooltip settings
         ToolTipManager.sharedInstance().setDismissDelay(7000);
         ToolTipManager.sharedInstance().setInitialDelay(400);
-        //ToolTipManager.sharedInstance().setReshowDelay(100);
+        // ToolTipManager.sharedInstance().setReshowDelay(100);
 
         // TAB PANELS (these are added to the root pane as tabs)
         JPanel unitsPanel;
         JPanel pilotSkillsPanel;
-        PathsPanel pathsPanel = new PathsPanel();// file paths
-        InfluencePanel influencePanel = new InfluencePanel(mwclient);// influence settings
+        PathsPanel pathsPanel = new PathsPanel(); // file paths
+        InfluencePanel influencePanel = new InfluencePanel(mwclient); // influence settings
         RepodPanel repodPanel = new RepodPanel(mwclient);
         TechnicianPanel technicianPanel = new TechnicianPanel(mwclient);
         if (screenSize.height >= 1024) {
@@ -151,25 +149,36 @@ public final class ServerConfigurationDialog implements ActionListener {
         NewbieHousePanel newbieHousePanel = new NewbieHousePanel();
         VotingPanel votingPanel = new VotingPanel();
         AutoProdPanel autoProdPanel = new AutoProdPanel(mwclient); // Autoproduction
-        CombatPanel combatPanel = new CombatPanel();// mm options, etc
-        UnitLimitsPanel unitLimitsPanel = new UnitLimitsPanel(); // Set limits on units in a player's hangar
-        ProductionPanel productionPanel = new ProductionPanel();// was factoryOptions
+        CombatPanel combatPanel = new CombatPanel(); // mm options, etc
+        UnitLimitsPanel unitLimitsPanel =
+                new UnitLimitsPanel(); // Set limits on units in a player's hangar
+        ProductionPanel productionPanel = new ProductionPanel(); // was factoryOptions
         BlackMarketPanel blackMarketPanel = new BlackMarketPanel(mwclient);
         RewardPanel rewardPanel = new RewardPanel(mwclient);
-        FactoryPurchasePanel factoryPurchasePanel = new FactoryPurchasePanel(mwclient); // Allow players to purchase new factories.
-        DefectionPanel defectionPanel = new DefectionPanel();// control defection access, losses therefrom, etc.
-        MiscOptionsPanel miscOptionsPanel = new MiscOptionsPanel();// things which can't be easily categorized
-        UnitResearchPanel unitResearchPanel = new UnitResearchPanel(mwclient); // Research Unit Panel
+        FactoryPurchasePanel factoryPurchasePanel =
+                new FactoryPurchasePanel(mwclient); // Allow players to purchase new factories.
+        DefectionPanel defectionPanel =
+                new DefectionPanel(); // control defection access, losses therefrom, etc.
+        MiscOptionsPanel miscOptionsPanel =
+                new MiscOptionsPanel(); // things which can't be easily categorized
+        UnitResearchPanel unitResearchPanel =
+                new UnitResearchPanel(mwclient); // Research Unit Panel
         ArtilleryPanel artilleryPanel = new ArtilleryPanel();
-        TechnologyResearchPanel technologyResearchPanel = new TechnologyResearchPanel(mwclient); // Technology Reseach Panel
-        BattleValuePanel battleValuePanel = new BattleValuePanel();// mekwars BV adjustments
-        SinglePlayerFactionPanel singlePlayerFactionPanel = new SinglePlayerFactionPanel(); // Single Player Faction Configs
+        TechnologyResearchPanel technologyResearchPanel =
+                new TechnologyResearchPanel(mwclient); // Technology Reseach Panel
+        BattleValuePanel battleValuePanel = new BattleValuePanel(); // mekwars BV adjustments
+        SinglePlayerFactionPanel singlePlayerFactionPanel =
+                new SinglePlayerFactionPanel(); // Single Player Faction Configs
         DisconnectionPanel disconnectionPanel = new DisconnectionPanel();
-        DiscordAndDjangoPanel discordAndDjangoPanel = new DiscordAndDjangoPanel(); //@salient
-        PilotsPanel pilotsPanel = new PilotsPanel(mwclient);// allows SO's set up pilot options and personal pilot queue options
+        DiscordAndDjangoPanel discordAndDjangoPanel = new DiscordAndDjangoPanel(); // @salient
+        PilotsPanel pilotsPanel =
+                new PilotsPanel(
+                        mwclient); // allows SO's set up pilot options and personal pilot queue
+        // options
         NoPlayPanel noPlayPanel = new NoPlayPanel(mwclient);
-        AdvancedRepairPanel advancedRepairPanel = new AdvancedRepairPanel();// Advanced Repair
-        LossCompensationPanel lossCompensationPanel = new LossCompensationPanel();// battle loss compensation
+        AdvancedRepairPanel advancedRepairPanel = new AdvancedRepairPanel(); // Advanced Repair
+        LossCompensationPanel lossCompensationPanel =
+                new LossCompensationPanel(); // battle loss compensation
         PayoutModPanel payoutModPanel = new PayoutModPanel();
         ChristmasPanel christmasPanel = new ChristmasPanel();
         SchedulerPanel schedulerPanel = new SchedulerPanel();
@@ -192,51 +201,95 @@ public final class ServerConfigurationDialog implements ActionListener {
         okayButton.setToolTipText("Save Options");
         cancelButton.setToolTipText("Exit without saving options");
 
-        ConfigPane.addTab("Advanced Repairs", null, advancedRepairPanel, "For all your Unit Care needs");
-        ConfigPane.addTab("Autoproduction", null, autoProdPanel, "Set type and details of factory autoproduction");
+        ConfigPane.addTab(
+                "Advanced Repairs", null, advancedRepairPanel, "For all your Unit Care needs");
+        ConfigPane.addTab(
+                "Autoproduction",
+                null,
+                autoProdPanel,
+                "Set type and details of factory autoproduction");
         ConfigPane.addTab("Black Market", null, blackMarketPanel, "Black Market access controls");
         ConfigPane.addTab("BV Options", null, battleValuePanel, "Battle Value");
         ConfigPane.addTab("Christmas Units", null, christmasPanel, "Merry Christmas!");
         ConfigPane.addTab("Combat", null, combatPanel, "Combat");
         ConfigPane.addTab("Defection", null, defectionPanel, "Defection configuration");
-        ConfigPane.addTab("Direct Sales", null, directSellPanel, "Units - the lifeblood of the game");
-        ConfigPane.addTab("Disconnection", null, disconnectionPanel, "Disconnection autoresolution settings");
-        ConfigPane.addTab("Discord & Django", null, discordAndDjangoPanel, "Discord & Django"); //@salient
+        ConfigPane.addTab(
+                "Direct Sales", null, directSellPanel, "Units - the lifeblood of the game");
+        ConfigPane.addTab(
+                "Disconnection", null, disconnectionPanel, "Disconnection autoresolution settings");
+        ConfigPane.addTab(
+                "Discord & Django", null, discordAndDjangoPanel, "Discord & Django"); // @salient
         ConfigPane.addTab("Faction", null, factionPanel, "House Stuff");
         ConfigPane.addTab("Factory Options", null, productionPanel, "Factories That Can Do");
         ConfigPane.addTab("Factory Purchase", null, factoryPurchasePanel, "Factories For Sale");
         ConfigPane.addTab("File Paths", null, pathsPanel, "Paths");
-        ConfigPane.addTab("Free Build", null, freebuildPanel, "Free Build"); //@salient
+        ConfigPane.addTab("Free Build", null, freebuildPanel, "Free Build"); // @salient
         ConfigPane.addTab("Influence", null, influencePanel, "Influence");
-        ConfigPane.addTab("Links & Rules", null, linksPanel, "Configure/Enable Links Area and Rules Panel"); //@salient
-        ConfigPane.addTab("Loss Compensation", null, lossCompensationPanel, "Extra Payments for salvaged/destroyed units.");
-        ConfigPane.addTab("Mini Campaigns", null, miniCampaignPanel, "Mini Campaigns"); //@salient
+        ConfigPane.addTab(
+                "Links & Rules",
+                null,
+                linksPanel,
+                "Configure/Enable Links Area and Rules Panel"); // @salient
+        ConfigPane.addTab(
+                "Loss Compensation",
+                null,
+                lossCompensationPanel,
+                "Extra Payments for salvaged/destroyed units.");
+        ConfigPane.addTab("Mini Campaigns", null, miniCampaignPanel, "Mini Campaigns"); // @salient
         ConfigPane.addTab("Misc Options", null, miscOptionsPanel, "Misc Stuff");
         ConfigPane.addTab("No Play", null, noPlayPanel, "Personal Blacklist/Exclusion options");
         ConfigPane.addTab("Payout Mods", null, payoutModPanel, "Modifications to ops payout");
         ConfigPane.addTab("Pilots", null, pilotsPanel, "Pilot Options");
-        ConfigPane.addTab("Pilot Skills", null, pilotSkillsPanel, "Server Configurable Pilot Skills");
+        ConfigPane.addTab(
+                "Pilot Skills", null, pilotSkillsPanel, "Server Configurable Pilot Skills");
         ConfigPane.addTab("Repodding", null, repodPanel, "Repod");
         ConfigPane.addTab("Rewards", null, rewardPanel, "Reward Points");
-        ConfigPane.addTab("Scheduler",  null, schedulerPanel, "Repeating Tasks");
-        ConfigPane.addTab("Single Player", null, singlePlayerFactionPanel, "Single Player Faction Configuration");
+        ConfigPane.addTab("Scheduler", null, schedulerPanel, "Repeating Tasks");
+        ConfigPane.addTab(
+                "Single Player",
+                null,
+                singlePlayerFactionPanel,
+                "Single Player Faction Configuration");
         ConfigPane.addTab("SOL Units", null, newbieHousePanel, "SOL Units and Attack Limits");
-        ConfigPane.addTab("Support Units", null, artilleryPanel, "Artillery and Gun Emplacements and Mines oh my!");
+        ConfigPane.addTab(
+                "Support Units",
+                null,
+                artilleryPanel,
+                "Artillery and Gun Emplacements and Mines oh my!");
         ConfigPane.addTab("Techs", null, technicianPanel, "Techs");
-        ConfigPane.addTab("Tech Research", null, technologyResearchPanel, "Technology Research Configuration");
-        ConfigPane.addTab("Tracker", null, trackerPanel, "Comstar HPGNet - enabling inter-server communiation and activity tracking");
+        ConfigPane.addTab(
+                "Tech Research",
+                null,
+                technologyResearchPanel,
+                "Technology Research Configuration");
+        ConfigPane.addTab(
+                "Tracker",
+                null,
+                trackerPanel,
+                "Comstar HPGNet - enabling inter-server communiation and activity tracking");
         ConfigPane.addTab("Voting", null, votingPanel, "Voting Stuff");
-        ConfigPane.addTab("Unit Limits", null, unitLimitsPanel, "Limits to unit ownership based on unit weightclass");
+        ConfigPane.addTab(
+                "Unit Limits",
+                null,
+                unitLimitsPanel,
+                "Limits to unit ownership based on unit weightclass");
         ConfigPane.addTab("Unit Research", null, unitResearchPanel, "Unit Research Configuration");
         ConfigPane.addTab("Units", null, unitsPanel, "Consolidated Unit Information");
         // Create the panel that will hold the entire UI
         JPanel mainConfigPanel = new JPanel();
 
         // Set the user's options
-        Object[] options = { okayButton, cancelButton };
+        Object[] options = {okayButton, cancelButton};
 
         // Create the pane containing the buttons
-        pane = new JOptionPane(ConfigPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, options, null);
+        pane =
+                new JOptionPane(
+                        ConfigPane,
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.DEFAULT_OPTION,
+                        null,
+                        options,
+                        null);
 
         // Create the main dialog and set the default button
         dialog = pane.createDialog(mainConfigPanel, windowName);
@@ -248,7 +301,6 @@ public final class ServerConfigurationDialog implements ActionListener {
         for (int pos = ConfigPane.getComponentCount() - 1; pos >= 0; pos--) {
             JPanel panel = (JPanel) ConfigPane.getComponent(pos);
             findAndPopulateTextAndCheckBoxes(panel);
-
         }
 
         // Show the dialog and get the user's input
@@ -274,8 +326,9 @@ public final class ServerConfigurationDialog implements ActionListener {
     }
 
     /**
-     * This Method tunnels through all of the panels to find the textfields and checkboxes. Once it find one it grabs the Name() param of the object and uses
-     * that to find out what the setting should be from the mwclient.getServerConfigs() method.
+     * This Method tunnels through all of the panels to find the textfields and checkboxes. Once it
+     * find one it grabs the Name() param of the object and uses that to find out what the setting
+     * should be from the mwclient.getServerConfigs() method.
      *
      * @param panel
      */
@@ -360,9 +413,9 @@ public final class ServerConfigurationDialog implements ActionListener {
 
             } else if (field instanceof JScrollPane) {
                 JScrollPane pane = (JScrollPane) field;
-                JTextArea area = (JTextArea)pane.getViewport().getView();
+                JTextArea area = (JTextArea) pane.getViewport().getView();
                 key = area.getName();
-                if(key == null) {
+                if (key == null) {
                     continue;
                 }
                 String s = mwclient.getServerConfigs(key);
@@ -373,8 +426,8 @@ public final class ServerConfigurationDialog implements ActionListener {
     }
 
     /**
-     * This method will tunnel through all of the panels of the config UI to find any changed text fields or checkboxes. Then it will send the new configs to
-     * the server.
+     * This method will tunnel through all of the panels of the config UI to find any changed text
+     * fields or checkboxes. Then it will send the new configs to the server.
      *
      * @param panel
      */
@@ -406,7 +459,13 @@ public final class ServerConfigurationDialog implements ActionListener {
 
                 // reduce bandwidth only send things that have changed.
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX
+                                    + "c AdminChangeServerConfig#"
+                                    + key
+                                    + "#"
+                                    + value
+                                    + "#CONFIRM");
                 }
             } else if (field instanceof JCheckBox) {
                 JCheckBox checkBox = (JCheckBox) field;
@@ -419,7 +478,13 @@ public final class ServerConfigurationDialog implements ActionListener {
                 }
                 // reduce bandwidth only send things that have changed.
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX
+                                    + "c AdminChangeServerConfig#"
+                                    + key
+                                    + "#"
+                                    + value
+                                    + "#CONFIRM");
                 }
             } else if (field instanceof JRadioButton) {
                 JRadioButton radioButton = (JRadioButton) field;
@@ -432,7 +497,13 @@ public final class ServerConfigurationDialog implements ActionListener {
                 }
                 // reduce bandwidth only send things that have changed.
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX
+                                    + "c AdminChangeServerConfig#"
+                                    + key
+                                    + "#"
+                                    + value
+                                    + "#CONFIRM");
                 }
             } else if (field instanceof JDatePickerImpl) {
                 JDatePickerImpl picker = (JDatePickerImpl) field;
@@ -440,16 +511,28 @@ public final class ServerConfigurationDialog implements ActionListener {
                 key = picker.getName();
                 // reduce bandwidth only send things that have changed.
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + value + "#CONFIRM");
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX
+                                    + "c AdminChangeServerConfig#"
+                                    + key
+                                    + "#"
+                                    + value
+                                    + "#CONFIRM");
                 }
             } else if (field instanceof JScrollPane) {
                 JScrollPane pane = (JScrollPane) field;
-                JTextArea area = (JTextArea)pane.getViewport().getView();
+                JTextArea area = (JTextArea) pane.getViewport().getView();
                 value = area.getText();
                 key = area.getName();
                 if (!mwclient.getServerConfigs(key).equalsIgnoreCase(value)) {
                     String toSend = value.replace('\n', '$');
-                    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminChangeServerConfig#" + key + "#" + toSend + "#CONFIRM");
+                    mwclient.sendChat(
+                            GameHost.CAMPAIGN_PREFIX
+                                    + "c AdminChangeServerConfig#"
+                                    + key
+                                    + "#"
+                                    + toSend
+                                    + "#CONFIRM");
                 }
             } // else continue
         }

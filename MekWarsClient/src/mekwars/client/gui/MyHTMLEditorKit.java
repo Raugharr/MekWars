@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -26,41 +26,24 @@ import javax.swing.text.html.HTMLEditorKit;
 
 public class MyHTMLEditorKit extends HTMLEditorKit {
 
-  /**
-     * 
-     */
+    /** */
     private static final long serialVersionUID = -891227318566572289L;
 
-
-@Override
-public ViewFactory getViewFactory() {
-    return new HTMLFactoryX();
-  }
-
-
-  public static class HTMLFactoryX extends HTMLFactory
-    implements ViewFactory {
-
     @Override
-	public View create(Element elem) {
-      Object o =
-        elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
-      if (o instanceof HTML.Tag) {
-	HTML.Tag kind = (HTML.Tag) o;
-        if (kind == HTML.Tag.IMG)
-          return new MyImageView(elem);
-      }
-      return super.create( elem );
+    public ViewFactory getViewFactory() {
+        return new HTMLFactoryX();
     }
-  }
+
+    public static class HTMLFactoryX extends HTMLFactory implements ViewFactory {
+
+        @Override
+        public View create(Element elem) {
+            Object o = elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
+            if (o instanceof HTML.Tag) {
+                HTML.Tag kind = (HTML.Tag) o;
+                if (kind == HTML.Tag.IMG) return new MyImageView(elem);
+            }
+            return super.create(elem);
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-

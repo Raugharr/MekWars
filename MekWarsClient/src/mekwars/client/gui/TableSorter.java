@@ -1,47 +1,40 @@
 package mekwars.client.gui;
 
 /**
- * A sorter for TableModels. The sorter has a model (conforming to TableModel)
- * and itself implements TableModel. TableSorter does not store or copy
- * the data in the TableModel, instead it maintains an array of
- * integers which it keeps the same size as the number of rows in its
- * model. When the model changes it notifies the sorter that something
- * has changed eg. "rowsAdded" so that its internal array of integers
- * can be reallocated. As requests are made of the sorter (like
- * getValueAt(row, col) it redirects them to its model via the mapping
- * array. That way the TableSorter appears to hold another copy of the table
- * with the rows in a different order. The sorting algorthm used is stable
- * which means that it does not move around rows when its comparison
+ * A sorter for TableModels. The sorter has a model (conforming to TableModel) and itself implements
+ * TableModel. TableSorter does not store or copy the data in the TableModel, instead it maintains
+ * an array of integers which it keeps the same size as the number of rows in its model. When the
+ * model changes it notifies the sorter that something has changed eg. "rowsAdded" so that its
+ * internal array of integers can be reallocated. As requests are made of the sorter (like
+ * getValueAt(row, col) it redirects them to its model via the mapping array. That way the
+ * TableSorter appears to hold another copy of the table with the rows in a different order. The
+ * sorting algorthm used is stable which means that it does not move around rows when its comparison
  * function returns 0 to denote that they are equivalent.
  *
  * @version 1.5 12/17/97
  * @author Philip Milne
  */
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.Vector;
-
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
-
 import mekwars.client.MWClient;
 import mekwars.common.util.MWLogger;
 
 public class TableSorter extends TableMap {
 
-    /**
-     * 
-     */
+    /** */
     private static final long serialVersionUID = -3715062654870040447L;
+
     // VARIABLES
-    public final static int SORTER_BM = 0;
-    public final static int SORTER_BUILDTABLES = 1;
-    public final static int SORTER_BATTLES = 2;
-    public final static int SORTER_BMPARTS = 3;
+    public static final int SORTER_BM = 0;
+    public static final int SORTER_BUILDTABLES = 1;
+    public static final int SORTER_BATTLES = 2;
+    public static final int SORTER_BMPARTS = 3;
 
     int indexes[];
     Vector<Integer> sortingColumns = new Vector<Integer>(1, 1);
@@ -52,7 +45,7 @@ public class TableSorter extends TableMap {
     // store the "current" column in order to toggle
     // acending/decending sorts @urgru 3.27.05
     int currentColumn = -2;
-    boolean currentOrder = true;// ascending
+    boolean currentOrder = true; // ascending
     MWClient mwclient = null;
 
     // CONSTRUCTOR
@@ -231,8 +224,8 @@ public class TableSorter extends TableMap {
         checkModel();
 
         compares = 0;
-        //n2sort();
-        //qsort(0, indexes.length-1);
+        // n2sort();
+        // qsort(0, indexes.length-1);
         shuttlesort(indexes.clone(), indexes, 0, indexes.length);
         // MMClient.mwClientLog.clientOutputLog("Compares: "+compares);
     }
@@ -310,8 +303,7 @@ public class TableSorter extends TableMap {
 
     @Override
     public Object getValueAt(int aRow, int aColumn) {
-        if (aRow < 0 || aRow >= indexes.length)
-            return null;
+        if (aRow < 0 || aRow >= indexes.length) return null;
         checkModel();
         return model.getValueAt(indexes[aRow], aColumn);
     }
@@ -334,15 +326,11 @@ public class TableSorter extends TableMap {
         super.tableChanged(new TableModelEvent(this));
     }
 
-    /**
-     * Method used to restore a pre-existing sort order after BM data is
-     * refreshed.
-     */
+    /** Method used to restore a pre-existing sort order after BM data is refreshed. */
     public void restorePreviousSort() {
         // only restore if a column was actually selected
-        if (currentColumn != -2)
-            this.sortByColumn(currentColumn, currentOrder);
-    }// end restorePreviousSort
+        if (currentColumn != -2) this.sortByColumn(currentColumn, currentOrder);
+    } // end restorePreviousSort
 
     public void loadSavedSortPreferences(int mode) {
 
@@ -366,7 +354,8 @@ public class TableSorter extends TableMap {
             mwclient.getConfig().setParam("BMSORTCOLUMN", Integer.toString(currentColumn));
             mwclient.getConfig().setParam("BMSORTORDER", Boolean.toString(currentOrder));
         } else if (sortMode == SORTER_BUILDTABLES) {
-            mwclient.getConfig().setParam("TABLEBROWSERSORTCOLUMN", Integer.toString(currentColumn));
+            mwclient.getConfig()
+                    .setParam("TABLEBROWSERSORTCOLUMN", Integer.toString(currentColumn));
             mwclient.getConfig().setParam("TABLEBROWSERSORTORDER", Boolean.toString(currentOrder));
         } else if (sortMode == SORTER_BATTLES) {
             mwclient.getConfig().setParam("BATTLESSORTCOLUMN", Integer.toString(currentColumn));
@@ -385,57 +374,55 @@ public class TableSorter extends TableMap {
         final TableSorter sorter = this;
         final JTable tableView = table;
         tableView.setColumnSelectionAllowed(false);
-        MouseAdapter listMouseListener = new MouseAdapter() {
+        MouseAdapter listMouseListener =
+                new MouseAdapter() {
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // JPopupMenu popup = new JPopupMenu();
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        // JPopupMenu popup = new JPopupMenu();
 
-                // check the column
-                final int column = tableView.getColumnModel().getColumnIndexAtX(e.getX());
+                        // check the column
+                        final int column = tableView.getColumnModel().getColumnIndexAtX(e.getX());
 
-                // break out if its a bum column
-                if (column == -1)
-                    return;
+                        // break out if its a bum column
+                        if (column == -1) return;
 
-                // sorting the same column, again. toggle.
-                if (column == currentColumn) {
+                        // sorting the same column, again. toggle.
+                        if (column == currentColumn) {
 
-                    // if currently ascending do an ascending sort,
-                    // and vice versa.
-                    if (currentOrder == true) {
-                        sorter.sortByColumn(column, false);
-                        tableView.repaint();
-                        currentOrder = false;
-                    } else {
-                        sorter.sortByColumn(column, true);
-                        tableView.repaint();
-                        currentOrder = true;
+                            // if currently ascending do an ascending sort,
+                            // and vice versa.
+                            if (currentOrder == true) {
+                                sorter.sortByColumn(column, false);
+                                tableView.repaint();
+                                currentOrder = false;
+                            } else {
+                                sorter.sortByColumn(column, true);
+                                tableView.repaint();
+                                currentOrder = true;
+                            }
+                            sorter.saveSortPreferences();
+                        } // end if(sorting same column)
+                        else {
+
+                            /*
+                             * All sorts start ascending (true), except TableViewer
+                             * Frequency sorts. These default to decending.
+                             */
+                            if (sortMode == SORTER_BUILDTABLES && column == 3) {
+                                sorter.sortByColumn(column, false);
+                                currentOrder = false;
+                            } else {
+                                sorter.sortByColumn(column, true);
+                                currentOrder = true;
+                            }
+
+                            tableView.repaint();
+                            currentColumn = column;
+                            sorter.saveSortPreferences();
+                        }
                     }
-                    sorter.saveSortPreferences();
-                }// end if(sorting same column)
-
-                else {
-
-                    /*
-                     * All sorts start ascending (true), except TableViewer
-                     * Frequency sorts. These default to decending.
-                     */
-                    if (sortMode == SORTER_BUILDTABLES && column == 3) {
-                        sorter.sortByColumn(column, false);
-                        currentOrder = false;
-                    } else {
-                        sorter.sortByColumn(column, true);
-                        currentOrder = true;
-                    }
-
-                    tableView.repaint();
-                    currentColumn = column;
-                    sorter.saveSortPreferences();
-                }
-            }
-
-        };
+                };
         JTableHeader th = tableView.getTableHeader();
         th.addMouseListener(listMouseListener);
     }

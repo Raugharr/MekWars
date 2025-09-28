@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Jason Tighe (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,16 +16,14 @@
 
 /**
  * Sends Access Levels for each command back to the user.
- * 
- * @author Torren (Jason Tighe) 8.15.05 
- * 
+ *
+ * @author Torren (Jason Tighe) 8.15.05
  */
 package mekwars.server.dataProvider.commands;
 
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
 import mekwars.server.campaign.CampaignMain;
@@ -34,28 +32,26 @@ import mekwars.server.dataProvider.ServerCommand;
 
 /**
  * Retrieve all planet information (if the data cache is lost at client side)
- * 
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class CommandAccessLevels implements ServerCommand {
 
     /**
-     * @see server.dataProvider.ServerCommand#execute(java.util.Date,
-     *      java.io.PrintWriter, common.CampaignData)
+     * @see server.dataProvider.ServerCommand#execute(java.util.Date, java.io.PrintWriter,
+     *     common.CampaignData)
      */
-    public void execute(Date timestamp, BinWriter out, CampaignData data)
-            throws Exception {
-		Hashtable<String,Command> commandTable = CampaignMain.cm.getServerCommands();
-		Enumeration<String> commands = commandTable.keys();
+    public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
+        Hashtable<String, Command> commandTable = CampaignMain.cm.getServerCommands();
+        Enumeration<String> commands = commandTable.keys();
 
-		out.println(commandTable.size(),"CommandSize");
-		while (commands.hasMoreElements())
-		{
-			String commandName = commands.nextElement();
-			Command commandMethod = commandTable.get(commandName);
-			
-			out.println(commandName,"CommandName");
-	        out.println(commandMethod.getExecutionLevel(),"AccessLevel");
-		}
+        out.println(commandTable.size(), "CommandSize");
+        while (commands.hasMoreElements()) {
+            String commandName = commands.nextElement();
+            Command commandMethod = commandTable.get(commandName);
+
+            out.println(commandName, "CommandName");
+            out.println(commandMethod.getExecutionLevel(), "AccessLevel");
+        }
     }
 }

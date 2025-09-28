@@ -19,54 +19,49 @@
  */
 package mekwars.server.campaign.pilot.skills;
 
+import megamek.common.Entity;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 
 /**
- *  Pilots with the gifted Skill recive an extra 5% chance to
- *  gain a skill when they fail to level Piloting or Gunnery
- *  after a win.
- * @@author Torren (Jason Tighe)
+ * Pilots with the gifted Skill recive an extra 5% chance to gain a skill when they fail to level
+ * Piloting or Gunnery after a win. @@author Torren (Jason Tighe)
  */
-
 public class GiftedSkill extends SPilotSkill {
-   public GiftedSkill(int id) {
-      super(id, "Gifted", "GT");
-      setDescription("Pilots receive an extra 5% chance to gain a skill when they fail to level Piloting or Gunnery after a win.");
-  }
+    public GiftedSkill(int id) {
+        super(id, "Gifted", "GT");
+        setDescription(
+                "Pilots receive an extra 5% chance to gain a skill when they fail to level Piloting or Gunnery after a win.");
+    }
 
-  public GiftedSkill() {
-  	//TODO: replace with ReflectionProvider
-  }
+    public GiftedSkill() {
+        // TODO: replace with ReflectionProvider
+    }
 
+    @Override
+    public void modifyPilot(Pilot p) {}
 
-  @Override
-public void modifyPilot(Pilot p) {
-	}
-
-	@Override
-	public int getChance(int unitType, Pilot p) {
-    	if (p.getSkills().has(this)) {
+    @Override
+    public int getChance(int unitType, Pilot p) {
+        if (p.getSkills().has(this)) {
             return 0;
         }
 
-       	String chance = "chancefor"+getAbbreviation()+"for"+Unit.getTypeClassDesc(unitType);
+        String chance = "chancefor" + getAbbreviation() + "for" + Unit.getTypeClassDesc(unitType);
 
-		SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
+        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
 
-		if ( house == null ) {
+        if (house == null) {
             return CampaignMain.cm.getIntegerConfig(chance);
         }
 
-		return house.getIntegerConfig(chance);
+        return house.getIntegerConfig(chance);
     }
 
-	@Override
-	public int getBVMod(Entity unit){
+    @Override
+    public int getBVMod(Entity unit) {
         return 0;
     }
-
 }

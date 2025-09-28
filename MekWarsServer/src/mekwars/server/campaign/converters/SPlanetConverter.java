@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,8 +22,8 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import java.util.TreeMap;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import mekwars.common.CampaignData;
 import mekwars.common.Continent;
 import mekwars.common.House;
@@ -38,8 +38,8 @@ public class SPlanetConverter implements Converter {
         return clazz.equals(SPlanet.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer,
-            MarshallingContext context) {
+    public void marshal(
+            Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         SPlanet planet = (SPlanet) source;
 
         for (Continent continent : planet.getEnvironments().toArray()) {
@@ -130,11 +130,8 @@ public class SPlanetConverter implements Converter {
             } else if (nodeName.equals("influence")) {
                 influences = (Influences) context.convertAnother(null, Influences.class);
             } else if (nodeName.equals("unitFactory")) {
-                SUnitFactory unitFactory = (SUnitFactory) 
-                    context.convertAnother(
-                            null,
-                            SUnitFactory.class
-                    );
+                SUnitFactory unitFactory =
+                        (SUnitFactory) context.convertAnother(null, SUnitFactory.class);
                 unitFactoryList.add(unitFactory);
             } else if (nodeName.equals("isHomeworld")) {
                 isHomeworld = Boolean.parseBoolean(reader.getValue());
@@ -148,20 +145,20 @@ public class SPlanetConverter implements Converter {
         if (name == null) {
             throw new ConversionException("name is null");
         }
-        SPlanet planet = new SPlanet(
-                name,
-                influences,
-                componentProduction,
-                Double.parseDouble(xcoord),
-                Double.parseDouble(ycoord)
-            );
+        SPlanet planet =
+                new SPlanet(
+                        name,
+                        influences,
+                        componentProduction,
+                        Double.parseDouble(xcoord),
+                        Double.parseDouble(ycoord));
         for (UnitFactory unitFactory : unitFactoryList) {
             ((SUnitFactory) unitFactory).setPlanet(planet);
         }
         planet.setHomeWorld(isHomeworld);
         if (originalOwnerString == null) {
             Integer owner = influences.getOwner();
-            
+
             House house = CampaignData.cd.getHouse(owner);
             originalOwnerString = house.getName();
         }
@@ -174,8 +171,8 @@ public class SPlanetConverter implements Converter {
         return planet;
     }
 
-    public TreeMap<String, String> unmarshalOperationFlags(HierarchicalStreamReader reader,
-            UnmarshallingContext context) {
+    public TreeMap<String, String> unmarshalOperationFlags(
+            HierarchicalStreamReader reader, UnmarshallingContext context) {
         TreeMap<String, String> operationFlags = new TreeMap<String, String>();
 
         while (reader.hasMoreChildren()) {
@@ -189,7 +186,9 @@ public class SPlanetConverter implements Converter {
         return operationFlags;
     }
 
-    public void unmarshalOperationFlag(TreeMap<String, String> operationFlags, HierarchicalStreamReader reader,
+    public void unmarshalOperationFlag(
+            TreeMap<String, String> operationFlags,
+            HierarchicalStreamReader reader,
             UnmarshallingContext context) {
         String key = null;
         String value = null;

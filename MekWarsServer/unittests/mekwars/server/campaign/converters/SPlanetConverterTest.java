@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -19,11 +19,6 @@ package mekwars.server.campaign.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.TreeMap;
 import mekwars.common.Influences;
 import mekwars.server.campaign.CampaignMain;
@@ -45,18 +40,12 @@ public class SPlanetConverterTest {
         TreeMap<String, String> operationFlags = new TreeMap<String, String>();
 
         operationFlags.put("Foo", "Bar");
-        SPlanet planet = new SPlanet(
-                planetName,
-                influences,
-                componentProduction,
-                xcoord,
-                ycoord     
-            );
+        SPlanet planet = new SPlanet(planetName, influences, componentProduction, xcoord, ycoord);
         planet.setHomeWorld(isHomeworld);
         planet.setOriginalOwner(originalOwner);
         planet.setPlanetFlags(operationFlags);
 
-        SMMNetXStream xstream = new SMMNetXStream(); 
+        SMMNetXStream xstream = new SMMNetXStream();
         String xml = xstream.toXML(planet);
 
         SPlanet newPlanet = (SPlanet) xstream.fromXML(xml);

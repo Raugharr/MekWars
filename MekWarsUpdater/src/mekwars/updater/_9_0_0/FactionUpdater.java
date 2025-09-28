@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,10 +18,8 @@ package mekwars.updater._9_0_0;
 
 import com.thoughtworks.xstream.XStream;
 import java.util.ArrayList;
-import mekwars.common.CampaignData;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
-import mekwars.server.common.util.SMMNetXStream;
 import mekwars.updater.FileUpdater;
 import mekwars.updater._9_0_0.util.XMLFactionDataParser;
 
@@ -41,8 +39,8 @@ public class FactionUpdater extends FileUpdater<SHouse> {
     }
 
     protected String serialize(ArrayList<SHouse> elements) {
-        XStream xstream = CampaignMain.cm.getXStream(); 
-        
+        XStream xstream = CampaignMain.cm.getXStream();
+
         return xstream.toXML(elements.toArray(new SHouse[elements.size()]));
     }
 }

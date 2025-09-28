@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,53 +16,71 @@
 
 package mekwars.server.campaign.commands.admin;
 
-
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminSetServerAmmoBanCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Munition Number";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		String ammoName = "";
-		try{
-			ammoName = command.nextToken();
-		}
-		catch (Exception ex){
-			CampaignMain.cm.toUser("Invalid syntax. Try: adminsetserveradmmoban#munitionnumber",Username,true);
-		}
-		
-		if ( CampaignMain.cm.getServerBannedAmmo().get(ammoName)!= null ){
-			CampaignMain.cm.getServerBannedAmmo().remove(ammoName);
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Munition Number";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        String ammoName = "";
+        try {
+            ammoName = command.nextToken();
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser(
+                    "Invalid syntax. Try: adminsetserveradmmoban#munitionnumber", Username, true);
+        }
+
+        if (CampaignMain.cm.getServerBannedAmmo().get(ammoName) != null) {
+            CampaignMain.cm.getServerBannedAmmo().remove(ammoName);
             CampaignMain.cm.getData().setServerBannedAmmo(CampaignMain.cm.getServerBannedAmmo());
-			ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
-			CampaignMain.cm.toUser("Server-wide ban on " + ammoName + " lifted.",Username,true);
-			CampaignMain.cm.doSendModMail("NOTE",Username + " lifted the server-wide ban on " + ammoName+ ".");
-		}
-		else {
-			CampaignMain.cm.getServerBannedAmmo().put(ammoName,"banned");
+            ammoName =
+                    CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
+            CampaignMain.cm.toUser("Server-wide ban on " + ammoName + " lifted.", Username, true);
+            CampaignMain.cm.doSendModMail(
+                    "NOTE", Username + " lifted the server-wide ban on " + ammoName + ".");
+        } else {
+            CampaignMain.cm.getServerBannedAmmo().put(ammoName, "banned");
             CampaignMain.cm.getData().setServerBannedAmmo(CampaignMain.cm.getServerBannedAmmo());
-			ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
-			CampaignMain.cm.toUser(ammoName + " banned server-wide.",Username,true);
-			CampaignMain.cm.doSendModMail("NOTE",Username + " banned " + ammoName+ " server-wide.");
-		}
-		
+            ammoName =
+                    CampaignMain.cm.getData().getMunitionsByNumber().get(Long.parseLong(ammoName));
+            CampaignMain.cm.toUser(ammoName + " banned server-wide.", Username, true);
+            CampaignMain.cm.doSendModMail(
+                    "NOTE", Username + " banned " + ammoName + " server-wide.");
+        }
+
         CampaignMain.cm.saveBannedAmmo();
-	}
+    }
 }

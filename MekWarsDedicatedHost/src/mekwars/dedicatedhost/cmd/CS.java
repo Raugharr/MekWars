@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
  *
@@ -24,18 +24,18 @@ import mekwars.dedicatedhost.MWDedHost;
  */
 public class CS extends Command {
 
-	/**
-	 * @param client
-	 */
-	public CS(MWDedHost mwclient) {
-		super(mwclient);
-	}
+    /**
+     * @param client
+     */
+    public CS(MWDedHost mwclient) {
+        super(mwclient);
+    }
 
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		mwclient.changeStatus(Integer.parseInt(decode(input).nextToken()));
-	}
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        mwclient.changeStatus(Integer.parseInt(decode(input).nextToken()));
+    }
 }

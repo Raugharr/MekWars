@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -14,33 +14,26 @@
  * for more details.
  */
 
-
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
- */ 
+ */
 /**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
+ * @author Torren (Jason Tighe) 11.5.05
  */
 package mekwars.server.MWChatServer;
 
 import java.util.Properties;
 
 /**
- * A wrapper around the com.lyrisoft.util.i18n.Translator object that
- * provides static methods that can be called from anywhere, and an
- * init() method that should be called once, early on.
+ * A wrapper around the com.lyrisoft.util.i18n.Translator object that provides static methods that
+ * can be called from anywhere, and an init() method that should be called once, early on.
  */
 public class Translator {
     private static mekwars.server.MWChatServer.translator.Translator _translator;
 
-    /**
-     * Initialize the "real", underlying Translator object with the
-     * given properties file.
-     */
+    /** Initialize the "real", underlying Translator object with the given properties file. */
     public static void init(Properties p) {
         if (_translator == null) {
             _translator = new mekwars.server.MWChatServer.translator.Translator(p);
@@ -69,4 +62,3 @@ public class Translator {
         return _translator.getMessage(key, args);
     }
 }
-

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -35,14 +35,17 @@ import java.awt.image.MemoryImageSource;
 import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
+import megamek.client.ui.swing.tileset.MechTileset;
+import megamek.client.ui.swing.util.RotateFilter;
+import megamek.common.Entity;
+import megamek.common.Mech;
+import megamek.common.Tank;
 import mekwars.client.GUIClientConfig;
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CArmy;
@@ -50,23 +53,15 @@ import mekwars.client.campaign.CUnit;
 import mekwars.common.Unit;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
-import megamek.client.ui.swing.tileset.MechTileset;
-import megamek.client.ui.swing.util.RotateFilter;
-import megamek.common.Entity;
-import megamek.common.Mech;
-import megamek.common.Tank;
 
 /**
- * 
  * @author Steve Hawkins
  */
-
 public class MechInfo extends JPanel {
 
-    /**
-     * 
-     */
+    /** */
     private static final long serialVersionUID = 4308503800966118202L;
+
     protected static MechTileset mt;
     private JLabel lblName = new JLabel();
     private JLabel lblImage = new JLabel();
@@ -85,347 +80,502 @@ public class MechInfo extends JPanel {
 
     /**
      * Creates new general-purpose MechInfo.
-     * 
-     * Used to generate images in HQ, BM, etx.
+     *
+     * <p>Used to generate images in HQ, BM, etx.
      */
     public MechInfo(MWClient client) {
         mwclient = client;
 
-        if (mwclient != null)
-            Config = mwclient.getConfig();
+        if (mwclient != null) Config = mwclient.getConfig();
 
-        lblImage = new JLabel() {
+        lblImage =
+                new JLabel() {
 
-            /**
-             * 
-             */
-            private static final long serialVersionUID = -114192798426952281L;
+                    /** */
+                    private static final long serialVersionUID = -114192798426952281L;
 
-            @Override
-            public void paint(Graphics g) {
+                    @Override
+                    public void paint(Graphics g) {
 
-                // First draw the background image - tiled
-                if (Config.isParam("UNITHEX")) {
-                    ImageIcon image = new ImageIcon((new ImageIcon("data/images/hexes/boring/beige_plains_0.gif")).getImage().getScaledInstance(cellWidth, getHeight(), Image.SCALE_DEFAULT));
-                    g.drawImage(image.getImage(), (getWidth() - image.getIconWidth()) / 2, (getHeight() - image.getIconHeight()) / 2, null, null);
-                }
-
-                // Now let the regular paint code do it's work
-                Icon icon = getIcon();
-                icon.paintIcon(this, g, (getWidth() - icon.getIconWidth()) / 2, (getHeight() - icon.getIconHeight()) / 2);
-
-                if (mwclient != null && mwclient.getConfig().isUsingStatusIcons() && cm != null) {
-
-                    int height = 0;
-                    boolean dynamic = mwclient.getConfig().isParam("LEFTCOLUMNDYNAMIC");
-                    ImageIcon ic = null;
-                    Entity m = cm.getEntity();
-
-                    if (lblImage.isVisible() && (m instanceof Mech || m instanceof Tank)) {
-
-                        boolean useAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
-
-                        // Pilot Block
-                        if (Config.isParam("LEFTPILOTEJECT")) {
-                            if (cm.hasVacantPilot()) {
-                                ic = new ImageIcon("data/images/status/nopilot.gif");
-
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                                // pilotImage.setIcon(new
-                                // ImageIcon("data/images/status/nopilot.gif"));
-                            } else if (cm.getPilot().getHits() > 0) {
-                                ic = new ImageIcon("data/images/status/wound.gif");
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else if (m instanceof Mech && ((Mech) m).isAutoEject()) {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/eject.gif");
-                                    g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            } else {
-                                ic = new ImageIcon("data/images/status/noeject.gif");
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-
-                            }
+                        // First draw the background image - tiled
+                        if (Config.isParam("UNITHEX")) {
+                            ImageIcon image =
+                                    new ImageIcon(
+                                            (new ImageIcon(
+                                                            "data/images/hexes/boring/beige_plains_0.gif"))
+                                                    .getImage()
+                                                    .getScaledInstance(
+                                                            cellWidth,
+                                                            getHeight(),
+                                                            Image.SCALE_DEFAULT));
+                            g.drawImage(
+                                    image.getImage(),
+                                    (getWidth() - image.getIconWidth()) / 2,
+                                    (getHeight() - image.getIconHeight()) / 2,
+                                    null,
+                                    null);
                         }
 
-                        // Repairing status
-                        if (Config.isParam("LEFTREPAIR")) {
-                            if (useAdvanceRepairs) {
-                                if (UnitUtils.isRepairing(cm.getEntity())) {
-                                    ic = new ImageIcon("data/images/status/repairing.gif");
-                                    g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                } else if (mwclient.getRMT() != null && mwclient.getRMT().hasQueuedOrders(cm.getId())) {
-                                    ic = new ImageIcon("data/images/status/pending.gif");
-                                    g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
+                        // Now let the regular paint code do it's work
+                        Icon icon = getIcon();
+                        icon.paintIcon(
+                                this,
+                                g,
+                                (getWidth() - icon.getIconWidth()) / 2,
+                                (getHeight() - icon.getIconHeight()) / 2);
+
+                        if (mwclient != null
+                                && mwclient.getConfig().isUsingStatusIcons()
+                                && cm != null) {
+
+                            int height = 0;
+                            boolean dynamic = mwclient.getConfig().isParam("LEFTCOLUMNDYNAMIC");
+                            ImageIcon ic = null;
+                            Entity m = cm.getEntity();
+
+                            if (lblImage.isVisible() && (m instanceof Mech || m instanceof Tank)) {
+
+                                boolean useAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
+
+                                // Pilot Block
+                                if (Config.isParam("LEFTPILOTEJECT")) {
+                                    if (cm.hasVacantPilot()) {
+                                        ic = new ImageIcon("data/images/status/nopilot.gif");
+
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                        // pilotImage.setIcon(new
+                                        // ImageIcon("data/images/status/nopilot.gif"));
+                                    } else if (cm.getPilot().getHits() > 0) {
+                                        ic = new ImageIcon("data/images/status/wound.gif");
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else if (m instanceof Mech && ((Mech) m).isAutoEject()) {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/eject.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    0,
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    } else {
+                                        ic = new ImageIcon("data/images/status/noeject.gif");
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    }
                                 }
-                            } else {
-                                if (cm.getStatus() == Unit.STATUS_UNMAINTAINED) {
-                                    ic = new ImageIcon("data/images/status/unmaint.gif");
-                                    g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
+
+                                // Repairing status
+                                if (Config.isParam("LEFTREPAIR")) {
+                                    if (useAdvanceRepairs) {
+                                        if (UnitUtils.isRepairing(cm.getEntity())) {
+                                            ic = new ImageIcon("data/images/status/repairing.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    0,
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        } else if (mwclient.getRMT() != null
+                                                && mwclient.getRMT().hasQueuedOrders(cm.getId())) {
+                                            ic = new ImageIcon("data/images/status/pending.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    0,
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    } else {
+                                        if (cm.getStatus() == Unit.STATUS_UNMAINTAINED) {
+                                            ic = new ImageIcon("data/images/status/unmaint.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    0,
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        } else {
+                                            if (!dynamic) {
+                                                ic = new ImageIcon("data/images/status/maint.gif");
+                                                g.drawImage(
+                                                        ic.getImage(),
+                                                        0,
+                                                        height,
+                                                        ic.getImageObserver());
+                                                height += ic.getIconHeight();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Engine Damage
+                                if (Config.isParam("LEFTENGINE")) {
+                                    // Engine Block
+                                    if (UnitUtils.getNumberOfDamagedEngineCrits(m) >= 1) {
+                                        ic = new ImageIcon("data/images/status/engine.gif");
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    0,
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    }
+                                }
+
+                                // Equipiment/Crit Damage
+                                if (Config.isParam("LEFTEQUIPMENT")) {
+                                    if (UnitUtils.hasCriticalDamage(m)) {
+                                        ic = new ImageIcon("data/images/status/critical.gif");
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    0,
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    }
+                                }
+
+                                // Armor/IS Damage
+                                if (Config.isParam("LEFTARMOR")) {
+                                    if (UnitUtils.hasISDamage(m)) {
+                                        ic = new ImageIcon("data/images/status/structure.gif");
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else if (UnitUtils.hasArmorDamage(m)) {
+                                        ic = new ImageIcon("data/images/status/armor.gif");
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    0,
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    }
+                                }
+
+                                // ammo block
+                                if (Config.isParam("LEFTAMMO")) {
+                                    if (UnitUtils.isAmmoless(m)) {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    0,
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    } else if (UnitUtils.hasEmptyAmmo(m)) {
+                                        ic = new ImageIcon("data/images/status/empty.gif");
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else if (UnitUtils.hasLowAmmo(m)) {
+                                        ic = new ImageIcon("data/images/status/low.gif");
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    0,
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    }
+                                }
+
+                                // commander block
+                                if (Config.isParam("LEFTCOMMANDER") && army != null) {
+                                    if (army.isCommander(cm.getId())) {
+                                        ic = new ImageIcon("data/images/status/comm.gif");
+                                        g.drawImage(
+                                                ic.getImage(), 0, height, ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    }
+                                }
+
+                                height = 0;
+                                // Screw it I can't find the width any other way.
+                                // consecutive paints will fix the issue.
+                                cellWidth = Math.min(cellWidth, getWidth());
+                                dynamic = Config.isParam("RIGHTCOLUMNDYNAMIC");
+                                // Pilot Block
+                                if (Config.isParam("RIGHTPILOTEJECT")) {
+                                    if (cm.hasVacantPilot()) {
+                                        ic = new ImageIcon("data/images/status/nopilot.gif");
+
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                        // pilotImage.setIcon(new
+                                        // ImageIcon("data/images/status/nopilot.gif"));
+                                    } else if (cm.getPilot().getHits() > 0) {
+                                        ic = new ImageIcon("data/images/status/wound.gif");
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else if (m instanceof Mech && ((Mech) m).isAutoEject()) {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/eject.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    } else {
+                                        ic = new ImageIcon("data/images/status/noeject.gif");
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    }
+                                }
+
+                                // Repairing status
+                                if (Config.isParam("RIGHTREPAIR")) {
+                                    if (useAdvanceRepairs) {
+                                        if (UnitUtils.isRepairing(cm.getEntity())) {
+                                            ic = new ImageIcon("data/images/status/repairing.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        } else if (mwclient.getRMT() != null
+                                                && mwclient.getRMT().hasQueuedOrders(cm.getId())) {
+                                            ic = new ImageIcon("data/images/status/pending.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    } else {
+                                        if (cm.getStatus() == Unit.STATUS_UNMAINTAINED) {
+                                            ic = new ImageIcon("data/images/status/unmaint.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        } else {
+                                            if (!dynamic) {
+                                                ic = new ImageIcon("data/images/status/maint.gif");
+                                                g.drawImage(
+                                                        ic.getImage(),
+                                                        cellWidth - ic.getIconWidth(),
+                                                        height,
+                                                        ic.getImageObserver());
+                                                height += ic.getIconHeight();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Engine Damage
+                                if (Config.isParam("RIGHTENGINE")) {
+                                    // Engine Block
+                                    if (UnitUtils.getNumberOfDamagedEngineCrits(m) >= 1) {
+                                        ic = new ImageIcon("data/images/status/engine.gif");
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    }
+                                }
+
+                                // Equipiment/Crit Damage
+                                if (Config.isParam("RIGHTEQUIPMENT")) {
+                                    if (UnitUtils.hasCriticalDamage(m)) {
+                                        ic = new ImageIcon("data/images/status/critical.gif");
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    }
+                                }
+
+                                // Armor/IS Damage
+                                if (Config.isParam("RIGHTARMOR")) {
+                                    if (UnitUtils.hasISDamage(m)) {
+                                        ic = new ImageIcon("data/images/status/structure.gif");
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else if (UnitUtils.hasArmorDamage(m)) {
+                                        ic = new ImageIcon("data/images/status/armor.gif");
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    }
+                                }
+
+                                // ammo block
+                                if (Config.isParam("RIGHTAMMO")) {
+                                    if (UnitUtils.isAmmoless(m)) {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    } else if (UnitUtils.hasEmptyAmmo(m)) {
+                                        ic = new ImageIcon("data/images/status/empty.gif");
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else if (UnitUtils.hasLowAmmo(m)) {
+                                        ic = new ImageIcon("data/images/status/low.gif");
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
+                                        height += ic.getIconHeight();
+                                    } else {
+                                        if (!dynamic) {
+                                            ic = new ImageIcon("data/images/status/blank.gif");
+                                            g.drawImage(
+                                                    ic.getImage(),
+                                                    cellWidth - ic.getIconWidth(),
+                                                    height,
+                                                    ic.getImageObserver());
+                                            height += ic.getIconHeight();
+                                        }
+                                    }
+                                }
+                            }
+
+                            // commander block
+                            if (Config.isParam("RIGHTCOMMANDER") && army != null) {
+                                if (army.isCommander(cm.getId())) {
+                                    ic = new ImageIcon("data/images/status/comm.gif");
+                                    g.drawImage(
+                                            ic.getImage(),
+                                            cellWidth - ic.getIconWidth(),
+                                            height,
+                                            ic.getImageObserver());
                                     height += ic.getIconHeight();
                                 } else {
                                     if (!dynamic) {
-                                        ic = new ImageIcon("data/images/status/maint.gif");
-                                        g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
+                                        ic = new ImageIcon("data/images/status/blank.gif");
+                                        g.drawImage(
+                                                ic.getImage(),
+                                                cellWidth - ic.getIconWidth(),
+                                                height,
+                                                ic.getImageObserver());
                                         height += ic.getIconHeight();
                                     }
                                 }
                             }
+
+                            // setLeftStatusIcons(g, icon);
+                            // setRightStatusIcons(g);
                         }
 
-                        // Engine Damage
-                        if (Config.isParam("LEFTENGINE")) {
-                            // Engine Block
-                            if (UnitUtils.getNumberOfDamagedEngineCrits(m) >= 1) {
-                                ic = new ImageIcon("data/images/status/engine.gif");
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            }
-                        }
-
-                        // Equipiment/Crit Damage
-                        if (Config.isParam("LEFTEQUIPMENT")) {
-                            if (UnitUtils.hasCriticalDamage(m)) {
-                                ic = new ImageIcon("data/images/status/critical.gif");
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            }
-                        }
-
-                        // Armor/IS Damage
-                        if (Config.isParam("LEFTARMOR")) {
-                            if (UnitUtils.hasISDamage(m)) {
-                                ic = new ImageIcon("data/images/status/structure.gif");
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else if (UnitUtils.hasArmorDamage(m)) {
-                                ic = new ImageIcon("data/images/status/armor.gif");
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            }
-                        }
-
-                        // ammo block
-                        if (Config.isParam("LEFTAMMO")) {
-                            if (UnitUtils.isAmmoless(m)) {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            } else if (UnitUtils.hasEmptyAmmo(m)) {
-                                ic = new ImageIcon("data/images/status/empty.gif");
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else if (UnitUtils.hasLowAmmo(m)) {
-                                ic = new ImageIcon("data/images/status/low.gif");
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            }
-                        }
-
-                        // commander block
-                        if (Config.isParam("LEFTCOMMANDER") && army != null) {
-                            if (army.isCommander(cm.getId())) {
-                                ic = new ImageIcon("data/images/status/comm.gif");
-                                g.drawImage(ic.getImage(), 0, height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            }
-                        }
-
-                        height = 0;
-                        // Screw it I can't find the width any other way.
-                        // consecutive paints will fix the issue.
-                        cellWidth = Math.min(cellWidth, getWidth());
-                        dynamic = Config.isParam("RIGHTCOLUMNDYNAMIC");
-                        // Pilot Block
-                        if (Config.isParam("RIGHTPILOTEJECT")) {
-                            if (cm.hasVacantPilot()) {
-                                ic = new ImageIcon("data/images/status/nopilot.gif");
-
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                                // pilotImage.setIcon(new
-                                // ImageIcon("data/images/status/nopilot.gif"));
-                            } else if (cm.getPilot().getHits() > 0) {
-                                ic = new ImageIcon("data/images/status/wound.gif");
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else if (m instanceof Mech && ((Mech) m).isAutoEject()) {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/eject.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            } else {
-                                ic = new ImageIcon("data/images/status/noeject.gif");
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-
-                            }
-                        }
-
-                        // Repairing status
-                        if (Config.isParam("RIGHTREPAIR")) {
-                            if (useAdvanceRepairs) {
-                                if (UnitUtils.isRepairing(cm.getEntity())) {
-                                    ic = new ImageIcon("data/images/status/repairing.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                } else if (mwclient.getRMT() != null && mwclient.getRMT().hasQueuedOrders(cm.getId())) {
-                                    ic = new ImageIcon("data/images/status/pending.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            } else {
-                                if (cm.getStatus() == Unit.STATUS_UNMAINTAINED) {
-                                    ic = new ImageIcon("data/images/status/unmaint.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                } else {
-                                    if (!dynamic) {
-                                        ic = new ImageIcon("data/images/status/maint.gif");
-                                        g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                        height += ic.getIconHeight();
-                                    }
-                                }
-                            }
-                        }
-
-                        // Engine Damage
-                        if (Config.isParam("RIGHTENGINE")) {
-                            // Engine Block
-                            if (UnitUtils.getNumberOfDamagedEngineCrits(m) >= 1) {
-                                ic = new ImageIcon("data/images/status/engine.gif");
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            }
-                        }
-
-                        // Equipiment/Crit Damage
-                        if (Config.isParam("RIGHTEQUIPMENT")) {
-                            if (UnitUtils.hasCriticalDamage(m)) {
-                                ic = new ImageIcon("data/images/status/critical.gif");
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            }
-                        }
-
-                        // Armor/IS Damage
-                        if (Config.isParam("RIGHTARMOR")) {
-                            if (UnitUtils.hasISDamage(m)) {
-                                ic = new ImageIcon("data/images/status/structure.gif");
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else if (UnitUtils.hasArmorDamage(m)) {
-                                ic = new ImageIcon("data/images/status/armor.gif");
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            }
-                        }
-
-                        // ammo block
-                        if (Config.isParam("RIGHTAMMO")) {
-                            if (UnitUtils.isAmmoless(m)) {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            } else if (UnitUtils.hasEmptyAmmo(m)) {
-                                ic = new ImageIcon("data/images/status/empty.gif");
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else if (UnitUtils.hasLowAmmo(m)) {
-                                ic = new ImageIcon("data/images/status/low.gif");
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            } else {
-                                if (!dynamic) {
-                                    ic = new ImageIcon("data/images/status/blank.gif");
-                                    g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                    height += ic.getIconHeight();
-                                }
-                            }
-                        }
+                        // super.paint(g);
                     }
-
-                    // commander block
-                    if (Config.isParam("RIGHTCOMMANDER") && army != null) {
-                        if (army.isCommander(cm.getId())) {
-                            ic = new ImageIcon("data/images/status/comm.gif");
-                            g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                            height += ic.getIconHeight();
-                        } else {
-                            if (!dynamic) {
-                                ic = new ImageIcon("data/images/status/blank.gif");
-                                g.drawImage(ic.getImage(), cellWidth - ic.getIconWidth(), height, ic.getImageObserver());
-                                height += ic.getIconHeight();
-                            }
-                        }
-                    }
-
-                    // setLeftStatusIcons(g, icon);
-                    // setRightStatusIcons(g);
-                }
-
-                // super.paint(g);
-            }
-        };// end new JLabel(LBL Image)
+                }; // end new JLabel(LBL Image)
 
         lblName = new JLabel();
         setLayout(new GridBagLayout());
@@ -444,10 +594,10 @@ public class MechInfo extends JPanel {
     }
 
     /**
-     * Creates new MechInfo for use in previews. Is passed a ficticious config
-     * which contains preview camo.
-     * 
-     * Used to generate images in HQ, BM, etc.
+     * Creates new MechInfo for use in previews. Is passed a ficticious config which contains
+     * preview camo.
+     *
+     * <p>Used to generate images in HQ, BM, etc.
      */
     public MechInfo(ImageIcon preview) {
 
@@ -460,25 +610,38 @@ public class MechInfo extends JPanel {
             Config = mwclient.getConfig();
         }
 
-        lblImage = new JLabel() {
+        lblImage =
+                new JLabel() {
 
-            /**
-             * 
-             */
-            private static final long serialVersionUID = 639618470390199477L;
+                    /** */
+                    private static final long serialVersionUID = 639618470390199477L;
 
-            @Override
-            public void paint(Graphics g) {
-                // first draw the background image - tiled
-                ImageIcon image = new ImageIcon((new ImageIcon("data/images/hexes/boring/beige_plains_0.gif")).getImage().getScaledInstance(80, 68, Image.SCALE_DEFAULT));
-                g.drawImage(image.getImage(), (getWidth() - image.getIconWidth()) / 2, (getHeight() - image.getIconHeight()) / 2, null, null);
+                    @Override
+                    public void paint(Graphics g) {
+                        // first draw the background image - tiled
+                        ImageIcon image =
+                                new ImageIcon(
+                                        (new ImageIcon(
+                                                        "data/images/hexes/boring/beige_plains_0.gif"))
+                                                .getImage()
+                                                .getScaledInstance(80, 68, Image.SCALE_DEFAULT));
+                        g.drawImage(
+                                image.getImage(),
+                                (getWidth() - image.getIconWidth()) / 2,
+                                (getHeight() - image.getIconHeight()) / 2,
+                                null,
+                                null);
 
-                // Now let the regular paint code do it's work
-                Icon icon = getIcon();
-                icon.paintIcon(this, g, (getWidth() - icon.getIconWidth()) / 2, (getHeight() - icon.getIconHeight()) / 2);
-                // super.paint(g);
-            }
-        };// end new JLabel(LBL Image)
+                        // Now let the regular paint code do it's work
+                        Icon icon = getIcon();
+                        icon.paintIcon(
+                                this,
+                                g,
+                                (getWidth() - icon.getIconWidth()) / 2,
+                                (getHeight() - icon.getIconHeight()) / 2);
+                        // super.paint(g);
+                    }
+                }; // end new JLabel(LBL Image)
 
         lblName = new JLabel();
         setLayout(new GridBagLayout());
@@ -520,9 +683,10 @@ public class MechInfo extends JPanel {
             } catch (IOException ex) {
                 MWLogger.errLog("Unable to read data/images/units/mechset.txt");
             }
-        }// end if(null tileset)
-        //@Salient - from what i can tell from the megamek code, passing in the component does nothing.
-        return mt.imageFor(m, -1); 
+        } // end if(null tileset)
+        // @Salient - from what i can tell from the megamek code, passing in the component does
+        // nothing.
+        return mt.imageFor(m, -1);
     }
 
     public void setPreviewIcon(ImageIcon preview) {
@@ -539,23 +703,18 @@ public class MechInfo extends JPanel {
 
         // look for a config image to load. if no config exists,
         // try to load the preview icon.
-        if (Config != null)
-            camoicon = Config.getImage("CAMO");
-        else
-            camoicon = previewIcon;
+        if (Config != null) camoicon = Config.getImage("CAMO");
+        else camoicon = previewIcon;
 
-        if (camoicon != null)
-            camo = camoicon.getImage();
+        if (camoicon != null) camo = camoicon.getImage();
 
         EntityImage ei = new EntityImage(unit, 0xFFFFFF, camo, this);
         setImage(ei.loadPreviewImage());
-
     }
 
     public void setUnit(CUnit cm, CArmy army) {
 
-        if (cm == null)
-            return;
+        if (cm == null) return;
 
         this.cm = cm;
         this.army = army;
@@ -566,38 +725,37 @@ public class MechInfo extends JPanel {
 
         try // @ salient, this should fix the gui problem.
         {
-        	unit = getImageFor(m, lblImage).getScaledInstance(84, 72, Image.SCALE_DEFAULT);     	
-        }
-        catch (Exception ex)
-        {
-        	MWLogger.errLog(ex);   	
-        	try 
-        	{
-        	    File pathToFile = new File("./data/images/ImageMissing.png");
-        	    unit = ImageIO.read(pathToFile);
-        	    unit = unit.getScaledInstance(84, 72, Image.SCALE_DEFAULT);
-        	    MWLogger.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
-        	} 
-        	catch (IOException ex2) 
-        	{
-        	    MWLogger.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
-        	    MWLogger.errLog(ex2);
-        	}
+            unit = getImageFor(m, lblImage).getScaledInstance(84, 72, Image.SCALE_DEFAULT);
+        } catch (Exception ex) {
+            MWLogger.errLog(ex);
+            try {
+                File pathToFile = new File("./data/images/ImageMissing.png");
+                unit = ImageIO.read(pathToFile);
+                unit = unit.getScaledInstance(84, 72, Image.SCALE_DEFAULT);
+                MWLogger.errLog(
+                        "incorrect image filename in mechset.txt for "
+                                + cm.getModelName()
+                                + " "
+                                + CUnit.getTypeClassDesc(cm.getType()));
+            } catch (IOException ex2) {
+                MWLogger.errLog(
+                        "incorrect image filename in mechset.txt for "
+                                + cm.getModelName()
+                                + " "
+                                + CUnit.getTypeClassDesc(cm.getType()));
+                MWLogger.errLog(ex2);
+            }
         }
 
         // look for a config image to load. if no config exists,
         // try to load the preview icon.
-        if (Config != null)
-            camoicon = Config.getImage("CAMO");
-        else
-            camoicon = previewIcon;
+        if (Config != null) camoicon = Config.getImage("CAMO");
+        else camoicon = previewIcon;
 
-        if (camoicon != null)
-            camo = camoicon.getImage();
+        if (camoicon != null) camo = camoicon.getImage();
 
         EntityImage ei = new EntityImage(unit, 0xFFFFFF, camo, this);
         setImage(ei.loadPreviewImage());
-
     }
 
     public void setImageVisible(boolean flag) {
@@ -640,14 +798,18 @@ public class MechInfo extends JPanel {
 
             icon = base.getScaledInstance(56, 48, Image.SCALE_SMOOTH);
             for (int i = 0; i < 6; i++) {
-                ImageProducer rotSource = new FilteredImageSource(base.getSource(), new RotateFilter((Math.PI / 3) * (6 - i)));
+                ImageProducer rotSource =
+                        new FilteredImageSource(
+                                base.getSource(), new RotateFilter((Math.PI / 3) * (6 - i)));
                 facings[i] = comp.createImage(rotSource);
             }
 
             if (wreck != null) {
                 wreck = applyColor(wreck);
                 for (int i = 0; i < 6; i++) {
-                    ImageProducer rotSource = new FilteredImageSource(wreck.getSource(), new RotateFilter((Math.PI / 3) * (6 - i)));
+                    ImageProducer rotSource =
+                            new FilteredImageSource(
+                                    wreck.getSource(), new RotateFilter((Math.PI / 3) * (6 - i)));
                     wreckFacings[i] = comp.createImage(rotSource);
                 }
             }
@@ -682,29 +844,37 @@ public class MechInfo extends JPanel {
 
             int[] pMech = new int[IMG_SIZE];
             int[] pCamo = new int[IMG_SIZE];
-            PixelGrabber pgMech = new PixelGrabber(iMech, 0, 0, IMG_WIDTH, IMG_HEIGHT, pMech, 0, IMG_WIDTH);
+            PixelGrabber pgMech =
+                    new PixelGrabber(iMech, 0, 0, IMG_WIDTH, IMG_HEIGHT, pMech, 0, IMG_WIDTH);
 
             try {
                 pgMech.grabPixels();
             } catch (InterruptedException e) {
-                MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image." + e.getMessage());
+                MWLogger.errLog(
+                        "EntityImage.applyColor(): Failed to grab pixels for mech image."
+                                + e.getMessage());
                 return image;
             }
             if ((pgMech.getStatus() & ImageObserver.ABORT) != 0) {
-                MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
+                MWLogger.errLog(
+                        "EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
                 return image;
             }
 
             if (useCamo) {
-                PixelGrabber pgCamo = new PixelGrabber(camo, 0, 0, IMG_WIDTH, IMG_HEIGHT, pCamo, 0, IMG_WIDTH);
+                PixelGrabber pgCamo =
+                        new PixelGrabber(camo, 0, 0, IMG_WIDTH, IMG_HEIGHT, pCamo, 0, IMG_WIDTH);
                 try {
                     pgCamo.grabPixels();
                 } catch (InterruptedException e) {
-                    MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for camo image." + e.getMessage());
+                    MWLogger.errLog(
+                            "EntityImage.applyColor(): Failed to grab pixels for camo image."
+                                    + e.getMessage());
                     return image;
                 }
                 if ((pgCamo.getStatus() & ImageObserver.ABORT) != 0) {
-                    MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
+                    MWLogger.errLog(
+                            "EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
                     return image;
                 }
             }
@@ -729,9 +899,10 @@ public class MechInfo extends JPanel {
                 }
             }
 
-            image = comp.createImage(new MemoryImageSource(IMG_WIDTH, IMG_HEIGHT, pMech, 0, IMG_WIDTH));
+            image =
+                    comp.createImage(
+                            new MemoryImageSource(IMG_WIDTH, IMG_HEIGHT, pMech, 0, IMG_WIDTH));
             return image;
         }
     }
-
 }

@@ -19,7 +19,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -29,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
@@ -40,18 +38,17 @@ import mekwars.common.util.SpringLayoutHelper;
 
 public class PromotePilotDialog extends JFrame implements ActionListener, KeyListener {
 
-    /**
-     *
-     */
+    /** */
     private static final long serialVersionUID = -8988175448434842033L;
+
     // store the client backlink for other things to use
     private MWClient mwclient = null;
     private CUnit playerUnit = null;
     private Pilot pilot = null;
     private boolean demoting = false;
 
-    private final static String okayCommand = "Ok";
-    private final static String cancelCommand = "Close";
+    private static final String okayCommand = "Ok";
+    private static final String cancelCommand = "Close";
 
     private String windowName = "Bulk Repair Dialog";
 
@@ -103,10 +100,17 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
         SpringLayoutHelper.setupSpringGrid(MasterPanel, 4);
 
         // Set the user's options
-        Object[] options = { okayButton, cancelButton };
+        Object[] options = {okayButton, cancelButton};
 
         // Create the pane containing the buttons
-        pane = new JOptionPane(MasterPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, options, null);
+        pane =
+                new JOptionPane(
+                        MasterPanel,
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.OK_CANCEL_OPTION,
+                        null,
+                        options,
+                        null);
 
         setTitle(windowName);
 
@@ -143,7 +147,6 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
         } else if (e.getSource() instanceof JCheckBox) {
             calculateExpCost();
         }
-
     }
 
     private void loadPanel() {
@@ -167,14 +170,16 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
         expCost.setMaximumSize(dim);
         MasterPanel.add(expCost);
 
-        if (pilot.getGunnery() > Integer.parseInt(mwclient.getServerConfigs("BestGunnerySkill")) && !demoting) {
+        if (pilot.getGunnery() > Integer.parseInt(mwclient.getServerConfigs("BestGunnerySkill"))
+                && !demoting) {
             masterCB = new JCheckBox("Gunnery " + (pilot.getGunnery() - 1));
             masterCB.setName("gunnery");
             masterCB.addActionListener(this);
             MasterPanel.add(masterCB);
         }
 
-        if (pilot.getPiloting() > Integer.parseInt(mwclient.getServerConfigs("BestPilotingSkill")) && !demoting) {
+        if (pilot.getPiloting() > Integer.parseInt(mwclient.getServerConfigs("BestPilotingSkill"))
+                && !demoting) {
             masterCB = new JCheckBox("Piloting " + (pilot.getPiloting() - 1));
             masterCB.setName("piloting");
             masterCB.addActionListener(this);
@@ -187,383 +192,570 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
         }
 
         if (demoting) {
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (pilot.getSkills().has(PilotSkill.AstechSkillID))) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforATfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && (pilot.getSkills().has(PilotSkill.AstechSkillID))) {
                 masterCB = new JCheckBox("Astech");
                 masterCB.setName("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.DodgeManeuverSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforDMfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.DodgeManeuverSkillID)) {
                 masterCB = new JCheckBox("Dodge Maneuver");
                 masterCB.setName("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.MeleeSpecialistSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforMSfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.MeleeSpecialistSkillID)) {
                 masterCB = new JCheckBox("Melee Specialist");
                 masterCB.setName("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.PainResistanceSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforPRfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.PainResistanceSkillID)) {
                 masterCB = new JCheckBox("Pain Resistance");
                 masterCB.setName("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.SurvivalistSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforSVfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.SurvivalistSkillID)) {
                 masterCB = new JCheckBox("Survivalist");
                 masterCB.setName("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.IronManSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforIMfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.IronManSkillID)) {
                 masterCB = new JCheckBox("Iron Man");
                 masterCB.setName("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (pilot.getSkills().has(PilotSkill.EdgeSkillID))) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforEDfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && (pilot.getSkills().has(PilotSkill.EdgeSkillID))) {
                 masterCB = new JCheckBox("Edge");
                 masterCB.setName("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.ManeuveringAceSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforMAfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.ManeuveringAceSkillID)) {
                 masterCB = new JCheckBox("Maneuvering Ace");
                 masterCB.setName("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.NaturalAptitudePilotingSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforNAPfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.NaturalAptitudePilotingSkillID)) {
                 masterCB = new JCheckBox("Natural Aptitude Piloting");
                 masterCB.setName("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.NaturalAptitudeGunnerySkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforNAGfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.NaturalAptitudeGunnerySkillID)) {
                 masterCB = new JCheckBox("Natural Aptitude Gunnery");
                 masterCB.setName("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.WeaponSpecialistSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforWSfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.WeaponSpecialistSkillID)) {
                 masterCB = new JCheckBox("Weapon Specialist");
                 masterCB.setName("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.TacticalGeniusSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforTGfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.TacticalGeniusSkillID)) {
                 masterCB = new JCheckBox("Tactical Genius");
                 masterCB.setName("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GunneryMissileSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforGMfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.GunneryMissileSkillID)) {
                 masterCB = new JCheckBox("Gunnery Missile");
                 masterCB.addActionListener(this);
                 masterCB.setName("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GunneryBallisticSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforGBfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.GunneryBallisticSkillID)) {
                 masterCB = new JCheckBox("Gunnery Ballistic");
                 masterCB.setName("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GunneryLaserSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforGLfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.GunneryLaserSkillID)) {
                 masterCB = new JCheckBox("Gunnery Laser");
                 masterCB.setName("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.TraitID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforTNfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.TraitID)) {
                 masterCB = new JCheckBox("Trait");
                 masterCB.setName("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.EnhancedInterfaceID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforEIfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.EnhancedInterfaceID)) {
                 masterCB = new JCheckBox("Enhanced Interface");
                 masterCB.setName("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.GiftedID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforGTfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.GiftedID)) {
                 masterCB = new JCheckBox("Gifted");
                 masterCB.setName("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.QuickStudyID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforQSfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.QuickStudyID)) {
                 masterCB = new JCheckBox("Quick Study");
                 masterCB.setName("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.MedTechID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforMTfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.MedTechID)) {
                 masterCB = new JCheckBox("Med Tech");
                 masterCB.setName("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.VDNIID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforVDNIfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.VDNIID)) {
                 masterCB = new JCheckBox("VDNI");
                 masterCB.setName("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.BufferedVDNIID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforBVDNIfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.BufferedVDNIID)) {
                 masterCB = new JCheckBox("Buffered VDNI");
                 masterCB.setName("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && pilot.getSkills().has(PilotSkill.PainShuntID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforPSfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && pilot.getSkills().has(PilotSkill.PainShuntID)) {
                 masterCB = new JCheckBox("Pain Shunt");
                 masterCB.setName("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
         } else {
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (!pilot.getSkills().has(PilotSkill.AstechSkillID) || pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID).getLevel() < 2)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforATfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && (!pilot.getSkills().has(PilotSkill.AstechSkillID)
+                            || pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID).getLevel()
+                                    < 2)) {
                 masterCB = new JCheckBox("Astech");
                 masterCB.setName("chanceforATfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.DodgeManeuverSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforDMfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.DodgeManeuverSkillID)) {
                 masterCB = new JCheckBox("Dodge Maneuver");
                 masterCB.setName("chanceforDMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.MeleeSpecialistSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforMSfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.MeleeSpecialistSkillID)) {
                 masterCB = new JCheckBox("Melee Specialist");
                 masterCB.setName("chanceforMSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.PainResistanceSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforPRfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.PainResistanceSkillID)) {
                 masterCB = new JCheckBox("Pain Resistance");
                 masterCB.setName("chanceforPRfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.SurvivalistSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforSVfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.SurvivalistSkillID)) {
                 masterCB = new JCheckBox("Survivalist");
                 masterCB.setName("chanceforSVfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.IronManSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforIMfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.IronManSkillID)) {
                 masterCB = new JCheckBox("Iron Man");
                 masterCB.setName("chanceforIMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && (!pilot.getSkills().has(PilotSkill.EdgeSkillID) || pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel() < Integer.parseInt(mwclient.getServerConfigs("MaxEdgeChanges")))) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforEDfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && (!pilot.getSkills().has(PilotSkill.EdgeSkillID)
+                            || pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel()
+                                    < Integer.parseInt(
+                                            mwclient.getServerConfigs("MaxEdgeChanges")))) {
                 masterCB = new JCheckBox("Edge");
                 masterCB.setName("chanceforEDfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.ManeuveringAceSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforMAfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.ManeuveringAceSkillID)) {
                 masterCB = new JCheckBox("Maneuvering Ace");
                 masterCB.setName("chanceforMAfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.NaturalAptitudePilotingSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforNAPfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.NaturalAptitudePilotingSkillID)) {
                 masterCB = new JCheckBox("Natural Aptitude Piloting");
                 masterCB.setName("chanceforNAPfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.NaturalAptitudeGunnerySkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforNAGfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.NaturalAptitudeGunnerySkillID)) {
                 masterCB = new JCheckBox("Natural Aptitude Gunnery");
                 masterCB.setName("chanceforNAGfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.WeaponSpecialistSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforWSfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.WeaponSpecialistSkillID)) {
                 masterCB = new JCheckBox("Weapon Specialist");
                 masterCB.setName("chanceforWSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.TacticalGeniusSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforTGfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.TacticalGeniusSkillID)) {
                 masterCB = new JCheckBox("Tactical Genius");
                 masterCB.setName("chanceforTGfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GunneryMissileSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforGMfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.GunneryMissileSkillID)) {
                 masterCB = new JCheckBox("Gunnery Missile");
                 masterCB.addActionListener(this);
                 masterCB.setName("chanceforGMfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GunneryBallisticSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforGBfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.GunneryBallisticSkillID)) {
                 masterCB = new JCheckBox("Gunnery Ballistic");
                 masterCB.setName("chanceforGBfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GunneryLaserSkillID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforGLfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.GunneryLaserSkillID)) {
                 masterCB = new JCheckBox("Gunnery Laser");
                 masterCB.setName("chanceforGLfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.TraitID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforTNfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.TraitID)) {
                 masterCB = new JCheckBox("Trait");
                 masterCB.setName("chanceforTNfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.EnhancedInterfaceID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforEIfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.EnhancedInterfaceID)) {
                 masterCB = new JCheckBox("Enhanced Interface");
                 masterCB.setName("chanceforEIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.GiftedID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforGTfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.GiftedID)) {
                 masterCB = new JCheckBox("Gifted");
                 masterCB.setName("chanceforGTfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.QuickStudyID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforQSfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.QuickStudyID)) {
                 masterCB = new JCheckBox("Quick Study");
                 masterCB.setName("chanceforQSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.MedTechID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforMTfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.MedTechID)) {
                 masterCB = new JCheckBox("Med Tech");
                 masterCB.setName("chanceforMTfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.VDNIID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforVDNIfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.VDNIID)) {
                 masterCB = new JCheckBox("VDNI");
                 masterCB.setName("chanceforVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.BufferedVDNIID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforBVDNIfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.BufferedVDNIID)) {
                 masterCB = new JCheckBox("Buffered VDNI");
                 masterCB.setName("chanceforBVDNIfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
 
-            if (Integer.parseInt(mwclient.getServerConfigs("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()))) > 0 && !pilot.getSkills().has(PilotSkill.PainShuntID)) {
+            if (Integer.parseInt(
+                                    mwclient.getServerConfigs(
+                                            "chanceforPSfor"
+                                                    + Unit.getTypeClassDesc(playerUnit.getType())))
+                            > 0
+                    && !pilot.getSkills().has(PilotSkill.PainShuntID)) {
                 masterCB = new JCheckBox("Pain Shunt");
                 masterCB.setName("chanceforPSfor" + Unit.getTypeClassDesc(playerUnit.getType()));
                 masterCB.addActionListener(this);
                 MasterPanel.add(masterCB);
-
             }
         }
     }
 
-    public void keyPressed(KeyEvent arg0) {
-    }
+    public void keyPressed(KeyEvent arg0) {}
 
-    public void keyReleased(KeyEvent arg0) {
-    }
+    public void keyReleased(KeyEvent arg0) {}
 
     public void keyTyped(KeyEvent arg0) {
 
@@ -572,7 +764,6 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
         } else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
             sendPromoteCommands();
         }
-
     }
 
     private void calculateExpCost() {
@@ -595,36 +786,55 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
                 if (checkBox.isSelected()) {
 
-                    if (checkBox.getName().equalsIgnoreCase("gunnery") || checkBox.getName().equalsIgnoreCase("piloting")) {
+                    if (checkBox.getName().equalsIgnoreCase("gunnery")
+                            || checkBox.getName().equalsIgnoreCase("piloting")) {
                         int totalSkill = Math.min(9, gun + piloting);
                         pilotCost = Integer.parseInt(mwclient.getServerConfigs("BaseRollToLevel"));
-                        pilotCost *= Integer.parseInt(mwclient.getServerConfigs("MultiplierPerPreviousLevel"));
+                        pilotCost *=
+                                Integer.parseInt(
+                                        mwclient.getServerConfigs("MultiplierPerPreviousLevel"));
                         pilotCost *= 10 - totalSkill;
 
                     } else if (checkBox.getName().startsWith("chanceforATfor")) {
                         if (pilot.getSkills().has(PilotSkill.AstechSkillID)) {
-                            int level = pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID).getLevel();
+                            int level =
+                                    pilot.getSkills()
+                                            .getPilotSkill(PilotSkill.AstechSkillID)
+                                            .getLevel();
 
-                            pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
+                            pilotCost =
+                                    Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                             pilotCost *= level + 2;
                         } else {
-                            pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
+                            pilotCost =
+                                    Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                         }
                     } else if (checkBox.getName().startsWith("chanceforEDfor")) {
                         if (pilot.getSkills().has(PilotSkill.EdgeSkillID)) {
-                            int level = pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel();
+                            int level =
+                                    pilot.getSkills()
+                                            .getPilotSkill(PilotSkill.EdgeSkillID)
+                                            .getLevel();
 
-                            pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
+                            pilotCost =
+                                    Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                             pilotCost *= level + 1;
                         } else {
-                            pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
+                            pilotCost =
+                                    Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                         }
                     } else {
                         pilotCost = Integer.parseInt(mwclient.getServerConfigs(checkBox.getName()));
                     }
 
                     if (demoting) {
-                        pilotCost = (int) Math.round(((double) pilotCost) * Double.parseDouble(mwclient.getServerConfigs("PilotUpgradeSellBackPercent")));
+                        pilotCost =
+                                (int)
+                                        Math.round(
+                                                ((double) pilotCost)
+                                                        * Double.parseDouble(
+                                                                mwclient.getServerConfigs(
+                                                                        "PilotUpgradeSellBackPercent")));
                     }
                     cost += pilotCost;
                 }
@@ -640,7 +850,8 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
 
     private void sendPromoteCommands() {
 
-        String baseCommand = GameHost.CAMPAIGN_PREFIX + "c promotepilot#" + playerUnit.getId() + "#";
+        String baseCommand =
+                GameHost.CAMPAIGN_PREFIX + "c promotepilot#" + playerUnit.getId() + "#";
 
         if (demoting) {
             baseCommand = GameHost.CAMPAIGN_PREFIX + "c demotepilot#" + playerUnit.getId() + "#";
@@ -661,6 +872,5 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
                 }
             }
         }
-
     }
-}// end BulkRepairDialog.java
+} // end BulkRepairDialog.java

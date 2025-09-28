@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -30,7 +30,8 @@ public class TerrainConverter implements Converter {
         return clazz.equals(Terrain.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+    public void marshal(
+            Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         Terrain terrain = (Terrain) source;
 
         for (PlanetEnvironment environment : terrain.getEnvironments()) {
@@ -52,11 +53,8 @@ public class TerrainConverter implements Converter {
             reader.moveDown();
             String nodeName = reader.getNodeName();
             if (nodeName.equals("environment")) {
-                PlanetEnvironment environment = (PlanetEnvironment)
-                    context.convertAnother(
-                        null,
-                        PlanetEnvironment.class
-                    );
+                PlanetEnvironment environment =
+                        (PlanetEnvironment) context.convertAnother(null, PlanetEnvironment.class);
                 terrain.getEnvironments().add(environment);
             } else if (nodeName.equals("name")) {
                 name = reader.getValue();

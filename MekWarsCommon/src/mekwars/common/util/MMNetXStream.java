@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,11 +22,9 @@ import com.thoughtworks.xstream.core.ReferenceByIdMarshallingStrategy;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import mekwars.common.AdvancedTerrain;
-import mekwars.common.House;
-import mekwars.common.Planet;
 import mekwars.common.campaign.converters.PointConverter;
+
 /**
- * 
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class MMNetXStream extends XStream {
@@ -34,17 +32,17 @@ public class MMNetXStream extends XStream {
         super(new PureJavaReflectionProvider());
         setup();
     }
-    
+
     public MMNetXStream(HierarchicalStreamDriver hierarchicalStreamDriver) {
         super(hierarchicalStreamDriver);
         setup();
     }
 
     protected void setup() {
-        // you may add shortcuts here, so XStream will not 
+        // you may add shortcuts here, so XStream will not
         // write the whole class name each time ;-)
-    	registerConverter(new PointConverter());
-    	
+        registerConverter(new PointConverter());
+
         alias("advancedTerrain", AdvancedTerrain.class);
         alias("point", java.awt.Point.class);
         // Enables reference marshalling.

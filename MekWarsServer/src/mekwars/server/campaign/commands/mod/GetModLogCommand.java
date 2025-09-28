@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,51 +22,63 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
-
 import mekwars.common.util.MWLogger;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 public class GetModLogCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		BufferedReader dis = null;
-		try {
-			File configFile = new File("./logs/modlog.0");
-			FileInputStream fis = new FileInputStream(configFile);
-			dis = new BufferedReader(new InputStreamReader(fis));
-			String total = "";
-			while (dis.ready()) {
-				String line = dis.readLine();
-				total += line + "<br>";
-			}
-			CampaignMain.cm.toUser("SM|" + total,Username,false);
-			CampaignMain.cm.doSendModMail("NOTE",Username + " read the modlog.");
-		} catch (Exception ex) {
-		    MWLogger.errLog(ex);
-		} finally {
-			try {
-				dis.close();
-			} catch (IOException e) {
-				MWLogger.errLog(e);
-			}
-		}
-		
-		
-		
-	}
+
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+        BufferedReader dis = null;
+        try {
+            File configFile = new File("./logs/modlog.0");
+            FileInputStream fis = new FileInputStream(configFile);
+            dis = new BufferedReader(new InputStreamReader(fis));
+            String total = "";
+            while (dis.ready()) {
+                String line = dis.readLine();
+                total += line + "<br>";
+            }
+            CampaignMain.cm.toUser("SM|" + total, Username, false);
+            CampaignMain.cm.doSendModMail("NOTE", Username + " read the modlog.");
+        } catch (Exception ex) {
+            MWLogger.errLog(ex);
+        } finally {
+            try {
+                dis.close();
+            } catch (IOException e) {
+                MWLogger.errLog(e);
+            }
+        }
+    }
 }

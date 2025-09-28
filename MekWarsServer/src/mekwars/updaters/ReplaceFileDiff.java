@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.StringTokenizer;
-
 import updaters.utils.IOUtil;
 
 public class ReplaceFileDiff extends FileDiff {
@@ -15,7 +14,11 @@ public class ReplaceFileDiff extends FileDiff {
         remoteFileOffset_ = fileInfo.getRemoteOffset();
         version_ = version;
 
-        System.err.println("Building replace file diff for local " + localFileOffset_ + ", remote " + remoteFileOffset_);
+        System.err.println(
+                "Building replace file diff for local "
+                        + localFileOffset_
+                        + ", remote "
+                        + remoteFileOffset_);
     }
 
     @Override
@@ -39,10 +42,18 @@ public class ReplaceFileDiff extends FileDiff {
 
             // Create the file target (where the file will actually be after the update script
             // is run...which is run after this process)
-            String fileCopyTarget = updater.getLocalDir() + File.separator + fileToken;// IOUtil.fixPath(fileToken);
+            String fileCopyTarget =
+                    updater.getLocalDir()
+                            + File.separator
+                            + fileToken; // IOUtil.fixPath(fileToken);
 
             // Create a destination path that will be the temporary place until the script is run
-            String destFileName = updater.getLocalDir() + File.separator + AutoUpdater.UPDATE_TMP_DIR + File.separator + fileToken;// IOUtil.fixPath(fileToken);
+            String destFileName =
+                    updater.getLocalDir()
+                            + File.separator
+                            + AutoUpdater.UPDATE_TMP_DIR
+                            + File.separator
+                            + fileToken; // IOUtil.fixPath(fileToken);
 
             // We've got the proper paths set up, but if we have a flag
             // showing that the tmp directory already has the up to date
@@ -54,7 +65,8 @@ public class ReplaceFileDiff extends FileDiff {
             }
 
             // first check if temp update dir exists and if not, create it
-            File tmpDirFile = new File(updater.getLocalDir() + File.separator + AutoUpdater.UPDATE_TMP_DIR);
+            File tmpDirFile =
+                    new File(updater.getLocalDir() + File.separator + AutoUpdater.UPDATE_TMP_DIR);
             if (!tmpDirFile.exists()) {
                 tmpDirFile.mkdirs();
             }
@@ -119,7 +131,9 @@ public class ReplaceFileDiff extends FileDiff {
                 // alternate file name and build a script, to be run after
                 // autoupdater exits, that moves the files back to the
                 // correct file names.
-                System.err.println(destFileName + " in use.  Writing to alternate file name.  Must run updatefix script after autoupdate process completes.");
+                System.err.println(
+                        destFileName
+                                + " in use.  Writing to alternate file name.  Must run updatefix script after autoupdate process completes.");
 
                 // fiu == file in use
                 String newDestFileName = destFileName + ".fiu";

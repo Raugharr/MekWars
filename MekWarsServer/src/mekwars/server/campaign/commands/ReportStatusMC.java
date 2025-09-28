@@ -24,33 +24,45 @@ import mekwars.server.campaign.SPlayer;
 /**
  * @author Salient for miniCampaigns, will report to user status of their campaign
  */
-public class ReportStatusMC implements Command 
-{
+public class ReportStatusMC implements Command {
 
-	int accessLevel = 1;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
+    int accessLevel = 1;
+    String syntax = "";
 
-	public void process(StringTokenizer command,String Username) 
-	{
-		//access level checks
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		SPlayer p = CampaignMain.cm.getPlayer(Username);
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
 
-		if(userLevel < getExecutionLevel()) 
-		{
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
 
-		if(!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_MiniCampaign"))) 
-		{
-			CampaignMain.cm.toUser("AM:This command is disabled on this server.",Username,true);
-			return;
-		}
+    public String getSyntax() {
+        return syntax;
+    }
 
-		p.reportStatusMC();
-	}
+    public void process(StringTokenizer command, String Username) {
+        // access level checks
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        SPlayer p = CampaignMain.cm.getPlayer(Username);
+
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        if (!Boolean.parseBoolean(CampaignMain.cm.getConfig("Enable_MiniCampaign"))) {
+            CampaignMain.cm.toUser("AM:This command is disabled on this server.", Username, true);
+            return;
+        }
+
+        p.reportStatusMC();
+    }
 }

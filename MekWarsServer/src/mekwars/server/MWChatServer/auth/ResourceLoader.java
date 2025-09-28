@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - Torren (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -14,46 +14,38 @@
  * for more details.
  */
 
-
 /*
- * Derived from NFCChat, a GPL chat client/server. 
+ * Derived from NFCChat, a GPL chat client/server.
  * Original code can be found @ http://nfcchat.sourceforge.net
  * Our thanks to the original authors.
- */ 
+ */
 /**
- * 
- * @author Torren (Jason Tighe) 11.5.05 
- * 
+ * @author Torren (Jason Tighe) 11.5.05
  */
 package mekwars.server.MWChatServer.auth;
 
 import java.io.InputStream;
 
-
 /**
- * A class that loads resources from locations relative to the
- * CLASSPATH, or relative to the ServletContext if one is specified.
+ * A class that loads resources from locations relative to the CLASSPATH, or relative to the
+ * ServletContext if one is specified.
  *
- * $Id: ResourceLoader.java,v 1.1 2005/11/07 23:37:17 torren Exp $
+ * <p>$Id: ResourceLoader.java,v 1.1 2005/11/07 23:37:17 torren Exp $
  */
 public class ResourceLoader {
 
-    /**
-     * All static class - don't instantiate
-     */
-    protected ResourceLoader() {
-    }
-
+    /** All static class - don't instantiate */
+    protected ResourceLoader() {}
 
     /**
-     * Load a resource from the CLASSPATH.  relativePath should use forward-slashes
-     * and omit the first slash.
+     * Load a resource from the CLASSPATH. relativePath should use forward-slashes and omit the
+     * first slash.
      *
-     * e.g., getResource("path/to/my/resource");
+     * <p>e.g., getResource("path/to/my/resource");
      *
      * @param relativePath
      */
-    public static InputStream getResource(String relativePath) throws Exception{
+    public static InputStream getResource(String relativePath) throws Exception {
 
         // we use the actual ClassLoader rather than the simple,
         // Class.getResource() method, because we want the SYSTEM
@@ -63,7 +55,5 @@ public class ResourceLoader {
             throw new Exception("Could not locate resource, " + relativePath);
         }
         return is;
-    } 
-
-
+    }
 }

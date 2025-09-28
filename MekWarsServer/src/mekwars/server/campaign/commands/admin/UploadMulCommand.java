@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2006 
+ * MekWars - Copyright (C) 2006
  *
  * Original author - jtighe (torren@users.sourceforge.net)
  *
@@ -20,57 +20,70 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
-
 public class UploadMulCommand implements Command {
 
-	/*
-	 * This command allows an Admin to upload a single build table
-	 * from a directory on their local machine.  The directory structure
-	 * on the local machine must match that on the server - i.e, ./buildtables/rare
-	 * ./buildtables/reward and ./buildtables/standard.  The replacement build
-	 * table is put into place and a backup of the original build table is created.
-	 */
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "FileName#Line#Line#Line...";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
+    /*
+     * This command allows an Admin to upload a single build table
+     * from a directory on their local machine.  The directory structure
+     * on the local machine must match that on the server - i.e, ./buildtables/rare
+     * ./buildtables/reward and ./buildtables/standard.  The replacement build
+     * table is put into place and a backup of the original build table is created.
+     */
 
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		String fileName = "./data/armies/" + command.nextToken();
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "FileName#Line#Line#Line...";
 
-		try {
-			File newMul = new File(fileName);
-			if(!newMul.exists()) {
-				newMul.createNewFile();
-			}
-			FileOutputStream out = new FileOutputStream(fileName);
-			PrintStream p = new PrintStream(out);
-			while (command.hasMoreTokens()) {
-				p.println(command.nextToken());
-			}
-			p.close();
-			out.close();
-			
-			CampaignMain.cm.toUser(newMul.getPath() + " Saved", Username, true);
-		}
-		catch ( Exception ex){
-			CampaignMain.cm.toUser("File Not found",Username,true);
-			return;
-		}
-		
-	}
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+        String fileName = "./data/armies/" + command.nextToken();
+
+        try {
+            File newMul = new File(fileName);
+            if (!newMul.exists()) {
+                newMul.createNewFile();
+            }
+            FileOutputStream out = new FileOutputStream(fileName);
+            PrintStream p = new PrintStream(out);
+            while (command.hasMoreTokens()) {
+                p.println(command.nextToken());
+            }
+            p.close();
+            out.close();
+
+            CampaignMain.cm.toUser(newMul.getPath() + " Saved", Username, true);
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser("File Not found", Username, true);
+            return;
+        }
+    }
 }

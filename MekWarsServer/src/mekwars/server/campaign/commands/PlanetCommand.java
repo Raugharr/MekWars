@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,36 +22,49 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 
 public class PlanetCommand implements Command {
-	
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		SPlanet p = null;
-		try {
-			p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
-			if (p == null)
-				return;
-		} catch (Exception e) {
-			CampaignMain.cm.toUser("AM:Improper format. Try: /c planet#NAME",Username,true);
-			return;
-		}
-		
-		//found a valid world. send info.
-		CampaignMain.cm.toUser("SM|" + p.getLongDescription(false),Username,false);
-		
-	}//end process()
-	
+
+    int accessLevel = 0;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        Username,
+                        true);
+                return;
+            }
+        }
+
+        SPlanet p = null;
+        try {
+            p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), Username);
+            if (p == null) return;
+        } catch (Exception e) {
+            CampaignMain.cm.toUser("AM:Improper format. Try: /c planet#NAME", Username, true);
+            return;
+        }
+
+        // found a valid world. send info.
+        CampaignMain.cm.toUser("SM|" + p.getLongDescription(false), Username, false);
+    } // end process()
 }

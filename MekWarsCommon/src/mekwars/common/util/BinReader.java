@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,6 @@
 
 package mekwars.common.util;
 
-import mekwars.common.util.HTMLConverter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -24,12 +23,8 @@ import java.io.Reader;
 /**
  * Helper to encode and decode typical fields of classes
  *
- * currently handled types are:
- * - boolean
- * - int
- * - String
- * - double
- *  
+ * <p>currently handled types are: - boolean - int - String - double
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class BinReader {
@@ -37,76 +32,59 @@ public class BinReader {
     private BufferedReader in;
     private boolean debug;
 
-    
     private String read(String debugName) throws IOException {
-//        if ( !in.ready() )
-  //          throw new IOException("EOF");
+        //        if ( !in.ready() )
+        //          throw new IOException("EOF");
         String s = in.readLine();
         if (debug) {
-            if (!s.substring(0,s.indexOf('=')).equals(debugName))
+            if (!s.substring(0, s.indexOf('=')).equals(debugName))
                 throw new RuntimeException("serialization mismatch");
-            return s.substring(s.indexOf('=')+1);
+            return s.substring(s.indexOf('=') + 1);
         }
         return s;
     }
-    
-    /**
-     * Construct an BinReader
-     */
+
+    /** Construct an BinReader */
     public BinReader(Reader in) {
         this.in = new BufferedReader(in);
         try {
             this.in.mark(100);
             String s = this.in.readLine();
             debug = s.equals("###DEBUG_ON###");
-            if (!debug)
-                this.in.reset();
+            if (!debug) this.in.reset();
         } catch (IOException e) {
             MWLogger.errLog(e);
             debug = false;
         }
     }
 
-    /**
-     * Reads an integer
-     */
+    /** Reads an integer */
     public int readInt(String debugName) throws IOException {
         return Integer.parseInt(read(debugName));
     }
 
-    /**
-     * Reads an double
-     */
+    /** Reads an double */
     public double readDouble(String debugName) throws IOException {
         return Double.parseDouble(read(debugName));
     }
 
-    /**
-     * Reads an boolean
-     */
+    /** Reads an boolean */
     public boolean readBoolean(String debugName) throws IOException {
         String s = read(debugName);
-        return !s.equalsIgnoreCase("false") && !s.equals("0") &&
-            !s.equals("");
+        return !s.equalsIgnoreCase("false") && !s.equals("0") && !s.equals("");
     }
 
-    /**
-     * Reads an string
-     */
+    /** Reads an string */
     public String readLine(String debugName) throws IOException {
         return HTMLConverter.br2cr(read(debugName));
     }
 
-    /**
-     * Reads a string
-     */
+    /** Reads a string */
     public String readStringLine(String debugName) throws IOException {
         return read(debugName);
     }
 
-    /**
-     * Closes the input.
-     */
+    /** Closes the input. */
     public void close() throws IOException {
         in.close();
     }

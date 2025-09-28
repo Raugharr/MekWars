@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,48 +17,65 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminDestroyTerrainCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Planet Name#Terrain";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		} 
-		
-		try{
-			SPlanet p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
-			String terrain = command.nextToken();
-			
-			if ( p == null ) {
-				CampaignMain.cm.toUser("Planet not found:",Username,true);
-				return;
-			}
-			
-			p.getEnvironments().remove(terrain);
-			p.updated();
-	
-			//server.MWLogger.modLog(Username + " removed terrain from " + p.getName() + "(#" + placeToDelete + ").");
-			CampaignMain.cm.doSendModMail("NOTE",Username + " removed terrain from " + p.getName() + "(" + terrain + ").");
-		}
-		catch (Exception ex){
-			MWLogger.errLog(ex);
-		}
-		
-	}
+
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Planet Name#Terrain";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
+
+        try {
+            SPlanet p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), Username);
+            String terrain = command.nextToken();
+
+            if (p == null) {
+                CampaignMain.cm.toUser("Planet not found:", Username, true);
+                return;
+            }
+
+            p.getEnvironments().remove(terrain);
+            p.updated();
+
+            // server.MWLogger.modLog(Username + " removed terrain from " + p.getName() + "(#" +
+            // placeToDelete + ").");
+            CampaignMain.cm.doSendModMail(
+                    "NOTE",
+                    Username + " removed terrain from " + p.getName() + "(" + terrain + ").");
+        } catch (Exception ex) {
+            MWLogger.errLog(ex);
+        }
+    }
 }

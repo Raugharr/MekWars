@@ -23,7 +23,6 @@ import java.text.DecimalFormat;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -35,19 +34,18 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
-
-import mekwars.client.MWClient;
-import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.common.Equipment;
-import mekwars.common.util.MWLogger;
-import mekwars.common.util.SpringLayoutHelper;
-import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.EquipmentType;
 import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.Equipment;
+import mekwars.common.util.MWLogger;
+import mekwars.common.util.SpringLayoutHelper;
+import mekwars.common.util.UnitUtils;
 
 public final class ComponentDisplayDialog extends JDialog implements ActionListener {
 
@@ -55,13 +53,13 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
     private static final long serialVersionUID = 8839724432360797850L;
     private MWClient mwclient = null;
 
-    public final static int WEAPON_TYPE = 0;
-    public final static int MISC_TYPE = 1;
-    public final static int AMMO_TYPE = 2;
-    public final static int AMMO_COSTS_TYPE = 3;
+    public static final int WEAPON_TYPE = 0;
+    public static final int MISC_TYPE = 1;
+    public static final int AMMO_TYPE = 2;
+    public static final int AMMO_COSTS_TYPE = 3;
 
-    private final static String okayCommand = "Add";
-    private final static String cancelCommand = "Close";
+    private static final String okayCommand = "Add";
+    private static final String cancelCommand = "Close";
 
     private String windowName = "Component Display Dialog";
 
@@ -75,12 +73,12 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
     private JScrollPane MasterPanel = new JScrollPane();
 
     private int displayType = 0;
-    
+
     // Text boxes
     JTabbedPane ConfigPane = new JTabbedPane();
 
     public ComponentDisplayDialog(MWClient c, int type) {
-        
+
         super(c.getMainFrame(), "Component Display Dialog", true);
 
         // save the client
@@ -92,7 +90,6 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         MWLogger.errLog("Year: " + mwclient.getServerConfigs("CampaignYear"));
         int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
 
-        
         // Set the tooltips and actions for dialouge buttons
         okayButton.setActionCommand(okayCommand);
         cancelButton.setActionCommand(cancelCommand);
@@ -126,21 +123,28 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         for (int pos = ConfigPane.getComponentCount() - 1; pos >= 0; pos--) {
             JPanel panel = (JPanel) ConfigPane.getComponent(pos);
             findAndPopulateTextAndCheckBoxes(panel);
-
         }
 
         // Set the user's options
-        Object[] options = { okayButton, cancelButton };
+        Object[] options = {okayButton, cancelButton};
 
         Dimension dim = new Dimension(100, 200);
 
         ConfigPane.setMaximumSize(dim);
 
         // Create the pane containing the buttons
-        pane = new JOptionPane(ConfigPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, options, null);
+        pane =
+                new JOptionPane(
+                        ConfigPane,
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.DEFAULT_OPTION,
+                        null,
+                        options,
+                        null);
 
         pane.setMaximumSize(dim);
-        MasterPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        MasterPanel.setHorizontalScrollBarPolicy(
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         MasterPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         MasterPanel.setMaximumSize(dim);
@@ -246,17 +250,16 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
             if (((AmmoType) eq).getTechLevel(year) != tech) {
                 // This is done for Unknown and all tech level. Make them all IS
                 // Level 1
-                if (tech == TechConstants.T_IS_TW_NON_BOX && ((AmmoType) eq).getTechLevel(year) > tech) {
+                if (tech == TechConstants.T_IS_TW_NON_BOX
+                        && ((AmmoType) eq).getTechLevel(year) > tech) {
                     continue;
                 }
                 if (tech != TechConstants.T_IS_TW_NON_BOX) {
                     continue;
                 }
-
             }
 
             equipmentSort.put(eq.getInternalName(), (AmmoType) eq);
-
         }
 
         for (AmmoType eq : equipmentSort.values()) {
@@ -316,7 +319,6 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         }
 
         MasterPanel.add(ConfigPane);
-
     }
 
     private void loadAmmoCostPanelType(int tech, int year) {
@@ -352,17 +354,16 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
             if (((AmmoType) eq).getTechLevel(year) != tech) {
                 // This is done for Unknown and all tech level. Make them all IS
                 // Level 1
-                if (tech == TechConstants.T_IS_TW_NON_BOX && ((AmmoType) eq).getTechLevel(year) > tech) {
+                if (tech == TechConstants.T_IS_TW_NON_BOX
+                        && ((AmmoType) eq).getTechLevel(year) > tech) {
                     continue;
                 }
                 if (tech != TechConstants.T_IS_TW_NON_BOX) {
                     continue;
                 }
-
             }
 
             equipmentSort.put(eq.getInternalName(), (AmmoType) eq);
-
         }
 
         for (AmmoType eq : equipmentSort.values()) {
@@ -402,7 +403,6 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         }
 
         MasterPanel.add(ConfigPane);
-
     }
 
     private void loadWeaponPanelType(int tech, int year) {
@@ -438,17 +438,16 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
             if (((WeaponType) eq).getTechLevel(year) != tech) {
                 // This is done for Unknown and all tech level. Make them all IS
                 // Level 1
-                if (tech == TechConstants.T_IS_TW_NON_BOX && ((WeaponType) eq).getTechLevel(year) > tech) {
+                if (tech == TechConstants.T_IS_TW_NON_BOX
+                        && ((WeaponType) eq).getTechLevel(year) > tech) {
                     continue;
                 }
                 if (tech != TechConstants.T_IS_TW_NON_BOX) {
                     continue;
                 }
-
             }
 
             equipmentSort.put(eq.getInternalName(), (WeaponType) eq);
-
         }
 
         for (WeaponType eq : equipmentSort.values()) {
@@ -509,7 +508,6 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         }
 
         MasterPanel.add(ConfigPane);
-
     }
 
     private void loadMiscPanelType(int tech, int year) {
@@ -729,17 +727,16 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
                 if (((MiscType) eq).getTechLevel(year) != tech) {
                     // This is done for Unknown and all tech level. Make them
                     // all IS Level 1
-                    if (tech == TechConstants.T_IS_TW_NON_BOX && ((MiscType) eq).getTechLevel(year) > tech) {
+                    if (tech == TechConstants.T_IS_TW_NON_BOX
+                            && ((MiscType) eq).getTechLevel(year) > tech) {
                         continue;
                     }
                     if (tech != TechConstants.T_IS_TW_NON_BOX) {
                         continue;
                     }
-
                 }
 
                 equipmentSort.put(eq.getInternalName(), (MiscType) eq);
-
             }
 
             for (MiscType eq : equipmentSort.values()) {
@@ -854,7 +851,6 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
                 textField.setMaximumSize(dim);
                 textField.setToolTipText("The max. number of items that will be on the BM");
                 panel.add(textField);
-
             }
 
             if (panel.getComponentCount() > 0) {
@@ -864,7 +860,6 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
             }
         }
         MasterPanel.add(ConfigPane);
-
     }
 
     private void loadMiscPanel(int year) {
@@ -881,11 +876,10 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
     }
 
     /**
-     * This Method tunnels through all of the panels to find the textfields and
-     * checkboxes. Once it find one it grabs the Name() param of the object and
-     * uses that to find out what the setting should be from the
-     * mwclient.getServerConfigs() method.
-     * 
+     * This Method tunnels through all of the panels to find the textfields and checkboxes. Once it
+     * find one it grabs the Name() param of the object and uses that to find out what the setting
+     * should be from the mwclient.getServerConfigs() method.
+     *
      * @param panel
      */
     public void findAndPopulateTextAndCheckBoxes(JPanel panel) {
@@ -910,7 +904,8 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
                 try {
                     StringTokenizer keys = new StringTokenizer(key, "|");
 
-                    Equipment equipment = mwclient.getBlackMarketEquipmentList().get(keys.nextToken());
+                    Equipment equipment =
+                            mwclient.getBlackMarketEquipmentList().get(keys.nextToken());
 
                     if (equipment == null) {
                         textBox.setText("0");
@@ -926,7 +921,6 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
                         } else {
                             textBox.setText(Integer.toString(equipment.getMaxProduction()));
                         }
-
                     }
                 } catch (Exception ex) {
                     textBox.setText("N/A");
@@ -941,16 +935,26 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
             Equipment bme = mwclient.getBlackMarketEquipmentList().get(key);
 
             if (bme.isUpdated()) {
-                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSetBlackMarketSetting#" + key + "#" + bme.getMinCost() + "#" + bme.getMaxCost() + "#" + bme.getMinProduction() + "#" + bme.getMaxProduction());
+                mwclient.sendChat(
+                        GameHost.CAMPAIGN_PREFIX
+                                + "c AdminSetBlackMarketSetting#"
+                                + key
+                                + "#"
+                                + bme.getMinCost()
+                                + "#"
+                                + bme.getMaxCost()
+                                + "#"
+                                + bme.getMinProduction()
+                                + "#"
+                                + bme.getMaxProduction());
             }
         }
-
     }
 
     /**
-     * This method will tunnel through all of the panels of the config UI to
-     * find any changed text fields. The data is saved to the Equipment Hashmap
-     * 
+     * This method will tunnel through all of the panels of the config UI to find any changed text
+     * fields. The data is saved to the Equipment Hashmap
+     *
      * @param panel
      */
     public void findAndSaveConfigs(JPanel panel) {
@@ -1023,7 +1027,5 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
                  */
             }
         }
-
     }
-
-}// end ComponentDisplayDialog.java
+} // end ComponentDisplayDialog.java

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2005 
- * 
+ * MekWars - Copyright (C) 2005
+ *
  * Original author - nmorris (urgru@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,35 +16,30 @@
 
 /**
  * @author Torren (Jason Tighe)
- * 
- * Seperate app to create operations from. This files will then have
- * to be loaded to the server.
- * 
+ *     <p>Seperate app to create operations from. This files will then have to be loaded to the
+ *     server.
  */
 package mekwars.operationseditor;
 
-
 import mekwars.operationseditor.gui.dialog.OperationsDialog;
 
-public class MainOperations{
+public class MainOperations {
 
-    //Main-Method
-    /**
-     * main call. Clean and simple 
-     */
+    // Main-Method
+    /** main call. Clean and simple */
     public static void main(String[] args) {
         try {
-        	new OperationsDialog(null);
+            new OperationsDialog(null);
         } catch (Exception e) {
-        	System.err.println(e);
+            System.err.println(e);
         }
     }
-    
+
     public static void main(Object o) {
         try {
-        	new OperationsDialog(o);
+            new OperationsDialog(o);
         } catch (Exception e) {
-        	System.err.println(e);
+            System.err.println(e);
         }
     }
 }

@@ -4,69 +4,67 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 
 public class VirtualUnit {
-	
-	public enum MovementMode {
-		STANDING, WALKING, RUNNING, JUMPING
-	}
 
-	private MovementMode movementMode;
-	private int movementDistance;
+    public enum MovementMode {
+        STANDING,
+        WALKING,
+        RUNNING,
+        JUMPING
+    }
 
-	private VirtualUnit target;
-	private SUnit unit;
-	private SPlayer player;
-	private boolean attacker;
-	
-	public VirtualUnit(SUnit unit, SPlayer player, boolean attacker){
-		this.unit = unit;
-		this.player = player;
-		this.attacker = attacker;
-	}
-	
-	/**
-	 * Reports the State of the Unit to the Player
-	 */
-	public void reportStateToPlayer(){
-    	unit.reportStateToPlayer(player);
-	}
-	
-	public void setMovement(MovementMode mode, int distance){
-		this.movementMode = mode;
-		this.movementDistance = distance;
-	}
+    private MovementMode movementMode;
+    private int movementDistance;
 
-	public MovementMode getMovementMode() {
-		return movementMode;
-	}
-	
-	
-	public int getMovementDistance() {
-		return movementDistance;
-	}
-	
+    private VirtualUnit target;
+    private SUnit unit;
+    private SPlayer player;
+    private boolean attacker;
 
-	public SUnit getUnit() {
-		return unit;
-	}
+    public VirtualUnit(SUnit unit, SPlayer player, boolean attacker) {
+        this.unit = unit;
+        this.player = player;
+        this.attacker = attacker;
+    }
 
-	public SPlayer getPlayer() {
-		return player;
-	}
+    /** Reports the State of the Unit to the Player */
+    public void reportStateToPlayer() {
+        unit.reportStateToPlayer(player);
+    }
 
-	public boolean isAttacker() {
-		return attacker;
-	}
+    public void setMovement(MovementMode mode, int distance) {
+        this.movementMode = mode;
+        this.movementDistance = distance;
+    }
 
-	public VirtualUnit getTarget() {
-		return target;
-	}
+    public MovementMode getMovementMode() {
+        return movementMode;
+    }
 
-	public void setTarget(VirtualUnit target) {
-		this.target = target;
-	}
-	
-	public int getId(){
-		return unit.getId();
-	}
-	
+    public int getMovementDistance() {
+        return movementDistance;
+    }
+
+    public SUnit getUnit() {
+        return unit;
+    }
+
+    public SPlayer getPlayer() {
+        return player;
+    }
+
+    public boolean isAttacker() {
+        return attacker;
+    }
+
+    public VirtualUnit getTarget() {
+        return target;
+    }
+
+    public void setTarget(VirtualUnit target) {
+        this.target = target;
+    }
+
+    public int getId() {
+        return unit.getId();
+    }
 }

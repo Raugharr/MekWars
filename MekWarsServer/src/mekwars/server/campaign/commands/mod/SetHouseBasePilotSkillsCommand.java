@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2006 
- * 
+ * MekWars - Copyright (C) 2006
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,60 +17,109 @@
 package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.common.Unit;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.commands.Command;
 
-//Syntax sethousebasepilotskills house#pilotType#Gunnery#Piloting
+// Syntax sethousebasepilotskills house#pilotType#Gunnery#Piloting
 public class SetHouseBasePilotSkillsCommand implements Command {
-	
-	int accessLevel = IAuthenticator.MODERATOR;
-	String syntax = "Faction Name#Pilot Type#Gunnery#Piloting";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
+
+    int accessLevel = IAuthenticator.MODERATOR;
+    String syntax = "Faction Name#Pilot Type#Gunnery#Piloting";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String Username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    Username,
+                    true);
+            return;
+        }
 
         SHouse house;
         int pilotType;
         int gunnery;
         int piloting;
-        
-        try{
+
+        try {
             house = CampaignMain.cm.getHouseFromPartialString(command.nextToken(), Username);
             pilotType = Integer.parseInt(command.nextToken());
             gunnery = Integer.parseInt(command.nextToken());
             piloting = Integer.parseInt(command.nextToken());
-        }catch (Exception ex ){
-            CampaignMain.cm.toUser("Invalid Syntax: sethousebasepilotskills house#pilotType#Gunnery#Piloting", Username);
+        } catch (Exception ex) {
+            CampaignMain.cm.toUser(
+                    "Invalid Syntax: sethousebasepilotskills house#pilotType#Gunnery#Piloting",
+                    Username);
             return;
         }
 
-        if ( house == null )
-            return;
-        
-        if ( pilotType >= Unit.MAXBUILD || pilotType < 0){
-            CampaignMain.cm.toUser("Invalid unit type:<br>Mek "+Unit.MEK+"<br>Vehicle "+Unit.VEHICLE+"<br>Infantry "+Unit.INFANTRY+"<br>Battle Armor "+Unit.BATTLEARMOR+"<br>ProtoMek "+Unit.PROTOMEK+"<br>Aero "+Unit.AERO, Username);
+        if (house == null) return;
+
+        if (pilotType >= Unit.MAXBUILD || pilotType < 0) {
+            CampaignMain.cm.toUser(
+                    "Invalid unit type:<br>Mek "
+                            + Unit.MEK
+                            + "<br>Vehicle "
+                            + Unit.VEHICLE
+                            + "<br>Infantry "
+                            + Unit.INFANTRY
+                            + "<br>Battle Armor "
+                            + Unit.BATTLEARMOR
+                            + "<br>ProtoMek "
+                            + Unit.PROTOMEK
+                            + "<br>Aero "
+                            + Unit.AERO,
+                    Username);
             return;
         }
-        
+
         house.getPilotQueues().setBaseGunnery(gunnery, pilotType);
         house.getPilotQueues().setBasePiloting(piloting, pilotType);
-        
-		//log, and inform mods.
-		CampaignMain.cm.toUser("You set have set the gunnery and piloting for unit "+Unit.getTypeClassDesc(pilotType)+" for house "+house.getName()+" to "+gunnery+"/"+piloting,Username);
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has set the gunnery and piloting for unit "+Unit.getTypeClassDesc(pilotType)+" for house "+house.getName()+" to "+gunnery+"/"+piloting+ ".");
-		
-	}//end process
+
+        // log, and inform mods.
+        CampaignMain.cm.toUser(
+                "You set have set the gunnery and piloting for unit "
+                        + Unit.getTypeClassDesc(pilotType)
+                        + " for house "
+                        + house.getName()
+                        + " to "
+                        + gunnery
+                        + "/"
+                        + piloting,
+                Username);
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                Username
+                        + " has set the gunnery and piloting for unit "
+                        + Unit.getTypeClassDesc(pilotType)
+                        + " for house "
+                        + house.getName()
+                        + " to "
+                        + gunnery
+                        + "/"
+                        + piloting
+                        + ".");
+    } // end process
 }
