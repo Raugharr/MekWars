@@ -2743,6 +2743,6 @@ public class UnitUtils {
             Munitions.M_INFERNO_IV,
             Munitions.M_VIBRABOMB_IV
         );
-        return !innersphereMunitions.retainAll(munitionType);
+        return innersphereMunitions.containsAll(munitionType);
     }
 }

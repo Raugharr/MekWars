@@ -42,6 +42,8 @@ import java.lang.reflect.Constructor;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -84,6 +86,24 @@ import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.looks.plastic.theme.DesertGreen;
 import com.jgoodies.looks.plastic.theme.SkyBlue;
+import megamek.MMConstants;
+import megamek.Version;
+import megamek.client.ui.swing.GameOptionsDialog;
+import megamek.common.CriticalSlot;
+import megamek.common.Entity;
+import megamek.common.EquipmentType;
+import megamek.common.Game;
+import megamek.common.Mech;
+import megamek.common.MechWarrior;
+import megamek.common.event.GameCFREvent;
+import megamek.common.event.GameEvent;
+import megamek.common.icons.Camouflage;
+import megamek.common.options.GameOptions;
+import megamek.common.options.IBasicOption;
+import megamek.common.preference.ClientPreferences;
+import megamek.common.preference.PreferenceManager;
+import megamek.server.GameManager;
+import megamek.server.Server;
 import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
@@ -128,26 +148,11 @@ import mekwars.common.util.MWLogger;
 import mekwars.common.util.ThreadManager;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
-import megamek.Version;
-import megamek.MMConstants;
-import megamek.client.ui.swing.GameOptionsDialog;
-import megamek.common.CriticalSlot;
-import megamek.common.Entity;
-import megamek.common.EquipmentType;
-import megamek.common.Game;
-import megamek.common.Mech;
-import megamek.common.MechWarrior;
-import megamek.common.event.GameCFREvent;
-import megamek.common.event.GameEvent;
-import megamek.common.options.GameOptions;
-import megamek.common.options.IBasicOption;
-import megamek.common.preference.ClientPreferences;
-import megamek.common.preference.PreferenceManager;
-import megamek.server.Server;
-import megamek.server.GameManager;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class MWClient extends GameHost implements IClient {
+    private static final Logger logger = LogManager.getLogger(MWClient.class);
 
     /**
      *
@@ -254,7 +259,6 @@ public final class MWClient extends GameHost implements IClient {
 
     private HashMap<String, Equipment> blackMarketEquipmentList = new HashMap<String, Equipment>();
 
-    //private static MWLogger logger = MWLogger.getInstance();
     // Main-Method
     public static void main(String[] args) {
 
@@ -453,7 +457,7 @@ public final class MWClient extends GameHost implements IClient {
                                 JOptionPane.ERROR_MESSAGE, null, options,
                                 options[0]);
                 if (selectedValue == 0) {
-                    System.exit(0);// exit, if they so choose
+                    System.exit(0); // exit, if they so choose
                 }
             }
 
@@ -2270,7 +2274,7 @@ public final class MWClient extends GameHost implements IClient {
             if (pcommand == null) {
                 MWLogger.infoLog("COMMAND ERROR: unknown protocol command from server.");
                 MWLogger.infoLog("COMMAND RECEIVED: " + incoming);
-                if (incoming.equalsIgnoreCase("denied	/denied")) {
+                if (incoming.equalsIgnoreCase("denied    /denied")) {
                     // let them know it's a wrong password
                     JOptionPane.showMessageDialog(getMainFrame(),
                             "Unknown Username/Password combination.");
@@ -3936,7 +3940,17 @@ public final class MWClient extends GameHost implements IClient {
         this.game = game;
     }
 
-    
+    public Camouflage getCamouflage() {
+        Path path = Paths.get(getConfig().getParam("UNITCAMO"));
+        Path filename = path.getFileName();
+        Path parent = path.getParent();
+
+        if (filename == null || parent == null) {
+            logger.warn("Invalid camouflage config '{}'", path.toString());
+            return null;
+        }
+        return new Camouflage(parent.toString(), filename.toString());
+    }
 }
 
 /**

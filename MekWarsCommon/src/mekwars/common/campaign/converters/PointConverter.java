@@ -31,14 +31,14 @@ public class PointConverter implements Converter {
 
     public void marshal(Object source, HierarchicalStreamWriter writer,
             MarshallingContext context) {
-    	Point point = (Point) source;
+        Point point = (Point) source;
 
         writer.startNode("x");
-        writer.setValue(Double.toString(point.getX()));
+        writer.setValue(Integer.toString(Math.toIntExact(Math.round(point.getX()))));
         writer.endNode();
 
         writer.startNode("y");
-        writer.setValue(Double.toString(point.getY()));
+        writer.setValue(Integer.toString(Math.toIntExact(Math.round(point.getY()))));
         writer.endNode();
     }
 

@@ -14,8 +14,6 @@ package mekwars.client;
 
 import java.awt.KeyboardFocusManager;
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -457,13 +455,12 @@ public class ClientThread extends Thread implements CloseClientListener {
                  cs = null;
 
                 if (!mwclient.getConfig().getParam("UNITCAMO").equals(Camouflage.NO_CAMOUFLAGE)) {
-                    Path path = Paths.get(mwclient.getConfig().getParam("UNITCAMO"));
-                    Camouflage camouflage = new Camouflage(
-                            path.getParent().toString(),
-                            path.getFileName().toString()
-                        );
-                    client.getLocalPlayer().setCamouflage(camouflage);
-                    playerUpdate = true;
+                    Camouflage camouflage = mwclient.getCamouflage();
+
+                    if(camouflage != null) {
+                        client.getLocalPlayer().setCamouflage(camouflage);
+                        playerUpdate = true;
+                    }
                 }
 
                 if (bot != null) {
