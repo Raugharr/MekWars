@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-	id 'java-common-conventions'
+    id 'java-common-conventions'
 }
 
 sourceSets {
@@ -8,7 +8,7 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
-	}
+    }
 
     test {
         java {
@@ -18,55 +18,69 @@ sourceSets {
 }
 
 dependencies {
-	implementation project(':MekWarsCommon')
+    implementation project(':MekWarsCommon')
+	implementation 'org.jsoup:jsoup:1.5.2'
 }
 
 application {
-	mainClassName = 'mekwars.server.MWServ'
+    mainClassName = 'mekwars.server.MWServ'
     applicationDefaultJvmArgs = [
-			'-Dlog4j2.configurationFile=log4j2.xml',
+            '-Dlog4j2.configurationFile=log4j2.xml',
             '-Xmx4096m',
             '-Dsun.awt.disablegrab=true'
     ]
 }
 
 ext {
-	fileStagingDir = "${buildDir}/files"
-	serverdist = "server-dist"
-	data = "${serverdist}/data"
-	mmconf = "${serverdist}/mmconf"
-}
-
-task stageFiles(type: Copy) {
-	description = 'Stages files that are to be copied into the distribution.'
-
-	from serverdist
-	into fileStagingDir
+    fileStagingDir = "${buildDir}/files"
+    serverdist = "server-dist"
+    data = "${serverdist}/data"
+    mmconf = "${serverdist}/mmconf"
+    lib = "lib"
 }
 
 jar {
-	archiveFileName = 'MekWarsServer.jar'
-	manifest {
-		attributes(
-		  'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
-		  'Main-Class': mainClassName
-		)
-	}
+    archiveFileName = "MekWarsServer.jar"
+    manifest {
+        attributes(
+          'Class-Path': "MegaMek.jar " + configurations.runtimeClasspath.files
+              .findAll { it.name.endsWith(".jar") && !it.name.toLowerCase().startsWith("megamek") }
+              .collect { "${lib}/${it.name}" }.join(' '),
+          'Main-Class': mainClassName
+        )
+    }
+}
+
+task stageFiles(type: Copy) {
+    description = 'Stages files that are to be copied into the distribution.'
+
+	file(fileStagingDir).mkdirs()
+	File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
+	batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
+	from batFile
+    from serverdist
+	into fileStagingDir
 }
 
 tasks.named('run') {
-	workingDir = file(serverdist)
+    workingDir = file(serverdist)
 }
 
 distributions {
-	main {
-		contents {
-			from stageFiles
+    main {
+        contents {
+            from stageFiles
+            from jar
+            from "${mmDir}/megamek/build/libs/MegaMek.jar"
+            from (project.sourceSets.main.runtimeClasspath.files
+                    .findAll { it.name.endsWith(".jar") }) {
+                into "${lib}"
+            }
             duplicatesStrategy = 'exclude'
-		}
-	}
+        }
+    }
 }
 
 test {  
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

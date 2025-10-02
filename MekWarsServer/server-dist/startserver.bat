@@ -1,1 +1,0 @@
-call bin/MekWarsServer.bat

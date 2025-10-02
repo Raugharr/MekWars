@@ -1,3 +1,7 @@
+plugins {
+    id 'distribution'
+}
+
 allprojects {
     apply plugin: 'java'
 
@@ -11,7 +15,7 @@ allprojects {
             url 'https://jitpack.io'
         }
     }
-	 gradle.projectsEvaluated {
+     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
             options.compilerArgs << "-Xmaxerrs" << "4000"
         }
@@ -24,8 +28,62 @@ subprojects {
 }
 
 ext {
-	lib = "lib"
-	mmVersion = "49.20"
+    lib = "lib"
+    mmVersion = "49.20"
+    mmDir = "${rootDir}/../megamek"
+}
+
+distributions {
+    server {
+        contents {
+            into('lib') {
+                from project(':MekWarsClient').configurations.runtimeClasspath
+                from project(':MekWarsOperationsEditor').configurations.runtimeClasspath
+                from project(':MekWarsServer').configurations.runtimeClasspath
+                from project(':MekWarsUpdater').configurations.runtimeClasspath
+                from project(':MekWarsDedicatedHost').configurations.runtimeClasspath
+            }
+
+            from project(':MekWarsClient').jar
+            from project(':MekWarsOperationsEditor').jar
+            from project(':MekWarsServer').jar
+            from project(':MekWarsUpdater').jar
+            from project(':MekWarsDedicatedHost').jar
+
+            from project(':MekWarsClient').tasks.findByPath(':MekWarsClient:stageFiles')
+            from project(':MekWarsOperationsEditor').tasks.findByPath(':MekWarsOperationsEditor:stageFiles')
+            from project(':MekWarsServer').tasks.findByPath(':MekWarsServer:stageFiles')
+            from project(':MekWarsDedicatedHost').tasks.findByPath(':MekWarsDedicatedHost:stageFiles')
+            from (project.sourceSets.main.runtimeClasspath.files
+                    .findAll { it.name.endsWith(".jar") }) {
+                into "${lib}"
+            }
+            from "${mmDir}/megamek/build/libs/MegaMek.jar"
+            duplicatesStrategy = 'exclude'
+        }
+    }
+    client {
+        contents {
+            into('lib') {
+                from project(':MekWarsClient').configurations.runtimeClasspath
+                from project(':MekWarsOperationsEditor').configurations.runtimeClasspath
+            }
+
+            from project(':MekWarsClient').tasks.findByPath(':MekWarsClient:stageFiles')
+            from project(':MekWarsClient').jar
+            from project(':MekWarsOperationsEditor').jar
+
+            from project(':MekWarsClient').tasks.findByPath(':MekWarsClient:stageFiles')
+            from project(':MekWarsOperationsEditor').tasks.findByPath(':MekWarsOperationsEditor:stageFiles')
+            from (project.sourceSets.main.runtimeClasspath.files
+                    .findAll { it.name.endsWith(".jar") }) {
+                into "${lib}"
+            }
+            from "${mmDir}/megamek/build/libs/MegaMek.jar"
+            duplicatesStrategy = 'exclude'
+        }
+    }
+    
 }
 // A properties_local.gradle file can be used to override any of the above options. For instance,
 // rootProject.ext.hqGitRoot = 'file:///path/to/local/repo' will cause the release target to clone a

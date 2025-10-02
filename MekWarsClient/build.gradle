@@ -1,6 +1,7 @@
 plugins {
     id 'application'
 	id 'java-common-conventions'
+    id 'edu.sc.seis.launch4j' version '2.5.4'
 }
 
 sourceSets {
@@ -8,57 +9,77 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
-		resources {
-   			srcDirs = ['resources']
-		}
-	}
+        resources {
+               srcDirs = ['resources']
+        }
+    }
 }
 
 dependencies {
-	implementation project(':MekWarsCommon')
+    implementation project(':MekWarsCommon')
+	implementation 'org.jdatepicker:jdatepicker:1.3.4'
+	implementation 'com.jgoodies:looks:2.2.2'
 }
 
 application {
-	mainClassName = 'mekwars.client.MWClient'
+    mainClassName = 'mekwars.client.MWClient'
 }
 
 ext {
-	fileStagingDir = "${buildDir}/files"
-	clientdist = "client-dist"
-	lib = "lib"
-	data = "data"
-	docs = "docs"
-	mmconf = "mmconf"
-}
-
-task stageFiles(type: Copy) {
-	description = 'Stages files that are to be copied into the distribution.'
-
-	dependsOn gradle.includedBuild('megamek').task(':megamek:stageFiles')
-
-	from clientdist
-	into fileStagingDir
+    fileStagingDir = "${buildDir}/files"
+    clientdist = "client-dist"
+    lib = "lib"
+    data = "data"
+    docs = "docs"
+    mmconf = "mmconf"
 }
 
 jar {
-	archiveFileName = 'MekWars.jar'
+    archiveFileName = 'MekWars.jar'
     manifest {
         attributes(
-            'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+          'Class-Path': "MegaMek.jar " + configurations.runtimeClasspath.files
+              .findAll { it.name.endsWith(".jar") && !it.name.toLowerCase().startsWith("megamek") }
+              .collect { "${lib}/${it.name}" }.join(' '),
             'Main-Class': mainClassName
         )
     }
 }
 
+task stageFiles(type: Copy) {
+    description = 'Stages files that are to be copied into the distribution.'
+
+    dependsOn gradle.includedBuild('megamek').task(':megamek:stageFiles')
+
+	file(fileStagingDir).mkdirs()
+	File batFile = new File("${fileStagingDir}/MekWars.bat")
+	batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
+	from batFile
+    from clientdist
+    into fileStagingDir
+}
+
 tasks.named ('run') {
-	workingDir = file('client-dist')
+    workingDir = file('client-dist')
 }
 
 distributions {
-	main {
-		contents {
-			from stageFiles
+    main {
+        contents {
+            from stageFiles
+            from jar
+            from "${mmDir}/megamek/build/libs/MegaMek.jar"
+            from (project.sourceSets.main.runtimeClasspath.files
+                    .findAll { it.name.endsWith(".jar") }) {
+                into "${lib}"
+            }
             duplicatesStrategy = 'exclude'
-		}
-	}
+        }
+    }
+}
+
+createExe {
+    mainClassName = project.mainClassName
+    outfile = 'MekWars.exe'
+    jar = project.tasks.getByName("jar").archiveFile.get()
 }
