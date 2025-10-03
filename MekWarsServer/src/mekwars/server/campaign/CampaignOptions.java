@@ -59,7 +59,7 @@ public class CampaignOptions {
         } catch (Exception ex) {
             logger.error("Problems with loading campaign config");
             logger.error(ex);
-            defaultOptions.createConfig();
+            defaultOptions.createConfig(configFile);
             try {
                 config.load(new FileInputStream(configFile));
             } catch (Exception ex1) {
@@ -68,8 +68,8 @@ public class CampaignOptions {
                 System.exit(1);
             }
 
-        defaultOptions.createConfig(); // save the cofig file so any missed defaults are
-        // added
+            // added
+            defaultOptions.createConfig(configFile); // save the cofig file so any missed defaults are
         }
     }
 

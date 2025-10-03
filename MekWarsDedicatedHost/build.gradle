@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-	id 'java-common-conventions'
+    id 'java-common-conventions'
 }
 
 sourceSets {
@@ -8,16 +8,16 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
-	}
+    }
 }
 
 dependencies {
-	implementation project(':MekWarsCommon')
-	implementation project(':MekWarsClient')
+    implementation project(':MekWarsCommon')
+    implementation project(':MekWarsClient')
 }
 
 application {
-	mainClassName = 'mekwars.dedicatedhost.MWDedHost'
+    mainClassName = 'mekwars.dedicatedhost.MWDedHost'
     applicationDefaultJvmArgs = [
             '-Xmx4096m',
             '-Dsun.awt.disablegrab=true'
@@ -25,16 +25,47 @@ application {
 }
 
 ext {
-	data = "data"
-	docs = "docs"
-	mmconf = "mmconf"
+    fileStagingDir = "${buildDir}/files"
+    data = "data"
+    docs = "docs"
+    mmconf = "mmconf"
 }
 
 jar {
-  manifest {
-    attributes(
-      'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
-      'Main-Class': mainClassName
-    )
-  }
+    archiveFileName = 'MekWarsDedicatedHost.jar'
+    manifest {
+        attributes(
+          'Class-Path': "MegaMek.jar MekWars.jar " + configurations.runtimeClasspath.files
+              .findAll { it.name.endsWith(".jar")
+                && !it.name.toLowerCase().startsWith("megamek")
+                && !it.name.toLowerCase().startsWith("mekwars")
+              }
+              .collect { "${lib}/${it.name}" }.join(' '),
+          'Main-Class': mainClassName
+        )
+    }
+}
+
+task stageFiles(type: Copy) {
+	file(fileStagingDir).mkdirs()
+	File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
+	batFile.text = "start /min java ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
+	from batFile
+	into fileStagingDir
+}
+
+distributions {
+    main {
+        contents {
+			from stageFiles
+            from project(':MekWarsClient').jar
+            from jar
+            from "${mmDir}/megamek/build/libs/MegaMek.jar"
+            from (project.sourceSets.main.runtimeClasspath.files
+                    .findAll { it.name.endsWith(".jar") }) {
+                into "${lib}"
+            }
+            duplicatesStrategy = 'exclude'
+        }
+    }
 }
