@@ -27,10 +27,10 @@ import java.util.Vector;
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SmallPlayer;
-import mekwars.server.util.StringUtil;
 
 
 public class Statistics {
@@ -78,7 +78,7 @@ public class Statistics {
 	        
 	        result.append("</td><td align=\"right\">");
 	        if (m.getLastTimeUpdated() > 0) {
-	            result.append(StringUtil.readableTime(System.currentTimeMillis() - m.getLastTimeUpdated()));
+	            result.append(StringUtils.readableTime(System.currentTimeMillis() - m.getLastTimeUpdated()));
 	        } else
 	            result.append("unknown");
 	        result.append("</td></tr>\n\r");

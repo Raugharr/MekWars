@@ -20,6 +20,7 @@ import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
+import mekwars.common.util.StringUtils;
 import megamek.Version;
 import megamek.common.Mech;
 import mekwars.server.MWServ;
@@ -30,7 +31,6 @@ import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 import mekwars.server.campaign.util.scheduler.MWScheduler;
 import mekwars.server.util.SPlayerToJSON;
-import mekwars.server.util.StringUtil;
 
 public class ActivateCommand implements Command {
 
@@ -269,7 +269,7 @@ public class ActivateCommand implements Command {
         }
         
         if (CampaignMain.cm.getBooleanConfig("Activate_Subfaction_Only")) {
-            if (StringUtil.isNullOrEmpty(p.getSubFactionName())) {
+            if (StringUtils.isNullOrEmpty(p.getSubFactionName())) {
                 p.toSelf("AM: You must first join a subfaction before you can activate!");
                 return;
             }

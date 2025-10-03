@@ -69,7 +69,6 @@ import mekwars.server.campaign.mercenaries.MercHouse;
 import mekwars.server.campaign.operations.resolvers.NewShortResolver;
 import mekwars.server.campaign.operations.resolvers.ShortOpPlayers;
 import mekwars.server.campaign.pilot.SPilot;
-import mekwars.server.util.StringUtil;
 
 // IMPORTS
 
@@ -1481,7 +1480,7 @@ public class ShortOperation implements Comparable<Object> {
 
             // add duration, names and BV's to the results log
             StringBuilder toStore = new StringBuilder();
-            toStore.append("#" + getShortID() + " [" + getName() + "]" + " [" + targetWorld.getName() + "] {" +  aTerrain.getHumanReadableWeather() + "} Duration: " + StringUtil.readableTime(completionTime - startTime) + " / Players: " );
+            toStore.append("#" + getShortID() + " [" + getName() + "]" + " [" + targetWorld.getName() + "] {" +  aTerrain.getHumanReadableWeather() + "} Duration: " + StringUtils.readableTime(completionTime - startTime) + " / Players: " );
             boolean firstPlayer = true;
             for (String currName : getAllPlayerNames()) {
                 if (firstPlayer) {
@@ -2174,7 +2173,7 @@ public class ShortOperation implements Comparable<Object> {
         // if this is a mod request, append the duration to pre-built header
         if (mod) {
             Long duration = System.currentTimeMillis() - startTime;
-            String readableDuration = StringUtil.readableTime(duration);
+            String readableDuration = StringUtils.readableTime(duration);
             resultString += modHeader + " / Duration: " + readableDuration + "]<br>";
         }
 
@@ -2283,13 +2282,13 @@ public class ShortOperation implements Comparable<Object> {
     private String getFinishedInfo(boolean complete, boolean mod) {
 
         Long age = System.currentTimeMillis() - completionTime;
-        String toReturn = StringUtil.readableTime(age) + " ago: ";
+        String toReturn = StringUtils.readableTime(age) + " ago: ";
 
         // determine how much to return (player or faction names)
         if (mod) {
 
             Long duration = completionTime - startTime;
-            String readableDuration = StringUtil.readableTime(duration);
+            String readableDuration = StringUtils.readableTime(duration);
             toReturn += modHeader + " / Duration: " + readableDuration + "]<br>";
             toReturn += completeFinishedString;
 

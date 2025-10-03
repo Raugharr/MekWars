@@ -19,7 +19,7 @@ sourceSets {
 
 dependencies {
     implementation project(':MekWarsCommon')
-	implementation 'org.jsoup:jsoup:1.5.2'
+	implementation 'org.jsoup:jsoup:1.21.2'
 }
 
 application {

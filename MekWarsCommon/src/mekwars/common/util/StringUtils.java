@@ -126,9 +126,9 @@ public final class StringUtils {
             green -= 128;
         }
 
-        try{
+        try {
             newColor = new Color(red,green,blue);
-        }catch(Exception ex){
+        } catch(Exception ex) {
             
         }
         return newColor;
@@ -141,7 +141,7 @@ public final class StringUtils {
     
     public static String hasBadChars(String string, boolean pilot){
         
-        char[] badChars = {'%','~', '$', '|', '*', '#' , '@', '&', '^', '+', '=',
+        char[] badChars = {'%', '~', '$', '|', '*', '#', '@', '&', '^', '+', '=',
                             ';', ':', '\'', '"', '/', '\\', '{', '}' };
 
         for (int pos = badChars.length -1; pos >= 0; pos-- ){
@@ -159,4 +159,77 @@ public final class StringUtils {
         
         return "";
     }
-}// end AorAnChecker class
+    
+    /**
+     * Method which generates human readible times from miliseconds. Useful only
+     * for times which are known to be minutes or seconds in length. Produces
+     * full-word output.
+     */
+    public static String readableTimeWithSeconds(long elapsed) {
+    
+        // to return
+        String result = "";
+    
+        long elapsedMinutes = elapsed / 60000;
+        long elapsedSeconds = (elapsed % 60000) / 1000;
+    
+        if (elapsedMinutes > 0) {
+            result += elapsedMinutes + " min";
+        }
+    
+        if (elapsedSeconds > 0 && elapsedMinutes > 0) {
+            result += ", " + elapsedSeconds + " sec";
+        } else if (elapsedSeconds > 0) {
+            result += elapsedSeconds + " sec";
+        }
+        return result;
+    }
+
+    /*
+     * Replace original readible time (which oddly adjusted times from MechStats
+     * into seconds, but used ms from System.currentTime() for comparison) with
+     * similar code from MWTracker.java. This produces abbreviated timenames.
+     * 
+     * @urgru 8.6.05
+     */
+    public static String readableTime(long elapsed) {
+    
+        // to return
+        String result = "";
+    
+        long elapsedDays = (elapsed / 86400000);
+        long elapsedHours = (elapsed % 86400000) / 3600000;
+        long elapsedMinutes = (elapsed % 3600000) / 60000;
+    
+        if (elapsedDays > 0) {
+            result += elapsedDays + "d ";
+        }
+    
+        if (elapsedHours > 0 || elapsedDays > 0) {
+            result += elapsedHours + "h ";
+        }
+    
+        result += elapsedMinutes + "m";
+    
+        return result;
+    }
+
+    /**
+     * Returns TRUE if the passed in text is either a NULL value or is an empty string.
+     *
+     * @param text  The string to be evaluated.
+     */
+    public static boolean isNullOrEmpty(String text) {
+        return (text == null) || (text.trim().isEmpty());
+    }
+
+
+    /**
+     * Returns TRUE if the passed in text is either a NULL value or is an empty string.
+     *
+     * @param text The string to be evaluated.
+     */
+    public static boolean isNullOrEmpty(StringBuilder text) {
+        return (text == null) || isNullOrEmpty(text.toString());
+    }
+} // end AorAnChecker class

@@ -149,7 +149,7 @@ import mekwars.server.campaign.util.WhoToHTML;
 import mekwars.server.campaign.util.scheduler.MWScheduler;
 import mekwars.server.campaign.votes.VoteManager;
 import mekwars.server.util.MWPasswd;
-import mekwars.server.util.StringUtil;
+import mekwars.server.util.HtmlSanitizer;
 import mekwars.server.util.discord.DiscordMessageHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -191,6 +191,7 @@ public final class CampaignMain implements Serializable {
     private Random r = new Random(System.currentTimeMillis());
     private Date housePlanetDate = new Date();
     private HashMap<String, ChatRoom> chatRooms = new HashMap<String, ChatRoom>();
+    private HtmlSanitizer htmlSanitizer = null;
 
     /**
      * This is a hash collection of all the players that have yet to log into
@@ -327,7 +328,10 @@ public final class CampaignMain implements Serializable {
 
 
         // Start up the HTML Sanitizer
-        StringUtil.loadSanitizer();
+        htmlSanitizer = new HtmlSanitizer(
+                getBooleanConfig("AllowLinksInMOTD"),
+                getBooleanConfig("AllowPlanetsInMOTD")
+            );
 
         // Load the default player flags
         defaultPlayerFlags.loadFromDisk();
@@ -3885,5 +3889,9 @@ public final class CampaignMain implements Serializable {
      */
     public XStream getXStream() {
         return (XStream) xstream;    
+    }
+
+    public HtmlSanitizer getHtmlSanitizer() {
+        return htmlSanitizer;
     }
 }
