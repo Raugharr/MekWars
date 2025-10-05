@@ -21,7 +21,6 @@ import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
-import mekwars.server.util.StringUtil;
 
 public class AdminReloadHTMLSanitizerConfigsCommand implements Command {
 	
@@ -41,7 +40,7 @@ public class AdminReloadHTMLSanitizerConfigsCommand implements Command {
 			return;
 		}
 		
-		StringUtil.reloadSanitizer();
+		CampaignMain.cm.getHtmlSanitizer().loadSanitizer();
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has reloaded the HTML Sanitizer configs");
 		CampaignMain.cm.toUser("You have reloaded the HTML Sanitizer configs",Username,true);
 	}

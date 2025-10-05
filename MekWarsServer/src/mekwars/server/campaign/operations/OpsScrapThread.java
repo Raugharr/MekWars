@@ -19,10 +19,10 @@ package mekwars.server.campaign.operations;
 import java.util.TreeMap;
 
 import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
-import mekwars.server.util.StringUtil;
 
 public class OpsScrapThread extends Thread {
 
@@ -190,7 +190,7 @@ public class OpsScrapThread extends Thread {
 		}
 
 		// inform the potential scrapper that he can get some cash.
-		CampaignMain.cm.toUser("You have " + StringUtil.readableTimeWithSeconds(waitTime) + " to scrap salvaged units and recover repair costs.", playerName, true);
+		CampaignMain.cm.toUser("You have " + StringUtils.readableTimeWithSeconds(waitTime) + " to scrap salvaged units and recover repair costs.", playerName, true);
 
 		// do the wait
 		try {

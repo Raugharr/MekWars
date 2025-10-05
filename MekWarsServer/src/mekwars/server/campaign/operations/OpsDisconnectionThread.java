@@ -19,8 +19,8 @@ package mekwars.server.campaign.operations;
 import mekwars.common.CampaignData;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
+import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
-import mekwars.server.util.StringUtil;
 
 public class OpsDisconnectionThread extends Thread {
 	
@@ -61,7 +61,7 @@ public class OpsDisconnectionThread extends Thread {
 			timeToReport = 120000;
 		
 		//inform the potential "winner" that the game will resolve
-		String timeToReturn = StringUtil.readableTimeWithSeconds(timeToReport);
+		String timeToReturn = StringUtils.readableTimeWithSeconds(timeToReport);
 		CampaignMain.cm.toUser(CampaignMain.cm.getPlayer(loserName).getColoredName() + " disconnected. You will win by forfeit if he does not return within " + timeToReturn + ".",winnerName,true);
 		
 		//add the start to the log
@@ -92,7 +92,7 @@ public class OpsDisconnectionThread extends Thread {
 	
 	public void playerReturned(boolean tellOtherPlayer, long timeOffline) {
 		if (tellOtherPlayer) {
-			CampaignMain.cm.toUser(CampaignMain.cm.getPlayer(loserName).getColoredName() + " returned. He was offline for " + StringUtil.readableTimeWithSeconds(timeOffline) + ".",winnerName,true);
+			CampaignMain.cm.toUser(CampaignMain.cm.getPlayer(loserName).getColoredName() + " returned. He was offline for " + StringUtils.readableTimeWithSeconds(timeOffline) + ".",winnerName,true);
 			MWLogger.gameLog("Disco Thread/Stop:" + id + "/" + loserName + ". Player returned.");
 		} else {
 			MWLogger.gameLog("Disco Thread/Stop:" + id + "/" + loserName + ". Player threads cleared.");

@@ -21,7 +21,6 @@ import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
-import mekwars.server.util.StringUtil;
 
 /**
  * Set a faction's message of the day. Can be of arbitrary length and use HTML.
@@ -87,7 +86,7 @@ public class SetMOTDCommand implements Command {
 		}
 		
 		boolean allowPlanets = CampaignMain.cm.getBooleanConfig("AllowPlanetsInMOTD");
-		motd = StringUtil.sanitize(motd);
+		motd = CampaignMain.cm.getHtmlSanitizer().sanitize(motd);
 		
 		p.getMyHouse().setMotd(motd + "<p> -- Set by " + p.getName());
 		CampaignMain.cm.toUser("AM:MOTD set. Use /c motd to review.",Username,true);
