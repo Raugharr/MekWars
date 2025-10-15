@@ -21,18 +21,19 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayDeque;
 import java.util.Date;
+import java.util.Deque;
 import java.util.Iterator;
 
-import com.google.common.collect.EvictingQueue;
 import com.google.gson.annotations.Expose;
 
 /**
- * A container for information about the client servers 
- * 
+ * A container for information about the client servers
+ *
  * @author Spork
  * @version 1.0
- * 
+ *
  */
 
 public class HPGSubscriber implements Comparable<HPGSubscriber> {
@@ -46,11 +47,11 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	@Expose(serialize = true, deserialize = true)
 	private String description;
 	@Expose(serialize = true, deserialize = true)
-	private EvictingQueue<Integer> historicalPlayers;
+	private ArrayDeque<Integer> historicalPlayers;
 	@Expose(serialize = true, deserialize = true)
-	private EvictingQueue<Integer> historicalGames;
+	private ArrayDeque<Integer> historicalGames;
 	@Expose(serialize = true, deserialize = true)
-	private EvictingQueue<Integer> historicalCompletedGames;
+	private ArrayDeque<Integer> historicalCompletedGames;
 	@Expose(serialize = true, deserialize = true)
 	private int maxPlayers;
 	@Expose(serialize = true, deserialize = true)
@@ -83,8 +84,8 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	private int threatLevel;
 	@Expose(serialize = false, deserialize = false)
 	private HPGNet tracker;
-	
-	
+
+
 
 	public static int THREAT_LEVEL_NONE = 0;
 	public static int THREAT_LEVEL_YELLOW = 1;
@@ -104,7 +105,7 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	public void setThreatLevel(int threatLevel) {
 		this.threatLevel = threatLevel;
 	}
-	
+
 	/**
 	 * @return the totalGames
 	 */
@@ -167,256 +168,269 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	public String getMWVersion() {
 		return MWVersion;
 	}
-	
+
 	/**
 	 * @param mWVersion the mWVersion to set
 	 */
 	public void setMWVersion(String mWVersion) {
 		MWVersion = mWVersion;
 	}
-	
+
 	/**
 	 * @return the trackerEntry
 	 */
 	public String getTrackerEntry() {
 		return trackerEntry;
 	}
-	
+
 	/**
 	 * @param htmlString the trackerEntry to set
 	 */
 	public void setTrackerEntry(String htmlString) {
 		this.trackerEntry = htmlString;
 	}
-	
+
 	/**
 	 * @return the lastUpdated
 	 */
 	public Date getLastUpdated() {
 		return lastUpdated;
 	}
-	
+
 	/**
 	 * @param lastUpdated the lastUpdated to set
 	 */
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
-	
+
 	/**
 	 * @return the domain
 	 */
 	public String getDomain() {
 		return domain;
 	}
-	
+
 	/**
 	 * @param domain the domain to set
 	 */
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}
-	
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * @return the url
 	 */
 	public String getUrl() {
 		return url;
 	}
-	
+
 	/**
 	 * @param url the url to set
 	 */
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
 		return description;
 	}
-	
+
 	/**
 	 * @param description the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	/**
 	 * @return the currentPlayers
 	 */
 	public int getCurrentPlayers() {
 		return currentPlayers;
 	}
-	
+
 	/**
 	 * @param currentPlayers the currentPlayers to set
 	 */
 	public void setCurrentPlayers(int currentPlayers) {
 		this.currentPlayers = currentPlayers;
 	}
-	
+
 	/**
 	 * @return the currentGames
 	 */
 	public int getCurrentGames() {
 		return currentGames;
 	}
-	
+
 	/**
 	 * @param currentGames the currentGames to set
 	 */
 	public void setCurrentGames(int currentGames) {
 		this.currentGames = currentGames;
 	}
-	
+
 	/**
 	 * @return the historicalPlayers
 	 */
-	public EvictingQueue<Integer> getHistoricalPlayers() {
+	public ArrayDeque<Integer> getHistoricalPlayers() {
 		return historicalPlayers;
 	}
-	
+
 	/**
 	 * @param historicalPlayers the historicalPlayers to set
 	 */
-	public void setHistoricalPlayers(EvictingQueue<Integer> historicalPlayers) {
+	public void setHistoricalPlayers(ArrayDeque<Integer> historicalPlayers) {
 		this.historicalPlayers = historicalPlayers;
 	}
-	
+
 	/**
 	 * @return the historicalGames
 	 */
-	public EvictingQueue<Integer> getHistoricalGames() {
+	public ArrayDeque<Integer> getHistoricalGames() {
 		return historicalGames;
 	}
-	
+
 	/**
 	 * @param historicalGames the historicalGames to set
 	 */
-	public void setHistoricalGames(EvictingQueue<Integer> historicalGames) {
+	public void setHistoricalGames(ArrayDeque<Integer> historicalGames) {
 		this.historicalGames = historicalGames;
 	}
-	
+
 	/**
 	 * @return the maxPlayers
 	 */
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
-	
+
 	/**
 	 * @param maxPlayers the maxPlayers to set
 	 */
 	public void setMaxPlayers(int maxPlayers) {
 		this.maxPlayers = maxPlayers;
 	}
-	
+
 	/**
 	 * @return the maxGames
 	 */
 	public int getMaxGames() {
 		return maxGames;
 	}
-	
+
 	/**
 	 * @param maxGames the maxGames to set
 	 */
 	public void setMaxGames(int maxGames) {
 		this.maxGames = maxGames;
 	}
-	
+
 	/**
 	 * @return the port
 	 */
 	public int getPort() {
 		return port;
 	}
-	
+
 	/**
 	 * @param port the port to set
 	 */
 	public void setPort(int port) {
 		this.port = port;
 	}
-	
+
 	/**
 	 * @return the ipAddress
 	 */
 	public String getIpAddress() {
 		return ipAddress;
 	}
-	
+
 	/**
 	 * @param ipAddress the ipAddress to set
 	 */
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
 	}
-	
+
 	/**
 	 * Create a new HPGSubscriber
 	 */
 	public HPGSubscriber() {
 		// Servers update every 10 minutes.  We want to keep 7 days of history
 		// 7 days = 1008 entries
-		historicalGames = EvictingQueue.create(1008);
-		historicalPlayers = EvictingQueue.create(1008);
-		historicalCompletedGames = EvictingQueue.create(1008);
+		historicalGames = new ArrayDeque<>();
+		historicalPlayers = new ArrayDeque<>();
+		historicalCompletedGames = new ArrayDeque<>();
 	}
-	
+
 	/**
 	 * @param t the tracker to set
 	 */
 	public void setTracker(HPGNet t) {
 		tracker = t;
 	}
-	
+
 	/**
 	 * Adds a game to the CompletedGames EvictingQueue
 	 * @param completedGames
 	 */
 	public void addHistoricalCompletedGamesElement(int completedGames) {
-		historicalCompletedGames.add(completedGames);
+        addToQueue(completedGames, historicalCompletedGames);
 		calculateCompletedGames();
 	}
-	
+
 	/**
 	 * Adds a game to the EvictingQueue
 	 * @param games
 	 */
 	public void addHistoricalGamesElement(int games) {
-		historicalGames.add(games);
+        addToQueue(games, historicalGames);
 		calculateMaxGames();
 	}
-	
+
 	/**
 	 * Adds a player entry to the EvictingQueue
 	 * @param players
 	 */
 	public void addHistoricalPlayersElement(int players) {
-		historicalPlayers.add(players);
+        addToQueue(players, historicalPlayers);
 		calculateMaxPlayers();
 	}
 
-	/**
+    /**
+     * Enforcese the desired limit for Deque impls
+     * @param integer
+     * @param gameQueue
+     */
+    void addToQueue(Integer integer, Deque<Integer> gameQueue) {
+        if (gameQueue.size() >= 1008) {
+            gameQueue.removeFirst();
+        }
+        gameQueue.addLast(integer);
+    }
+
+
+    /**
 	 * Iterates through the currentPlayers queue, calculating the max value
 	 */
 	private void calculateMaxPlayers() {

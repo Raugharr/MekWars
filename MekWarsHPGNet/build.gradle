@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-	id 'java-common-conventions'
+    id 'java-common-conventions'
 }
 
 sourceSets {
@@ -8,37 +8,91 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
-	}
+        resources {
+            srcDirs = ['src/mekwars/hpgnet/resources']
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['test']
+        }
+        resources {
+            srcDirs = ['test/resources']
+        }
+    }
 }
 
 dependencies {
-	implementation project(':MekWarsCommon')
-	implementation 'com.google.code.gson:gson:2.8.9'
+    implementation project(':MekWarsCommon')
+    implementation 'com.google.code.gson:gson:2.8.9'
 }
 
 application {
-	mainClassName = 'mekwars.hpgnet.HPGNet'
-    applicationDefaultJvmArgs = [
-            '-Xmx4096m',
-            '-Dsun.awt.disablegrab=true'
-    ]
+    mainClassName = 'mekwars.hpgnet.HPGNet'
 }
 
 ext {
-	data = "data"
-	docs = "docs"
-	mmconf = "mmconf"
+    hpgDist = "${projectDir}/hpg-dist"
 }
 
+// Output JAR to hpg-dist
 jar {
-  manifest {
-    attributes(
-      'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
-      'Main-Class': mainClassName
-    )
-  }
+    destinationDirectory = file(hpgDist)
+    manifest {
+        attributes(
+                'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+                'Main-Class': mainClassName
+        )
+    }
 }
 
+// Copy resources next to the JAR in hpg-dist
+tasks.register('copyResourcesToDist', Copy) {
+    file(hpgDist).mkdirs()
+
+    doFirst {
+        File batFile = new File(hpgDist, "MekWarsHPGNet.bat")
+        batFile.text = "start java ${project.application.applicationDefaultJvmArgs.join(' ')} -jar \"%~dp0\\${jar.archiveFileName.get()}\""
+    }
+
+    from('src/mekwars/hpgnet/resources') {
+        include '**/*'
+    }
+    into(hpgDist)
+}
+
+assemble {
+    dependsOn copyResourcesToDist
+}
+
+// Task optimization notify
+tasks.named('startScripts') {
+    dependsOn copyResourcesToDist
+}
+
+tasks.named('distZip') {
+    dependsOn copyResourcesToDist
+}
+
+tasks.named('distTar') {
+    dependsOn copyResourcesToDist
+}
+
+tasks.named('build') {
+    dependsOn copyResourcesToDist
+}
+
+// Set run working directory
 tasks.named('run') {
-	workingDir = file('hpgnet-dist')
+    workingDir = file(hpgDist)
+}
+
+// Clean removes everything in hpg-dist
+tasks.named('clean') {
+    delete fileTree(hpgDist)
+}
+
+test {
+    useJUnitPlatform()
 }

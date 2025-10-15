@@ -26,17 +26,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 
 /**
  * Starts a server which listens for information
@@ -48,7 +48,6 @@ import com.google.gson.GsonBuilder;
  * 
  * Final b/c threads start in constructor.
  */
-
 public final class HPGNet {
 	Properties config;
 	
@@ -384,17 +383,19 @@ public final class HPGNet {
 	public void loadAllFromDisk() {
 		File dir = new File(getFilepath());
 		File[] files = dir.listFiles();
-		for (int i = 0; i < files.length; i++) {
-			if(files[i].isFile()) {
-				File current = files[i];
-				if (current.getName().endsWith(".dat")) {
-					// read this
-					
-					HPGSubscriber sub = load(current.toString());
-					addSubscriber(sub);
-				}
-			}
-		}
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    File current = file;
+                    if (current.getName().endsWith(".dat")) {
+                        // read this
+
+                        HPGSubscriber sub = load(current.toString());
+                        addSubscriber(sub);
+                    }
+                }
+            }
+        }
 		generateHTML();
 	}
 	
@@ -424,10 +425,10 @@ public final class HPGNet {
 		String tablefooter = "";
 		String footer = "";
 		try {
-			header = Files.asCharSource(new File("templates/header.txt"), Charsets.US_ASCII).read();
-			tableheader = Files.asCharSource(new File("templates/table_header.txt"), Charsets.US_ASCII).read();
-			tablefooter = Files.asCharSource(new File("templates/table_footer.txt"), Charsets.US_ASCII).read();
-			footer = Files.asCharSource(new File("templates/footer.txt"), Charsets.US_ASCII).read();
+            header = Files.readString(Path.of("templates/header.txt"), StandardCharsets.US_ASCII);
+            tableheader = Files.readString(Path.of("templates/table_header.txt"), StandardCharsets.US_ASCII);
+            tablefooter = Files.readString(Path.of("templates/table_footer.txt"), StandardCharsets.US_ASCII);
+            footer = Files.readString(Path.of("templates/footer.txt"), StandardCharsets.US_ASCII);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
