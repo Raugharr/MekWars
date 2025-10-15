@@ -24,9 +24,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -36,11 +39,9 @@ import java.util.Properties;
 import java.util.SimpleTimeZone;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.UUID;
 import java.util.Vector;
 import megamek.Version;
-import mekwars.server.campaign.ImmunityThread;
-import mekwars.server.campaign.SliceThread;
-import mekwars.server.campaign.TickThread;
 import megamek.common.EquipmentType;
 import megamek.common.MechSummaryCache;
 import mekwars.common.MMGame;
@@ -52,19 +53,21 @@ import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.DefaultServerOptions;
+import mekwars.server.campaign.ImmunityThread;
 import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SliceThread;
+import mekwars.server.campaign.TickThread;
+import mekwars.server.campaign.util.scheduler.TrackerUpdateJob;
 import mekwars.server.dataProvider.Server;
+import mekwars.server.net.hpgnet.HPGSubscribedClient;
 import mekwars.server.util.AutomaticBackup;
 import mekwars.server.util.IpCountry;
 import mekwars.server.util.RepairTrackingThread;
-import mekwars.server.util.TrackerThread;
+import mekwars.server.util.discord.DiscordMessageHandler;
 import mekwars.server.util.rss.Feed;
 import mekwars.server.util.rss.FeedMessage;
-import mekwars.server.util.discord.DiscordMessageHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import megamek.Version;
-import megamek.common.EquipmentType;
 
 public class MWServ {
     private static final Logger logger = LogManager.getLogger(MWServ.class);
@@ -95,9 +98,7 @@ public class MWServ {
     private ImmunityThread IThread;
     private RepairTrackingThread RTT;
     private AutomaticBackup aub = new AutomaticBackup(System.currentTimeMillis());
-    private TrackerThread trackerThread;
-    
-    // private boolean debug = true;
+    private HPGSubscribedClient hpgClient;
 
     /*
      * List of Abreviations for the protocol used by the client only: NG = New
@@ -117,9 +118,19 @@ public class MWServ {
 
     public static void main(String[] argv) {
         MWServ.getInstance();
-        // start the TrackerThread if using tracker
-        MWServ.getInstance().startTracker();
         
+        String trackerAddress = MWServ.getInstance().getCampaign().getConfig("TrackerAddress");
+
+        try {
+            InetSocketAddress address = new InetSocketAddress(
+                    trackerAddress,
+                    HPGSubscribedClient.TRACKER_PORT
+                );
+            MWServ.getInstance().getHpgClient().connect(address);
+        } catch (IOException exception) {
+            logger.warn("Unable to connect to tracker");
+        }
+        TrackerUpdateJob.submit();
         //start server
         MWLogger.mainLog("Entering main loop cycle. Starting the server...");
         MWServ.getInstance().startServer();
@@ -130,7 +141,7 @@ public class MWServ {
     }
     
     public synchronized static MWServ getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new MWServ();
         }
         return instance;
@@ -164,7 +175,7 @@ public class MWServ {
             dataport = Integer.parseInt(getConfigParam("DATAPORT"));
         } catch (NumberFormatException e) {
             logger.error("Non-number given as dataport. Defaulting to 4867.");
-            logger.error(e);
+            logger.catching(e);
             dataport = 4867;
         } finally {
             dataProviderServer = new Server(campaign.getData(), dataport, getConfigParam("SERVERIP"));
@@ -181,7 +192,6 @@ public class MWServ {
         MWLogger.bmLog("Black Market (BM) log touched.");
         MWLogger.infoLog("Server info log touched.");
         MWLogger.warnLog("Server warnings log touched.");
-        MWLogger.errLog("Server errors log touched.");
         MWLogger.modLog("Moderators log touched.");
         MWLogger.tickLog("Tick report log touched.");
 
@@ -192,6 +202,15 @@ public class MWServ {
         SThread.start(); // it slices, it dices, it chops!
         IThread = new ImmunityThread();
         IThread.start();
+
+        String trackerId = getCampaign().getConfig("TrackerUUID");
+        UUID uuid = null;
+
+        try {
+            uuid = UUID.fromString(trackerId);
+        } catch (IllegalArgumentException e) { }
+
+        hpgClient = new HPGSubscribedClient(this, uuid);
 
         // start Advanced Repair, if enabled
         boolean isUsing = campaign.getBooleanConfig("UseAdvanceRepair") || campaign.getBooleanConfig("UseSimpleRepair");
@@ -204,19 +223,6 @@ public class MWServ {
         }
     }
 
-    public void startTracker() {
-        if (Boolean.parseBoolean(getCampaign().getConfig("UseTracker"))) {
-            
-            if(this.trackerThread != null) {
-                this.trackerThread.interrupt();
-            }
-            MWLogger.infoLog("Attempting to create TrackerThread in MWServ.");
-            TrackerThread trackT = new TrackerThread(this);
-            trackT.start();
-            this.trackerThread = trackT;
-        }
-    }
-    
     public void loadConfig() {
         try {
             config.load(new FileInputStream("./data/serverconfig.txt"));
@@ -1249,6 +1255,10 @@ public class MWServ {
     public void startAutomaticBackup() {
         aub = new AutomaticBackup(System.currentTimeMillis());
         aub.run();
+    }
+
+    public HPGSubscribedClient getHpgClient() {
+        return hpgClient;
     }
 }
 
