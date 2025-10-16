@@ -163,7 +163,6 @@ public class GUIClientConfig implements IClientConfig {
         defaults.setProperty("UNITCAMO", "Flame.jpg"); // camouflage for units
                                                        // in hangar bay
         defaults.setProperty("UNITHEX", "NO"); // hexes for units in hangar bay
-        defaults.setProperty("HQCOLORSCHEME", "grey");// colors for unit
                                                       // backgrounds in HQ
         defaults.setProperty("UNITAMOUNT", "10"); // hexes for units in hangar
                                                   // bay

@@ -1767,9 +1767,7 @@ public final class MWClient extends GameHost implements IClient {
 
     public void addToChat(String s, int channel, String tabName) {
 
-        s = "<BODY  TEXT=\"" + Config.getParam("CHATFONTCOLOR")
-                + "\" BGCOLOR=\"" + Config.getParam("BACKGROUNDCOLOR")
-                + "\"><font size=\"" + Config.getParam("CHATFONTSIZE") + "\">"
+        s = "<BODY  <font size=\"" + Config.getParam("CHATFONTSIZE") + "\">"
                 + s + "</font></BODY>";
         // MWLogger.infoLog("String: "+s);
         try {

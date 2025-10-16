@@ -148,7 +148,6 @@ public class CUserListPanel extends JPanel implements ActionListener{
         UserListSP.setViewportView(UserList);
         add(UserListSP, BorderLayout.CENTER);
 
-        UserList.setBackground(StringUtils.html2Color(mwclient.getConfigParam("BACKGROUNDCOLOR")));
         //set up the countlabel
         CountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         CountLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -491,9 +490,9 @@ public class CUserListPanel extends JPanel implements ActionListener{
                      * a handful have access to.
                      */
                     if (mwclient.isMod()) {
-						StaffUserlistPopupMenu staffUserlistPopupMenu = new StaffUserlistPopupMenu();
-						staffUserlistPopupMenu.createMenu(mwclient, user);
-						popup.add((JMenu)staffUserlistPopupMenu);
+                        StaffUserlistPopupMenu staffUserlistPopupMenu = new StaffUserlistPopupMenu();
+                        staffUserlistPopupMenu.createMenu(mwclient, user);
+                        popup.add((JMenu)staffUserlistPopupMenu);
                         popup.addSeparator();
                     }
 
@@ -1222,11 +1221,11 @@ public class CUserListPanel extends JPanel implements ActionListener{
                 if (selected) {
                     setForeground(list.getSelectionForeground());
                     setBackground(list.getSelectionBackground());
-                }
-                else {
+                } else {
                     setBackground(list.getBackground());
-                    if (TextColor && LoggedIn) {setForeground(user.getRGBColor());}
-                    else {setForeground(Color.black);}
+                    if (TextColor && LoggedIn) {
+                        setForeground(user.getRGBColor());
+                    }
                 }
 
                 if (LoggedIn) {

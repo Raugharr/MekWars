@@ -36,7 +36,6 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -51,10 +50,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
+import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-
 import megamek.client.ui.dialogs.CamoChooserDialog;
 import megamek.client.ui.swing.tileset.MechTileset;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
@@ -75,9 +74,8 @@ import mekwars.client.gui.dialog.AdvancedRepairDialog;
 import mekwars.client.gui.dialog.BulkRepairDialog;
 import mekwars.client.gui.dialog.CustomUnitDialog;
 import mekwars.client.gui.dialog.PromotePilotDialog;
-//@Salient
 import mekwars.client.gui.dialog.SolFreeBuildDialog;
-//import mekwars.client.gui.dialog.TableViewerDialog; //for testing/debug
+import mekwars.client.gui.utilities.MekWarsTableCellRenderer;
 import mekwars.common.Army;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
@@ -209,8 +207,6 @@ public class CHQPanel extends JPanel {
         // pnlMeks.setLayout(new BoxLayout(pnlMeks, BoxLayout.Y_AXIS));
         pnlMeks.setLayout(new GridBagLayout());
         spMeks.setPreferredSize(new Dimension(300, 400));
-        tblMeks.setBackground(new Color(255, 255, 255));
-        tblMeks.setForeground(new Color(0, 0, 0));
         tblMeks.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         tblMeks.setDoubleBuffered(true);
         tblMeks.setMaximumSize(new Dimension(2147483647, 10000));
@@ -3171,10 +3167,7 @@ public class CHQPanel extends JPanel {
         }
 
         public class Renderer extends MechInfo implements TableCellRenderer {
-
-            /**
-             *
-             */
+        // public class Renderer extends MekWarsTableCellRenderer {
             private static final long serialVersionUID = -300922977373422309L;
 
             int meknum;
@@ -3192,13 +3185,11 @@ public class CHQPanel extends JPanel {
             }
 
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
                 Component c = this;
                 setOpaque(true);
                 setText(getValueAt(row, column).toString());
                 setToolTipText(null);
                 c.setBackground(dcolor);
-                String scheme = mwclient.getConfig().getParam("HQCOLORSCHEME").toLowerCase();
                 CArmy l = getArmyAt(row);
 
                 if (l != null) {
@@ -3211,8 +3202,7 @@ public class CHQPanel extends JPanel {
                         return c;
                     }
                 } else if (column == 0) {
-                    // Hangar Color (pale purple)
-                    c.setBackground(new Color(dcolor.getRed() - 33, dcolor.getBlue() - 33, dcolor.getGreen() - 7));
+                    c.setBackground(UIManager.getColor("TableHeader.separatorColor"));
                     return c;
                 }
                 CUnit cm = getMekAt(row, column);
@@ -3291,8 +3281,7 @@ public class CHQPanel extends JPanel {
                     }
 
                     //@salient EXPANDEDUNITTOOLTIP
-                    if(Boolean.parseBoolean(mwclient.getConfig().getParam("EXPANDEDUNITTOOLTIP")))
-                    {          
+                    if (Boolean.parseBoolean(mwclient.getConfig().getParam("EXPANDEDUNITTOOLTIP"))) {
                         C3Text.append("<font color=\"purple\">");
                         C3Text.append("<b>[General]</b><br>");
                         C3Text.append("Weight: "+cm.getEntity().getWeight()+" Tons ("+ cm.getEntity().getWeightClassName() +")<br>");
@@ -3312,11 +3301,6 @@ public class CHQPanel extends JPanel {
                             C3Text.append("<br>");
                                     
                         C3Text.append("Heat Capacity: "+cm.getEntity().getHeatCapacity()+"<br>");
-                                               
-//                        if(cm.getEntity().hasQuirk("no_twist"))
-//                            C3Text.append("Torso Twist: <font color=\"green\">NO</font><br>");
-//                        else
-//                            C3Text.append("Torso Twist: <font color=\"red\">YES</font><br>");
                         
                         if(cm.getEntity().canFlipArms())
                             C3Text.append("Arms Flip: <font color=\"green\">YES</font><br>");
@@ -3398,159 +3382,8 @@ public class CHQPanel extends JPanel {
                         } else if (useAdvanceRepairs && !UnitUtils.hasAllAmmo(cm.getEntity())) {
                             c.setBackground(new Color(255, 128, 255));
                         }
-                        //@salient this is also irrelevant, due to else-if order of operations.
-//                        else if (cm.getStatus() == Unit.STATUS_UNMAINTAINED) {
-//                            // a nice rusty orange for unmaintained units
-//                            c.setBackground(new Color(190, 150, 55));
-//                        }
-                        //@salient, isnt this the same as the first if statement? duplicate condition.
-//                        else if (cm.getStatus() == Unit.STATUS_FORSALE) {
-//                            // a mild green for units that are on sale
-//                            c.setBackground(new Color(50, 170, 35));
-//                        }
-                        else if ((l == null) && (inNumberofArmies > 0)) {
-                            if (scheme.equals("classic")) {
-                                c.setBackground(new Color(65, 170, 55));// dark
-                                // green
-                            } else {
-                                // all non-classic sets (light blue)
-                                c.setBackground(new Color(dcolor.getRed() - 43, dcolor.getBlue() - 33, dcolor.getGreen() - 4));
-                            }
-                        } else {
-
-                            // TAN SET. Tan gradients.
-                            if (scheme.equals("tan")) {
-                                switch (cm.getWeightclass()) {
-
-                                case Unit.LIGHT:
-                                    c.setBackground(new Color(dcolor.getRed() - 10, dcolor.getBlue() - 10, dcolor.getGreen() - 30));
-                                    break;
-                                case Unit.MEDIUM:
-                                    c.setBackground(new Color(dcolor.getRed() - 30, dcolor.getBlue() - 30, dcolor.getGreen() - 50));
-                                    break;
-                                case Unit.HEAVY:
-                                    c.setBackground(new Color(dcolor.getRed() - 55, dcolor.getBlue() - 55, dcolor.getGreen() - 75));
-                                    break;
-                                case Unit.ASSAULT:
-                                    c.setBackground(new Color(dcolor.getRed() - 75, dcolor.getBlue() - 75, dcolor.getGreen() - 95));
-                                    break;
-
-                                }// end Tan Switch
-                            }
-
-                            // GREY SET. Grey gradients.
-                            else if (scheme.equals("grey")) {
-                                switch (cm.getWeightclass()) {
-
-                                case Unit.LIGHT:
-                                    c.setBackground(dcolor);
-                                    break;
-                                case Unit.MEDIUM:
-                                    c.setBackground(new Color(dcolor.getRed() - 17, dcolor.getBlue() - 17, dcolor.getGreen() - 17));
-                                    break;
-                                case Unit.HEAVY:
-                                    c.setBackground(new Color(dcolor.getRed() - 40, dcolor.getBlue() - 40, dcolor.getGreen() - 40));
-                                    break;
-                                case Unit.ASSAULT:
-                                    c.setBackground(new Color(dcolor.getRed() - 65, dcolor.getBlue() - 65, dcolor.getGreen() - 65));
-                                    break;
-
-                                }// end Grey Switch
-                            }
-
-                            else {// CLASSIC COLORS. White/Tan/Blue/Purple.
-
-                                switch (cm.getWeightclass()) {
-
-                                case Unit.LIGHT:
-                                    c.setBackground(dcolor);
-                                    break;
-                                case Unit.MEDIUM:
-                                    c.setBackground(new Color(dcolor.getRed() - 30, dcolor.getBlue() - 30, dcolor.getGreen() - 50));
-                                    break;
-                                case Unit.HEAVY:
-                                    c.setBackground(new Color(dcolor.getRed() - 65, dcolor.getBlue() - 65, dcolor.getGreen() - 25));
-                                    break;
-                                case Unit.ASSAULT:
-                                    c.setBackground(new Color(dcolor.getRed() - 45, dcolor.getBlue() - 93, dcolor.getGreen() - 45));
-                                    break;
-
-                                }// end Classic Switch
-                            }
-                        }// end else(should fill by weight)
-                    } else if ((l == null) && (inNumberofArmies > 0)) {
-                        if (scheme.equals("classic")) {
-                            c.setBackground(new Color(65, 170, 55));// dark
-                            // green
-                        } else {
-                            // all non-classic sets (light blue)
-                            c.setBackground(new Color(dcolor.getRed() - 43, dcolor.getBlue() - 33, dcolor.getGreen() - 4));
-                        }
-                    } else {
-
-                        // TAN SET. Tan gradients.
-                        if (scheme.equals("tan")) {
-                            switch (cm.getWeightclass()) {
-
-                            case Unit.LIGHT:
-                                c.setBackground(new Color(dcolor.getRed() - 10, dcolor.getBlue() - 10, dcolor.getGreen() - 30));
-                                break;
-                            case Unit.MEDIUM:
-                                c.setBackground(new Color(dcolor.getRed() - 30, dcolor.getBlue() - 30, dcolor.getGreen() - 50));
-                                break;
-                            case Unit.HEAVY:
-                                c.setBackground(new Color(dcolor.getRed() - 55, dcolor.getBlue() - 55, dcolor.getGreen() - 75));
-                                break;
-                            case Unit.ASSAULT:
-                                c.setBackground(new Color(dcolor.getRed() - 75, dcolor.getBlue() - 75, dcolor.getGreen() - 95));
-                                break;
-
-                            }// end Tan Switch
-                        }
-
-                        // GREY SET. Grey gradients.
-                        else if (scheme.equals("grey")) {
-                            switch (cm.getWeightclass()) {
-
-                            case Unit.LIGHT:
-                                c.setBackground(dcolor);
-                                break;
-                            case Unit.MEDIUM:
-                                c.setBackground(new Color(dcolor.getRed() - 17, dcolor.getBlue() - 17, dcolor.getGreen() - 17));
-                                break;
-                            case Unit.HEAVY:
-                                c.setBackground(new Color(dcolor.getRed() - 40, dcolor.getBlue() - 40, dcolor.getGreen() - 40));
-                                break;
-                            case Unit.ASSAULT:
-                                c.setBackground(new Color(dcolor.getRed() - 65, dcolor.getBlue() - 65, dcolor.getGreen() - 65));
-                                break;
-
-                            }// end Grey Switch
-                        }
-
-                        else {// CLASSIC COLORS. White/Tan/Blue/Purple.
-
-                            switch (cm.getWeightclass()) {
-
-                            case Unit.LIGHT:
-                                c.setBackground(dcolor);
-                                break;
-                            case Unit.MEDIUM:
-                                c.setBackground(new Color(dcolor.getRed() - 30, dcolor.getBlue() - 30, dcolor.getGreen() - 50));
-                                break;
-                            case Unit.HEAVY:
-                                c.setBackground(new Color(dcolor.getRed() - 65, dcolor.getBlue() - 65, dcolor.getGreen() - 25));
-                                break;
-                            case Unit.ASSAULT:
-                                c.setBackground(new Color(dcolor.getRed() - 45, dcolor.getBlue() - 93, dcolor.getGreen() - 45));
-                                break;
-
-                            }// end Classic Switch
-                        }
-                    }// end else(should fill by weight)
-                }
-
-                else {
+                    }
+                } else {
                     setImageVisible(false);
                     meknum = (((row - getRowsForArmies()) * getColumnCount()) - 1) + column;
                     int freebays = Player.getFreeBays();
@@ -3561,10 +3394,10 @@ public class CHQPanel extends JPanel {
                         setText("");
                     }
                 }
+                MekWarsTableCellRenderer.setupTigerStripes(this, table, column);
                 return c;
             }
         }// end Renderer
-
     }// end MekTableModel
 
 }
