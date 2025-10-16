@@ -151,10 +151,6 @@ public final class ConfigurationDialog implements ActionListener {
     private final JTextField f4Field = new JTextField(30);
     private final JTextField f5Field = new JTextField(30);
 
-    // COMBO BOXES
-    private final String[] schemeChoices = { "Grey", "Tan", "Classic" };
-    private final JComboBox schemeComboBox = new JComboBox(schemeChoices);
-
     private JComboBox lookandfeelComboBox = new JComboBox();
 
     private final String[] playerChatColorChoices = { "Player Defined", "Faction Colors", "Mixed (Faction Tag)", "Mixed (Faction Name)" };
@@ -274,7 +270,6 @@ public final class ConfigurationDialog implements ActionListener {
         // stored values.
         int originalColumns = Integer.parseInt(mwclient.getConfigParam("UNITAMOUNT"));
         String originalUnitHex = mwclient.getConfigParam("UNITHEX");
-        String originalScheme = mwclient.getConfigParam("HQCOLORSCHEME").toLowerCase();
         String originalLookAndFeel = mwclient.getConfigParam("LOOKANDFEEL");
         // String originalMapBrightness =
         // mwclient.getConfigParam("DARKERMAP").toLowerCase();
@@ -340,7 +335,7 @@ public final class ConfigurationDialog implements ActionListener {
         foregroundColorField.setToolTipText("<HTML>Foreground text colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
         playerFieldsPanel.add(foregroundColorField);
 
-        playerFieldsPanel.add(new JLabel("Back Ground:", SwingConstants.TRAILING));
+        playerFieldsPanel.add(new JLabel("Background:", SwingConstants.TRAILING));
         backgroundColorField.setMaximumSize(newDim);
         backgroundColorField.setToolTipText("<HTML>Background colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
         playerFieldsPanel.add(backgroundColorField);
@@ -417,19 +412,8 @@ public final class ConfigurationDialog implements ActionListener {
 
         SpringLayoutHelper.setupSpringGrid(playerUpperCBoxesPanel, 2);
 
-        // set up the color scheme panel/radio buttons
-        JPanel schemeWrapper = new JPanel();
-        schemeWrapper.setLayout(new BoxLayout(schemeWrapper, BoxLayout.Y_AXIS));
-
         Dimension comboDim = new Dimension();
         comboDim.setSize(lookandfeelComboBox.getMinimumSize().getWidth() * 1.6, uNameField.getMinimumSize().getHeight() + 2);
-
-        JLabel schemeHeader = new JLabel("HQ Color Scheme:");
-        schemeHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
-        schemeWrapper.add(schemeHeader);
-        schemeWrapper.add(schemeComboBox);
-        schemeComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-        schemeComboBox.setMaximumSize(comboDim);
 
         JPanel statusWrapper = new JPanel();
         statusWrapper.setLayout(new BoxLayout(statusWrapper, BoxLayout.Y_AXIS));
@@ -476,7 +460,6 @@ public final class ConfigurationDialog implements ActionListener {
         playerPanel.add(playerFieldsWrapper);
         playerPanel.add(playerUpperCBoxesPanel);
         if (mwclient.getConfig().isParam("HQTABVISIBLE")) {
-            playerPanel.add(schemeWrapper);
             playerPanel.add(statusWrapper);
         } else {
             playerPanel.add(new JLabel("\n"));
@@ -1207,16 +1190,6 @@ public final class ConfigurationDialog implements ActionListener {
         soundOnMenuField.setText(mwclient.getConfig().getParam("SOUNDONMENU"));
         keywordsField.setText(mwclient.getConfig().getParam("KEYWORDS"));
 
-        // Set the selected HQ color scheme button
-        String scheme = mwclient.getConfigParam("HQCOLORSCHEME").toLowerCase();
-        if (scheme.equals("tan")) {
-            schemeComboBox.setSelectedIndex(1);
-        } else if (scheme.equals("grey")) {
-            schemeComboBox.setSelectedIndex(0);
-        } else {// scheme is classic
-            schemeComboBox.setSelectedIndex(2);
-        }
-
         // set the selected Sys Message color scheme
         // sysMessageColorChoices = {"DarkGreen", "Gold", "Indigo", "Navy",
         // "Orange", "Red", "Teal"};
@@ -1470,17 +1443,6 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("USETESTBUILDTABLEVIEWER", Boolean.toString(testBuildTableBox.isSelected()));
             mwclient.getConfig().setParam("EXPANDEDUNITTOOLTIP", Boolean.toString(expandedUnitToolTipBox.isSelected()));
 
-            // set the HQCOLORSCHEME based on selected button.
-            // private final String[] schemeChoices = {"Grey", "Tan",
-            // "Classic"};
-            if (schemeComboBox.getSelectedIndex() == 1) {
-                mwclient.getConfig().setParam("HQCOLORSCHEME", "tan");
-            } else if (schemeComboBox.getSelectedIndex() == 0) {
-                mwclient.getConfig().setParam("HQCOLORSCHEME", "grey");
-            } else {// scheme is classic
-                mwclient.getConfig().setParam("HQCOLORSCHEME", "classic");
-            }
-
             // set the SYSMESSAGECOLOR based on selected button
             // sysMessageColorChoices = {"Dark Green", "Gold", "Indigo", "Navy",
             // "Orange", "Red", "Teal"};
@@ -1688,7 +1650,6 @@ public final class ConfigurationDialog implements ActionListener {
              * so...
              */
             boolean columnsChanged = false;
-            boolean schemeChanged = false;
             boolean unitHexChanged = false;
             boolean mapBrightnessChanged = false;
 
@@ -1700,20 +1661,12 @@ public final class ConfigurationDialog implements ActionListener {
                 unitHexChanged = true;
             }
 
-            if (!mwclient.getConfigParam("HQCOLORSCHEME").equalsIgnoreCase(originalScheme)) {
-                schemeChanged = true;
-            }
-
-            if (!mwclient.getConfigParam("DARKERMAP").equalsIgnoreCase(originalScheme)) {
-                mapBrightnessChanged = true;
-            }
-
             int currColumns = Integer.parseInt(mwclient.getConfigParam("UNITAMOUNT"));
             if (currColumns != originalColumns) {
                 columnsChanged = true;
             }
 
-            if (columnsChanged || schemeChanged || unitHexChanged) {
+            if (columnsChanged || unitHexChanged) {
                 // only reinit. no image loading.
                 mwclient.getMainFrame().getMainPanel().selectFirstTab();
                 mwclient.getMainFrame().getMainPanel().getCommPanel().selectFirstTab();
@@ -1727,8 +1680,6 @@ public final class ConfigurationDialog implements ActionListener {
             if (!mwclient.getConfigParam("BMPREVIEWIMAGE").equalsIgnoreCase(originalBMPreview)) {
                 mwclient.getMainFrame().getMainPanel().getBMPanel().resetButtonBar();
             }
-
-            mwclient.addToChat("</BODY></html><html><BODY  TEXT=\"" + mwclient.getConfig().getParam("CHATFONTCOLOR") + "\" BGCOLOR=\"" + mwclient.getConfig().getParam("BACKGROUNDCOLOR") + "\"></BODY>");
         } else {
             dialog.dispose();
         }
