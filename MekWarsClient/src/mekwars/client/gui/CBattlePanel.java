@@ -24,7 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JMenu;
@@ -35,9 +34,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.MMGame;
@@ -584,15 +583,19 @@ public class CBattlePanel extends JPanel {
 				String gameName = (String)battleSorter.getValueAt(row,0);//host name
 				MMGame game = mwclient.getServers().get(gameName);
 								
+				Color red = UIManager.getColor("MekWars.Red");
+				Color green = UIManager.getColor("MekWars.Green");
+				Color yellow = UIManager.getColor("MekWars.Yellow");
 				//set background color
-				if (game.getCurrentPlayers().size() >= game.getMaxPlayers())
-					c.setBackground(Color.red);
-				else if (game.getStatus().equals("Open"))
-					c.setBackground(Color.green);
-				else if (game.getStatus().equals("Running"))
-					c.setBackground(Color.yellow);
-				else
+				if (game.getCurrentPlayers().size() >= game.getMaxPlayers()) {
+					c.setBackground(red);
+				} else if (game.getStatus().equals("Open")) {
+					c.setBackground(green);
+				} else if (game.getStatus().equals("Running")) {
+					c.setBackground(yellow); 
+				} else {
 					c.setBackground(getBackground());
+				}
 				
 				return c;
 			}
