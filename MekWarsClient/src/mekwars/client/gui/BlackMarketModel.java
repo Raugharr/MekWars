@@ -222,7 +222,7 @@ public class BlackMarketModel extends AbstractTableModel {
             }
 
             if (mm.playerIsSeller()) {
-                c.setBackground(UIManager.getColor("black"));
+                c.setBackground(UIManager.getColor("MekWars.BlackMarket.SellerBackground"));
             } else if (table.getModel().getValueAt(row, BID) != null) {
                 c.setBackground(UIManager.getColor("MekWars.BlackMarket.BidBackground"));
             }
