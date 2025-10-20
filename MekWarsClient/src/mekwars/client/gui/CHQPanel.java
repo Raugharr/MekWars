@@ -82,6 +82,7 @@ import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.TokenReader;
+import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
 
 /**
@@ -89,10 +90,6 @@ import mekwars.common.util.UnitUtils;
  */
 
 public class CHQPanel extends JPanel {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = -5137503055464771160L;
 
     MWClient mwclient;
@@ -2995,8 +2992,7 @@ public class CHQPanel extends JPanel {
             return null;
         }
 
-        public Object getValueAt(int row, int col) {
-
+        public String getValueAt(int row, int col) {
             if (row < 0) {
                 return "";
             }
@@ -3167,13 +3163,11 @@ public class CHQPanel extends JPanel {
         }
 
         public class Renderer extends MechInfo implements TableCellRenderer {
-        // public class Renderer extends MekWarsTableCellRenderer {
             private static final long serialVersionUID = -300922977373422309L;
 
             int meknum;
 
             MechTileset mt = new MechTileset(new File("data/images/units/"));
-            Color dcolor = new Color(220, 220, 220);
 
             public Renderer(MWClient client) {
                 super(client);
@@ -3189,7 +3183,6 @@ public class CHQPanel extends JPanel {
                 setOpaque(true);
                 setText(getValueAt(row, column).toString());
                 setToolTipText(null);
-                c.setBackground(dcolor);
                 CArmy l = getArmyAt(row);
 
                 if (l != null) {
@@ -3280,9 +3273,15 @@ public class CHQPanel extends JPanel {
                         C3Text.append("[Support]<br>");
                     }
 
+                    String green = StringUtils.color2html(UIManager.getColor("MekWars.Green"));
+                    String red = StringUtils.color2html(UIManager.getColor("MekWars.Red"));
+                    String general = StringUtils.color2html(UIManager.getColor("MekWars.MechInfo.General"));
+                    String weapons = StringUtils.color2html(UIManager.getColor("MekWars.MechInfo.Weapons"));
+                    String quirks = StringUtils.color2html(UIManager.getColor("MekWars.MechInfo.Quirks"));
+
                     //@salient EXPANDEDUNITTOOLTIP
                     if (Boolean.parseBoolean(mwclient.getConfig().getParam("EXPANDEDUNITTOOLTIP"))) {
-                        C3Text.append("<font color=\"purple\">");
+                        C3Text.append("<font color=\"" + general + "\">");
                         C3Text.append("<b>[General]</b><br>");
                         C3Text.append("Weight: "+cm.getEntity().getWeight()+" Tons ("+ cm.getEntity().getWeightClassName() +")<br>");
                         C3Text.append("Armor: "+cm.getEntity().getArmorWeight()+" Tons ("+ cm.getEntity().getTotalArmor() + " Pts)<br>");
@@ -3290,7 +3289,7 @@ public class CHQPanel extends JPanel {
                         int run = cm.getEntity().getRunMPwithoutMASC();
                         int jump = cm.getEntity().getJumpMP();
                         int masc = cm.getEntity().getRunMP();
-                        C3Text.append("Movement: "+walk+"/"+run); 
+                        C3Text.append("Movement: " + walk + "/" + run); 
                         
                         if(cm.getEntity().getMASC() != null)
                             C3Text.append("("+masc+")"); 
@@ -3303,14 +3302,14 @@ public class CHQPanel extends JPanel {
                         C3Text.append("Heat Capacity: "+cm.getEntity().getHeatCapacity()+"<br>");
                         
                         if(cm.getEntity().canFlipArms())
-                            C3Text.append("Arms Flip: <font color=\"green\">YES</font><br>");
+                            C3Text.append("Arms Flip: <font color=\"" + green + "\">YES</font><br>");
                         else
-                            C3Text.append("Arms Flip: <font color=\"red\">NO</font><br>");
+                            C3Text.append("Arms Flip: <font color=\"" + red + "\">NO</font><br>");
                                
                         C3Text.append("</font>"); 
                         //End General (purple)
                         
-                        C3Text.append("<font color=\"blue\">");
+                        C3Text.append("<font color=\"" + weapons +"\">");
                         C3Text.append("<b>[Weapons]</b><br>");
                         cm.getEntity().getWeaponList().forEach(weapon -> {
                             C3Text.append(weapon.getName() + " (");
@@ -3324,18 +3323,16 @@ public class CHQPanel extends JPanel {
                         //End Weapons (blue)
                         
                         //Quirks...
-                        if(Boolean.parseBoolean(mwclient.getServerConfigs("EnableQuirks")))
-                        {
-                            C3Text.append("<font color=\"teal\">");
+                        if (Boolean.parseBoolean(mwclient.getServerConfigs("EnableQuirks"))) {
+                            C3Text.append("<font color=\"" + quirks + "\">");
                             C3Text.append("<b>[Quirks]</b><br>");
 
                             StringTokenizer st = new StringTokenizer(cm.getHtmlQuirksList(), "*");
                               
-                            while(st.hasMoreTokens())
+                            while(st.hasMoreTokens()) {
                                 C3Text.append(TokenReader.readString(st));                                
-
+                            }
                             
-                            //C3Text.append(cm.quirkCheck());
                             C3Text.append("</font>"); 
                             //End Quirks (teal)                            
                         }
@@ -3399,5 +3396,4 @@ public class CHQPanel extends JPanel {
             }
         }// end Renderer
     }// end MekTableModel
-
 }

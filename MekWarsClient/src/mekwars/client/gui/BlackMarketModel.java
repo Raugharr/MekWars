@@ -27,13 +27,12 @@ package mekwars.client.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.TreeMap;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.UIManager;
 import javax.swing.table.TableColumn;
-
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CBMUnit;
 import mekwars.client.campaign.CCampaign;
@@ -118,9 +117,9 @@ public class BlackMarketModel extends AbstractTableModel {
             
             // This is a hack, but removeColumn() is throwing errors, so for the moment...
             if (hiddenUnits && i == BV) {
-            	column.setMinWidth(0);
-            	column.setMaxWidth(0);
-            	column.setPreferredWidth(0);
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
+                column.setPreferredWidth(0);
             }
         }
         
@@ -146,15 +145,15 @@ public class BlackMarketModel extends AbstractTableModel {
         CBMUnit mm = (CBMUnit)this.sortedMechs[row];
         switch (col) {
             case MECH:
-            	if (hiddenUnits) {
-            		return mm.getHiddenUnitDescription();
-            	} else {
+                if (hiddenUnits) {
+                    return mm.getHiddenUnitDescription();
+                } else {
                 return mm.getModelName();
-            	}
+                }
             case BV:
-            	if (hiddenUnits) {
-            		return " ";
-            	}
+                if (hiddenUnits) {
+                    return " ";
+                }
                 return mm.getEmbeddedUnit().getEntity().calculateBattleValue();
             case MIN:
                 return mm.getMinBid();
@@ -199,20 +198,21 @@ public class BlackMarketModel extends AbstractTableModel {
             CBMUnit mm = (CBMUnit)mechs.get(table.getModel().getValueAt(row, BlackMarketModel.AUCTION_ID));
             String description = "";
             if (!hiddenUnits) {
-            	description="<html><body>#" + mm.getAuctionID() + " " + mm.getEmbeddedUnit().getEntity().getChassis()
-            	+ " (" + mm.getEmbeddedUnit().getEntity().getModel() + ")<br>";
+                description="<html><body>#" + mm.getAuctionID() + " " + mm.getEmbeddedUnit().getEntity().getChassis()
+                + " (" + mm.getEmbeddedUnit().getEntity().getModel() + ")<br>";
             
 
-            	if (mm.getEmbeddedUnit().getC3Level() > Unit.C3_NONE){
-            		if ( mm.getEmbeddedUnit().getC3Level() == Unit.C3_SLAVE)
-            			description += "<br>" + "C3 Slave";
-            		else if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_MASTER)
-            			description += "<br>" + "C3 Master";
-            		else if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_IMPROVED)
-            			description += "<br>" + "C3 Improved";
-            	}
+                if (mm.getEmbeddedUnit().getC3Level() > Unit.C3_NONE) {
+                    if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_SLAVE) {
+                        description += "<br>" + "C3 Slave";
+                    } else if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_MASTER) {
+                        description += "<br>" + "C3 Master";
+                    } else if (mm.getEmbeddedUnit().getC3Level() == Unit.C3_IMPROVED) {
+                        description += "<br>" + "C3 Improved";
+                    }
+                }
 
-            	description += "</body></html>";
+                description += "</body></html>";
             }
             c.setToolTipText(description);
             if (isSelected) {
@@ -222,11 +222,9 @@ public class BlackMarketModel extends AbstractTableModel {
             }
 
             if (mm.playerIsSeller()) {
-                c.setBackground(Color.lightGray);
+                c.setBackground(UIManager.getColor("MekWars.BlackMarket.SellerBackground"));
             } else if (table.getModel().getValueAt(row, BID) != null) {
-                c.setBackground(Color.green);
-            } else {
-                c.setBackground(Color.white);
+                c.setBackground(UIManager.getColor("MekWars.BlackMarket.BidBackground"));
             }
             return c;
         }

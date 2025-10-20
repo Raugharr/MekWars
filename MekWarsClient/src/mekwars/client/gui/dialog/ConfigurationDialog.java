@@ -53,6 +53,12 @@ import org.apache.logging.log4j.Logger;
 
 public final class ConfigurationDialog implements ActionListener {
     private static final Logger logger = LogManager.getLogger(ConfigurationDialog.class);
+    private static final String[] LOOK_AND_FEEL_NAMES = {
+        "Flat Light",
+        "Flat IntelliJ",
+        "Flat Dark",
+        "Flat Darcula"
+    };
 
     // store the client backlink for other things to use
     private MWClient mwclient = null;
@@ -1730,10 +1736,8 @@ public final class ConfigurationDialog implements ActionListener {
         skinHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
         skinWrapper.add(skinHeader);
 
-        LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
-
-        for (LookAndFeelInfo lookAndFeel : lookAndFeels) {
-            lookandfeelComboBox.addItem(lookAndFeel.getName());
+        for (String lookAndFeel : LOOK_AND_FEEL_NAMES) {
+            lookandfeelComboBox.addItem(lookAndFeel);
         }
         lookandfeelComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
         lookandfeelComboBox.setMaximumSize(comboDim);

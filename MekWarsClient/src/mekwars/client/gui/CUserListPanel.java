@@ -340,10 +340,9 @@ public class CUserListPanel extends JPanel implements ActionListener{
 
 
         linksPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
-        linksPanel.setBackground(Color.LIGHT_GRAY);
-        linksPanel.setPreferredSize(new Dimension(175,34));
-        linksPanel.setMinimumSize(new Dimension(175,34));
-        linksPanel.setMaximumSize(new Dimension(175,34));
+        linksPanel.setPreferredSize(new Dimension(175, 34));
+        linksPanel.setMinimumSize(new Dimension(175, 34));
+        linksPanel.setMaximumSize(new Dimension(175, 34));
         linksPanel.add(LinksLabel);
         linksPanel.add(LinkButton1);
         linksPanel.add(LinkButton2);
