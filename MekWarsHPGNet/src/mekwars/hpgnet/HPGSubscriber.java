@@ -91,6 +91,7 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	public static int THREAT_LEVEL_YELLOW = 1;
 	public static int THREAT_LEVEL_RED = 2;
 	public static int THREAT_LEVEL_PURGE = 3;
+    private static int MAX_QUEUE_SIZE = 1008;
 
 	/**
 	 * @return the threatLevel
@@ -418,12 +419,12 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	}
 
     /**
-     * Enforcese the desired limit for Deque impls
+     * Enforces the desired limit for Deque impls
      * @param integer
      * @param gameQueue
      */
     void addToQueue(Integer integer, Deque<Integer> gameQueue) {
-        if (gameQueue.size() >= 1008) {
+        if (gameQueue.size() >= MAX_QUEUE_SIZE) {
             gameQueue.removeFirst();
         }
         gameQueue.addLast(integer);
