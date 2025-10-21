@@ -81,11 +81,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
-import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
-import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
-import com.jgoodies.looks.plastic.theme.DesertGreen;
-import com.jgoodies.looks.plastic.theme.SkyBlue;
 import megamek.MMConstants;
 import megamek.Version;
 import megamek.client.ui.swing.GameOptionsDialog;
