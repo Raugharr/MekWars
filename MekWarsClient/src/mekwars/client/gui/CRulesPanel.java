@@ -19,14 +19,17 @@ package mekwars.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.io.IOException;
 import java.net.URL;
-
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import mekwars.client.MWClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class to display simple rules tab
@@ -34,27 +37,32 @@ import mekwars.client.MWClient;
  * @author Salient
  */
 
-public class CRulesPanel extends JPanel
-{
+public class CRulesPanel extends JPanel {
     private static final long serialVersionUID = 5547551469995402891L;
+    private static final Logger logger = LogManager.getLogger(CRulesPanel.class);
 
     MWClient mwclient;
 
-    public CRulesPanel(MWClient client)
-    {
+    public CRulesPanel(MWClient client) {
         mwclient = client;
 
         setLayout(new BorderLayout());
         JEditorPane editorPane = new JEditorPane();
         editorPane.setEditable(false);
         String rulesLocation = mwclient.getServerConfigs("Rules_Location");
-        URL rulesURL = CRulesPanel.class.getResource(rulesLocation);
+        File rulesFile = new File(rulesLocation);
 
-        if (rulesURL != null) {
-            try { editorPane.setPage(rulesURL); }
-            catch (IOException e)  { System.err.println("Bad URL: " + rulesURL); }
+        if (rulesFile != null) {
+            try {
+                editorPane.setContentType("text/html");
+                editorPane.setText(Files.readString(Path.of(rulesLocation)));
+            } catch (IOException e)  {
+                logger.error("Bad URL: " + rulesFile);
+                logger.catching(e);
+            }
+        } else {
+            logger.error("Couldn't find: ServerRules.html");
         }
-        else { System.err.println("Couldn't find: ServerRules.html"); }
 
         JScrollPane editorScrollPane = new JScrollPane(editorPane);
         editorScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
