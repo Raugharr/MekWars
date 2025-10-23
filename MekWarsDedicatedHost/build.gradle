@@ -9,6 +9,15 @@ sourceSets {
             srcDirs = ['src']
         }
     }
+
+    test {
+        java {
+            srcDirs = ['test']
+        }
+        resources {
+            srcDirs = ['test/resources']
+        }
+    }
 }
 
 dependencies {
@@ -69,3 +78,8 @@ distributions {
         }
     }
 }
+
+test {
+    useJUnitPlatform()
+}
+
