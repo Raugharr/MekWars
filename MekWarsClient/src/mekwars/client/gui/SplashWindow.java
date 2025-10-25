@@ -99,8 +99,7 @@ public class SplashWindow {
 		//use a box layout to align panel components vertically
 		windowPanel.setLayout(new BoxLayout(windowPanel, BoxLayout.Y_AXIS));
 		
-		//format the panel - Colours, JLabels and a divider
-		windowPanel.setBackground(Color.WHITE);
+		//format the panel - JLabels and a divider
 		windowPanel.add(imageLabel);
 		windowPanel.add(new JSeparator());
 		windowPanel.add(versionLabel);
@@ -115,7 +114,6 @@ public class SplashWindow {
 		
 		splashWindow.getContentPane().add(windowPanel);
 		splashWindow.getContentPane().add(progressBar,BorderLayout.SOUTH);
-		splashWindow.getContentPane().setBackground(Color.WHITE);
 		splashWindow.pack();
 		splashWindow.setLocationRelativeTo(null);
 		
