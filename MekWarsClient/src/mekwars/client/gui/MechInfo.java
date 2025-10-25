@@ -733,5 +733,4 @@ public class MechInfo extends JPanel {
             return image;
         }
     }
-
 }

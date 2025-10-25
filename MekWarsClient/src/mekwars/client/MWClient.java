@@ -15,6 +15,13 @@ package mekwars.client;
 // This is the Client used for connecting to the master server.
 // @Author: Helge Richter (McWizard@gmx.de)
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.extras.FlatInspector;
+import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -61,7 +68,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -79,8 +85,8 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-
 import megamek.MMConstants;
 import megamek.Version;
 import megamek.client.ui.swing.GameOptionsDialog;
@@ -103,6 +109,14 @@ import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.cmd.Command;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
+import mekwars.client.common.campaign.clientutils.protocol.IClient;
+import mekwars.client.common.campaign.clientutils.protocol.commands.AckSignonPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
+import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
+import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
 import mekwars.client.gui.Browser;
 import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.CMainFrame;
@@ -129,15 +143,7 @@ import mekwars.common.Planet;
 import mekwars.common.PlanetEnvironment;
 import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
-import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.campaign.clientutils.SerializeEntity;
-import mekwars.client.common.campaign.clientutils.protocol.CConnector;
-import mekwars.client.common.campaign.clientutils.protocol.IClient;
-import mekwars.client.common.campaign.clientutils.protocol.commands.AckSignonPCmd;
-import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
-import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
-import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
-import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
 import mekwars.common.util.GameReport;
 import mekwars.common.util.ThreadManager;
 import mekwars.common.util.TokenReader;
@@ -313,6 +319,18 @@ public final class MWClient extends GameHost implements IClient {
 
         // set up the splash screen. do this before any
         // other non-main/non-static actions.
+        FlatLaf.registerCustomDefaultsSource("mekwars.themes");
+        FlatInspector.install("ctrl shift alt X");
+        FlatUIDefaultsInspector.install("ctrl shift alt Y");
+        FlatLightLaf.setup();
+        FlatIntelliJLaf.setup();
+        FlatDarkLaf.setup();
+        FlatDarculaLaf.setup();
+
+        UIManager.installLookAndFeel("Flat Light", "com.formdev.flatlaf.FlatLightLaf");
+        UIManager.installLookAndFeel("Flat IntelliJ", "com.formdev.flatlaf.FlatIntelliJLaf");
+        UIManager.installLookAndFeel("Flat Dark", "com.formdev.flatlaf.FlatDarkLaf");
+        UIManager.installLookAndFeel("Flat Darcula", "com.formdev.flatlaf.FlatDarculaLaf");
 
         if (isDedicated()) {
             try {
@@ -1702,9 +1720,7 @@ public final class MWClient extends GameHost implements IClient {
 
     public void addToChat(String s, int channel, String tabName) {
 
-        s = "<BODY  TEXT=\"" + Config.getParam("CHATFONTCOLOR")
-                + "\" BGCOLOR=\"" + Config.getParam("BACKGROUNDCOLOR")
-                + "\"><font size=\"" + Config.getParam("CHATFONTSIZE") + "\">"
+        s = "<BODY  <font size=\"" + Config.getParam("CHATFONTSIZE") + "\">"
                 + s + "</font></BODY>";
         try {
             SwingUtilities.invokeLater(new CAddToChat(s, channel, tabName));
@@ -1894,49 +1910,26 @@ public final class MWClient extends GameHost implements IClient {
      * @urgru 2.21.05
      */
     public void setLookAndFeel(boolean isRedraw) {
-
-        LookAndFeel LAF = new MetalLookAndFeel();
-        // if (Config.getParam("LOOKANDFEEL").equals("plastic")) {
-        //     PlasticLookAndFeel.setMyCurrentTheme(new DesertGreen());
-        //     LAF = new Plastic3DLookAndFeel();
-        // } else if (Config.getParam("LOOKANDFEEL").equals("plasticxp")) {
-        //     LAF = new PlasticXPLookAndFeel();
-        // } else if (Config.getParam("LOOKANDFEEL").equals("plastic3d")) {
-        //     PlasticLookAndFeel.setMyCurrentTheme(new SkyBlue());
-        //     LAF = new Plastic3DLookAndFeel();
-        // } else if (Config.getParam("LOOKANDFEEL").equals("skins")) {
-        //     try {
-        //         Skin theSkinToUse = SkinLookAndFeel
-        //                 .loadThemePack("./data/skins/"
-        //                         + Config.getParam("LOOKANDFEELSKIN"));
-        //         SkinLookAndFeel.setSkin(theSkinToUse);
-        //         LAF = new SkinLookAndFeel();
-        //     } catch (Exception ex) {
-        //         MWLogger.errLog(ex);
-        //         LAF = UIManager.getLookAndFeel();
-        //     }
-        // }
+        String lookAndFeel = Config.getParam("LOOKANDFEEL");
+        logger.info("SetLookAndFeel: {}", lookAndFeel);
 
         try {
             if (isRedraw) {
                 MainFrame.setVisible(false);
             }
-
-            if (Config.getParam("LOOKANDFEEL").equalsIgnoreCase("system")) {
-                UIManager.setLookAndFeel(UIManager
-                        .getSystemLookAndFeelClassName());
+            LookAndFeelInfo lookAndFeelInfo = getLookAndFeel(lookAndFeel);
+            if (lookAndFeelInfo != null) {
+                UIManager.setLookAndFeel(lookAndFeelInfo.getClassName());
             } else {
-                UIManager.setLookAndFeel(LAF);
+                logger.error("Invalid LookAndFeel '{}'", lookAndFeel);
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
-
             if (isRedraw) {
                 SwingUtilities.updateComponentTreeUI(MainFrame);
-                // MainFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
                 MainFrame.setVisible(true);
                 getMainFrame().getMainPanel().getUserListPanel()
                         .resetActivityButton();
             }
-
         } catch (Exception ex) {
             logger.catching(ex);
             try {
@@ -1945,9 +1938,8 @@ public final class MWClient extends GameHost implements IClient {
             } catch (Exception e) {
                 logger.catching(e);
             }
-        }// end catch
-
-    }// end setLookAndFeel
+        }
+    }
 
     protected class CRefreshGUI implements Runnable {
         protected int mode = -1;
@@ -3876,6 +3868,17 @@ public final class MWClient extends GameHost implements IClient {
             return null;
         }
         return new Camouflage(parent.toString(), filename.toString());
+    }
+
+    public LookAndFeelInfo getLookAndFeel(String name) {
+        LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
+
+        for (LookAndFeelInfo lookAndFeel : lookAndFeels) {
+            if (lookAndFeel.getName().equals(name)) {
+                return lookAndFeel;
+            }
+        }
+        return null;
     }
 }
 

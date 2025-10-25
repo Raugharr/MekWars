@@ -31,7 +31,6 @@ public final class StringUtils {
      * Method which is used to determine whether "a" or "an" should be used in a string.
      */
     public static String aOrAn(String s, boolean lowerCase, boolean returnString) {
-
         // get proper into ("A" or "An")
         String AorAn = "A ";
         String checkString = s.toLowerCase();
@@ -52,10 +51,9 @@ public final class StringUtils {
      * As above, but whether or not to pluraize based on a number.
      */
     public static String addAnS(int i) {
-
-        if (i > 1)
+        if (i > 1) {
             return "s";
-        // else
+        }
         return "";
     }
 

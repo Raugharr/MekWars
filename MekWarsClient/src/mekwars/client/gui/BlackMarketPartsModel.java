@@ -19,15 +19,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.text.DecimalFormat;
 import java.util.TreeMap;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
-
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CCampaign;
+import mekwars.client.gui.utilities.MekWarsTableCellRenderer;
 import mekwars.common.BMEquipment;
 
 /**
@@ -189,11 +188,7 @@ public class BlackMarketPartsModel extends AbstractTableModel {
                 return c;
             }
 
-            if (row % 2 == 0) {
-                c.setBackground(Color.lightGray);
-            } else {
-                c.setBackground(Color.white);
-            }
+            MekWarsTableCellRenderer.setupTigerStripes(this, table, row);
 
             if (bme.isCostUp()) {
                 c.setForeground(new Color(195, 11, 00));

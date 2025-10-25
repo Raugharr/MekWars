@@ -84,4 +84,5 @@ createExe {
     mainClassName = project.mainClassName
     outfile = 'MekWars.exe'
     jar = project.tasks.getByName("jar").archiveFile.get()
+            duplicatesStrategy = 'exclude'
 }

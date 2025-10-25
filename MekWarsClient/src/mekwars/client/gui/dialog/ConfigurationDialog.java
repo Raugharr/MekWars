@@ -23,7 +23,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -38,7 +37,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import megamek.client.ui.dialogs.CamoChooserDialog;
 import megamek.common.Configuration;
 import megamek.common.icons.Camouflage;
@@ -48,8 +48,17 @@ import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.VerticalLayout;
 import mekwars.common.util.SpringLayoutHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class ConfigurationDialog implements ActionListener {
+    private static final Logger logger = LogManager.getLogger(ConfigurationDialog.class);
+    private static final String[] LOOK_AND_FEEL_NAMES = {
+        "Flat Light",
+        "Flat IntelliJ",
+        "Flat Dark",
+        "Flat Darcula"
+    };
 
     // store the client backlink for other things to use
     private MWClient mwclient = null;
@@ -148,12 +157,7 @@ public final class ConfigurationDialog implements ActionListener {
     private final JTextField f4Field = new JTextField(30);
     private final JTextField f5Field = new JTextField(30);
 
-    // COMBO BOXES
-    private final String[] schemeChoices = { "Grey", "Tan", "Classic" };
-    private final JComboBox schemeComboBox = new JComboBox(schemeChoices);
-
-    private final String[] lookandFeelChoices = { "Native", "CDE/Motif", "Java/Ocean", "Metouia", "Plastic (Desert)", "Plastic (Sky)", "Plastic XP", "Steel", "Windows - J", "Skins" };
-    private final JComboBox lookandfeelComboBox = new JComboBox(lookandFeelChoices);
+    private JComboBox lookandfeelComboBox = new JComboBox();
 
     private final String[] playerChatColorChoices = { "Player Defined", "Faction Colors", "Mixed (Faction Tag)", "Mixed (Faction Name)" };
     private final JComboBox playerChatColorComboBox = new JComboBox(playerChatColorChoices);
@@ -164,7 +168,6 @@ public final class ConfigurationDialog implements ActionListener {
     private final String[] playerMessageTabChoices = { "Main", "Misc", "System", "Personal" };
     private final JComboBox playerMessageTabComboBox = new JComboBox(playerMessageTabChoices);
 
-    private JComboBox skinComboBox = null;
     // CHECK BOXEN
     // tab visibility
     private final JCheckBox hqTabVisBox = new JCheckBox();
@@ -273,9 +276,7 @@ public final class ConfigurationDialog implements ActionListener {
         // stored values.
         int originalColumns = Integer.parseInt(mwclient.getConfigParam("UNITAMOUNT"));
         String originalUnitHex = mwclient.getConfigParam("UNITHEX");
-        String originalScheme = mwclient.getConfigParam("HQCOLORSCHEME").toLowerCase();
-        String originalLookAndFeel = mwclient.getConfigParam("LOOKANDFEEL").toLowerCase();
-        String originalSkin = mwclient.getConfigParam("LOOKANDFEELSKIN").toLowerCase();
+        String originalLookAndFeel = mwclient.getConfigParam("LOOKANDFEEL");
         // String originalMapBrightness =
         // mwclient.getConfigParam("DARKERMAP").toLowerCase();
         String originalBMPreview = mwclient.getConfigParam("BMPREVIEWIMAGE").toLowerCase();
@@ -340,7 +341,7 @@ public final class ConfigurationDialog implements ActionListener {
         foregroundColorField.setToolTipText("<HTML>Foreground text colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
         playerFieldsPanel.add(foregroundColorField);
 
-        playerFieldsPanel.add(new JLabel("Back Ground:", SwingConstants.TRAILING));
+        playerFieldsPanel.add(new JLabel("Background:", SwingConstants.TRAILING));
         backgroundColorField.setMaximumSize(newDim);
         backgroundColorField.setToolTipText("<HTML>Background colour. Can be any HTML keyword<br>colour (blue) or hex code (#003366)</HTML>");
         playerFieldsPanel.add(backgroundColorField);
@@ -417,55 +418,11 @@ public final class ConfigurationDialog implements ActionListener {
 
         SpringLayoutHelper.setupSpringGrid(playerUpperCBoxesPanel, 2);
 
-        // set up the color scheme panel/radio buttons
-        JPanel schemeWrapper = new JPanel();
-        schemeWrapper.setLayout(new BoxLayout(schemeWrapper, BoxLayout.Y_AXIS));
-
         Dimension comboDim = new Dimension();
         comboDim.setSize(lookandfeelComboBox.getMinimumSize().getWidth() * 1.6, uNameField.getMinimumSize().getHeight() + 2);
-        lookandfeelComboBox.addActionListener(this);
-        lookandfeelComboBox.setActionCommand(lookAndFeelCommand);
-
-        JLabel schemeHeader = new JLabel("HQ Color Scheme:");
-        schemeHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
-        schemeWrapper.add(schemeHeader);
-        schemeWrapper.add(schemeComboBox);
-        schemeComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-        schemeComboBox.setMaximumSize(comboDim);
 
         JPanel statusWrapper = new JPanel();
         statusWrapper.setLayout(new BoxLayout(statusWrapper, BoxLayout.Y_AXIS));
-
-        // set up the system skin combo box
-        JPanel skinWrapper = new JPanel();
-        skinWrapper.setLayout(new BoxLayout(skinWrapper, BoxLayout.Y_AXIS));
-
-        JLabel skinHeader = new JLabel("Look and Feel:");
-        skinHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
-        skinWrapper.add(skinHeader);
-        skinWrapper.add(lookandfeelComboBox);
-        lookandfeelComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-        lookandfeelComboBox.setMaximumSize(comboDim);
-
-        File skinFiles = new File("./data/skins");
-
-        if (!skinFiles.exists()) {
-            skinFiles.mkdir();
-        }
-
-        skinComboBox = new JComboBox(skinFiles.list());
-
-        for (int pos = 0; pos < skinComboBox.getItemCount(); pos++) {
-            if (skinComboBox.getItemAt(pos).toString().equalsIgnoreCase(originalSkin)) {
-                skinComboBox.setSelectedIndex(pos);
-                break;
-            }
-        }
-        skinComboBox.setEnabled(false);
-        skinWrapper.add(new JLabel("Skins:", SwingConstants.CENTER));
-        skinWrapper.add(skinComboBox);
-        skinComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-        skinComboBox.setMaximumSize(comboDim);
 
         // sys message combo box
         JPanel sysMessageWrapper = new JPanel();
@@ -509,7 +466,6 @@ public final class ConfigurationDialog implements ActionListener {
         playerPanel.add(playerFieldsWrapper);
         playerPanel.add(playerUpperCBoxesPanel);
         if (mwclient.getConfig().isParam("HQTABVISIBLE")) {
-            playerPanel.add(schemeWrapper);
             playerPanel.add(statusWrapper);
         } else {
             playerPanel.add(new JLabel("\n"));
@@ -519,7 +475,7 @@ public final class ConfigurationDialog implements ActionListener {
             playerPanel.add(new JLabel("\n"));
         }
         playerPanel.add(sysMessageWrapper);
-        playerPanel.add(skinWrapper);
+        playerPanel.add(initLookAndFeelComboBox(comboDim));
         if (!mwclient.getConfig().isParam("HQTABVISIBLE")) {
             playerPanel.add(new JLabel("\n"));
         }
@@ -1240,16 +1196,6 @@ public final class ConfigurationDialog implements ActionListener {
         soundOnMenuField.setText(mwclient.getConfig().getParam("SOUNDONMENU"));
         keywordsField.setText(mwclient.getConfig().getParam("KEYWORDS"));
 
-        // Set the selected HQ color scheme button
-        String scheme = mwclient.getConfigParam("HQCOLORSCHEME").toLowerCase();
-        if (scheme.equals("tan")) {
-            schemeComboBox.setSelectedIndex(1);
-        } else if (scheme.equals("grey")) {
-            schemeComboBox.setSelectedIndex(0);
-        } else {// scheme is classic
-            schemeComboBox.setSelectedIndex(2);
-        }
-
         // set the selected Sys Message color scheme
         // sysMessageColorChoices = {"DarkGreen", "Gold", "Indigo", "Navy",
         // "Orange", "Red", "Teal"};
@@ -1270,30 +1216,6 @@ public final class ConfigurationDialog implements ActionListener {
             sysMessageColorComboBox.setSelectedIndex(6);
         } else {
             sysMessageColorComboBox.setSelectedIndex(7);
-        }
-
-        // Set the selected look and feel button
-        String skin = mwclient.getConfigParam("LOOKANDFEEL").toLowerCase();
-        if (skin.equals("motif")) {
-            lookandfeelComboBox.setSelectedIndex(1);
-        } else if (skin.equals("metal")) {// note: this is actually Ocean in 1.5
-            lookandfeelComboBox.setSelectedIndex(2);
-        } else if (skin.equals("metouia")) {
-            lookandfeelComboBox.setSelectedIndex(3);
-        } else if (skin.equals("plastic")) {
-            lookandfeelComboBox.setSelectedIndex(4);
-        } else if (skin.equals("plastic3d")) {
-            lookandfeelComboBox.setSelectedIndex(5);
-        } else if (skin.equals("plasticxp")) {
-            lookandfeelComboBox.setSelectedIndex(6);
-        } else if (skin.equals("steel")) {
-            lookandfeelComboBox.setSelectedIndex(7);
-        } else if (skin.equals("jwindows")) {
-            lookandfeelComboBox.setSelectedIndex(8);
-        } else if (skin.equals("skins")) {
-            lookandfeelComboBox.setSelectedIndex(9);
-        } else {// scheme is system
-            lookandfeelComboBox.setSelectedIndex(0);
         }
 
         // set the chat name color button
@@ -1527,46 +1449,6 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("USETESTBUILDTABLEVIEWER", Boolean.toString(testBuildTableBox.isSelected()));
             mwclient.getConfig().setParam("EXPANDEDUNITTOOLTIP", Boolean.toString(expandedUnitToolTipBox.isSelected()));
 
-            // set the HQCOLORSCHEME based on selected button.
-            // private final String[] schemeChoices = {"Grey", "Tan",
-            // "Classic"};
-            if (schemeComboBox.getSelectedIndex() == 1) {
-                mwclient.getConfig().setParam("HQCOLORSCHEME", "tan");
-            } else if (schemeComboBox.getSelectedIndex() == 0) {
-                mwclient.getConfig().setParam("HQCOLORSCHEME", "grey");
-            } else {// scheme is classic
-                mwclient.getConfig().setParam("HQCOLORSCHEME", "classic");
-            }
-
-            // set the LOOKANDFEEL based on selected button.
-            if (lookandfeelComboBox.getSelectedIndex() == 1) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "motif");
-            } else if (lookandfeelComboBox.getSelectedIndex() == 2) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "metal");// note:
-                // this is
-                // actually
-                // "Ocean"
-                // in Java
-                // 1.5
-            } else if (lookandfeelComboBox.getSelectedIndex() == 3) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "metouia");
-            } else if (lookandfeelComboBox.getSelectedIndex() == 4) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "plastic");
-            } else if (lookandfeelComboBox.getSelectedIndex() == 5) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "plastic3d");
-            } else if (lookandfeelComboBox.getSelectedIndex() == 6) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "plasticxp");
-            } else if (lookandfeelComboBox.getSelectedIndex() == 7) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "steel");
-            } else if (lookandfeelComboBox.getSelectedIndex() == 8) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "jwindows");
-            } else if (lookandfeelComboBox.getSelectedIndex() == 9) {
-                mwclient.getConfig().setParam("LOOKANDFEEL", "skins");
-                mwclient.getConfig().setParam("LOOKANDFEELSKIN", skinComboBox.getSelectedItem().toString());
-            } else {// skin is system
-                mwclient.getConfig().setParam("LOOKANDFEEL", "system");
-            }
-
             // set the SYSMESSAGECOLOR based on selected button
             // sysMessageColorChoices = {"Dark Green", "Gold", "Indigo", "Navy",
             // "Orange", "Red", "Teal"};
@@ -1617,7 +1499,6 @@ public final class ConfigurationDialog implements ActionListener {
                 break;
             default:
                 mwclient.getConfig().setParam("USERDEFINDMESSAGETAB", "0");
-
             }
 
             mwclient.getConfig().setParam("ENABLECALLSOUND", Boolean.toString(enableSoundOnCall.isSelected()));
@@ -1775,11 +1656,10 @@ public final class ConfigurationDialog implements ActionListener {
              * so...
              */
             boolean columnsChanged = false;
-            boolean schemeChanged = false;
             boolean unitHexChanged = false;
             boolean mapBrightnessChanged = false;
 
-            if (!mwclient.getConfigParam("LOOKANDFEEL").equalsIgnoreCase(originalLookAndFeel) || (mwclient.getConfigParam("LOOKANDFEEL").equalsIgnoreCase("skins") && !mwclient.getConfigParam("LOOKANDFEELSKIN").equalsIgnoreCase(originalSkin))) {
+            if (!mwclient.getConfigParam("LOOKANDFEEL").equals(originalLookAndFeel)) {
                 mwclient.setLookAndFeel(true);
             }
 
@@ -1787,20 +1667,12 @@ public final class ConfigurationDialog implements ActionListener {
                 unitHexChanged = true;
             }
 
-            if (!mwclient.getConfigParam("HQCOLORSCHEME").equalsIgnoreCase(originalScheme)) {
-                schemeChanged = true;
-            }
-
-            if (!mwclient.getConfigParam("DARKERMAP").equalsIgnoreCase(originalScheme)) {
-                mapBrightnessChanged = true;
-            }
-
             int currColumns = Integer.parseInt(mwclient.getConfigParam("UNITAMOUNT"));
             if (currColumns != originalColumns) {
                 columnsChanged = true;
             }
 
-            if (columnsChanged || schemeChanged || unitHexChanged) {
+            if (columnsChanged || unitHexChanged) {
                 // only reinit. no image loading.
                 mwclient.getMainFrame().getMainPanel().selectFirstTab();
                 mwclient.getMainFrame().getMainPanel().getCommPanel().selectFirstTab();
@@ -1814,15 +1686,14 @@ public final class ConfigurationDialog implements ActionListener {
             if (!mwclient.getConfigParam("BMPREVIEWIMAGE").equalsIgnoreCase(originalBMPreview)) {
                 mwclient.getMainFrame().getMainPanel().getBMPanel().resetButtonBar();
             }
-
-            mwclient.addToChat("</BODY></html><html><BODY  TEXT=\"" + mwclient.getConfig().getParam("CHATFONTCOLOR") + "\" BGCOLOR=\"" + mwclient.getConfig().getParam("BACKGROUNDCOLOR") + "\"></BODY>");
         } else {
             dialog.dispose();
         }
     }
 
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
+    public void actionPerformed(ActionEvent event) {
+        String command = event.getActionCommand();
+
         if (command.equals(okayCommand)) {
             pane.setValue(okayButton);
             dialog.dispose();
@@ -1843,12 +1714,47 @@ public final class ConfigurationDialog implements ActionListener {
                 mwclient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
             }
         } else if (command.equals(lookAndFeelCommand)) {
-            if (lookandfeelComboBox.getSelectedIndex() == 9) {
-                skinComboBox.setEnabled(true);
-            } else {
-                skinComboBox.setEnabled(false);
+            try {
+                String selectedItem = (String) lookandfeelComboBox.getSelectedItem();
+                LookAndFeelInfo lookAndFeelInfo = mwclient.getLookAndFeel(selectedItem);
+
+                if (lookAndFeelInfo == null) {
+                    logger.error("Invalid LookAndFeel '{}'", selectedItem);
+                    return;
+                }
+                mwclient.getConfig().setParam("LOOKANDFEEL", lookAndFeelInfo.getName());
+            } catch (Exception e) {
+                logger.catching(e);
             }
         }
     }
 
-}// end ConfigPage.java
+    protected JPanel initLookAndFeelComboBox(Dimension comboDim) {
+        JPanel skinWrapper = new JPanel();
+        skinWrapper.setLayout(new BoxLayout(skinWrapper, BoxLayout.Y_AXIS));
+        JLabel skinHeader = new JLabel("Look and Feel:");
+        skinHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
+        skinWrapper.add(skinHeader);
+
+        for (String lookAndFeel : LOOK_AND_FEEL_NAMES) {
+            lookandfeelComboBox.addItem(lookAndFeel);
+        }
+        lookandfeelComboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lookandfeelComboBox.setMaximumSize(comboDim);
+        lookandfeelComboBox.addActionListener(this);
+        lookandfeelComboBox.setActionCommand(lookAndFeelCommand);
+
+        skinWrapper.add(lookandfeelComboBox);
+
+        String currentLookAndFeel = mwclient.getConfigParam("LOOKANDFEEL");
+
+        for (int i = 0; i < lookandfeelComboBox.getItemCount(); ++i) {
+            String item = (String) lookandfeelComboBox.getItemAt(i);
+
+            if (item.equals(currentLookAndFeel)) {
+                lookandfeelComboBox.setSelectedItem(item);
+            }
+        }
+        return skinWrapper;
+    }
+}
