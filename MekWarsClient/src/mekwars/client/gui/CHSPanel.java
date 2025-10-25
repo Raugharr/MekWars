@@ -540,7 +540,7 @@ public class CHSPanel extends JPanel {
     public void updateDisplay() {
 
         // Returns the Private Status for Members only
-        StringBuilder result = new StringBuilder("<BODY  TEXT=\"" + mwclient.getConfigParam("CHATFONTCOLOR") + "\" BGCOLOR=\"" + mwclient.getConfigParam("BACKGROUNDCOLOR") + "\">");
+        StringBuilder result = new StringBuilder("<BODY TEXT=\"" + mwclient.getConfigParam("CHATFONTCOLOR") + "\">");
         boolean usingAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
         int playerAccessLevel = mwclient.getPlayer().getSubFactionAccess();
         result.append("<TABLE Border=\"1\"><TR><TH>" + HouseName + "</TH><TH>" + mwclient.getServerConfigs("LightFactoryTypeTitle") + "</TH><TH>" + mwclient.getServerConfigs("MediumFactoryTypeTitle") + "</TH><TH>" + mwclient.getServerConfigs("HeavyFactoryTypeTitle") + "</TH><TH>" + mwclient.getServerConfigs("AssaultFactoryTypeTitle") + "</TH></TR>");
