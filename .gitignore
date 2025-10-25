@@ -9,6 +9,7 @@ MekWarsOperationsEditor/build
 MekWarsTracker/build
 MekWarsDedicatedHost/build
 MekWarsHPGNet/build
+MekWarsHPGNet/hpg-dist
 buildSrc/build
 buildSrc/.gradle
 MekWarsClient/client-dist/data/images

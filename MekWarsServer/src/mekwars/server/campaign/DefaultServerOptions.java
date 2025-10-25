@@ -1384,7 +1384,7 @@ public class DefaultServerOptions {
         defaults.setProperty("Enable_Link_Area", "false");
         defaults.setProperty("Link_Area_Label", "Links:");
         // HTML location for new rules panel
-        defaults.setProperty("Rules_Location", "/data/ServerRules.html");
+        defaults.setProperty("Rules_Location", "./data/ServerRules.html");
         // Add generic link buttons
         defaults.setProperty("Enable_Link1_Button", "false");
         defaults.setProperty("Link1_URL", "http://www.mekwars.org/");
