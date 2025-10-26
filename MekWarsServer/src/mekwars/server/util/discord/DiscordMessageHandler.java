@@ -15,63 +15,77 @@
  */
 package mekwars.server.util.discord;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
 import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpClient.Version;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 /**
  * Provides integration with a Discord webhook.  Status messages and
  * Operation outcome can be sent to the webhook.
- *
  * @author Spork
- *
  */
 public class DiscordMessageHandler {
-    private String webhookAddress = "";
+    private String webhookAddress;
+    private HttpClient httpClient;
+
+    public DiscordMessageHandler(String webhookAddress, HttpClient httpClient) {
+        this.webhookAddress = webhookAddress;
+        this.httpClient = httpClient;
+    }
 
     public DiscordMessageHandler() {
-        if (!CampaignMain.cm.getBooleanConfig("DiscordEnable")) {
-            return;
-        }
-        webhookAddress = CampaignMain.cm.getConfig("DiscordWebHookAddress");
+        webhookAddress = CampaignMain.cm.getBooleanConfig("DiscordEnable")
+                ? CampaignMain.cm.getConfig("DiscordWebHookAddress")
+                : null;
+
+        httpClient = HttpClient.newBuilder()
+                .version(Version.HTTP_1_1)
+                .connectTimeout(Duration.ofSeconds(5))
+                .build();
     }
 
     /**
      * Post a message to the webhook
-     *
      * @param message the message to send
      */
     public void post(String message) {
-        if (webhookAddress.equalsIgnoreCase("") || webhookAddress.length() < 1 || webhookAddress == null) {
-            return;
+        if (addressValid()) {
+            String body = "content=" + URLEncoder.encode(message, StandardCharsets.UTF_8);
+            HttpRequest request = HttpRequest.newBuilder(URI.create(webhookAddress))
+                    .timeout(Duration.ofSeconds(5))
+                    .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                    .POST(BodyPublishers.ofString(body))
+                    .build();
+            try {
+                HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
+                if (response.statusCode() >= 400) {
+                    MWLogger.errLog("Discord returned HTTP " + response.statusCode()
+                            + " body=" + response.body());
+                }
+            } catch (IOException | InterruptedException e) {
+                MWLogger.errLog(e);
+                Thread.currentThread().interrupt();
+            }
         }
+    }
 
-        HttpClient httpclient = HttpClients.createDefault();
-        HttpPost httppost = new HttpPost(webhookAddress);
-
-        // Request parameters and other properties.
-        List<NameValuePair> params = new ArrayList<NameValuePair>(2);
-        params.add(new BasicNameValuePair("content", message));
-        try {
-            httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            MWLogger.errLog(e);
-        }
-
-        try {
-            httpclient.execute(httppost);
-        } catch (IOException e) {
-            MWLogger.errLog(e);
-        }
+    /**
+     * webhookAddress is expected to be non-null and non-empty. Further validation might be reasonable if this
+     * functionality is critical.
+     * @return webhook validity
+     */
+    private boolean addressValid() {
+        return webhookAddress != null && !webhookAddress.trim().isEmpty();
     }
 }

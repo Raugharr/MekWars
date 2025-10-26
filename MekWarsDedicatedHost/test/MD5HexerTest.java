@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MD5HexerTest {
 
-    private String digestUtilsMD5 = "FB19537F278C9669CD9510A174D49354";
+    private String digestUtilsMD5 = "7C7F6627E11BF3BA373EEFC9E56CD16C";
 
     @Test
     public void testOldMD5EqualsNewMD5() throws IOException, NoSuchAlgorithmException {
-        File file = new File("test/resources/gameoptions.xml");
+        File file = new File("test/resources/gameoptionstest.xml");
         String md5HexerString = MD5Hexer.md5Hex(file);
         assertEquals(digestUtilsMD5, md5HexerString);
     }
