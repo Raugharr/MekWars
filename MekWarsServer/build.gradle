@@ -14,12 +14,18 @@ sourceSets {
         java {
             srcDirs = ['unittests']
         }
+        resources {
+            srcDirs = ['unittests/resources']
+        }
     }
 }
 
 dependencies {
     implementation project(':MekWarsCommon')
 	implementation 'org.jsoup:jsoup:1.21.2'
+    testImplementation "org.mockito:mockito-junit-jupiter:5.11.0"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
+    testImplementation "org.mockito:mockito-junit-jupiter:5.11.0"
 }
 
 application {
