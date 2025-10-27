@@ -157,11 +157,6 @@ public class DefectCommand implements Command {
                 return;
             }
 
-            // break out if user tries to defect back to SOL
-            if (newHouse != null && newHouse.isNewbieHouse()) {
-                CampaignMain.cm.toUser("AM:You may not defect back to the training faction.", Username, true);
-                return;
-            }
 
             // DO NOT LET PLAYERS LEAVE SOL UNLESS THEY HAVE A PASSWORD!
             /*
