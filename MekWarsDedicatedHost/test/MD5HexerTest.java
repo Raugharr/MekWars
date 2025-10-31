@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MD5HexerTest {
 
-    private String digestUtilsMD5 = "7C7F6627E11BF3BA373EEFC9E56CD16C";
+    private String digestUtilsMD5 = "4AB4494CDB7F872285069E8E237B6881";
 
     @Test
     public void testOldMD5EqualsNewMD5() throws IOException, NoSuchAlgorithmException {
