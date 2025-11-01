@@ -42,6 +42,8 @@ import java.util.TimeZone;
 import java.util.UUID;
 import java.util.Vector;
 import megamek.Version;
+import mekwars.server.campaign.ImmunityThread;
+import mekwars.server.campaign.SliceThread;
 import megamek.common.EquipmentType;
 import megamek.common.MechSummaryCache;
 import mekwars.common.MMGame;
@@ -56,8 +58,8 @@ import mekwars.server.campaign.DefaultServerOptions;
 import mekwars.server.campaign.ImmunityThread;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SliceThread;
-import mekwars.server.campaign.TickThread;
 import mekwars.server.campaign.util.scheduler.TrackerUpdateJob;
+import mekwars.server.campaign.util.scheduler.TickJob;
 import mekwars.server.dataProvider.Server;
 import mekwars.server.net.hpgnet.HPGSubscribedClient;
 import mekwars.server.util.AutomaticBackup;
@@ -93,7 +95,6 @@ public class MWServ {
     private Vector<String> ignoreList = new Vector<String>(1, 1);
     private Vector<String> factionLeaderIgnoreList = new Vector<String>(1, 1);
     private Feed newsFeed = new Feed();
-    private TickThread TThread;
     private SliceThread SThread;
     private ImmunityThread IThread;
     private RepairTrackingThread RTT;
@@ -131,6 +132,7 @@ public class MWServ {
             logger.warn("Unable to connect to tracker");
         }
         TrackerUpdateJob.submit();
+        TickJob.submit();
         //start server
         MWLogger.mainLog("Entering main loop cycle. Starting the server...");
         MWServ.getInstance().startServer();
@@ -195,9 +197,7 @@ public class MWServ {
         MWLogger.modLog("Moderators log touched.");
         MWLogger.tickLog("Tick report log touched.");
 
-        // start tick, slice and immunity threads
-        TThread = new TickThread(campaign, campaign.getCampaignOptions().getIntegerConfig("TickTime"));
-        TThread.start();
+        // start slice and immunity threads
         SThread = new SliceThread(campaign, campaign.getCampaignOptions().getIntegerConfig("SliceTime"));
         SThread.start(); // it slices, it dices, it chops!
         IThread = new ImmunityThread();
@@ -1229,10 +1229,6 @@ public class MWServ {
         }
         DiscordMessageHandler handler = new DiscordMessageHandler();
         handler.post(message);
-    }
-
-    public TickThread getTThread() {
-        return TThread;
     }
 
     public ImmunityThread getIThread() {

@@ -34,11 +34,11 @@ public class ThreadManager{
 		executor = Executors.newCachedThreadPool();
 	}
 	
-	public static ThreadManager getInstance(){
+	public static ThreadManager getInstance() {
 		return instance;
 	}
 	
-	public void runInThreadFromPool(Thread runnable){
+	public void runInThreadFromPool(Thread runnable) {
 		try{
 			executor.execute(runnable);
 		}catch(Exception ex ){
