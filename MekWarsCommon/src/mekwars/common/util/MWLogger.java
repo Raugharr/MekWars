@@ -13,156 +13,143 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-
 package mekwars.common.util;
 
-import java.io.File;
-
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.MarkerManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 
+public interface MWLogger {
+    Logger LOGGER = LogManager.getLogger(MWLogger.class);
 
-public final class MWLogger {// final - no extension of the server logger
+    Marker RESULTS_MARKER = MarkerManager.getMarker("resultsLog");
+    Marker GAME_MARKER = MarkerManager.getMarker("gameLog");
+    Marker TEST_MARKER = MarkerManager.getMarker("testLog");
+    Marker TICK_MARKER = MarkerManager.getMarker("tickLog");
+    Marker PM_MARKER = MarkerManager.getMarker("pmLog");
 
-    private File logDir;
-    private static MWLogger logger = null;
-    
-    private MWLogger() {
-        LogManager.getLogger().info("MWLogger Started");
+    static void errLog(String message) {
+        LOGGER.error(message);
     }
     
-    public static MWLogger getInstance() {
-        if (logger == null) {
-            logger = new MWLogger();
-        }
-        return logger;
-    }
-    
-    public static void errLog(String message) {
-       LogManager.getLogger().error(message);
-    }
-    
-    public static void mainLog(String message) {
-        LogManager.getLogger().info(message);
-    }
-    
-    public static void modLog(String message) {
-        LogManager.getLogger().log(Level.INFO, message);
-    }
-    
-    public static void debugLog(String message) {
-        LogManager.getLogger().debug(message);
-    }
-    
-    public static void ipLog(String message) {
-        LogManager.getLogger().info(message);
-    }
-    
-    public static void cmdLog(String message) {
-        LogManager.getLogger().error(message);
-    }
-    
-    public static void errLog(Exception e) {
-        LogManager.getLogger().error(e);
-    }
-    
-    public static void mainLog(Exception e) {
-        LogManager.getLogger().info(e);
-    }
-    
-    public static void modLog(Exception e) {
-        LogManager.getLogger().info(e);
-    }
-    
-    public static void debugLog(Exception e) {
-        LogManager.getLogger().info(e);
-    }
-    
-    public static void ipLog(Exception e) {
-        LogManager.getLogger().info(e);
-    }
-    
-    public static void cmdLog(Exception e) {
-        LogManager.getLogger().info(e);
-    }
-    
-    public static void infoLog(String message) {
-        LogManager.getLogger().info(message);
-    }
-    
-    public static void infoLog(Exception e) {
-        LogManager.getLogger().info(e);
+    static void mainLog(String message) {
+        LOGGER.info(message);
     }
 
-    public static void bmLog(String message) {
-        LogManager.getLogger().info(message);
+    static void modLog(String message) {
+        LOGGER.info(message);
     }
     
-    public static void bmLog(Exception e) {
-        LogManager.getLogger().info(e);
-    }
-    public static void resultsLog(String message) {
-        final Marker results = MarkerManager.getMarker("resutlsLog");
-        LogManager.getLogger().info(results, message);
+    static void debugLog(String message) {
+        LOGGER.debug(message);
     }
     
-    public static void resultsLog(Exception e) {
-        LogManager.getLogger().info(e);
+    static void ipLog(String message) {
+        LOGGER.info(message);
+    }
+    
+    static void cmdLog(String message) {
+        LOGGER.error(message);
     }
 
-    public static void gameLog(String message) {
-        final Marker game = MarkerManager.getMarker("gameLog");
-        LogManager.getLogger().info(game, message);
+    static void infoLog(String message) {
+        LOGGER.info(message);
     }
-    
-    public static void gameLog(Exception e) {
-        LogManager.getLogger().info(e);
+
+    static void bmLog(String message) {
+        LOGGER.info(message);
     }
-    
-    public static void testLog(String message) {
-        final Marker test = MarkerManager.getMarker("testLog");
-        LogManager.getLogger().info(test, message);
+
+    static void resultsLog(String message) {
+        LOGGER.info(RESULTS_MARKER, message);
     }
-    
-    public static void testLog(Exception e) {
-        LogManager.getLogger().info(e);
+
+    static void gameLog(String message) {
+        LOGGER.info(GAME_MARKER, message);
     }
-    
-    public static void tickLog(String message) {
-        final Marker tick = MarkerManager.getMarker("tickLog");
-        LogManager.getLogger().info(tick, message);
+
+    static void testLog(String message) {
+        LOGGER.info(TEST_MARKER, message);
     }
-    
-    public static void tickLog(Exception e) {
-        LogManager.getLogger().info(e);
+
+    static void tickLog(String message) {
+        LOGGER.info(TICK_MARKER, message);
     }
-    
-    public static void warnLog(String message) {
-        LogManager.getLogger().warn(message);
+
+    static void warnLog(String message) {
+        LOGGER.warn(message);
     }
-    
-    public static void warnLog(Exception e) {
-        LogManager.getLogger().warn(e);
+
+    static void pmLog(String message) {
+        LOGGER.info(PM_MARKER, message);
     }
-    
-    public static void pmLog(String message) {
-        final Marker pm = MarkerManager.getMarker("pmLog");
-        LogManager.getLogger().info(pm, message);
-    }
-    
-    public static void pmLog(Exception e) {
-        LogManager.getLogger().info(e);
-    }
-    
-    public static void factionLog(String factionName, String message) {
+
+    // Can't have a method like this here without a rework, note it is unused anyway
+    static void factionLog(String factionName, String message) {
         final Marker faction = MarkerManager.getMarker(factionName);
-        LogManager.getLogger().info(faction, message);
+        LOGGER.info(faction, message);
+    }
+
+    static void errLog(Exception e) {
+        LOGGER.error("Exception: ", e);
     }
     
-    public static void factionLog(String factionName, Exception e) {
+    static void mainLog(Exception e) {
+        LOGGER.info("Exception: ", e);
+    }
+    
+    static void modLog(Exception e) {
+        LOGGER.info("Exception: ", e);
+    }
+    
+    static void debugLog(Exception e) {
+        LOGGER.info("Exception: ", e);
+    }
+    
+    static void ipLog(Exception e) {
+        LOGGER.info("Exception: ", e);
+    }
+    
+    static void cmdLog(Exception e) {
+        LOGGER.info("Exception: ", e);
+    }
+    
+    static void infoLog(Exception e) {
+        LOGGER.info("Exception: ", e);
+    }
+
+    static void bmLog(Exception e) {
+        LOGGER.info("Exception: ", e);
+    }
+
+    static void resultsLog(Exception e) {
+        LOGGER.info(RESULTS_MARKER, "Exception: ", e);
+    }
+
+    static void gameLog(Exception e) {
+        LOGGER.info(GAME_MARKER, "Exception: ", e);
+    }
+
+    static void testLog(Exception e) {
+        LOGGER.info(e);
+    }
+    
+    static void tickLog(Exception e) {
+        LOGGER.info(e);
+    }
+    
+    static void warnLog(Exception e) {
+        LOGGER.warn(e);
+    }
+    
+    static void pmLog(Exception e) {
+        LOGGER.info(e);
+    }
+
+    // Can't have a method like this here without a rework, note it is unused anyway
+    static void factionLog(String factionName, Exception e) {
         final Marker factiondebug = MarkerManager.getMarker(factionName);
-        LogManager.getLogger().debug(factiondebug, e.getMessage());
+        LOGGER.debug(factiondebug, e.getMessage());
     }
 }
