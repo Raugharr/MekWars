@@ -90,6 +90,7 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	private int threatLevel;
 	@Expose(serialize = false, deserialize = false)
 	private HPGNet tracker;
+    private boolean online = false;
 
 
 
@@ -639,5 +640,13 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
      */
     public ServerUpdate toServerUpdate() {
         return new ServerUpdate(UUID.fromString(uuid), currentPlayers, 0, totalGames);
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+
+    public boolean isOnline() {
+        return online;
     }
 }

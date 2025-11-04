@@ -228,3 +228,5 @@ MAXPLAYERS=12
 MAXPMTABS=5
 REPAIRWEAPONSROLL=9
 SORTMODE=NAME
+TrackerAddress=tracker.mekwars.org
+TrackerEnabled=false

@@ -24,12 +24,14 @@ import mekwars.common.net.AbstractPacket;
 public class ServerQueryResponse extends AbstractPacket {
     private ServerRegister serverRegister;
     private ServerUpdate serverUpdate;
+    private String hostname;
 
     public ServerQueryResponse() {}
 
-    public ServerQueryResponse(ServerRegister serverRegister, ServerUpdate serverUpdate) {
+    public ServerQueryResponse(ServerRegister serverRegister, ServerUpdate serverUpdate, String hostname) {
         this.serverRegister = serverRegister;
         this.serverUpdate = serverUpdate; 
+        this.hostname = hostname;
     }
 
     public PacketType getId() {
@@ -42,5 +44,9 @@ public class ServerQueryResponse extends AbstractPacket {
 
     public ServerUpdate getServerUpdate() {
         return serverUpdate;
+    }
+
+    public String getHostname() {
+        return hostname;
     }
 }

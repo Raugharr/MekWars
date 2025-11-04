@@ -37,6 +37,7 @@ public class KryoThreadLocal extends ThreadLocal<Kryo> {
         kryo.register(ServerQueryAll.class);
         kryo.register(ServerQueryAllResponse.class);
         kryo.register(ServerQueryResponse.class);
+        kryo.register(ServerQueryResponse[].class);
         kryo.register(ServerRegister.class);
         kryo.register(ServerRegisterResponse.class);
         kryo.register(ServerUpdate.class);

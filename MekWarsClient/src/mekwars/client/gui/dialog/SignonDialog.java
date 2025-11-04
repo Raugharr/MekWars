@@ -20,7 +20,6 @@ package mekwars.client.gui.dialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -29,19 +28,19 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import mekwars.client.MWClient;
+import mekwars.client.common.ServerInfo;
 
 public final class SignonDialog implements ActionListener {
 	
-	private final String usernameCommand = "user";
-	private final String passwordCommand = "password";
-	private final String okayCommand = "okay";
-	private final String cancelCommand = "cancel";
-	private final String windowName = "MekWars Login";
-	private final String ipaddressCommand = "ip address";
-	private final String chatPortCommand = "chatport";
-	private final String dataPortCommand = "dataport";
+	private static final String usernameCommand = "user";
+	private static final String passwordCommand = "password";
+	private static final String okayCommand = "okay";
+	private static final String cancelCommand = "cancel";
+	private static final String windowName = "MekWars Login";
+	private static final String ipaddressCommand = "ip address";
+	private static final String chatPortCommand = "chatport";
+	private static final String dataPortCommand = "dataport";
 	
 	private final JTextField usernameField = new JTextField();
 	private final JPasswordField passwordField = new JPasswordField();
@@ -138,12 +137,12 @@ public final class SignonDialog implements ActionListener {
 			mwclient.getConfig().setParam("SERVERPORT",chatPortField.getText());
 			mwclient.getConfig().setParam("DATAPORT", dataPortField.getText());
 			mwclient.getConfig().setParam("SERVERIP",ipaddressField.getText());
-		}
-		
-		//not ok with signing on? ok. quit!
-		else {System.exit(0);}
+		} else {
+            //not ok with signing on? ok. quit!
+            System.exit(0);
+        }
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if (command.equals(usernameCommand)) {

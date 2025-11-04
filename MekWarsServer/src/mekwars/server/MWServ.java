@@ -52,6 +52,7 @@ import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.CampaignOptions;
 import mekwars.server.campaign.DefaultServerOptions;
 import mekwars.server.campaign.ImmunityThread;
 import mekwars.server.campaign.SPlayer;
@@ -129,7 +130,10 @@ public class MWServ {
         } catch (IOException exception) {
             LOGGER.warn("Unable to connect to tracker");
         }
-        TrackerUpdateJob.submit();
+        CampaignOptions campaignOptions = MWServ.getInstance().getCampaign().getCampaignOptions();
+        if (campaignOptions.getBooleanConfig("TrackerEnabled")) {
+            TrackerUpdateJob.submit();
+        }
         TickJob.submit();
         //start server
         LOGGER.info("Entering main loop cycle. Starting the server...");

@@ -17,11 +17,10 @@
 package mekwars.hpgnet;
 
 import com.esotericsoftware.kryo.Kryo;
-import java.io.IOException;
-import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import mekwars.common.net.Connection;
+import mekwars.common.net.Listener;
 import mekwars.common.net.hpgnet.packets.ServerRegister;
 import mekwars.common.net.hpgnet.packets.ServerUpdate;
 
@@ -30,11 +29,26 @@ public class HPGConnection extends Connection {
 
     public HPGConnection(ThreadLocal<Kryo> kryos, int inputLen, int outputLen) {
         super(kryos, inputLen, outputLen);
+        addListener(new Listener() {
+            @Override
+            public void disconnected(Connection connection) {
+                ((HPGConnection) connection).getSubscriber().setOnline(false);
+            }
+        });
     }
 
     public HPGConnection(ThreadLocal<Kryo> kryos, SocketChannel socket,
             SelectionKey socketKey, int inputLen, int outputLen) {
         super(kryos, socket, socketKey, inputLen, outputLen);
+    }
+
+    public HPGSubscriber getSubscriber() {
+        return subscriber;
+    }
+
+    public void setSubscriber(HPGSubscriber subscriber) {
+        this.subscriber = subscriber;
+        this.subscriber.setOnline(true);
     }
 
     public ServerRegister getServerRegister() {

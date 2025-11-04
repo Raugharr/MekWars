@@ -94,3 +94,12 @@ if (localProperties.exists()) {
     apply from: localProperties
 }
 
+test {  
+    useJUnitPlatform()
+}
+
+
+task testCicd(type: Test) {
+    useJUnitPlatform()
+    exclude 'MekWarsClient/test/mekwars/client/gui/dialog/*'
+}

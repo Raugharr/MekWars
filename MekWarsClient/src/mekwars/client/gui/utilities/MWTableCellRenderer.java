@@ -18,12 +18,39 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class MekWarsTableCellRenderer extends DefaultTableCellRenderer {
+public class MWTableCellRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
         boolean isSelected, boolean hasFocus, int row, int column) {
-        setupTigerStripes(this, table, row);
-        return this;
+        Component component = super.getTableCellRendererComponent(table, value, isSelected,
+            hasFocus, row, column);
+
+        setupTableColors(component, table, isSelected, hasFocus, row);
+        return component;
+    }
+
+    public static void setupTableColors(Component component, JTable table, boolean isSelected,
+              boolean hasFocus, int row) {
+
+        if (isSelected) {
+            component.setForeground(table.getSelectionForeground());
+            component.setBackground(table.getSelectionBackground());
+        } else {
+            setupTigerStripes(component, table, row);
+        }
+
+        if (hasFocus) {
+            if (!isSelected) {
+                Color foregroundColor = UIManager.getColor("Table.focusCellForeground");
+                if (foregroundColor != null) {
+                    component.setForeground(foregroundColor);
+                }
+                Color backgroundColor = UIManager.getColor("Table.focusCellBackground");
+                if (backgroundColor != null) {
+                    component.setBackground(backgroundColor);
+                }
+            }
+        }
     }
 
     public static void setupTigerStripes(Component component, JTable table, int row) {

@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2018
+ * MekWars - Copyright (C) 2025
  * 
  * Original author - Bob Eldred (spork@mekwars.org)  
  *
@@ -23,8 +23,6 @@ import mekwars.common.net.hpgnet.packets.PacketType;
 import mekwars.common.net.hpgnet.packets.ServerQueryAll;
 import mekwars.common.net.hpgnet.packets.ServerQueryAllResponse;
 import mekwars.common.net.hpgnet.packets.ServerQueryResponse;
-import mekwars.common.net.hpgnet.packets.ServerRegister;
-import mekwars.common.net.hpgnet.packets.ServerUpdate;
 import mekwars.hpgnet.HPGNet;
 import mekwars.hpgnet.HPGSubscriber;
 import mekwars.hpgnet.HPGConnection;
@@ -36,16 +34,15 @@ public class ServerQueryAllResolver extends AbstractResolver<ServerQueryAll, HPG
 
     public void receive(ServerQueryAll message, HPGConnection connection) {
         HPGNet tracker = HPGNet.getInstance();
-        ServerQueryResponse responseArray[] = new ServerQueryResponse[tracker.getSubscribers().size()];
-        int index = 0;
 
-        for (HPGSubscriber subscriber : tracker.getSubscribers()) {
-            ServerRegister serverRegister = subscriber.toServerRegister();
-            ServerUpdate serverUpdate = subscriber.toServerUpdate();
-            responseArray[index] = new ServerQueryResponse(serverRegister, serverUpdate);
-            index += 1;
-        }
-        connection.write(new ServerQueryAllResponse(responseArray));
+        var responses = tracker.getSubscribers().stream()
+            .filter(HPGSubscriber::isOnline)
+            .map(s -> new ServerQueryResponse(
+                        s.toServerRegister(),
+                        s.toServerUpdate(),
+                        s.getIpAddress())
+            ).toArray(ServerQueryResponse[]::new);
+        connection.write(new ServerQueryAllResponse(responses));
     }
 
     public boolean canResolve(AbstractPacket.Type packetType) {

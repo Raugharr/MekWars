@@ -49,8 +49,8 @@ public class ServerUpdateResolver extends AbstractResolver<ServerUpdate, HPGConn
                 return;
             }
             
+            connection.setSubscriber(subscriber);
             subscriber.update(message);
-            
             subscriber.setLastUpdated(new Date());
             tracker.save(subscriber);
         }
