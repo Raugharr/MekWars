@@ -13,6 +13,16 @@ sourceSets {
                srcDirs = ['resources']
         }
     }
+
+    test {
+        java {
+            srcDirs = ['test']
+        }
+
+        resources {
+            srcDirs = ['test/resources']
+        }
+    }
 }
 
 dependencies {
@@ -21,6 +31,10 @@ dependencies {
 
     implementation 'com.formdev:flatlaf:3.4'
     implementation 'com.formdev:flatlaf-extras:3.4.1'
+
+    testImplementation "org.mockito:mockito-junit-jupiter:5.11.0"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
+    testImplementation "org.mockito:mockito-junit-jupiter:5.11.0"
 }
 
 application {
@@ -85,4 +99,8 @@ createExe {
     outfile = 'MekWars.exe'
     jar = project.tasks.getByName("jar").archiveFile.get()
             duplicatesStrategy = 'exclude'
+}
+
+test {
+    useJUnitPlatform()
 }
