@@ -8,7 +8,11 @@ include 'MekWarsOperationsEditor'
 include 'MekWarsCommon'
 include 'MekWarsUpdater'
 
-includeBuild('../megamek')
+if (file('../megamek').exists()) {
+	includeBuild('../megamek')
+} else {
+	includeBuild("megamek")
+}
 
 def localSettings = file('settings_local.gradle')
 if (localSettings.exists()) {
