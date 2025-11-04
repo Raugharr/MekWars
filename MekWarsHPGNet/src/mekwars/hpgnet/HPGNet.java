@@ -16,6 +16,8 @@
 
 package mekwars.hpgnet;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +28,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,10 +37,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.TreeSet;
+import java.util.UUID;
 import java.util.Vector;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import mekwars.common.util.ThreadManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Starts a server which listens for information
@@ -49,7 +56,11 @@ import com.google.gson.GsonBuilder;
  * Final b/c threads start in constructor.
  */
 public final class HPGNet {
-	Properties config;
+    private static final Logger logger = LogManager.getLogger(HPGNet.class);
+    private static HPGNet instance;
+
+    private HPGServer server;
+    private Properties config;
 	
 	/**
 	 * @return the config
@@ -69,7 +80,6 @@ public final class HPGNet {
 	private TreeSet<HPGSubscriber> subscribers;
 	private int port;
 	
-	private Vector<HPGProcessingThread> processingThreads = new Vector<HPGProcessingThread>();
 	private Vector<HPGPurgeThread> purgingThreads = new Vector<HPGPurgeThread>();
 	
 	boolean generatingHTML = false;
@@ -158,53 +168,52 @@ public final class HPGNet {
 		this.port = port;
 	}
 
-	/**
-	 * Instantiate a new HPGNet server
-	 */
-	public HPGNet() {
-		config = new Properties();
-		InputStream in;
-		String fileName = "hpgnet.properties";
-		try {
-			in = new FileInputStream(fileName);
-			config.load(in);
-			in.close();
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		addToLog("config: " + config.toString());
-		setPort(Integer.parseInt(config.getProperty("port", "13731")));
-		setFilepath(config.getProperty("filepath", "./subscribers/"));
-		
-		setSubscribers(new TreeSet<HPGSubscriber>());
-		
-		loadAllFromDisk();
-		
-		HPGListenerThread lthread = new HPGListenerThread(this);
-		lthread.setName("ListenerThread");
-		lthread.start();
-		
-		HPGPurgeThread pthread = new HPGPurgeThread(this);
-		pthread.setName("Purge Thread");
-		pthread.start();
-	}
+    /**
+     * Instantiate a new HPGNet server
+     */
+    public HPGNet() {
+        config = new Properties();
+        InputStream in;
+        String fileName = "hpgnet.properties";
+        try {
+            in = new FileInputStream(fileName);
+            config.load(in);
+            in.close();
+        } catch (Exception e) {
+            logger.catching(e);
+        }
+        logger.info("config: " + config.toString());
+        setPort(Integer.parseInt(config.getProperty("port", "13731")));
+        setFilepath(config.getProperty("filepath", "./subscribers/"));
+        File filepathDirectory = new File(getFilepath());
+        if (!filepathDirectory.exists()) {
+            filepathDirectory.mkdirs();    
+        }
+        
+        setSubscribers(new TreeSet<HPGSubscriber>());
+        
+        logger.info("Loading from disk");
+        loadAllFromDisk();
+        
+        this.server = new HPGServer();
+
+        this.server.start(new InetSocketAddress((InetAddress) null, getPort()));
+        
+        HPGPurgeThread pthread = new HPGPurgeThread(this);
+        pthread.setName("Purge Thread");
+		ThreadManager.getInstance().runInThreadFromPool(pthread);
+    }
 	
 	/**
 	 * Start the server.  Makes the jar runnable
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-		try {
-			//MWTracker tracker = 
-            new HPGNet();
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
+        try {
+            HPGNet.getInstance();
+        } catch (Exception e) {
+            logger.catching(e);
+        }
 	}
 	
 	/**
@@ -229,7 +238,7 @@ public final class HPGNet {
 			file.flush();
 			file.close();
 		} catch (IOException e) {
-			
+			logger.catching(e);
 		}
 
 	}
@@ -285,68 +294,12 @@ public final class HPGNet {
 	}
 	
 	/**
-	 * Write a String to the log
-	 * @param s the String to log
-	 */
-	public void addToLog(String s) {
-		boolean loggingEnabled = true;//Turn on if testing.
-		if (loggingEnabled) {
-			String fileName = "log.txt";
-			try {
-				FileOutputStream out = new FileOutputStream(fileName, true);
-				PrintStream p = new PrintStream(out);
-				p.println(s);//1st line is server name
-				p.close();
-				out.close();
-			} catch (Exception e) {
-				System.out.println("Error writing to log file!");
-				return;
-			}
-		}
-	}
-	
-	/**
-	 * Write an Exception to the log
-	 * @param e the Exception to log
-	 */
-	public void addToLog(Exception e) {
-		boolean loggingEnabled = true;
-		if (loggingEnabled) {
-			String fileName = "log.txt";
-			try {
-				FileOutputStream out = new FileOutputStream(fileName, true);
-				PrintStream p = new PrintStream(out);
-				e.printStackTrace(p);
-			} catch (Exception ex) {
-				System.out.println("Error writing to log file!");
-				return;
-			}
-		}
-	}
-
-	/**
-	 * @return the processingThreads
-	 */
-	public Vector<HPGProcessingThread> getProcessingThreads() {
-		return processingThreads;
-	}
-
-	/**
-	 * @param processingThreads the processingThreads to set
-	 */
-	public void setProcessingThreads(Vector<HPGProcessingThread> processingThreads) {
-		this.processingThreads = processingThreads;
-	}
-
-	/**
 	 * Are there any active HPGProcessingThreads?
 	 * @return
 	 */
 	public boolean isProcessing() {
-		if (processingThreads.size() > 0)
-			return true;
-		//else
-		return false;
+        //FIXME
+        return false; //lthread.clients.size() > 0;
 	}
 	
 	/**
@@ -404,14 +357,14 @@ public final class HPGNet {
 	 * @param subid
 	 * @return
 	 */
-	public HPGSubscriber getSubscriber(String subid) {
-		for(HPGSubscriber sub : getSubscribers()) {
-			if(sub.getName().equalsIgnoreCase(subid)) {
-				return sub;
-			}
-		}
-		return null;
-	}
+    public HPGSubscriber getSubscriber(UUID uid) {
+        for (HPGSubscriber sub : getSubscribers()) {
+            if (sub.getUuid().equals(uid.toString())) {
+                return sub;
+            }
+        }
+        return null;
+    }
 	
 	/**
 	 * Build the web page 
@@ -476,4 +429,11 @@ public final class HPGNet {
 		}
 		return identifier;
 	}
+
+    public synchronized static HPGNet getInstance() {
+        if (instance == null) {
+            instance = new HPGNet();
+        }
+        return instance;
+    }
 }

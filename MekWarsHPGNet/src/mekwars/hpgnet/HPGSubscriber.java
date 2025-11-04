@@ -16,6 +16,7 @@
 
 package mekwars.hpgnet;
 
+import com.google.gson.annotations.Expose;
 import java.time.Instant;
 import java.time.Period;
 import java.time.ZoneId;
@@ -25,8 +26,9 @@ import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.Deque;
 import java.util.Iterator;
-
-import com.google.gson.annotations.Expose;
+import java.util.UUID;
+import mekwars.common.net.hpgnet.packets.ServerRegister;
+import mekwars.common.net.hpgnet.packets.ServerUpdate;
 
 /**
  * A container for information about the client servers
@@ -80,6 +82,10 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	private boolean isLegacy = false;
 	@Expose(serialize = true, deserialize = true)
 	private int totalGames;
+    @Expose(serialize = true, deserialize = true)
+    private int serverPort;
+    @Expose(serialize = true, deserialize = true)
+    private int dataPort;
 	@Expose(serialize = false, deserialize = false)
 	private int threatLevel;
 	@Expose(serialize = false, deserialize = false)
@@ -373,6 +379,22 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 		this.ipAddress = ipAddress;
 	}
 
+    public void setServerPort(int port) {
+        serverPort = port;
+    }
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public void setDataPort(int port) {
+        dataPort = port;
+    }
+
+    public int getDataPort() {
+        return dataPort;
+    }
+
 	/**
 	 * Create a new HPGSubscriber
 	 */
@@ -383,6 +405,11 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 		historicalPlayers = new ArrayDeque<>();
 		historicalCompletedGames = new ArrayDeque<>();
 	}
+
+    public HPGSubscriber(UUID uuid) {
+        this();
+        this.uuid = uuid.toString();
+    }
 
 	/**
 	 * @param t the tracker to set
@@ -472,16 +499,19 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 	 * @param players the number of players on the server
 	 * @param games the number of games in progress
 	 */
-	public void update(int players, int games, int completedGames) {
-		addHistoricalPlayersElement(players);
-		setCurrentPlayers(players);
-		addHistoricalGamesElement(games);
-		setCurrentGames(games);
-		addHistoricalCompletedGamesElement(completedGames);
-		setLastUpdated(new Date());
-		calculateThreatLevel();
-		generateHTMLString();
-	}
+    public void update(ServerUpdate message) {
+        addHistoricalPlayersElement(message.getPlayersOnline());
+        setCurrentPlayers(message.getPlayersOnline());
+
+        addHistoricalGamesElement(message.getGamesComplete());
+        setCurrentGames(message.getGamesComplete());
+
+        addHistoricalCompletedGamesElement(message.getGamesComplete());
+        setLastUpdated(new Date());
+
+        calculateThreatLevel();
+        generateHTMLString();
+    }
 	
 	/**
 	 * Creates the tracker entry
@@ -595,5 +625,19 @@ public class HPGSubscriber implements Comparable<HPGSubscriber> {
 		}
 		
 	}
-	
+
+    /*
+     * Serialize the HPGSubscriber into a ServerRegister.
+     */
+    public ServerRegister toServerRegister() {
+        return new ServerRegister(name, serverPort, dataPort, url,
+                MWVersion, description);
+    }
+
+    /*
+     * Serialize the HPGSubscriber into a ServerUpdate.
+     */
+    public ServerUpdate toServerUpdate() {
+        return new ServerUpdate(UUID.fromString(uuid), currentPlayers, 0, totalGames);
+    }
 }
