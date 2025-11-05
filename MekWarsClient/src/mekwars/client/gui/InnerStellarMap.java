@@ -40,7 +40,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
-import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,75 +77,9 @@ import mekwars.common.util.StringUtils;
 
 public class InnerStellarMap extends JComponent implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 8655078955521790260L;
 
-    /**
-     * All configuration behaviour of InterStellarMap are saved here.
-     *
-     * @author Imi (immanuel.scholz@gmx.de)
-     */
-    static public final class InnerStellarMapConfig {
-        /**
-         * Whether to scale planet dots on zoom or not
-         */
-        int minDotSize = 2;
-        int maxdotSize = 25;
-        /**
-         * The scaling maximum dimension
-         */
-        int reverseScaleMax = 100;
-        /**
-         * The scaling minimum dimension
-         */
-        int reverseScaleMin = 2;
-        /**
-         * Threshold to not show influence anymore. 0 means show always
-         */
-        double showInfluenceThreshold = 0.0;
-        /**
-         * Threshold to not show unit factories anymore. 0 means show always
-         */
-        double showUnitFactoriesThreshold = 0.0;
-        /**
-         * Threshold to not show planet names. 0 means show always
-         */
-        double showPlanetNamesThreshold = 0.0;
-        /**
-         * brightness correction for colors. This is no gamma correction! Gamma correction brightens medium level colors more than extreme ones. 0 means no brightening.
-         */
-        double colorAdjustment = 0.5;
-        /**
-         * The maps background color
-         */
-        String backgroundColor = "#000000";
-
-        /**
-         * Various display options - Names, Control, Factories, Warehouses, Ranges, Changes
-         */
-        boolean[] display = new boolean[] { true, false, true, true, true, true, true, true };
-
-        /**
-         * The actual scale factor. 1.0 for default, higher means bigger.
-         */
-        double scale = 1.0;
-        /**
-         * The scrolling offset
-         */
-        Point offset = new Point();
-        /**
-         * The current selected Planet-id
-         */
-        int planetID;
-    }
-
-    /**
-     * The current configuration & filtration options.
-     */
-    InnerStellarMapConfig conf = new InnerStellarMapConfig();
-
+    private InnerStellarMapConfig conf = new InnerStellarMapConfig();
     private CMapPanel mp;
 
     /**
@@ -319,7 +252,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             if (p != null) {// only add if there is a planet to center on
                 item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent ae) {
-                        conf.offset.setLocation(-p.getPosition().x * conf.scale, p.getPosition().y * conf.scale);
+                        conf.getOffset().setLocation(-p.getPosition().x * conf.getScale(), p.getPosition().y * conf.getScale());
                         mp.repaint();
                     }
                 });
@@ -329,9 +262,9 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             item = new JMenuItem("On Natural Center");
             item.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent ae) {
-                    conf.offset = new Point();
-                    conf.scale = 1;
-                    mp.getSlider().setValue((int) Math.round(50 / conf.scale));
+                    conf.setOffset(new Point());
+                    conf.setScale(1);
+                    mp.getSlider().setValue((int) Math.round(50 / conf.getScale()));
                     mp.repaint();
                 }
             });
@@ -443,23 +376,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         addMouseMotionListener(this);
         addMouseWheelListener(this);
 
-        MMNetXStream xml = new MMNetXStream(new DomDriver());
-        try {
-            File dir = new File(client.getCacheDir());
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            conf = (InnerStellarMapConfig) xml.fromXML(new FileReader(client.getCacheDir() + "/mapconf.xml"));
-            if (conf.display.length != displayStr.length) {
-                throw new RuntimeException("not my file");
-            }
-        } catch (Throwable e) {
-            if (!(e instanceof FileNotFoundException)) {
-                MWLogger.errLog((Exception) e);
-            }
-            MWLogger.infoLog("could not read map config file. Will use defaults");
-            conf = new InnerStellarMapConfig();
-        }
+        conf = loadMapConf(client.getCacheDir());
 
         try {
             parseOverlayFile();
@@ -471,7 +388,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         }
 
         for (int i = 0; i < displayStr.length; ++i) {
-            display[i] = new JCheckBoxMenuItem(displayStr[i], conf.display[i]);
+            display[i] = new JCheckBoxMenuItem(displayStr[i], conf.getDisplay()[i]);
             display[i].addActionListener(this);
         }
 
@@ -533,25 +450,45 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         if (storedZoom != null) {
             double storedValue = storedZoom.doubleValue();
             if (storedValue != 0) {
-                conf.scale = storedValue;
+                conf.setScale(storedValue);
             }
         }
 
         // restore previous offset
         int storedXOffset = Integer.parseInt(client.getConfigParam("MAPXOFFSET"));
         int storedYOffset = Integer.parseInt(client.getConfigParam("MAPYOFFSET"));
-        conf.offset = new Point(storedXOffset, storedYOffset);
+        conf.setOffset(new Point(storedXOffset, storedYOffset));
 
         // restore previously selected planet
         String storedPlanetName = client.getConfigParam("SELECTEDPLANET");
-        if (storedPlanetName != null && !storedPlanetName.trim().equals("")) {
+        if (storedPlanetName != null && !storedPlanetName.trim().isEmpty()) {
             // planet setting exists. lets see if the planet does ...
             Planet currPlan = client.getData().getPlanetByName(storedPlanetName);
             if (currPlan != null) {
                 this.activate(currPlan, false);
             }
         }
+    }
 
+    public InnerStellarMapConfig loadMapConf(String directory) {
+        MMNetXStream xml = new MMNetXStream(new DomDriver());
+        try {
+            File dir = new File(directory);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            InnerStellarMapConfig innerStellarMapConfig = (InnerStellarMapConfig) xml.fromXML(new FileReader(directory + "/mapconf.xml"));
+            if (innerStellarMapConfig.getDisplay().length != displayStr.length) {
+                throw new RuntimeException("not my file");
+            }
+            return innerStellarMapConfig;
+        } catch (Throwable e) {
+            if (!(e instanceof FileNotFoundException)) {
+                MWLogger.errLog((Exception) e);
+            }
+            MWLogger.infoLog("could not read map config file. Will use defaults");
+            return new InnerStellarMapConfig();
+        }
     }
 
     private void parseOverlayFile() throws Exception {
@@ -609,19 +546,19 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
      * Computes the map-coordinate from the screen koordinate system
      */
     private double scr2mapX(int x) {
-        return Math.round((x - getWidth() / 2 - conf.offset.x) / conf.scale);
+        return Math.round((x - getWidth() / 2 - conf.getOffset().x) / conf.getScale());
     }
 
     private int map2scrX(double x) {
-        return (int) Math.round(getWidth() / 2 + x * conf.scale) + conf.offset.x;
+        return (int) Math.round(getWidth() / 2 + x * conf.getScale()) + conf.getOffset().x;
     }
 
     private double scr2mapY(int y) {
-        return Math.round((getHeight() / 2 - (y - conf.offset.y)) / conf.scale);
+        return Math.round((getHeight() / 2 - (y - conf.getOffset().y)) / conf.getScale());
     }
 
     private int map2scrY(double y) {
-        return (int) Math.round(getHeight() / 2 - y * conf.scale) + conf.offset.y;
+        return (int) Math.round(getHeight() / 2 - y * conf.getScale()) + conf.getOffset().y;
     }
 
     /**
@@ -631,12 +568,12 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
     public void paint(Graphics g) {
         Collection<Planet> planets = mp.getData().getAllPlanets();
         // background
-        g.setColor(StringUtils.html2Color(conf.backgroundColor));
+        g.setColor(StringUtils.html2Color(conf.getBackgroundColor()));
         g.fillRect(0, 0, getWidth(), getHeight());
-        int size = (int) Math.round(Math.max(5, Math.log(conf.scale) * 15 + 5));
-        size = Math.max(Math.min(size, conf.maxdotSize), conf.minDotSize);
+        int size = (int) Math.round(Math.max(5, Math.log(conf.getScale()) * 15 + 5));
+        size = Math.max(Math.min(size, conf.getMaxDotSize()), conf.getMinDotSize());
 
-        if (conf.display[DISPLAY_OVERLAY] && overlayLines != null) {
+        if (conf.getDisplay()[DISPLAY_OVERLAY] && overlayLines != null) {
             for (ArrayList<Position> points : overlayLines) {
                 Position last = null;
                 for (Position p : points) {
@@ -651,8 +588,8 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             try {
                 int x = mwclient.getConfig().getIntParam("MAPIMAGEX");
                 int y = mwclient.getConfig().getIntParam("MAPIMAGEY");
-                int height = (int) (mwclient.getConfig().getIntParam("MAPIMAGEHEIGHT") * conf.scale);
-                int width = (int) (mwclient.getConfig().getIntParam("MAPIMAGEWIDTH") * conf.scale);
+                int height = (int) (mwclient.getConfig().getIntParam("MAPIMAGEHEIGHT") * conf.getScale());
+                int width = (int) (mwclient.getConfig().getIntParam("MAPIMAGEWIDTH") * conf.getScale());
                 ImageIcon ic = null;
 
                 boolean useJPGImage = new File("data/images/mekwarsmap.jpg").exists();
@@ -722,7 +659,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             // planet dot
             int dotSize = size;
             boolean blink = false;
-            if (conf.display[DISPLAY_LAST_CHANGED] && blinkPhase && changesSinceLastRefresh.containsKey(p.getId())) {
+            if (conf.getDisplay()[DISPLAY_LAST_CHANGED] && blinkPhase && changesSinceLastRefresh.containsKey(p.getId())) {
                 g.setColor(Color.WHITE);
                 dotSize++;
                 blink = true;
@@ -738,12 +675,12 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             if (!blink) {
                 g.setColor(c);
             }
-            if (conf.display[DISPLAY_NAMES] && (conf.showPlanetNamesThreshold == 0 || conf.scale > conf.showPlanetNamesThreshold)) {
+            if (conf.getDisplay()[DISPLAY_NAMES] && (conf.getShowPlanetNamesThreshold() == 0 || conf.getScale() > conf.getShowPlanetNamesThreshold())) {
                 g.drawString(p.getName(), x + size, y);
             }
 
             // influence icon
-            if (conf.display[DISPLAY_INFLUENCE] && (conf.showInfluenceThreshold == 0 || conf.scale > conf.showInfluenceThreshold)) {
+            if (conf.getDisplay()[DISPLAY_INFLUENCE] && (conf.getShowInfluenceThreshold() == 0 || conf.getScale() > conf.getShowInfluenceThreshold())) {
                 int pos = 0;
                 Iterator<House> infIt = p.getInfluence().getHouses().iterator();
                 while (infIt.hasNext()) {
@@ -768,7 +705,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             }
 
             // unit factories
-            if (conf.display[DISPLAY_UNITS] && (conf.showUnitFactoriesThreshold == 0 || conf.scale > conf.showUnitFactoriesThreshold)) {
+            if (conf.getDisplay()[DISPLAY_UNITS] && (conf.getShowUnitFactoriesThreshold() == 0 || conf.getScale() > conf.getShowUnitFactoriesThreshold())) {
                 int pos = 0;
 
                 if (p.getFactoryCount() > 0) {
@@ -778,7 +715,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             }
 
             // warehouses
-            if (conf.display[DISPLAY_WAREHOUSES] && p.getBaysProvided() > 0) {
+            if (conf.getDisplay()[DISPLAY_WAREHOUSES] && p.getBaysProvided() > 0) {
                 g.setColor(Color.WHITE);
                 g.drawString(Integer.toString(p.getBaysProvided()), x - 8, y);
             }
@@ -795,7 +732,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
              * Draw Range Circles. This is not so simple as it was with Tasks.
              */
 
-            if (conf.display[DISPLAY_RANGES]) {
+            if (conf.getDisplay()[DISPLAY_RANGES]) {
 
                 // determine which ops the player is eligible for
                 TreeSet<String> legalOps = new TreeSet<String>();
@@ -826,7 +763,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                         Color c = StringUtils.html2Color(vals[1]);
 
                         g.setColor(c);
-                        int rSize = (int) Math.round(2 * range * conf.scale);
+                        int rSize = (int) Math.round(2 * range * conf.getScale());
                         g.drawArc(x - rSize / 2, y - rSize / 2, rSize, rSize, 0, 360);
                     }
 
@@ -856,17 +793,17 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
      * What we NOT want, is to wash out the color tone by adding simple gray to the color. I preferre the code from Color.brighter() which simple looks good. (But it had to be adjusted a bit) Imi
      */
     private int adj(int r) {
-        if (conf.colorAdjustment == 0) {
+        if (conf.getColorAdjustment() == 0) {
             return r;
         }
-        if (conf.colorAdjustment == 1) {
+        if (conf.getColorAdjustment() == 1) {
             return 255;
         }
-        int i = (int) (1.0 / conf.colorAdjustment);
+        int i = (int) (1.0 / conf.getColorAdjustment());
         if (r > 0 && r < i) {
             r = i;
         }
-        return Math.min((int) (r / (1 - conf.colorAdjustment)), 255);
+        return Math.min((int) (r / (1 - conf.getColorAdjustment())), 255);
     }
 
     /**
@@ -891,7 +828,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         if (mp.getPPanel() != null && mp.getPPanel().getPlanet() != p) {
 
             mp.getPPanel().update(p);
-            conf.planetID = p.getId();
+            conf.setPlanetId(p.getId());
             mp.repaint();
 
             saveMapSelection(p);
@@ -912,7 +849,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
 
         // then center on the world
         if (center) {
-            conf.offset.setLocation(-p.getPosition().x * conf.scale, p.getPosition().y * conf.scale);
+            conf.getOffset().setLocation(-p.getPosition().x * conf.getScale(), p.getPosition().y * conf.getScale());
         }
 
     }// end activate(p,center)
@@ -950,8 +887,8 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             return;
         }
         if (lastMousePos != null) {
-            conf.offset.x -= lastMousePos.x - e.getX();
-            conf.offset.y -= lastMousePos.y - e.getY();
+            conf.getOffset().x -= lastMousePos.x - e.getX();
+            conf.getOffset().y -= lastMousePos.y - e.getY();
         }
         mouseMoved(e);
         mp.repaint();
@@ -963,16 +900,16 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
 
         if (keyCode == 37)// left arrow
         {
-            conf.offset.y -= conf.scale;
+            conf.getOffset().y -= conf.getScale();
         } else if (keyCode == 38) // uparrow
         {
-            conf.offset.x -= conf.scale;
+            conf.getOffset().x -= conf.getScale();
         } else if (keyCode == 39)// right arrow
         {
-            conf.offset.y += conf.scale;
+            conf.getOffset().y += conf.getScale();
         } else if (keyCode == 40)// down arrow
         {
-            conf.offset.x += conf.scale;
+            conf.getOffset().x += conf.getScale();
         } else {
             return;
         }
@@ -988,7 +925,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             lastMousePos.y = e.getY();
         }
 
-        if (conf.display[DISPLAY_TOOLTIPS]) {
+        if (conf.getDisplay()[DISPLAY_TOOLTIPS]) {
 
             Planet planet = nearestNeighbour(scr2mapX(e.getX()), scr2mapY(e.getY()));
             StringBuilder result = new StringBuilder("<html><center><b><u>" + planet.getName() + "</b></u></center>");
@@ -1020,7 +957,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
     public void mouseWheelMoved(MouseWheelEvent e) {
         mp.getSlider().setValue(mp.getSlider().getValue() + e.getWheelRotation() * 3);
         if (selectedPlanet != null) {
-            conf.offset.setLocation(-selectedPlanet.getPosition().x * conf.scale, selectedPlanet.getPosition().y * conf.scale);
+            conf.getOffset().setLocation(-selectedPlanet.getPosition().x * conf.getScale(), selectedPlanet.getPosition().y * conf.getScale());
             mp.repaint();
         }
 
@@ -1031,26 +968,10 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
      *            The scale to set.
      */
     public void setScale(double scale) {
-        conf.scale = scale;
+        conf.setScale(scale);
         if (selectedPlanet != null) {
-            conf.offset.setLocation(-selectedPlanet.getPosition().x * conf.scale, selectedPlanet.getPosition().y * conf.scale);
+            conf.getOffset().setLocation(-selectedPlanet.getPosition().x * conf.getScale(), selectedPlanet.getPosition().y * conf.getScale());
         }
-    }
-
-    /**
-     * @param off
-     *            The conf.offset.x to set.
-     */
-    public void setXOff(int off) {
-        conf.offset.x = off;
-    }
-
-    /**
-     * @param off
-     *            The conf.offset.y to set.
-     */
-    public void setYOff(int off) {
-        conf.offset.y = off;
     }
 
     /**
@@ -1071,7 +992,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
 
         // save display settings
         for (int i = 0; i < displayStr.length; ++i) {
-            conf.display[i] = display[i].isSelected();
+            conf.getDisplay()[i] = display[i].isSelected();
         }
 
         // save filter settings
@@ -1143,9 +1064,9 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
     public void saveMapSelection(Planet p) {
         // save the config
         mwclient.getConfig().setParam("SELECTEDPLANET", p.getName());
-        mwclient.getConfig().setParam("MAPZOOMLEVEL", "" + conf.scale);
-        mwclient.getConfig().setParam("MAPYOFFSET", "" + (int) conf.offset.getY());
-        mwclient.getConfig().setParam("MAPXOFFSET", "" + (int) conf.offset.getX());
+        mwclient.getConfig().setParam("MAPZOOMLEVEL", "" + conf.getScale());
+        mwclient.getConfig().setParam("MAPYOFFSET", "" + (int) conf.getOffset().getY());
+        mwclient.getConfig().setParam("MAPXOFFSET", "" + (int) conf.getOffset().getX());
 
         mwclient.getConfig().saveConfig();
         mwclient.setConfig();
@@ -1202,5 +1123,13 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         }
         // no qualifiers. we shouldn't see the world.
         return false;
+    }
+
+    public InnerStellarMapConfig getConf() {
+        return conf;
+    }
+
+    public void setConf(InnerStellarMapConfig conf) {
+        this.conf = conf;
     }
 }

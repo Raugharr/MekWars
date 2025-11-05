@@ -1,0 +1,27 @@
+<mekwars.client.gui.InnerStellarMapConfig>
+  <minDotSize>2</minDotSize>
+  <maxDotSize>25</maxDotSize>
+  <reverseScaleMax>100</reverseScaleMax>
+  <reverseScaleMin>2</reverseScaleMin>
+  <showInfluenceThreshold>0.0</showInfluenceThreshold>
+  <showUnitFactoriesThreshold>0.0</showUnitFactoriesThreshold>
+  <showPlanetNamesThreshold>0.0</showPlanetNamesThreshold>
+  <colorAdjustment>0.5</colorAdjustment>
+  <backgroundColor>#000000</backgroundColor>
+  <display>
+    <boolean>true</boolean>
+    <boolean>false</boolean>
+    <boolean>true</boolean>
+    <boolean>false</boolean>
+    <boolean>false</boolean>
+    <boolean>false</boolean>
+    <boolean>true</boolean>
+    <boolean>true</boolean>
+  </display>
+  <scale>0.7142857142857143</scale>
+  <offset>
+    <x>-146</x>
+    <y>224</y>
+  </offset>
+  <planetId>591</planetId>
+</mekwars.client.gui.InnerStellarMapConfig>

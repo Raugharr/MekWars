@@ -53,9 +53,9 @@ public class CMapPanel extends JPanel {
         private static final long serialVersionUID = -2214264904474265394L;
 
         ZoomSlider() {
-            super(HORIZONTAL, map.conf.reverseScaleMin,map.conf.reverseScaleMax, 
-                    map.conf.reverseScaleMin + 
-                    (map.conf.reverseScaleMax - map.conf.reverseScaleMin) / 2);
+            super(HORIZONTAL, map.getConf().getReverseScaleMin(), map.getConf().getReverseScaleMax(),
+                    map.getConf().getReverseScaleMin() +
+                    (map.getConf().getReverseScaleMax() - map.getConf().getReverseScaleMin()) / 2);
             addChangeListener(this);
         }
 
@@ -111,7 +111,7 @@ public class CMapPanel extends JPanel {
 
         // zoom slider
         slider = new ZoomSlider();
-        slider.setValue((int)Math.round(50/map.conf.scale));
+        slider.setValue((int)Math.round(50/ map.getConf().getScale()));
         slider.setAlignmentX(Component.LEFT_ALIGNMENT);
         slider.setAlignmentY(Component.TOP_ALIGNMENT);
         slider.setOpaque(false);
@@ -140,7 +140,7 @@ public class CMapPanel extends JPanel {
         //if the map is visible, select the correct planet last(since this involves several updates)
         if (client.getConfig().isParam("MAPTABVISIBLE")) {
         	try {
-            	map.activate(client.getData().getPlanet(map.conf.planetID));
+            	map.activate(client.getData().getPlanet(map.getConf().getPlanetId()));
             } catch (Exception ex) {
             	MWLogger.errLog(ex);
             }
