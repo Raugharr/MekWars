@@ -29,27 +29,22 @@ import java.util.Properties;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import mekwars.common.House;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.MWLogger;
 import megamek.common.AmmoType;
-
 
 /**
  * TODO: It seems, that all operations done here are needed independly of the
  * semantic of the underlying structure. Planets are handled equal to factions
  * and each function is doubled. If this is true, it should be managed in an
  * generic way to reduce code bloat and code replication.
- * 
  * Campaign is the base of the data holding classes for client and server. Here
  * all campaign relevant information as Houses, Planets and Player data is
  * stored.
- * 
  * In this base class some methods are provided to retrieve these informations
  * to use in common data classes like House or Planet when reffering to
  * ressources.
- * 
  * Notice: Please read the doc to binOut before adding new data types.
  * 
  * @author Imi (immanuel.scholz@gmx.de)
@@ -115,8 +110,7 @@ public class CampaignData implements TerrainProvider {
             Integer planetID = planetid.get(name.toLowerCase());
             return getPlanet(planetID);
         } catch (Exception ex) {
-            MWLogger.errLog("Looking for planet: " + name);
-            // MWLogger.errLog(ex);
+            MWLogger.errLog("Could not find planet: " + name);
             return null;
         }
     }
