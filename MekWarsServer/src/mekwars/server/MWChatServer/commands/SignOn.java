@@ -107,14 +107,14 @@ public class SignOn extends CommandBase implements ICommands {
 			
 			//hacky and evil! @urgru 2.27.05
 			if (username.startsWith("Nobody")) {
-				CampaignMain.cm.toUser("<font color=\"navy\"><br>---<br>It appears that you've misentered your password or tried to sign on using a name that is already taken.<br>---<br></font>", username, true);
+				CampaignMain.cm.toUser("<font color=\"teal\"><br>---<br>It appears that you've misentered your password or tried to sign on using a name that is already taken.<br>---<br></font>", username, true);
 			} else if (username.startsWith("[Dedicated]")) {
                 CampaignMain.cm.toUser("SSC|UseAdvanceRepair|"+CampaignMain.cm.getConfig("UseAdvanceRepair")+"|UseSimpleRepair|"+CampaignMain.cm.getConfig("UseSimpleRepair")+"|AllowedMegaMekVersion|"+CampaignMain.cm.getConfig("AllowedMegaMekVersion")+"|MMTimeStampLogFile|"+CampaignMain.cm.getConfig("MMTimeStampLogFile"), client.getUserId(), false);
 			} else {
 				CampaignMain.cm.doLoginPlayer(username);
 				CampaignMain.cm.getOpsManager().doReconnectCheckOnPlayer(username);
 				if (client.getAccessLevel() < IAuthenticator.REGISTERED)
-					CampaignMain.cm.toUser("<font color=\"navy\"><br>---<br>Warning: Your account is not password protected. [<a href=\"MWREG\">Click to register</a>]<br>---<br></font>", username, true);
+					CampaignMain.cm.toUser("<font color=\"teal\"><br>---<br>Warning: Your account is not password protected. [<a href=\"MWREG\">Click to register</a>]<br>---<br></font>", username, true);
 			}// else { 
 				//CampaignMain.cm.toUser("<font color=\"navy\"><br>---<br>It appears that you have not signed up for this server's campaign. [<a href=\"MEKWARS/c enroll\">Click to get started</a>]<br>---<br></font>", username, true);
 		//	}
