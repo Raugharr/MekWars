@@ -252,7 +252,7 @@ public class ShortOperation implements Comparable<Object> {
         for (SArmy currA : possibleDefenders) {
             toLog += currA.getName() + "/" + currA.getID() + " ";
         }
-        MWLogger.gameLog(toLog);
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, toLog);
 
         Operation o = CampaignMain.cm.getOpsManager().getOperation(opName);
 
@@ -1947,7 +1947,7 @@ public class ShortOperation implements Comparable<Object> {
                 chickenThreads.put(playername, newThread);
 
                 // add creation to log
-                MWLogger.gameLog("Created chicken thread for " + shortID + "/" + currPlayer.getName() + "(" + opName + ")");
+                LOGGER.info(LogMarkerHolder.GAME_MARKER, "Created chicken thread for " + shortID + "/" + currPlayer.getName() + "(" + opName + ")");
             }
         }// end while(poss defenders remain)
 
@@ -1956,7 +1956,7 @@ public class ShortOperation implements Comparable<Object> {
          * those players who have multiple armies able to defend, start the
          * threads.
          */
-        MWLogger.gameLog("Starting all chicken threads for #" + shortID + " (" + opName + ")");
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "Starting all chicken threads for #" + shortID + " (" + opName + ")");
         for (OpsChickenThread ct : chickenThreads.values()) {
             ct.start();
         }

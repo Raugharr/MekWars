@@ -17,6 +17,7 @@
 package mekwars.server.campaign.operations;
 
 import mekwars.common.campaign.operations.Operation;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
@@ -67,7 +68,7 @@ public class OpsDisconnectionThread extends Thread {
 		CampaignMain.cm.toUser(CampaignMain.cm.getPlayer(loserName).getColoredName() + " disconnected. You will win by forfeit if he does not return within " + timeToReturn + ".",winnerName,true);
 		
 		//add the start to the log
-		MWLogger.gameLog("Disco Thread/Start:" + id + "/" + loserName + ". " + winnerName + " wins in " + timeToReturn);
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "Disco Thread/Start:" + id + "/" + loserName + ". " + winnerName + " wins in " + timeToReturn);
 		
 		try {
 			this.wait(timeToReport);
@@ -87,7 +88,7 @@ public class OpsDisconnectionThread extends Thread {
 		Operation o = CampaignMain.cm.getOpsManager().getOperation(so.getName());
 				
 		//add to log and send to resolver
-		MWLogger.gameLog("Autoreport: " + id + "/" + loserName + ". " + winnerName + " wins by forfeit");
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "Autoreport: " + id + "/" + loserName + ". " + winnerName + " wins by forfeit");
 		CampaignMain.cm.getOpsManager().resolveShortAttack(o, so, winnerName, loserName);
 		
 	}//end run()
@@ -95,9 +96,9 @@ public class OpsDisconnectionThread extends Thread {
 	public void playerReturned(boolean tellOtherPlayer, long timeOffline) {
 		if (tellOtherPlayer) {
 			CampaignMain.cm.toUser(CampaignMain.cm.getPlayer(loserName).getColoredName() + " returned. He was offline for " + StringUtils.readableTimeWithSeconds(timeOffline) + ".",winnerName,true);
-			MWLogger.gameLog("Disco Thread/Stop:" + id + "/" + loserName + ". Player returned.");
+            LOGGER.info(LogMarkerHolder.GAME_MARKER, "Disco Thread/Stop:" + id + "/" + loserName + ". Player returned.");
 		} else {
-			MWLogger.gameLog("Disco Thread/Stop:" + id + "/" + loserName + ". Player threads cleared.");
+            LOGGER.info(LogMarkerHolder.GAME_MARKER, "Disco Thread/Stop:" + id + "/" + loserName + ". Player threads cleared.");
 		}
 		playerReturned = true;
 	}

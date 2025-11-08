@@ -15,7 +15,6 @@
  */
 package mekwars.common.util;
 
-import mekwars.common.log.LogMarkerHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,9 +35,5 @@ public interface MWLogger {
 
     static void infoLog(String message) {
         LOGGER.info(message);
-    }
-
-    static void gameLog(String message) {
-        LOGGER.info(LogMarkerHolder.GAME_MARKER, message);
     }
 }

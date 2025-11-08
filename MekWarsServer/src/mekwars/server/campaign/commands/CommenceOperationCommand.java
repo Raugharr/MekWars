@@ -19,17 +19,22 @@ import java.util.StringTokenizer;
 
 import mekwars.common.CampaignData;
 import mekwars.common.campaign.operations.Operation;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.operations.ShortOperation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This command is used for multi player opertionas. the attacker
  * will send this command to start an operation
  */
 public class  CommenceOperationCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(CommenceOperationCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -114,7 +119,7 @@ public class  CommenceOperationCommand  implements Command {
 		so.changeStatus(ShortOperation.STATUS_INPROGRESS);
 		
 		//tell the defender that he has succesfully joined the attack.
-		MWLogger.gameLog("Operation Commenced: " + so.getShortID() + "/" + ap.getName());
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "Operation Commenced: " + so.getShortID() + "/" + ap.getName());
 		CampaignMain.cm.toUser("AM:Operation Commenced!",Username,true);
 		
 	}//end process

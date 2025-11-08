@@ -186,7 +186,7 @@ public class MWServ {
         // Touch log files
         MWLogger.mainLog("Initializing log subsystem. Touching log files.");
         MWLogger.mainLog("Main channel log touched.");
-        MWLogger.gameLog("Game log touched.");
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "Game log touched.");
         LOGGER.error("Command log touched.");
         LOGGER.info(LogMarkerHolder.PM_MARKER, "Private messages (PM) log touched.");
         LOGGER.info("Black Market (BM) log touched.");
@@ -702,8 +702,8 @@ public class MWServ {
                 }
             } else if (task.equals("CR")) {
                 String result = st.nextToken();
-                MWLogger.gameLog("Starting report process by " + name);
-                MWLogger.gameLog(name + " reported: " + lineIn);
+                LOGGER.info(LogMarkerHolder.GAME_MARKER, "Starting report process by " + name);
+                LOGGER.info(LogMarkerHolder.GAME_MARKER, name + " reported: " + lineIn);
                 getCampaign().doProcessAutomaticReport(result, name);
             } else if (task.equals("IPU")) {// InProgressUpdate
                 String result = st.nextToken();
