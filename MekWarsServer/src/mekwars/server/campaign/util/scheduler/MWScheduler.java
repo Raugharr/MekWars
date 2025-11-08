@@ -155,7 +155,7 @@ public class MWScheduler implements ScheduleHandler {
 	@Override
 	public void scheduleChristmas(Date startDate, Date endDate) {
 		// TODO Auto-generated method stub
-		MWLogger.infoLog("Scheduling Christmas");
+		LOGGER.info("Scheduling Christmas");
 	}
 
 	/**

@@ -232,7 +232,7 @@ public class CPlayer extends Player {
 
         //flags.loadDefaults(mwclient.getPlayer().getDefaultPlayerFlags().export());
         //flags.loadPersonal(TokenReader.readString(ST));
-        MWLogger.infoLog("My Player Flags: " + flags.export());
+        LOGGER.info("My Player Flags: " + flags.export());
         // traps run. sort the HQ. this isn't duplicative, b/c
         // direct lods (PS instead of PL) don't trigger sorts.
         sortHangar();

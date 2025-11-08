@@ -362,7 +362,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 	/** My attributes may have changed. */
 	@Override
 	public void changedUpdate(DocumentEvent e, Shape a, ViewFactory f) {
-		if(DEBUG) MWLogger.infoLog("ImageView: changedUpdate begin...");
+		if(DEBUG) LOGGER.info("ImageView: changedUpdate begin...");
 		super.changedUpdate(e,a,f);
 		float align = getVerticalAlignment();
 		
@@ -375,11 +375,11 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 		boolean wChanged = fWidth!=width;
 		if( hChanged || wChanged || getVerticalAlignment()!=align ) {
 			if(DEBUG)
-				MWLogger.infoLog("ImageView: calling preferenceChanged");
+				LOGGER.info("ImageView: calling preferenceChanged");
 			getParent().preferenceChanged(this,hChanged,wChanged);
 		}
 		if(DEBUG)
-			MWLogger.infoLog("ImageView: changedUpdate end; valign="+getVerticalAlignment());
+			LOGGER.info("ImageView: changedUpdate end; valign="+getVerticalAlignment());
 	}
 	
 	
@@ -556,7 +556,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 		if( changed != 0 ) {
 			// May need to resize myself, asynchronously:
 			if( DEBUG )
-				MWLogger.infoLog("ImageView: resized to "+fWidth+"x"+fHeight);
+				LOGGER.info("ImageView: resized to "+fWidth+"x"+fHeight);
 			
 			Document doc = getDocument();
 			try {
@@ -729,7 +729,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 				&& getSelectionState()==2 ) {
 			// Click in selected grow-box:
 			if(DEBUG)
-				MWLogger.infoLog("ImageView: grow!!! Size="+fWidth+"x"+fHeight);
+				LOGGER.info("ImageView: grow!!! Size="+fWidth+"x"+fHeight);
 			Point loc = fComponent.getLocationOnScreen();
 			fGrowBase = new Point(loc.x+e.getX() - fWidth,
 					loc.y+e.getY() - fHeight);

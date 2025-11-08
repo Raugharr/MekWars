@@ -145,7 +145,7 @@ public class ServerWrapper extends MWChatServer{
 	@Override
 	public boolean signOn(MWChatClient client, String password) throws Exception{
 		
-		MWLogger.infoLog(client.getUserId() + " is attempting a signon: ");
+		LOGGER.info(client.getUserId() + " is attempting a signon: ");
 		String userId = client.getUserId();
 		validateUserId(userId);
 		
@@ -166,7 +166,7 @@ public class ServerWrapper extends MWChatServer{
 			int access = auth.getAccess();
 			client.setAccessLevel(access);
 			_users.put(clientKey(client), client);
-			MWLogger.infoLog(client.getUserId() + " is authenticated.  Access = " + access + (client.getTunneling() ? " (tunneling)" : ""));
+			LOGGER.info(client.getUserId() + " is authenticated.  Access = " + access + (client.getTunneling() ? " (tunneling)" : ""));
 			_cumulativeLogins++;
 		}
 		

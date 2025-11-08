@@ -220,7 +220,7 @@ public abstract class GameHost implements GameListener, IGameHost {
 
 	public void gameVictory(GameVictoryEvent e) {
         sendGameReport();
-        MWLogger.infoLog("GAME END");	
+        LOGGER.info("GAME END");	
 	}
     
     protected abstract void sendGameReport();
@@ -265,7 +265,7 @@ public abstract class GameHost implements GameListener, IGameHost {
                     && savedFile.isFile()
                     && (lastTime < (System.currentTimeMillis() - daysInSeconds))) {
                 try {
-                    MWLogger.infoLog("Purging File: "
+                    LOGGER.info("Purging File: "
                             + savedFile.getName() + " Time: " + lastTime
                             + " purge Time: "
                             + (System.currentTimeMillis() - daysInSeconds));

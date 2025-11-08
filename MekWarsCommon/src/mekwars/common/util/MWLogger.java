@@ -28,8 +28,4 @@ public interface MWLogger {
     static void debugLog(String message) {
         LOGGER.debug(message);
     }
-
-    static void infoLog(String message) {
-        LOGGER.info(message);
-    }
 }

@@ -63,7 +63,7 @@ public class BT extends Command {
 			while(folderT.hasMoreTokens()) {
 				//Token 1 is the folder
 				String dName = folderT.nextToken();
-				MWLogger.infoLog(dName);
+				LOGGER.info(dName);
 				// Token 2 is the names of the lists
 				if(folderT.hasMoreTokens()) {
 					StringTokenizer listT = new StringTokenizer(folderT.nextToken(), "*");
@@ -92,7 +92,7 @@ public class BT extends Command {
             while(folderT.hasMoreTokens()) {
                 //Token 1 is the folder
                 String dName = folderT.nextToken();
-                MWLogger.infoLog(dName);
+                LOGGER.info(dName);
                 // Token 2 is the names of the lists
                 if(folderT.hasMoreTokens()) {
                     StringTokenizer listT = new StringTokenizer(folderT.nextToken(), "*");

@@ -24,12 +24,15 @@ import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.MWLogger;
 import mekwars.server.dataProvider.ServerCommand;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Command which calcaulates and returns the 
  * timestamp of the current OpList.txt file.
  */
 public class OpListTimestamp implements ServerCommand {
+    private static final Logger LOGGER = LogManager.getLogger(OpListTimestamp.class);
 
     public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
     	
@@ -46,13 +49,13 @@ public class OpListTimestamp implements ServerCommand {
 				
 				oplistTimestamp = tempTime.substring(11);//remove "#Timestamp="
 			} catch (Exception e) {
-				MWLogger.infoLog("Error reading first line from OpList.txt");       
+				LOGGER.info("Error reading first line from OpList.txt");
 			}
     	
     	}//end if(oplist exists)
     		
     	else
-    		MWLogger.infoLog("OpList.txt didn't exist. Returning falsified timestamp to requesting client.");
+    		LOGGER.info("OpList.txt didn't exist. Returning falsified timestamp to requesting client.");
        
         out.println(oplistTimestamp, "OpListTimestamp");
         out.flush();

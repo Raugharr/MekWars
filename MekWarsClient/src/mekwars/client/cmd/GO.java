@@ -26,13 +26,16 @@ import mekwars.common.util.MWLogger;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.common.options.Option;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
 
 public class GO extends Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(GO.class);
+
 	public GO(MWClient mwclient) {
 		super(mwclient);
 	}
@@ -75,7 +78,7 @@ public class GO extends Command {
                             optionsHash.put(gameOption.getName(),gameOption);
                     	}
                     }catch (Exception ex2){
-                    		MWLogger.infoLog("Uknown format: " + option + " :: " + value);
+                    		LOGGER.info("Uknown format: " + option + " :: " + value);
                         }
                 }
             }

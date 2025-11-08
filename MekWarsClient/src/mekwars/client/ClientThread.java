@@ -181,7 +181,7 @@ public class ClientThread extends Thread implements CloseClientListener {
         } catch (Exception ex) {
             client = null;
             mwclient.showInfoWindow("Couldn't join this game!");
-            MWLogger.infoLog(serverip + " " + serverport);
+            LOGGER.info(serverip + " " + serverport);
             return;
         }
         // client.retrieveServerInfo();

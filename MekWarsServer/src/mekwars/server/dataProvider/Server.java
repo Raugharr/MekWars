@@ -67,7 +67,7 @@ public class Server extends Thread {
 		} catch (IOException e) {
 			LOGGER.error("Shutting down because:", e);
 			MWLogger.mainLog("DataProvider: Could not create server socket. Shutting down.");
-			MWLogger.infoLog("DataProvider: Could not create server socket. Shutting down.");
+			LOGGER.info("DataProvider: Could not create server socket. Shutting down.");
 			return;
 		}
 		
@@ -102,7 +102,7 @@ public class Server extends Thread {
                     LOGGER.error("Shutting down because:");
                     LOGGER.error("Exception: ", ex);
                     MWLogger.mainLog("DataProvider: Could not create server socket. Shutting down.");
-                    MWLogger.infoLog("DataProvider: Could not create server socket. Shutting down.");
+                    LOGGER.info("DataProvider: Could not create server socket. Shutting down.");
                     return;
                 }
 			} catch (IOException e) {

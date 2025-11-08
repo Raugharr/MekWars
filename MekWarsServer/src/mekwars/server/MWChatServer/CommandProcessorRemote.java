@@ -57,7 +57,7 @@ public class CommandProcessorRemote implements ICommands{
 
     public static void init(Properties p) {
         if (_processors != null && _idleTimeImmune != null) {
-            MWLogger.infoLog("CommandProcessorRemote: Warning: init() called a second time");
+            LOGGER.info("CommandProcessorRemote: Warning: init() called a second time");
         }
         
         _processors = new HashMap<String,ICommandProcessorRemote>();
@@ -67,13 +67,13 @@ public class CommandProcessorRemote implements ICommands{
             String name = (String)e.nextElement();
             int idx = name.indexOf(".");
             if (idx < 1) {
-                MWLogger.infoLog("CommandProcessorRemote: unknown property: " + name);
+                LOGGER.info("CommandProcessorRemote: unknown property: " + name);
                 continue;
             }
             String command = name.substring(0, idx);
             if (name.endsWith(".class")) {
                 String className = p.getProperty(name);
-                MWLogger.infoLog("CommandProcessorRemote: initting the " + command + " command processor");
+                LOGGER.info("CommandProcessorRemote: initting the " + command + " command processor");
                 try {
                     ICommandProcessorRemote cp = 
                             (ICommandProcessorRemote)Class.forName(className).newInstance();

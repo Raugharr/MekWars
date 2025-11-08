@@ -2174,7 +2174,7 @@ public final class MWClient extends GameHost implements IClient {
     public void processIncoming(String incoming) {
         IProtCommand pcommand = null;
 
-        // MWLogger.infoLog("INCOMING: " + incoming);
+        // LOGGER.info("INCOMING: " + incoming);
         if (incoming.startsWith(IClient.PROTOCOL_PREFIX)) {
             incoming = incoming.substring(IClient.PROTOCOL_PREFIX.length());
             StringTokenizer ST = new StringTokenizer(incoming,
@@ -2656,7 +2656,7 @@ public final class MWClient extends GameHost implements IClient {
         }
 
         if (!dataFetcher.getPlanetsUpdate(data)) {
-            // MWLogger.infoLog("MD5 does not match! Retrieve all
+            // LOGGER.info("MD5 does not match! Retrieve all
             // planet data again.");
             LOGGER.error("MD5 does not match! But the md5 seems broken anyway...");
             /*

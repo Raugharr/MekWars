@@ -4,11 +4,14 @@ import java.util.StringTokenizer;
 
 import mekwars.client.common.campaign.clientutils.protocol.IClient;
 import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Ping command
  */
 public class PingPCmd extends CProtCommand {
+    private static final Logger LOGGER = LogManager.getLogger(PingPCmd.class);
 
 	public PingPCmd(IClient client) {
 		super(client);
@@ -26,7 +29,7 @@ public class PingPCmd extends CProtCommand {
 			String sender = ST.nextToken();
 			String stamp = ST.nextToken();
 
-			MWLogger.infoLog("Received server ping.");
+			LOGGER.info("Received server ping.");
 
 			getConnector().send(getPrefix() + "pong" + getDelimiter() + sender + getDelimiter() + stamp);
 			if (!sender.equals("server")) {echo(input);}

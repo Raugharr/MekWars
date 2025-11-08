@@ -81,7 +81,7 @@ public class MWPasswd implements ICommands {
             password = "";
         }
         if (password.length() < 2) {
-            MWLogger.infoLog("Access denied: " + userId);
+            LOGGER.info("Access denied: " + userId);
             throw new Exception(userId);
         }
 

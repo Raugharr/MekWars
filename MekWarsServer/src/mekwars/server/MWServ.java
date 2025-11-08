@@ -190,7 +190,7 @@ public class MWServ {
         LOGGER.error("Command log touched.");
         LOGGER.info(LogMarkerHolder.PM_MARKER, "Private messages (PM) log touched.");
         LOGGER.info("Black Market (BM) log touched.");
-        MWLogger.infoLog("Server info log touched.");
+        LOGGER.info("Server info log touched.");
         LOGGER.warn("Server warnings log touched.");
         LOGGER.info("Moderators log touched.");
         LOGGER.info(LogMarkerHolder.TICK_MARKER, "Tick report log touched.");
@@ -263,7 +263,7 @@ public class MWServ {
             fis.close();
         } catch (Exception ex) {
             try {
-                MWLogger.infoLog("Creating new File");
+                LOGGER.info("Creating new File");
                 MWLogger.mainLog("Creating new File");
                 if (filename.equals("./data/mails.txt")) {
                     FileOutputStream out = new FileOutputStream(filename);
@@ -399,7 +399,7 @@ public class MWServ {
             invis = getCampaign().getPlayer(name).isInvisible();
         }
         MWClientInfo newUser = new MWClientInfo(originalName, getIP(name), System.currentTimeMillis(), status, invis);
-        MWLogger.infoLog(originalName + " logged in from " + getIP(name).toString() + " at " + new Date(System.currentTimeMillis()).toString());
+        LOGGER.info(originalName + " logged in from " + getIP(name).toString() + " at " + new Date(System.currentTimeMillis()).toString());
 
         // Double IP Check
         if (!originalName.startsWith("[Dedicated]")) {
@@ -558,7 +558,7 @@ public class MWServ {
         } else { 
             sendRemoveUserToAll(name, true);
         }
-        MWLogger.infoLog("Client " + name + "logged out.");
+        LOGGER.info("Client " + name + "logged out.");
         users.remove(name.toLowerCase());
 
         // remove his host, if he has a game open
@@ -726,7 +726,7 @@ public class MWServ {
 
     public void statusMessage() {
         MWLogger.mainLog("Open Games: " + games.size());
-        MWLogger.infoLog("Open Games: " + games.size());
+        LOGGER.info("Open Games: " + games.size());
     }
 
     private void doCloseGame(MMGame game) {
@@ -774,16 +774,16 @@ public class MWServ {
 
     public void sendRemoveUserToAll(String name, boolean userGone, String ip) {
         if (userGone && ip != null) {
-            MWLogger.infoLog(name + " left the room (IP:" + ip + ").");
+            LOGGER.info(name + " left the room (IP:" + ip + ").");
         } else if (userGone) {
-            MWLogger.infoLog(name + " left the room");
+            LOGGER.info(name + " left the room");
         }
         myCommunicator.broadcastComm("UG|" + getUser(name) + (userGone ? "|GONE" : ""));
     }
     
     public void sendRemoveUserToAll(String name, boolean userGone) {
         if (userGone) {
-            MWLogger.infoLog(name + " left the room.");
+            LOGGER.info(name + " left the room.");
         }
         myCommunicator.broadcastComm("UG|" + getUser(name) + (userGone ? "|GONE" : ""));
     }
@@ -1102,7 +1102,7 @@ public class MWServ {
                 InetAddress ia = InetAddress.getByName(ip);
                 if (ia != null) {
                     banips.put(ia, time);
-                    MWLogger.infoLog("Added " + line + " to the list of banned IPs");
+                    LOGGER.info("Added " + line + " to the list of banned IPs");
                     MWLogger.mainLog("Added " + line + " to the list of banned IP's");
                 } else {
                     LOGGER.warn("Importing IP bans; offending line: {}", line);
@@ -1119,7 +1119,7 @@ public class MWServ {
     public void loadBanPlayers() {
         // Loading the banned players file.
         try {
-            MWLogger.infoLog("Loading Ban Players");
+            LOGGER.info("Loading Ban Players");
             File banFile = new File("./data/accountbans.txt");
 
             // make the file, if its missing
@@ -1136,7 +1136,7 @@ public class MWServ {
                 String howLong = st.nextToken().trim();
                 if ((toBan != null) && (howLong != null)) {
                     banaccounts.put(toBan.toLowerCase(), howLong);
-                    MWLogger.infoLog("Added " + toBan + " to the banlist (for " + howLong + ")");
+                    LOGGER.info("Added " + toBan + " to the banlist (for " + howLong + ")");
                     MWLogger.mainLog("Added " + toBan + " to the banlist (for " + howLong + ")");
                 } else {
                     LOGGER.warn("Initial bans warning: {} / {}", toBan, howLong);
@@ -1152,7 +1152,7 @@ public class MWServ {
     public void loadISPs() {
         // Loading the ISP file.
         try {
-            MWLogger.infoLog("Loading ISPs");
+            LOGGER.info("Loading ISPs");
             File ispFile = new File("./data/isps.txt");
 
             // make the file, if its missing
@@ -1169,7 +1169,7 @@ public class MWServ {
                 Long address = Long.parseLong(st.nextToken().trim());
                 if ((isp != null) && (address != null)) {
                     ISPlog.put(isp.toLowerCase(), address);
-                    MWLogger.infoLog("Added " + isp + " to the ISP List");
+                    LOGGER.info("Added " + isp + " to the ISP List");
                     MWLogger.mainLog("Added " + isp + " to the ISP List");
                 }
             }

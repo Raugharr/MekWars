@@ -123,7 +123,7 @@ public class GameReport {
         if (buildingTemplate != null) {
             result.append("BL*" + buildingTemplate);
         }
-        MWLogger.infoLog("CR|" + result);
+        LOGGER.info("CR|" + result);
         return result;
     }
 }

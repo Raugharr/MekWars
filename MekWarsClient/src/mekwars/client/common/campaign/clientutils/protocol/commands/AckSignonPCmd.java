@@ -48,7 +48,7 @@ public class AckSignonPCmd extends CProtCommand {
 
 	@Override
 	protected void echo(String input) {
-		MWLogger.infoLog("Signon acknowledged");
+		LOGGER.info("Signon acknowledged");
 		LOGGER.error("Signon acknowledged");
 	}
 }

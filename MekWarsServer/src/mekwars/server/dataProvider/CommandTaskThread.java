@@ -67,7 +67,7 @@ public class CommandTaskThread extends Thread {
             // timestamp is in this format
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
-            MWLogger.infoLog("DataProvider call accepted from "+client.getInetAddress());
+            LOGGER.info("DataProvider call accepted from "+client.getInetAddress());
             BinWriter out = null;
             BufferedReader in = null;
             String cmdStr = "";
@@ -127,7 +127,7 @@ public class CommandTaskThread extends Thread {
                     out.flush();
                 }//end While            
                 try {
-                    MWLogger.infoLog("Closing DataProvider call from "+client.getInetAddress());
+                    LOGGER.info("Closing DataProvider call from "+client.getInetAddress());
                     in.close();
                     if(out != null)
                     	out.close();
@@ -150,7 +150,7 @@ public class CommandTaskThread extends Thread {
                     if(out != null)
                     	out.close();
                     client.close();
-                    MWLogger.infoLog("TimeOut DataProvider call from "+client.getInetAddress());
+                    LOGGER.info("TimeOut DataProvider call from "+client.getInetAddress());
                 }catch(Exception ex){}
                 client = null;
                 return;

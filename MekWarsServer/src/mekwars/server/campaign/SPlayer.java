@@ -1745,7 +1745,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		restock = true;
     		minBVRestock = true;
 
-    		LOGGER.info(getName() + " has gone under BV limit and a restock should occur");
+            LOGGER.info("{} has gone under BV limit and a restock should occur", getName());
     	}
 
     	if( percentBVLimit != -1 && getHangarBVforMC() < getBVResetPointMC() )
@@ -1754,7 +1754,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		percentRestock = true;
     		setBVTracker(0); //return this to default zero. on activation, it will be set to new value.
 
-    		LOGGER.info(getName() + " has gone under % BV limit and a restock should occur");
+            LOGGER.info("{} has gone under % BV limit and a restock should occur", getName());
     	}
 
     	if( minUnitLimit != -1 && getUnitCountMC() < minUnitLimit )
@@ -3418,7 +3418,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         }
 
         // print the player into the info log. only for Debug
-        // MWLogger.infoLog("CSPlayer: " + s);
+        // LOGGER.info("CSPlayer: " + s);
         isLoading = true;
 
         try {

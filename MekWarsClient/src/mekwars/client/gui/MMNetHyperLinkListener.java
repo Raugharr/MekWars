@@ -77,7 +77,7 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 			try
 			{
 				Tooltip = (String)e.getSourceElement().getAttributes().getAttribute(HTML.getAttributeKey("alt"));
-				MWLogger.infoLog(Tooltip);
+				LOGGER.info(Tooltip);
 				if (HSPanel != null)
 					HSPanel.setInfoText(Tooltip);
 			}
@@ -85,15 +85,15 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 			{
 				LOGGER.error("Exception: ", ex);
 			}
-			//MWLogger.infoLog("hyperlinkUpdate fired");
-			//MWLogger.infoLog("     entered->");
+			//LOGGER.info("hyperlinkUpdate fired");
+			//LOGGER.info("     entered->");
 		}
 		else if (e.getEventType() == HyperlinkEvent.EventType.EXITED) {
 			isHovering = false;
 			if (HSPanel != null)
 				HSPanel.setInfoText("");
 			Tooltip = null;
-			//MWLogger.infoLog("     <-exited");
+			//LOGGER.info("     <-exited");
 		}
 		
 		

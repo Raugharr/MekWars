@@ -489,7 +489,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             if (!(e instanceof FileNotFoundException)) {
                 LOGGER.error("Exception: ", e);
             }
-            MWLogger.infoLog("could not read map config file. Will use defaults");
+            LOGGER.info("could not read map config file. Will use defaults");
             return new InnerStellarMapConfig();
         }
     }

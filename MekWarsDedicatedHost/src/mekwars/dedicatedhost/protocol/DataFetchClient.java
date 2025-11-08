@@ -505,13 +505,13 @@ public class DataFetchClient {
      */
     private BinReader openConnection(String cmd, int timeout) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        MWLogger.infoLog("Command: " + cmd);
+        LOGGER.info("Command: " + cmd);
         if (dataSocket == null
                 || dataSocket.isClosed()
                 || dataSocket.isInputShutdown()
                 || dataSocket.isOutputShutdown()) {
             this.closeDataConnection();
-            MWLogger.infoLog("Trying to connect to " + hostAddr + " at port " + dataPort);
+            LOGGER.info("Trying to connect to " + hostAddr + " at port " + dataPort);
             dataSocket = new Socket(hostAddr, dataPort);
             dataSocket.setKeepAlive(true);
         } else {//clean out any old data first.
@@ -523,7 +523,7 @@ public class DataFetchClient {
         if (lastTimestamp == null)
             out.println("", "lasttimestamp");
         else {
-            MWLogger.infoLog("writing timestamp " + sdf.format(lastTimestamp));
+            LOGGER.info("writing timestamp " + sdf.format(lastTimestamp));
             out.println(sdf.format(lastTimestamp), "lasttimestamp");
         }
         out.flush();
@@ -534,7 +534,7 @@ public class DataFetchClient {
             sdf.parse(in.readLine("lasttimestamp"));
         } catch (ParseException e) {
             LOGGER.error("Exception: ", e);
-            MWLogger.infoLog("Timestamp could not be parsed.. left unchanged.");
+            LOGGER.info("Timestamp could not be parsed.. left unchanged.");
         } catch (SocketException se) {
             LOGGER.error("Socket Exception Error: DataFetchClient", se);
             this.closeDataConnection();
@@ -597,7 +597,7 @@ public class DataFetchClient {
         try {
             if (dataSocket == null)
                 return;
-            MWLogger.infoLog("Closing Socket.");
+            LOGGER.info("Closing Socket.");
             dataSocket.shutdownInput();
             dataSocket.shutdownOutput();
             dataSocket.close();

@@ -90,7 +90,7 @@ public class CConnector implements IConnectionListener {
     	if ( message.indexOf("CH%7c%2fc+sendclientdata%23") < 0
     	        && message.indexOf("CH%7c%2fc+sendtomisc%23") < 0
     	        && message.indexOf("/pong") < 0) {
-            MWLogger.infoLog("SENT: " + message);
+            LOGGER.info("SENT: " + message);
         }
       _connectionHandler.queueMessage(message);
     }

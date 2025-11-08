@@ -87,7 +87,7 @@ public class CUnit extends Unit {
         StringTokenizer ST;
         String element;
         String unitDamage = null;
-        MWLogger.infoLog("PDATA: " + data);
+        LOGGER.info("PDATA: " + data);
 
         ST = new StringTokenizer(data, "$");
         element = TokenReader.readString(ST);
