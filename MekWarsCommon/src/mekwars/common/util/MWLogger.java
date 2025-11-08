@@ -33,21 +33,9 @@ public interface MWLogger {
     static void debugLog(String message) {
         LOGGER.debug(message);
     }
-    
-    static void ipLog(String message) {
-        LOGGER.info(message);
-    }
-    
-    static void cmdLog(String message) {
-        LOGGER.error(message);
-    }
 
     static void infoLog(String message) {
         LOGGER.info(message);
-    }
-
-    static void resultsLog(String message) {
-        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, message);
     }
 
     static void gameLog(String message) {

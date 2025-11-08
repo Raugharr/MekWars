@@ -20,6 +20,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class  SendClientDataCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(SendClientDataCommand.class);
+
 	public int getExecutionLevel(){return 0;}
 	public void setExecutionLevel(int i) {}
 	String syntax = "";
@@ -51,8 +53,8 @@ public class  SendClientDataCommand  implements Command {
 				}
 				count++;
 			}
-			MWLogger.ipLog(userData.toString());
-			MWLogger.ipLog(verifyData.toString());
+            LOGGER.info(userData.toString());
+            LOGGER.info(verifyData.toString());
 		}catch (Exception ex){
 			//do nothing
 		}

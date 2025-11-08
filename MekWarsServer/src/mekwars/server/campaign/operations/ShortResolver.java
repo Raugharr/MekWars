@@ -40,6 +40,7 @@ import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.ThreadManager;
@@ -447,7 +448,7 @@ public class ShortResolver {
 
             // stick the result into the human readable result log, per
             // RFE1479311.
-            MWLogger.resultsLog(toSend);
+            LOGGER.info(LogMarkerHolder.RESULTS_MARKER, toSend);
 
             // deal with scrapThread for player, if he has one.
             if (scrapThreads.containsKey(currName)) {
@@ -703,7 +704,7 @@ public class ShortResolver {
         CampaignMain.cm.toUser(toSend, winName, true);
 
         // stick the result into the human readable result log, per RFE1479311.
-        MWLogger.resultsLog(toSend);
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, toSend);
 
         // update operations and set unbusy. we know the loser isn't
         // online, so we only need to send to the winner.
@@ -785,7 +786,7 @@ public class ShortResolver {
         // stick the result into the human readable result log, per RFE1479311.
 		MWLogger.debugLog("Autoreporting debug ["+ so.getShortID() + "]:" + "stick the result into the human readable result log");
 
-        MWLogger.resultsLog(toSend);
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, toSend);
 
         /*
          * Set the finished strings for the ShortOperation.

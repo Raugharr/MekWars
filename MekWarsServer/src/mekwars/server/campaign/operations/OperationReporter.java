@@ -118,15 +118,15 @@ import org.apache.logging.log4j.Logger;
 	
 	public void commit() {
 		opData.setEndTime(System.currentTimeMillis());
-				
-		MWLogger.resultsLog("Operation Finished: ");
-		MWLogger.resultsLog("  OpType: " + opData.getOpType());
-		MWLogger.resultsLog("  Planet: " + opData.getPlanet() + ", Terrain: " + opData.getTerrain() + ", Theme: " + opData.getTheme());
-		MWLogger.resultsLog("  Attacker(s): " + opData.getAttackers() + " (" + opData.getAttackerSize() + " units)  --  Defender(s): " + opData.getDefenders() + " (" + opData.getDefenderSize() + " units)");
-		MWLogger.resultsLog("  BVs: Attacker: " + opData.getAttackerStartBV() + " / " + opData.getAttackerEndBV() + "  --  Defender: " + opData.getDefenderStartBV() + " / " + opData.getDefenderEndBV());
-		MWLogger.resultsLog("  Attacker Won: " + Boolean.toString(opData.attackerIsWinner()));
-		MWLogger.resultsLog("  Winner(s): " + opData.getWinners() + "  --  Loser(s): " + opData.getLosers());
-		MWLogger.resultsLog("  Game Length: " + opData.getHumanReadableGameLength());
+
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "Operation Finished: ");
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  OpType: " + opData.getOpType());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Planet: " + opData.getPlanet() + ", Terrain: " + opData.getTerrain() + ", Theme: " + opData.getTheme());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Attacker(s): " + opData.getAttackers() + " (" + opData.getAttackerSize() + " units)  --  Defender(s): " + opData.getDefenders() + " (" + opData.getDefenderSize() + " units)");
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  BVs: Attacker: " + opData.getAttackerStartBV() + " / " + opData.getAttackerEndBV() + "  --  Defender: " + opData.getDefenderStartBV() + " / " + opData.getDefenderEndBV());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Attacker Won: " + opData.attackerIsWinner());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Winner(s): " + opData.getWinners() + "  --  Loser(s): " + opData.getLosers());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Game Length: " + opData.getHumanReadableGameLength());
 	}
 	
 	public void closeOperation(boolean draw, boolean attackerWon) {

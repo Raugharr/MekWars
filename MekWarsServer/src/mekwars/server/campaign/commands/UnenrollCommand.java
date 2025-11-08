@@ -22,15 +22,16 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SPlayer;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UnenrollCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(UnenrollCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -114,7 +115,7 @@ public class UnenrollCommand implements Command {
 		//tell the mods and add to iplog.0
 		InetAddress ip = MWServ.getInstance().getIP(Username);
 		//MWLogger.modLog(Username + " unenrolled from the campaign (IP: " + ip + ").");
-		MWLogger.ipLog("UNENROLL: " + Username + " IP: " + ip);
+        LOGGER.info("UNENROLL: {} IP: {}", Username, ip);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " unenrolled from the campaign (IP: " + ip + ").");
 	}//end process
 	

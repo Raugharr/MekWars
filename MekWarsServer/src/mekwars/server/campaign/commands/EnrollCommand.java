@@ -28,8 +28,12 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.NewbieHouse;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class  EnrollCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(EnrollCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -163,7 +167,7 @@ public class  EnrollCommand  implements Command {
 		//tell the mods and add to the IP log
 		InetAddress ip = MWServ.getInstance().getIP(Username);
 		//MWLogger.modLog(Username + " enrolled in the campaign (IP: " + ip + ").");
-		MWLogger.ipLog("ENROLL: " + Username + " IP: " + ip);
+        LOGGER.info("ENROLL: {} IP: {}", Username, ip);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " enrolled in the campaign (IP: " + ip + ").");
 
 	}//end process()

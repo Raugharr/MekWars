@@ -44,6 +44,7 @@ import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.operations.Operation;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
@@ -1514,7 +1515,7 @@ public class ShortOperation implements Comparable<Object> {
                     toStore.append(")");
                 }
             }
-            MWLogger.resultsLog(toStore.toString());
+            LOGGER.info(LogMarkerHolder.RESULTS_MARKER, toStore.toString());
 
             /*
              * send a Finished Game entry to faction mates. same as when

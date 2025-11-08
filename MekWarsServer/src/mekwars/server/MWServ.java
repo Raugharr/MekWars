@@ -187,7 +187,7 @@ public class MWServ {
         MWLogger.mainLog("Initializing log subsystem. Touching log files.");
         MWLogger.mainLog("Main channel log touched.");
         MWLogger.gameLog("Game log touched.");
-        MWLogger.cmdLog("Command log touched.");
+        LOGGER.error("Command log touched.");
         LOGGER.info(LogMarkerHolder.PM_MARKER, "Private messages (PM) log touched.");
         LOGGER.info("Black Market (BM) log touched.");
         MWLogger.infoLog("Server info log touched.");
@@ -291,8 +291,8 @@ public class MWServ {
         InetAddress hisip = getIP(name);
         MWChatClient client = myCommunicator.getClient(name);
 
-        
-        MWLogger.ipLog("Connection from " + getIP(name) + " (" + name + ")");
+
+        LOGGER.info("Connection from {} ({})", getIP(name), name);
         // Double account check
         // Don't worry about deds or nobodies.
         if (!originalName.startsWith("[Dedicated]") && !originalName.startsWith("Nobody")) {
