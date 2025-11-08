@@ -37,7 +37,9 @@ import org.apache.logging.log4j.Logger;
  * @author Helge Richter
  *  
  */
-public class  SellCommand  implements Command {
+public class SellCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(SellCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -212,7 +214,7 @@ public class  SellCommand  implements Command {
 		if (! CampaignMain.cm.getBooleanConfig("HiddenBMUnits")) {
 			CampaignMain.cm.doSendHouseMail(p.getMyHouse(), "NOTE", p.getName() + " added a unit to the market [" + unitToSell.getModelName() + "].");
 		}
-		MWLogger.bmLog(p.getName() + " added a " + unitToSell.getModelName() + ". Asking: " + minBid + ". Length: " + salesTicks);
+        LOGGER.info("{} added a {}. Asking: {}. Length: {}", p.getName(), unitToSell.getModelName(), minBid, salesTicks);
 				
 	}//end process()
 }//end SellCommand.java

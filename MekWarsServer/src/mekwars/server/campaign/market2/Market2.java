@@ -553,7 +553,7 @@ public class Market2 {
 						// send the unit to its new owner, and log the transition
 						sellingActor.removeUnit(unitForSale, false);//BM units already removed from the SHouse display
 						buyingActor.addUnit(unitForSale, true, true);
-						MWLogger.bmLog(winningBid.getBidderName()+ " bought a " + currList.getListedModelName()+ " from " + currList.getSellerName() + " for "+ winningBidAmt);
+                        LOGGER.info("{} bought a {} from {} for {}", winningBid.getBidderName(), currList.getListedModelName(), currList.getSellerName(), winningBidAmt);
 					
 						/*
 						 * Add to listings to remove. The seller will be non-null, but the unit

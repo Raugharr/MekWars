@@ -46,10 +46,6 @@ public interface MWLogger {
         LOGGER.info(message);
     }
 
-    static void bmLog(String message) {
-        LOGGER.info(message);
-    }
-
     static void resultsLog(String message) {
         LOGGER.info(LogMarkerHolder.RESULTS_MARKER, message);
     }

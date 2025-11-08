@@ -189,7 +189,7 @@ public class MWServ {
         MWLogger.gameLog("Game log touched.");
         MWLogger.cmdLog("Command log touched.");
         LOGGER.info(LogMarkerHolder.PM_MARKER, "Private messages (PM) log touched.");
-        MWLogger.bmLog("Black Market (BM) log touched.");
+        LOGGER.info("Black Market (BM) log touched.");
         MWLogger.infoLog("Server info log touched.");
         LOGGER.warn("Server warnings log touched.");
         MWLogger.modLog("Moderators log touched.");
