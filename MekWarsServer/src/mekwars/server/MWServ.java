@@ -191,7 +191,7 @@ public class MWServ {
         LOGGER.info(LogMarkerHolder.PM_MARKER, "Private messages (PM) log touched.");
         MWLogger.bmLog("Black Market (BM) log touched.");
         MWLogger.infoLog("Server info log touched.");
-        MWLogger.warnLog("Server warnings log touched.");
+        LOGGER.warn("Server warnings log touched.");
         MWLogger.modLog("Moderators log touched.");
         MWLogger.tickLog("Tick report log touched.");
 
@@ -710,7 +710,7 @@ public class MWServ {
                 getCampaign().addInProgressUpdate(result, name);
             } else {
                 clientSend("CH|Unknown command. Please make sure your client is up to date.", name);
-                MWLogger.warnLog("Got a strange command, " + task + ", from " + name);
+                LOGGER.warn("Got a strange command, {}, from {}", task, name);
             }
         } catch (Exception ex) {
             // The GB doesn't arrive at the server because of the client
@@ -719,8 +719,7 @@ public class MWServ {
                 // Most propably an out of date client. Send him the request to
                 // update
                 clientSend("CH|Your Client sent a false packet or caused a server error. You probably entered an illegal server command.", name);
-                LOGGER.error("False packet/illegal command (from " + name + "):");
-                LOGGER.error("Exception: ", ex);
+                LOGGER.error("False packet/illegal command (from {}):", name, ex);
             }
         }
     }
@@ -1106,7 +1105,7 @@ public class MWServ {
                     MWLogger.infoLog("Added " + line + " to the list of banned IPs");
                     MWLogger.mainLog("Added " + line + " to the list of banned IP's");
                 } else {
-                    MWLogger.warnLog("Importing IP bans; offending line: " + line);
+                    LOGGER.warn("Importing IP bans; offending line: {}", line);
                 }
             }
             dis.close();
@@ -1140,7 +1139,7 @@ public class MWServ {
                     MWLogger.infoLog("Added " + toBan + " to the banlist (for " + howLong + ")");
                     MWLogger.mainLog("Added " + toBan + " to the banlist (for " + howLong + ")");
                 } else {
-                    MWLogger.warnLog("Initial bans warning: " + toBan + " / " + howLong);
+                    LOGGER.warn("Initial bans warning: {} / {}", toBan, howLong);
                 }
             }
             dis.close();
