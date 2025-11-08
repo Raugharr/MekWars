@@ -85,8 +85,4 @@ public interface MWLogger {
     static void debugLog(Exception e) {
         LOGGER.info("Exception: ", e);
     }
-
-    static void infoLog(Exception e) {
-        LOGGER.info("Exception: ", e);
-    }
 }
