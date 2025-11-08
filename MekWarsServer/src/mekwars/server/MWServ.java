@@ -47,6 +47,7 @@ import megamek.common.MechSummaryCache;
 import mekwars.common.MMGame;
 import mekwars.common.comm.Command;
 import mekwars.common.comm.ServerCommand;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
@@ -187,7 +188,7 @@ public class MWServ {
         MWLogger.mainLog("Main channel log touched.");
         MWLogger.gameLog("Game log touched.");
         MWLogger.cmdLog("Command log touched.");
-        MWLogger.pmLog("Private messages (PM) log touched.");
+        LOGGER.info(LogMarkerHolder.PM_MARKER, "Private messages (PM) log touched.");
         MWLogger.bmLog("Black Market (BM) log touched.");
         MWLogger.infoLog("Server info log touched.");
         MWLogger.warnLog("Server warnings log touched.");
@@ -915,7 +916,6 @@ public class MWServ {
     }
 
     public void doStoreMail(String s, String name) {
-        // MWLogger.mainLog("Debug: " + s);
         StringTokenizer st = new StringTokenizer(s, ",");
         String target = "";
         String text = "";
@@ -940,12 +940,12 @@ public class MWServ {
 
                 if (campaign.getPlayer(name) != null) {
                     if (campaign.getPlayer(target) != null) {
-                        MWLogger.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + "[" + campaign.getPlayer(target).getMyHouse().getAbbreviation() + "]: " + mailtext);
+                        LOGGER.info(LogMarkerHolder.PM_MARKER, name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + "[" + campaign.getPlayer(target).getMyHouse().getAbbreviation() + "]: " + mailtext);
                     } else {
-                        MWLogger.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + ": " + mailtext);
+                        LOGGER.info(LogMarkerHolder.PM_MARKER, name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + ": " + mailtext);
                     }
                 } else {
-                    MWLogger.pmLog(name + " -> " + target + ": " + mailtext);
+                    LOGGER.info(LogMarkerHolder.PM_MARKER, name + " -> " + target + ": " + mailtext);
                 }
 
             }

@@ -69,8 +69,4 @@ public interface MWLogger {
     static void warnLog(String message) {
         LOGGER.warn(message);
     }
-
-    static void pmLog(String message) {
-        LOGGER.info(LogMarkerHolder.PM_MARKER, message);
-    }
 }
