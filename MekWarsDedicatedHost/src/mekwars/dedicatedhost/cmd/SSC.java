@@ -19,9 +19,12 @@ import java.util.StringTokenizer;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.dedicatedhost.MWDedHost;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SSC extends Command {
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(SSC.class);
+
 	public SSC(MWDedHost mwclient) {
 		super(mwclient);
 	}
@@ -39,7 +42,7 @@ public class SSC extends Command {
 	            mwclient.getServerConfigs().put(TokenReader.readString(st), TokenReader.readString(st));
 	        }
 	    }catch( Exception ex) {
-	        MWLogger.errLog(ex);
+	        LOGGER.error("Exception: ", ex);
 	    }
 		//mwclient.setWaiting(false);
 	}//end execute

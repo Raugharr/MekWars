@@ -34,12 +34,15 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Helge Richter
  */
 public class DonateCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(DonateCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -97,7 +100,7 @@ public class DonateCommand implements Command {
         if (m.getModelName().startsWith("Error") || m.getModelName().startsWith("OMG")){
             CampaignMain.cm.toUser("AM:You tried to donate an Error unit. The unit was auto-scrapped and the staff was alerted.",Username,true);
             CampaignMain.cm.doSendModMail("NOTE",Username + " tried to donate an OMG. Unit auto-scrapped. Data: " + m.getProducer());
-            MWLogger.errLog(Username + " tried to donate an OMG. Unit auto-scrapped. Data: " + m.getProducer());
+            LOGGER.error(Username + " tried to donate an OMG. Unit auto-scrapped. Data: " + m.getProducer());
             p.removeUnit(unitid, true);
             return;
         }

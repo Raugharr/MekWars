@@ -36,6 +36,8 @@ import mekwars.common.campaign.operations.DefaultOperation;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MMNetXStream;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -45,7 +47,7 @@ import mekwars.common.util.MWLogger;
  *
  */
 public class OP extends Command {
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(OP.class);
 	public OP(MWClient client) {
 		super(client);
 	}
@@ -240,7 +242,7 @@ public class OP extends Command {
 			}			
 			break;
 		default:
-			MWLogger.errLog("Default case reached in OP command");
+			LOGGER.error("Default case reached in OP command");
 			break;
 		}
 

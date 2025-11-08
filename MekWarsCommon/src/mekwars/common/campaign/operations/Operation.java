@@ -43,9 +43,11 @@ import mekwars.common.MWXMLWriter;
 import mekwars.common.MWXmlSerializable;
 import mekwars.common.util.MMNetXStream;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Operation implements MWXmlSerializable {
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(Operation.class);
 	//IVARS
 	
 	/*
@@ -112,24 +114,23 @@ public class Operation implements MWXmlSerializable {
 	 * and returned.
 	 */
 	public String getValue(String valToGet, boolean log) {
-		
 		//look in the short list every time
 		String toReturn = (String)opValues.get(valToGet);
 		
 		//if not present, load a default
-		if (toReturn == null)
-			toReturn = opsDefaults.getDefault(valToGet);
+		if (toReturn == null) {
+            toReturn = opsDefaults.getDefault(valToGet);
+        }
 		
 		//catastrophic failue. sysexit.
-		if (toReturn == null && log) {
-			MWLogger.errLog("Failed getting value \"" + valToGet + "\" from " + this.getName() + " and DefaultOp. Returning null.");
-			try{
-				throw new Exception();
-			}catch(Exception ex){
-				MWLogger.errLog(ex);
-			}
-		}
-			
+        if (toReturn == null && log) {
+            LOGGER.error("Failed getting value {} from {} and DefaultOp. Returning null.", valToGet, this.getName());
+            try {
+                throw new Exception();
+            } catch (Exception ex) {
+                LOGGER.error("Exception: ", ex);
+            }
+        }
 		return toReturn;
 	}
 	

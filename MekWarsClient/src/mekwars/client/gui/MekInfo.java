@@ -55,6 +55,8 @@ import megamek.client.ui.swing.util.RotateFilter;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Tank;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -62,10 +64,8 @@ import megamek.common.Tank;
  */
 
 public class MekInfo extends JPanel {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MekInfo.class);
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 4308503800966118202L;
     protected static MechTileset mt;
     private JLabel lblName = new JLabel();
@@ -518,7 +518,7 @@ public class MekInfo extends JPanel {
             try {
                 mt.loadFromFile("mechset.txt");
             } catch (IOException ex) {
-                MWLogger.errLog("Unable to read data/images/units/mechset.txt");
+                LOGGER.error("Unable to read data/images/units/mechset.txt");
             }
         }// end if(null tileset)
         //@Salient - from what i can tell from the megamek code, passing in the component does nothing.
@@ -570,18 +570,18 @@ public class MekInfo extends JPanel {
         }
         catch (Exception ex)
         {
-        	MWLogger.errLog(ex);   	
+        	LOGGER.error("Exception: ", ex);
         	try 
         	{
         	    File pathToFile = new File("./data/images/ImageMissing.png");
         	    unit = ImageIO.read(pathToFile);
         	    unit = unit.getScaledInstance(84, 72, Image.SCALE_DEFAULT);
-        	    MWLogger.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
+        	    LOGGER.error("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
         	} 
         	catch (IOException ex2) 
         	{
-        	    MWLogger.errLog("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
-        	    MWLogger.errLog(ex2);
+        	    LOGGER.error("incorrect image filename in mechset.txt for " + cm.getModelName() + " " + CUnit.getTypeClassDesc(cm.getType()));
+        	    LOGGER.error("Exception: ", ex2);
         	}
         }
 
@@ -687,11 +687,11 @@ public class MekInfo extends JPanel {
             try {
                 pgMek.grabPixels();
             } catch (InterruptedException e) {
-                MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image." + e.getMessage());
+                LOGGER.error("EntityImage.applyColor(): Failed to grab pixels for mech image." + e.getMessage());
                 return image;
             }
             if ((pgMek.getStatus() & ImageObserver.ABORT) != 0) {
-                MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
+                LOGGER.error("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
                 return image;
             }
 
@@ -700,11 +700,11 @@ public class MekInfo extends JPanel {
                 try {
                     pgCamo.grabPixels();
                 } catch (InterruptedException e) {
-                    MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for camo image." + e.getMessage());
+                    LOGGER.error("EntityImage.applyColor(): Failed to grab pixels for camo image." + e.getMessage());
                     return image;
                 }
                 if ((pgCamo.getStatus() & ImageObserver.ABORT) != 0) {
-                    MWLogger.errLog("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
+                    LOGGER.error("EntityImage.applyColor(): Failed to grab pixels for mech image. ImageObserver aborted.");
                     return image;
                 }
             }

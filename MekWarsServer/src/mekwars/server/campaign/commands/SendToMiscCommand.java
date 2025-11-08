@@ -19,10 +19,11 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
-public class SendToMiscCommand implements Command {
-	
+public class  SendToMiscCommand  implements Command {
 	int accessLevel = 200;
 	public int getExecutionLevel(){return 200;}
 	public void setExecutionLevel(int i) {accessLevel = 200;}

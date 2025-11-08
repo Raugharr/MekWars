@@ -25,8 +25,7 @@ import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 
-public class HouseStatusCommand implements Command {
-	
+public class  HouseStatusCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

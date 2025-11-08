@@ -67,16 +67,16 @@ import megamek.common.Crew;
 import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.Infantry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * SHouse Status Panel
  */
 
 public class CHSPanel extends JPanel {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CHSPanel.class);
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -6985292870326367798L;
     MWClient mwclient;
     CPlayer thePlayer;
@@ -463,14 +463,14 @@ public class CHSPanel extends JPanel {
         // if weight and type map is null, there is no way to change the
         // factory.
         if (weightAndTypeMap == null) {
-            MWLogger.errLog("Error updating factory: null treemap at weight & type.");
+            LOGGER.error("Error updating factory: null treemap at weight & type.");
             return;
         }
 
         // no factory with matching name on planet. return.
         String oldFactoryInfo = weightAndTypeMap.get(planet + "$" + factoryName);
         if (oldFactoryInfo == null) {
-            MWLogger.errLog("Error updating factory: null oldFactory.");
+            LOGGER.error("Error updating factory: null oldFactory.");
             return;
         }
 
@@ -804,7 +804,7 @@ public class CHSPanel extends JPanel {
         if (s == null) {
             hsButtonSpringPanel.setVisible(true);
             lblInfo.setVisible(false);
-        } else if (s.equals("")) {
+        } else if (s.isEmpty()) {
             hsButtonSpringPanel.setVisible(true);
             lblInfo.setVisible(false);
         } else {

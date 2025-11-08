@@ -22,7 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class CampaignOptions {
-    private static final Logger logger = LogManager.getLogger(CampaignOptions.class);
+    private static final Logger LOGGER = LogManager.getLogger(CampaignOptions.class);
 
     private DefaultServerOptions defaultOptions;
     private Properties config = new Properties();
@@ -47,7 +47,7 @@ public class CampaignOptions {
             ArrayList<String> keysToRemove = new ArrayList<String>();
             for (Object key : config.keySet()) {
                 if (!defaultOptions.getServerDefaults().keySet().contains(key) && !((String)key).endsWith("RewardPointMultiplier")) {
-                    logger.error("Key " + (String)key + " does not exist in DefaultServerConfig.  Pruning from configs.");
+                    LOGGER.error("Key " + (String)key + " does not exist in DefaultServerConfig.  Pruning from configs.");
                     keysToRemove.add((String) key);
                 }
             }
@@ -57,14 +57,14 @@ public class CampaignOptions {
             }
             saveConfigureFile(config, configFile);
         } catch (Exception ex) {
-            logger.error("Problems with loading campaign config");
-            logger.error(ex);
+            LOGGER.error("Problems with loading campaign config");
+            LOGGER.error("Exception: ", ex);
             defaultOptions.createConfig(configFile);
             try {
                 config.load(new FileInputStream(configFile));
             } catch (Exception ex1) {
-                logger.error("Problems with loading campaing config from defaults");
-                logger.error(ex1);
+                LOGGER.error("Problems with loading campaing config from defaults");
+                LOGGER.error(ex1);
                 System.exit(1);
             }
 
@@ -116,7 +116,7 @@ public class CampaignOptions {
     public String getConfig(String key) {
         if (config.getProperty(key) == null) {
             if (defaultOptions.getServerDefaults().getProperty(key) == null) {
-                logger.error("You're missing the config variable: " + key + " in campaignconfig!");
+                LOGGER.error("You're missing the config variable: " + key + " in campaignconfig!");
                 return "-1";
             }
             return defaultOptions.getServerDefaults().getProperty(key).trim();
@@ -135,9 +135,9 @@ public class CampaignOptions {
             config.store(ps, "Server Config");
             ps.close();
         } catch (FileNotFoundException fe) {
-            logger.error(fileName + " not found");
+            LOGGER.error(fileName + " not found");
         } catch (Exception ex) {
-            logger.error(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 

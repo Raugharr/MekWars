@@ -17,9 +17,10 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class ListServerOpFlagsCommand implements Command {
-	
+public class  ListServerOpFlagsCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

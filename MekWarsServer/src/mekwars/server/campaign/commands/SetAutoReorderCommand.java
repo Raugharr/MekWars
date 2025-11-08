@@ -23,9 +23,11 @@ import mekwars.server.MWServ;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class SetAutoReorderCommand implements Command {
-	
+public class  SetAutoReorderCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger( SetAutoReorderCommand .class);
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

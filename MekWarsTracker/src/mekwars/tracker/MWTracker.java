@@ -251,7 +251,7 @@ public final class MWTracker {
                 try {
                     server.close();
                 } catch (IOException e) {
-                    MWLogger.errLog(e);
+                    LOGGER.error("Exception: ", e);
                 }
             }
             

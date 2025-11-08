@@ -29,11 +29,12 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WholeNumberField extends JTextField {
-    /**
-     * 
-     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(WholeNumberField.class);
+
     private static final long serialVersionUID = 3640879107242018821L;
     private Toolkit toolkit;
     private NumberFormat integerFormatter;
@@ -87,7 +88,7 @@ public class WholeNumberField extends JTextField {
                     result[j++] = source[i];
                 else {
                     toolkit.beep();
-                    MWLogger.errLog("insertString: " + source[i]);
+                    LOGGER.error("insertString: " + source[i]);
                 }
             }
             super.insertString(offs, new String(result, 0, j), a);

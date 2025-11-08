@@ -37,12 +37,12 @@ import mekwars.common.util.Position;
 import mekwars.common.util.TokenReader;
 import mekwars.server.campaign.data.TimeUpdatePlanet;
 import mekwars.server.campaign.util.SerializedMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparable<Object> {
+    private static final Logger LOGGER = LogManager.getLogger(SPlanet.class);
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -2266871107987235842L;
     private SHouse owner = null;
 
@@ -154,13 +154,13 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
                     if (h != null)
                         influence.put(h.getId(), HouseInf);
                     else
-                        MWLogger.errLog("House not found: " + HouseName);
+                        LOGGER.error("House not found: " + HouseName);
                 }
             }
             setInfluence(new Influences(influence));
         } catch (RuntimeException ex) {
-            MWLogger.errLog("Problem on Planet: " + this.getName());
-            MWLogger.errLog(ex);
+            LOGGER.error("Problem on Planet: " + this.getName());
+            LOGGER.error("Exception: ", ex);
         }
         int Envs = TokenReader.readInt(ST);
         for (int i = 0; i < Envs; i++) {
@@ -209,8 +209,8 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             setTimestamp(sdf.parse(TokenReader.readString(ST)));
         } catch (Exception ex) {
             // No biggy, but will cause senseless Data transfer, so:
-            MWLogger.errLog("The following excepion on planet " + getName() + " is not critical, but will cause useless bandwith usage: please fix!");
-            MWLogger.errLog(ex);
+            LOGGER.error("The following excepion on planet " + getName() + " is not critical, but will cause useless bandwith usage: please fix!");
+            LOGGER.error("Exception: ", ex);
             setTimestamp(new Date(System.currentTimeMillis()));
         }
 
@@ -403,7 +403,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
     public SHouse checkOwner() {
 
         if (getInfluence() == null) {
-            MWLogger.errLog("getINF == null Planet: " + getName());
+            LOGGER.error("getINF == null Planet: " + getName());
             return null;
         }
 

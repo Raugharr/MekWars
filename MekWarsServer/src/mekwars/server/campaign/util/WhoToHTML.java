@@ -11,8 +11,12 @@ import java.util.TreeMap;
 
 import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class WhoToHTML {
+    private static final Logger LOGGER = LogManager.getLogger(WhoToHTML.class);
+
 	private HashMap<String,DataEntry> players = null;
 	private String outputPath;
 	
@@ -49,9 +53,8 @@ public class WhoToHTML {
 			fw.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			MWLogger.errLog("IOException in WhoToHTML");
-			MWLogger.errLog(e);
-		} 
+			LOGGER.error("IOException in WhoToHTML", e);
+		}
 		
 		return;
 	}

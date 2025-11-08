@@ -17,6 +17,9 @@
 package mekwars.common.util;
 
 import mekwars.common.util.HTMLConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,6 +29,8 @@ import java.io.PrintWriter;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class BinWriter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BinWriter.class);
+
     private PrintWriter out;
     private boolean debug;
     private BinWriter dataBlock = null;
@@ -38,12 +43,13 @@ public class BinWriter {
     
     public BinWriter(PrintWriter out, String debugFilename) {
         try {
+            //TODO: there is no system property called line.seperator (misspelled) - this does nothing
             String ls = System.getProperty("line.seperator");
             System.setProperty("line.seperator", String.valueOf((char) 13));
             this.out = new PrintWriter(new TeePrinter(out, new FileWriter(debugFilename)));
             System.setProperty("line.seperator", ls);
         } catch (IOException e) {
-            MWLogger.errLog(e);
+            LOGGER.error("Exception ", e);
             this.out = new PrintWriter(out);
         }
         debug = true;

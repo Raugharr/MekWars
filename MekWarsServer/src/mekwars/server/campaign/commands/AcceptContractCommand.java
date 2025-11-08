@@ -23,8 +23,7 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.mercenaries.ContractInfo;
 import mekwars.server.campaign.mercenaries.MercHouse;
 
-public class AcceptContractCommand implements Command {
-	
+public class  AcceptContractCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

@@ -24,13 +24,15 @@ import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Torren
  * Ded MegaMekLog
  */
 public class DMML extends Command {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(DMML.class);
 	/**
 	 * @see Command#Command(MMClient)
 	 */
@@ -63,7 +65,7 @@ public class DMML extends Command {
     			p.flush();
     			p.close();
         	}catch(Exception ex) {
-        		MWLogger.errLog(ex);
+        		LOGGER.error("Exception: ", ex);
         	}
         }
 	}

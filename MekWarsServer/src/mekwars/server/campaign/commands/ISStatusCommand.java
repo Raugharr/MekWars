@@ -28,8 +28,7 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.util.PlanetNameComparator;
 
-public class ISStatusCommand implements Command {
-	
+public class  ISStatusCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

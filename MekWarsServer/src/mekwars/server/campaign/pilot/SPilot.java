@@ -44,15 +44,16 @@ import mekwars.server.campaign.pilot.skills.SPilotSkill;
 import mekwars.server.campaign.pilot.skills.TraitSkill;
 import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
 import mekwars.server.campaign.util.SerializedMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Helge Richter
  *
  */
 public class SPilot extends Pilot {
-    /**
-     *
-     */
+    private static final Logger LOGGER = LogManager.getLogger(SPilot.class);
+
     private int originalID;
     private int pickedUpID;
     private boolean death = false;
@@ -552,8 +553,8 @@ public class SPilot extends Pilot {
                 setPilotId(CampaignMain.cm.getAndUpdateCurrentPilotID());
             }
         } catch (Exception ex) {
-            MWLogger.errLog("Error loading Pilot " + getName());
-            MWLogger.errLog(ex);
+            LOGGER.error("Error loading Pilot " + getName());
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -631,7 +632,7 @@ public class SPilot extends Pilot {
             }
 
             String scrapFile = "/pilotcapturemessagestoowner.txt";
-            // MWLogger.errLog(folder.getPath()+scrapFile);
+            // LOGGER.error(folder.getPath()+scrapFile);
             FileInputStream fis = new FileInputStream(folder.getPath() + scrapFile);
             dis = new BufferedReader(new InputStreamReader(fis));
             int messages = Integer.parseInt(dis.readLine());
@@ -651,7 +652,7 @@ public class SPilot extends Pilot {
         } catch (FileNotFoundException fnfn) {
             return getName() + " was captured by enemy forces after fleeing the " + unit.getModelName() + ".";
         } catch (Exception e) {
-            MWLogger.errLog("A problem occured with your pilotcapturemessagestoowner File!");
+            LOGGER.error("A problem occured with your pilotcapturemessagestoowner File!");
             return getName() + " was captured by enemy forces after fleeing the " + unit.getModelName() + ".";
         } finally {
         	if (dis != null) {
@@ -659,8 +660,8 @@ public class SPilot extends Pilot {
 					dis.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					MWLogger.errLog("Unable to close reader in GetPilotCaptureMessageToOwner");
-					MWLogger.errLog(e.getMessage());
+					LOGGER.error("Unable to close reader in GetPilotCaptureMessageToOwner");
+					LOGGER.error(e.getMessage());
 				}
         	}
         }
@@ -683,7 +684,7 @@ public class SPilot extends Pilot {
             }
 
             String scrapFile = "/pilotcaptureanddefectedmessages.txt";
-            // MWLogger.errLog(folder.getPath()+scrapFile);
+            // LOGGER.error(folder.getPath()+scrapFile);
             FileInputStream fis = new FileInputStream(folder.getPath() + scrapFile);
             dis = new BufferedReader(new InputStreamReader(fis));
             int messages = Integer.parseInt(dis.readLine());
@@ -704,7 +705,7 @@ public class SPilot extends Pilot {
         } catch (FileNotFoundException fnfn) {
             return getName() + " was rescued from his unit by our infantry and has decided to join " + house.getColoredNameAsLink() + ".";
         } catch (Exception e) {
-            MWLogger.errLog("A problem occured with your pilotcapturemessagesdefect File!");
+            LOGGER.error("A problem occured with your pilotcapturemessagesdefect File!");
             return getName() + " was rescued from his unit by our infantry and has decided to join " + house.getColoredNameAsLink() + ".";
         } finally {
         	if (dis != null) {
@@ -712,8 +713,8 @@ public class SPilot extends Pilot {
 					dis.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					MWLogger.errLog("Unable to close reader in GetPilotCaptureAndDefectedMessage");
-					MWLogger.errLog(e.getMessage());
+					LOGGER.error("Unable to close reader in GetPilotCaptureAndDefectedMessage");
+					LOGGER.error(e.getMessage());
 				}
         	}
         }
@@ -735,7 +736,7 @@ public class SPilot extends Pilot {
             }
 
             String scrapFile = "/pilotcaptureandremovedmessages.txt";
-            // MWLogger.errLog(folder.getPath()+scrapFile);
+            // LOGGER.error(folder.getPath()+scrapFile);
             FileInputStream fis = new FileInputStream(folder.getPath() + scrapFile);
             dis = new BufferedReader(new InputStreamReader(fis));
             int messages = Integer.parseInt(dis.readLine());
@@ -755,7 +756,7 @@ public class SPilot extends Pilot {
         } catch (FileNotFoundException fnfn) {
             return getName() + " captured by our infantry transferred to HQ for interrogation.";
         } catch (Exception e) {
-            MWLogger.errLog("A problem occured with your pilotcapturemessagesdefect File!");
+            LOGGER.error("A problem occured with your pilotcapturemessagesdefect File!");
             return getName() + " captured by our infantry transferred to HQ for interrogation.";
         } finally {
         	if (dis != null) {
@@ -763,8 +764,8 @@ public class SPilot extends Pilot {
 					dis.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					MWLogger.errLog("Unable to close reader in GetPilotCaptureAndRemoveMessage");
-					MWLogger.errLog(e.getMessage());
+					LOGGER.error("Unable to close reader in GetPilotCaptureAndRemoveMessage");
+					LOGGER.error(e.getMessage());
 				}
         	}
         }
@@ -787,7 +788,7 @@ public class SPilot extends Pilot {
             }
 
             String scrapFile = "/pilotrescuemessages.txt";
-            // MWLogger.errLog(folder.getPath()+scrapFile);
+            // LOGGER.error(folder.getPath()+scrapFile);
             FileInputStream fis = new FileInputStream(folder.getPath() + scrapFile);
             dis = new BufferedReader(new InputStreamReader(fis));
             int messages = Integer.parseInt(dis.readLine());
@@ -807,7 +808,7 @@ public class SPilot extends Pilot {
         } catch (FileNotFoundException fnfn) {
             return getName() + " hiked back to base.";
         } catch (Exception e) {
-            MWLogger.errLog("A problem occured with your pilotcapturemessages File!");
+            LOGGER.error("A problem occured with your pilotcapturemessages File!");
             return getName() + " hiked back to base.";
         } finally {
         	if (dis != null) {
@@ -815,8 +816,8 @@ public class SPilot extends Pilot {
 					dis.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					MWLogger.errLog("Unable to close reader in GetPilotRescueMessage");
-					MWLogger.errLog(e.getMessage());
+					LOGGER.error("Unable to close reader in GetPilotRescueMessage");
+					LOGGER.error(e.getMessage());
 				}
         	}
         }
@@ -849,15 +850,15 @@ public class SPilot extends Pilot {
                 pilotid--;
             }
         } catch (Exception e) {
-            MWLogger.errLog("A problem occured with your Pilotnames File!");
+            LOGGER.error("A problem occured with your Pilotnames File!");
         } finally {
         	if (dis != null) {
         		try {
 					dis.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					MWLogger.errLog("Unable to close reader in GetRandomPilotName");
-					MWLogger.errLog(e.getMessage());
+					LOGGER.error("Unable to close reader in GetRandomPilotName");
+					LOGGER.error(e.getMessage());
 				}
         	}
         }

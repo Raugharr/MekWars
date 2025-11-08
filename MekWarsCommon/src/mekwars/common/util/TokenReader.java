@@ -29,7 +29,7 @@ public class TokenReader{
         try{
             return st.nextToken().trim();
         }catch(Exception ex){
-            //MWLogger.errLog(ex);
+            //LOGGER.error("Exception: ", ex);
             return "-1";
         }
     }
@@ -38,7 +38,7 @@ public class TokenReader{
         try{
             return Integer.parseInt(st.nextToken());
         }catch(Exception ex){
-            //MWLogger.errLog(ex);
+            //LOGGER.error("Exception: ", ex);
             return -1;
         }
     }
@@ -47,7 +47,7 @@ public class TokenReader{
         try{
             return Long.parseLong(st.nextToken());
         }catch(Exception ex){
-            //MWLogger.errLog(ex);
+            //LOGGER.error("Exception: ", ex);
             return -1;
         }
     }
@@ -56,7 +56,7 @@ public class TokenReader{
         try{
             return Float.parseFloat(st.nextToken());
         }catch(Exception ex){
-            //MWLogger.errLog(ex);
+            //LOGGER.error("Exception: ", ex);
             return -1;
         }
     }
@@ -65,7 +65,7 @@ public class TokenReader{
         try{
             return Double.parseDouble(st.nextToken());
         }catch(Exception ex){
-            //MWLogger.errLog(ex);
+            //LOGGER.error("Exception: ", ex);
             return -1;
         }
     }
@@ -74,7 +74,7 @@ public class TokenReader{
         try{
             return Boolean.parseBoolean(st.nextToken());
         }catch(Exception ex){
-            //MWLogger.errLog(ex);
+            //LOGGER.error("Exception: ", ex);
             return false;
         }
     }

@@ -30,8 +30,7 @@ import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.util.PlanetNameComparator;
 
 //BarukKahzad 20151129 with much copy and paste from HouseCommand.java
-public class FindContestedPlanetsCommand implements Command {
-	
+public class  FindContestedPlanetsCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

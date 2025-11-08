@@ -23,6 +23,7 @@ import java.io.Writer;
  * Splits a stream into two.
  * @author Imi (immanuel.scholz@gmx.de)
  */
+//TODO: Way outdated class, replace with modern solution (can probably in-line this wherever it's used)
 public final class TeePrinter extends Writer {
     Writer tee, too;
 

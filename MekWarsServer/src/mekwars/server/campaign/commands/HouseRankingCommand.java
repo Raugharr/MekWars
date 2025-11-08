@@ -22,8 +22,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.util.Statistics;
 
 
-public class HouseRankingCommand implements Command{
-	
+public class  HouseRankingCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

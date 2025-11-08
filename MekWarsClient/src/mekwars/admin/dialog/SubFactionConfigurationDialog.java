@@ -44,9 +44,12 @@ import mekwars.common.House;
 import mekwars.common.SubFaction;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class SubFactionConfigurationDialog implements ActionListener {
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubFactionConfigurationDialog.class);
+
     private final static String okayCommand = "okay";
     private final static String cancelCommand = "cancel";
     private String windowName = "";
@@ -267,7 +270,7 @@ public final class SubFactionConfigurationDialog implements ActionListener {
                 
                 key = checkBox.getName();
                 if ( key == null ){
-                    MWLogger.errLog("Null Checkbox: "+checkBox.getToolTipText());
+                    LOGGER.error("Null Checkbox: "+checkBox.getToolTipText());
                     continue;
                 }
                 checkBox.setSelected(Boolean.parseBoolean(this.subFactionConfig.getConfig(key)));
@@ -277,7 +280,7 @@ public final class SubFactionConfigurationDialog implements ActionListener {
                 
                 key = radioButton.getName();
                 if ( key == null ){
-                    MWLogger.errLog("Null RadioButton: "+radioButton.getToolTipText());
+                    LOGGER.error("Null RadioButton: "+radioButton.getToolTipText());
                     continue;
                 }
                 radioButton.setSelected(Boolean.parseBoolean(this.subFactionConfig.getConfig(key)));

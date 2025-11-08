@@ -35,12 +35,16 @@ import java.util.zip.Deflater;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommands;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Constantly reads from the BufferedReader. Notifies the MWChatServerLocal via
  * the incomingMessage() method
  */
 public class WriterThread extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(WriterThread.class);
+
     protected static final int MAX_DEFLATED_SIZE = 29999;
 
     protected Socket _socket;
@@ -81,9 +85,9 @@ public class WriterThread extends Thread {
                         this.wait(20 - elapsed);
                     }
                 } catch (InterruptedException e) {
-                    MWLogger.errLog(e);
+                    LOGGER.error("Exception: ", e);
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         }
@@ -144,13 +148,13 @@ public class WriterThread extends Thread {
                     _out.print(s);
                     _out.flush();
                 } catch (Exception ex) {
-                    MWLogger.errLog("Socket error; shutting down client at " + _host);
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Socket error; shutting down client at " + _host);
+                    LOGGER.error("Exception: ", ex);
                     pleaseStop();
                     try {
                         _socket.close();
                     } catch (Exception se) {
-                        MWLogger.errLog(se);
+                        LOGGER.error(se);
                     }
                 }
                 return;
@@ -213,13 +217,13 @@ public class WriterThread extends Thread {
             _socket.getOutputStream().flush();
 
         } catch (Exception e) {
-            MWLogger.errLog("Socket error; shutting down client");
-            MWLogger.errLog(e);
+            LOGGER.error("Socket error; shutting down client");
+            LOGGER.error("Exception: ", e);
             pleaseStop();
             try {
                 _socket.close();
             } catch (Exception se) {
-                MWLogger.errLog(se);
+                LOGGER.error(se);
             }
             // Commenting out for now. letting the socket get closed in the
             // readerthread code. --Torren

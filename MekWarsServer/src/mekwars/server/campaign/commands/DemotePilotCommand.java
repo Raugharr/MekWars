@@ -26,8 +26,7 @@ import mekwars.server.campaign.pilot.skills.AstechSkill;
 import mekwars.server.campaign.pilot.skills.EdgeSkill;
 import mekwars.server.campaign.pilot.skills.SPilotSkill;
 
-public class DemotePilotCommand implements Command {
-
+public class  DemotePilotCommand  implements Command {
     int accessLevel = 0;
     String syntax = "demotepilot#unitid#skill";
 

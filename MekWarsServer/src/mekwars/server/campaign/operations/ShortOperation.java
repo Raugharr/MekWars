@@ -69,11 +69,13 @@ import mekwars.server.campaign.mercenaries.MercHouse;
 import mekwars.server.campaign.operations.resolvers.NewShortResolver;
 import mekwars.server.campaign.operations.resolvers.ShortOpPlayers;
 import mekwars.server.campaign.pilot.SPilot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // IMPORTS
 
 public class ShortOperation implements Comparable<Object> {
-
+    private static final Logger LOGGER = LogManager.getLogger(ShortOperation.class);
     // IVARS
 
     // progress info. finished short ops removed from
@@ -301,7 +303,7 @@ public class ShortOperation implements Comparable<Object> {
                 int maxPlayersPerTeam = o.getIntValue("TeamSize");
                 int maxPlayers = Math.max(2, Math.min(8, maxTeams)) * maxPlayersPerTeam;
 
-                // MWLogger.errLog("Max Teams: "+maxTeams+" Players
+                // LOGGER.error("Max Teams: "+maxTeams+" Players
                 // Per
                 // Team: "+maxPlayersPerTeam+" Max Players: "+maxPlayers+"
                 // Current Players: "+this.getAllPlayerNames().size());
@@ -389,7 +391,7 @@ public class ShortOperation implements Comparable<Object> {
             int maxPlayers = Math.max(2, Math.min(8, maxTeams)) * maxPlayersPerTeam;
 
             isTeamOp = true;
-            // MWLogger.errLog("Max Teams: "+maxTeams+" Players Per
+            // LOGGER.error("Max Teams: "+maxTeams+" Players Per
             // Team:
             // "+maxPlayersPerTeam+" Max Players: "+maxPlayers+" Current
             // Players: "+this.getAllPlayerNames().size());
@@ -2242,7 +2244,7 @@ public class ShortOperation implements Comparable<Object> {
                     resultString += defendArm.getInaccurateDescription();
                 }
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
         }
 
@@ -2261,7 +2263,7 @@ public class ShortOperation implements Comparable<Object> {
                     }
 
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
 
@@ -2458,8 +2460,8 @@ public class ShortOperation implements Comparable<Object> {
                     defendString += nameString + " players ";
                 }
             } catch (Exception ex) {
-                MWLogger.errLog("Unable to find defenders for operation: " + opName);
-                MWLogger.errLog(ex);
+                LOGGER.error("Unable to find defenders for operation: " + opName);
+                LOGGER.error("Exception: ", ex);
             }
         }
 

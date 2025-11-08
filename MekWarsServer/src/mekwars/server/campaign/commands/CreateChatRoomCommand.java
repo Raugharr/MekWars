@@ -19,8 +19,7 @@ import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.util.ChatRoom;
 
-public class CreateChatRoomCommand implements Command {
-
+public class  CreateChatRoomCommand  implements Command {
     int accessLevel = 0;
     String syntax = "ChatRoomName#Private";
 

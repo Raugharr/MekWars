@@ -32,8 +32,11 @@ import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.SUnitFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OpsChickenThread extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(OpsChickenThread.class);
 
     // VARIABLE
     private SPlayer pdefender;
@@ -209,7 +212,7 @@ public class OpsChickenThread extends Thread {
         // get the actual ShortOperation. Catch any nulls.
         ShortOperation parentOp = CampaignMain.cm.getOpsManager().getRunningOps().get(opID);
         if (parentOp == null) {
-            MWLogger.errLog("Tried to do a leech with a null ShortOperation!");
+            LOGGER.error("Tried to do a leech with a null ShortOperation!");
             return;
         }
 
@@ -424,7 +427,7 @@ public class OpsChickenThread extends Thread {
             try {
                 this.wait(waittime * 1000);// time given in seconds
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
             // if the stop signal was sent while we were

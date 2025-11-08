@@ -11,8 +11,11 @@ import megamek.common.IArmorState;
 import megamek.common.Mounted;
 import megamek.common.Tank;
 import megamek.common.equipment.AmmoMounted;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VehicleDamageHandler extends AbstractUnitDamageHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VehicleDamageHandler.class);
 
 	@Override
 	public String buildDamageString(Entity unit, boolean sendAmmo) {
@@ -176,8 +179,7 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
             result.append(delimiter);
 
         } catch (Exception ex) {
-            MWLogger.errLog("Entity: " + unit.getShortNameRaw());
-            MWLogger.errLog(ex);
+            LOGGER.error("Entity: {}", unit.getShortNameRaw(), ex);
             return "%%-%%-%%";
         }
         return result.toString();
@@ -186,7 +188,7 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
 
 	@Override
 	public void applyDamageString(Entity unit, String report, boolean isRepairing) {
-		// MWLogger.errLog(System.currentTimeMillis()+" Unit "+unit.getModel()+" applyBattleDamage: "+report);
+		// LOGGER.error(System.currentTimeMillis()+" Unit "+unit.getModel()+" applyBattleDamage: "+report);
         StringTokenizer entry = new StringTokenizer(report, "-");
 
         StringTokenizer externalArmor = new StringTokenizer(entry.nextToken(), "%");
@@ -292,7 +294,7 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
                         weapon.setShotsLeft(ammoLeft);
                     }
                 } catch (Exception ex) {
-                    MWLogger.errLog("Error while parsing ammo Moving along");
+                    LOGGER.error("Error while parsing ammo Moving along");
                 }
             }
         }

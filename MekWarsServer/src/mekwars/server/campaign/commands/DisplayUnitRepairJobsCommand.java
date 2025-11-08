@@ -28,8 +28,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 
-public class DisplayUnitRepairJobsCommand implements Command {
-	
+public class  DisplayUnitRepairJobsCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

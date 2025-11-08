@@ -24,8 +24,7 @@ import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
 
 
-public class NameArmyCommand implements Command {
-	
+public class  NameArmyCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

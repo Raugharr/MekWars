@@ -22,8 +22,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SPlayer;
 
-public class CheckDistCommand implements Command {
-	
+public class  CheckDistCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

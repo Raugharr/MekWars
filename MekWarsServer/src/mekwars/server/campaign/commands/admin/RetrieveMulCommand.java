@@ -82,7 +82,6 @@ public class RetrieveMulCommand implements Command {
 				try {
 					br.close();
 				} catch (IOException e) {
-					MWLogger.errLog(e);
 				}
 			}
 			return;
@@ -90,7 +89,6 @@ public class RetrieveMulCommand implements Command {
 			try {
 				br.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
 			}
 		}
 		

@@ -34,10 +34,13 @@ import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.Auth;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWChatServer.commands.ICommands;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class ServerWrapper extends MWChatServer{
-	
+    private static final Logger LOGGER = LogManager.getLogger(ServerWrapper.class);
+
 	MWServ myServer;
 	
 	public static ServerWrapper createServer(MWServ server) throws Exception {
@@ -63,7 +66,7 @@ public class ServerWrapper extends MWChatServer{
 		try {
 			this.myServer.clientRecieve(command, username);
 		} catch (Exception e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 	
@@ -73,7 +76,7 @@ public class ServerWrapper extends MWChatServer{
 			try {
 				client.sendRaw("/comm" + ICommands.DELIMITER + TransportCodec.encode(msg));
 			} catch (Exception e) {
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
 		}
 	}
@@ -115,7 +118,7 @@ public class ServerWrapper extends MWChatServer{
 				try {
 					return InetAddress.getLocalHost();
 				} catch (Exception ex) {
-					MWLogger.errLog(ex);
+					LOGGER.error("Exception: ", ex);
 					return null;
 				}
 			}
@@ -123,7 +126,7 @@ public class ServerWrapper extends MWChatServer{
 		}
 		
 		catch (Exception e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 			try {
 				return InetAddress.getLocalHost();
 			} catch (Exception ex) {
@@ -177,7 +180,7 @@ public class ServerWrapper extends MWChatServer{
 		try {
 			this.myServer.clientLogout(client.getUserId());
 		} catch (Exception e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 	

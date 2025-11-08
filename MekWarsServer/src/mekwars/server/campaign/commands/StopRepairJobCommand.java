@@ -26,6 +26,8 @@ import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Torren (Jason Tighe)
@@ -33,7 +35,8 @@ import mekwars.server.campaign.SUnit;
  * to the repair thread
  */
 public class StopRepairJobCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(StopRepairJobCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -67,7 +70,7 @@ public class StopRepairJobCommand implements Command {
             
             if ( MWServ.getInstance().getRTT().getState() == Thread.State.TERMINATED ){
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed - the repair thread terminated. Staff was notified.",Username,false);
-                MWLogger.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart the thread. If all else fails reboot!");
+                LOGGER.error("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart the thread. If all else fails reboot!");
                 return;
             }
 
@@ -76,8 +79,7 @@ public class StopRepairJobCommand implements Command {
             CampaignMain.cm.toUser("PL|UU|"+unitID+"|"+unit.toString(true),Username,false);
 
         }catch(Exception ex){
-            MWLogger.errLog("AM:Unable to Process Repair Unit Command!");
-            MWLogger.errLog(ex);
+            LOGGER.error("AM:Unable to Process Repair Unit Command!", ex);
         }
         
 	}//end process()

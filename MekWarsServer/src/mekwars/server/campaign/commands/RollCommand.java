@@ -26,8 +26,7 @@ import mekwars.server.campaign.CampaignMain;
  *
  * Syntax  /c Roll#Dice
  */
-public class RollCommand implements Command {
-	
+public class  RollCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

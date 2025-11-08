@@ -23,8 +23,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 //Syntax updateoperations
-public class UpdateOperationsCommand implements Command {
-    
+public class  UpdateOperationsCommand  implements Command {
     int accessLevel = IAuthenticator.ADMIN;
     public int getExecutionLevel(){return accessLevel;}
     public void setExecutionLevel(int i) {accessLevel = i;}

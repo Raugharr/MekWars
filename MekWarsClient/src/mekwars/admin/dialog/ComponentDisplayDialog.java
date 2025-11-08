@@ -48,8 +48,11 @@ import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ComponentDisplayDialog extends JDialog implements ActionListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentDisplayDialog.class);
 
     // store the client backlink for other things to use
     private static final long serialVersionUID = 8839724432360797850L;
@@ -89,7 +92,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         // stored values.
         displayType = type;
 
-        MWLogger.errLog("Year: " + mwclient.getServerConfigs("CampaignYear"));
+        LOGGER.error("Year: " + mwclient.getServerConfigs("CampaignYear"));
         int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
 
         

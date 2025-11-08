@@ -26,8 +26,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SmallPlayer;
 
-public class LastOnlineCommand implements Command {
-	
+public class  LastOnlineCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

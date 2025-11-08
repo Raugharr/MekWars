@@ -28,8 +28,7 @@ import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
  * validity of the attacking force.
  * syntax JoinAttack attackingPlayerName#JoiningPlayersArmyId
  */
-public class JoinAttackCommand implements Command {
-	
+public class  JoinAttackCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

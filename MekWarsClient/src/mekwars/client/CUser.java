@@ -24,12 +24,15 @@ import mekwars.common.House;
 import mekwars.common.campaign.clientutils.IClientUser;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Class for User objects held in userlist
  */
 
 public class CUser implements Comparable<Object>, IClientUser {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CUser.class);
 
     protected String Name;
 
@@ -102,7 +105,7 @@ public class CUser implements Comparable<Object>, IClientUser {
             Userlevel = Integer.parseInt(ST.nextToken());
             isInvis = Boolean.parseBoolean(ST.nextToken());
         } catch (Exception ex) {
-            MWLogger.errLog("Error in deserializing user");
+            LOGGER.error("Error in deserializing user");
         }
     }
 
@@ -223,7 +226,7 @@ public class CUser implements Comparable<Object>, IClientUser {
             RGBColor = Color.black;
             RGBColor = StringUtils.html2Color(playerH.getHousePlayerColor());
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 

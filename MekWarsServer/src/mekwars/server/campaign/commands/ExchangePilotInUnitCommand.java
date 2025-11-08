@@ -26,9 +26,12 @@ import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ExchangePilotInUnitCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(ExchangePilotInUnitCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -108,7 +111,7 @@ public class ExchangePilotInUnitCommand implements Command {
 							return;
 						}
 					} catch(Exception ex){
-						MWLogger.errLog(ex);
+						LOGGER.error("Exception: ", ex);
 						CampaignMain.cm.toUser("AM:Invalid Pilot try again!",Username,true);
 						return;
 					}

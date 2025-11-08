@@ -14,10 +14,13 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.operations.OperationEntity;
 import mekwars.server.campaign.operations.ShortOperation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //@salient - so for now this will be basic, it wont handle salvage or draw games.
-public class BattleToJSON
-{
+public class BattleToJSON {
+    private static final Logger LOGGER = LogManager.getLogger(BattleToJSON.class);
+
     private static String jsonString = "";
     
     private static boolean skipComma = false;
@@ -28,7 +31,7 @@ public class BattleToJSON
     	//I could just randomly pick a winner...
     	if(gameEndedInDraw)
     	{
-    		MWLogger.errLog("BattleToJSON - Draw games are not saved to JSON");
+    		LOGGER.error("BattleToJSON - Draw games are not saved to JSON");
     		return;
     	}
     	
@@ -58,9 +61,7 @@ public class BattleToJSON
              * Not sure if it was ever resolved. Leaving the check here just in case.
              */
             if (owner == null) {
-                MWLogger.errLog("Null _owner_ while processing post-game salvage for " 
-                		+ " Attack #" + theOp.getShortID() + ". Needed to find Player: " + ownerName + " Unit #" 
-                		+ currOpEnt.getID() + "/Type: " + currOpEnt.getType());
+                LOGGER.error("Null _owner_ while processing post-game salvage for  Attack #{}. Needed to find Player: {} Unit #{}/Type: {}", theOp.getShortID(), ownerName, currOpEnt.getID(), currOpEnt.getType());
                 continue;
             }
 
@@ -91,9 +92,7 @@ public class BattleToJSON
              * Not sure if it was ever resolved. Leaving the check here just in case.
              */
             if (owner == null) {
-                MWLogger.errLog("Null _owner_ while processing BattleToJson " 
-                		+ " Attack #" + theOp.getShortID() + ". Needed to find Player: " + ownerName + " Unit #" 
-                		+ currOpEnt.getID() + "/Type: " + currOpEnt.getType());
+                LOGGER.error("Null _owner_ while processing BattleToJson  Attack #{}. Needed to find Player: {} Unit #{}/Type: {}", theOp.getShortID(), ownerName, currOpEnt.getID(), currOpEnt.getType());
                 continue;
             }
 
@@ -127,7 +126,7 @@ public class BattleToJSON
 		{
 			if(pathCheck.mkdirs() == false)
 			{
-				MWLogger.errLog("error in BattleToJSON, failed to create directories");
+				LOGGER.error("error in BattleToJSON, failed to create directories");
 				return;
 			}			
 		}
@@ -145,7 +144,7 @@ public class BattleToJSON
 		catch (IOException e) 
 		{
 			MWLogger.debugLog(e);
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 		
 		jsonString = ""; //clear for next use

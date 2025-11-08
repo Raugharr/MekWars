@@ -38,6 +38,8 @@ import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommandProcessorRemote;
 import mekwars.server.MWChatServer.commands.ICommands;
 import mekwars.server.MWChatServer.commands.UnknownCommand;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * When messages come in on the socket from the client, they have to be processed.  This class
@@ -47,6 +49,8 @@ import mekwars.server.MWChatServer.commands.UnknownCommand;
  * @see com.lyrisoft.chat.ICommands
  */
 public class CommandProcessorRemote implements ICommands{
+    private static final Logger LOGGER = LogManager.getLogger(CommandProcessorRemote.class);
+
     private static HashMap<String,ICommandProcessorRemote> _processors;
     private static HashSet<String> _idleTimeImmune;
     private static UnknownCommand unknownCommandProcessor = new UnknownCommand();
@@ -91,9 +95,9 @@ public class CommandProcessorRemote implements ICommands{
                     CommandProcessorRemote.extendCommandSet("/" + command, cp);
                 }
                 catch (Exception ex) {
-                    MWLogger.errLog("Unable to install the " + command + " command");
-                    MWLogger.errLog(ex);
-                    MWLogger.errLog("Continuing despite error(s)");
+                    LOGGER.error("Unable to install the " + command + " command");
+                    LOGGER.error("Exception: ", ex);
+                    LOGGER.error("Continuing despite error(s)");
                 }
             } else if (name.endsWith(".idleImmune")) {
                 _idleTimeImmune.add("/" + command);

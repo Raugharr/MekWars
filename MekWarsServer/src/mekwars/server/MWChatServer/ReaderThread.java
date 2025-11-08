@@ -36,12 +36,16 @@ import java.net.SocketTimeoutException;
 
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommands;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Constantly reads from the BufferedReader.
  * Notifies the MWChatServerLocal via the incomingMessage() method
  */
 public class ReaderThread extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(ReaderThread.class);
+
     protected IConnectionListener _connectionListener;
     protected BufferedReader _in;
     protected InputStream _inputStream;
@@ -56,7 +60,7 @@ public class ReaderThread extends Thread {
         try {
 			_in = new BufferedReader(new InputStreamReader(in, "UTF8"));
         } catch (Exception e) {
-        	MWLogger.errLog(e);
+        	LOGGER.error("Exception: ", e);
         }
     }
     
@@ -77,8 +81,8 @@ public class ReaderThread extends Thread {
             }
     		catch (SocketException se) {
                 pleaseStop();
-                //MWLogger.errLog(_connectionHandler._client._userId+" Disconnected. Socket exception.");
-                //MWLogger.errLog(se);
+                //LOGGER.error(_connectionHandler._client._userId+" Disconnected. Socket exception.");
+                //LOGGER.error(se);
     		}//Socket Read timed out keep going.
             catch ( SocketTimeoutException ste ){
             }
@@ -86,7 +90,7 @@ public class ReaderThread extends Thread {
     			// including but not limited to IOException
     			// -- in particular if the message handler croaks we want to know how/why
                 pleaseStop();//potential fix for MMNET crashing issue? @urgru 4.08.06
-                MWLogger.errLog(ex); 
+                LOGGER.error("Exception: ", ex);
             }
         }
     }

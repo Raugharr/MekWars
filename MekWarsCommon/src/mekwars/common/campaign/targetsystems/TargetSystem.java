@@ -4,11 +4,14 @@ import java.util.Vector;
 
 import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * NOTE: This looks unused and should be deprecated and/or removed.
  */
 public class TargetSystem {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TargetSystem.class);
 
 	public final static int TS_TYPE_STANDARD = 0;
 	public final static int TS_TYPE_ANTIAIR = 1;
@@ -130,29 +133,23 @@ public class TargetSystem {
 		String name = "";
 		try {
 			name = getTypeName(currentType);
-		} catch (TargetTypeOutOfBoundsException e) {
-			// TODO Auto-generated catch block
-			MWLogger.errLog(e);
-		} catch (TargetTypeNotImplementedException e) {
-			// TODO Auto-generated catch block
-			MWLogger.errLog(e);
+		} catch (TargetTypeOutOfBoundsException | TargetTypeNotImplementedException e) {
+			LOGGER.error("Error getting typeName", e);
 		}
-		return name;
+        return name;
 	}
 
 	public String[] getNameArray() {
 		Vector<String> names = new Vector<String>(1,1);
-		
+
 		for (int i = TS_TYPE_STANDARD; i <= TS_TYPE_MAX; i++) {
 			try {
 				names.add(getTypeName(i));
-			} catch (TargetTypeOutOfBoundsException e) {
-				MWLogger.errLog(e);
-			} catch (TargetTypeNotImplementedException e) {
-				MWLogger.errLog(e);
+			} catch (TargetTypeOutOfBoundsException | TargetTypeNotImplementedException e) {
+				LOGGER.error("Exception: ", e);
 			}
-		}
-		String toReturn[] = new String[names.size()];
+        }
+		String[] toReturn = new String[names.size()];
 		names.toArray(toReturn);
 		return toReturn;
 	}
@@ -164,13 +161,11 @@ public class TargetSystem {
 				if(!bans.contains(i)) {
 					names.add(getTypeName(i));
 				}
-			} catch (TargetTypeOutOfBoundsException e) {
-				MWLogger.errLog(e);
-			} catch (TargetTypeNotImplementedException e) {
-				MWLogger.errLog(e);
+			} catch (TargetTypeOutOfBoundsException | TargetTypeNotImplementedException e) {
+				LOGGER.error("Exception: ", e);
 			}
-		}
-		String toReturn[] = new String[names.size()];
+        }
+		String[] toReturn = new String[names.size()];
 		names.toArray(toReturn);
 		return toReturn;
 	}

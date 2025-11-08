@@ -30,9 +30,12 @@ import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Mech;
 import megamek.common.Mounted;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SalvageManagmentThread extends Thread{
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(SalvageManagmentThread.class);
+
     private Vector<ConcurrentLinkedQueue<String>> workOrders = new Vector<ConcurrentLinkedQueue<String>>(5,1);
     private long averageRepairTime = 1000;
     private MWClient client = null;
@@ -59,8 +62,8 @@ public class SalvageManagmentThread extends Thread{
                 processWorkOrders();
             }catch(Exception ex){
                 client.systemMessage("Error proccessing Salvage Management queue. Alert an SO and check your ./logs/error.0 for the error");
-                MWLogger.errLog("Error in Salvage Management Queue");
-                MWLogger.errLog(ex);
+                LOGGER.error("Error in Salvage Management Queue");
+                LOGGER.error("Exception: ", ex);
             }
         }
     }
@@ -183,7 +186,7 @@ public class SalvageManagmentThread extends Thread{
                     boolean armor = ( slot >= UnitUtils.LOC_FRONT_ARMOR);
                     
                     if ( unit == null ){
-                        MWLogger.errLog("Unable to find unit to salvage. removing salvage job");
+                        LOGGER.error("Unable to find unit to salvage. removing salvage job");
                         client.systemMessage("Unable to find unit to salvage. removing salvage job");
                         workQueue.remove();
                         continue;

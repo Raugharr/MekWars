@@ -29,8 +29,7 @@ import mekwars.server.campaign.operations.ShortOperation;
  * This command is used for multi player opertionas. the attacker
  * will send this command to start an operation
  */
-public class CommenceOperationCommand implements Command {
-	
+public class  CommenceOperationCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

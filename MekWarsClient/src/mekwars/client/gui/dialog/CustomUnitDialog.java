@@ -77,6 +77,8 @@ import megamek.common.Tank;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
 import megamek.common.equipment.AmmoMounted;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A dialog that a player can use to customize his mech before battle.
@@ -87,7 +89,7 @@ import megamek.common.equipment.AmmoMounted;
  */
 
 public class CustomUnitDialog extends JDialog implements ActionListener {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomUnitDialog.class);
     /**
      *
      */
@@ -312,7 +314,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
         panMunitions.setLayout(new SpringLayout());
         MunitionChoicePanel mcp = null;// replaced repeatedly w/i while loop
         int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
-        MWLogger.errLog("Year: " + year);
+        LOGGER.error("Year: " + year);
         // int row = 0;
         int location = -1;// also repeatedly replaced
 
@@ -369,7 +371,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 EnumSet<Munitions> munition = atCheck.getMunitionType();
                 House faction = mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse());
 
-                // MWLogger.errLog("Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
+                // LOGGER.error("Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
                 // check banned ammo
                 if (mwclient.getData().getServerBannedAmmo().containsKey(munition) || faction.getBannedAmmo().containsKey(munition) || ((mwclient.getAmmoCost(atCheck.getInternalName()) < 0) && !usingCrits)) {
                     //if(mwclient.getData().getServerBannedAmmo().containsKey(munition))
@@ -429,20 +431,20 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                     MWLogger.debugLog("Minefields disabled");
                     continue;
                 }
-                // MWLogger.errLog("4.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
+                // LOGGER.error("4.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
 
                 // Only Protos can use Proto-specific ammo
                 if (atCheck.hasFlag(AmmoType.F_PROTOMECH) && !(entity instanceof Protomech)) {
                     continue;
                 }
-                // MWLogger.errLog("5.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
+                // LOGGER.error("5.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
 
                 // When dealing with machine guns, Protos can only
                 // use proto-specific machine gun ammo
                 if ((entity instanceof Protomech) && atCheck.hasFlag(AmmoType.F_MG) && !atCheck.hasFlag(AmmoType.F_PROTOMECH)) {
                     continue;
                 }
-                // MWLogger.errLog("6.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
+                // LOGGER.error("6.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
 
                 // Restrict Aero to ATM
                 if ((entity instanceof Aero) && !(atCheck.getAmmoType() == AmmoType.T_ATM)) {
@@ -611,8 +613,8 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 try {
                     ammoCost = mwclient.getAmmoCost(at.getInternalName());
                 } catch (Exception ex) {
-                    MWLogger.errLog("error finding cost for: " + at.getName());
-                    MWLogger.errLog(ex);
+                    LOGGER.error("error finding cost for: " + at.getName());
+                    LOGGER.error("Exception: ", ex);
                 }
                 if (m.getLocation() == Entity.LOC_NONE) {
                     if (usingCrits) {
@@ -638,7 +640,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                         cost = (int) Math.ceil(ammoCost * refillShots);
                     }
 
-                    // MWLogger.errLog("Cost: "+cost+" string: "+mwclient.moneyOrFluMessage(true,true,cost));
+                    // LOGGER.error("Cost: "+cost+" string: "+mwclient.moneyOrFluMessage(true,true,cost));
                     if (usingCrits) {
                         m_choice.addItem(at.getName() + " (" + shotsLeft + "/" + refillShots + "/" + mwclient.getPlayer().getPartsCache().getPartsCritCount(at.getInternalName()) + ")");
                     } else {
@@ -918,7 +920,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
 
             // Targeting
             int newTargetSystem = unit.getTargetSystem().getTypeByName(targetSelection.getSelectedItem().toString());
-            MWLogger.errLog("Targeting Selected: " + newTargetSystem);
+            LOGGER.error("Targeting Selected: " + newTargetSystem);
             if (newTargetSystem != unit.getTargetSystem().getCurrentType()) {
                 // Change in targeting - send server notification
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setTargetSystem#" + unit.getId() + "#" + newTargetSystem);

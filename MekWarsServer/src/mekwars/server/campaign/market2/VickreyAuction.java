@@ -25,6 +25,8 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Vickrey auction is a modified highest sealed bid auction. Winner
@@ -38,7 +40,8 @@ import mekwars.server.campaign.SUnit;
  * @author urgru
  */
 public final class VickreyAuction implements IAuction {
-    
+    private static final Logger LOGGER = LogManager.getLogger(VickreyAuction.class);
+
     /**
      * Winner is simply the highest offering person who can
      * afford to pay. The amount he pays is adjusted.
@@ -130,7 +133,7 @@ public final class VickreyAuction implements IAuction {
                     // OK, we've got a unit to work with
                     baysNeeded = SUnit.getHangarSpaceRequired(u, sellingFaction);
                 } else {
-                    MWLogger.errLog("Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
+                    LOGGER.error("Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
                     CampaignMain.cm.doSendModMail("NOTE", "Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
                     baysNeeded = 0;
                 }

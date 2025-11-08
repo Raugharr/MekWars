@@ -25,10 +25,13 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // AdminLockPlanet#Planet#factory#true/false
 public class AdminLockFactoryCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AdminLockFactoryCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "Planet#factory#true/false";
 	public int getExecutionLevel(){return accessLevel;}
@@ -94,7 +97,7 @@ public class AdminLockFactoryCommand implements Command {
 
 		} catch (Exception ex){
 			CampaignMain.cm.toUser("Command failed. Make sure format was: /c adminlockfactory#planetname#factoryname", Username, true);
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}
 		
 	}

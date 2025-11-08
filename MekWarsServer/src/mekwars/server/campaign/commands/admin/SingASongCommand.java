@@ -138,7 +138,6 @@ public class SingASongCommand implements Command {
 			try {
 				dis.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
 			}
 		}
 		
@@ -169,7 +168,6 @@ public class SingASongCommand implements Command {
 			try {
 				dis.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
 			}
 		}
 		

@@ -46,6 +46,8 @@ import mekwars.client.gui.dialog.PlayerNameDialog;
 import mekwars.common.House;
 import mekwars.common.Planet;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Create an "Attack" menu. Used in Map, CMainFramge, etc. to generate
@@ -57,11 +59,8 @@ import mekwars.common.util.MWLogger;
  */
 
 public class AttackMenu extends JMenu implements ActionListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AttackMenu.class);
     
-    
-    /**
-     * 
-     */
     private static final long serialVersionUID = 7420602115238025725L;
     //VARS
     private MWClient mwclient;
@@ -222,7 +221,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                     
                     //Check for allowed planet flags. the planet most have these flags.
                     if ( allowPlanetFlags.length() > 0 ){
-                        //MWLogger.errLog(currOpName+" AllowPlanetFlags: "+allowPlanetFlags);
+                        //LOGGER.error(currOpName+" AllowPlanetFlags: "+allowPlanetFlags);
                         boolean allowOp = true;
                         StringTokenizer st = new StringTokenizer(allowPlanetFlags,"^");
                         while ( st.hasMoreTokens() ){
@@ -231,7 +230,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                             if ( key.trim().length() < 1 )
                                 continue;
                             if ( !tp.getPlanetFlags().containsKey(key) ){
-                                MWLogger.errLog(tp.getName()+" does not have flag: "+key);
+                                LOGGER.error(tp.getName()+" does not have flag: "+key);
                                 allowOp = false;
                                 break;
                             }
@@ -247,7 +246,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                     //Check for disallowed planet flags. If the planet has one of these flags
                     // The planet will not be allowed.
                     if ( disallowPlanetFlags.length() > 0){
-                        //MWLogger.errLog(currOpName+" DisallowPlanetFlags: "+disallowPlanetFlags);
+                        //LOGGER.error(currOpName+" DisallowPlanetFlags: "+disallowPlanetFlags);
                         
                         boolean allowOp = true;
                         StringTokenizer st = new StringTokenizer(disallowPlanetFlags,"^");
@@ -258,7 +257,7 @@ public class AttackMenu extends JMenu implements ActionListener {
                                 continue;
                             if ( tp.getPlanetFlags().containsKey(key)){
                                 allowOp = false;
-                                MWLogger.errLog(tp.getName()+" has flag: "+key);
+                                LOGGER.error(tp.getName()+" has flag: "+key);
                                 break;
                             }
                         }
@@ -297,12 +296,12 @@ public class AttackMenu extends JMenu implements ActionListener {
                     mwclient.updateOpData(false);
                     
                     if (!allOps.containsKey(currName)) {
-                        MWLogger.errLog("Error in updateMenuItems(): no _" + currName + "_ in allOps.");
+                        LOGGER.error("Error in updateMenuItems(): no _" + currName + "_ in allOps.");
                         
                         StringBuilder allOpsList = new StringBuilder("allOps contains: ");
                         for(String currO : allOps.keySet())
                             allOpsList.append(currO + " ");
-                        MWLogger.errLog(allOpsList.toString());
+                        LOGGER.error(allOpsList.toString());
                         
                         //don't want to stop building because of one bad apple - continue to next element.
                         continue;
@@ -353,12 +352,12 @@ public class AttackMenu extends JMenu implements ActionListener {
                 for (String currName : clickArmy.getLegalOperations()) {
                     
                     if (!allOps.containsKey(currName)) {
-                        MWLogger.errLog("Error in updateMenuItems(): no _" + currName + "_ in allOps.");
+                        LOGGER.error("Error in updateMenuItems(): no _" + currName + "_ in allOps.");
                         
                         String allOpsList = "allOps contains: ";
                         for(String currO : allOps.keySet())
                             allOpsList += currO + " ";
-                        MWLogger.errLog(allOpsList);
+                        LOGGER.error(allOpsList);
                         
                         //don't stop building the list just because of one bad apple...
                         continue;

@@ -61,9 +61,11 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MyImageView extends View implements ImageObserver, MouseListener, MouseMotionListener {
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyImageView.class);
 	// --- Attribute Values ------------------------------------------
 	
 	public static final String
@@ -831,7 +833,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 		
 		buffer = out.toByteArray();
 		if (buffer.length == 0) {
-			MWLogger.errLog("warning: " + gifFile +
+			LOGGER.error("warning: " + gifFile +
 			" is zero-length");
 			return null;
 		}
@@ -845,7 +847,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 			if( sMissingImageIcon == null )
 				sMissingImageIcon = makeIcon(MISSING_IMAGE_SRC);
 		}catch( Exception x ) {
-			MWLogger.errLog("ImageView: Couldn't load image icons");
+			LOGGER.error("ImageView: Couldn't load image icons");
 		}
 	}
 	

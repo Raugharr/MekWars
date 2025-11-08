@@ -62,8 +62,6 @@ public class ShutdownCommand implements Command {
         try {
             MWPasswd.save();
         } catch(Exception ex) {
-            MWLogger.errLog("Unable to save passwords before shutdown!");
-            MWLogger.errLog(ex);
         }
         
         System.exit(0);

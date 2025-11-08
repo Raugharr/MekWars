@@ -12,8 +12,7 @@ import mekwars.server.campaign.pilot.SPilot;
 /**
  * @author Torren (Jason Tighe)
  */
-public class DonatePilotCommand implements Command {
-	
+public class  DonatePilotCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

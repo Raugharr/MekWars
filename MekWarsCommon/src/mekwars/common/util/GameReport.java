@@ -26,11 +26,15 @@ import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.SerializeEntity;
 
 import megamek.common.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * This class is responsible for reports that are generated on both the client and server.
  */
 public class GameReport {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameReport.class);
+
     public static StringBuilder prepareReport(GameInterface myGame,
             boolean usingAdvancedRepairs, Buildings buildingTemplate) {
         StringBuilder result = new StringBuilder();
@@ -44,8 +48,7 @@ public class GameReport {
             List<String> winners = myGame.getWinners();
 
             // TODO: Winners is sometimes coming up empty. Let's see why
-            MWLogger.errLog("Finding winners:");
-            MWLogger.errLog(winners.toString());
+            LOGGER.info("Finding winners: {}", winners.toString());
 
             for (String winner : winners) {
                 StringTokenizer st = new StringTokenizer(winner, "~");

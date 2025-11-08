@@ -23,9 +23,12 @@ import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AdminDestroyTerrainCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AdminDestroyTerrainCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "Planet Name#Terrain";
 	public int getExecutionLevel(){return accessLevel;}
@@ -57,7 +60,7 @@ public class AdminDestroyTerrainCommand implements Command {
 			CampaignMain.cm.doSendModMail("NOTE",Username + " removed terrain from " + p.getName() + "(" + terrain + ").");
 		}
 		catch (Exception ex){
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}
 		
 	}

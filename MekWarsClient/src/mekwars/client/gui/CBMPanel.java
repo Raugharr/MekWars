@@ -47,15 +47,16 @@ import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Black Market Panel
  */
 
 public class CBMPanel extends JPanel {
-    /**
-     *
-     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(CBMPanel.class);
+
     private static final long serialVersionUID = -432087180209544906L;
     MWClient mwclient;
     CPlayer Player;
@@ -424,9 +425,8 @@ public class CBMPanel extends JPanel {
                 }catch (NumberFormatException NFE){
                     String toUser = "CH|CLIENT: Invalid Bid amount. Try using numbers next time!";
                     mwclient.doParseDataInput(toUser);
-                    return;
                 }catch (Exception ex){
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         }

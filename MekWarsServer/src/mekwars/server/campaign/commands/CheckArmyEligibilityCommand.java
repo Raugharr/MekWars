@@ -24,9 +24,8 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
 
-public class CheckArmyEligibilityCommand implements Command {
-	
-	
+public class  CheckArmyEligibilityCommand  implements Command {
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

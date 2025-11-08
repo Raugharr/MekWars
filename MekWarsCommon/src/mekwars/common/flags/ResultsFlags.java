@@ -5,8 +5,12 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResultsFlags extends PlayerFlags {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultsFlags.class);
+
 	private Map<Integer, Integer> flagsApplyTo;
 	
 	public static final int APPLIESTO_ATTACKER = 1;
@@ -144,7 +148,7 @@ public class ResultsFlags extends PlayerFlags {
 		if (flag != -1) {
 			flags.set(flag, value);
 		} else {
-			MWLogger.errLog("Unknown Flag checked: " + name);
+			LOGGER.error("Unknown Flag checked: " + name);
 		}
 	}
 	

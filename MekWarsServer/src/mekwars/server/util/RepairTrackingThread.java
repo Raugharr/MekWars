@@ -40,6 +40,8 @@ import megamek.common.Mounted;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -48,6 +50,7 @@ import mekwars.server.campaign.SUnit;
  * Thread use to track all repairs made by all users on the server.
  */
 public class RepairTrackingThread extends Thread{
+    private static final Logger LOGGER = LogManager.getLogger(RepairTrackingThread.class);
 
     private Vector<Repair> repairList = new Vector<Repair>(1,1);
     private long repairtime = 0;
@@ -63,13 +66,12 @@ public class RepairTrackingThread extends Thread{
     public synchronized void run (){
         try{
             while(true){
-                //MWLogger.errLog("Wait time: "+repairtime);
+                //LOGGER.error("Wait time: "+repairtime);
                 this.wait(repairtime);
                 checkRepairs();
             }
         }catch(Exception ex){
-            MWLogger.errLog("Error while trying to sleep in RepairTrackingThread");
-            MWLogger.errLog(ex);
+            LOGGER.error("Error while trying to sleep in RepairTrackingThread", ex);
         }
 
     }
@@ -80,9 +82,9 @@ public class RepairTrackingThread extends Thread{
             ConcurrentLinkedQueue<Repair> tempVector = new ConcurrentLinkedQueue<Repair>(repairList);
             synchronized (tempVector) {
                 for ( Repair repairOrder: tempVector ){
-                    //MWLogger.errLog("Start Time: "+ new Date(repairOrder.getStartTime()).toString()+" End Time: "+new Date(repairOrder.getEndTime()).toString());
+                    //LOGGER.error("Start Time: "+ new Date(repairOrder.getStartTime()).toString()+" End Time: "+new Date(repairOrder.getEndTime()).toString());
                     //double minutes = (repairOrder.getEndTime()-System.currentTimeMillis())/60000;
-                    //MWLogger.errLog("ETA: "+Double.toString(minutes));
+                    //LOGGER.error("ETA: "+Double.toString(minutes));
                     if ( repairOrder == null ){
                         repairList.removeElement(repairOrder);
                         return;
@@ -97,16 +99,16 @@ public class RepairTrackingThread extends Thread{
                             }
                         }
                         catch(Exception ex){
-                            MWLogger.errLog("Unable to finish repair for "+repairOrder.getUsername()+" for unit #"+repairOrder.getUnitID()+" "+repairOrder.getUnit().getShortNameRaw());
-                            MWLogger.errLog(ex);
+                            LOGGER.error("Unable to finish repair for "+repairOrder.getUsername()+" for unit #"+repairOrder.getUnitID()+" "+repairOrder.getUnit().getShortNameRaw());
+                            LOGGER.error("Exception: ", ex);
                         }
                     }
                 }
             }
         }
         catch (Exception ex){
-            MWLogger.errLog("Error while checking repair. Containing and continuing.");
-            MWLogger.errLog(ex);
+            LOGGER.error("Error while checking repair. Containing and continuing.");
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -307,6 +309,7 @@ public class RepairTrackingThread extends Thread{
 }
 
 class Repair{
+    private static final Logger LOGGER = LogManager.getLogger(Repair.class);
 
     private Entity unit;
     private String Username;
@@ -367,19 +370,18 @@ class Repair{
     }
 
     public boolean finishRepair(){
-
         CriticalSlot cs = null;
         Pilot pilot = null;
 
         SPlayer player = CampaignMain.cm.getPlayer(Username);
         if ( player == null ){
-            MWLogger.errLog("Could not find player "+Username+" removing repair job from queue.");
+            LOGGER.error("Could not find player "+Username+" removing repair job from queue.");
             return true;
         }
         SUnit mek = player.getUnit(unitID);
 
         if ( mek == null ){
-            MWLogger.errLog("Could not find unit # "+unitID+" for player "+player.getName()+ " removing repair job from queue.");
+            LOGGER.error("Could not find unit # "+unitID+" for player "+player.getName()+ " removing repair job from queue.");
             return true;
         }
         pilot = mek.getPilot();
@@ -479,7 +481,7 @@ class Repair{
                     die1 = CampaignMain.cm.getRandomNumber(6) + 1;
                     die2 = CampaignMain.cm.getRandomNumber(6) + 1;
 
-                    // MWLogger.errLog("tech level roll: "+(die1+die2)+"
+                    // LOGGER.error("tech level roll: "+(die1+die2)+"
                     // base: "+(10+techType));
 
                     if(!disableTechAdvancement) {
@@ -699,17 +701,17 @@ class Repair{
                             armorToRepair = unit.getInternal(location);
 
 
-                            //MWLogger.errLog("IS Amount1: "+armorToRepair);
+                            //LOGGER.error("IS Amount1: "+armorToRepair);
                             if ( armorToRepair <= 3) {
                                 armorRepaired = 1;
                             } else {
                                 armorRepaired = CampaignMain.cm.getRandomNumber(armorToRepair-2)+1;
                             }
 
-                            //MWLogger.errLog("IS Amount2: "+armorRepaired);
+                            //LOGGER.error("IS Amount2: "+armorRepaired);
                             //the more they miss the roll by the less armor is repaired.
                             armorRepaired = Math.max(1,armorRepaired-(roll-(die1+die2)));
-                            //MWLogger.errLog("IS Amount3: "+armorRepaired);
+                            //LOGGER.error("IS Amount3: "+armorRepaired);
 
                             //if the roll is higher then 12 make them pay for it.
                             if ( roll > 12 ) {
@@ -1023,7 +1025,7 @@ class Repair{
                 die1 = CampaignMain.cm.getRandomNumber(6)+1;
                 die2 = CampaignMain.cm.getRandomNumber(6)+1;
 
-                //MWLogger.errLog("tech level roll: "+(die1+die2)+" base: "+(10+techType));
+                //LOGGER.error("tech level roll: "+(die1+die2)+" base: "+(10+techType));
 
                 if(!disableTechAdvancement) {
                     if ( ((die1+die2) >= (10+techType)) && !pilotIsRepairing && !repairTech){
@@ -1093,8 +1095,8 @@ class Repair{
             player.checkAndUpdateArmies(mek);
             return true;
         }catch(Exception ex){
-            MWLogger.errLog("Failed to trap the following error removing repair job from queue: ");
-            MWLogger.errLog(ex);
+            LOGGER.error("Failed to trap the following error removing repair job from queue: ");
+            LOGGER.error("Exception: ", ex);
             if ( (mek != null) && (player != null) ){
                 mek.setEntity(unit);
                 CampaignMain.cm.toUser("PL|UU|"+unitID+"|"+mek.toString(true),Username,false);
@@ -1158,9 +1160,9 @@ class Repair{
         if ( !armor ){
             CriticalSlot cs = unit.getCritical(location,slot);
             UnitUtils.setRepairing(unit,cs);
-            //MWLogger.errLog("number of crits "+ UnitUtils.getNumberOfCrits(unit,cs));
+            //LOGGER.error("number of crits "+ UnitUtils.getNumberOfCrits(unit,cs));
             repairTime *= UnitUtils.getNumberOfCrits(unit,cs);
-            //MWLogger.errLog("Repair Time: "+repairTime);
+            //LOGGER.error("Repair Time: "+repairTime);
         }else{
             int templocation = location;
             if ( slot != UnitUtils.LOC_INTERNAL_ARMOR ){
@@ -1191,7 +1193,7 @@ class Repair{
         startTime = System.currentTimeMillis();
         endTime = startTime+repairTime;
 
-        //MWLogger.errLog("Start Time: "+startTime+" End Time: "+endTime);
+        //LOGGER.error("Start Time: "+startTime+" End Time: "+endTime);
     }
 
     public void stopRepair(){

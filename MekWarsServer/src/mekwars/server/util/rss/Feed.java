@@ -24,6 +24,8 @@ import java.util.Iterator;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The Feed class implements an RSS feed, getting the functionality out of CampaignMain
@@ -34,6 +36,8 @@ import mekwars.server.campaign.CampaignMain;
  * @since 2018-02-18
  */
 public class Feed {
+    private static final Logger LOGGER = LogManager.getLogger(Feed.class);
+
 	private ArrayList<FeedMessage> messages = new ArrayList<FeedMessage>();
 
 	private String header;
@@ -89,11 +93,8 @@ public class Feed {
         } catch (FileNotFoundException efnf) {
             // ignore
         } catch (Exception ex) {
-            MWLogger.errLog("Problems writing the news feed");
+            LOGGER.error("Problems writing the news feed");
         }
-
-        
-        
 	}
 	
 	/**

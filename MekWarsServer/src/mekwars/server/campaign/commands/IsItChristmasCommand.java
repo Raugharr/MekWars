@@ -8,8 +8,7 @@ import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.util.ChristmasHandler;
 
-public class IsItChristmasCommand implements Command {
-
+public class  IsItChristmasCommand  implements Command {
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "";
 	

@@ -68,6 +68,8 @@ import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.campaign.clientutils.IClientConfig;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 //admin import. har!
@@ -78,10 +80,8 @@ import mekwars.common.util.StringUtils;
  */
 
 public class CUserListPanel extends JPanel implements ActionListener{
+    private static final Logger LOGGER = LoggerFactory.getLogger(CUserListPanel.class);
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 6676029823454849117L;
     public static int SORTMODE_NAME = 0;
     public static int SORTMODE_HOUSE = 1;
@@ -361,7 +361,7 @@ public class CUserListPanel extends JPanel implements ActionListener{
 
     public synchronized void refresh() {
         try {((CUserListModel)UserList.getModel()).refreshModel();}
-        catch (Exception ex) {MWLogger.errLog(ex);}
+        catch (Exception ex) {LOGGER.error("Exception: ", ex);}
         CountLabel.setText("Player Count: " + UserList.getModel().getSize());
     }
 
@@ -1233,16 +1233,16 @@ public class CUserListPanel extends JPanel implements ActionListener{
 
                         //logged out users are never bold
                         setFont(getFont().deriveFont(Font.PLAIN));
-                        if (TextImage) {try {setIcon(LogoutImage);} catch (Exception ex) {MWLogger.errLog(ex);}}
+                        if (TextImage) {try {setIcon(LogoutImage);} catch (Exception ex) {LOGGER.error("Exception: ", ex);}}
                     }
                     else {
                         if (TextBold) {setFont(getFont().deriveFont(Font.BOLD));}
                         else {setFont(getFont().deriveFont(Font.PLAIN));}
 
                         if (TextImage) {
-                            if (status == MWClient.STATUS_RESERVE) {try {setIcon(ReserveImage);} catch (Exception ex) {MWLogger.errLog(ex);}}
-                            if (status == MWClient.STATUS_ACTIVE) {try {setIcon(ActiveImage);} catch (Exception ex) {MWLogger.errLog(ex);}}
-                            if (status == MWClient.STATUS_FIGHTING) {try {setIcon(FightImage);} catch (Exception ex) {MWLogger.errLog(ex);}}
+                            if (status == MWClient.STATUS_RESERVE) {try {setIcon(ReserveImage);} catch (Exception ex) {LOGGER.error("Exception: ", ex);}}
+                            if (status == MWClient.STATUS_ACTIVE) {try {setIcon(ActiveImage);} catch (Exception ex) {LOGGER.error("Exception: ", ex);}}
+                            if (status == MWClient.STATUS_FIGHTING) {try {setIcon(FightImage);} catch (Exception ex) {LOGGER.error("Exception: ", ex);}}
                         } else {
                             setIcon(null);
                         }

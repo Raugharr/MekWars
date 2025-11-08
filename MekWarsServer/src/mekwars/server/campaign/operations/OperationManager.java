@@ -58,7 +58,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class OperationManager extends AbstractOperationManager implements I_OperationManager {
-    private static final Logger logger = LogManager.getLogger(OperationManager.class);
+    private static final Logger LOGGER = LogManager.getLogger(OperationManager.class);
     /**
      * Construction of the Manager is keystone event for
      * Operations system. Construction triggers attempts to
@@ -339,7 +339,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
         
         //nullcheck, just in case.
         if (so == null) {
-            logger.error("Error: Tried to add a null ShortOperation to the Manager");
+            LOGGER.error("Error: Tried to add a null ShortOperation to the Manager");
             return;
         }
         
@@ -397,7 +397,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
     public void terminateOperation(ShortOperation so, int termCode, SPlayer terminator, boolean ignoreStatus) {
         
         if (so == null) {
-            logger.error("Attempted to terminate null ShortOperation");
+            LOGGER.error("Attempted to terminate null ShortOperation");
             return;
         }
         
@@ -525,7 +525,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
                     for(SUnit unit : so.preCapturedUnits )
                         faction.addUnit(unit, true);
                 }catch(Exception ex){
-                    logger.error(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
                     
             }
@@ -542,7 +542,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
             try{
                 CampaignMain.cm.getPlayer(currN).lockArmy(-1);
             }catch(Exception ex){
-                logger.error(currN+" had a null army while terminating. Continuing to next player.");
+                LOGGER.error(currN+" had a null army while terminating. Continuing to next player.");
                 continue;
             }
         }
@@ -1009,7 +1009,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
                 modDir.mkdir();
             }
         } catch (Exception e) {
-            logger.error("Error while creating operations directories.");
+            LOGGER.error("Error while creating operations directories.");
         }
         
         ops.clear();
@@ -1024,7 +1024,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
         String[] shortNames = shortDir.list();
         for (int i = 0; i < shortNames.length; i++) {
             Operation currOp = opLoader.loadOpValues(shortNames[i]);
-            logger.info("Loading short operation '{}'", currOp.getName());
+            LOGGER.info("Loading short operation '{}'", currOp.getName());
             ops.put(currOp.getName(), currOp);
             if (currOp.getBooleanValue("MULArmiesOnly")) {
                 MULOnlyArmiesOpsLoad = true;
@@ -1039,7 +1039,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
         String[] modNames = modDir.list();
         for (int i = 0; i < modNames.length; i++) {
             ModifyingOperation currMod = opLoader.loadModOpValues(modNames[i]);
-            logger.info("Loading mod operation '{}'", currMod.getName());
+            LOGGER.info("Loading mod operation '{}'", currMod.getName());
             mods.put(currMod.getName(), currMod);
             
             /*
@@ -1053,7 +1053,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
                 String currTarget = st.nextToken().trim();
                 Operation currOp = ops.get(currTarget);
                 if (currOp == null) {
-                    logger.error("Error assigning modop target. Mod: " + currMod.getName() + " Target: " + currTarget);
+                    LOGGER.error("Error assigning modop target. Mod: " + currMod.getName() + " Target: " + currTarget);
                 } else {
                     currOp.addModifyingOperation(currMod);
                 }
@@ -1065,7 +1065,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
          */
         opWriter.writeOpList(ops);
         if(ops.isEmpty()) {
-            logger.error("No operations loaded");
+            LOGGER.error("No operations loaded");
         }
     }
     

@@ -24,10 +24,11 @@ import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // refreshfactory#planet#factory
-public class RequestServerMailCommand implements Command {
-	
+public class  RequestServerMailCommand  implements Command {
 	int accessLevel = IAuthenticator.GUEST;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

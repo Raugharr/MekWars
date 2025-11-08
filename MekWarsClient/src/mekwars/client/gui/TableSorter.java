@@ -30,12 +30,12 @@ import javax.swing.table.TableModel;
 
 import mekwars.client.MWClient;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TableSorter extends TableMap {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TableSorter.class);
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -3715062654870040447L;
     // VARIABLES
     public final static int SORTER_BM = 0;
@@ -110,7 +110,7 @@ public class TableSorter extends TableMap {
             } else {
                 return 0;
             }
-        } else if (type == java.util.Date.class) {
+        } else if (type == Date.class) {
             Date d1 = (Date) data.getValueAt(row1, column);
             long n1 = d1.getTime();
             Date d2 = (Date) data.getValueAt(row2, column);
@@ -223,7 +223,7 @@ public class TableSorter extends TableMap {
 
     public void checkModel() {
         if (indexes.length != model.getRowCount()) {
-            MWLogger.errLog("Sorter not informed of a change in model.");
+            LOGGER.error("Sorter not informed of a change in model.");
         }
     }
 

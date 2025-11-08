@@ -59,6 +59,8 @@ import mekwars.server.campaign.mercenaries.ContractInfo;
 import mekwars.server.campaign.mercenaries.MercHouse;
 import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.util.SerializedMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A class holding a server-side representation of a House
@@ -74,6 +76,7 @@ import mekwars.server.campaign.util.SerializedMessage;
  * 
  */
 public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISeller, IBuyer, Serializable {
+    private static final Logger LOGGER = LogManager.getLogger(SHouse.class);
 
     private static final long serialVersionUID = -1558672678021355218L;
     // store all online players in *THREE* hashes, one for each primary status
@@ -692,8 +695,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
             return s;
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Error while loading faction: " + getName() + " Going forward anyway ...");
+            LOGGER.error("Exception: ", ex);
+            LOGGER.error("Error while loading faction: " + getName() + " Going forward anyway ...");
             return s;
         }
     }
@@ -1337,7 +1340,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
         } catch (Exception e) {// ./data/scrapmessages/ is 21 chars. strip path
             // leader and just name file w/ problems.
-            MWLogger.errLog("A problem occured with your " + filepath.substring(21, filepath.length()) + " file!");
+            LOGGER.error("A problem occured with your " + filepath.substring(21, filepath.length()) + " file!");
             return "A " + unit.getModelName() + " was kidnapped by aliens from outer space";
         }
     }
@@ -1630,9 +1633,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             Vector<Integer> v = getComponents().get(type_id);
             v.setElementAt(v.elementAt(weight).intValue() + val, weight);
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Error in addPP()");
-            MWLogger.errLog("weight: " + weight + " type: " + type_id + " value: " + val);
+            LOGGER.error("Exception: ", ex);
+            LOGGER.error("Error in addPP()");
+            LOGGER.error("weight: " + weight + " type: " + type_id + " value: " + val);
             Vector<Integer> v = new Vector<Integer>(4, 1);
             for (int i = 0; i < 4; i++) {
                 // Weight
@@ -1671,8 +1674,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         try {
             s = this.getHangar(type_id).elementAt(weightclass);
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Empty Vector in getEntity");
+            LOGGER.error("Exception: ", ex);
+            LOGGER.error("Empty Vector in getEntity");
             return null;
         }
 
@@ -2626,8 +2629,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         try {
             s = this.getHangar(type).elementAt(weight);
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Empty Vector in getHighestUnitCost");
+            LOGGER.error("Exception: ", ex);
+            LOGGER.error("Empty Vector in getHighestUnitCost");
             return Float.MAX_VALUE;
         }
         if (s == null) {
@@ -2714,9 +2717,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             config.store(ps, "Faction Config");
             ps.close();
         } catch (FileNotFoundException fe) {
-            MWLogger.errLog(fileName + " not found");
+            LOGGER.error(fileName + " not found");
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 
     }
@@ -2736,7 +2739,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             config.load(new FileInputStream(configFile));
             populateUnitLimits();
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
         populateUnitLimits();
         populateBMLimits();
@@ -2786,11 +2789,11 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
      */
     public int getUnitLimit(int unitType, int unitWeightClass) {
         if (unitType < 0 || unitType > Unit.AERO) {
-            MWLogger.errLog("Request for invalid unitType in SHouse.getUnitLimit: " + unitType);
+            LOGGER.error("Request for invalid unitType in SHouse.getUnitLimit: " + unitType);
             return -1;
         }
         if (unitWeightClass < 0 || unitWeightClass > Unit.ASSAULT) {
-            MWLogger.errLog("Request for invalid unitWeightClass in SHouse.getUnitLimit: " + unitWeightClass);
+            LOGGER.error("Request for invalid unitWeightClass in SHouse.getUnitLimit: " + unitWeightClass);
             return -1;
         }
         return unitLimits[unitType][unitWeightClass];

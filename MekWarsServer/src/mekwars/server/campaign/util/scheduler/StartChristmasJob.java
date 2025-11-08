@@ -7,6 +7,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -24,6 +26,8 @@ import mekwars.server.campaign.util.ChristmasHandler;
  * @version 2016.10.26
  */
 public class StartChristmasJob implements Job {
+    private static final Logger LOGGER = LogManager.getLogger(StartChristmasJob.class);
+
 	public StartChristmasJob() {
 	}
 	
@@ -49,7 +53,7 @@ public class StartChristmasJob implements Job {
 		try {
 			date = sdf.parse(startDateString);
 		} catch (ParseException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 		
 		boolean inThePast = false;

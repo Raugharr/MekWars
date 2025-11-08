@@ -21,8 +21,7 @@ import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.util.discord.DiscordMessageHandler;
 
-public class CodeTestCommand implements Command {
-	
+public class  CodeTestCommand  implements Command {
 	int accessLevel = 0;
 	public int getExecutionLevel(){return 200;}
 	public void setExecutionLevel(int i) {}
@@ -78,7 +77,7 @@ public class CodeTestCommand implements Command {
 //				}
 //				
 //			} catch (SchedulerException e) {
-//				MWLogger.errLog(e);
+//				LOGGER.error("Exception: ", e);
 //			}
 			break;
 		}

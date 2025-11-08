@@ -23,6 +23,8 @@ import java.net.Socket;
 
 import mekwars.common.CampaignData;
 import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -30,7 +32,8 @@ import mekwars.common.util.MWLogger;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class Server extends Thread {
-	
+    private static final Logger LOGGER = LogManager.getLogger(Server.class);
+
 	private CampaignData data;
 	private int dataPort;
 	private String IpAddress;
@@ -62,8 +65,7 @@ public class Server extends Thread {
 				server = new ServerSocket(dataPort,0,InetAddress.getByName(IpAddress));
 			
 		} catch (IOException e) {
-			MWLogger.errLog("Shutting down because:");
-			MWLogger.errLog(e);
+			LOGGER.error("Shutting down because:", e);
 			MWLogger.mainLog("DataProvider: Could not create server socket. Shutting down.");
 			MWLogger.infoLog("DataProvider: Could not create server socket. Shutting down.");
 			return;
@@ -81,8 +83,8 @@ public class Server extends Thread {
 			
 			} catch(OutOfMemoryError OOM) {
 				
-				MWLogger.errLog("Out of Memory while opening dataprovider socket:");
-				MWLogger.errLog(OOM.toString());
+				LOGGER.error("Out of Memory while opening dataprovider socket:");
+				LOGGER.error(OOM.toString());
 				
 				/*
                  * Ok so too many socket connections lets try a reset
@@ -97,17 +99,17 @@ public class Server extends Thread {
                     else
                         server = new ServerSocket(dataPort,0,InetAddress.getByName(IpAddress));
                 } catch(Exception ex){
-                    MWLogger.errLog("Shutting down because:");
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Shutting down because:");
+                    LOGGER.error("Exception: ", ex);
                     MWLogger.mainLog("DataProvider: Could not create server socket. Shutting down.");
                     MWLogger.infoLog("DataProvider: Could not create server socket. Shutting down.");
                     return;
                 }
 			} catch (IOException e) {
-				MWLogger.errLog("Dataprovider IO Exception:");
-				MWLogger.errLog(e);
+				LOGGER.error("Dataprovider IO Exception:");
+				LOGGER.error("Exception: ", e);
 			} catch(Exception ex) {
-				MWLogger.errLog(ex);
+				LOGGER.error("Exception: ", ex);
 			}
 		}
 		

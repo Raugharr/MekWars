@@ -34,12 +34,13 @@ import org.apache.logging.log4j.Logger;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class ServerConfig implements ServerCommand {
-    private static final Logger logger = LogManager.getLogger(ServerConfig.class);
+    private static final Logger LOGGER = LogManager.getLogger(ServerConfig.class);
 
     /**
-     * @see server.dataProvider.ServerCommand#execute(java.util.Date,
+     * @see server.dataProvider.ServerCommand#execute(Date,
      *      java.io.PrintWriter, common.CampaignData)
      */
+    @Override
     public void execute(Date timestamp, BinWriter out, CampaignData data)
             throws Exception {
         try {
@@ -53,8 +54,7 @@ public class ServerConfig implements ServerCommand {
         
             config.close();
         } catch (Exception ex) {
-           logger.error("ServerConfig failed"); 
-           logger.error(ex); 
+           LOGGER.error("ServerConfig failed", ex);
         }
     }
 }

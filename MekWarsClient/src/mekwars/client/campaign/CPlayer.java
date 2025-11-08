@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.CPlayerPanel;
 import mekwars.client.util.CArmyComparator;
 import mekwars.client.util.CUnitComparator;
 import mekwars.common.House;
@@ -38,13 +39,15 @@ import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.OffBoardDirection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for Player object used by Client
  */
 public class CPlayer extends Player {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CPlayer.class);
 
-    public static final String PREFIX = "PL"; // prefix for player strings
     public static final String DELIMITER = "#"; // delimiter for player strings
 
     private MWClient mwclient;
@@ -247,8 +250,7 @@ public class CPlayer extends Player {
                 sortHangar();// sort it!
             }
         } catch (Exception e) {
-            MWLogger.errLog(e);
-            return;
+            LOGGER.error("Exception: ", e);
         }
     }
 
@@ -261,8 +263,7 @@ public class CPlayer extends Player {
             currUnit.setData(TokenReader.readString(st));
             sortHangar();// properties have changes. sort. YARR!
         } catch (Exception e) {
-            MWLogger.errLog(e);
-            return;
+            LOGGER.error("Exception: ", e);
         }
     }
 
@@ -278,8 +279,7 @@ public class CPlayer extends Player {
 
             sortHangar();// properties have changes. sort. YARR!
         } catch (Exception e) {
-            MWLogger.errLog(e);
-            return;
+            LOGGER.error("Exception: ", e);
         }
     }
 
@@ -923,7 +923,7 @@ public class CPlayer extends Player {
             if (getArmy(army) != null) {
                 getArmy(army).setBV(TokenReader.readInt(ST));
             } else {
-                MWLogger.errLog("Bad Army id: " + army);
+                LOGGER.error("Bad Army id: " + army);
             }
         }
     }

@@ -30,9 +30,12 @@ import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import mekwars.client.MWClient;
 import mekwars.common.Planet;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class MMNetHyperLinkListener implements HyperlinkListener {
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(MMNetHyperLinkListener.class);
+
 	MWClient mwclient;
 	protected boolean isHovering = false;
 	protected String Tooltip = null;
@@ -80,7 +83,7 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 			}
 			catch (Exception ex)
 			{
-				MWLogger.errLog(ex);
+				LOGGER.error("Exception: ", ex);
 			}
 			//MWLogger.infoLog("hyperlinkUpdate fired");
 			//MWLogger.infoLog("     entered->");
@@ -113,7 +116,7 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 						command = command.substring(7);
 						StringTokenizer commandStr = new StringTokenizer(command,"*");
 						command = commandStr.nextToken() +", "+commandStr.nextToken(); 
-						MWLogger.errLog("Command "+command);	
+						LOGGER.error("Command "+command);
 						mwclient.sendChat("/mail "+command);
 					}
 					else if (e.getDescription().startsWith("MEKINFO")) {
@@ -209,8 +212,8 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 						Browser.displayURL(e.getURL().toExternalForm());
 					}
 				}
-				catch (Throwable t) {
-					MWLogger.errLog((Exception)t);
+				catch (Throwable throwable) {
+					LOGGER.error("Exception: ", throwable);
 				}
 			}
 		}

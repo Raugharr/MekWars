@@ -20,8 +20,7 @@ import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 
-public class HouseMailCommand implements Command {
-	
+public class  HouseMailCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

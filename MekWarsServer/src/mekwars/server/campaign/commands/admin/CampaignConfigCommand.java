@@ -23,9 +23,12 @@ import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CampaignConfigCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(CampaignConfigCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -44,7 +47,7 @@ public class CampaignConfigCommand implements Command {
 		try {//Try to read the config file
 			CampaignMain.cm.getCampaignOptions().getConfig().load(new FileInputStream(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG")));
 		} catch (Exception ex) {
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 			CampaignMain.cm.toUser("Failed to read campaign config.",Username,true);
 		}	
 		CampaignMain.cm.toUser("Campaign config reread!",Username,true);

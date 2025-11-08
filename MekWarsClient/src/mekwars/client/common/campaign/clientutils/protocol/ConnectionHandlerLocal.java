@@ -39,6 +39,8 @@ import java.util.Vector;
 import mekwars.common.campaign.clientutils.protocol.IConnectionHandler;
 import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
 import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The keeper of the Socket on the client side.
@@ -51,6 +53,8 @@ import mekwars.common.util.MWLogger;
  */
 
 public class ConnectionHandlerLocal implements IConnectionHandler {
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionHandlerLocal.class);
+
     protected PrintStream _out;
     protected Socket _socket;
     //protected BufferedReader _in;
@@ -104,17 +108,17 @@ public class ConnectionHandlerLocal implements IConnectionHandler {
         _writer.pleaseStop();
         _writer.flushOutputQueue();
         try {_socket.close();}
-        catch (IOException e) 
+        catch (IOException e)
         {
-          MWLogger.errLog("Error closing socket.");
-          MWLogger.errLog(e);
+          LOGGER.error("Error closing socket.");
+          LOGGER.error("Exception: ", e);
         }
         if (notify) {_listener.socketClosed();}
     }
 
     public static final void DEBUG(String s) {
         if (DEBUG) {
-            MWLogger.errLog(s);
+            LOGGER.error(s);
         }
     }
 }
@@ -123,6 +127,8 @@ public class ConnectionHandlerLocal implements IConnectionHandler {
  * Write the messages in the queue to the socket's output stream
  */
 class WriterThread extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(WriterThread.class);
+
     private boolean keepGoing = true;
     private Vector<String> outgoingMessages;
     private PrintStream _out;
@@ -142,10 +148,10 @@ class WriterThread extends Thread {
                 // wait until there are more messages
                 wait(1000);
             }
-            MWLogger.errLog("WriterThread: stopping gracefully.");
+            LOGGER.error("WriterThread: stopping gracefully.");
         }
         catch (InterruptedException e) {
-            MWLogger.errLog("ConnectionHandlerLocal$WriterThread.run(): Interrupted!");
+            LOGGER.error("ConnectionHandlerLocal$WriterThread.run(): Interrupted!");
         }
     }
 

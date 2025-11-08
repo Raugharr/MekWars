@@ -46,8 +46,11 @@ import mekwars.server.MWChatServer.auth.IRoomAuthenticator;
 import mekwars.server.MWChatServer.auth.NullRoomAuthenticator;
 import mekwars.server.MWChatServer.auth.PasswdAuthenticator;
 import mekwars.server.MWChatServer.commands.ICommands;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MWChatServer implements ICommands {
+    private static final Logger LOGGER = LogManager.getLogger(MWChatServer.class);
 
     protected static Properties _properties;
     protected boolean _asciiRoomNames;
@@ -160,7 +163,7 @@ public class MWChatServer implements ICommands {
         try {
             return _users.get(clientKey(target));
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return null;
         }
     }
@@ -217,7 +220,7 @@ public class MWChatServer implements ICommands {
             MWChatClient oldC = _users.get(clientKey(client));
             if (oldC != null) {
                 oldC.killed(client.getUserId(),"Terminated by signing on elsewhere");
-                MWLogger.errLog("Terminated by signing on elsewhere");
+                LOGGER.error("Terminated by signing on elsewhere");
                 signOff(oldC);
             }
 
@@ -227,8 +230,8 @@ public class MWChatServer implements ICommands {
             try {
                 this.joinRoom(client, "Main Chat", "");
             } catch (Exception ex) {
-                MWLogger.errLog("Unable to join room");
-                MWLogger.errLog(ex);
+                LOGGER.error("Unable to join room");
+                LOGGER.error("Exception: ", ex);
             }
         }
         
@@ -250,7 +253,7 @@ public class MWChatServer implements ICommands {
                 try {
                     _users.remove(clientKey(client));
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
 
@@ -410,7 +413,7 @@ public class MWChatServer implements ICommands {
         try {
             return client.toLowerCase();
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return null;
         }
     }
@@ -434,18 +437,18 @@ public class MWChatServer implements ICommands {
                 // MWChatClient client =
                 createMWChatClient(s);
             } catch (IOException e) {
-                MWLogger.errLog(e);
+                LOGGER.error("Exception: ", e);
                 try {
                     Thread.sleep(1000);
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
                 try {
                     Thread.sleep(1000);
                 } catch (Exception exs) {
-                    MWLogger.errLog(exs);
+                    LOGGER.error(exs);
                 }
             }
         }
@@ -491,8 +494,8 @@ public class MWChatServer implements ICommands {
                 }
             }
         } catch (Exception ex) {
-            MWLogger.errLog("Error while sending server ping!");
-            MWLogger.errLog(ex);
+            LOGGER.error("Error while sending server ping!");
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -558,8 +561,7 @@ public class MWChatServer implements ICommands {
 
                 }
             } catch (Exception ex) {
-                MWLogger.errLog("Error while trying to sleep PingThread");
-                MWLogger.errLog(ex);
+                LOGGER.error("Error while trying to sleep PingThread", ex);
             }
 
         }

@@ -14,8 +14,12 @@ import megamek.common.MiscType;
 import megamek.common.Mounted;
 import megamek.common.equipment.AmmoMounted;
 import megamek.common.equipment.MiscMounted;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MekDamageHandler extends AbstractUnitDamageHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MekDamageHandler.class);
+
     @Override
     public String buildDamageString(Entity unit, boolean sendAmmo) {
         StringBuilder result = new StringBuilder();
@@ -249,8 +253,7 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
             result.append(delimiter);
 
         } catch (Exception ex) {
-            MWLogger.errLog("Entity: " + unit.getShortNameRaw());
-            MWLogger.errLog(ex);
+            LOGGER.error("Entity: {}", unit.getShortNameRaw(), ex);
             return "%%-%%-%%";
         }
         return result.toString();
@@ -357,7 +360,7 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                 }
                 unit.setCritical(location, slot, critSlot);
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
         }
 
@@ -383,7 +386,7 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                         weapon.setShotsLeft(ammoLeft);
                     }
                 } catch (Exception ex) {
-                    MWLogger.errLog("Error while parsing ammo Moving along");
+                    LOGGER.error("Error while parsing ammo Moving along");
                 }
             }
         }

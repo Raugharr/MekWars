@@ -35,6 +35,8 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -48,8 +50,8 @@ import mekwars.server.campaign.pilot.SPilot;
  * @Salient
  * 2017.9.01
  */
-public class FreeBuildCreateUnitCommand implements Command
-{
+public class FreeBuildCreateUnitCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(FreeBuildCreateUnitCommand.class);
 
 	int accessLevel = 1;
 	String syntax = "filename#weightclass#houseTable";
@@ -324,7 +326,7 @@ public class FreeBuildCreateUnitCommand implements Command
 				
 		}
 		
-		MWLogger.errLog("No case for this unit type in FreeBuildCreateUnit.java -> checkDupeLimits. Type is.. " + unit.getType());
+		LOGGER.error("No case for this unit type in FreeBuildCreateUnit.java -> checkDupeLimits. Type is.. " + unit.getType());
 		return false;
 	}
 	
@@ -369,7 +371,7 @@ public class FreeBuildCreateUnitCommand implements Command
 				{
 					CampaignMain.cm.toUser("AM:This is not a legal unit!",username,true);
 					//add some logging here, mod mail possible cheating attempt or BT error
-					MWLogger.errLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					LOGGER.error("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
 					MWLogger.modLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
 					return false;
 				}
@@ -380,7 +382,7 @@ public class FreeBuildCreateUnitCommand implements Command
 				{
 					CampaignMain.cm.toUser("AM:This is not a legal unit!",username,true);
 					//add some logging here, mod mail possible cheating attempt or BT error
-					MWLogger.errLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					LOGGER.error("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
 					MWLogger.modLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
 					return false;
 				}
@@ -391,7 +393,7 @@ public class FreeBuildCreateUnitCommand implements Command
 				{
 					CampaignMain.cm.toUser("AM:This is not a legal unit!",username,true);
 					//add some logging here, mod mail possible cheating attempt or BT error
-					MWLogger.errLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
+					LOGGER.error("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
 					MWLogger.modLog("User: " + username + "  tried to create " + unit.getUnitFilename() + " unit was not found in build tables");
 					return false;
 				}
@@ -399,7 +401,7 @@ public class FreeBuildCreateUnitCommand implements Command
 		}
 		catch (IOException e)
 		{
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 			return false;
 		}
 

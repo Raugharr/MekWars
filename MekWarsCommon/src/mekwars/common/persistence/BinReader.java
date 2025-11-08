@@ -103,9 +103,9 @@ public class BinReader {
                 obj.binIn(this, dataProvider);
                 col.add(obj);
             } catch (InstantiationException e) {
-                MWLogger.errLog(e);
+                LOGGER.error("Exception: ", e);
             } catch (IllegalAccessException e) {
-                MWLogger.errLog(e);
+                LOGGER.error("Exception: ", e);
             }
         }
     }*/

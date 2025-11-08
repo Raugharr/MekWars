@@ -25,8 +25,7 @@ import mekwars.server.campaign.CampaignMain;
  *
  * Syntax  /c Color#Color Schema
  */
-public class ColorCommand implements Command {
-	
+public class  ColorCommand  implements Command {
 	int accessLevel = 0;
 	public int getExecutionLevel(){return accessLevel;}
 	public void setExecutionLevel(int i) {accessLevel = i;}

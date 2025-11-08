@@ -28,9 +28,12 @@ import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetModLogCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(GetModLogCommand.class);
+
 	int accessLevel = IAuthenticator.MODERATOR;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -57,12 +60,12 @@ public class GetModLogCommand implements Command {
 			CampaignMain.cm.toUser("SM|" + total,Username,false);
 			CampaignMain.cm.doSendModMail("NOTE",Username + " read the modlog.");
 		} catch (Exception ex) {
-		    MWLogger.errLog(ex);
+		    LOGGER.error("Exception: ", ex);
 		} finally {
 			try {
 				dis.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
 		}
 		

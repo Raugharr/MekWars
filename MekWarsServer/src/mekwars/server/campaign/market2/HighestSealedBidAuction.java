@@ -25,13 +25,16 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Classic MMNET-style sealed bid auction.
  * @author urgru
  */
 public final class HighestSealedBidAuction implements IAuction {
-	
+    private static final Logger LOGGER = LogManager.getLogger(HighestSealedBidAuction.class);
+
 	/**
 	 * Winner is simply the highest offering person who can
 	 * afford to pay. This, codewise, is a truncated Vickrey
@@ -117,7 +120,7 @@ public final class HighestSealedBidAuction implements IAuction {
 					// OK, we've got a unit to work with
 					baysNeeded = SUnit.getHangarSpaceRequired(u, sellingFaction);
 				} else {
-					MWLogger.errLog("Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
+					LOGGER.error("Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
 					CampaignMain.cm.doSendModMail("NOTE", "Spork effed something up.  Unable to find unit in HighestSealedBidAuction.getWinner()");
 					baysNeeded = 0;
 				}
@@ -136,7 +139,7 @@ public final class HighestSealedBidAuction implements IAuction {
 			// if the buyer doesn't have room, move on as well.
 			
 			if (potentialWinner.isHuman() && !hiddenBM && !((SPlayer) potentialWinner).hasRoomForUnit(unitType, unitWeightClass)) {
-				MWLogger.errLog(currBid.getBidderName() + " has no room for a " + Unit.getWeightClassDesc(unitWeightClass) + " " + Unit.getTypeClassDesc(unitType) + " from the BM");
+                LOGGER.error("{} has no room for a {} {} from the BM", currBid.getBidderName(), Unit.getWeightClassDesc(unitWeightClass), Unit.getTypeClassDesc(unitType));
 				CampaignMain.cm.toUser("The " + listing.getListedModelName() 
 						+ " from the BM could have been yours! Unfortunately, you don't have room for another "
 						+ Unit.getWeightClassDesc(unitWeightClass) + " " 

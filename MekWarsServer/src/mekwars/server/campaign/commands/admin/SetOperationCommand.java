@@ -26,8 +26,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 //Syntax setoperation#optype#opname#data
-public class SetOperationCommand implements Command {
-    
+public class  SetOperationCommand  implements Command {
     int accessLevel = IAuthenticator.ADMIN;
     public int getExecutionLevel(){return accessLevel;}
     public void setExecutionLevel(int i) {accessLevel = i;}

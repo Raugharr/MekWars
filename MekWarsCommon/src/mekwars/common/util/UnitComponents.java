@@ -27,22 +27,23 @@ import megamek.common.Entity;
 import megamek.common.EquipmentType;
 import megamek.common.Mounted;
 import megamek.common.TechConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UnitComponents{
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnitComponents.class);
 
-    Hashtable<String, Integer> components = new Hashtable<String, Integer>();
+    private Hashtable<String, Integer> components = new Hashtable<>();
 
     public String tableizeComponents(int year) {
         return tableizeComponents(components, year);
     }
 
     public static Comparator<? super Object> stringComparator() {
-        return new Comparator<Object>() {
-            public int compare(Object o1, Object o2) {
-                String s1 = ((String) o1).toLowerCase();
-                String s2 = ((String) o2).toLowerCase();
-                return s1.compareTo(s2);
-            }
+        return (Comparator<Object>) (o1, o2) -> {
+            String s1 = ((String) o1).toLowerCase();
+            String s2 = ((String) o2).toLowerCase();
+            return s1.compareTo(s2);
         };
     }
 
@@ -120,7 +121,7 @@ public class UnitComponents{
                 components.put(key, value);
             }
         }catch(Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 
     }
@@ -133,7 +134,7 @@ public class UnitComponents{
                 components.put(st.nextToken(), Integer.parseInt(st.nextToken()));
             }
         }catch(Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 
     }

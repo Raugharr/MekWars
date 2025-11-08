@@ -29,8 +29,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 //Syntax removesong#songname
-public class RemoveSongCommand implements Command {
-    
+public class  RemoveSongCommand  implements Command {
     int accessLevel = IAuthenticator.ADMIN;
     public int getExecutionLevel(){return accessLevel;}
     public void setExecutionLevel(int i) {accessLevel = i;}

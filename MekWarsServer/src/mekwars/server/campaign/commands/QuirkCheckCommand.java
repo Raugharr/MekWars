@@ -7,10 +7,13 @@ import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //@salient a command to make sure hosts are using same quirk files
-public class QuirkCheckCommand implements Command 
-{	
+public class QuirkCheckCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(QuirkCheckCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "/c quirkCheck#canon#custom";
 	public int getExecutionLevel(){return accessLevel;}
@@ -104,7 +107,7 @@ public class QuirkCheckCommand implements Command
 		if( serverCanonQuirkLength != clientCanonQuirkLength || serverCustomQuirkLength != clientCustomQuirkLength )
 		{
 			CampaignMain.cm.doSendModMail(username, " is hosting with quirk files that do not match server!");
-			MWLogger.errLog(username + " is hosting with quirk files that do not match server!");
+			LOGGER.error(username + " is hosting with quirk files that do not match server!");
 			CampaignMain.cm.doSendErrLog(username + " is hosting with quirk files that do not match server!");
 			player.toSelf("AM: Your files do not match the server, run autoupdate before hosting a match!");			
 		}

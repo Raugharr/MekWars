@@ -13,20 +13,21 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-
 package mekwars.common;
 
 import java.util.Properties;
 import java.util.StringTokenizer;
 
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SubFaction{
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubFaction.class);
+
 	private static Properties defaultSettings = new Properties();
 	private Properties factionSettings = null;
-	public int DBId = 0;
-	
+
 	public SubFaction(){
 		factionSettings = new Properties(SubFaction.getDefault());
 	}
@@ -59,25 +60,23 @@ public class SubFaction{
 		return defaultSettings;
 	}
 	
-	public String getConfig(String key){
-		
+	public String getConfig(String key) {
 		if ( !factionSettings.containsKey(key) ){
-			
-			if ( SubFaction.getDefault().containsKey(key) )
-				return SubFaction.getDefault().getProperty(key);
-			
-			MWLogger.errLog("Unable to find subfaction config: "+key);
+			if ( SubFaction.getDefault().containsKey(key) ) {
+                return SubFaction.getDefault().getProperty(key);
+            }
+            LOGGER.error("Unable to find subfaction config: {}", key);
 			return "-1";
 		}
-		
 		return factionSettings.getProperty(key);
 	}
 	
-	public void setConfig(String key, String value){
+	public void setConfig(String key, String value) {
 		factionSettings.setProperty(key, value);
 	}
 	
-	public String toString(){
+	@Override
+    public String toString() {
 		StringBuffer result = new StringBuffer();
 		
 		if ( factionSettings.size() < 1 )
@@ -92,7 +91,7 @@ public class SubFaction{
 		return result.toString();
 	}
 	
-	public void fromString(String settings){
+	public void fromString(String settings) {
 		StringTokenizer propertyList = new StringTokenizer(settings,"#");
 		
 		while ( propertyList.hasMoreElements() ){
@@ -106,9 +105,8 @@ public class SubFaction{
 			setConfig(key, value);
 		}
 	}
-	
-	public String getName()
-	{
-		return factionSettings.getProperty("Name");
-	}
+
+    public String getName() {
+        return factionSettings.getProperty("Name");
+    }
 }

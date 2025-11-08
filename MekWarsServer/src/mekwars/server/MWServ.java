@@ -18,7 +18,6 @@ package mekwars.server;
 
 //The MegaMek.NET Master Server Application
 //@Author: Helge Richter (McWizard@gmx.de)
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,7 +28,6 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -72,7 +70,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class MWServ {
-    private static final Logger logger = LogManager.getLogger(MWServ.class);
+    private static final Logger LOGGER = LogManager.getLogger(MWServ.class);
     private static MWServ instance;
     // Static logging engine, and static version info.
     public static final Version SERVER_VERSION = new Version("9.0.0");
@@ -129,7 +127,7 @@ public class MWServ {
                 );
             MWServ.getInstance().getHpgClient().connect(address);
         } catch (IOException exception) {
-            logger.warn("Unable to connect to tracker");
+            LOGGER.warn("Unable to connect to tracker");
         }
         TrackerUpdateJob.submit();
         TickJob.submit();
@@ -176,8 +174,7 @@ public class MWServ {
         try {
             dataport = Integer.parseInt(getConfigParam("DATAPORT"));
         } catch (NumberFormatException e) {
-            logger.error("Non-number given as dataport. Defaulting to 4867.");
-            logger.catching(e);
+            LOGGER.error("Non-number given as dataport. Defaulting to 4867.", e);
             dataport = 4867;
         } finally {
             dataProviderServer = new Server(campaign.getData(), dataport, getConfigParam("SERVERIP"));
@@ -236,8 +233,7 @@ public class MWServ {
             try {
                 config.store(new FileOutputStream("./data/serverconfig.txt"), "Server config File");
             } catch (Exception e1) {
-                MWLogger.errLog("config file could not be read or written, defaults will be used.");
-                MWLogger.errLog(e1);
+                LOGGER.error("config file could not be read or written, defaults will be used.", e1);
             }
         }
 
@@ -252,8 +248,7 @@ public class MWServ {
             myCommunicator = ServerWrapper.createServer(this);
             myCommunicator.start();
         } catch (Exception e) {
-            MWLogger.errLog("== PROBLEM STARTING SERVER WRAPPER ==");
-            MWLogger.errLog(e);
+            LOGGER.error("== PROBLEM STARTING SERVER WRAPPER ==", e);
         }
     }
 
@@ -277,7 +272,7 @@ public class MWServ {
                     out.close();
                 }
             } catch (Exception e) {
-                MWLogger.errLog(e);
+                LOGGER.error("Exception: ", e);
                 MWLogger.mainLog("No file named " + filename + " was found and cannot create one!");
                 System.exit(1);
             }
@@ -723,8 +718,8 @@ public class MWServ {
                 // Most propably an out of date client. Send him the request to
                 // update
                 clientSend("CH|Your Client sent a false packet or caused a server error. You probably entered an illegal server command.", name);
-                MWLogger.errLog("False packet/illegal command (from " + name + "):");
-                MWLogger.errLog(ex);
+                LOGGER.error("False packet/illegal command (from " + name + "):");
+                LOGGER.error("Exception: ", ex);
             }
         }
     }
@@ -760,7 +755,7 @@ public class MWServ {
                     String player = dis.readLine();
                     if (player.equalsIgnoreCase(name)) {
                         String provderName = newFile.getName().substring(0, newFile.getName().lastIndexOf(".prv"));
-                        MWLogger.errLog("Provider: " + provderName);
+                        LOGGER.error("Provider: " + provderName);
                         ISPlog.put(provderName, time);
                         in.close();
                         dis.close();
@@ -866,8 +861,8 @@ public class MWServ {
             dis.close();
             fis.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems reading mail file:");
-            MWLogger.errLog(ex);
+            LOGGER.error("Problems reading mail file:");
+            LOGGER.error("Exception: ", ex);
         }
         return result;
     }
@@ -884,8 +879,8 @@ public class MWServ {
             p.close();
             out.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems writing mail file:");
-            MWLogger.errLog(ex);
+            LOGGER.error("Problems writing mail file:");
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -1018,7 +1013,7 @@ public class MWServ {
                 doStoreMailToHashtable(null, username, txt);
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -1061,8 +1056,8 @@ public class MWServ {
             p.close();
             out.close();
         } catch (Exception e) {
-            MWLogger.errLog("Problem updating ban files:");
-            MWLogger.errLog(e);
+            LOGGER.error("Problem updating ban files:");
+            LOGGER.error("Exception: ", e);
         }
     }
 
@@ -1117,8 +1112,8 @@ public class MWServ {
             dis.close();
             fis.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems with loading IP banlist:");
-            MWLogger.errLog(ex);
+            LOGGER.error("Problems with loading IP banlist:");
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -1151,7 +1146,7 @@ public class MWServ {
             dis.close();
             fis.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems reading ban file at startup!");
+            LOGGER.error("Problems reading ban file at startup!");
         }
     }
 
@@ -1182,7 +1177,7 @@ public class MWServ {
             dis.close();
             fis.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems reading ISP file at startup!");
+            LOGGER.error("Problems reading ISP file at startup!");
         }
     }
 

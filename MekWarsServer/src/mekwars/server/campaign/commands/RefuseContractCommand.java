@@ -21,8 +21,7 @@ import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.mercenaries.ContractInfo;
 
-public class RefuseContractCommand implements Command {
-	
+public class  RefuseContractCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

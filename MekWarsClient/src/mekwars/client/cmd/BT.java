@@ -28,15 +28,17 @@ import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.CCommPanel;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
+    /**
  * @author Spork
  * 
  * Handles Build Table up/downloading for admins/mods
  * 
  */
 public class BT extends Command {
-
+        private static final Logger LOGGER = LoggerFactory.getLogger(BT.class);
 	/**
 	 * @param client
 	 */
@@ -141,11 +143,11 @@ public class BT extends Command {
 					out.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					MWLogger.errLog(e);
+					LOGGER.error("Exception: ", e);
 				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
 		} else if ( cmd.equalsIgnoreCase("VS") ) {
 		    mwclient.setWaiting(false);

@@ -38,6 +38,8 @@ import mekwars.common.House;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //IMPORTS
 
@@ -51,7 +53,8 @@ import mekwars.server.campaign.CampaignMain;
  * they connect and used to build menus and maps.
  */
 public class OperationWriter {
-	
+    private static final Logger LOGGER = LogManager.getLogger(OperationWriter.class);
+
 	//IVARS
 	
 	//CONSTRUCTORS
@@ -155,9 +158,9 @@ public class OperationWriter {
 			}
 			ps.close();
 		} catch (FileNotFoundException fe) {
-			MWLogger.errLog("Error: could not find " + path);
+			LOGGER.error("Error: could not find " + path);
 		} catch (Exception ex) {
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}
 		
 	}//end writeOpList

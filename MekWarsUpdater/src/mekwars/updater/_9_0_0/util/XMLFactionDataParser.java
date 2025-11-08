@@ -33,7 +33,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class XMLFactionDataParser implements XMLResponder {
-    private static final Logger logger = LogManager.getLogger(XMLFactionDataParser.class);
+    private static final Logger LOGGER = LogManager.getLogger(XMLFactionDataParser.class);
     
     String lastElement = "";
     String lastInfFaction = "";
@@ -68,7 +68,7 @@ public class XMLFactionDataParser implements XMLResponder {
             XMLParser xp = new XMLParser();
             xp.parseXML(this);
         } catch (Exception ex) {
-            logger.error(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
     
@@ -77,7 +77,7 @@ public class XMLFactionDataParser implements XMLResponder {
      {
      String charData = (new String(characters,start,length)).trim();
      if (!charData.equalsIgnoreCase(""))
-     logger.info(lastElement + " --> " + charData);
+     LOGGER.info(lastElement + " --> " + charData);
      else
      lastElement = "";
      if (lastElement.equalsIgnoreCase("NAME"))
@@ -99,7 +99,7 @@ public class XMLFactionDataParser implements XMLResponder {
         if (rawName.equalsIgnoreCase("FACTION"))
         {
             /*
-             logger.info("FACTION READ");
+             LOGGER.info("FACTION READ");
              SHouse h;
              if (this.isMercenary)
              h = new MercHouse(name,Color,BaseGunner,BasePilot,Abbreviation,myCampaign.getR(),myCampaign);
@@ -134,7 +134,7 @@ public class XMLFactionDataParser implements XMLResponder {
         System.out.print(prefix+"!NOTATION: "+name);
         if (pubID!=null) System.out.print("  pubID = "+pubID);
         if (sysID!=null) System.out.print("  sysID = "+sysID);
-        logger.info("");
+        LOGGER.info("");
     }
     
     public void recordEntityDeclaration(String name, String value, String pubID, String sysID, String notation) throws ParseException {
@@ -143,12 +143,12 @@ public class XMLFactionDataParser implements XMLResponder {
         if (pubID!=null) System.out.print("  pubID = "+pubID);
         if (sysID!=null) System.out.print("  sysID = "+sysID);
         if (notation!=null) System.out.print("  notation = "+notation);
-        logger.info("");
+        LOGGER.info("");
     }
     
     public void recordElementDeclaration(String name, String content) throws ParseException {
         System.out.print(prefix+"!ELEMENT: "+name);
-        logger.info("  content = "+content);
+        LOGGER.info("  content = "+content);
     }
     
     public void recordAttlistDeclaration(String element, String attr, boolean notation, String type, String defmod, String def) throws ParseException {
@@ -156,14 +156,14 @@ public class XMLFactionDataParser implements XMLResponder {
         System.out.print("  attr = "+attr);
         System.out.print("  type = " + ((notation) ? "NOTATIONS " : "") + type);
         System.out.print("  def. modifier = "+defmod);
-        logger.info( (def==null) ? "" : "  def = "+notation);
+        LOGGER.info( (def==null) ? "" : "  def = "+notation);
     }
     
     public void recordDoctypeDeclaration(String name, String pubID, String sysID) throws ParseException {
         System.out.print(prefix+"!DOCTYPE: "+name);
         if (pubID!=null) System.out.print("  pubID = "+pubID);
         if (sysID!=null) System.out.print("  sysID = "+sysID);
-        logger.info("");
+        LOGGER.info("");
         prefix = "";
     }
     
@@ -175,12 +175,12 @@ public class XMLFactionDataParser implements XMLResponder {
     }
     
     public void recordDocEnd() {
-        logger.info("");
-        logger.info("Faction Parsing finished without error");
+        LOGGER.info("");
+        LOGGER.info("Faction Parsing finished without error");
     }
     
     public void recordElementStart(String name, Hashtable attr) throws ParseException {
-        logger.info(prefix+"Element: "+name);
+        LOGGER.info(prefix+"Element: "+name);
         lastElement = name;
         /*        if (attr!=null) {
          Enumeration e = attr.keys();
@@ -191,7 +191,7 @@ public class XMLFactionDataParser implements XMLResponder {
          System.out.print(conj+k+" = "+attr.get(k));
          conj = ", ";
          }
-         logger.info("");
+         LOGGER.info("");
          }
          prefix = prefix+"  ";*/
     }
@@ -199,7 +199,7 @@ public class XMLFactionDataParser implements XMLResponder {
     public void recordElementEnd(String name) throws ParseException {
         if (name.equalsIgnoreCase("FACTION"))
         {
-            logger.info("FACTION READ");
+            LOGGER.info("FACTION READ");
             SHouse h = null;
             // search for an unused ID
             idcounter++;
@@ -236,13 +236,13 @@ public class XMLFactionDataParser implements XMLResponder {
     }
     
     public void recordPI(String name, String pValue) {
-        logger.info(prefix+"*"+name+" PI: "+pValue);
+        LOGGER.info(prefix+"*"+name+" PI: "+pValue);
     }
     
     public void recordCharData(String charData) {
-        logger.info(prefix+charData);
+        LOGGER.info(prefix+charData);
         if (!charData.equalsIgnoreCase(""))
-            logger.info(lastElement + " --> " + charData);
+            LOGGER.info(lastElement + " --> " + charData);
         else
             lastElement = "";
         if (lastElement.equalsIgnoreCase("NAME"))
@@ -276,7 +276,7 @@ public class XMLFactionDataParser implements XMLResponder {
     }
     
     public void recordComment(String comment) {
-        logger.info(prefix+"*Comment: "+comment);
+        LOGGER.info(prefix+"*Comment: "+comment);
     }
     
     

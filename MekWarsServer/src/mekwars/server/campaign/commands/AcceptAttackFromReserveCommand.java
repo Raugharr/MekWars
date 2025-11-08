@@ -33,8 +33,7 @@ import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
  * "join" command - it allows a player to register
  * himself as the defender for an attack.
  */
-public class AcceptAttackFromReserveCommand implements Command {
-	
+public class  AcceptAttackFromReserveCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

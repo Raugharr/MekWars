@@ -30,8 +30,7 @@ import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.operations.ShortOperation;
 import mekwars.server.campaign.util.PlanetNameComparator;
 
-public class HouseCommand implements Command {
-	
+public class  HouseCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

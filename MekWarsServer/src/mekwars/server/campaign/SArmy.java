@@ -37,6 +37,8 @@ import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.VTOL;
 import megamek.common.battlevalue.BVCalculator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Helge Richter
@@ -44,6 +46,7 @@ import megamek.common.battlevalue.BVCalculator;
  */
 
 public class SArmy extends Army {
+    private static final Logger LOGGER = LogManager.getLogger(SArmy.class);
 
     // VARIABLES
     private float rawForceSize = 0;
@@ -181,15 +184,15 @@ public class SArmy extends Army {
                     hasHoming = true;
                 }
 
-                // MWLogger.errLog(" Unit: "+u.getModelName()+" TAG:
+                // LOGGER.error(" Unit: "+u.getModelName()+" TAG:
                 // "+hasTAG+" Homing: "+hasHoming);
                 if (hasTAG && hasHoming) {
                     return true;
                 }
             }
         } catch (Exception ex) {
-            MWLogger.errLog("Bad unit in army for TAGandHomingCombo. Returning false.");
-            MWLogger.errLog(ex);
+            LOGGER.error("Bad unit in army for TAGandHomingCombo. Returning false.");
+            LOGGER.error("Exception: ", ex);
             return false;
         }
         return false;
@@ -210,15 +213,15 @@ public class SArmy extends Army {
                     hasSemiGuided = true;
                 }
 
-                // MWLogger.errLog(" Unit: "+u.getModelName()+" TAG:
+                // LOGGER.error(" Unit: "+u.getModelName()+" TAG:
                 // "+hasTAG+" SemiGuided: "+hasSemiGuided);
                 if (hasTAG && hasSemiGuided) {
                     return true;
                 }
             }
         } catch (Exception ex) {
-            MWLogger.errLog("Bad unit in army for hasTAGAndSemiGuidedCombo. Returning false.");
-            MWLogger.errLog(ex);
+            LOGGER.error("Bad unit in army for hasTAGAndSemiGuidedCombo. Returning false.");
+            LOGGER.error("Exception: ", ex);
             return false;
         }
         return false;
@@ -662,8 +665,8 @@ public class SArmy extends Army {
             opponents.add(a);
             opponents.trimToSize();
         } catch (Exception e) {
-            MWLogger.errLog("Error adding army to opponentList. Trace follows.");
-            MWLogger.errLog(e);
+            LOGGER.error("Error adding army to opponentList. Trace follows.");
+            LOGGER.error("Exception: ", e);
         }
     }// end addOpponent
 
@@ -672,8 +675,8 @@ public class SArmy extends Army {
             opponents.remove(a);
             opponents.trimToSize();
         } catch (Exception e) {
-            MWLogger.errLog("Error removing army from opponentList. Trace follows.");
-            MWLogger.errLog(e);
+            LOGGER.error("Error removing army from opponentList. Trace follows.");
+            LOGGER.error("Exception: ", e);
         }
     }// end removeOpponent()
 

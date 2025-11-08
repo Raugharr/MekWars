@@ -21,33 +21,36 @@
 
 package mekwars.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ThreadManager{
-	
-	private static ThreadManager instance = new ThreadManager();
-	
-	private ExecutorService executor;
-	
-	protected ThreadManager(){
-		executor = Executors.newCachedThreadPool();
-	}
-	
-	public static ThreadManager getInstance() {
-		return instance;
-	}
-	
-	public void runInThreadFromPool(Thread runnable) {
-		try{
-			executor.execute(runnable);
-		}catch(Exception ex ){
-			MWLogger.errLog(ex);
-		}
-	}
-	
-	
-	public void shutdown(){
-		executor.shutdown();
-	}
+public class ThreadManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadManager.class);
+
+    private static ThreadManager instance = new ThreadManager();
+
+    private ExecutorService executor;
+
+    protected ThreadManager() {
+        executor = Executors.newCachedThreadPool();
+    }
+
+    public static ThreadManager getInstance() {
+        return instance;
+    }
+
+    public void runInThreadFromPool(Thread runnable) {
+        try {
+            executor.execute(runnable);
+        } catch (Exception ex) {
+            LOGGER.error("Exception with executor", ex);
+        }
+    }
+
+    public void shutdown() {
+        executor.shutdown();
+    }
 }

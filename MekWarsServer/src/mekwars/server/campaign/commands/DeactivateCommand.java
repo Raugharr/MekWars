@@ -26,8 +26,7 @@ import mekwars.server.campaign.util.scheduler.MWScheduler;
  * A command that takes a player out of active status.
  * @version 2016.10.06
  */
-public class DeactivateCommand implements Command {
-	
+public class  DeactivateCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

@@ -32,6 +32,8 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -42,7 +44,8 @@ import mekwars.server.campaign.pilot.SPilot;
  * @urgru 12.29.05
  */
 public class Market2 {
-	
+    private static final Logger LOGGER = LogManager.getLogger(Market2.class);
+
 	// IVARS
 	private IAuction auctionType;// set in constructor
 	private TreeMap<Integer, MarketListing> currentAuctions;
@@ -91,7 +94,7 @@ public class Market2 {
 			sellingPlayer = CampaignMain.cm.getPlayer(sellername);
 		
 		if (unit.getModelName().startsWith("Error") || unit.getModelName().startsWith("OMG")) {
-			MWLogger.errLog("OMG unit trying to be sold on the BM " + unit.getProducer());
+			LOGGER.error("OMG unit trying to be sold on the BM " + unit.getProducer());
 			return;
 		}
 		
@@ -99,7 +102,7 @@ public class Market2 {
 				|| UnitUtils.hasArmorDamage(unit.getEntity())
 				|| UnitUtils.hasCriticalDamage(unit.getEntity()))
 				&& !CampaignMain.cm.getBooleanConfig("AllowDonatingOfDamagedUnits")) {
-			MWLogger.errLog("Damaged unit trying to be sold on the BM " + unit.getProducer());
+			LOGGER.error("Damaged unit trying to be sold on the BM " + unit.getProducer());
 			
 			if (sellingPlayer != null)
 				CampaignMain.cm.toUser("You cannot sell damaged units on the Black Market!",sellername, true);
@@ -433,7 +436,7 @@ public class Market2 {
 					SUnit unitForSale = sellingActor.getUnit(currList.getListedUnitID());
 					
 					if (unitForSale == null) {
-						MWLogger.errLog("Unable to get unit for sale "+ currList.getListedModelName() + " seller " + currList.getSellerName());
+						LOGGER.error("Unable to get unit for sale "+ currList.getListedModelName() + " seller " + currList.getSellerName());
 						listingsToRemove.add(currAuctionID);
 						continue;
 					}
@@ -564,8 +567,8 @@ public class Market2 {
 				}// end if(auction is over)
 				
 			} catch (Exception ex) {
-				MWLogger.errLog("Error during Market Tick for unit " + currList.getListedModelName());
-				MWLogger.errLog(ex);
+				LOGGER.error("Error during Market Tick for unit " + currList.getListedModelName());
+				LOGGER.error("Exception: ", ex);
 			}
 		}// end for(all auctions)
 
@@ -665,12 +668,12 @@ public class Market2 {
 		} else if (roll < assaultEnd) {
 			return 3;
 		} else {
-			MWLogger.errLog("Error in getSkewedWeightClass().");
-			MWLogger.errLog("lightEnd: " + lightEnd);
-			MWLogger.errLog("mediumEnd: " + mediumEnd);
-			MWLogger.errLog("heavyEnd: " + heavyEnd);
-			MWLogger.errLog("assaultEnd: " + assaultEnd);
-			MWLogger.errLog("Roll: " + roll);
+			LOGGER.error("Error in getSkewedWeightClass().");
+			LOGGER.error("lightEnd: " + lightEnd);
+			LOGGER.error("mediumEnd: " + mediumEnd);
+			LOGGER.error("heavyEnd: " + heavyEnd);
+			LOGGER.error("assaultEnd: " + assaultEnd);
+			LOGGER.error("Roll: " + roll);
 			return 0;
 		}
 	}

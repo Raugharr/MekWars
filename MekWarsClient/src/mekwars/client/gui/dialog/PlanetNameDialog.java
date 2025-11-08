@@ -47,6 +47,8 @@ import mekwars.common.House;
 import mekwars.common.Planet;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 //util imports
 //swing imports
 //mekwars imports
@@ -65,12 +67,9 @@ import mekwars.common.util.SpringLayoutHelper;
  *  
  * @Torren 5.6.05
  */
-
 public class PlanetNameDialog extends JDialog implements ActionListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlanetNameDialog.class);
 
-	/**
-     * 
-     */
     private static final long serialVersionUID = 3344329118582475184L;
     //variables
 	private final TreeSet<String> planetNames;
@@ -181,7 +180,7 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
 				
                 //Check for allowed planet flags. the planet most have these flags.
                 if ( allowPlanetFlags.length() > 0 ){
-                    //MWLogger.errLog(currOpName+" AllowPlanetFlags: "+allowPlanetFlags);
+                    //LOGGER.error(currOpName+" AllowPlanetFlags: "+allowPlanetFlags);
                     boolean allowOp = true;
                     StringTokenizer st = new StringTokenizer(allowPlanetFlags,"^");
                     while ( st.hasMoreTokens() ){
@@ -190,7 +189,7 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
                         if ( key.trim().length() < 1 )
                             continue;
                         if ( !tp.getPlanetFlags().containsKey(key) ){
-                            MWLogger.errLog(tp.getName()+" does not have flag: "+key);
+                            LOGGER.error(tp.getName()+" does not have flag: "+key);
                             allowOp = false;
                             break;
                         }
@@ -202,7 +201,7 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
                 //Check for disallowed planet flags. If the planet has one of these flags
                 // The planet will not be allowed.
                 if ( disallowPlanetFlags.length() > 0){
-                    //MWLogger.errLog(currOpName+" DisallowPlanetFlags: "+disallowPlanetFlags);
+                    //LOGGER.error(currOpName+" DisallowPlanetFlags: "+disallowPlanetFlags);
                     
                     boolean allowOp = true;
                     StringTokenizer st = new StringTokenizer(disallowPlanetFlags,"^");
@@ -260,7 +259,7 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
 					@Override
 					public void run(){
 						String text = nameField.getText();
-						if (text == null || text.equals("")) {
+						if (text == null || text.isEmpty()) {
 							matchingPlanetsList.setListData(allPlanetNames);
 							return;
 						}
@@ -352,7 +351,7 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
 			 String selectedPlanet = (String)matchingPlanetsList.getSelectedValue();
 		        if (selectedPlanet == null)
 		        	selectedPlanet = nameField.getText();
-		        if (selectedPlanet == null || selectedPlanet.equals(""))
+		        if (selectedPlanet == null || selectedPlanet.isEmpty())
 		        	return;
 		        if (matchingPlanetsList.getModel().getSize() == 1)
 		        	selectedPlanet = (String)matchingPlanetsList.getModel().getElementAt(0);

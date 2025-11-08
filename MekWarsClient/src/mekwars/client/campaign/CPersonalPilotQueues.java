@@ -29,6 +29,8 @@ import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Torren (Jason Tighe)
@@ -41,14 +43,15 @@ import mekwars.common.util.TokenReader;
  */
 
 public class CPersonalPilotQueues {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CPersonalPilotQueues.class);
 
     /*
      * Don't need to synchronize on the client side. Two threads won't WRITE to
      * these, although multiple threads may read.
      */
-    private ArrayList<LinkedList<Pilot>> mekPilots = new ArrayList<LinkedList<Pilot>>();
-    private ArrayList<LinkedList<Pilot>> protoPilots = new ArrayList<LinkedList<Pilot>>();
-    private ArrayList<LinkedList<Pilot>> aeroPilots = new ArrayList<LinkedList<Pilot>>();
+    private ArrayList<LinkedList<Pilot>> mekPilots = new ArrayList<>();
+    private ArrayList<LinkedList<Pilot>> protoPilots = new ArrayList<>();
+    private ArrayList<LinkedList<Pilot>> aeroPilots = new ArrayList<>();
 
     // CONSTRUCTOR
     /**
@@ -58,9 +61,9 @@ public class CPersonalPilotQueues {
     public CPersonalPilotQueues() {
 
         for (int i = Unit.LIGHT; i <= Unit.ASSAULT; i++) {// for (0 - 3)
-            mekPilots.add(i, new LinkedList<Pilot>());
-            protoPilots.add(i, new LinkedList<Pilot>());
-            aeroPilots.add(i, new LinkedList<Pilot>());
+            mekPilots.add(i, new LinkedList<>());
+            protoPilots.add(i, new LinkedList<>());
+            aeroPilots.add(i, new LinkedList<>());
         }
 
     }
@@ -144,8 +147,7 @@ public class CPersonalPilotQueues {
 
             this.getUnitTypeQueue(pilotType).get(pilotClass).addLast(pilot);
         } catch (Exception ex) {
-            MWLogger.errLog("Error while adding pilot to PPQ");
-            MWLogger.errLog(ex);
+            LOGGER.error("Error while adding pilot to PPQ", ex);
         }
 
     }
@@ -166,8 +168,7 @@ public class CPersonalPilotQueues {
 
             this.getUnitTypeQueue(pilotType).get(pilotClass).remove(pilotPosition);
         } catch (Exception ex) {
-            MWLogger.errLog("Unable to remove pilot form queue");
-            MWLogger.errLog(ex);
+            LOGGER.error("Unable to remove pilot form queue", ex);
         }
     }
 

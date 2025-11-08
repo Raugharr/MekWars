@@ -23,12 +23,14 @@ import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class TL extends Command {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(TL.class);
 	/**
 	 * @param client
 	 */
@@ -49,7 +51,7 @@ public class TL extends Command {
             out.write("\n");
             out.close();
         } catch (IOException e) {
-            MWLogger.errLog(e);
+            LOGGER.error("Exception: ", e);
         }
 	}
 }

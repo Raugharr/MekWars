@@ -33,8 +33,7 @@ import mekwars.server.campaign.util.ExclusionList;
  * and gives attackers their "Special" options. Syntax
  * attackfromreserve#opname#armyid#planet#defender
  */
-public class AttackFromReserveCommand implements Command {
-
+public class  AttackFromReserveCommand  implements Command {
     int accessLevel = 2;
 
     public int getExecutionLevel() {

@@ -39,7 +39,7 @@ import org.apache.logging.log4j.Logger;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class CommandTaskThread extends Thread {
-    private static final Logger logger = LogManager.getLogger(MWServ.class);
+    private static final Logger LOGGER = LogManager.getLogger(CommandTaskThread.class);
     
     private Socket client;
     private CampaignData data;
@@ -54,7 +54,7 @@ public class CommandTaskThread extends Thread {
             this.data = data;
             //this.client.setSoTimeout(12000);
         } catch (Exception ex){
-          logger.error(ex); 
+          LOGGER.error("Exception: ", ex);
         }
     }
     
@@ -83,8 +83,7 @@ public class CommandTaskThread extends Thread {
                     	//System.err.println("timeStr: "+timeStr);
                     }catch (Exception e) {
                         in.close();
-                    	MWLogger.errLog("Error getting data provider command or timestamp from client.");
-                    	MWLogger.errLog(e);
+                    	LOGGER.error("Error getting data provider command or timestamp from client.", e);
                     	return;
                     }//end command name try/catch
                     
@@ -94,8 +93,7 @@ public class CommandTaskThread extends Thread {
                         	out = new BinWriter(new PrintWriter(client.getOutputStream()));
                         } catch (Exception e) {
                             in.close();
-                        	MWLogger.errLog("Error in data provider while creating output stream.");
-                        	MWLogger.errLog(e);
+                        	LOGGER.error("Error in data provider while creating output stream.", e);
                         	return;
                         } 
                     }//end output stream if
@@ -105,13 +103,12 @@ public class CommandTaskThread extends Thread {
                     ServerCommand cmd;
                     try {
                     	cmdClass = Class.forName("mekwars.server.dataProvider.commands." + cmdStr);
-                    	logger.info(cmdStr);
+                    	LOGGER.info(cmdStr);
                     	cmd = (ServerCommand)cmdClass.getDeclaredConstructor().newInstance();
                     } catch (Exception e) {
                         in.close();
                         out.close();
-                    	MWLogger.errLog("Error creating dataprovider command: " + cmdStr);
-                    	MWLogger.errLog(e);
+                        LOGGER.error("Error creating dataprovider command: {}", cmdStr, e);
                     	return;
                     }//end command class try/catch
                    
@@ -120,12 +117,11 @@ public class CommandTaskThread extends Thread {
                     
                     //execute command
                     try {
-                    	cmd.execute(timeStr.equals("")?null:sdf.parse(timeStr),out, data);
+                        cmd.execute(timeStr.isEmpty() ? null : sdf.parse(timeStr), out, data);
                     } catch (Exception e) {
                         in.close();
                         out.close();
-                    	MWLogger.errLog("Error executing dataprovider command: " + cmdStr);
-                    	MWLogger.errLog(e);
+                        LOGGER.error("Error executing dataprovider command: {}", cmdStr, e);
                     	return;
                     }//end execute try/catch
                     out.flush();
@@ -142,7 +138,7 @@ public class CommandTaskThread extends Thread {
                     client = null;
                     return;
                 }catch (Exception e) {
-                	MWLogger.errLog(e);
+                	LOGGER.error("Exception: ", e);
                 	return;
                 }//end client.close() try
             }catch (SocketException se ){
@@ -159,7 +155,7 @@ public class CommandTaskThread extends Thread {
                 client = null;
                 return;
             }catch (Exception ex){
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
                 return;
             }//end first try
             

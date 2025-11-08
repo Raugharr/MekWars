@@ -24,14 +24,15 @@ import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
  * Syntax  /ListSubFaction FactionName 
  */
 
-public class ListSubFactionCommand implements Command {
-	
+public class  ListSubFactionCommand  implements Command {
 	int accessLevel = IAuthenticator.MODERATOR;
 	public int getExecutionLevel(){return accessLevel;}
 	public void setExecutionLevel(int i) {accessLevel = i;}

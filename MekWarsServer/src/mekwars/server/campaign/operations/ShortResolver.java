@@ -62,8 +62,11 @@ import mekwars.server.campaign.mercenaries.MercHouse;
 import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.util.ELORanking;
 import mekwars.server.util.BattleToJSON;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ShortResolver {
+    private static final Logger LOGGER = LogManager.getLogger(ShortResolver.class);
 
     // IVARS
 
@@ -280,7 +283,7 @@ public class ShortResolver {
             // set to reporting status
             so.changeStatus(ShortOperation.STATUS_REPORTING);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
-            MWLogger.errLog("Error while trying to Resolve game: " + so.getShortID() + " Result sent by Game: " + report);
+            LOGGER.error("Error while trying to Resolve game: " + so.getShortID() + " Result sent by Game: " + report);
             return;
         }
 
@@ -570,7 +573,7 @@ public class ShortResolver {
 
         // return if there is no winner. terminate the game.
         if (so.getWinners().size() == 0) {
-            MWLogger.errLog("Autoreporting error: Game had no winner." + so.getShortID() + " Result sent by Game: ");
+            LOGGER.error("Autoreporting error: Game had no winner." + so.getShortID() + " Result sent by Game: ");
             CampaignMain.cm.toUser("Autoreporting error: Game had no winner.", loserName, true);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
 			return;
@@ -578,7 +581,7 @@ public class ShortResolver {
 
         // return if there is no loser. terminate the game.
         if (so.getLosers().size() == 0) {
-            MWLogger.errLog("Autoreporting error: Game had no loser." + so.getShortID() + " Result sent by Game: ");
+            LOGGER.error("Autoreporting error: Game had no loser." + so.getShortID() + " Result sent by Game: ");
             CampaignMain.cm.toUser("Autoreporting error: Game had no loser.", winnerName, true);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
             return;
@@ -608,7 +611,7 @@ public class ShortResolver {
         }
 
         if ((winnerA == null) || (winnerA.getPlayerName().trim().length() == 0)) {
-            MWLogger.errLog("Autoreporting error ["+ so.getShortID() + "]:" + " Winner(" + winnerName + ") army  null or had empty owner name.");
+            LOGGER.error("Autoreporting error ["+ so.getShortID() + "]:" + " Winner(" + winnerName + ") army  null or had empty owner name.");
 			CampaignMain.cm.toUser("Autoreporting error: Winner army null or had empty owner name.", winnerName, true);
 			CampaignMain.cm.toUser("Autoreporting error: Winner army null or had empty owner name.", loserName, true);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
@@ -616,7 +619,7 @@ public class ShortResolver {
         }
 
         if ((loserA == null) || (loserA.getPlayerName().trim().length() == 0)) {
-            MWLogger.errLog("Autoreporting error ["+ so.getShortID() + "]:" + "Loser(" + loserName + ") army  null or had empty owner name.");
+            LOGGER.error("Autoreporting error ["+ so.getShortID() + "]:" + "Loser(" + loserName + ") army  null or had empty owner name.");
 			CampaignMain.cm.toUser("Autoreporting error: Loser army null or had empty owner name.", loserName, true);
 			CampaignMain.cm.toUser("Autoreporting error: Loser army null or had empty owner name.", winnerName, true);
             CampaignMain.cm.getOpsManager().terminateOperation(so, OperationManager.TERM_REPORTINGERROR, null);
@@ -1542,7 +1545,7 @@ public class ShortResolver {
              * resolution.
              */
             if (owner == null) {
-                MWLogger.errLog("Null _owner_ while processing post-game salvage for " + " Attack #" + so.getShortID() + ". Needed to find Player: " + ownerName + " Unit #" + currEntity.getID() + "/Type: " + currEntity.getType());
+                LOGGER.error("Null _owner_ while processing post-game salvage for " + " Attack #" + so.getShortID() + ". Needed to find Player: " + ownerName + " Unit #" + currEntity.getID() + "/Type: " + currEntity.getType());
                 continue;
             }
 
@@ -1552,7 +1555,7 @@ public class ShortResolver {
         	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
         	{
         	    currU.setLocked(true);
-        	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+        	    //LOGGER.error(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
         	}
 
             // Attacker was able to flee the unit so that means they get to keep
@@ -1568,8 +1571,8 @@ public class ShortResolver {
                     UnitUtils.applyBattleDamage(currU.getEntity(), currEntity.getUnitDamage(), false);
                 }
             } catch (Exception ex) {
-                MWLogger.errLog("Unable to apply damage to unit " + currU.getModelName());
-                MWLogger.errLog(ex);
+                LOGGER.error("Unable to apply damage to unit " + currU.getModelName());
+                LOGGER.error("Exception: ", ex);
             }
 
             // If damaged is transfered from Game to campaign then save it the
@@ -1638,7 +1641,7 @@ public class ShortResolver {
         	&& CampaignMain.cm.getBooleanConfig("LockSalvagedUnits"))
         	{
         	    currU.setLocked(true);
-        	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+        	    //LOGGER.error(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
         	}
 
             // apply battle damage if there is any to be applied.
@@ -1647,8 +1650,8 @@ public class ShortResolver {
                     UnitUtils.applyBattleDamage(currU.getEntity(), currEntity.getUnitDamage(), false);
                 }
             } catch (Exception ex) {
-                MWLogger.errLog("Unable to apply damage to unit " + currU.getModelName());
-                MWLogger.errLog(ex);
+                LOGGER.error("Unable to apply damage to unit " + currU.getModelName());
+                LOGGER.error("Exception: ", ex);
             }
 
             /*
@@ -1747,7 +1750,7 @@ public class ShortResolver {
             	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
             	{
             	    currU.setLocked(true);
-            	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	    //LOGGER.error(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
             	}
 
                 // winner recovered own unit. send update.
@@ -1851,7 +1854,7 @@ public class ShortResolver {
             	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
             	{
             	    currU.setLocked(true);
-            	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	    //LOGGER.error(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
             	}
 
                 // winner recovered own unit. send update.
@@ -1955,7 +1958,7 @@ public class ShortResolver {
             	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
             	{
             	    currU.setLocked(true);
-            	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	    //LOGGER.error(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
             	}
 
                 // winner recovered own unit. send update.
@@ -2055,7 +2058,7 @@ public class ShortResolver {
             	if(CampaignMain.cm.getBooleanConfig("LockUnits"))
             	{
             	    currU.setLocked(true);
-            	    //MWLogger.errLog(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
+            	    //LOGGER.error(currU.getVerboseModelName() + " ID:" + currU.getId() + " is now locked!");
             	}
             } else {
                 toOriginalOwner = " " + newOwner.getColoredName() + " recovered your " + currU.getModelName() + ". ";
@@ -2451,7 +2454,7 @@ public class ShortResolver {
                      */
                     return;
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }// end if(polluted)
 
@@ -2576,7 +2579,7 @@ public class ShortResolver {
                 newsFeedBody += " on " + so.getTargetWorld().getName() + " (" + so.getName() + ").";
                 newsFeedTitle += " on " + so.getTargetWorld().getName();
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
             /*
@@ -3282,7 +3285,7 @@ public class ShortResolver {
                         }// end while(factories remain)
                         so.checkMercContracts(aWinner, ContractInfo.CONTRACT_COMPONENTS, ppDestroyed);
                     } catch (Exception ex) {
-                        MWLogger.errLog(ex);
+                        LOGGER.error("Exception: ", ex);
                     }
 
                 }// end if(attackerWon)
@@ -3458,7 +3461,7 @@ public class ShortResolver {
                             }// end if ppToGenerate > 0
                         }// end if(defender has factories on world)
                     } catch (Exception ex) {
-                        MWLogger.errLog(ex);
+                        LOGGER.error("Exception: ", ex);
                     }
 
                 }// end elseif(defenderWon)
@@ -3515,11 +3518,11 @@ public class ShortResolver {
                 }
 
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }// end this.assembleMetaStrings()
 
@@ -3556,7 +3559,7 @@ public class ShortResolver {
                     String currentUnit = reportTokenizer.nextToken();
                     // We're getting errors in this module.  Let's find out why
                     errorUnit = currentUnit;
-                    //MWLogger.errLog("Testing unit: " + currentUnit);
+                    //LOGGER.error("Testing unit: " + currentUnit);
 
                     // MechWarrior
                     if (currentUnit.startsWith("MW*")) {
@@ -3671,7 +3674,7 @@ public class ShortResolver {
             } catch (Exception ex) {
             	CampaignMain.cm.doSendErrLog("Error processing unit: ");
             	CampaignMain.cm.doSendErrLog(errorUnit);
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
             /*
@@ -3726,11 +3729,11 @@ public class ShortResolver {
                     }// end if
                 }// end while(More To Check)
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 
     }// end possibleSalvageFromReport
@@ -3769,7 +3772,7 @@ public class ShortResolver {
                     }
                 }
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
             /*
@@ -3788,7 +3791,7 @@ public class ShortResolver {
                     }// end for(all units in currArmy)
                 }// end for(all armies)
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
             /*
@@ -3809,7 +3812,7 @@ public class ShortResolver {
                     }
                 }
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
             /*
@@ -3861,11 +3864,11 @@ public class ShortResolver {
 
                 }// end if(no units to shift)
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 
     }// end possibleSalvageFromInProgressInfo
@@ -3915,7 +3918,7 @@ public class ShortResolver {
                 toReturn += " " + newPilotDescription(unit);
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return toReturn;
         }
 
@@ -3943,7 +3946,7 @@ public class ShortResolver {
                 owner.getHouseFightingFor().addDispossessedPilot(unit, false);
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -4300,7 +4303,7 @@ public class ShortResolver {
             // captured, but did not defect
             toReturn[2] = ((SPilot) currUnit.getPilot()).getPilotCaptureAndRemovedMessage(currUnit);
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return toReturn;
         }
 
@@ -4363,7 +4366,7 @@ public class ShortResolver {
             }
 
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return Math.round(repairCost);
         }
 
@@ -4478,7 +4481,7 @@ public class ShortResolver {
 
             return null;
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return null;
         }
 
@@ -4515,7 +4518,7 @@ public class ShortResolver {
 
             return null;
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return null;
         }
 
@@ -4542,7 +4545,7 @@ public class ShortResolver {
             result += "]";
             return result;
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return result;
         }
 
@@ -4581,7 +4584,7 @@ public class ShortResolver {
             }
             return false;
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return false;
         }
 
@@ -4920,7 +4923,7 @@ public class ShortResolver {
                         SHouse faction = (SHouse) house;
 
                         buildFile = BuildTable.getFileName(faction.getName(), Unit.getWeightClassDesc(unit.getWeightclass()), timeZone, unit.getType());
-                        // MWLogger.errLog("File: "+fileName);
+                        // LOGGER.error("File: "+fileName);
 
                         if (!tables.contains(buildFile)) {
                             tables.add(buildFile);
@@ -4932,9 +4935,9 @@ public class ShortResolver {
                         }
 
                         timeZone = currp.getMyHouse().getConfig("NoFactoryRepodFolder");
-                        // MWLogger.errLog("TimeZone: "+timeZone);
+                        // LOGGER.error("TimeZone: "+timeZone);
                         buildFile = BuildTable.getFileName(faction.getName(), Unit.getWeightClassDesc(unit.getWeightclass()), timeZone, unit.getType());
-                        // MWLogger.errLog("File: "+fileName);
+                        // LOGGER.error("File: "+fileName);
 
                         if (!tables.contains(buildFile)) {
                             tables.add(buildFile);
@@ -4999,7 +5002,7 @@ public class ShortResolver {
                         } catch (IOException ex) {
                             MWLogger.mainLog("File " + buildTable + " had an I/O error");
                         } catch (Exception ex) {
-                            MWLogger.errLog(ex);
+                            LOGGER.error("Exception: ", ex);
                             MWLogger.mainLog("File " + buildTable + " has a problem");
                         }
 
@@ -5036,7 +5039,7 @@ public class ShortResolver {
                     }
                 }
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
         }

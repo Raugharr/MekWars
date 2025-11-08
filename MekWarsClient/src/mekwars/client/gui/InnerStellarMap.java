@@ -68,6 +68,8 @@ import mekwars.common.util.MMNetXStream;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.Position;
 import mekwars.common.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Draws the main map component.
@@ -76,6 +78,7 @@ import mekwars.common.util.StringUtils;
  */
 
 public class InnerStellarMap extends JComponent implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InnerStellarMap.class);
 
     private static final long serialVersionUID = 8655078955521790260L;
 
@@ -382,9 +385,9 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             parseOverlayFile();
         } catch (Throwable e) {
             if (!(e instanceof FileNotFoundException)) {
-                MWLogger.errLog((Exception) e);
+                LOGGER.error("Exception: ", e);
             }
-            MWLogger.infoLog("could not read map overlay file.");
+            LOGGER.info("could not read map overlay file.");
         }
 
         for (int i = 0; i < displayStr.length; ++i) {
@@ -484,7 +487,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             return innerStellarMapConfig;
         } catch (Throwable e) {
             if (!(e instanceof FileNotFoundException)) {
-                MWLogger.errLog((Exception) e);
+                LOGGER.error("Exception: ", e);
             }
             MWLogger.infoLog("could not read map config file. Will use defaults");
             return new InnerStellarMapConfig();
@@ -602,7 +605,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                 g.drawImage(ic.getImage(), map2scrX(x), map2scrY(y), width, height, ic.getImageObserver());
 
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
         }
@@ -632,15 +635,13 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                 try {
                     c = StringUtils.html2Color(houseColor);
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
-                    MWLogger.errLog("Bad House for planet: " + p.getName());
+                    LOGGER.error("Bad House for planet: {}", p.getName(), ex);
                 }
             } else {
                 try {
                     c = adjustColor(StringUtils.html2Color(houseColor));
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
-                    MWLogger.errLog("Bad House for planet: " + p.getName());
+                    LOGGER.error("Bad House for planet: {}", p.getName(), ex);
                 }
             }
 
@@ -771,7 +772,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
             }// end if(should display)
 
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 
     }
@@ -1017,8 +1018,8 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
     public void processTick() {
         try {
             new MMNetXStream().toXML(conf, new FileWriter(mwclient.getCacheDir() + "/mapconf.xml"));
-        } catch (IOException e1) {
-            MWLogger.errLog(e1);
+        } catch (IOException ioe) {
+            LOGGER.error("Exception: ", ioe);
         }
     }
 
@@ -1038,7 +1039,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                     mp.repaint();
                 }
             } catch (Exception ex) {
-                MWLogger.errLog("Error with Planet: " + mwclient.getData().getPlanet(id).getName());
+                LOGGER.error("Error with Planet: " + mwclient.getData().getPlanet(id).getName());
             }
         }
     }

@@ -29,8 +29,7 @@ import mekwars.server.campaign.SPlayer;
  * @author Vertigo
  * (11-feb-2004)
  */
-public class MOTDCommand implements Command {
-
+public class  MOTDCommand  implements Command {
 	/*
 	 * @see server.Campaign.Commands.Command#process(java.util.StringTokenizer, java.lang.String, server.Campaign.CampaignMain)
 	 */

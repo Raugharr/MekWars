@@ -27,9 +27,12 @@ import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class RetrieveAllMulsCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(RetrieveAllMulsCommand.class);
 
 	/*
 	 * This command allows an Admin to upload a single build table
@@ -87,7 +90,7 @@ public class RetrieveAllMulsCommand implements Command {
 			try {
 				br.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
 		}		
 	}

@@ -58,8 +58,11 @@ import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ClientThread extends Thread implements CloseClientListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientThread.class);
 
     // VARIABLES
     private String myname;
@@ -142,8 +145,8 @@ public class ClientThread extends Thread implements CloseClientListener {
             mwclient.getGameOptions().clear();
             // get rid of any and all bots.
         } catch (Exception ex) {
-            MWLogger.errLog("Error reporting game!");
-            MWLogger.errLog(ex);
+            LOGGER.error("Error reporting game!");
+            LOGGER.error("Exception: ", ex);
         }
 
         if (swingGui != null) {
@@ -421,8 +424,8 @@ public class ClientThread extends Thread implements CloseClientListener {
                         Thread.sleep(50);
                     }
                 } catch (Exception ex) {
-                    MWLogger.errLog("Bot Error!");
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Bot Error!");
+                    LOGGER.error("Exception: ", ex);
                 }
                 Thread.sleep(125);
 
@@ -577,7 +580,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                         entity.setCrew(UnitUtils.createEntityPilot(autoUnit, mwclient.getPlayer().isClan()));
                     }
 
-                    // MWLogger.errLog(entity.getModel()+"
+                    // LOGGER.error(entity.getModel()+"
                     // direction "+entity.getOffBoardDirection());
                     // add the unit to the game.
                     if (bot != null) {
@@ -631,7 +634,7 @@ public class ClientThread extends Thread implements CloseClientListener {
             }
 
         } catch (Exception e) {
-            MWLogger.errLog(e);
+            LOGGER.error("Exception: ", e);
         }
         /*the swingGui object ref was initialized and is
         *active on the client thread, so release the ref to it- BarukKhazad!
@@ -688,25 +691,25 @@ public class ClientThread extends Thread implements CloseClientListener {
                 }
                 Thread.sleep(10);// give the queue time to refresh
             } catch (Exception ex) {
-                MWLogger.errLog("Error in linkMegaMekC3Units");
-                MWLogger.errLog(ex);
+                LOGGER.error("Error in linkMegaMekC3Units");
+                LOGGER.error("Exception: ", ex);
             }
         }
 
         // catch for some funky stuff
         if ((c3Unit == null) || (c3Master == null)) {
-            MWLogger.errLog("Null Units c3Unit: " + c3Unit + " C3Master: " + c3Master);
+            LOGGER.error("Null Units c3Unit: " + c3Unit + " C3Master: " + c3Master);
             return;
         }
 
         try {
             CUnit masterUnit = (CUnit) army.getUnit(masterid);
-            // MWLogger.errLog("Master Unit:
+            // LOGGER.error("Master Unit:
             // "+masterUnit.getModelName());
-            // MWLogger.errLog("Slave Unit:
+            // LOGGER.error("Slave Unit:
             // "+c3Unit.getModel());
             if (!masterUnit.hasC3SlavesLinkedTo(army) && masterUnit.hasBeenC3LinkedTo(army) && ((masterUnit.getC3Level() == Unit.C3_MASTER) || (masterUnit.getC3Level() == Unit.C3_MMASTER))) {
-                // MWLogger.errLog("Unit:
+                // LOGGER.error("Unit:
                 // "+c3Master.getModel()+" id: "+c3Master.getExternalId());
                 if (c3Master.getC3MasterId() == Entity.NONE) {
                     c3Master.setShutDown(false);
@@ -715,24 +718,24 @@ public class ClientThread extends Thread implements CloseClientListener {
                 }
                 /*
                  * if ( c3Master.hasC3MM() )
-                 * MWLogger.errLog("hasC3MM"); else
-                 * MWLogger.errLog("!hasC3MM");
+                 * LOGGER.error("hasC3MM"); else
+                 * LOGGER.error("!hasC3MM");
                  */
             } else if (c3Master.getC3MasterId() != Entity.NONE) {
                 c3Master.setShutDown(false);
                 c3Master.setC3Master(Entity.NONE, false);
                 client.sendUpdateEntity(c3Master);
             }
-            // MWLogger.errLog("c3Unit: "+c3Unit.getModel()+"
+            // LOGGER.error("c3Unit: "+c3Unit.getModel()+"
             // Master: "+c3Master.getModel());
             c3Unit.setShutDown(false);
             c3Unit.setC3Master(c3Master, false);
-            // MWLogger.errLog("c3Master Set to
+            // LOGGER.error("c3Master Set to
             // "+c3Unit.getC3MasterId()+" "+c3Unit.getC3NetId());
             client.sendUpdateEntity(c3Unit);
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Error in setting up C3Network");
+            LOGGER.error("Exception: ", ex);
+            LOGGER.error("Error in setting up C3Network");
         }
     }
 

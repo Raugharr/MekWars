@@ -24,6 +24,8 @@ import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.DefaultServerOptions;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -34,7 +36,8 @@ import mekwars.server.campaign.commands.Command;
  * off so that they have to update right away.
  */
 public class ForceUpdateCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(ForceUpdateCommand.class);
+
 	int accessLevel = IAuthenticator.MODERATOR;
 	public int getExecutionLevel(){return accessLevel;}
 	public void setExecutionLevel(int i) {accessLevel = i;}
@@ -102,7 +105,7 @@ public class ForceUpdateCommand implements Command {
 	            		MWServ.getInstance().doStoreMail(toKick+",update", Username);
 	                	Thread.sleep(120);
 	                }catch (Exception ex){
-	                    MWLogger.errLog(ex);
+	                    LOGGER.error("Exception: ", ex);
 	                }
             	}
             }//end for

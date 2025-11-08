@@ -15,24 +15,13 @@
  */
 package mekwars.common.util;
 
+import mekwars.common.log.LogMarkerHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.MarkerManager;
 
 public interface MWLogger {
     Logger LOGGER = LogManager.getLogger(MWLogger.class);
 
-    Marker RESULTS_MARKER = MarkerManager.getMarker("resultsLog");
-    Marker GAME_MARKER = MarkerManager.getMarker("gameLog");
-    Marker TEST_MARKER = MarkerManager.getMarker("testLog");
-    Marker TICK_MARKER = MarkerManager.getMarker("tickLog");
-    Marker PM_MARKER = MarkerManager.getMarker("pmLog");
-
-    static void errLog(String message) {
-        LOGGER.error(message);
-    }
-    
     static void mainLog(String message) {
         LOGGER.info(message);
     }
@@ -62,19 +51,19 @@ public interface MWLogger {
     }
 
     static void resultsLog(String message) {
-        LOGGER.info(RESULTS_MARKER, message);
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, message);
     }
 
     static void gameLog(String message) {
-        LOGGER.info(GAME_MARKER, message);
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, message);
     }
 
     static void testLog(String message) {
-        LOGGER.info(TEST_MARKER, message);
+        LOGGER.info(LogMarkerHolder.TEST_MARKER, message);
     }
 
     static void tickLog(String message) {
-        LOGGER.info(TICK_MARKER, message);
+        LOGGER.info(LogMarkerHolder.TICK_MARKER, message);
     }
 
     static void warnLog(String message) {
@@ -82,19 +71,9 @@ public interface MWLogger {
     }
 
     static void pmLog(String message) {
-        LOGGER.info(PM_MARKER, message);
+        LOGGER.info(LogMarkerHolder.PM_MARKER, message);
     }
 
-    // Can't have a method like this here without a rework, note it is unused anyway
-    static void factionLog(String factionName, String message) {
-        final Marker faction = MarkerManager.getMarker(factionName);
-        LOGGER.info(faction, message);
-    }
-
-    static void errLog(Exception e) {
-        LOGGER.error("Exception: ", e);
-    }
-    
     static void mainLog(Exception e) {
         LOGGER.info("Exception: ", e);
     }
@@ -106,50 +85,8 @@ public interface MWLogger {
     static void debugLog(Exception e) {
         LOGGER.info("Exception: ", e);
     }
-    
-    static void ipLog(Exception e) {
-        LOGGER.info("Exception: ", e);
-    }
-    
-    static void cmdLog(Exception e) {
-        LOGGER.info("Exception: ", e);
-    }
-    
+
     static void infoLog(Exception e) {
         LOGGER.info("Exception: ", e);
-    }
-
-    static void bmLog(Exception e) {
-        LOGGER.info("Exception: ", e);
-    }
-
-    static void resultsLog(Exception e) {
-        LOGGER.info(RESULTS_MARKER, "Exception: ", e);
-    }
-
-    static void gameLog(Exception e) {
-        LOGGER.info(GAME_MARKER, "Exception: ", e);
-    }
-
-    static void testLog(Exception e) {
-        LOGGER.info(e);
-    }
-    
-    static void tickLog(Exception e) {
-        LOGGER.info(e);
-    }
-    
-    static void warnLog(Exception e) {
-        LOGGER.warn(e);
-    }
-    
-    static void pmLog(Exception e) {
-        LOGGER.info(e);
-    }
-
-    // Can't have a method like this here without a rework, note it is unused anyway
-    static void factionLog(String factionName, Exception e) {
-        final Marker factiondebug = MarkerManager.getMarker(factionName);
-        LOGGER.debug(factiondebug, e.getMessage());
     }
 }

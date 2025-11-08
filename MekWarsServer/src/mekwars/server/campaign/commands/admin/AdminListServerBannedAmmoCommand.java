@@ -50,7 +50,7 @@ public class AdminListServerBannedAmmoCommand implements Command {
 			TreeSet<String> ammoBan = new TreeSet<String>(CampaignMain.cm.getServerBannedAmmo().keySet());
 			Hashtable<Munitions, String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
 			for (String ammoName : ammoBan) {
-               // MWLogger.errLog("Munition: "+ammoName);
+               // LOGGER.error("Munition: "+ammoName);
 				CampaignMain.cm.toUser(munitions.get(Long.parseLong(ammoName)),Username,true);
 			}
 		}

@@ -43,6 +43,8 @@ import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
 import megamek.common.loaders.EntityLoadingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A JPanel containing a JTable representing a BuildTable
@@ -50,7 +52,8 @@ import megamek.common.loaders.EntityLoadingException;
  *
  */
 public class TablePanel extends JPanel implements ActionListener {
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(TablePanel.class);
+
 	private static final long serialVersionUID = 1348587767892438630L;
 	private SelectorPanel selector;
 	private BuildTableViewer viewer;
@@ -182,7 +185,7 @@ public class TablePanel extends JPanel implements ActionListener {
 				
 				MWUnitDisplayHelper.create(entity);
 			} catch (EntityLoadingException e) {
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
 		}
 	}

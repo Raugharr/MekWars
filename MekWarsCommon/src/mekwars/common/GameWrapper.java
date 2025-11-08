@@ -9,45 +9,52 @@ import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import megamek.common.Game;
 import megamek.common.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class GameWrapper implements GameInterface {
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameWrapper.class);
+
     private final Game game;
     
     public GameWrapper(Game game) {
         this.game = game;
     }
 
+    @Override
     public Enumeration<Entity> getDevastatedEntities() {
         return game.getDevastatedEntities();
     }
 
+    @Override
     public Enumeration<Entity> getGraveyardEntities() {
         return game.getGraveyardEntities();
     }
 
+    @Override
     public Iterator<Entity> getEntities() {
         return game.getEntities();
     }
 
+    @Override
     public Enumeration<Entity> getRetreatedEntities() {
         return game.getRetreatedEntities();
     }
 
+    @Override
     public List<String> getWinners() {
         ArrayList<String> result = new ArrayList<String>();
         
         //TODO: Winners sometimes coming up empty. Let's see why
-        
         Enumeration<Player> en = game.getPlayers();
-        
-        MWLogger.errLog("  :: game.getPlayers(): " + en.toString());
-        MWLogger.errLog("  :: VictoryTeam: " + game.getVictoryTeam());
+
+        LOGGER.error("  :: game.getPlayers(): {}", en.toString());
+        LOGGER.error("  :: VictoryTeam: {}", game.getVictoryTeam());
         
         while (en.hasMoreElements()){
             final Player player = en.nextElement();
-            MWLogger.errLog("  :: ==> Player: " + player.getName().trim() + " :: Team: " + player.getTeam());
+            LOGGER.error("  :: ==> Player: {} :: Team: {}", player.getName().trim(), player.getTeam());
             
             if (player.getTeam() == game.getVictoryTeam()){
                 result.add(player.getName().trim());
@@ -56,9 +63,8 @@ public class GameWrapper implements GameInterface {
         return result;
     }
 
+    @Override
     public boolean hasWinner() {
         return game.getVictoryTeam() != Player.TEAM_NONE;
     }
-
-
 }

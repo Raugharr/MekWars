@@ -29,8 +29,7 @@ import mekwars.server.campaign.NewbieHouse;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 
-public class EnrollCommand implements Command {
-
+public class  EnrollCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

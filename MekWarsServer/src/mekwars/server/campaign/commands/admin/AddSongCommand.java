@@ -26,8 +26,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 //Syntax addsong#songname#lyric1#lyric2....
-public class AddSongCommand implements Command {
-    
+public class  AddSongCommand  implements Command {
     int accessLevel = IAuthenticator.ADMIN;
     public int getExecutionLevel(){return accessLevel;}
     public void setExecutionLevel(int i) {accessLevel = i;}

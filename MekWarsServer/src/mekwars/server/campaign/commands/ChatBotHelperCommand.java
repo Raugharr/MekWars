@@ -27,11 +27,14 @@ import java.util.StringTokenizer;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * used for capturing chat to a file a discord bot can manipulate
  */
-public class ChatBotHelperCommand implements Command {
+public class  ChatBotHelperCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(ChatBotHelperCommand.class);
 
 	int accessLevel = 0;
 	String syntax = "";
@@ -91,13 +94,13 @@ public class ChatBotHelperCommand implements Command {
 		}
 		catch (UnsupportedEncodingException e)
 		{
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 			//CampaignMain.cm.toUser(e.toString(),Username,true);
 
 		}
 		catch (IOException e)
 		{
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 			//CampaignMain.cm.toUser(e.toString(),Username,true);
 
 		}

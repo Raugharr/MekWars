@@ -84,8 +84,11 @@ import mekwars.admin.dialog.serverConfigDialogs.VotingPanel;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ServerConfigurationDialog implements ActionListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerConfigurationDialog.class);
 
     private final static String okayCommand = "okay";
     private final static String cancelCommand = "cancel";
@@ -315,7 +318,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
                 key = checkBox.getName();
                 if (key == null) {
-                    MWLogger.errLog("Null Checkbox: " + checkBox.getToolTipText());
+                    LOGGER.error("Null Checkbox: " + checkBox.getToolTipText());
                     continue;
                 }
                 checkBox.setSelected(Boolean.parseBoolean(mwclient.getServerConfigs(key)));
@@ -325,7 +328,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
                 key = radioButton.getName();
                 if (key == null) {
-                    MWLogger.errLog("Null RadioButton: " + radioButton.getToolTipText());
+                    LOGGER.error("Null RadioButton: " + radioButton.getToolTipText());
                     continue;
                 }
                 radioButton.setSelected(Boolean.parseBoolean(mwclient.getServerConfigs(key)));
@@ -335,7 +338,7 @@ public final class ServerConfigurationDialog implements ActionListener {
 
                 key = picker.getName();
                 if (key == null) {
-                    MWLogger.errLog("Null JDatePickerImpl: " + picker.getToolTipText());
+                    LOGGER.error("Null JDatePickerImpl: " + picker.getToolTipText());
                     continue;
                 }
                 String s = mwclient.getServerConfigs(key);

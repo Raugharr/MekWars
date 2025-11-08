@@ -25,8 +25,11 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.util.MWPasswd;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AdminPasswordCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(AdminPasswordCommand.class);
 
     // conforming methods
     int accessLevel = IAuthenticator.REGISTERED;
@@ -77,7 +80,7 @@ public class AdminPasswordCommand implements Command {
             try {
                 MWPasswd.save();
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
             CampaignMain.cm.toUser("Password for " + target + " removed!", Username, true);
             CampaignMain.cm.doSendModMail("NOTE", Username + " has removed " + target + "'s password");
@@ -108,7 +111,7 @@ public class AdminPasswordCommand implements Command {
                 }
 
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
             CampaignMain.cm.toUser("Level for " + target + " set to " + level + "!", Username, true);

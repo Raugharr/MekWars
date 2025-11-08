@@ -32,8 +32,11 @@ import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetOpsCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(GetOpsCommand.class);
 
 	int accessLevel = 2;
 	public int getExecutionLevel() {
@@ -127,7 +130,7 @@ public class GetOpsCommand implements Command {
 	                }
 	            } catch (FileNotFoundException e) {
 	                // TODO Auto-generated catch block
-	                MWLogger.errLog(e);
+	                LOGGER.error("Exception: ", e);
 	            }
 				CampaignMain.cm.toUser("OP|md5|" + toReturn.toString(), Username, false);
 				

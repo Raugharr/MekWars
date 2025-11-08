@@ -18,8 +18,7 @@ import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 
-public class GetServerMegaMekGameOptionsCommand implements Command {
-	
+public class  GetServerMegaMekGameOptionsCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return 0;}

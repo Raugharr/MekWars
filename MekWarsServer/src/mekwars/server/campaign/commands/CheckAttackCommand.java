@@ -28,9 +28,8 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.operations.OperationManager;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 
-public class CheckAttackCommand implements Command {
-	
-	
+public class  CheckAttackCommand  implements Command {
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

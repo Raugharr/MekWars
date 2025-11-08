@@ -26,8 +26,7 @@ import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
 
 
-public class RetirePilotCommand implements Command {
-	
+public class  RetirePilotCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

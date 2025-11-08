@@ -31,9 +31,11 @@ import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 import mekwars.server.campaign.util.scheduler.MWScheduler;
 import mekwars.server.util.SPlayerToJSON;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class ActivateCommand implements Command {
-
+public class  ActivateCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger( ActivateCommand .class);
     int accessLevel = 0;
     String syntax = "";
 
@@ -80,8 +82,8 @@ public class ActivateCommand implements Command {
                 return;
             }
         } catch (Exception ex) {
-            MWLogger.errLog("Error activating player. User reported client verson: " + p.getPlayerClientVersion() + " --- Stack Trace Follows.");
-            // MWLogger.errLog(ex);
+            LOGGER.error("Error activating player. User reported client verson: " + p.getPlayerClientVersion() + " --- Stack Trace Follows.");
+            // LOGGER.error("Exception: ", ex);
             CampaignMain.cm.toUser("AM:Your clients version was not reported to the server. <a href=\"MEKWARS/c setclientversion#" + Username + "#" + MWServ.SERVER_VERSION + "\">Click here to update the server.</a> then try to activate again.", Username);
             return;
         }
@@ -504,6 +506,7 @@ public class ActivateCommand implements Command {
  *         private thread. simple minactivetime wait which runs a checkattack for the activating player.
  */
 class CheckAttackThread extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(CheckAttackThread.class);
 
     // vars
     SPlayer p;
@@ -531,7 +534,7 @@ class CheckAttackThread extends Thread {
             // ran once. kill the thread by returning.
             return;
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }// end run()
 }// end CheckAttackThread

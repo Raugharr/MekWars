@@ -19,14 +19,15 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Moving the Color command from MWServ into the normal command structure.
  *
  * Syntax  /c getsavedMail
  */
-public class GetSavedMailCommand implements Command {
-	
+public class  GetSavedMailCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

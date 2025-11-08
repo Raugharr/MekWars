@@ -31,8 +31,7 @@ import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
  * attacking force can defend the target op type, and then creates the operation
  * and gives attackers their "Special" options.
  */
-public class AttackCommand implements Command {
-
+public class  AttackCommand  implements Command {
     int accessLevel = 0;
     String syntax = "";
 

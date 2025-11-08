@@ -27,8 +27,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 //Syntax retrievealloperations#optype
-public class RetrieveAllOperationsCommand implements Command {
-    
+public class  RetrieveAllOperationsCommand  implements Command {
     int accessLevel = IAuthenticator.ADMIN;
     public int getExecutionLevel(){return accessLevel;}
     public void setExecutionLevel(int i) {accessLevel = i;}

@@ -16,14 +16,16 @@
 
 package mekwars.server.campaign.operations;
 
-import mekwars.common.CampaignData;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OpsDisconnectionThread extends Thread {
-	
+    private static final Logger LOGGER = LogManager.getLogger(OpsDisconnectionThread.class);
+
 	//VARIABLES
 	private boolean playerReturned;
 	private int id;
@@ -70,7 +72,7 @@ public class OpsDisconnectionThread extends Thread {
 		try {
 			this.wait(timeToReport);
 		} catch (Exception ex) {
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}
 		
 		//only report if player is still missing

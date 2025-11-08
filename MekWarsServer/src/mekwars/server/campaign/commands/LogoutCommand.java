@@ -21,8 +21,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 
 
-public class LogoutCommand implements Command {
-
+public class  LogoutCommand  implements Command {
 	//conforming methods
 	public int getExecutionLevel(){return 0;}
 	public void setExecutionLevel(int i) {}

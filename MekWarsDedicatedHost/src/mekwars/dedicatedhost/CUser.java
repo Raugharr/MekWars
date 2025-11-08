@@ -21,12 +21,14 @@ import java.util.StringTokenizer;
 
 import mekwars.common.campaign.clientutils.IClientUser;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Class for User objects held in userlist
  */
-
 public class CUser implements Comparable<Object>, IClientUser {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CUser.class);
 
 	protected String Name;
 
@@ -53,7 +55,7 @@ public class CUser implements Comparable<Object>, IClientUser {
 			ST.nextToken();
 			Userlevel = Integer.parseInt(ST.nextToken());
 		} catch (Exception ex) {
-			MWLogger.errLog("Error in deserializing user");
+			LOGGER.error("Error in deserializing user");
 		}
 	}
 

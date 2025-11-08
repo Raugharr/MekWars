@@ -40,8 +40,11 @@ import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.util.HouseRankingHelpContainer;
 import mekwars.server.util.MWPasswd;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class DefectCommand implements Command {
+public class  DefectCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(DefectCommand.class);
 
     int accessLevel = 0;
     String syntax = "";
@@ -685,7 +688,7 @@ public class DefectCommand implements Command {
         }
 
         if (planetList.size() < 1) {
-            MWLogger.errLog("Error Unable to find planet for new faction " + house.getName());
+            LOGGER.error("Error Unable to find planet for new faction " + house.getName());
             CampaignMain.cm.doSendModMail("NOTE", "Error Unable to find planet for new faction " + house.getName());
         }
 
@@ -752,7 +755,7 @@ public class DefectCommand implements Command {
                     ps.close();
                     out.close();
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         }

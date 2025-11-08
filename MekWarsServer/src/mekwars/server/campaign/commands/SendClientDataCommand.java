@@ -16,9 +16,10 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 
 import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class SendClientDataCommand implements Command {
-	
+public class  SendClientDataCommand  implements Command {
 	public int getExecutionLevel(){return 0;}
 	public void setExecutionLevel(int i) {}
 	String syntax = "";

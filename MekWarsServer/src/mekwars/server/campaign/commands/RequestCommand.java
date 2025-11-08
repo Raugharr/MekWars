@@ -34,8 +34,7 @@ import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.pilot.SPilot;
 
-public class RequestCommand implements Command {
-
+public class  RequestCommand  implements Command {
     int accessLevel = 0;
     String syntax = "";
 

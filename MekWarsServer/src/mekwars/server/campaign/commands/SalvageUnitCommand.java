@@ -35,6 +35,8 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.util.RepairTrackingThread;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Torren (Jason Tighe)
@@ -42,6 +44,7 @@ import mekwars.server.util.RepairTrackingThread;
  *         and sends that data to the repair thread
  */
 public class SalvageUnitCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(SalvageUnitCommand.class);
 
     int accessLevel = 0;
     String syntax = "";
@@ -203,7 +206,7 @@ public class SalvageUnitCommand implements Command {
 
             if (MWServ.getInstance().getRTT().getState() == Thread.State.TERMINATED) {
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed, and the repair thread terminated. Staff was notified.", Username, false);
-                MWLogger.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
+                LOGGER.error("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
                 return;
             }
             if (techType == UnitUtils.TECH_PILOT) {
@@ -221,8 +224,7 @@ public class SalvageUnitCommand implements Command {
                 CampaignMain.cm.toUser("ARD|" + unitID + "|true", Username, false);
             }
         } catch (Exception ex) {
-            MWLogger.errLog("Unable to Process Salvage Unit Command!");
-            MWLogger.errLog(ex);
+            LOGGER.error("Unable to Process Salvage Unit Command!", ex);
         }
 
     }// end process()

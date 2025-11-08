@@ -37,15 +37,16 @@ import javax.swing.event.ChangeListener;
 import mekwars.client.MWClient;
 import mekwars.common.BMEquipment;
 import mekwars.common.util.MWLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Main panel
  */
 
 public class CMainPanel extends JPanel implements ChangeListener, ComponentListener {
-    /**
-     *
-     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(CMainPanel.class);
+
     private static final long serialVersionUID = -7817596095411018999L;
     JSplitPane MainSPane;
     JSplitPane TabSPane;
@@ -379,7 +380,7 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
         ((CBMPartsPanel)BMETabbed.getComponentAt(2)).refresh();
         ((CBMPartsPanel)BMETabbed.getComponentAt(3)).refresh();
         }catch (Exception ex){
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 

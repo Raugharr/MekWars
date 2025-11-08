@@ -49,8 +49,11 @@ import mekwars.server.campaign.mercenaries.ContractInfo;
 import mekwars.server.campaign.operations.validation.I_SpreadValidator;
 import mekwars.server.campaign.operations.validation.PercentBVSpreadValidator;
 import mekwars.server.campaign.operations.validation.StandardBVSpreadValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ShortValidator {
+    private static final Logger LOGGER = LogManager.getLogger(ShortValidator.class);
 
     // IVARS
     // back reference to the manager
@@ -685,12 +688,12 @@ public class ShortValidator {
                 if (defenderFails.size() == 0)// if player can defend, add
                     fullMatches.add(currArmy);
                 else if (o.getBooleanValue("DebugOp")) { // spamalama
-                    MWLogger.errLog("Failed Defense reasons for Op: " + o.getName() + " Launched by player: " + ap.getName() + " with army: #" + aa.getID());
-                    MWLogger.errLog("Defending Player: " + currPlayer.getName() + " Army id: #" + currArmy.getID());
+                    LOGGER.error("Failed Defense reasons for Op: " + o.getName() + " Launched by player: " + ap.getName() + " with army: #" + aa.getID());
+                    LOGGER.error("Defending Player: " + currPlayer.getName() + " Army id: #" + currArmy.getID());
 
                     Iterator<Integer> df = defenderFails.iterator();
                     while (df.hasNext()) {
-                        MWLogger.errLog("Reason: " + this.decodeFailure((Integer) df.next()));
+                        LOGGER.error("Reason: " + this.decodeFailure((Integer) df.next()));
                     }
                 }
             }

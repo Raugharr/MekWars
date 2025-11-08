@@ -30,9 +30,12 @@ import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AdminSaveBlackMarketConfigsCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AdminSaveBlackMarketConfigsCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -70,9 +73,9 @@ public class AdminSaveBlackMarketConfigsCommand implements Command {
 			}
 			ps.close();
 		} catch (FileNotFoundException fe) {
-			MWLogger.errLog("blackmarketsettings.dat not found");
+			LOGGER.error("blackmarketsettings.dat not found");
 		} catch (Exception ex) {
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}   
 
 		CampaignMain.cm.toUser("AM:Black Market Settings saved!",Username,true);
