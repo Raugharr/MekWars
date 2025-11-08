@@ -61,8 +61,4 @@ public interface MWLogger {
     static void testLog(String message) {
         LOGGER.info(LogMarkerHolder.TEST_MARKER, message);
     }
-
-    static void tickLog(String message) {
-        LOGGER.info(LogMarkerHolder.TICK_MARKER, message);
-    }
 }

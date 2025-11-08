@@ -193,7 +193,7 @@ public class MWServ {
         MWLogger.infoLog("Server info log touched.");
         LOGGER.warn("Server warnings log touched.");
         MWLogger.modLog("Moderators log touched.");
-        MWLogger.tickLog("Tick report log touched.");
+        LOGGER.info(LogMarkerHolder.TICK_MARKER, "Tick report log touched.");
 
         // start slice and immunity threads
         SThread = new SliceThread(campaign, campaign.getCampaignOptions().getIntegerConfig("SliceTime"));
