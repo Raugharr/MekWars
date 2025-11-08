@@ -57,8 +57,4 @@ public interface MWLogger {
     static void gameLog(String message) {
         LOGGER.info(LogMarkerHolder.GAME_MARKER, message);
     }
-
-    static void testLog(String message) {
-        LOGGER.info(LogMarkerHolder.TEST_MARKER, message);
-    }
 }
