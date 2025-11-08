@@ -25,10 +25,6 @@ public interface MWLogger {
         LOGGER.info(message);
     }
 
-    static void modLog(String message) {
-        LOGGER.info(message);
-    }
-    
     static void debugLog(String message) {
         LOGGER.debug(message);
     }

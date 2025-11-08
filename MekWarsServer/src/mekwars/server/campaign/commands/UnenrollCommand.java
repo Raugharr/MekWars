@@ -114,8 +114,7 @@ public class UnenrollCommand implements Command {
 
 		//tell the mods and add to iplog.0
 		InetAddress ip = MWServ.getInstance().getIP(Username);
-		//MWLogger.modLog(Username + " unenrolled from the campaign (IP: " + ip + ").");
-        LOGGER.info("UNENROLL: {} IP: {}", Username, ip);
+		LOGGER.info("UNENROLL: {} IP: {}", Username, ip);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " unenrolled from the campaign (IP: " + ip + ").");
 	}//end process
 	

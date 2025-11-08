@@ -3,7 +3,6 @@ package mekwars.server.campaign.commands;
 import java.io.File;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -88,14 +87,14 @@ public class QuirkCheckCommand implements Command {
 		if(clientCanonQuirkLength == 0L)
 		{
 			player.toSelf("AM: canon quirk file is missing!");
-			MWLogger.modLog(username + " is missing canon quirk file on client!");
+			LOGGER.info(username + " is missing canon quirk file on client!");
 			return;
 		}
 		
 		if(clientCustomQuirkLength == 0L)
 		{
 			player.toSelf("AM: canon quirk file is missing!");
-			MWLogger.modLog(username + " is missing canon quirk file on client!");
+			LOGGER.info(username + " is missing canon quirk file on client!");
 			return;
 		}
 				

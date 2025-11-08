@@ -192,7 +192,7 @@ public class MWServ {
         LOGGER.info("Black Market (BM) log touched.");
         MWLogger.infoLog("Server info log touched.");
         LOGGER.warn("Server warnings log touched.");
-        MWLogger.modLog("Moderators log touched.");
+        LOGGER.info("Moderators log touched.");
         LOGGER.info(LogMarkerHolder.TICK_MARKER, "Tick report log touched.");
 
         // start slice and immunity threads

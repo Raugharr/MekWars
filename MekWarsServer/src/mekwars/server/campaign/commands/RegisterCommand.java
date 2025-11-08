@@ -18,7 +18,6 @@ package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -116,7 +115,7 @@ public class RegisterCommand implements Command {
 
             //acknowledge registration
             CampaignMain.cm.toUser("AM:\"" + regname + "\" successfully registered.", Username);
-            MWLogger.modLog("New nickname registered: " + regname);
+            LOGGER.info("New nickname registered: " + regname);
             CampaignMain.cm.doSendModMail("NOTE","New nickname registered: " + regname + " by: " + Username);
     	
         } catch (Exception e) {

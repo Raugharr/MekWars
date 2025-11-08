@@ -1745,7 +1745,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		restock = true;
     		minBVRestock = true;
 
-    		MWLogger.modLog(getName() + " has gone under BV limit and a restock should occur");
+    		LOGGER.info(getName() + " has gone under BV limit and a restock should occur");
     	}
 
     	if( percentBVLimit != -1 && getHangarBVforMC() < getBVResetPointMC() )
@@ -1754,7 +1754,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		percentRestock = true;
     		setBVTracker(0); //return this to default zero. on activation, it will be set to new value.
 
-    		MWLogger.modLog(getName() + " has gone under % BV limit and a restock should occur");
+    		LOGGER.info(getName() + " has gone under % BV limit and a restock should occur");
     	}
 
     	if( minUnitLimit != -1 && getUnitCountMC() < minUnitLimit )
@@ -1762,7 +1762,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		restock = true;
     		unitRestock = true;
 
-    		MWLogger.modLog(getName() + " has gone under Unit limit and a restock should occur");
+    		LOGGER.info(getName() + " has gone under Unit limit and a restock should occur");
     	}
 
     	if( !restock && !minBVRestock && minBVLimit != -1)
@@ -1882,7 +1882,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         if ( percentBVLimit != -1  && getHangarBVforMC() > getBVTracker() )
         {
         	setBVTracker(getHangarBVforMC());
-        	MWLogger.modLog(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
+        	LOGGER.info(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
         }
         
         if(isPhaseRestockMC())
@@ -1944,7 +1944,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 			if ( percentBVLimit != -1 )
 			{
 				setBVTracker(getHangarBVforMC());// set new hangar BV for tracking
-				MWLogger.modLog(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
+				LOGGER.info(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
 			}
 			
     		setPhaseActiveMC();

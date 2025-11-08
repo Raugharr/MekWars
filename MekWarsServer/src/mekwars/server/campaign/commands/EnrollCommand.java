@@ -21,7 +21,6 @@ import java.net.InetAddress;
 import java.util.StringTokenizer;
 
 import mekwars.common.House;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -166,8 +165,7 @@ public class  EnrollCommand  implements Command {
 
 		//tell the mods and add to the IP log
 		InetAddress ip = MWServ.getInstance().getIP(Username);
-		//MWLogger.modLog(Username + " enrolled in the campaign (IP: " + ip + ").");
-        LOGGER.info("ENROLL: {} IP: {}", Username, ip);
+		LOGGER.info("ENROLL: {} IP: {}", Username, ip);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " enrolled in the campaign (IP: " + ip + ").");
 
 	}//end process()

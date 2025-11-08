@@ -19,13 +19,15 @@ package mekwars.server.campaign.commands.leader;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FactionLeaderMuteCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(FactionLeaderMuteCommand.class);
 
     int accessLevel = CampaignMain.cm.getIntegerConfig("factionLeaderLevel");
 
@@ -75,7 +77,7 @@ public class FactionLeaderMuteCommand implements Command {
 			MWServ.getInstance().sendChat(Username + " muted " + p.getName() + " (faction mute).");
 		} else { //unmute
 			factionIgnores.remove(p.getName());
-			MWLogger.modLog(Username + " faction unmuted " + p.getName());
+			LOGGER.info(Username + " faction unmuted " + p.getName());
 			CampaignMain.cm.doSendModMail("NOTE",Username + " faction unmuted " + p.getName());
 			MWServ.getInstance().sendChat(Username + " unmuted " + p.getName() + " (faction mute).");
 		}
