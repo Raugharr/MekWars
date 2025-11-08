@@ -73,12 +73,4 @@ public interface MWLogger {
     static void pmLog(String message) {
         LOGGER.info(LogMarkerHolder.PM_MARKER, message);
     }
-
-    static void mainLog(Exception e) {
-        LOGGER.info("Exception: ", e);
-    }
-    
-    static void modLog(Exception e) {
-        LOGGER.info("Exception: ", e);
-    }
 }
