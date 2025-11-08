@@ -59,7 +59,6 @@ public class SPlayerToJSON {
 		} 
 		catch (IOException e) 
 		{
-			MWLogger.debugLog(e);
 			LOGGER.error("Exception: ", e);
 		}
 		

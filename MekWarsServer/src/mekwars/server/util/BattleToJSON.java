@@ -143,7 +143,6 @@ public class BattleToJSON {
 		} 
 		catch (IOException e) 
 		{
-			MWLogger.debugLog(e);
 			LOGGER.error("Exception: ", e);
 		}
 		
