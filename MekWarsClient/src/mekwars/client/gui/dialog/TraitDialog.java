@@ -46,13 +46,12 @@ import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.House;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class TraitDialog implements ActionListener, KeyListener{
-    private static final Logger LOGGER = LoggerFactory.getLogger(TraitDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(TraitDialog.class);
 
 	//store the client backlink for other things to use
 	private MWClient mwclient = null; 

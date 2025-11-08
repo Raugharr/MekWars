@@ -61,11 +61,11 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 
 import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MyImageView extends View implements ImageObserver, MouseListener, MouseMotionListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MyImageView.class);
+    private static final Logger LOGGER = LogManager.getLogger(MyImageView.class);
 	// --- Attribute Values ------------------------------------------
 	
 	public static final String

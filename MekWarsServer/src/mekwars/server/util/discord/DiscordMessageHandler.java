@@ -16,8 +16,8 @@
 package mekwars.server.util.discord;
 
 import mekwars.server.campaign.CampaignMain;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -37,7 +37,7 @@ import java.time.Duration;
  * @author Spork
  */
 public class DiscordMessageHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DiscordMessageHandler.class);
+    private static final Logger LOGGER = LogManager.getLogger(DiscordMessageHandler.class);
 
     private String webhookAddress;
     private HttpClient httpClient;

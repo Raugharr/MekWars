@@ -27,11 +27,11 @@ import megamek.common.Entity;
 import megamek.common.EquipmentType;
 import megamek.common.Mounted;
 import megamek.common.TechConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UnitComponents{
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnitComponents.class);
+    private static final Logger LOGGER = LogManager.getLogger(UnitComponents.class);
 
     private Hashtable<String, Integer> components = new Hashtable<>();
 

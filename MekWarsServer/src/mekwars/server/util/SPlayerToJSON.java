@@ -8,14 +8,14 @@ import java.nio.file.StandardOpenOption;
 
 import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.SPlayer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 //@salient - util class saves SPlayer as simple json file
 //			 for use with discord bot
 public class SPlayerToJSON {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SPlayerToJSON.class);
+    private static final Logger LOGGER = LogManager.getLogger(SPlayerToJSON.class);
 
     private static String jsonString = "";
     

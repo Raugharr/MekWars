@@ -21,14 +21,14 @@
 
 package mekwars.common.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ThreadManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadManager.class);
+    private static final Logger LOGGER = LogManager.getLogger(ThreadManager.class);
 
     private static ThreadManager instance = new ThreadManager();
 

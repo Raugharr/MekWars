@@ -26,14 +26,14 @@ import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.SerializeEntity;
 
 import megamek.common.Entity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * This class is responsible for reports that are generated on both the client and server.
  */
 public class GameReport {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GameReport.class);
+    private static final Logger LOGGER = LogManager.getLogger(GameReport.class);
 
     public static StringBuilder prepareReport(GameInterface myGame,
             boolean usingAdvancedRepairs, Buildings buildingTemplate) {

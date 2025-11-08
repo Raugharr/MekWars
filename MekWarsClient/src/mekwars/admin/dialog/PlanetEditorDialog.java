@@ -53,15 +53,13 @@ import mekwars.common.House;
 import mekwars.common.Planet;
 import mekwars.common.Terrain;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import megamek.common.planetaryconditions.Atmosphere;
-import megamek.common.planetaryconditions.PlanetaryConditions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class PlanetEditorDialog implements ActionListener, KeyListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlanetEditorDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(PlanetEditorDialog.class);
     // store the client backlink for other things to use
     private MWClient mwclient = null;
     private String planetName = "";

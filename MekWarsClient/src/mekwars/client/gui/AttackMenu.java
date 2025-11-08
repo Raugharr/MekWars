@@ -45,9 +45,8 @@ import mekwars.client.gui.dialog.PlanetNameDialog;
 import mekwars.client.gui.dialog.PlayerNameDialog;
 import mekwars.common.House;
 import mekwars.common.Planet;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Create an "Attack" menu. Used in Map, CMainFramge, etc. to generate
@@ -59,7 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class AttackMenu extends JMenu implements ActionListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AttackMenu.class);
+    private static final Logger LOGGER = LogManager.getLogger(AttackMenu.class);
     
     private static final long serialVersionUID = 7420602115238025725L;
     //VARS

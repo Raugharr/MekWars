@@ -59,13 +59,13 @@ import megamek.common.MechView;
 import megamek.common.TechConstants;
 import megamek.common.UnitType;
 import megamek.common.loaders.EntityLoadingException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class NewUnitViewerDialog extends JDialog implements Runnable,
         KeyListener, ActionListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NewUnitViewerDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(NewUnitViewerDialog.class);
         private static final long serialVersionUID = 8144354264100884817L;
 
         private JButton btnSelectClose;

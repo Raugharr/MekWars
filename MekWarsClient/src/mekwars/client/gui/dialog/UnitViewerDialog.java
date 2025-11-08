@@ -96,15 +96,15 @@ import megamek.common.TechConstants;
 import megamek.common.UnitType;
 import megamek.common.WeaponType;
 import megamek.common.loaders.EntityLoadingException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * Allows a user to sort through a list of MechSummaries and select one
  */
 
 public class UnitViewerDialog extends JFrame implements ActionListener, KeyListener, ListSelectionListener, Runnable, WindowListener, ItemListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnitViewerDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(UnitViewerDialog.class);
     
     private static final long serialVersionUID = -7210333306969855153L;
     // how long after a key is typed does a new search begin

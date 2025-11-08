@@ -31,9 +31,8 @@ import java.util.TreeSet;
 
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents the influences of different Houses of a planet. This may be used
@@ -44,7 +43,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class Influences implements MutableSerializable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Influences.class);
+    private static final Logger LOGGER = LogManager.getLogger(Influences.class);
     /**
      * A hash table with key=House and value=Integer of the influences of the
      * different factions. Only factions greater than 0% are listed.

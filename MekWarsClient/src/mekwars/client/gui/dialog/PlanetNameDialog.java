@@ -45,10 +45,9 @@ import javax.swing.event.CaretListener;
 import mekwars.client.MWClient;
 import mekwars.common.House;
 import mekwars.common.Planet;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 //util imports
 //swing imports
 //mekwars imports
@@ -68,7 +67,7 @@ import org.slf4j.LoggerFactory;
  * @Torren 5.6.05
  */
 public class PlanetNameDialog extends JDialog implements ActionListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlanetNameDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(PlanetNameDialog.class);
 
     private static final long serialVersionUID = 3344329118582475184L;
     //variables

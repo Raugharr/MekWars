@@ -42,12 +42,11 @@ import java.util.TreeMap;
 import mekwars.common.MWXMLWriter;
 import mekwars.common.MWXmlSerializable;
 import mekwars.common.util.MMNetXStream;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Operation implements MWXmlSerializable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Operation.class);
+    private static final Logger LOGGER = LogManager.getLogger(Operation.class);
 	//IVARS
 	
 	/*

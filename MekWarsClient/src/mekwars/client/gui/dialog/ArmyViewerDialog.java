@@ -68,8 +68,8 @@ import mekwars.common.Unit;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import megamek.common.Infantry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /* 
@@ -77,7 +77,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class ArmyViewerDialog extends JDialog implements ActionListener, ListSelectionListener, ItemListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArmyViewerDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(ArmyViewerDialog.class);
     private static final long serialVersionUID = -3851019509649287454L;
 
 

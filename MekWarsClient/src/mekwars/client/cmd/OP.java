@@ -35,9 +35,8 @@ import mekwars.client.gui.dialog.opviewer.OperationViewerDialog;
 import mekwars.common.campaign.operations.DefaultOperation;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MMNetXStream;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -47,7 +46,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class OP extends Command {
-    private static final Logger LOGGER = LoggerFactory.getLogger(OP.class);
+    private static final Logger LOGGER = LogManager.getLogger(OP.class);
 	public OP(MWClient client) {
 		super(client);
 	}

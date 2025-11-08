@@ -36,16 +36,15 @@ import javax.swing.event.ChangeListener;
 
 import mekwars.client.MWClient;
 import mekwars.common.BMEquipment;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Main panel
  */
 
 public class CMainPanel extends JPanel implements ChangeListener, ComponentListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CMainPanel.class);
+    private static final Logger LOGGER = LogManager.getLogger(CMainPanel.class);
 
     private static final long serialVersionUID = -7817596095411018999L;
     JSplitPane MainSPane;

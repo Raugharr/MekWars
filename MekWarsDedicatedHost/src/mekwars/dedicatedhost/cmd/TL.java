@@ -21,16 +21,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.dedicatedhost.MWDedHost;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class TL extends Command {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TL.class);
+    private static final Logger LOGGER = LogManager.getLogger(TL.class);
 	/**
 	 * @param client
 	 */

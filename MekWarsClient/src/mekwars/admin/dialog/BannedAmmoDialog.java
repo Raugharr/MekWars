@@ -35,15 +35,14 @@ import javax.swing.SpringLayout;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.House;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 
 import megamek.common.AmmoType.Munitions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class BannedAmmoDialog implements ActionListener{
-    private static final Logger LOGGER = LoggerFactory.getLogger(BannedAmmoDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(BannedAmmoDialog.class);
 
 	//store the client backlink for other things to use
 	private MWClient mwclient = null; 

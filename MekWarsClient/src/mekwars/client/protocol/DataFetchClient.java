@@ -31,8 +31,8 @@ import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.MWLogger;
 import megamek.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Calls to the data retrieving server and gets data for planets and factions
@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class DataFetchClient {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataFetchClient.class);
+    private static final Logger LOGGER = LogManager.getLogger(DataFetchClient.class);
 
 	private String hostAddr;
     private String cacheDir;

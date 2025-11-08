@@ -7,8 +7,8 @@ import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.MWLogger;
 import mekwars.dedicatedhost.MWDedHost;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.io.*;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class DataFetchClient {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataFetchClient.class);
+    private static final Logger LOGGER = LogManager.getLogger(DataFetchClient.class);
 
     private String hostAddr;
     private String cacheDir;

@@ -30,11 +30,11 @@ import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import mekwars.client.MWClient;
 import mekwars.common.Planet;
 import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 class MMNetHyperLinkListener implements HyperlinkListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MMNetHyperLinkListener.class);
+    private static final Logger LOGGER = LogManager.getLogger(MMNetHyperLinkListener.class);
 
 	MWClient mwclient;
 	protected boolean isHovering = false;

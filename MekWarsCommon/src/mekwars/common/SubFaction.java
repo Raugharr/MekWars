@@ -18,12 +18,11 @@ package mekwars.common;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SubFaction{
-    private static final Logger LOGGER = LoggerFactory.getLogger(SubFaction.class);
+    private static final Logger LOGGER = LogManager.getLogger(SubFaction.class);
 
 	private static Properties defaultSettings = new Properties();
 	private Properties factionSettings = null;

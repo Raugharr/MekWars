@@ -77,8 +77,8 @@ import megamek.common.Tank;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
 import megamek.common.equipment.AmmoMounted;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A dialog that a player can use to customize his mech before battle.
@@ -89,7 +89,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class CustomUnitDialog extends JDialog implements ActionListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomUnitDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(CustomUnitDialog.class);
     /**
      *
      */

@@ -68,8 +68,8 @@ import mekwars.common.util.MMNetXStream;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.Position;
 import mekwars.common.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Draws the main map component.
@@ -78,7 +78,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class InnerStellarMap extends JComponent implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(InnerStellarMap.class);
+    private static final Logger LOGGER = LogManager.getLogger(InnerStellarMap.class);
 
     private static final long serialVersionUID = 8655078955521790260L;
 

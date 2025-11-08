@@ -16,9 +16,8 @@
 
 package mekwars.common.util;
 
-import mekwars.common.util.HTMLConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,7 +35,7 @@ import java.io.Reader;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class BinReader {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BinReader.class);
+    private static final Logger LOGGER = LogManager.getLogger(BinReader.class);
 
     private BufferedReader in;
     private boolean debug;

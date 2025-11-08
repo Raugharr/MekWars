@@ -46,12 +46,11 @@ import mekwars.common.VerticalLayout;
 import mekwars.common.campaign.operations.DefaultOperation;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MMNetXStream;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OperationViewerDialog extends JDialog implements Runnable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(OperationViewerDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(OperationViewerDialog.class);
 
     private static final long serialVersionUID = 1L;
 

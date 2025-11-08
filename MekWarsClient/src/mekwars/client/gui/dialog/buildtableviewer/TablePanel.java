@@ -36,15 +36,13 @@ import mekwars.client.MWClient;
 import mekwars.client.gui.MWUnitDisplayHelper;
 import mekwars.common.House;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
 import megamek.common.loaders.EntityLoadingException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A JPanel containing a JTable representing a BuildTable
@@ -52,7 +50,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class TablePanel extends JPanel implements ActionListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TablePanel.class);
+    private static final Logger LOGGER = LogManager.getLogger(TablePanel.class);
 
 	private static final long serialVersionUID = 1348587767892438630L;
 	private SelectorPanel selector;

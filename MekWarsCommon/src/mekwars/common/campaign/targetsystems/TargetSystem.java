@@ -2,16 +2,15 @@ package mekwars.common.campaign.targetsystems;
 
 import java.util.Vector;
 
-import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * NOTE: This looks unused and should be deprecated and/or removed.
  */
 public class TargetSystem {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TargetSystem.class);
+    private static final Logger LOGGER = LogManager.getLogger(TargetSystem.class);
 
 	public final static int TS_TYPE_STANDARD = 0;
 	public final static int TS_TYPE_ANTIAIR = 1;

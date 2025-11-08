@@ -64,11 +64,10 @@ import mekwars.common.campaign.operations.DefaultOperation;
 import mekwars.common.flags.FlagSet;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 public class OperationsDialog extends JFrame implements ActionListener, KeyListener, MouseListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(OperationsDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(OperationsDialog.class);
     private static final long serialVersionUID = -238767483230471330L;
     private final static String windowName = "MekWars Operations Editor";
     private final static int SHORT_OP = 0;

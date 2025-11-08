@@ -28,8 +28,8 @@ import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.CCommPanel;
 import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
     /**
  * @author Spork
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class BT extends Command {
-        private static final Logger LOGGER = LoggerFactory.getLogger(BT.class);
+        private static final Logger LOGGER = LogManager.getLogger(BT.class);
 	/**
 	 * @param client
 	 */

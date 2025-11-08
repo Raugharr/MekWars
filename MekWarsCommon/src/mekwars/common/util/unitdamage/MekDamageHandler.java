@@ -14,11 +14,11 @@ import megamek.common.MiscType;
 import megamek.common.Mounted;
 import megamek.common.equipment.AmmoMounted;
 import megamek.common.equipment.MiscMounted;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MekDamageHandler extends AbstractUnitDamageHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MekDamageHandler.class);
+    private static final Logger LOGGER = LogManager.getLogger(MekDamageHandler.class);
 
     @Override
     public String buildDamageString(Entity unit, boolean sendAmmo) {

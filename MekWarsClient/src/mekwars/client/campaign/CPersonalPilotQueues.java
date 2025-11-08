@@ -27,10 +27,9 @@ import java.util.StringTokenizer;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Torren (Jason Tighe)
@@ -43,7 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class CPersonalPilotQueues {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CPersonalPilotQueues.class);
+    private static final Logger LOGGER = LogManager.getLogger(CPersonalPilotQueues.class);
 
     /*
      * Don't need to synchronize on the client side. Two threads won't WRITE to

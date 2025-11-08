@@ -45,19 +45,18 @@ import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.OffBoardDirection;
 import megamek.common.WeaponType;
-import megamek.common.enums.Gender;
 import megamek.common.equipment.AmmoMounted;
 import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class for unit object used by Client
  */
 public class CUnit extends Unit {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CUnit.class);
+    private static final Logger LOGGER = LogManager.getLogger(CUnit.class);
 
     protected Entity unitEntity;
 

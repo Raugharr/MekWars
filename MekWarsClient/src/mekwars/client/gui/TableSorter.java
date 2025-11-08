@@ -29,12 +29,11 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
 import mekwars.client.MWClient;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TableSorter extends TableMap {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TableSorter.class);
+    private static final Logger LOGGER = LogManager.getLogger(TableSorter.class);
 
     private static final long serialVersionUID = -3715062654870040447L;
     // VARIABLES

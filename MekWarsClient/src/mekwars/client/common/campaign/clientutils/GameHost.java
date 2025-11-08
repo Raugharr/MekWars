@@ -17,8 +17,8 @@ import mekwars.common.campaign.clientutils.IGameHost;
 import mekwars.common.campaign.clientutils.SerializeEntity;
 import mekwars.common.campaign.clientutils.protocol.TransportCodec;
 import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,7 +31,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 public abstract class GameHost implements GameListener, IGameHost {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GameHost.class);
+    private static final Logger LOGGER = LogManager.getLogger(GameHost.class);
     
     public static final int STATUS_DISCONNECTED = 0;
     public static final int STATUS_LOGGEDOUT = 1;

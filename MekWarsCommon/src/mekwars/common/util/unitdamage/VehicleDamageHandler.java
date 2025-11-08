@@ -11,11 +11,11 @@ import megamek.common.IArmorState;
 import megamek.common.Mounted;
 import megamek.common.Tank;
 import megamek.common.equipment.AmmoMounted;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class VehicleDamageHandler extends AbstractUnitDamageHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(VehicleDamageHandler.class);
+    private static final Logger LOGGER = LogManager.getLogger(VehicleDamageHandler.class);
 
 	@Override
 	public String buildDamageString(Entity unit, boolean sendAmmo) {

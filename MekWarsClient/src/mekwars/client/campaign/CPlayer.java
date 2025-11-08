@@ -39,14 +39,14 @@ import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.OffBoardDirection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class for Player object used by Client
  */
 public class CPlayer extends Player {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CPlayer.class);
+    private static final Logger LOGGER = LogManager.getLogger(CPlayer.class);
 
     public static final String DELIMITER = "#"; // delimiter for player strings
 

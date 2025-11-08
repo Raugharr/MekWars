@@ -40,6 +40,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdatepicker.impl.JDatePickerImpl;
 
 import mekwars.admin.dialog.serverConfigDialogs.AdvancedRepairPanel;
@@ -83,12 +85,9 @@ import mekwars.admin.dialog.serverConfigDialogs.UnitsPanel;
 import mekwars.admin.dialog.serverConfigDialogs.VotingPanel;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class ServerConfigurationDialog implements ActionListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerConfigurationDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(ServerConfigurationDialog.class);
 
     private final static String okayCommand = "okay";
     private final static String cancelCommand = "cancel";

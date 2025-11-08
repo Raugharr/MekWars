@@ -20,15 +20,14 @@ package mekwars.dedicatedhost;
 import java.util.StringTokenizer;
 
 import mekwars.common.campaign.clientutils.IClientUser;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * Class for User objects held in userlist
  */
 public class CUser implements Comparable<Object>, IClientUser {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CUser.class);
+    private static final Logger LOGGER = LogManager.getLogger(CUser.class);
 
 	protected String Name;
 

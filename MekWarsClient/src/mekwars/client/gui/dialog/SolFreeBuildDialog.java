@@ -79,18 +79,16 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
 import megamek.common.MULParser;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
-import megamek.common.MULParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SolFreeBuildDialog extends JFrame implements ItemListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SolFreeBuildDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(SolFreeBuildDialog.class);
 
     private static final long serialVersionUID = -5449999786199993020L;
 

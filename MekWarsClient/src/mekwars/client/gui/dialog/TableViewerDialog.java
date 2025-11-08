@@ -67,21 +67,20 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
 import megamek.common.MULParser;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @deprecated As of Client v0.7.0.1, replaced by BuildTableViewer.java
  */
 @Deprecated
 public class TableViewerDialog extends JFrame implements ItemListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TableViewerDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(TableViewerDialog.class);
     private static final long serialVersionUID = -5449211786198003020L;
 
     JComboBox<String> weightClassCombo;

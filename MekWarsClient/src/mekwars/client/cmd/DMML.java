@@ -23,16 +23,15 @@ import java.io.PrintStream;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Torren
  * Ded MegaMekLog
  */
 public class DMML extends Command {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DMML.class);
+    private static final Logger LOGGER = LogManager.getLogger(DMML.class);
 	/**
 	 * @see Command#Command(MMClient)
 	 */

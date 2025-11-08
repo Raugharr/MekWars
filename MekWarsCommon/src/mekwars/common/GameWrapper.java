@@ -5,16 +5,15 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
-import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import megamek.common.Game;
 import megamek.common.Player;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class GameWrapper implements GameInterface {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GameWrapper.class);
+    private static final Logger LOGGER = LogManager.getLogger(GameWrapper.class);
 
     private final Game game;
     

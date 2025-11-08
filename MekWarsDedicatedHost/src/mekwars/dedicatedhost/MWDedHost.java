@@ -70,15 +70,15 @@ import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.SerializeEntity;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 // This is the Client used for connecting to the master server.
 // @Author: Helge Richter (McWizard@gmx.de)
 
 public final class MWDedHost extends GameHost implements IClient {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MWDedHost.class);
+    private static final Logger LOGGER = LogManager.getLogger(MWDedHost.class);
 
     DataFetchClient dataFetcher;
 
@@ -1317,7 +1317,7 @@ public final class MWDedHost extends GameHost implements IClient {
     }
 
     protected class TimeOutThread extends Thread {
-        private final Logger LOGGER = LoggerFactory.getLogger(TimeOutThread.class);
+        private final Logger LOGGER = LogManager.getLogger(TimeOutThread.class);
 
         MWDedHost mwdedhost;
 
@@ -1539,7 +1539,7 @@ public final class MWDedHost extends GameHost implements IClient {
     }
 
     private static class PurgeAutoSaves implements Runnable {
-        private static final Logger LOGGER = LoggerFactory.getLogger(PurgeAutoSaves.class);
+        private static final Logger LOGGER = LogManager.getLogger(PurgeAutoSaves.class);
 
         public PurgeAutoSaves() {
             super();

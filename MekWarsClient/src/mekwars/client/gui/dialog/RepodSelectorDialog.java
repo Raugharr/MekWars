@@ -78,14 +78,14 @@ import megamek.common.MechSummaryCache;
 import megamek.common.MechSummaryComparator;
 import megamek.common.MechView;
 import megamek.common.loaders.EntityLoadingException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * Allows a user to sort through a list of MechSummaries and select one
  */
 public class RepodSelectorDialog extends JFrame implements ActionListener, KeyListener, ListSelectionListener, Runnable, WindowListener, ItemListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RepodSelectorDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(RepodSelectorDialog.class);
 
     private static final long serialVersionUID = -6467246609231845514L;
 

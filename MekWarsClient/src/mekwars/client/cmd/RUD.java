@@ -21,16 +21,15 @@ import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
 import mekwars.client.gui.dialog.RepodSelectorDialog;
-import mekwars.common.util.MWLogger;
 import megamek.client.ui.swing.UnitLoadingDialog;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @@author jtighe
  */
 public class RUD extends Command {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RUD.class);
+    private static final Logger LOGGER = LogManager.getLogger(RUD.class);
     /**
      * @param client
      */

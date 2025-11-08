@@ -30,16 +30,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CUnit;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Mech;
 import megamek.common.Mounted;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RepairManagmentThread extends Thread{
-    private static final Logger LOGGER = LoggerFactory.getLogger(RepairManagmentThread.class);
+    private static final Logger LOGGER = LogManager.getLogger(RepairManagmentThread.class);
 
     private Vector<ConcurrentLinkedQueue<String>> workOrders = new Vector<ConcurrentLinkedQueue<String>>(5,1);
     private long averageRepairTime = 1000;

@@ -58,11 +58,11 @@ import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ClientThread extends Thread implements CloseClientListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientThread.class);
+    private static final Logger LOGGER = LogManager.getLogger(ClientThread.class);
 
     // VARIABLES
     private String myname;

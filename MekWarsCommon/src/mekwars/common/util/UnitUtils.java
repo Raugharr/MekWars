@@ -43,11 +43,11 @@ import megamek.common.Tank;
 import megamek.common.TechConstants;
 import megamek.common.enums.Gender;
 import megamek.common.equipment.ArmorType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UnitUtils {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnitUtils.class);
+    private static final Logger LOGGER = LogManager.getLogger(UnitUtils.class);
 
     // Engines
     public static final int STANDARD_ENGINE = 0;

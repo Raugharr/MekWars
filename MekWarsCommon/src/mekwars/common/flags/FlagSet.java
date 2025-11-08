@@ -14,12 +14,11 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FlagSet {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FlagSet.class);
+    private static final Logger LOGGER = LogManager.getLogger(FlagSet.class);
 
 	protected BitSet flags = new BitSet();
 	protected Map<Integer, String> flagNames;

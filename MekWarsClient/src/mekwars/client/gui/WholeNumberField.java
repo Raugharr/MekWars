@@ -28,12 +28,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class WholeNumberField extends JTextField {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WholeNumberField.class);
+    private static final Logger LOGGER = LogManager.getLogger(WholeNumberField.class);
 
     private static final long serialVersionUID = 3640879107242018821L;
     private Toolkit toolkit;

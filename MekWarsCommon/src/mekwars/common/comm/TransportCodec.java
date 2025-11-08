@@ -11,9 +11,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Provides a method to encode any string into a URL-safe
@@ -23,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * encoded as %HH escapes.
  */
 public class TransportCodec {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TransportCodec.class);
+    private static final Logger LOGGER = LogManager.getLogger(TransportCodec.class);
 
     final static String[] hex = {
             "%00", "%01", "%02", "%03", "%04", "%05", "%06", "%07",

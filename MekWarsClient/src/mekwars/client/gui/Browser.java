@@ -48,9 +48,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import mekwars.common.util.MWLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Allows URLs to be opened in the system browser on Windows and Unix.
@@ -62,7 +61,7 @@ import org.slf4j.LoggerFactory;
  */
 //TODO: Can probably modernize this
 public class Browser {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Browser.class);
+    private static final Logger LOGGER = LogManager.getLogger(Browser.class);
     /**
      * The dialog that allows user configuration of the options for this class.
      *

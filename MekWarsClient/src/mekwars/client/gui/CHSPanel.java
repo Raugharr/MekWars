@@ -62,20 +62,19 @@ import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.UnitUtils;
 import megamek.client.generator.RandomGenderGenerator;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Crew;
 import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.Infantry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * SHouse Status Panel
  */
 
 public class CHSPanel extends JPanel {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CHSPanel.class);
+    private static final Logger LOGGER = LogManager.getLogger(CHSPanel.class);
 
     private static final long serialVersionUID = -6985292870326367798L;
     MWClient mwclient;

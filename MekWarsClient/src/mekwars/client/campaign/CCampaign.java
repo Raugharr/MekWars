@@ -26,10 +26,9 @@ import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.dialog.ArmyViewerDialog;
 import mekwars.common.BMEquipment;
 import mekwars.common.util.ComponentToCritsConverter;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class for Campaign object used by Client
@@ -37,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * TODO: Properly comment this class.
  */
 public class CCampaign {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CCampaign.class);
+    private static final Logger LOGGER = LogManager.getLogger(CCampaign.class);
 
     MWClient mwclient;
     CPlayer Player;

@@ -48,15 +48,14 @@ import mekwars.client.MWClient;
 import mekwars.client.campaign.CArmy;
 import mekwars.client.campaign.CUnit;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.client.ui.swing.tileset.MechTileset;
 import megamek.client.ui.swing.util.RotateFilter;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Tank;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -64,7 +63,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class MekInfo extends JPanel {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MekInfo.class);
+    private static final Logger LOGGER = LogManager.getLogger(MekInfo.class);
 
     private static final long serialVersionUID = 4308503800966118202L;
     protected static MechTileset mt;

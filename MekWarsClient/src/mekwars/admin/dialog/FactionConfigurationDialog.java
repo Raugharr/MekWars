@@ -51,11 +51,11 @@ import mekwars.common.Unit;
 import mekwars.common.VerticalLayout;
 import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class FactionConfigurationDialog implements ActionListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FactionConfigurationDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(FactionConfigurationDialog.class);
     private final static String okayCommand = "okay";
     private final static String cancelCommand = "cancel";
     private String windowName = "";

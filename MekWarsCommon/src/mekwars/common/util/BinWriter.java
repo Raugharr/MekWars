@@ -16,9 +16,8 @@
 
 package mekwars.common.util;
 
-import mekwars.common.util.HTMLConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,7 +28,7 @@ import java.io.PrintWriter;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class BinWriter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BinWriter.class);
+    private static final Logger LOGGER = LogManager.getLogger(BinWriter.class);
 
     private PrintWriter out;
     private boolean debug;

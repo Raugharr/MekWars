@@ -80,16 +80,14 @@ import mekwars.client.gui.dialog.buildtableviewer.BuildTableViewer;
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.operationseditor.gui.dialog.OperationsDialog;
-import megamek.MegaMek;
 import megamek.client.ui.swing.UnitLoadingDialog;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CMainFrame extends JFrame {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CMainFrame.class);
+    private static final Logger LOGGER = LogManager.getLogger(CMainFrame.class);
 
     private static final long serialVersionUID = -1198882220815512476L;
 
