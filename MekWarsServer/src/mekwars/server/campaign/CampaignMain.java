@@ -872,7 +872,7 @@ public final class CampaignMain implements Serializable {
         SPlayer toLogin = this.getPlayer(Username);
 
         if (toLogin == null) {
-            this.toUser("<font color=\"navy\"><br>---<br>" + "It appears that you haven't signed up for this server's " + "campaign.<br><a href=\"MEKWARS/c enroll\">Click here to get " + "started.</a><br>---<br></font>", Username, true);
+            this.toUser("<font color=\"teal\"><br>---<br>" + "It appears that you haven't signed up for this server's " + "campaign.<br><a href=\"MEKWARS/c enroll\">Click here to get " + "started.</a><br>---<br></font>", Username, true);
             return;
         }
 
