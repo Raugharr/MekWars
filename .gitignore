@@ -1,4 +1,3 @@
-
 .vscode/settings.json
 *.swp
 *.swo
@@ -13,3 +12,10 @@ MekWarsHPGNet/hpg-dist
 buildSrc/build
 buildSrc/.gradle
 MekWarsClient/client-dist/data/images
+*.iml
+.idea/
+
+# Gradle
+.gradle/
+MekWarsUpdater/build/
+build/
