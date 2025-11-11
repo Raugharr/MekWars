@@ -19,9 +19,13 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.util.scheduler.TickJob;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TickCommand implements Command {
 	
+    private static final Logger logger = LogManager.getLogger(TickCommand.class);
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -38,9 +42,13 @@ public class TickCommand implements Command {
 			}
 		}
 		
-		long remaining = MWServ.getInstance().getTThread().getRemainingSleepTime() / 1000;
-		long remainingMinutes = (remaining / 60);
-		long remainingSeconds = (remaining % 60);
-		CampaignMain.cm.toUser("AM:The next Tick [" + (MWServ.getInstance().getTThread().getTickID() + 1) + "] will occur in " +remainingMinutes + " minutes and " + remainingSeconds + " seconds.", Username, true);
+        try {
+            long remaining = TickJob.millisecondsUntilNextFire();
+            long remainingMinutes = (remaining / 60);
+            long remainingSeconds = (remaining % 60);
+            CampaignMain.cm.toUser("AM:The next Tick [" + (TickJob.getTickID() + 1) + "] will occur in " + remainingMinutes + " minutes and " + remainingSeconds + " seconds.", Username, true);
+        } catch (Exception exception) {
+            logger.catching(exception);
+        }
 	}
 }

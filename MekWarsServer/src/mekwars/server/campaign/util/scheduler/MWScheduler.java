@@ -1,7 +1,28 @@
+/*
+ * MekWars - Copyright (C) 2025
+ * 
+ * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ */
+
 package mekwars.server.campaign.util.scheduler;
 
 import java.util.Date;
-
+import mekwars.common.CampaignData;
+import mekwars.common.House;
+import mekwars.common.util.MWLogger;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
@@ -9,13 +30,6 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
-
-import mekwars.common.CampaignData;
-import mekwars.common.House;
-import mekwars.common.util.MWLogger;
-import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SHouse;
-import mekwars.server.campaign.SPlayer;
 
 /**
  * A wrapper for a Quartz scheduler.  This class handles all the ancillary stuff
@@ -224,4 +238,20 @@ public class MWScheduler implements ScheduleHandler {
 			}
 		}
 	}
+
+    public static long millisecondsUntilNextFire(String triggerName, String group) throws Exception {
+        TriggerKey triggerKey = new TriggerKey(triggerName, group);
+        Trigger trigger = scheduler.getTrigger(triggerKey);
+
+        if (trigger == null) {
+            throw new Exception("Trigger '" + triggerName + "' not found");
+        }
+        Date nextFireTime = trigger.getNextFireTime();
+
+        if (nextFireTime == null) {
+            throw new Exception("Trigger '" + triggerName + "' is not a repeating job");
+        }
+        Date currentTime = new Date();
+        return nextFireTime.getTime() - currentTime.getTime();
+    }
 }

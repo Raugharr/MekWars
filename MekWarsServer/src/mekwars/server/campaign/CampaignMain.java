@@ -147,6 +147,7 @@ import mekwars.server.campaign.util.MechStatistics;
 import mekwars.server.campaign.util.Statistics;
 import mekwars.server.campaign.util.WhoToHTML;
 import mekwars.server.campaign.util.scheduler.MWScheduler;
+import mekwars.server.campaign.util.scheduler.TickJob;
 import mekwars.server.campaign.votes.VoteManager;
 import mekwars.server.util.MWPasswd;
 import mekwars.server.util.HtmlSanitizer;
@@ -979,7 +980,11 @@ public final class CampaignMain implements Serializable {
             CampaignMain.cm.toUser("PL|SHP|" + toLogin.buildHangarPenaltyString(), Username, false);
 
             // Send him the Tick Counter
-            CampaignMain.cm.toUser("CC|NT|" + MWServ.getInstance().getTThread().getRemainingSleepTime() + "|" + false, Username, false);
+            try {
+                CampaignMain.cm.toUser("CC|NT|" + TickJob.millisecondsUntilNextFire() + "|" + false, Username, false);
+            } catch (Exception exception) {
+                logger.catching(exception);
+            }
 
             // Check for Christmas
             if(ChristmasHandler.getInstance().isItChristmas()) {
