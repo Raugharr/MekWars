@@ -248,7 +248,7 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
 			fis = new FileInputStream(messageFile);
 			dis = new BufferedReader(new InputStreamReader(fis));
 
-			MWLogger.debugLog("getting random flu message");
+			LOGGER.debug("getting random flu message");
 			int messages = Integer.parseInt(dis.readLine());
 			int messageLine = rand.nextInt(messages);
 			while (dis.ready()) {

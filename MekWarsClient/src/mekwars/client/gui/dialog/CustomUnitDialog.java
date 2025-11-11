@@ -359,12 +359,12 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 
                 //boolean bTechMatch = TechConstants.isLegal(entity.getTechLevel(), atCheck.getTechLevel(year), true);// (entity.getTechLevel()
                 
-//                MWLogger.debugLog("Checking " + atCheck.getInternalName());
-//                MWLogger.debugLog("BtechMatch: " + bTechMatch);
-//                MWLogger.debugLog("Year: " + year);
-//                MWLogger.debugLog("Legal Level: " + legalLevel);
-//                MWLogger.debugLog("Ammo Tech Level: " + atCheck.getTechLevel(year));
-//                MWLogger.debugLog("Game Tech Level: " + mmClient.getGame().getOptions().stringOption("techlevel"));
+//                LOGGER.debug("Checking " + atCheck.getInternalName());
+//                LOGGER.debug("BtechMatch: " + bTechMatch);
+//                LOGGER.debug("Year: " + year);
+//                LOGGER.debug("Legal Level: " + legalLevel);
+//                LOGGER.debug("Ammo Tech Level: " + atCheck.getTechLevel(year));
+//                LOGGER.debug("Game Tech Level: " + mmClient.getGame().getOptions().stringOption("techlevel"));
                
                 // ==
                 // atCheck.getTechLevel());
@@ -375,17 +375,17 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 // check banned ammo
                 if (mwclient.getData().getServerBannedAmmo().containsKey(munition) || faction.getBannedAmmo().containsKey(munition) || ((mwclient.getAmmoCost(atCheck.getInternalName()) < 0) && !usingCrits)) {
                     //if(mwclient.getData().getServerBannedAmmo().containsKey(munition))
-                        //MWLogger.debugLog("Banned at the server level");
+                        //LOGGER.debug("Banned at the server level");
                     //if(faction.getBannedAmmo().containsKey(munition))
-                        //MWLogger.debugLog("Banned at the Faction level");
-                    //MWLogger.debugLog("Ammo cost: " + mwclient.getAmmoCost(atCheck.getInternalName()));
+                        //LOGGER.debug("Banned at the Faction level");
+                    //LOGGER.debug("Ammo cost: " + mwclient.getAmmoCost(atCheck.getInternalName()));
                     continue;
                 }
 
                 if (usingCrits && (mwclient.getPlayer().getPartsCache().getPartsCritCount(atCheck.getInternalName()) < 1) && !ammoAlreadyLoaded(atCheck) && (// !mwclient.getPlayer().getAutoReorder()
                         // &&
                         mwclient.getBlackMarketEquipmentList().get(atCheck.getInternalName()) == null)) {
-                    //MWLogger.debugLog("Player out of ammo.");
+                    //LOGGER.debug("Player out of ammo.");
                     continue;
                 }
 
@@ -395,16 +395,16 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 // need to show up in this display.
                 if (!bTechMatch && ((entity.getTechLevel() == TechConstants.T_IS_ADVANCED) || (entity.getTechLevel() == TechConstants.T_IS_EXPERIMENTAL)) && (atCheck.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)) {
                     bTechMatch = true;
-                    //MWLogger.debugLog("bTechMatch now true, because all L2 units can use L1 ammo");
+                    //LOGGER.debug("bTechMatch now true, because all L2 units can use L1 ammo");
                 }
 
                 // if is_eq_limits is unchecked allow L1 units to use L2
                 // munitions
-//                MWLogger.debugLog("Entity Tech Level: " + entity.getTechLevel());
-//                MWLogger.debugLog("Ammo tech level: " + atCheck.getTechLevel(year));
+//                LOGGER.debug("Entity Tech Level: " + entity.getTechLevel());
+//                LOGGER.debug("Ammo tech level: " + atCheck.getTechLevel(year));
 //                if (!entity.isClan() && entity.getTechLevel() == TechConstants.T_INTRO_BOXSET && (atCheck.getTechLevel(year) == TechConstants.T_IS_TW_NON_BOX || atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED)) {
 //                    bTechMatch = true;
-//                    MWLogger.debugLog("bTechMatch is true, because I said so");
+//                    LOGGER.debug("bTechMatch is true, because I said so");
 //                }
 
                 // Possibly allow level 3 ammos, possibly not.
@@ -428,7 +428,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 }
 
                 if (!mmClient.getGame().getOptions().booleanOption("minefields") && AmmoType.canDeliverMinefield(atCheck)) {
-                    MWLogger.debugLog("Minefields disabled");
+                    LOGGER.debug("Minefields disabled");
                     continue;
                 }
                 // LOGGER.error("4.Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
@@ -452,7 +452,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 }
 
                 // All other ammo types need to match on rack size and tech.
-                //MWLogger.debugLog("bTechMatch at end: " + bTechMatch);
+                //LOGGER.debug("bTechMatch at end: " + bTechMatch);
                 
                 if (bTechMatch) {
                     vTypes.addElement(atCheck);

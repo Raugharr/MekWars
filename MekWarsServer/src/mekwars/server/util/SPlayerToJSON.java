@@ -55,7 +55,7 @@ public class SPlayerToJSON {
 			         StandardOpenOption.CREATE,
 			         StandardOpenOption.TRUNCATE_EXISTING);
 						
-			MWLogger.debugLog("SPlayer to json filewrite completed successfully");
+			LOGGER.debug("SPlayer to json filewrite completed successfully");
 		} 
 		catch (IOException e) 
 		{

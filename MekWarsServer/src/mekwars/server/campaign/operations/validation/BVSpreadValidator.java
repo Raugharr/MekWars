@@ -16,8 +16,9 @@
 package mekwars.server.campaign.operations.validation;
 
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.SArmy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author 	Spork
@@ -27,6 +28,8 @@ import mekwars.server.campaign.SArmy;
  * Abstract class to validate unit spreads based on BV
  */
 public abstract class BVSpreadValidator implements I_SpreadValidator {
+    private static final Logger LOGGER = LogManager.getLogger(BVSpreadValidator.class);
+
 	private int validatorClass;
 	
 	protected int maxAllowedSpread = 0;
@@ -157,7 +160,7 @@ public abstract class BVSpreadValidator implements I_SpreadValidator {
 		s.append("\tMin/Max Actual BV:  " + minActualBV + "/" + maxActualBV + "\n");
 		s.append("\tSpread: " + getSpread() + "\n");
 		s.append("\tErrorLevel Returned: " + getError());
-		MWLogger.debugLog(s.toString());		
+		LOGGER.debug(s.toString());		
 	}
 	
 	public boolean getDebug() {

@@ -1775,9 +1775,9 @@ public class ShortOperation implements Comparable<Object> {
 
         if (isTeamOp) {
             CampaignMain.cm.toUser("PL|STN|" + p.getTeamNumber(), lowerName, false);
-            MWLogger.debugLog(p.getName() + " Team: " + p.getTeamNumber());
+            LOGGER.debug(p.getName() + " Team: " + p.getTeamNumber());
             CampaignMain.cm.toUser("GMEP|" + teamEdge[p.getTeamNumber() - 1], lowerName, false);
-            MWLogger.debugLog("Sent team edge to " + p.getName());
+            LOGGER.debug("Sent team edge to " + p.getName());
         }
         // send starting edge and autoarmy
         else if (defenders.containsKey(lowerName)) {
@@ -1880,7 +1880,7 @@ public class ShortOperation implements Comparable<Object> {
     public void addInProgressUpdate(String s) {
 
         StringTokenizer tokenizer = new StringTokenizer(s, "*");
-        MWLogger.debugLog("IPU Sent: " + s);
+        LOGGER.debug("IPU Sent: " + s);
 
         // see if we're dealing with a pilot or unit
         if (s.startsWith("MW*")) {
@@ -2887,13 +2887,13 @@ public class ShortOperation implements Comparable<Object> {
 
                 // skip if the operation doesn't allow capturing of this unit type
                 if (!currFacility.canBeRaided(type, o)) {
-                    MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
+                    LOGGER.debug("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
                     continue;
                 }
 
                 // skip if the operation doesn't allow capturing of this unit type
                 if (!currFacility.canBeRaided(type, o)) {
-                    MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
+                    LOGGER.debug("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
                     continue;
                 }
 
@@ -2901,7 +2901,7 @@ public class ShortOperation implements Comparable<Object> {
                 int ppAvailable = losingHouse.getPP(currFacility.getWeightclass(), type);
                 int ppNeed = currFacility.getPPCost(currFacility.getWeightclass(), type);
                 if (ppNeed > ppAvailable) {
-                    MWLogger.debugLog("Not enough PP to capture a unit.  Needed: " + ppNeed + ", available: " + ppAvailable);
+                    LOGGER.debug("Not enough PP to capture a unit.  Needed: " + ppNeed + ", available: " + ppAvailable);
                     continue;
                 }
 
@@ -2927,10 +2927,10 @@ public class ShortOperation implements Comparable<Object> {
                         SUnit unit = captured.get(i);
 
                         if (unit.isOMGUnit()) {
-                            MWLogger.debugLog("Removing an OMG-UR-FD from captured units for operation '" + o.getName() + "'.");
+                            LOGGER.debug("Removing an OMG-UR-FD from captured units for operation '" + o.getName() + "'.");
                             captured.remove(i);
                         } else if (!unit.canBeCapturedInOperation(o)) {
-                            MWLogger.debugLog("Removing an '" + unit.getModelName() + "' from captured units for operation '" + o.getName() + "'.");
+                            LOGGER.debug("Removing an '" + unit.getModelName() + "' from captured units for operation '" + o.getName() + "'.");
                             captured.remove(i);
                         }
                     }

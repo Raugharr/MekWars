@@ -66,7 +66,7 @@ public class PasswdAuthenticator extends NullAuthenticator {
             MWPasswdRecord record = MWPasswd.getRecord(userId, password);
             
             if (record == null) {
-            	MWLogger.debugLog("record is null for: "+userId);
+            	LOGGER.debug("record is null for: "+userId);
             	if (_allowGuests) {
             		Auth auth = super.authenticate(client, password);
             		if (_storeGuests) {

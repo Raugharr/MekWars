@@ -170,7 +170,7 @@ public class FlagSet {
 		setFlagName(id, name);
 		setFlag(name, value);
 		
-		//MWLogger.debugLog("Setting flag " + name + "(id: " + id + ") to value " + value);
+		//LOGGER.debug("Setting flag " + name + "(id: " + id + ") to value " + value);
 	}
 	
 	/**

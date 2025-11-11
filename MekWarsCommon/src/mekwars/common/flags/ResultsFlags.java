@@ -54,7 +54,7 @@ public class ResultsFlags extends PlayerFlags {
 			appliesTo += ResultsFlags.APPLIESTO_DEFENDER;
 		}
 		flagsApplyTo.put(id, appliesTo);
-		//MWLogger.debugLog("Setting flag " + name + "(id: " + id + ") to value " + value);
+		//LOGGER.debug("Setting flag " + name + "(id: " + id + ") to value " + value);
 	}
 	
 	/**

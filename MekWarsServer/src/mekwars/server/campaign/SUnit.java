@@ -1378,7 +1378,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         
         if (refigureWeightClass) {
             cm.setWeightclass(cm.getEntity().getWeightClass());
-            MWLogger.debugLog("Setting " + cm.getEntity().getModel() + " to weight class " + cm.getEntity().getWeightClass());
+            LOGGER.debug("Setting " + cm.getEntity().getModel() + " to weight class " + cm.getEntity().getWeightClass());
         }
         
         SPilot pilot = null;

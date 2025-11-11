@@ -209,7 +209,7 @@ public class SUnitFactory extends UnitFactory implements Serializable {
      * updates players' clients with accurate refresh times.
      */
     public String addRefresh(int i, boolean sendHSUpdate) {
-    	MWLogger.debugLog("Starting refresh on " + getName() + ", adding " + i);
+    	LOGGER.debug("Starting refresh on " + getName() + ", adding " + i);
         int startRefresh = getTicksUntilRefresh();
 
         setTicksUntilRefresh(getTicksUntilRefresh() + i);

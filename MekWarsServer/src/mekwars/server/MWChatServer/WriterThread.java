@@ -144,7 +144,7 @@ public class WriterThread extends Thread {
                     // MWLogger.warnLog("Client: " +
                     // _client.getUserId() + " /" + _client.getHost() +
                     // " Size: " + s.length() + " Message: " + s);
-                    MWLogger.debugLog("Sending data to " + _host + ":Size:" + s.length());
+                    LOGGER.debug("Sending data to " + _host + ":Size:" + s.length());
                     _out.print(s);
                     _out.flush();
                 } catch (Exception ex) {
@@ -211,7 +211,7 @@ public class WriterThread extends Thread {
             /*
              * End of NFC prinln, resumption of deflateAndSend.
              */
-            MWLogger.debugLog("Sending deflated data to " + _host + ":Size:" + s.length() + ":Deflated Size:" + Integer.toString(n));
+            LOGGER.debug("Sending deflated data to " + _host + ":Size:" + s.length() + ":Deflated Size:" + Integer.toString(n));
             _out.flush();
             _socket.getOutputStream().write(_deflatedBytes, 0, n);
             _socket.getOutputStream().flush();

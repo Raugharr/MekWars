@@ -316,7 +316,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         String penaltyString = buildHangarPenaltyString();
         CampaignMain.cm.toUser("PL|SHP|" + penaltyString, name, false);
 
-        //MWLogger.debugLog("Checking Anti-Air");
+        //LOGGER.debug("Checking Anti-Air");
         //m.isAntiAir();
 
         return "";// dummy string returned to comply with IBuyer
@@ -1074,7 +1074,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             Vector<SArmy> orderedArmies = new Vector<SArmy>(1, 1);
 
-            MWLogger.debugLog("Start getWeightedArmyNumber for " + getName());
+            LOGGER.debug("Start getWeightedArmyNumber for " + getName());
             int MinCount = getMyHouse().getIntegerConfig("MinCountForTick");
             int MaxCount = getMyHouse().getIntegerConfig("MaxCountForTick");
             int MaxFlatDiff = 1;
@@ -1262,7 +1262,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             }// end if(armies were ordered)
         }// end if (weighted <= 0)
-        MWLogger.debugLog("End getWeightedArmyNumber for " + getName());
+        LOGGER.debug("End getWeightedArmyNumber for " + getName());
         return weightedArmyNumber;
     }
 
@@ -2155,7 +2155,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 			discordID = TokenReader.readString(st);
 		}
 		else
-			MWLogger.debugLog("loadDiscordInfo failed! no token available!");   		
+			LOGGER.debug("loadDiscordInfo failed! no token available!");   		
     }
 
 
@@ -2535,7 +2535,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 //        		if(debugCounter < 10)
 //        		{
 //        			debugCounter++;
-//        			//MWLogger.debugLog(currU.getVerboseModelName()+quirks+" MATCHED");
+//        			//LOGGER.debug(currU.getVerboseModelName()+quirks+" MATCHED");
 //        		}
 //        		continue;        		
 //        	}

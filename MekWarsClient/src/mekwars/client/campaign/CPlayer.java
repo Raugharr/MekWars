@@ -644,7 +644,7 @@ public class CPlayer extends Player {
 //                }
 //            }
 //        }
-//        MWLogger.debugLog(quirksList.toString());
+//        LOGGER.debug(quirksList.toString());
 //        return quirksList.toString();
 //    }
 

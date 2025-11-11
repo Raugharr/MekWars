@@ -926,7 +926,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
         double result = activityPP;
 
-//        MWLogger.debugLog("Getting all fighting players");
+//        LOGGER.debug("Getting all fighting players");
 //        // now loop through all of the fighting players
 //        for (SPlayer currP : getFightingPlayers().values()) {
 //
@@ -934,24 +934,24 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 //             * Get the player's short op. He's fighing, so there should always
 //             * be one, but check for a null just in case.
 //             */
-//            MWLogger.debugLog("checking short operation for " + currP.getName());
+//            LOGGER.debug("checking short operation for " + currP.getName());
 //            ShortOperation so = CampaignMain.cm.getOpsManager().getShortOpForPlayer(currP);
 //            if (so == null) {
 //                continue;
 //            }
 //
-//            MWLogger.debugLog("Getting data for op " + so.getName() + " for player " + currP.getName());
+//            LOGGER.debug("Getting data for op " + so.getName() + " for player " + currP.getName());
 //            Operation o = CampaignMain.cm.getOpsManager().getOperation(so.getName());
 //            double value = o.getDoubleValue("CountGameForProduction");
 //            if (value < 0) {
 //                value = 0;
 //            }
 //
-//            MWLogger.debugLog("adding value.");
+//            LOGGER.debug("adding value.");
 //            // add the players weight to the total faction multiplier
 //            result += value;
 //
-//            MWLogger.debugLog("Showing output");
+//            LOGGER.debug("Showing output");
 //            // if enabled, show the player his personal worth
 ////            if (value > 0 && showOutput) {
 ////                String toReturn = "AM:You counted towards production this tick";
@@ -962,7 +962,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 ////            }
 //        }// end for(fighting players)
 
-        MWLogger.debugLog("returning with results.");
+        LOGGER.debug("returning with results.");
         // pass back the aggregate value.
         return result;
     }
@@ -979,13 +979,13 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
          * Unfortunately, it doesn't lend itself to very good logging. I'll see
          * what I can do.
          */
-        MWLogger.debugLog("Inside SHouse.Tick for: " + getName());
+        LOGGER.debug("Inside SHouse.Tick for: " + getName());
         String result = "-------> <b>Tick! [" + tickid + "]</b><br>";
         StringBuilder hsUpdates = new StringBuilder();
 
         double tickworth = 0;
 
-        MWLogger.debugLog("Getting number of players who count for production");
+        LOGGER.debug("Getting number of players who count for production");
 
         // non-real ticks occur the first time a server starts, when free
         // minticks are given away
@@ -998,9 +998,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         }
         
         
-        MWLogger.debugLog("     -> " + tickworth);
+        LOGGER.debug("     -> " + tickworth);
 
-        MWLogger.debugLog("Calculating refresh points");
+        LOGGER.debug("Calculating refresh points");
         
         // Refresh factories
         calcActivityPP(tickworth);   
@@ -1021,7 +1021,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         StringBuilder scrapExcuses = new StringBuilder();
         StringBuilder marketAdditions = new StringBuilder();
 
-        MWLogger.debugLog("Checking for Unit Overflow");
+        LOGGER.debug("Checking for Unit Overflow");
         /*
          * Loop though every type and weight class, looking for overflow. If
          * there are more units than allowed in the hangar, dispose of random
@@ -1108,7 +1108,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             produceCrits();
         }
 
-        MWLogger.debugLog("Doing Component Overflow");
+        LOGGER.debug("Doing Component Overflow");
         /*
          * Loop through all types/weightclasses as above, but look for component
          * overflow instead of hangar overage. Here we either scrap the
@@ -1153,7 +1153,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                     else {
                         Vector<SUnit> newUnits = m.getMechProduced(type_id, getNewPilot(type_id));
                         for (SUnit newUnit : newUnits) {
-                            MWLogger.debugLog("AP Unit " + newUnit.getModelName());
+                            LOGGER.debug("AP Unit " + newUnit.getModelName());
                             hsUpdates.append(this.addUnit(newUnit, false));
                             hsUpdates.append(addPP(weight, type_id, -(getPPCost(weight, type_id)), false));
                             /*
@@ -1193,7 +1193,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         // now, assemble the strings
         result += mechsProduced.toString() + marketAdditions.toString() + industrialAccidents.toString() + scrapExcuses.toString();
 
-        MWLogger.debugLog("show Production Count");
+        LOGGER.debug("show Production Count");
         if ((getShowProductionCountNext() - 1) <= 0) {
             setShowProductionCountNext((Integer.parseInt(this.getConfig("ShowComponentGainEvery"))));
 
@@ -1253,7 +1253,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                 result += myFormatter.format(AeroComponents / (Double.parseDouble(this.getConfig("AssaultAeroPP")))) + " Assault aero<br>";
             }
 
-            MWLogger.debugLog("SetComponentsProduced");
+            LOGGER.debug("SetComponentsProduced");
             // and return the result to CampaignMain in order to have it sent to
             // the players
             setComponentsProduced(Unit.MEK, 0);
@@ -1266,13 +1266,13 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             addShowProductionCountNext(-1);
         }
         
-        MWLogger.debugLog("Send House Updates: ");
-        MWLogger.debugLog("     -> " + hsUpdates.toString());
+        LOGGER.debug("Send House Updates: ");
+        LOGGER.debug("     -> " + hsUpdates.toString());
         // send house updates, if not empty
         if (hsUpdates.length() > 0) {
             CampaignMain.cm.doSendToAllOnlinePlayers(this, "HS|" + hsUpdates.toString(), false);
         }
-        MWLogger.debugLog("returning from tick: " + getName());
+        LOGGER.debug("returning from tick: " + getName());
         return result;
     }
 
@@ -1521,7 +1521,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
      */
     public void addActivityPP(Double armyWeight) {
         activityPP += armyWeight;
-        MWLogger.debugLog("Adding " + armyWeight + " in production. " + getName() + " total now " + activityPP);
+        LOGGER.debug("Adding " + armyWeight + " in production. " + getName() + " total now " + activityPP);
     }
     
     public void resetActivityPP() {
@@ -1545,7 +1545,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             // has territory on
             SPlanet p = e.next();
             if (equals(p.getOwner())) {
-                MWLogger.debugLog("Calling tick on " + p.getName() + " to add " + refreshToAdd + " refresh");
+                LOGGER.debug("Calling tick on " + p.getName() + " to add " + refreshToAdd + " refresh");
                 hsUpdates.append(p.tick(refreshToAdd));// call the planetary
                 // tick
             }
@@ -1562,19 +1562,19 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         for (int i = 0; i < 4; i++) {// loop through each weight class,
             // adding PP
             if (useMekPP) {
-                MWLogger.debugLog("Updating House Mek Parts: " + i);
+                LOGGER.debug("Updating House Mek Parts: " + i);
                 hsUpdates.append(addPP(i, Unit.MEK, componentsToAdd, true));
                 addComponentsProduced(Unit.MEK, componentsToAdd);
             }
 
             if (useVehiclePP) {
-                MWLogger.debugLog("Updating House Vehicle Parts: " + i);
+                LOGGER.debug("Updating House Vehicle Parts: " + i);
                 hsUpdates.append(addPP(i, Unit.VEHICLE, componentsToAdd, true));
                 addComponentsProduced(Unit.VEHICLE, componentsToAdd);
             }
 
             if (useInfantryPP) {
-                MWLogger.debugLog("Updating House Infantry: " + i);
+                LOGGER.debug("Updating House Infantry: " + i);
                 if (!Boolean.parseBoolean(this.getConfig("UseOnlyLightInfantry")) || i == Unit.LIGHT) {
                     hsUpdates.append(addPP(i, Unit.INFANTRY, componentsToAdd, true));
                 }
@@ -1582,19 +1582,19 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             }
 
             if (useProtoMekPP) {
-                MWLogger.debugLog("Updating House ProtoMek: " + i);
+                LOGGER.debug("Updating House ProtoMek: " + i);
                 hsUpdates.append(addPP(i, Unit.PROTOMEK, componentsToAdd, true));
                 addComponentsProduced(Unit.PROTOMEK, componentsToAdd);
             }
 
             if (useBattleArmorPP) {
-                MWLogger.debugLog("Updating House BA: " + i);
+                LOGGER.debug("Updating House BA: " + i);
                 hsUpdates.append(addPP(i, Unit.BATTLEARMOR, componentsToAdd, true));
                 addComponentsProduced(Unit.BATTLEARMOR, componentsToAdd);
             }
 
             if (useAeroPP) {
-                MWLogger.debugLog("Updating House Aero: " + i);
+                LOGGER.debug("Updating House Aero: " + i);
                 hsUpdates.append(addPP(i, Unit.AERO, componentsToAdd, false));
                 addComponentsProduced(Unit.AERO, componentsToAdd);
             }
@@ -2903,7 +2903,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         setHouseColor(CampaignMain.cm.getConfig("DisputedPlanetColor"));
         setHousePlayerColors(CampaignMain.cm.getConfig("DisputedPlanetColor"));
 
-        MWLogger.debugLog(getName());
+        LOGGER.debug(getName());
         // Vehicles = new Vector();
 
         for (int j = 0; j < 5; j++) // Type

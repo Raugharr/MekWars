@@ -8,7 +8,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.Date;
 import java.util.TreeMap;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
@@ -139,7 +138,7 @@ public class BattleToJSON {
 			         StandardOpenOption.CREATE,
 			         StandardOpenOption.TRUNCATE_EXISTING);
 						
-			MWLogger.debugLog("SPlayer to json filewrite completed successfully");
+			LOGGER.debug("SPlayer to json filewrite completed successfully");
 		} 
 		catch (IOException e) 
 		{

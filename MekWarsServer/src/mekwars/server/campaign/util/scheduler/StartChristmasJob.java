@@ -34,7 +34,7 @@ public class StartChristmasJob implements Job {
 	@Override
 	public void execute(JobExecutionContext context)
 		{
-		MWLogger.debugLog("Starting Christmas");
+		LOGGER.debug("Starting Christmas");
 		ChristmasHandler.getInstance().startChristmas();
 	}
 	

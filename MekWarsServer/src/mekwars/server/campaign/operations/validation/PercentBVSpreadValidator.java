@@ -16,8 +16,9 @@
 package mekwars.server.campaign.operations.validation;
 
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.SArmy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author 	Spork
@@ -26,6 +27,7 @@ import mekwars.server.campaign.SArmy;
  */
 public class PercentBVSpreadValidator extends BVSpreadValidator implements
 		I_SpreadValidator {
+    private static final Logger LOGGER = LogManager.getLogger(PercentBVSpreadValidator.class);
 
 	protected double percent;
 	protected int base;
@@ -37,8 +39,8 @@ public class PercentBVSpreadValidator extends BVSpreadValidator implements
 		maximum += spreadPercent;
 		
 		if(getDebug()) {
-			MWLogger.debugLog("Base = " + base + ", spreadPercent = " + spreadPercent + ", maximum = " + maximum);
-			MWLogger.debugLog("Army BV = " + a.getBV() + ", percent = " + percent);
+			LOGGER.debug("Base = " + base + ", spreadPercent = " + spreadPercent + ", maximum = " + maximum);
+			LOGGER.debug("Army BV = " + a.getBV() + ", percent = " + percent);
 		}
 
 		
