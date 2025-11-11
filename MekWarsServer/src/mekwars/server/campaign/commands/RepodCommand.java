@@ -29,7 +29,6 @@ import java.util.Vector;
 
 import mekwars.common.House;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
 import megamek.common.Entity;
@@ -313,18 +312,18 @@ public class RepodCommand implements Command {
                                 // chassis.equals(targetChassis)
                             }// end if (Filename.startsWith(targetChassis))
                         } else {
-                            MWLogger.mainLog("File " + prodFile + " has a problem with line:" + l);
+                            LOGGER.info("File " + prodFile + " has a problem with line:" + l);
                         }
                     }// end dis.ready()
                     dis.close();
                     fis.close();
                 } catch (FileNotFoundException ex) {
-                    MWLogger.mainLog("File " + prodFile + " was not Found");
+                    LOGGER.info("File " + prodFile + " was not Found");
                 } catch (IOException ex) {
-                    MWLogger.mainLog("File " + prodFile + " had an I/O error");
+                    LOGGER.info("File " + prodFile + " had an I/O error");
                 } catch (Exception ex) {
                     LOGGER.error("Exception: ", ex);
-                    MWLogger.mainLog("File " + prodFile + " has a problem");
+                    LOGGER.info("File " + prodFile + " has a problem");
                 }
 
                 finally {

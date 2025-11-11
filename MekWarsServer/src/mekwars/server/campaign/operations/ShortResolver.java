@@ -41,7 +41,6 @@ import mekwars.common.UnitFactory;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.log.LogMarkerHolder;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.ThreadManager;
 import mekwars.common.util.UnitUtils;
@@ -4999,12 +4998,12 @@ public class ShortResolver {
                             dis.close();
                             fis.close();
                         } catch (FileNotFoundException ex) {
-                            MWLogger.mainLog("File " + buildTable + " was not Found");
+                            LOGGER.info("File " + buildTable + " was not Found");
                         } catch (IOException ex) {
-                            MWLogger.mainLog("File " + buildTable + " had an I/O error");
+                            LOGGER.info("File " + buildTable + " had an I/O error");
                         } catch (Exception ex) {
                             LOGGER.error("Exception: ", ex);
-                            MWLogger.mainLog("File " + buildTable + " has a problem");
+                            LOGGER.info("File " + buildTable + " has a problem");
                         }
 
                         finally {

@@ -1,7 +1,6 @@
 package mekwars.client.common.campaign.clientutils.protocol.commands;
 
 import mekwars.client.common.campaign.clientutils.protocol.IClient;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

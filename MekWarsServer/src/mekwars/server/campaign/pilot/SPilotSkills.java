@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.pilot.skills.AstechSkill;
 import mekwars.server.campaign.pilot.skills.BufferedVDNI;

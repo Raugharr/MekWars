@@ -65,7 +65,6 @@ import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import megamek.common.Infantry;
 import org.apache.logging.log4j.LogManager;

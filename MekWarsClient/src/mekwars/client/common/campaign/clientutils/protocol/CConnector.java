@@ -34,11 +34,9 @@ package mekwars.client.common.campaign.clientutils.protocol;
 import java.io.IOException;
 import java.net.Socket;
 
-import mekwars.client.common.campaign.clientutils.protocol.IClient;
 import mekwars.client.gui.SplashWindow;
 import mekwars.common.campaign.clientutils.protocol.IConnectionHandler;
 import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

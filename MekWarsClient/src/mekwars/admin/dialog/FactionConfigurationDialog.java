@@ -49,7 +49,6 @@ import javax.swing.border.EtchedBorder;
 import mekwars.client.MWClient;
 import mekwars.common.Unit;
 import mekwars.common.VerticalLayout;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

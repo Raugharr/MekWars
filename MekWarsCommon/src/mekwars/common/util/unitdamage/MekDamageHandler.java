@@ -3,7 +3,6 @@ package mekwars.common.util.unitdamage;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;

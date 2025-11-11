@@ -34,7 +34,6 @@ import mekwars.common.Planet;
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.flags.PlayerFlags;
-import mekwars.common.util.MWLogger;
 import megamek.common.BattleArmor;
 import megamek.common.Protomech;
 import mekwars.server.MWServ;

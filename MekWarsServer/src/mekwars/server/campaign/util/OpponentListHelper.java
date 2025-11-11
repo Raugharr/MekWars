@@ -24,7 +24,6 @@ import java.util.Vector;
 
 import mekwars.common.House;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;

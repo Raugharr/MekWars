@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import mekwars.common.CampaignData;
 import mekwars.common.log.LogMarkerHolder;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.SPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

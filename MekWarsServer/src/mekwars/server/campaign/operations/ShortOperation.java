@@ -45,7 +45,6 @@ import mekwars.common.UnitFactory;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.log.LogMarkerHolder;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
 import megamek.common.planetaryconditions.Atmosphere;

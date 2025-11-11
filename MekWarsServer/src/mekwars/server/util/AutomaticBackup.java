@@ -33,7 +33,6 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,7 +67,7 @@ public class AutomaticBackup extends Thread{
         if (lastBackup > time - backupHours )
             return;
         
-        MWLogger.mainLog("Archiving Started at "+time);
+        LOGGER.info("Archiving Started at "+time);
         CampaignMain.cm.setArchiving(true);
         
         SimpleDateFormat sDF = new SimpleDateFormat(dateTimeFormat);
@@ -131,7 +130,7 @@ public class AutomaticBackup extends Thread{
 		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("LastAutomatedBackup",Long.toString(time));
 		CampaignMain.cm.getCampaignOptions().getDefaultOptions().createConfig();
         CampaignMain.cm.setArchiving(false);
-        MWLogger.mainLog("Archiving Ended.");
+        LOGGER.info("Archiving Ended.");
     }
     
     /**

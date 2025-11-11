@@ -14,7 +14,6 @@ package mekwars.server.util;
 
 import java.io.IOException;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommands;
 import mekwars.server.MWChatServer.translator.jcrypt;
 import mekwars.server.campaign.CampaignMain;

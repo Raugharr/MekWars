@@ -40,7 +40,6 @@ import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;

@@ -42,7 +42,6 @@ import javax.swing.table.TableRowSorter;
 
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.client.ui.swing.AdvancedSearchDialog;

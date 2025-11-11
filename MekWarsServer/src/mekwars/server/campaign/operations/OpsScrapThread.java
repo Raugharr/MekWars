@@ -18,7 +18,6 @@ package mekwars.server.campaign.operations;
 
 import java.util.TreeMap;
 
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;

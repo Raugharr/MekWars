@@ -17,7 +17,6 @@
 package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

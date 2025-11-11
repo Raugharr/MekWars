@@ -27,7 +27,6 @@ import java.util.StringTokenizer;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.CCommPanel;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

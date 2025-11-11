@@ -58,7 +58,6 @@ import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.House;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.UnitUtils;
 import megamek.client.Client;

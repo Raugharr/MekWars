@@ -19,7 +19,6 @@ package mekwars.server.campaign.market2;
 import java.util.TreeMap;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;

@@ -38,7 +38,6 @@ import java.util.Vector;
 
 import mekwars.common.campaign.clientutils.protocol.IConnectionHandler;
 import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

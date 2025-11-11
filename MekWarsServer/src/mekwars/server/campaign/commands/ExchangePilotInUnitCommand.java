@@ -19,7 +19,6 @@ package mekwars.server.campaign.commands;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;

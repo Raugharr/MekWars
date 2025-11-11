@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import mekwars.common.util.MWLogger;
 
 /**
  * Starts a server which listens for information

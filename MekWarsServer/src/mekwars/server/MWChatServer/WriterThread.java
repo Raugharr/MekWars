@@ -32,7 +32,6 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.zip.Deflater;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommands;
 import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;

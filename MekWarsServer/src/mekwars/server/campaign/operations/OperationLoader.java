@@ -35,7 +35,6 @@ import java.util.Properties;
 import mekwars.common.campaign.operations.DefaultOperation;
 import mekwars.common.campaign.operations.ModifyingOperation;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -23,7 +23,6 @@ package mekwars.server.campaign.commands;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;

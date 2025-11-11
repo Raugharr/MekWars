@@ -24,7 +24,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;

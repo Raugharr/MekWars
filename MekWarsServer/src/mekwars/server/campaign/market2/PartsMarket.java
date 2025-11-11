@@ -18,7 +18,6 @@ package mekwars.server.campaign.market2;
 
 import mekwars.common.BMEquipment;
 import mekwars.common.Equipment;
-import mekwars.common.util.MWLogger;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

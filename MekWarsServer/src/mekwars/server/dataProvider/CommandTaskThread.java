@@ -27,7 +27,6 @@ import java.util.Date;
 
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 
 import org.apache.logging.log4j.LogManager;

@@ -79,7 +79,6 @@ import mekwars.client.gui.utilities.MekWarsTableCellRenderer;
 import mekwars.common.Army;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.StringUtils;

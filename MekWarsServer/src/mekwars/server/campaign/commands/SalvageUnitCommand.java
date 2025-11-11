@@ -23,7 +23,6 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;

@@ -29,7 +29,6 @@ import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 
 import mekwars.client.MWClient;
 import mekwars.common.Planet;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -21,7 +21,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;

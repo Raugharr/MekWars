@@ -22,7 +22,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import mekwars.common.CampaignData;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,7 +50,7 @@ public class Server extends Thread {
 	 * @throws IOException
 	 */
 	public void run() {
-		MWLogger.mainLog("DataProvider: startup...");
+		LOGGER.info("DataProvider: startup...");
 		
 		//open and bind a socket and wait for incoming calls     
 		//If bindip is "-1", we want to bind to all available interfaces.
@@ -66,12 +65,12 @@ public class Server extends Thread {
 			
 		} catch (IOException e) {
 			LOGGER.error("Shutting down because:", e);
-			MWLogger.mainLog("DataProvider: Could not create server socket. Shutting down.");
+			LOGGER.info("DataProvider: Could not create server socket. Shutting down.");
 			LOGGER.info("DataProvider: Could not create server socket. Shutting down.");
 			return;
 		}
 		
-		MWLogger.mainLog("DataProvider: server created at port "+dataPort+". Address "+IpAddress+". Waiting for calls...");
+		LOGGER.info("DataProvider: server created at port "+dataPort+". Address "+IpAddress+". Waiting for calls...");
 		
 		//listen for new data requests until an error occurs, or forever.
 		while(true) {
@@ -101,7 +100,7 @@ public class Server extends Thread {
                 } catch(Exception ex){
                     LOGGER.error("Shutting down because:");
                     LOGGER.error("Exception: ", ex);
-                    MWLogger.mainLog("DataProvider: Could not create server socket. Shutting down.");
+                    LOGGER.info("DataProvider: Could not create server socket. Shutting down.");
                     LOGGER.info("DataProvider: Could not create server socket. Shutting down.");
                     return;
                 }

@@ -23,7 +23,6 @@ import java.util.Vector;
 import mekwars.common.Army;
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import megamek.common.Aero;
 import megamek.common.AmmoType;

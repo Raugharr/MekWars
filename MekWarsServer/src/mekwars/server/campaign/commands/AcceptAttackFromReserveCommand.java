@@ -20,7 +20,6 @@ import java.util.StringTokenizer;
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.log.LogMarkerHolder;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;

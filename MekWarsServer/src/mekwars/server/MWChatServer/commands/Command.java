@@ -18,7 +18,6 @@
 package mekwars.server.MWChatServer.commands;
 
 import mekwars.common.comm.TransportCodec;
-import mekwars.common.util.MWLogger;
 import mekwars.server.ServerWrapper;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;

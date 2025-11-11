@@ -16,7 +16,6 @@
 
 package mekwars.server.campaign;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

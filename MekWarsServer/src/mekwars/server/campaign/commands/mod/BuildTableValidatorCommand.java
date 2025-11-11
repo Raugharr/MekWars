@@ -22,7 +22,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;

@@ -22,7 +22,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import mekwars.common.CampaignData;
 import mekwars.common.House;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
@@ -142,7 +141,7 @@ public class MWScheduler implements ScheduleHandler {
 			scheduler.shutdown();
 		} catch (SchedulerException e) {
 			CampaignMain.cm.doSendModMail("SERVER", e.getStackTrace().toString());
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 
@@ -171,7 +170,7 @@ public class MWScheduler implements ScheduleHandler {
 		try {
 			scheduler.scheduleJob(job, trigger);
 		} catch (SchedulerException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 

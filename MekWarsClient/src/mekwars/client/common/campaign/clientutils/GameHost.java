@@ -16,7 +16,6 @@ import mekwars.common.campaign.clientutils.IClientUser;
 import mekwars.common.campaign.clientutils.IGameHost;
 import mekwars.common.campaign.clientutils.SerializeEntity;
 import mekwars.common.campaign.clientutils.protocol.TransportCodec;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

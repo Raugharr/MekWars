@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;

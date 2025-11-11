@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

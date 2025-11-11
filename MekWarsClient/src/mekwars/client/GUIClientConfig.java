@@ -34,7 +34,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import mekwars.common.campaign.clientutils.IClientConfig;
-import mekwars.common.util.MWLogger;
 
 
 /**

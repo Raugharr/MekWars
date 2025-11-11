@@ -33,7 +33,6 @@ import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.campaign.targetsystems.TargetSystem;
 import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
 import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;

@@ -56,7 +56,6 @@ import mekwars.common.AdvancedTerrain;
 import mekwars.common.PlanetEnvironment;
 import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

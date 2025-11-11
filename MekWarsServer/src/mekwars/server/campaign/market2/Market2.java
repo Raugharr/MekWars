@@ -24,7 +24,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import mekwars.common.CampaignData;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import mekwars.server.campaign.BuildTable;
 import mekwars.server.campaign.CampaignMain;

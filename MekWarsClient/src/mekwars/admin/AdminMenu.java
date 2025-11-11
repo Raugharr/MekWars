@@ -54,7 +54,6 @@ import mekwars.common.Planet;
 import mekwars.common.Terrain;
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import megamek.client.ui.swing.UnitLoadingDialog;
 import megamek.common.TechConstants;
 import org.apache.logging.log4j.LogManager;

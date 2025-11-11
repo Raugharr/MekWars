@@ -24,7 +24,6 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
 import mekwars.server.MWServ;

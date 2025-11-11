@@ -22,7 +22,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.BuildTable;
 import mekwars.server.campaign.CampaignMain;
@@ -33,8 +32,12 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.pilot.SPilot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class  RequestCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(RequestCommand.class);
+
     int accessLevel = 0;
     String syntax = "";
 
@@ -434,7 +437,7 @@ public class  RequestCommand  implements Command {
 
             result = "AM:You've been granted the following " + results.toString() + ". (-";
             result += CampaignMain.cm.moneyOrFluMessage(true, false, mechCbills) + " / -" + CampaignMain.cm.moneyOrFluMessage(false, true, mechInfluence) + ")";
-            MWLogger.mainLog(p.getName() + " bought the following " + results.toString() + " from " + factory.getName() + " on " + planet.getName());
+            LOGGER.info(p.getName() + " bought the following " + results.toString() + " from " + factory.getName() + " on " + planet.getName());
             CampaignMain.cm.toUser(result, Username, true);
             CampaignMain.cm.doSendHouseMail(playerHouse, "NOTE", p.getName() + " bought the following " + results.toString() + " from " + factory.getName() + " on " + planet.getName() + "!");
 

@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;

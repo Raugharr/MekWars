@@ -43,7 +43,6 @@ import mekwars.common.Planet;
 import mekwars.common.SubFaction;
 import mekwars.common.Unit;
 import mekwars.common.util.ComponentToCritsConverter;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitComponents;
@@ -1895,9 +1894,9 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             dis.close();
             fis.close();
         } catch (FileNotFoundException fnfe) {
-            MWLogger.mainLog("FNFE!!!!");
+            LOGGER.info("FNFE!!!!");
         } catch (IOException ioe) {
-            MWLogger.mainLog("IOE!!!");
+            LOGGER.info("IOE!!!");
         }
     }
 
@@ -1938,8 +1937,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
             }
         } else {
             // Error. We should never get here.
-            MWLogger.mainLog("Error in House.removeUnitProduction(): trying to remove a unit that is not produced.");
-            MWLogger.mainLog("  --> House: " + getName() + ", Unit: " + fileName);
+            LOGGER.info("Error in House.removeUnitProduction(): trying to remove a unit that is not produced.");
+            LOGGER.info("  --> House: " + getName() + ", Unit: " + fileName);
         }
         if (toReturn.length() == 0) {
             return;
@@ -2075,7 +2074,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         CampaignMain.cm.toUser("PL|SSN|" + p.getSubFactionName(), realName, false);
 
         Date d = new Date(System.currentTimeMillis());
-        MWLogger.mainLog(d + ":" + "User Logged into House: " + realName);
+        LOGGER.info(d + ":" + "User Logged into House: " + realName);
 
         // Send the current servers MegaMek game Options
         CampaignMain.cm.toUser("GO|" + CampaignMain.cm.getMegaMekOptionsToString(), realName, false);
@@ -2226,7 +2225,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         CampaignMain.cm.forceSavePlayer(p);
         // add info to logs
         Date d = new Date(System.currentTimeMillis());
-        MWLogger.mainLog(d + ":" + "User Logged out: " + realName);
+        LOGGER.info(d + ":" + "User Logged out: " + realName);
         CampaignMain.cm.toUser("CS|" + SPlayer.STATUS_LOGGEDOUT, realName, false);
     }
 

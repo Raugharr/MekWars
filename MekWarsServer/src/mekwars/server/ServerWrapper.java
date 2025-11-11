@@ -27,7 +27,6 @@ import java.rmi.AccessException;
 import java.util.Iterator;
 
 import mekwars.common.comm.TransportCodec;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
@@ -53,7 +52,7 @@ public class ServerWrapper extends MWChatServer{
 	}
 	
 	public void start() {
-		MWLogger.mainLog("Starting");
+		LOGGER.info("Starting");
 		this.acceptConnections();
 	}
 	
@@ -98,7 +97,7 @@ public class ServerWrapper extends MWChatServer{
 		try {
 			MWChatClient c = this.getClient(username);
 			if (c == null) {
-				MWLogger.mainLog("WARNING: Tried to get the IP from " + username + ", who is not here.");
+				LOGGER.info("WARNING: Tried to get the IP from " + username + ", who is not here.");
 				
 				/*
 				 * We don't want to log out player who we can't find - logout uses getIP

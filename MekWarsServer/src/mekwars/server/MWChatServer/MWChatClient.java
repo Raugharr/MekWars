@@ -29,7 +29,6 @@ package mekwars.server.MWChatServer;
 
 import java.net.Socket;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWChatServer.commands.ICommands;
 import org.apache.logging.log4j.LogManager;

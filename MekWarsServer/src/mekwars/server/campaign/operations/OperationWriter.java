@@ -36,7 +36,6 @@ import java.util.TreeSet;
 
 import mekwars.common.House;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

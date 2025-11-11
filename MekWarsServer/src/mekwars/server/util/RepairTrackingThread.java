@@ -29,7 +29,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;

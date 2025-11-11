@@ -15,7 +15,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.util.ChristmasHandler;
 

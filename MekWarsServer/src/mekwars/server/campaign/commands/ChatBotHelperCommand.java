@@ -24,7 +24,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;

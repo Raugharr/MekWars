@@ -31,7 +31,6 @@ import java.util.StringTokenizer;
 
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import megamek.common.Infantry;
 import mekwars.server.campaign.CampaignMain;

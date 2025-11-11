@@ -31,7 +31,6 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -31,7 +31,6 @@ import java.util.Vector;
 
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.pilot.SPilotSkills;
 import mekwars.server.campaign.pilot.skills.SPilotSkill;

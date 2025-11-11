@@ -21,7 +21,6 @@
  */ 
 package mekwars.server.MWChatServer.commands;
 
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.ServerWrapper;
 import mekwars.server.MWServ;

@@ -33,7 +33,6 @@ import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.flags.PlayerFlags;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;

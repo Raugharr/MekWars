@@ -29,7 +29,6 @@ import mekwars.common.Influences;
 import mekwars.common.Planet;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
-import mekwars.common.util.MWLogger;
 import megamek.Version;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

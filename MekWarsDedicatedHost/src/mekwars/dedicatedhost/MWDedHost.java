@@ -68,15 +68,12 @@ import mekwars.common.GameWrapper;
 import mekwars.common.MMGame;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.SerializeEntity;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 // This is the Client used for connecting to the master server.
 // @Author: Helge Richter (McWizard@gmx.de)
-
 public final class MWDedHost extends GameHost implements IClient {
     private static final Logger LOGGER = LogManager.getLogger(MWDedHost.class);
 
@@ -126,12 +123,8 @@ public final class MWDedHost extends GameHost implements IClient {
      */
     public Properties serverConfigs = new Properties();
 
-    private static MWLogger logger;
-    
-
     // Main-Method
     public static void main(String[] args) {
-
         DedConfig config;
 
         /*

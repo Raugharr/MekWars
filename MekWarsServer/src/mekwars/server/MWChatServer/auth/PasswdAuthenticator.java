@@ -34,7 +34,6 @@ package mekwars.server.MWChatServer.auth;
 
 import java.io.IOException;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.util.MWPasswd;

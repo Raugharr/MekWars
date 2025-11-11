@@ -28,7 +28,6 @@ import mekwars.common.util.BinWriter;
 //import java.io.FileInputStream;
 //import java.io.InputStreamReader;
 //import mekwars.server.campaign.CampaignMain;
-import mekwars.common.util.MWLogger;
 import mekwars.server.dataProvider.ServerCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

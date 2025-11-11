@@ -21,7 +21,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import mekwars.server.MWServ;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;

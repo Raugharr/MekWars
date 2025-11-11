@@ -22,7 +22,6 @@ import java.util.Vector;
 
 import mekwars.common.Unit;
 import mekwars.common.log.LogMarkerHolder;
-import mekwars.common.util.MWLogger;
 import megamek.common.IEntityRemovalConditions;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;

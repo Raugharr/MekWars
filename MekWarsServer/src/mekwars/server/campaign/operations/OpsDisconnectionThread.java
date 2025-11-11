@@ -18,7 +18,6 @@ package mekwars.server.campaign.operations;
 
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.log.LogMarkerHolder;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;

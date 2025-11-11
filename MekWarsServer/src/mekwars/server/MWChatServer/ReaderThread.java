@@ -34,7 +34,6 @@ import java.io.InputStreamReader;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommands;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

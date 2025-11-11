@@ -77,7 +77,6 @@ import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.CMainFrame;
 import mekwars.client.gui.MechInfo;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.UnitUtils;
 import megamek.client.ui.swing.UnitFailureDialog;

@@ -53,7 +53,6 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.operations.newopmanager.AbstractOperationManager;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

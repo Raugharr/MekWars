@@ -36,10 +36,12 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AutoArmy {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AutoArmy.class);
+
 	//VARIABLES
 	private Vector<SUnit> theUnits;
 	
@@ -469,7 +471,7 @@ public class AutoArmy {
 		try {
 			v.elements();
 		} catch (Exception e) {
-			MWLogger.mainLog("AUTOARMY UNITS WERE NULL");
+			LOGGER.info("AUTOARMY UNITS WERE NULL");
 		}
 		
 		for (SUnit currU : this.getUnits()){

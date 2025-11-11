@@ -33,7 +33,6 @@ import java.util.Vector;
 
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.util.SerializedMessage;

@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.SPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

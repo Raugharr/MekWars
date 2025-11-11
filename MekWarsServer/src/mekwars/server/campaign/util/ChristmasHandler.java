@@ -30,7 +30,6 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;

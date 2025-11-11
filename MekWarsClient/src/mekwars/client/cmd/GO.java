@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
-import mekwars.common.util.MWLogger;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.common.options.Option;

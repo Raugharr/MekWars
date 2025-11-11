@@ -25,7 +25,6 @@ import mekwars.client.util.CUnitComparator;
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.UnitUtils;
 import java.awt.Color;

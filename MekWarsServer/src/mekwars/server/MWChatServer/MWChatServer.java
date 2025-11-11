@@ -39,7 +39,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.Auth;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWChatServer.auth.IRoomAuthenticator;

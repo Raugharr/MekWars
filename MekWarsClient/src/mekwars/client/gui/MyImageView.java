@@ -60,7 +60,6 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 
-import mekwars.common.util.MWLogger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

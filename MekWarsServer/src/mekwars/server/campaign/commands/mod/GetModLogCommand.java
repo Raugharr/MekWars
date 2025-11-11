@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;

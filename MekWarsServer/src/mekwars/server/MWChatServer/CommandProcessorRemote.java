@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommandProcessorRemote;
 import mekwars.server.MWChatServer.commands.ICommands;
 import mekwars.server.MWChatServer.commands.UnknownCommand;

@@ -48,7 +48,6 @@ import mekwars.common.MMGame;
 import mekwars.common.comm.Command;
 import mekwars.common.comm.ServerCommand;
 import mekwars.common.log.LogMarkerHolder;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
@@ -133,7 +132,7 @@ public class MWServ {
         TrackerUpdateJob.submit();
         TickJob.submit();
         //start server
-        MWLogger.mainLog("Entering main loop cycle. Starting the server...");
+        LOGGER.info("Entering main loop cycle. Starting the server...");
         MWServ.getInstance().startServer();
     }
 
@@ -149,26 +148,26 @@ public class MWServ {
     }
 
     MWServ() {
-        MWLogger.mainLog("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
+        LOGGER.info("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
         EquipmentType.initializeTypes();
         MechSummaryCache.getInstance();
         /*** Required to kick off the Server ***/
-        MWLogger.mainLog("Loading configuration...");
+        LOGGER.info("Loading configuration...");
         loadConfig();
-        MWLogger.mainLog("Configuration loaded.");
+        LOGGER.info("Configuration loaded.");
 
         if (Boolean.parseBoolean(getConfigParam("RESOLVECOUNTRY"))) {
             ipToCountry = new IpCountry("./data/iplist.txt", "./data/countrynames.txt");
         }
 
-        MWLogger.mainLog("Loading mail file...");
+        LOGGER.info("Loading mail file...");
         mails = checkAndCreateConfig("./data/mails.txt");
-        MWLogger.mainLog("Mail file loaded.");
+        LOGGER.info("Mail file loaded.");
 
-        MWLogger.mainLog("Creating new campaign environment...");
+        LOGGER.info("Creating new campaign environment...");
         campaign = new CampaignMain(getConfigParam("CAMPAIGNCONFIG"));
         campaign.start();
-        MWLogger.mainLog("Environment created.");
+        LOGGER.info("Environment created.");
         //this.addToNewsFeed("MekWars Server Started!", "Server News", "");
         // create & start a data provider
         int dataport = -1;
@@ -184,8 +183,8 @@ public class MWServ {
         }
 
         // Touch log files
-        MWLogger.mainLog("Initializing log subsystem. Touching log files.");
-        MWLogger.mainLog("Main channel log touched.");
+        LOGGER.info("Initializing log subsystem. Touching log files.");
+        LOGGER.info("Main channel log touched.");
         LOGGER.info(LogMarkerHolder.GAME_MARKER, "Game log touched.");
         LOGGER.error("Command log touched.");
         LOGGER.info(LogMarkerHolder.PM_MARKER, "Private messages (PM) log touched.");
@@ -264,7 +263,7 @@ public class MWServ {
         } catch (Exception ex) {
             try {
                 LOGGER.info("Creating new File");
-                MWLogger.mainLog("Creating new File");
+                LOGGER.info("Creating new File");
                 if (filename.equals("./data/mails.txt")) {
                     FileOutputStream out = new FileOutputStream(filename);
                     PrintStream p = new PrintStream(out);
@@ -274,7 +273,7 @@ public class MWServ {
                 }
             } catch (Exception e) {
                 LOGGER.error("Exception: ", e);
-                MWLogger.mainLog("No file named " + filename + " was found and cannot create one!");
+                LOGGER.info("No file named " + filename + " was found and cannot create one!");
                 System.exit(1);
             }
         }
@@ -725,7 +724,7 @@ public class MWServ {
     }
 
     public void statusMessage() {
-        MWLogger.mainLog("Open Games: " + games.size());
+        LOGGER.info("Open Games: " + games.size());
         LOGGER.info("Open Games: " + games.size());
     }
 
@@ -794,7 +793,7 @@ public class MWServ {
 
     public void sendChat(String s) {
         myCommunicator.broadcastComm("CH|" + s);
-        MWLogger.mainLog(s);
+        LOGGER.info(s);
     }
 
     // Check for new Mail
@@ -1103,7 +1102,7 @@ public class MWServ {
                 if (ia != null) {
                     banips.put(ia, time);
                     LOGGER.info("Added " + line + " to the list of banned IPs");
-                    MWLogger.mainLog("Added " + line + " to the list of banned IP's");
+                    LOGGER.info("Added " + line + " to the list of banned IP's");
                 } else {
                     LOGGER.warn("Importing IP bans; offending line: {}", line);
                 }
@@ -1137,7 +1136,7 @@ public class MWServ {
                 if ((toBan != null) && (howLong != null)) {
                     banaccounts.put(toBan.toLowerCase(), howLong);
                     LOGGER.info("Added " + toBan + " to the banlist (for " + howLong + ")");
-                    MWLogger.mainLog("Added " + toBan + " to the banlist (for " + howLong + ")");
+                    LOGGER.info("Added " + toBan + " to the banlist (for " + howLong + ")");
                 } else {
                     LOGGER.warn("Initial bans warning: {} / {}", toBan, howLong);
                 }
@@ -1170,7 +1169,7 @@ public class MWServ {
                 if ((isp != null) && (address != null)) {
                     ISPlog.put(isp.toLowerCase(), address);
                     LOGGER.info("Added " + isp + " to the ISP List");
-                    MWLogger.mainLog("Added " + isp + " to the ISP List");
+                    LOGGER.info("Added " + isp + " to the ISP List");
                 }
             }
             dis.close();

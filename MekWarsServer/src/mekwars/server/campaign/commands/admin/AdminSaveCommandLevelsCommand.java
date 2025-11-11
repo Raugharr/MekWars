@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import mekwars.server.MWServ;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;

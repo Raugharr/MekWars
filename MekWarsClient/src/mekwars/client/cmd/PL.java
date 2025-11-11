@@ -24,7 +24,6 @@ import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
 import mekwars.client.common.campaign.clientutils.GameHost;

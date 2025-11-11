@@ -25,7 +25,6 @@ import java.util.TreeSet;
 
 import mekwars.common.Planet;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.Version;
 import megamek.common.TechConstants;

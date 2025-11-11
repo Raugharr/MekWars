@@ -65,7 +65,6 @@ import mekwars.common.House;
 import mekwars.common.Influences;
 import mekwars.common.Planet;
 import mekwars.common.util.MMNetXStream;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.Position;
 import mekwars.common.util.StringUtils;
 import org.apache.logging.log4j.LogManager;

@@ -32,7 +32,6 @@ import mekwars.common.Influences;
 import mekwars.common.Terrain;
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.Position;
 import mekwars.common.util.TokenReader;
 import mekwars.server.campaign.data.TimeUpdatePlanet;
@@ -125,7 +124,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         // debug
 
         boolean singleFaction = CampaignMain.cm.getBooleanConfig("AllowSinglePlayerFactions");
-        MWLogger.mainLog(s);
+        LOGGER.info(s);
         s = s.substring(3);
         StringTokenizer ST = new StringTokenizer(s, "#");
         setName(TokenReader.readString(ST));
@@ -188,7 +187,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             	advTerrainNumber = Integer.parseInt(advTerrain);
             	planetWeather = data.getAdvancedTerrain(advTerrainNumber);
             } catch (Exception ex) {
-            	MWLogger.mainLog("advTerrain is " + advTerrain);                	
+            	LOGGER.info("advTerrain is " + advTerrain);                	
 
             	planetWeather = data.getAdvancedTerrainByName(advTerrain);
             }

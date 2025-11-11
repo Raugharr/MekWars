@@ -29,7 +29,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import org.apache.logging.log4j.LogManager;
