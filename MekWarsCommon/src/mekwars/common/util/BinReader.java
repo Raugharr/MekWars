@@ -16,7 +16,9 @@
 
 package mekwars.common.util;
 
-import mekwars.common.util.HTMLConverter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -33,18 +35,17 @@ import java.io.Reader;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class BinReader {
+    private static final Logger LOGGER = LogManager.getLogger(BinReader.class);
 
     private BufferedReader in;
     private boolean debug;
 
-    
     private String read(String debugName) throws IOException {
-//        if ( !in.ready() )
-  //          throw new IOException("EOF");
         String s = in.readLine();
         if (debug) {
-            if (!s.substring(0,s.indexOf('=')).equals(debugName))
+            if (!s.substring(0,s.indexOf('=')).equals(debugName)) {
                 throw new RuntimeException("serialization mismatch");
+            }
             return s.substring(s.indexOf('=')+1);
         }
         return s;
@@ -59,10 +60,11 @@ public class BinReader {
             this.in.mark(100);
             String s = this.in.readLine();
             debug = s.equals("###DEBUG_ON###");
-            if (!debug)
+            if (!debug) {
                 this.in.reset();
-        } catch (IOException e) {
-            MWLogger.errLog(e);
+            }
+        } catch (IOException ioe) {
+            LOGGER.error("Exception: ", ioe);
             debug = false;
         }
     }
@@ -87,7 +89,7 @@ public class BinReader {
     public boolean readBoolean(String debugName) throws IOException {
         String s = read(debugName);
         return !s.equalsIgnoreCase("false") && !s.equals("0") &&
-            !s.equals("");
+                !s.isEmpty();
     }
 
     /**

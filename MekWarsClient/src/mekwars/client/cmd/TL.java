@@ -22,13 +22,14 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class TL extends Command {
-
+    private static final Logger LOGGER = LogManager.getLogger(TL.class);
 	/**
 	 * @param client
 	 */
@@ -49,7 +50,7 @@ public class TL extends Command {
             out.write("\n");
             out.close();
         } catch (IOException e) {
-            MWLogger.errLog(e);
+            LOGGER.error("Exception: ", e);
         }
 	}
 }

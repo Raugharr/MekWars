@@ -457,7 +457,7 @@ public class CH extends Command {
             boolean checkSysMessages = mwclient.getConfig().isParam("SOUNDSFROMSYSMESSAGES");
             if (!wasSystemMessage || checkSysMessages) {
 
-                // MWLogger.errLog("uncoloredName: "+uncoloredName);
+                // LOGGER.error("uncoloredName: "+uncoloredName);
                 if (wasICMessage && !mwclient.getConfig().isParam("RPGVISIBLE") && !mwclient.getConfig().isParam("MAINCHANNELRPG")) {
                     // do nothing
                 }

@@ -18,12 +18,12 @@ package mekwars.server.campaign.commands.mod;
 
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Moving the Kick command from MWServ into the normal command structure.
@@ -31,7 +31,8 @@ import mekwars.server.campaign.commands.Command;
  * Syntax  /c Kick#Player
  */
 public class KickCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(KickCommand.class);
+
 	int accessLevel = IAuthenticator.MODERATOR;
 	String syntax = "Player Name";
 	public int getExecutionLevel(){return accessLevel;}
@@ -67,12 +68,12 @@ public class KickCommand implements Command {
 		//Use this to kick ghost players from the clients.
 		MWServ.getInstance().sendRemoveUserToAll(toKick,false);
 		MWServ.getInstance().sendChat("AM:"+Username + " kicked " + toKick);
-		MWLogger.modLog(Username + " kicked " + toKick);
+		LOGGER.info(Username + " kicked " + toKick);
 		
 		/*try {
 			Thread.sleep(100);//Why do we sleep here? Anyone?
 		} catch (Exception ex) {
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		} */       
 		
 		try {
@@ -83,7 +84,7 @@ public class KickCommand implements Command {
 				MWServ.getInstance().killClient(toKick,Username);
 			
 		} catch (Exception ex) {
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}
        
 

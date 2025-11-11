@@ -20,8 +20,7 @@ import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 
-public class MyStatusCommand implements Command {
-	
+public class  MyStatusCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

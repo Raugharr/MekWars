@@ -33,17 +33,16 @@ import java.util.Vector;
 
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.util.SerializedMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class SUnitFactory extends UnitFactory implements Serializable {
+    private static final Logger LOGGER = LogManager.getLogger(SUnitFactory.class);
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1735176578439214960L;
     // VARIABLES
     private SPlanet planet;
@@ -188,9 +187,9 @@ public class SUnitFactory extends UnitFactory implements Serializable {
             buildtableName += Unit.getTypeClassDesc(type_id);
 
 		if(this.getPlanet().getOwner() != null)
-			MWLogger.infoLog("New unit for " + this.getPlanet().getOwner().getName() + " on " + this.getPlanet().getName() + ": " + Filename + "(Table: " + buildtableName + ")");
+			LOGGER.info("New unit for " + this.getPlanet().getOwner().getName() + " on " + this.getPlanet().getName() + ": " + Filename + "(Table: " + buildtableName + ")");
 		else 
-			MWLogger.infoLog("New unit for " + this.getFounder() + " on " + this.getPlanet().getName() + ": " + Filename + "(Table: " + buildtableName + ")");
+			LOGGER.info("New unit for " + this.getFounder() + " on " + this.getPlanet().getName() + ": " + Filename + "(Table: " + buildtableName + ")");
 		
         if (Filename.toLowerCase().trim().endsWith(".mul")) {
             units.addAll(SUnit.createMULUnits(Filename, producer));
@@ -209,7 +208,7 @@ public class SUnitFactory extends UnitFactory implements Serializable {
      * updates players' clients with accurate refresh times.
      */
     public String addRefresh(int i, boolean sendHSUpdate) {
-    	MWLogger.debugLog("Starting refresh on " + getName() + ", adding " + i);
+    	LOGGER.debug("Starting refresh on " + getName() + ", adding " + i);
         int startRefresh = getTicksUntilRefresh();
 
         setTicksUntilRefresh(getTicksUntilRefresh() + i);

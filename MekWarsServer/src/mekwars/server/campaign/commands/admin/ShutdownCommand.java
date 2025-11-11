@@ -17,13 +17,14 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.campaign.util.scheduler.MWScheduler;
 import mekwars.server.util.MWPasswd;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -32,7 +33,8 @@ import mekwars.server.util.MWPasswd;
  * Syntax  /c Shutdown
  */
 public class ShutdownCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(ShutdownCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -56,14 +58,12 @@ public class ShutdownCommand implements Command {
         CampaignMain.cm.saveBannedAmmo();
         CampaignMain.cm.getDefaultPlayerFlags().save();
         CampaignMain.cm.toUser("AM:You halted the server. Have a nice day.", Username,true);
-        MWLogger.infoLog(Username + " halted the server. Have a nice day!");
+        LOGGER.info(Username + " halted the server. Have a nice day!");
         MWServ.getInstance().addToNewsFeed("Server halted!", "Server News", "");
         MWServ.getInstance().postToDiscord("Server halted!");
         try {
             MWPasswd.save();
         } catch(Exception ex) {
-            MWLogger.errLog("Unable to save passwords before shutdown!");
-            MWLogger.errLog(ex);
         }
         
         System.exit(0);

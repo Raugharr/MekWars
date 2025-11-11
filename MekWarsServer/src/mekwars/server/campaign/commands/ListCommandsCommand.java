@@ -24,9 +24,10 @@ import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class ListCommandsCommand implements Command {
-	
+public class  ListCommandsCommand  implements Command {
 	int accessLevel = IAuthenticator.REGISTERED;
 	public int getExecutionLevel(){return accessLevel;}
 	public void setExecutionLevel(int i) {accessLevel = i;}

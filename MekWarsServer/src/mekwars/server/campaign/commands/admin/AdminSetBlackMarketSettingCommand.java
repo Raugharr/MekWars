@@ -24,13 +24,15 @@ package mekwars.server.campaign.commands.admin;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.common.Equipment;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AdminSetBlackMarketSettingCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AdminSetBlackMarketSettingCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "Item Name#Min Cost#Max Cost#Min Production#Max Production";
 	public int getExecutionLevel(){return accessLevel;}
@@ -76,7 +78,7 @@ public class AdminSetBlackMarketSettingCommand implements Command {
 			CampaignMain.cm.getBlackMarketEquipmentTable().put(key, bme);
 			
 		}catch (Exception ex){
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}
 		
 		//NOTE:

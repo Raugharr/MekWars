@@ -26,7 +26,6 @@ import mekwars.common.House;
 import mekwars.common.Planet;
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.BuildTable;
 import mekwars.server.campaign.CampaignMain;
@@ -34,8 +33,12 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AdminSavePlanetsToXMLCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(AdminSavePlanetsToXMLCommand.class);
+
     int accessLevel = IAuthenticator.ADMIN;
     String syntax = "";
 
@@ -68,7 +71,7 @@ public class AdminSavePlanetsToXMLCommand implements Command {
             p.close();
             out.close();
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
         CampaignMain.cm.toUser("XML saved!", Username, true);
         CampaignMain.cm.doSendModMail("NOTE", Username + " has saved the universe to XML");

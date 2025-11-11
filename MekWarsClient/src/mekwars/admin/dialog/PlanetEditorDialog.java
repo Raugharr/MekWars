@@ -53,13 +53,13 @@ import mekwars.common.House;
 import mekwars.common.Planet;
 import mekwars.common.Terrain;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import megamek.common.planetaryconditions.Atmosphere;
-import megamek.common.planetaryconditions.PlanetaryConditions;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class PlanetEditorDialog implements ActionListener, KeyListener {
-
+    private static final Logger LOGGER = LogManager.getLogger(PlanetEditorDialog.class);
     // store the client backlink for other things to use
     private MWClient mwclient = null;
     private String planetName = "";
@@ -262,8 +262,8 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
                 removedTerrain.clear();
                 removedOwners.clear();
             } catch (Exception ex) {
-                MWLogger.errLog("PlanetEditorDialog Save Error!");
-                MWLogger.errLog(ex);
+                LOGGER.error("PlanetEditorDialog Save Error!");
+                LOGGER.error("Exception: ", ex);
             }
             refreshAllPanels();
         } else if (command.equals(cancelCommand)) {
@@ -333,7 +333,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
                     planetOwnersList.setSelectedIndex(0);
                 }
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
         } else if (command.equals(addFactoryCommand)) {
@@ -386,7 +386,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
                 planetTerrains.addItem(displayName);
                 ContinentMap.put(displayName, C);
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
         } else if (command.equals(RemoveTerrainCommand)) {
             if (planetTerrains.getItemCount() > 0) {
@@ -1026,7 +1026,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
                 int percent = Integer.parseInt(currentFactionOwnerShip.getText().trim().replaceAll("%", ""));
                 ownersMap.put(planetOwnersList.getSelectedItem().toString(), percent);
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
         } 
     }
@@ -1095,7 +1095,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
             saveMisc();
 
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return false;
         }
 

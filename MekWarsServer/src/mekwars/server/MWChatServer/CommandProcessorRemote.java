@@ -34,10 +34,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommandProcessorRemote;
 import mekwars.server.MWChatServer.commands.ICommands;
 import mekwars.server.MWChatServer.commands.UnknownCommand;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * When messages come in on the socket from the client, they have to be processed.  This class
@@ -47,13 +48,15 @@ import mekwars.server.MWChatServer.commands.UnknownCommand;
  * @see com.lyrisoft.chat.ICommands
  */
 public class CommandProcessorRemote implements ICommands{
+    private static final Logger LOGGER = LogManager.getLogger(CommandProcessorRemote.class);
+
     private static HashMap<String,ICommandProcessorRemote> _processors;
     private static HashSet<String> _idleTimeImmune;
     private static UnknownCommand unknownCommandProcessor = new UnknownCommand();
 
     public static void init(Properties p) {
         if (_processors != null && _idleTimeImmune != null) {
-            MWLogger.infoLog("CommandProcessorRemote: Warning: init() called a second time");
+            LOGGER.info("CommandProcessorRemote: Warning: init() called a second time");
         }
         
         _processors = new HashMap<String,ICommandProcessorRemote>();
@@ -63,13 +66,13 @@ public class CommandProcessorRemote implements ICommands{
             String name = (String)e.nextElement();
             int idx = name.indexOf(".");
             if (idx < 1) {
-                MWLogger.infoLog("CommandProcessorRemote: unknown property: " + name);
+                LOGGER.info("CommandProcessorRemote: unknown property: " + name);
                 continue;
             }
             String command = name.substring(0, idx);
             if (name.endsWith(".class")) {
                 String className = p.getProperty(name);
-                MWLogger.infoLog("CommandProcessorRemote: initting the " + command + " command processor");
+                LOGGER.info("CommandProcessorRemote: initting the " + command + " command processor");
                 try {
                     ICommandProcessorRemote cp = 
                             (ICommandProcessorRemote)Class.forName(className).newInstance();
@@ -91,9 +94,9 @@ public class CommandProcessorRemote implements ICommands{
                     CommandProcessorRemote.extendCommandSet("/" + command, cp);
                 }
                 catch (Exception ex) {
-                    MWLogger.errLog("Unable to install the " + command + " command");
-                    MWLogger.errLog(ex);
-                    MWLogger.errLog("Continuing despite error(s)");
+                    LOGGER.error("Unable to install the " + command + " command");
+                    LOGGER.error("Exception: ", ex);
+                    LOGGER.error("Continuing despite error(s)");
                 }
             } else if (name.endsWith(".idleImmune")) {
                 _idleTimeImmune.add("/" + command);

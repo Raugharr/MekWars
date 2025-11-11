@@ -25,11 +25,11 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.votes.Vote;
 import mekwars.server.campaign.votes.VoteManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
-
-public class MyVotesCommand implements Command {
-	
+public class  MyVotesCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

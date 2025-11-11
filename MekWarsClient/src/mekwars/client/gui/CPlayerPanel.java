@@ -37,18 +37,17 @@ import javax.swing.text.html.HTMLEditorKit;
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CPlayer;
 import mekwars.common.campaign.clientutils.IClientConfig;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Player panel
  */
 
 public class CPlayerPanel extends JScrollPane {
+    private static final Logger LOGGER = LogManager.getLogger(CPlayerPanel.class);
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -7036003412110367753L;
     MWClient mwclient;
     CPlayer player;
@@ -203,7 +202,7 @@ public class CPlayerPanel extends JScrollPane {
                     new StringReader(mwclient.getPlayer().getLogo()), lblLogo.getDocument(),0);
                 lblLogo.setCaretPosition(lblLogo.getDocument().getLength());
             }catch(Exception ex){
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
             //lblLogo.setIcon(mwclient.getPlayer().getLogo());
         }//lblLogo.setIcon(mwclient.getConfig().getImage("LOGO"));}
@@ -261,7 +260,7 @@ public class CPlayerPanel extends JScrollPane {
                 try {
                     wait(1000);
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }//unendting while
         }//end run

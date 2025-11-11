@@ -27,8 +27,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 
-public class ReloadAllAmmoCommand implements Command {
-
+public class  ReloadAllAmmoCommand  implements Command {
     int accessLevel = 0;
     String syntax = "";
     public int getExecutionLevel(){return accessLevel;}

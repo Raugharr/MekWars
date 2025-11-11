@@ -35,11 +35,13 @@ import java.util.Properties;
 import mekwars.common.campaign.operations.DefaultOperation;
 import mekwars.common.campaign.operations.ModifyingOperation;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class OperationLoader {
-	
+    private static final Logger LOGGER = LogManager.getLogger(OperationLoader.class);
+
 	//IVARS
 	DefaultOperation defaults;
 	
@@ -85,8 +87,8 @@ public class OperationLoader {
 		try {
 			opValues.load(new FileInputStream(shortFilename));
 		} catch (Exception e) {
-			MWLogger.errLog("Problems loading short op: " + opName);
-			MWLogger.errLog(e);
+			LOGGER.error("Problems loading short op: " + opName);
+			LOGGER.error("Exception: ", e);
 		}
 		
 		//attempt to load longvals
@@ -126,8 +128,8 @@ public class OperationLoader {
 		try {
 			modValues.load(new FileInputStream(modFilename));
 		} catch (Exception e) {
-			MWLogger.errLog("Problems loading mod op: " + opName);
-			MWLogger.errLog(e);
+			LOGGER.error("Problems loading mod op: " + opName);
+			LOGGER.error("Exception: ", e);
 		}
 		
 		opName = opName.substring(0, opName.length() - 5);//remove ".txt"

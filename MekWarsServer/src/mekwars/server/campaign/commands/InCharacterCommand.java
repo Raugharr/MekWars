@@ -21,8 +21,7 @@ import mekwars.server.MWServ;
 import mekwars.server.MWClientInfo;
 import mekwars.server.campaign.CampaignMain;
 
-public class InCharacterCommand implements Command {
-	
+public class  InCharacterCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

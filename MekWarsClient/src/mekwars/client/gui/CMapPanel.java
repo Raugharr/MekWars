@@ -30,7 +30,8 @@ import javax.swing.event.ChangeListener;
 
 import mekwars.client.MWClient;
 import mekwars.common.CampaignData;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class used to display Stellar InnerStellarMap in GUI
@@ -41,10 +42,8 @@ import mekwars.common.util.MWLogger;
  */
 
 public class CMapPanel extends JPanel {
+    private static final Logger LOGGER = LogManager.getLogger(CMapPanel.class);
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 5547551465585402891L;
     private class ZoomSlider extends JSlider implements ChangeListener {
         /**
@@ -142,7 +141,7 @@ public class CMapPanel extends JPanel {
         	try {
             	map.activate(client.getData().getPlanet(map.getConf().getPlanetId()));
             } catch (Exception ex) {
-            	MWLogger.errLog(ex);
+            	LOGGER.error("Exception: ", ex);
             }
         }
         

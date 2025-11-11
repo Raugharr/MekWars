@@ -24,8 +24,7 @@ import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 
-public class AutoPlanetStatusCommand implements Command {
-
+public class  AutoPlanetStatusCommand  implements Command {
 	//conforming methods
 	public int getExecutionLevel(){return 0;}
 	public void setExecutionLevel(int i) {}

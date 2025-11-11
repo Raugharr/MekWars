@@ -27,17 +27,19 @@ import java.rmi.AccessException;
 import java.util.Iterator;
 
 import mekwars.common.comm.TransportCodec;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.Auth;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWChatServer.commands.ICommands;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class ServerWrapper extends MWChatServer{
-	
+    private static final Logger LOGGER = LogManager.getLogger(ServerWrapper.class);
+
 	MWServ myServer;
 	
 	public static ServerWrapper createServer(MWServ server) throws Exception {
@@ -50,7 +52,7 @@ public class ServerWrapper extends MWChatServer{
 	}
 	
 	public void start() {
-		MWLogger.mainLog("Starting");
+		LOGGER.info("Starting");
 		this.acceptConnections();
 	}
 	
@@ -63,7 +65,7 @@ public class ServerWrapper extends MWChatServer{
 		try {
 			this.myServer.clientRecieve(command, username);
 		} catch (Exception e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 	
@@ -73,7 +75,7 @@ public class ServerWrapper extends MWChatServer{
 			try {
 				client.sendRaw("/comm" + ICommands.DELIMITER + TransportCodec.encode(msg));
 			} catch (Exception e) {
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
 		}
 	}
@@ -81,7 +83,7 @@ public class ServerWrapper extends MWChatServer{
 	//this is a hack...
 	//there should be comm objects
 	public void broadcastComm(String command) {
-		MWLogger.debugLog("Sending Broadcast Message: " + command);
+		LOGGER.debug("Sending Broadcast Message: " + command);
 		synchronized (_users) {
 			for (Iterator<MWChatClient> i = _users.values().iterator(); i.hasNext(); ) {
 				MWChatClient cc = i.next();
@@ -95,7 +97,7 @@ public class ServerWrapper extends MWChatServer{
 		try {
 			MWChatClient c = this.getClient(username);
 			if (c == null) {
-				MWLogger.mainLog("WARNING: Tried to get the IP from " + username + ", who is not here.");
+				LOGGER.info("WARNING: Tried to get the IP from " + username + ", who is not here.");
 				
 				/*
 				 * We don't want to log out player who we can't find - logout uses getIP
@@ -115,7 +117,7 @@ public class ServerWrapper extends MWChatServer{
 				try {
 					return InetAddress.getLocalHost();
 				} catch (Exception ex) {
-					MWLogger.errLog(ex);
+					LOGGER.error("Exception: ", ex);
 					return null;
 				}
 			}
@@ -123,7 +125,7 @@ public class ServerWrapper extends MWChatServer{
 		}
 		
 		catch (Exception e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 			try {
 				return InetAddress.getLocalHost();
 			} catch (Exception ex) {
@@ -142,7 +144,7 @@ public class ServerWrapper extends MWChatServer{
 	@Override
 	public boolean signOn(MWChatClient client, String password) throws Exception{
 		
-		MWLogger.infoLog(client.getUserId() + " is attempting a signon: ");
+		LOGGER.info(client.getUserId() + " is attempting a signon: ");
 		String userId = client.getUserId();
 		validateUserId(userId);
 		
@@ -163,7 +165,7 @@ public class ServerWrapper extends MWChatServer{
 			int access = auth.getAccess();
 			client.setAccessLevel(access);
 			_users.put(clientKey(client), client);
-			MWLogger.infoLog(client.getUserId() + " is authenticated.  Access = " + access + (client.getTunneling() ? " (tunneling)" : ""));
+			LOGGER.info(client.getUserId() + " is authenticated.  Access = " + access + (client.getTunneling() ? " (tunneling)" : ""));
 			_cumulativeLogins++;
 		}
 		
@@ -177,7 +179,7 @@ public class ServerWrapper extends MWChatServer{
 		try {
 			this.myServer.clientLogout(client.getUserId());
 		} catch (Exception e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 	

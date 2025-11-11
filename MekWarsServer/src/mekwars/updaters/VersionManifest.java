@@ -16,10 +16,13 @@ import java.util.StringTokenizer;
 
 import javax.swing.JFileChooser;
 
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import updaters.utils.IOUtil;
 
 public class VersionManifest {
+    private static final Logger LOGGER = LogManager.getLogger(VersionManifest.class);
+
     public VersionManifest(BufferedReader manifestStream) {
         String line = null;
         try {
@@ -284,7 +287,7 @@ public class VersionManifest {
         	try {
 				manifestList.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
         }
     }

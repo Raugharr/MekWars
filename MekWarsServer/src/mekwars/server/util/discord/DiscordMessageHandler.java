@@ -15,8 +15,9 @@
  */
 package mekwars.server.util.discord;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -36,6 +37,8 @@ import java.time.Duration;
  * @author Spork
  */
 public class DiscordMessageHandler {
+    private static final Logger LOGGER = LogManager.getLogger(DiscordMessageHandler.class);
+
     private String webhookAddress;
     private HttpClient httpClient;
 
@@ -70,11 +73,10 @@ public class DiscordMessageHandler {
             try {
                 HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
                 if (response.statusCode() >= 400) {
-                    MWLogger.errLog("Discord returned HTTP " + response.statusCode()
-                            + " body=" + response.body());
+                    LOGGER.error("Discord returned HTTP {} body={}", response.statusCode(), response.body());
                 }
             } catch (IOException | InterruptedException e) {
-                MWLogger.errLog(e);
+                LOGGER.error("Exception: ", e);
                 Thread.currentThread().interrupt();
             }
         }

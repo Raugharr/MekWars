@@ -36,7 +36,6 @@ import mekwars.client.util.CUnitComparator;
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.UnitUtils;
 import java.awt.Color;
@@ -79,21 +78,19 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
 import megamek.common.MULParser;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
-import megamek.common.MULParser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SolFreeBuildDialog extends JFrame implements ItemListener {
+    private static final Logger LOGGER = LogManager.getLogger(SolFreeBuildDialog.class);
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -5449999786199993020L;
-    // ivars
+
     JComboBox<String> weightClassCombo;
     JComboBox<String> factionCombo;
     JComboBox<String> unitTypeCombo;
@@ -617,8 +614,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                                     loadedUnits.trimToSize();
                                     frequency /= loadedUnits.size();
                                 } catch (Exception ex) {
-                                    MWLogger.errLog("Unable to load file " + entityFile.getName());
-                                    MWLogger.errLog(ex);
+                                    LOGGER.error("Unable to load file {}", entityFile.getName(), ex);
                                     continue;
                                 }
 
@@ -757,7 +753,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
         // System.out.println("Attempting to find ./data/buildtables/standard");
         buildTablePath = new File("./data/buildtables/standard");
         if (!buildTablePath.exists()) {
-            MWLogger.errLog("Could not find build tables.");
+            LOGGER.error("Could not find build tables.");
             return;
         }
 
@@ -978,7 +974,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                     // else
                     return "<html><body>" + currU.getModelName();
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                     return "";
                 }
             case WEIGHT:
@@ -1065,7 +1061,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                             }
                             return d1.compareTo(d2);
                         } catch (Exception ex) {
-                            MWLogger.errLog(ex);
+                            LOGGER.error("Exception: ", ex);
                             return 0;
                         }
                     }
@@ -1191,7 +1187,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                 unitEntity = new MechFileParser(ms.getSourceFile(), ms.getEntryName()).getEntity();
 
             } catch (Exception e) {
-                // MWLogger.errLog(e);
+                // LOGGER.error("Exception: ", e);
                 createEntityFromFileNameWithCache(fn.trim());// make the
                 // entity
             }
@@ -1266,10 +1262,10 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
                         unitEntity = new MechFileParser(new File("./data/mechfiles/Infantry.zip"), fn).getEntity();
                     } catch (Exception exc) {
                         try {
-                            MWLogger.errLog("Error loading unit: " + fn + ". Try replacing with OMG.");
+                            LOGGER.error("Error loading unit: {}. Try replacing with OMG.", fn);
                             unitEntity = UnitUtils.createOMG();// new
                         } catch (Exception exepe) {
-                            MWLogger.errLog("Error unit failed to load. Exiting.");
+                            LOGGER.error("Error unit failed to load. Exiting.");
                             System.exit(1);
                         }
                     }

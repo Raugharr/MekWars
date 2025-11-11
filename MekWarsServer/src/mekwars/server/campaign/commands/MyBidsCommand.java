@@ -19,9 +19,10 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class MyBidsCommand implements Command {
-	
+public class  MyBidsCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

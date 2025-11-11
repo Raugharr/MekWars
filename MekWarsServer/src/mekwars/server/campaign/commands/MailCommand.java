@@ -26,8 +26,7 @@ import mekwars.server.campaign.CampaignMain;
  *
  * Syntax  /c mail#Name,Blah
  */
-public class MailCommand implements Command {
-	
+public class  MailCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

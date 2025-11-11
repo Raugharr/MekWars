@@ -14,11 +14,12 @@ package mekwars.server.util;
 
 import java.io.IOException;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.commands.ICommands;
 import mekwars.server.MWChatServer.translator.jcrypt;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * Modified 2/26/2003 by Jonathan Ellis
@@ -38,32 +39,25 @@ import mekwars.server.campaign.SPlayer;
  * <li>crypted password (String)
  */
 
-public class MWPasswd implements ICommands{
-    
-    public static String getUserId(String target)
-    {
+public class MWPasswd implements ICommands {
+    private static final Logger LOGGER = LogManager.getLogger(MWPasswd.class);
+
+    public static String getUserId(String target) {
         SPlayer player = CampaignMain.cm.getPlayer(target);
         
         if ( player == null )
             return null;
             
     	return player.getName();
-    }    
-    public static final MWPasswdRecord getRecord(String userId){
+    }
+
+    public static MWPasswdRecord getRecord(String userId){
         SPlayer player = CampaignMain.cm.getPlayer(userId);
-        
-        if ( player == null ){
-        	//MWLogger.errLog("Player is null");
-        	return null;
-        }
-        
-        if ( player.getPassword() == null ){
-            //MWPasswd.reloadFile();
-        	//MWLogger.errLog("password is null");
+
+        if (player == null || player.getPassword() == null) {
             return null;
         }
-        //else
-    	return player.getPassword(); 
+    	return player.getPassword();
     }
     
     /**
@@ -75,37 +69,34 @@ public class MWPasswd implements ICommands{
      * @throw AccessDenied if the user was found, but his password did not match the contents
      *                        of the passwd file.
      */
-    public static final MWPasswdRecord getRecord(String userId, String password)
-        throws IOException, Exception
-    {
-    	MWPasswdRecord r;
-       	r = getRecord(userId.toLowerCase());
+    public static MWPasswdRecord getRecord(String userId, String password) throws Exception {
+        MWPasswdRecord mwPasswdRecord = getRecord(userId.toLowerCase());
 
-        if (r == null) {
-        	//MWLogger.errLog("r is null");
+        if (mwPasswdRecord == null) {
+        	//LOGGER.error("r is null");
             return null;
         }
         if (password == null) {
             password = "";
         }
         if (password.length() < 2) {
-            MWLogger.infoLog("Access denied: " + userId);
+            LOGGER.info("Access denied: " + userId);
             throw new Exception(userId);
         }
 
         try{
-	        String salt = r.passwd.substring(0, 2);
-	        if (jcrypt.crypt(salt, password).equals(r.passwd)) {
+	        String salt = mwPasswdRecord.passwd.substring(0, 2);
+	        if (jcrypt.crypt(salt, password).equals(mwPasswdRecord.passwd)) {
 	        	//r.setTime(System.currentTimeMillis());
 	        	//writeRecord(r,userId);
-	            return r;
+	            return mwPasswdRecord;
 	        }
         }catch(Exception ex){
         	return null;
         }
         
         //else
-        MWLogger.errLog("Access denied: " + userId);
+        LOGGER.error("Access denied: {}", userId);
         throw new Exception(ACCESS_DENIED);
     }
 
@@ -116,7 +107,7 @@ public class MWPasswd implements ICommands{
      *
      * @param r the record to write
      */
-    public static final void writeRecord(MWPasswdRecord r,String userId) throws IOException {
+    public static void writeRecord(MWPasswdRecord r, String userId) throws IOException {
         SPlayer player = CampaignMain.cm.getPlayer(userId);
         
         if ( player == null )
@@ -125,7 +116,7 @@ public class MWPasswd implements ICommands{
         player.setPassword(r);
     }
     
-    public static final void removeRecord(String userid) {
+    public static void removeRecord(String userid) {
         SPlayer player = CampaignMain.cm.getPlayer(userid);
         
         if ( player == null )
@@ -144,13 +135,13 @@ public class MWPasswd implements ICommands{
      * @param access the access level
      * @param passwd the plaintext password that will get encrypted
      */
-    public static final void writeRecord(String userId, int access, String passwd)
+    public static void writeRecord(String userId, int access, String passwd)
         throws IOException
     {
         SPlayer player = CampaignMain.cm.getPlayer(userId);
         
         if ( player == null ){
-        	MWLogger.errLog("writeRecord::Player is null");
+        	LOGGER.error("writeRecord::Player is null");
             return;
         }
         
@@ -166,7 +157,7 @@ public class MWPasswd implements ICommands{
     /**
      * Save the in-memory Hashtable of PasswdRecords out to disk.
      */
-    public  synchronized static final void save() throws IOException {
+    public synchronized static void save() throws IOException {
 /*        PrintWriter out = null;
 
         try {
@@ -207,15 +198,15 @@ public class MWPasswd implements ICommands{
 		catch (FileNotFoundException FNFE) {
 		}
 		catch(Exception ex){
-            MWLogger.errLog("Error reading passwd file, line " + lineno);
-            MWLogger.errLog(ex);
+            LOGGER.error("Error reading passwd file, line " + lineno);
+            LOGGER.error("Exception: ", ex);
 		}
 		finally {
 			if (reader != null) {
 				try {
 					reader.close();
 				} catch (Exception e) {
-                    MWLogger.errLog(e);
+                    LOGGER.error("Exception: ", e);
 				}
 			}
 		}
@@ -227,29 +218,17 @@ public class MWPasswd implements ICommands{
 			writeRecord(args[0], Integer.parseInt(args[1]), args[2]);
 		}
 		catch (IOException e) {
-			MWLogger.errLog("An I/O error occurred: " + e.getMessage());
+            LOGGER.error("An I/O error occurred: {}", e.getMessage());
 		}
 		catch (Exception e) {
 			showUsageAndExit();
 		}
 	}
 
-	private static final void showUsageAndExit() {
-		MWLogger.errLog("Passwd Program.  Adds new line to the passwd file, encrypting the password.");
-		MWLogger.errLog("usage: java com.lyrisoft.chat.server.remote.auth.Passwd " +
+	private static void showUsageAndExit() {
+		LOGGER.error("Passwd Program.  Adds new line to the passwd file, encrypting the password.");
+		LOGGER.error("usage: java com.lyrisoft.chat.server.remote.auth.Passwd " +
 						   "[user id] [access level] [password] [timeoflastuse]");
 		System.exit(1);
 	}
-
-    /*public static String getUserId(String target)
-    {
-       MWPasswdRecord record = (MWPasswdRecord)records.get(target.toLowerCase());
-       
-       if ( record == null )
-           return null;
-       
-       return record.userId;
-    }*/
-    
-
 }

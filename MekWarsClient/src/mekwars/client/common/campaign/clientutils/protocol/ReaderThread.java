@@ -42,12 +42,14 @@ import java.util.zip.Inflater;
 
 import mekwars.common.campaign.clientutils.protocol.IConnectionHandler;
 import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Constantly read from the socket's input stream
  */
 public class ReaderThread extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(ReaderThread.class);
     private boolean keepGoing = true;
 
     //private BufferedReader _in;
@@ -72,7 +74,7 @@ public class ReaderThread extends Thread {
         try {
             _sis = s.getInputStream();
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
         _connectionHandler = handler;
     }
@@ -183,7 +185,7 @@ public class ReaderThread extends Thread {
                             try {
                                 inflate(newLine);
                             } catch (Exception ex) {
-                                MWLogger.errLog(ex);
+                                LOGGER.error("Exception: ", ex);
                             }
                             continue;
                         }
@@ -194,16 +196,16 @@ public class ReaderThread extends Thread {
                     _listener.incomingMessage(newLine);
                     
                 } else {
-                    MWLogger.errLog("Null listener: " + newLine);
+                    LOGGER.error("Null listener: " + newLine);
                 }
             }
-            MWLogger.errLog("ReaderThread: stopping gracefully.");
+            LOGGER.error("ReaderThread: stopping gracefully.");
             
         } catch (IOException e) {
             if (keepGoing) {
             	pleaseStop();
-                MWLogger.errLog("ReaderThread Error");
-                MWLogger.errLog(e);
+                LOGGER.error("ReaderThread Error");
+                LOGGER.error("Exception: ", e);
                 _connectionHandler.shutdown(true);
             }
         }

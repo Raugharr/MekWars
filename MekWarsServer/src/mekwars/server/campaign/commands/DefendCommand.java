@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
 
 import mekwars.common.CampaignData;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
@@ -26,12 +26,15 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.operations.OperationManager;
 import mekwars.server.campaign.operations.OpsChickenThread;
 import mekwars.server.campaign.operations.ShortOperation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * DefendCommand is analagous to the Task system's "join" command - it allows a
  * player to register himself as the defender for an attack.
  */
-public class DefendCommand implements Command {
+public class  DefendCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(DefendCommand.class);
 
     int accessLevel = 0;
     String syntax = "attack number#army number#team number";
@@ -297,7 +300,7 @@ public class DefendCommand implements Command {
             toSend += ".";
 
         // tell the defender that he has successfully joined the attack.
-        MWLogger.gameLog("Defend: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "Defend: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
         CampaignMain.cm.toUser(toSend, Username, true);
 
         if (o.getBooleanValue("FreeForAllOperation")) {

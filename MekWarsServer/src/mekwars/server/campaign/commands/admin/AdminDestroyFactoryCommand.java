@@ -19,14 +19,16 @@ package mekwars.server.campaign.commands.admin;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AdminDestroyFactoryCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AdminDestroyFactoryCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN, factoryID;
 	public int getExecutionLevel(){return accessLevel;}
 	public void setExecutionLevel(int i) {accessLevel = i;}
@@ -78,7 +80,7 @@ public class AdminDestroyFactoryCommand implements Command {
 			CampaignMain.cm.toUser(factoryname + " removed from " + p.getName() + ".",Username,true);
 			CampaignMain.cm.doSendModMail("NOTE",Username + "  removed " + factoryname + " from " + p.getName() + ".");
 		} catch (Exception ex){
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}//end catch
 		
 	}

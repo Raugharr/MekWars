@@ -28,13 +28,15 @@ import mekwars.common.util.BinWriter;
 //import java.io.FileInputStream;
 //import java.io.InputStreamReader;
 //import mekwars.server.campaign.CampaignMain;
-import mekwars.common.util.MWLogger;
 import mekwars.server.dataProvider.ServerCommand;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Retrieve the MD5 of the current campaignconfig file.
  */
 public class ConfigTimestamp implements ServerCommand {
+    private static final Logger LOGGER = LogManager.getLogger(ConfigTimestamp.class);
 
     public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
     	
@@ -52,12 +54,12 @@ public class ConfigTimestamp implements ServerCommand {
 				
 				serverConfigTimestamp = tempTime.substring(11);//remove "#Timestamp="
 			} catch (Exception e) {
-				MWLogger.infoLog("Error reading first line from campaignconfig.txt");       
+				LOGGER.info("Error reading first line from campaignconfig.txt");
 			}
     	} 
         
         else
-        	MWLogger.infoLog("campaignconfig.txt didn't exist. returning ficticious timestamp to requesting client.");       
+        	LOGGER.info("campaignconfig.txt didn't exist. returning ficticious timestamp to requesting client.");
         
         out.println(serverConfigTimestamp, "ConfigTimestamp");
     }

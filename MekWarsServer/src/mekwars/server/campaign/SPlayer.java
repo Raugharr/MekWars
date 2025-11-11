@@ -33,7 +33,6 @@ import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.flags.PlayerFlags;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
@@ -52,6 +51,8 @@ import mekwars.server.campaign.util.SerializedMessage;
 import mekwars.server.campaign.util.scheduler.UserActivityComponentsJob;
 import mekwars.server.campaign.util.scheduler.UserActivityInfluenceJob;
 import mekwars.server.util.MWPasswdRecord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A class representing a Player DOCU is not finished
@@ -65,6 +66,7 @@ import mekwars.server.util.MWPasswdRecord;
  */
 
 public final class SPlayer extends Player implements Comparable<Object>, IBuyer, ISeller {
+    private static final Logger LOGGER = LogManager.getLogger(SPlayer.class);
 
     // STATIC VARIABLES
     // STATUS_DISCONNECTED, which is used by the client, is 0
@@ -313,7 +315,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         String penaltyString = buildHangarPenaltyString();
         CampaignMain.cm.toUser("PL|SHP|" + penaltyString, name, false);
 
-        //MWLogger.debugLog("Checking Anti-Air");
+        //LOGGER.debug("Checking Anti-Air");
         //m.isAntiAir();
 
         return "";// dummy string returned to comply with IBuyer
@@ -497,7 +499,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 }
                 numBays += expBays;
             } else {
-                MWLogger.errLog("0 is invalid setting for EXP for Bay Setting when using xp for bays!");
+                LOGGER.error("0 is invalid setting for EXP for Bay Setting when using xp for bays!");
             }
         }
 
@@ -1071,7 +1073,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             Vector<SArmy> orderedArmies = new Vector<SArmy>(1, 1);
 
-            MWLogger.debugLog("Start getWeightedArmyNumber for " + getName());
+            LOGGER.debug("Start getWeightedArmyNumber for " + getName());
             int MinCount = getMyHouse().getIntegerConfig("MinCountForTick");
             int MaxCount = getMyHouse().getIntegerConfig("MaxCountForTick");
             int MaxFlatDiff = 1;
@@ -1259,7 +1261,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             }// end if(armies were ordered)
         }// end if (weighted <= 0)
-        MWLogger.debugLog("End getWeightedArmyNumber for " + getName());
+        LOGGER.debug("End getWeightedArmyNumber for " + getName());
         return weightedArmyNumber;
     }
 
@@ -1358,7 +1360,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             try {
                 throw new Exception();
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
         }
         password = pass;
@@ -1718,7 +1720,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	}
 
     	//debug
-    	MWLogger.errLog(getName() + "'s BV: " + getHangarBVforMC());
+    	LOGGER.error(getName() + "'s BV: " + getHangarBVforMC());
 
     	//set states and cache configs
     	boolean restock = false;
@@ -1742,7 +1744,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		restock = true;
     		minBVRestock = true;
 
-    		MWLogger.modLog(getName() + " has gone under BV limit and a restock should occur");
+            LOGGER.info("{} has gone under BV limit and a restock should occur", getName());
     	}
 
     	if( percentBVLimit != -1 && getHangarBVforMC() < getBVResetPointMC() )
@@ -1751,7 +1753,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		percentRestock = true;
     		setBVTracker(0); //return this to default zero. on activation, it will be set to new value.
 
-    		MWLogger.modLog(getName() + " has gone under % BV limit and a restock should occur");
+            LOGGER.info("{} has gone under % BV limit and a restock should occur", getName());
     	}
 
     	if( minUnitLimit != -1 && getUnitCountMC() < minUnitLimit )
@@ -1759,7 +1761,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		restock = true;
     		unitRestock = true;
 
-    		MWLogger.modLog(getName() + " has gone under Unit limit and a restock should occur");
+    		LOGGER.info(getName() + " has gone under Unit limit and a restock should occur");
     	}
 
     	if( !restock && !minBVRestock && minBVLimit != -1)
@@ -1879,7 +1881,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         if ( percentBVLimit != -1  && getHangarBVforMC() > getBVTracker() )
         {
         	setBVTracker(getHangarBVforMC());
-        	MWLogger.modLog(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
+        	LOGGER.info(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
         }
         
         if(isPhaseRestockMC())
@@ -1941,7 +1943,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 			if ( percentBVLimit != -1 )
 			{
 				setBVTracker(getHangarBVforMC());// set new hangar BV for tracking
-				MWLogger.modLog(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
+				LOGGER.info(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
 			}
 			
     		setPhaseActiveMC();
@@ -1994,7 +1996,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	if(st.hasMoreTokens())
     		phaseMC = TokenReader.readString(st);
     	else
-    		MWLogger.errLog("loadStatusMC failed! no token available for phaseMC");
+    		LOGGER.error("loadStatusMC failed! no token available for phaseMC");
     }
 
     private boolean isPhaseRestockMC()
@@ -2152,7 +2154,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 			discordID = TokenReader.readString(st);
 		}
 		else
-			MWLogger.debugLog("loadDiscordInfo failed! no token available!");   		
+			LOGGER.debug("loadDiscordInfo failed! no token available!");   		
     }
 
 
@@ -2532,7 +2534,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 //        		if(debugCounter < 10)
 //        		{
 //        			debugCounter++;
-//        			//MWLogger.debugLog(currU.getVerboseModelName()+quirks+" MATCHED");
+//        			//LOGGER.debug(currU.getVerboseModelName()+quirks+" MATCHED");
 //        		}
 //        		continue;        		
 //        	}
@@ -2682,7 +2684,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         // if sharing ratings, send to clients
         if (!Boolean.parseBoolean(getMyHouse().getConfig("HideELO"))) {
-            Double rounded = getRatingRounded();
+            double rounded = getRatingRounded();
             CampaignMain.cm.toUser("PL|SR|" + rounded, name, false);
             CampaignMain.cm.doSendToAllOnlinePlayers("PI|RA|" + name + "|" + rounded, false);
         }
@@ -2964,7 +2966,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 healAllPilots((int) (timeGone / tickTime));
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -3415,7 +3417,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         }
 
         // print the player into the info log. only for Debug
-        // MWLogger.infoLog("CSPlayer: " + s);
+        // LOGGER.info("CSPlayer: " + s);
         isLoading = true;
 
         try {
@@ -3643,7 +3645,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 fixPilot(currU);
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         } finally {
             isLoading = false;
         }
@@ -3807,7 +3809,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 return false;
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             return false;
         }
 
@@ -3967,11 +3969,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public boolean hasRoomForUnit(int uType, int uWeightClass) {
         if ((uType < 0) || (uType > Unit.AERO)) {
-            MWLogger.errLog("Invalid uType in SPlayer.hasRoomForUnit: " + uType);
+            LOGGER.error("Invalid uType in SPlayer.hasRoomForUnit: " + uType);
             return false;
         }
         if ((uWeightClass < 0) || (uWeightClass > Unit.ASSAULT)) {
-            MWLogger.errLog("Invalid uWeightClass in SPlayer.hasRoomForUnit: " + uWeightClass);
+            LOGGER.error("Invalid uWeightClass in SPlayer.hasRoomForUnit: " + uWeightClass);
             return false;
         }
         int limit = CampaignMain.cm.getHouseFromPartialString(getMyHouse().getName()).getUnitLimit(uType, uWeightClass);
@@ -4004,11 +4006,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public int countUnits(int uType, int uWeightClass) {
         if ((uType < 0) || (uType > Unit.AERO)) {
-            MWLogger.errLog("Invalid uType in SPlayer.countUnits: " + uType);
+            LOGGER.error("Invalid uType in SPlayer.countUnits: " + uType);
             return 0;
         }
         if ((uWeightClass < 0) || (uWeightClass > Unit.ASSAULT)) {
-            MWLogger.errLog("Invalid uWeightClass in SPlayer.countUnits: " + uWeightClass);
+            LOGGER.error("Invalid uWeightClass in SPlayer.countUnits: " + uWeightClass);
             return 0;
         }
         // Actually count them now

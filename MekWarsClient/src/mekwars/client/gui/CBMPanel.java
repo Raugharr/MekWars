@@ -26,7 +26,6 @@ import java.awt.event.MouseEvent;
 import java.util.StringTokenizer;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -43,19 +42,18 @@ import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.dialog.SellUnitDialog;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Entity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Black Market Panel
  */
 
 public class CBMPanel extends JPanel {
-    /**
-     *
-     */
+    private static final Logger LOGGER = LogManager.getLogger(CBMPanel.class);
+
     private static final long serialVersionUID = -432087180209544906L;
     MWClient mwclient;
     CPlayer Player;
@@ -424,9 +422,8 @@ public class CBMPanel extends JPanel {
                 }catch (NumberFormatException NFE){
                     String toUser = "CH|CLIENT: Invalid Bid amount. Try using numbers next time!";
                     mwclient.doParseDataInput(toUser);
-                    return;
                 }catch (Exception ex){
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         }

@@ -24,13 +24,15 @@ import java.util.Date;
 
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
-import mekwars.common.util.MWLogger;
 import mekwars.server.dataProvider.ServerCommand;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Retrieve the MD5 of the current campaignconfig file.
  */
 public class BannedAmmoTimeStamp implements ServerCommand {
+    private static final Logger LOGGER = LogManager.getLogger(BannedAmmoTimeStamp.class);
 
     public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
     	
@@ -47,12 +49,12 @@ public class BannedAmmoTimeStamp implements ServerCommand {
                 in.close();
                 
             } catch (Exception e) {
-                MWLogger.infoLog("Error reading first line from banammo.dat");       
+                LOGGER.info("Error reading first line from banammo.dat");       
             }
         } 
         
         else
-            MWLogger.infoLog("banammo.dat didn't exist. returning ficticious timestamp to requesting client.");       
+            LOGGER.info("banammo.dat didn't exist. returning ficticious timestamp to requesting client.");       
         
         out.println(bannedAmmoTimestamp, "BannedAmmoTimeStamp");
     }

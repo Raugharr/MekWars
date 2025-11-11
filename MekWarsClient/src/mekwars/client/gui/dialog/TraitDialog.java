@@ -46,11 +46,13 @@ import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.House;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class TraitDialog implements ActionListener, KeyListener{
-	
+    private static final Logger LOGGER = LogManager.getLogger(TraitDialog.class);
+
 	//store the client backlink for other things to use
 	private MWClient mwclient = null; 
 	
@@ -391,13 +393,12 @@ public final class TraitDialog implements ActionListener, KeyListener{
 	        for ( int i =0; i < tempArray.length; i++)
 	            traitComboBox.addItem(tempArray[i]);
 	    }catch (Exception ex){
-	        MWLogger.errLog("Unable to load faction "+faction);
-	        MWLogger.errLog(ex);
+            LOGGER.error("Unable to load faction {}", faction, ex);
 	    } finally {
 	    	try {
 				dis.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
 	    }
 	    if ( traitComboBox.getItemCount() > 0 )
@@ -483,13 +484,12 @@ public final class TraitDialog implements ActionListener, KeyListener{
 	                
 	        }
 	    }catch (Exception ex){
-	        MWLogger.errLog("populate Traits error");
-	        MWLogger.errLog(ex);
+	        LOGGER.error("populate Traits error", ex);
         } finally {
         	try {
 				dis.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
         }
 	}

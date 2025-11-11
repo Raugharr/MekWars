@@ -19,8 +19,7 @@ package mekwars.server.campaign.commands;
 import java.util.StringTokenizer;
 import mekwars.server.campaign.CampaignMain;
 
-public class LoginCommand implements Command {
-	
+public class  LoginCommand  implements Command {
 	//conforming methods
 	public int getExecutionLevel(){return 0;}
 	public void setExecutionLevel(int i) {}

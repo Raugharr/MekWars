@@ -54,12 +54,13 @@ import mekwars.common.Planet;
 import mekwars.common.Terrain;
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import megamek.client.ui.swing.UnitLoadingDialog;
 import megamek.common.TechConstants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AdminMenu extends JMenu {
-
+    private static final Logger LOGGER = LogManager.getLogger(AdminMenu.class);
     /**
      *
      */
@@ -237,10 +238,9 @@ public class AdminMenu extends JMenu {
 
                     while (mwclient.isWaiting()) {
                         Thread.sleep(120);
-                        // MWLogger.errLog("Waiting for faction config");
                     }
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                     mwclient.setWaiting(false);
                 }
 
@@ -276,7 +276,7 @@ public class AdminMenu extends JMenu {
                 try {
                     mwclient.refreshData();
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
                 SubFactionNameDialog subFactionDialog = new SubFactionNameDialog(mwclient, "SubFaction", faction);
                 subFactionDialog.setVisible(true);
@@ -1355,15 +1355,14 @@ public class AdminMenu extends JMenu {
                     }
                     br.close();
                     in.close();
-                } catch (IOException ioex) {
-                    MWLogger.errLog("IOException: " + line.toString());
+                } catch (IOException ioe) {
+                    LOGGER.error("IOException on line {}", line.toString(), ioe);
                 }
-            } catch (FileNotFoundException fnfex) {
-                MWLogger.errLog("FileNotFoundException: " + line.toString());
+            } catch (FileNotFoundException fnfe) {
+                LOGGER.error("File not found {}: ", file, fnfe);
             }
             line.append("#");
             mwclient.sendChat(line.toString());
-
         }
     }
 
@@ -1404,10 +1403,10 @@ public class AdminMenu extends JMenu {
                     br.close();
                     in.close();
                 } catch (IOException ioex) {
-                    MWLogger.errLog("IOException: " + line.toString());
+                    LOGGER.error("IOException: " + line.toString());
                 }
             } catch (FileNotFoundException fnfex) {
-                MWLogger.errLog("FileNotFoundException: " + line.toString());
+                LOGGER.error("FileNotFoundException: " + line.toString());
             }
             line.append("#");
             mwclient.sendChat(line.toString());
@@ -1711,5 +1710,4 @@ public class AdminMenu extends JMenu {
 	private void jMenuAdminReloadSanitizer_actionPerformed(ActionEvent e) {
 		mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "adminReloadHTMLSanitizerConfigs");
 	}
-
-}// end AdminMenu class
+}

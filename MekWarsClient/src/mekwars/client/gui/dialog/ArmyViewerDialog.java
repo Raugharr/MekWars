@@ -65,9 +65,10 @@ import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import megamek.common.Infantry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /* 
@@ -75,10 +76,7 @@ import megamek.common.Infantry;
  */
 
 public class ArmyViewerDialog extends JDialog implements ActionListener, ListSelectionListener, ItemListener {
-	
-	/**
-     * 
-     */
+    private static final Logger LOGGER = LogManager.getLogger(ArmyViewerDialog.class);
     private static final long serialVersionUID = -3851019509649287454L;
 
 
@@ -287,7 +285,7 @@ public class ArmyViewerDialog extends JDialog implements ActionListener, ListSel
                 
 			}
 			catch(Exception ex){
-				MWLogger.errLog(ex);
+				LOGGER.error("Exception: ", ex);
 				//MMClient.mwClientLog.clientErrLog("Problem with actionPerformed in RepodDialog");
 			}
 		}// end unit selector if.

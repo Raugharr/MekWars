@@ -28,8 +28,7 @@ import mekwars.server.campaign.SPlayer;
  *
  * Syntax  /c me blah
  */
-public class MeCommand implements Command {
-	
+public class  MeCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -123,13 +122,13 @@ public class MeCommand implements Command {
 //		} 
 //		catch (UnsupportedEncodingException e) 
 //		{
-//			MWLogger.errLog(e);
+//			LOGGER.error("Exception: ", e);
 //			CampaignMain.cm.toUser(e.toString(),Username,true);
 //
 //		} 
 //		catch (IOException e) 
 //		{
-//			MWLogger.errLog(e);
+//			LOGGER.error("Exception: ", e);
 //			CampaignMain.cm.toUser(e.toString(),Username,true);
 //
 //		}

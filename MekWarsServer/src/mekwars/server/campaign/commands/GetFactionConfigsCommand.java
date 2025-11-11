@@ -23,18 +23,20 @@ package mekwars.server.campaign.commands;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Torren (Jason Tighe) Send a factions config to the player. Optional
  *         Faction Name variable for Staff to pull different factions configs.
  */
 public class GetFactionConfigsCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(GetFactionConfigsCommand.class);
 
     int accessLevel = 0;
     String syntax = "";
@@ -111,7 +113,7 @@ public class GetFactionConfigsCommand implements Command {
             CampaignMain.cm.toUser(result.toString(), Username, false);
         } catch (Exception ex) {
             CampaignMain.cm.toUser("PL|FC|DONE#DONE", Username, false);
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 }// end GetFactionConfigsCommand 

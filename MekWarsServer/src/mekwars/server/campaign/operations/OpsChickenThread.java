@@ -22,7 +22,7 @@ import java.util.Vector;
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.common.util.StringUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -32,8 +32,11 @@ import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.SUnitFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OpsChickenThread extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(OpsChickenThread.class);
 
     // VARIABLE
     private SPlayer pdefender;
@@ -79,7 +82,7 @@ public class OpsChickenThread extends Thread {
      * "stopped."
      */
     public synchronized void stopChicken() {
-        MWLogger.gameLog("ChickenThread " + opID + "/" + pdefender.getName() + " turned off.");
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "ChickenThread " + opID + "/" + pdefender.getName() + " turned off.");
         shouldContinue = false;
     }
 
@@ -209,7 +212,7 @@ public class OpsChickenThread extends Thread {
         // get the actual ShortOperation. Catch any nulls.
         ShortOperation parentOp = CampaignMain.cm.getOpsManager().getRunningOps().get(opID);
         if (parentOp == null) {
-            MWLogger.errLog("Tried to do a leech with a null ShortOperation!");
+            LOGGER.error("Tried to do a leech with a null ShortOperation!");
             return;
         }
 
@@ -393,7 +396,7 @@ public class OpsChickenThread extends Thread {
             CampaignMain.cm.doSendToAllOnlinePlayers(defendH, "HS|" + loserHSUpdates.toString(), false);
 
         // and add the info to the log
-        MWLogger.gameLog("Leech: " + this.opID + "/" + pdefender.getName() + "<br> Player saw: " + toPlayer + "<br> Main saw: " + toMain);
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "Leech: " + this.opID + "/" + pdefender.getName() + "<br> Player saw: " + toPlayer + "<br> Main saw: " + toMain);
     }
 
     @Override
@@ -424,7 +427,7 @@ public class OpsChickenThread extends Thread {
             try {
                 this.wait(waittime * 1000);// time given in seconds
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
 
             // if the stop signal was sent while we were

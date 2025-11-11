@@ -25,8 +25,7 @@ import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 
-public class ExchangeUnitCommand implements Command {
-	
+public class  ExchangeUnitCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

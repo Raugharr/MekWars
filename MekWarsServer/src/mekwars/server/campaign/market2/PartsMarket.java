@@ -18,7 +18,6 @@ package mekwars.server.campaign.market2;
 
 import mekwars.common.BMEquipment;
 import mekwars.common.Equipment;
-import mekwars.common.util.MWLogger;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,9 +30,12 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class PartsMarket {
-    
+    private static final Logger LOGGER = LogManager.getLogger(PartsMarket.class);
+
     // IVARS
     private HashMap<String, BMEquipment> equipmentList = new HashMap<String, BMEquipment>();
     private HashMap<String, BMEquipment> lastTickList = new HashMap<String, BMEquipment>();
@@ -109,7 +111,7 @@ public class PartsMarket {
                 eq.setAmount(Math.abs(eq.getAmount()));
             } catch (Exception ex) {
 
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
             eq.setAmount(Math.max(eq.getAmount(), masterEq.getMinProduction()));
             eq.getEquipmentName();
@@ -153,7 +155,7 @@ public class PartsMarket {
                 
             }
         }catch(Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
         
         return result.toString();
@@ -184,9 +186,9 @@ public class PartsMarket {
             }
             ps.close();
         } catch (FileNotFoundException fe) {
-            MWLogger.errLog("partsblackmarket.dat not found");
+            LOGGER.error("partsblackmarket.dat not found");
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }   
 
     }
@@ -221,13 +223,13 @@ public class PartsMarket {
             }
             
         }catch (Exception ex){
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         } finally {
             try {
                 if (dis!=null)
                 dis.close();
             } catch (IOException e) {
-                MWLogger.errLog(e);
+                LOGGER.error("Exception: ", e);
             }
         }
     }

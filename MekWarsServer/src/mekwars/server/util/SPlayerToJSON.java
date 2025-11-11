@@ -6,14 +6,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 //@salient - util class saves SPlayer as simple json file
 //			 for use with discord bot
-public class SPlayerToJSON 
-{
+public class SPlayerToJSON {
+    private static final Logger LOGGER = LogManager.getLogger(SPlayerToJSON.class);
+
     private static String jsonString = "";
     
     private static boolean jsonStart = false;
@@ -41,7 +43,7 @@ public class SPlayerToJSON
 		{
 			if(pathCheck.mkdirs() == false)
 			{
-				MWLogger.errLog("error in SPlayerToJSON, failed to create directories");
+				LOGGER.error("error in SPlayerToJSON, failed to create directories");
 				return;
 			}			
 		}
@@ -52,12 +54,11 @@ public class SPlayerToJSON
 			         StandardOpenOption.CREATE,
 			         StandardOpenOption.TRUNCATE_EXISTING);
 						
-			MWLogger.debugLog("SPlayer to json filewrite completed successfully");
+			LOGGER.debug("SPlayer to json filewrite completed successfully");
 		} 
 		catch (IOException e) 
 		{
-			MWLogger.debugLog(e);
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 		
 		jsonString = ""; //clear for next use

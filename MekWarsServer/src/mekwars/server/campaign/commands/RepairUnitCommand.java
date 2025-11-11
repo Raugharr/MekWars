@@ -22,7 +22,6 @@ package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -34,6 +33,8 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.util.RepairTrackingThread;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Torren (Jason Tighe)
@@ -41,7 +42,8 @@ import mekwars.server.util.RepairTrackingThread;
  * to the repair thread
  */
 public class RepairUnitCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(RepairUnitCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -130,7 +132,7 @@ public class RepairUnitCommand implements Command {
 			if ( techType != UnitUtils.TECH_REWARD_POINTS && CampaignMain.cm.getBooleanConfig("UsePartsRepair") ) {
 				String crit = UnitUtils.getCritName(entity, slot, location, armor);
 				int damagedCrits = UnitUtils.getNumberOfDamagedCrits(entity,slot,location,armor);
-				//MWLogger.errLog(crit+" Crits: "+player.getUnitParts().getPartsCritCount(crit)+" Needed: "+damagedCrits);
+				//LOGGER.error(crit+" Crits: "+player.getUnitParts().getPartsCritCount(crit)+" Needed: "+damagedCrits);
 				if ( player.getPartsAmount(crit) < damagedCrits  ) {
 					
 					if ( player.getAutoReorder() ){
@@ -217,7 +219,7 @@ public class RepairUnitCommand implements Command {
 
             if (MWServ.getInstance().getRTT().getState() == Thread.State.TERMINATED) {
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed, and the repair thread terminated. Staff was notified.",Username,false);
-                MWLogger.errLog("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
+                LOGGER.error("NOTE: Repair Thread terminated! Use the restartrepairthread command to restart. If all else fails, reboot.");
                 return;
             }
             if ( techType == UnitUtils.TECH_PILOT )
@@ -249,8 +251,8 @@ public class RepairUnitCommand implements Command {
             if ( sendDialogUpdate )
                 CampaignMain.cm.toUser("ARD|"+unitID,Username,false);
         }catch(Exception ex){
-            MWLogger.errLog("Unable to Process Repair Unit Command!");
-            MWLogger.errLog(ex);
+            LOGGER.error("Unable to Process Repair Unit Command!");
+            LOGGER.error("Exception: ", ex);
         }
         
 	}//end process()

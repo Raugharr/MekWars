@@ -26,8 +26,7 @@ import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 
-public class DirectSellUnitCommand implements Command {
-
+public class  DirectSellUnitCommand  implements Command {
     int accessLevel = 2;
 
     public int getExecutionLevel() {

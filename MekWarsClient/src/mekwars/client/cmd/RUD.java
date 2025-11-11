@@ -21,14 +21,15 @@ import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
 import mekwars.client.gui.dialog.RepodSelectorDialog;
-import mekwars.common.util.MWLogger;
 import megamek.client.ui.swing.UnitLoadingDialog;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @@author jtighe
  */
 public class RUD extends Command {
-
+    private static final Logger LOGGER = LogManager.getLogger(RUD.class);
     /**
      * @param client
      */
@@ -63,8 +64,8 @@ public class RUD extends Command {
             }
 
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Unable to run Repod Dialog");
+            LOGGER.error("Exception: ", ex);
+            LOGGER.error("Unable to run Repod Dialog");
         }
     }
 }

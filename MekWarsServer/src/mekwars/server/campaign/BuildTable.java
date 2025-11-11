@@ -31,7 +31,8 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -45,6 +46,7 @@ import mekwars.common.util.MWLogger;
  */
  
 public class BuildTable {
+    private static final Logger LOGGER = LogManager.getLogger(BuildTable.class);
 
     //VARIABLES
     public static final String STANDARD = "standard";
@@ -133,7 +135,7 @@ public class BuildTable {
         String result = "./data/buildtables/"+dir+"/" + faction + "_" + weightclass + addon + ".txt";
         if (!new File(result).exists()){
             if ( !result.trim().toLowerCase().endsWith(".txt") )
-                MWLogger.errLog("Unable to find build table file "+result+" using ./data/buildtables/"+dir+"/Common_" + weightclass + addon + ".txt");
+                LOGGER.error("Unable to find build table file "+result+" using ./data/buildtables/"+dir+"/Common_" + weightclass + addon + ".txt");
             result = "./data/buildtables/"+dir+"/Common_" + weightclass + addon + ".txt";
         }
         return result;
@@ -231,7 +233,7 @@ public class BuildTable {
             }
             result.trimToSize();
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
         return result;
     }
@@ -254,7 +256,7 @@ public class BuildTable {
             fos.close();
         }
         catch(Exception ex){
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 
     }
@@ -299,7 +301,7 @@ public class BuildTable {
             fis.close();
 
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
         return unitHolder;
     }

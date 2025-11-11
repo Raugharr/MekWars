@@ -29,8 +29,7 @@ import mekwars.server.campaign.pilot.skills.SPilotSkill;
 import mekwars.server.campaign.pilot.skills.TraitSkill;
 import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
 
-public class PromotePilotCommand implements Command {
-
+public class  PromotePilotCommand  implements Command {
     int accessLevel = 0;
     String syntax = "promotepilot#unitid#skill";
 

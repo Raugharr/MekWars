@@ -26,14 +26,16 @@ import java.util.Vector;
 
 import mekwars.common.House;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SmallPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class Statistics {
+    private static final Logger LOGGER = LogManager.getLogger(Statistics.class);
 
 	public static String doGetMechStats(int size) {
 	    TreeSet<MechStatistics> Sorted = new TreeSet<MechStatistics>();
@@ -45,7 +47,9 @@ public class Statistics {
 	    boolean color = false;
 	    Iterator<MechStatistics> i = Sorted.iterator();
 	    StringBuilder result = new StringBuilder();
-	    result.append("<h2>" + Unit.getWeightClassDesc(size) + " Units</h2>");
+	    result.append("<h2>")
+                .append(Unit.getWeightClassDesc(size))
+                .append(" Units</h2>");
 	    result.append("<table cellpadding=\"3\" cellspacing=\"0\"><tr bgcolor=\"#0066FF\">" +
 	    		"<th><font color=\"#FFFFFF\">MekName</th>" +
 	    		"<th><font color=\"#FFFFFF\">Games Played</th>" +
@@ -136,8 +140,7 @@ public class Statistics {
 			        result.append("</tr>");
 			        rank++;
 		        }catch(Exception ex){
-		        	MWLogger.errLog("Error while Referencing player: "+p.getName());
-		        	MWLogger.errLog(ex);
+                    LOGGER.error("Error while Referencing player: {}", p.getName(), ex);
 		        }
 		    }
 		    result.append("</table>");
@@ -153,7 +156,7 @@ public class Statistics {
 	        out.close();
         	Statistics.doEXPRanking();
 	    } catch (Exception ex) {
-	    	MWLogger.errLog(ex);
+	    	LOGGER.error("Exception: ", ex);
 	    }
 	}
 

@@ -18,7 +18,6 @@ package mekwars.server;
 
 //The MegaMek.NET Master Server Application
 //@Author: Helge Richter (McWizard@gmx.de)
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,7 +28,6 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -49,7 +47,7 @@ import megamek.common.MechSummaryCache;
 import mekwars.common.MMGame;
 import mekwars.common.comm.Command;
 import mekwars.common.comm.ServerCommand;
-import mekwars.common.util.MWLogger;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
@@ -72,7 +70,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class MWServ {
-    private static final Logger logger = LogManager.getLogger(MWServ.class);
+    private static final Logger LOGGER = LogManager.getLogger(MWServ.class);
     private static MWServ instance;
     // Static logging engine, and static version info.
     public static final Version SERVER_VERSION = new Version("9.0.0");
@@ -129,12 +127,12 @@ public class MWServ {
                 );
             MWServ.getInstance().getHpgClient().connect(address);
         } catch (IOException exception) {
-            logger.warn("Unable to connect to tracker");
+            LOGGER.warn("Unable to connect to tracker");
         }
         TrackerUpdateJob.submit();
         TickJob.submit();
         //start server
-        MWLogger.mainLog("Entering main loop cycle. Starting the server...");
+        LOGGER.info("Entering main loop cycle. Starting the server...");
         MWServ.getInstance().startServer();
     }
 
@@ -150,34 +148,33 @@ public class MWServ {
     }
 
     MWServ() {
-        MWLogger.mainLog("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
+        LOGGER.info("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
         EquipmentType.initializeTypes();
         MechSummaryCache.getInstance();
         /*** Required to kick off the Server ***/
-        MWLogger.mainLog("Loading configuration...");
+        LOGGER.info("Loading configuration...");
         loadConfig();
-        MWLogger.mainLog("Configuration loaded.");
+        LOGGER.info("Configuration loaded.");
 
         if (Boolean.parseBoolean(getConfigParam("RESOLVECOUNTRY"))) {
             ipToCountry = new IpCountry("./data/iplist.txt", "./data/countrynames.txt");
         }
 
-        MWLogger.mainLog("Loading mail file...");
+        LOGGER.info("Loading mail file...");
         mails = checkAndCreateConfig("./data/mails.txt");
-        MWLogger.mainLog("Mail file loaded.");
+        LOGGER.info("Mail file loaded.");
 
-        MWLogger.mainLog("Creating new campaign environment...");
+        LOGGER.info("Creating new campaign environment...");
         campaign = new CampaignMain(getConfigParam("CAMPAIGNCONFIG"));
         campaign.start();
-        MWLogger.mainLog("Environment created.");
+        LOGGER.info("Environment created.");
         //this.addToNewsFeed("MekWars Server Started!", "Server News", "");
         // create & start a data provider
         int dataport = -1;
         try {
             dataport = Integer.parseInt(getConfigParam("DATAPORT"));
         } catch (NumberFormatException e) {
-            logger.error("Non-number given as dataport. Defaulting to 4867.");
-            logger.catching(e);
+            LOGGER.error("Non-number given as dataport. Defaulting to 4867.", e);
             dataport = 4867;
         } finally {
             dataProviderServer = new Server(campaign.getData(), dataport, getConfigParam("SERVERIP"));
@@ -186,16 +183,16 @@ public class MWServ {
         }
 
         // Touch log files
-        MWLogger.mainLog("Initializing log subsystem. Touching log files.");
-        MWLogger.mainLog("Main channel log touched.");
-        MWLogger.gameLog("Game log touched.");
-        MWLogger.cmdLog("Command log touched.");
-        MWLogger.pmLog("Private messages (PM) log touched.");
-        MWLogger.bmLog("Black Market (BM) log touched.");
-        MWLogger.infoLog("Server info log touched.");
-        MWLogger.warnLog("Server warnings log touched.");
-        MWLogger.modLog("Moderators log touched.");
-        MWLogger.tickLog("Tick report log touched.");
+        LOGGER.info("Initializing log subsystem. Touching log files.");
+        LOGGER.info("Main channel log touched.");
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "Game log touched.");
+        LOGGER.error("Command log touched.");
+        LOGGER.info(LogMarkerHolder.PM_MARKER, "Private messages (PM) log touched.");
+        LOGGER.info("Black Market (BM) log touched.");
+        LOGGER.info("Server info log touched.");
+        LOGGER.warn("Server warnings log touched.");
+        LOGGER.info("Moderators log touched.");
+        LOGGER.info(LogMarkerHolder.TICK_MARKER, "Tick report log touched.");
 
         // start slice and immunity threads
         SThread = new SliceThread(campaign, campaign.getCampaignOptions().getIntegerConfig("SliceTime"));
@@ -236,8 +233,7 @@ public class MWServ {
             try {
                 config.store(new FileOutputStream("./data/serverconfig.txt"), "Server config File");
             } catch (Exception e1) {
-                MWLogger.errLog("config file could not be read or written, defaults will be used.");
-                MWLogger.errLog(e1);
+                LOGGER.error("config file could not be read or written, defaults will be used.", e1);
             }
         }
 
@@ -252,8 +248,7 @@ public class MWServ {
             myCommunicator = ServerWrapper.createServer(this);
             myCommunicator.start();
         } catch (Exception e) {
-            MWLogger.errLog("== PROBLEM STARTING SERVER WRAPPER ==");
-            MWLogger.errLog(e);
+            LOGGER.error("== PROBLEM STARTING SERVER WRAPPER ==", e);
         }
     }
 
@@ -267,8 +262,8 @@ public class MWServ {
             fis.close();
         } catch (Exception ex) {
             try {
-                MWLogger.infoLog("Creating new File");
-                MWLogger.mainLog("Creating new File");
+                LOGGER.info("Creating new File");
+                LOGGER.info("Creating new File");
                 if (filename.equals("./data/mails.txt")) {
                     FileOutputStream out = new FileOutputStream(filename);
                     PrintStream p = new PrintStream(out);
@@ -277,8 +272,8 @@ public class MWServ {
                     out.close();
                 }
             } catch (Exception e) {
-                MWLogger.errLog(e);
-                MWLogger.mainLog("No file named " + filename + " was found and cannot create one!");
+                LOGGER.error("Exception: ", e);
+                LOGGER.info("No file named " + filename + " was found and cannot create one!");
                 System.exit(1);
             }
         }
@@ -295,8 +290,8 @@ public class MWServ {
         InetAddress hisip = getIP(name);
         MWChatClient client = myCommunicator.getClient(name);
 
-        
-        MWLogger.ipLog("Connection from " + getIP(name) + " (" + name + ")");
+
+        LOGGER.info("Connection from {} ({})", getIP(name), name);
         // Double account check
         // Don't worry about deds or nobodies.
         if (!originalName.startsWith("[Dedicated]") && !originalName.startsWith("Nobody")) {
@@ -403,7 +398,7 @@ public class MWServ {
             invis = getCampaign().getPlayer(name).isInvisible();
         }
         MWClientInfo newUser = new MWClientInfo(originalName, getIP(name), System.currentTimeMillis(), status, invis);
-        MWLogger.infoLog(originalName + " logged in from " + getIP(name).toString() + " at " + new Date(System.currentTimeMillis()).toString());
+        LOGGER.info(originalName + " logged in from " + getIP(name).toString() + " at " + new Date(System.currentTimeMillis()).toString());
 
         // Double IP Check
         if (!originalName.startsWith("[Dedicated]")) {
@@ -562,7 +557,7 @@ public class MWServ {
         } else { 
             sendRemoveUserToAll(name, true);
         }
-        MWLogger.infoLog("Client " + name + "logged out.");
+        LOGGER.info("Client " + name + "logged out.");
         users.remove(name.toLowerCase());
 
         // remove his host, if he has a game open
@@ -706,15 +701,15 @@ public class MWServ {
                 }
             } else if (task.equals("CR")) {
                 String result = st.nextToken();
-                MWLogger.gameLog("Starting report process by " + name);
-                MWLogger.gameLog(name + " reported: " + lineIn);
+                LOGGER.info(LogMarkerHolder.GAME_MARKER, "Starting report process by " + name);
+                LOGGER.info(LogMarkerHolder.GAME_MARKER, name + " reported: " + lineIn);
                 getCampaign().doProcessAutomaticReport(result, name);
             } else if (task.equals("IPU")) {// InProgressUpdate
                 String result = st.nextToken();
                 getCampaign().addInProgressUpdate(result, name);
             } else {
                 clientSend("CH|Unknown command. Please make sure your client is up to date.", name);
-                MWLogger.warnLog("Got a strange command, " + task + ", from " + name);
+                LOGGER.warn("Got a strange command, {}, from {}", task, name);
             }
         } catch (Exception ex) {
             // The GB doesn't arrive at the server because of the client
@@ -723,15 +718,14 @@ public class MWServ {
                 // Most propably an out of date client. Send him the request to
                 // update
                 clientSend("CH|Your Client sent a false packet or caused a server error. You probably entered an illegal server command.", name);
-                MWLogger.errLog("False packet/illegal command (from " + name + "):");
-                MWLogger.errLog(ex);
+                LOGGER.error("False packet/illegal command (from {}):", name, ex);
             }
         }
     }
 
     public void statusMessage() {
-        MWLogger.mainLog("Open Games: " + games.size());
-        MWLogger.infoLog("Open Games: " + games.size());
+        LOGGER.info("Open Games: " + games.size());
+        LOGGER.info("Open Games: " + games.size());
     }
 
     private void doCloseGame(MMGame game) {
@@ -760,7 +754,7 @@ public class MWServ {
                     String player = dis.readLine();
                     if (player.equalsIgnoreCase(name)) {
                         String provderName = newFile.getName().substring(0, newFile.getName().lastIndexOf(".prv"));
-                        MWLogger.errLog("Provider: " + provderName);
+                        LOGGER.error("Provider: " + provderName);
                         ISPlog.put(provderName, time);
                         in.close();
                         dis.close();
@@ -779,16 +773,16 @@ public class MWServ {
 
     public void sendRemoveUserToAll(String name, boolean userGone, String ip) {
         if (userGone && ip != null) {
-            MWLogger.infoLog(name + " left the room (IP:" + ip + ").");
+            LOGGER.info(name + " left the room (IP:" + ip + ").");
         } else if (userGone) {
-            MWLogger.infoLog(name + " left the room");
+            LOGGER.info(name + " left the room");
         }
         myCommunicator.broadcastComm("UG|" + getUser(name) + (userGone ? "|GONE" : ""));
     }
     
     public void sendRemoveUserToAll(String name, boolean userGone) {
         if (userGone) {
-            MWLogger.infoLog(name + " left the room.");
+            LOGGER.info(name + " left the room.");
         }
         myCommunicator.broadcastComm("UG|" + getUser(name) + (userGone ? "|GONE" : ""));
     }
@@ -799,7 +793,7 @@ public class MWServ {
 
     public void sendChat(String s) {
         myCommunicator.broadcastComm("CH|" + s);
-        MWLogger.mainLog(s);
+        LOGGER.info(s);
     }
 
     // Check for new Mail
@@ -866,8 +860,8 @@ public class MWServ {
             dis.close();
             fis.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems reading mail file:");
-            MWLogger.errLog(ex);
+            LOGGER.error("Problems reading mail file:");
+            LOGGER.error("Exception: ", ex);
         }
         return result;
     }
@@ -884,8 +878,8 @@ public class MWServ {
             p.close();
             out.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems writing mail file:");
-            MWLogger.errLog(ex);
+            LOGGER.error("Problems writing mail file:");
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -920,7 +914,6 @@ public class MWServ {
     }
 
     public void doStoreMail(String s, String name) {
-        // MWLogger.mainLog("Debug: " + s);
         StringTokenizer st = new StringTokenizer(s, ",");
         String target = "";
         String text = "";
@@ -945,12 +938,12 @@ public class MWServ {
 
                 if (campaign.getPlayer(name) != null) {
                     if (campaign.getPlayer(target) != null) {
-                        MWLogger.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + "[" + campaign.getPlayer(target).getMyHouse().getAbbreviation() + "]: " + mailtext);
+                        LOGGER.info(LogMarkerHolder.PM_MARKER, name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + "[" + campaign.getPlayer(target).getMyHouse().getAbbreviation() + "]: " + mailtext);
                     } else {
-                        MWLogger.pmLog(name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + ": " + mailtext);
+                        LOGGER.info(LogMarkerHolder.PM_MARKER, name + "[" + campaign.getPlayer(name).getMyHouse().getAbbreviation() + "] -> " + target + ": " + mailtext);
                     }
                 } else {
-                    MWLogger.pmLog(name + " -> " + target + ": " + mailtext);
+                    LOGGER.info(LogMarkerHolder.PM_MARKER, name + " -> " + target + ": " + mailtext);
                 }
 
             }
@@ -1018,7 +1011,7 @@ public class MWServ {
                 doStoreMailToHashtable(null, username, txt);
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -1061,8 +1054,8 @@ public class MWServ {
             p.close();
             out.close();
         } catch (Exception e) {
-            MWLogger.errLog("Problem updating ban files:");
-            MWLogger.errLog(e);
+            LOGGER.error("Problem updating ban files:");
+            LOGGER.error("Exception: ", e);
         }
     }
 
@@ -1108,24 +1101,24 @@ public class MWServ {
                 InetAddress ia = InetAddress.getByName(ip);
                 if (ia != null) {
                     banips.put(ia, time);
-                    MWLogger.infoLog("Added " + line + " to the list of banned IPs");
-                    MWLogger.mainLog("Added " + line + " to the list of banned IP's");
+                    LOGGER.info("Added " + line + " to the list of banned IPs");
+                    LOGGER.info("Added " + line + " to the list of banned IP's");
                 } else {
-                    MWLogger.warnLog("Importing IP bans; offending line: " + line);
+                    LOGGER.warn("Importing IP bans; offending line: {}", line);
                 }
             }
             dis.close();
             fis.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems with loading IP banlist:");
-            MWLogger.errLog(ex);
+            LOGGER.error("Problems with loading IP banlist:");
+            LOGGER.error("Exception: ", ex);
         }
     }
 
     public void loadBanPlayers() {
         // Loading the banned players file.
         try {
-            MWLogger.infoLog("Loading Ban Players");
+            LOGGER.info("Loading Ban Players");
             File banFile = new File("./data/accountbans.txt");
 
             // make the file, if its missing
@@ -1142,23 +1135,23 @@ public class MWServ {
                 String howLong = st.nextToken().trim();
                 if ((toBan != null) && (howLong != null)) {
                     banaccounts.put(toBan.toLowerCase(), howLong);
-                    MWLogger.infoLog("Added " + toBan + " to the banlist (for " + howLong + ")");
-                    MWLogger.mainLog("Added " + toBan + " to the banlist (for " + howLong + ")");
+                    LOGGER.info("Added " + toBan + " to the banlist (for " + howLong + ")");
+                    LOGGER.info("Added " + toBan + " to the banlist (for " + howLong + ")");
                 } else {
-                    MWLogger.warnLog("Initial bans warning: " + toBan + " / " + howLong);
+                    LOGGER.warn("Initial bans warning: {} / {}", toBan, howLong);
                 }
             }
             dis.close();
             fis.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems reading ban file at startup!");
+            LOGGER.error("Problems reading ban file at startup!");
         }
     }
 
     public void loadISPs() {
         // Loading the ISP file.
         try {
-            MWLogger.infoLog("Loading ISPs");
+            LOGGER.info("Loading ISPs");
             File ispFile = new File("./data/isps.txt");
 
             // make the file, if its missing
@@ -1175,14 +1168,14 @@ public class MWServ {
                 Long address = Long.parseLong(st.nextToken().trim());
                 if ((isp != null) && (address != null)) {
                     ISPlog.put(isp.toLowerCase(), address);
-                    MWLogger.infoLog("Added " + isp + " to the ISP List");
-                    MWLogger.mainLog("Added " + isp + " to the ISP List");
+                    LOGGER.info("Added " + isp + " to the ISP List");
+                    LOGGER.info("Added " + isp + " to the ISP List");
                 }
             }
             dis.close();
             fis.close();
         } catch (Exception ex) {
-            MWLogger.errLog("Problems reading ISP file at startup!");
+            LOGGER.error("Problems reading ISP file at startup!");
         }
     }
 

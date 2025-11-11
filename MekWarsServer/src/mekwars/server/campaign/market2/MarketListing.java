@@ -19,10 +19,11 @@ package mekwars.server.campaign.market2;
 import java.util.TreeMap;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * MarketListing keeps track of all infomation related to a
@@ -34,7 +35,8 @@ import mekwars.server.campaign.SUnit;
  * @author urgru
  */
 public final class MarketListing {
-	
+    private static final Logger LOGGER = LogManager.getLogger(MarketListing.class);
+
 	//IVARS
 	private String sellerName;
 	private int listedUnitID;
@@ -147,7 +149,7 @@ public final class MarketListing {
     			bidsReceived.remove(lowerName);
     		}
         } catch(Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 	}
 	

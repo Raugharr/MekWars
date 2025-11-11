@@ -18,13 +18,15 @@ package mekwars.server.campaign.operations;
 
 import java.util.TreeMap;
 
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OpsScrapThread extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(OpsScrapThread.class);
 
 	// VARIABLES
 	private String playerName;
@@ -64,7 +66,7 @@ public class OpsScrapThread extends Thread {
 		TreeMap<Integer, Integer> toReplace = new TreeMap<Integer, Integer>();
 		for (Integer currID : salvagedUnits.keySet()) {
 			int currScrapValue = salvagedUnits.get(currID).intValue();
-			// MWLogger.errLog("currID: "+currID+" maxTotalPayment: "+maxTotalPayment+" currScrapValue: "+currScrapValue);
+			// LOGGER.error("currID: "+currID+" maxTotalPayment: "+maxTotalPayment+" currScrapValue: "+currScrapValue);
 			if (currScrapValue > maxTotalPayment) {
 				toReplace.put(currID, maxTotalPayment);
 			}
@@ -196,7 +198,7 @@ public class OpsScrapThread extends Thread {
 		try {
 			this.wait(waitTime);
 		} catch (Exception ex) {
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}
 
 		/*

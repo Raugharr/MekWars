@@ -24,7 +24,6 @@ import java.util.Vector;
 
 import mekwars.common.House;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -33,6 +32,8 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.operations.OperationManager;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -49,6 +50,7 @@ import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
  */
 
 public class OpponentListHelper {
+    private static final Logger LOGGER = LogManager.getLogger(OpponentListHelper.class);
 
 	//VARIABLES
 	private SPlayer searchPlayer;
@@ -120,8 +122,7 @@ public class OpponentListHelper {
 						if (p1.equals(p2))
 							continue playersLoop;
 					} catch (Exception e) {
-						MWLogger.errLog("Exception while checking players' IPs in OLH.");
-						MWLogger.errLog(e);
+						LOGGER.error("Exception while checking players' IPs in OLH.", e);
 					}
 				}
 

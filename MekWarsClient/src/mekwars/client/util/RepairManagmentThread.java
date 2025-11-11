@@ -30,14 +30,16 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CUnit;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Mech;
 import megamek.common.Mounted;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RepairManagmentThread extends Thread{
-    
+    private static final Logger LOGGER = LogManager.getLogger(RepairManagmentThread.class);
+
     private Vector<ConcurrentLinkedQueue<String>> workOrders = new Vector<ConcurrentLinkedQueue<String>>(5,1);
     private long averageRepairTime = 1000;
     private MWClient client = null;
@@ -64,8 +66,8 @@ public class RepairManagmentThread extends Thread{
                 processWorkOrders();
             }catch(Exception ex){
                 client.systemMessage("Error proccessing Repair Management queue. Alert an SO and check your ./logs/error.0 for the error");
-                MWLogger.errLog("Error in Repair Management Queue");
-                MWLogger.errLog(ex);
+                LOGGER.error("Error in Repair Management Queue", ex);
+                LOGGER.error("Exception: ", ex);
             }
         }
     }
@@ -190,7 +192,7 @@ public class RepairManagmentThread extends Thread{
                     boolean armor = ( slot >= UnitUtils.LOC_FRONT_ARMOR);
                     
                     if ( unit == null ){
-                        MWLogger.errLog("Unable to find unit to repair. removing repair job");
+                        LOGGER.error("Unable to find unit to repair. removing repair job");
                         client.systemMessage("Unable to find unit to repair. removing repair job");
                         workQueue.remove();
                         continue;

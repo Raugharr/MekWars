@@ -25,7 +25,6 @@ import java.util.Vector;
 
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -38,6 +37,8 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.util.RepairTrackingThread;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Torren (Jason Tighe)
@@ -45,7 +46,8 @@ import mekwars.server.util.RepairTrackingThread;
  * to the repair thread
  */
 public class SimpleRepairCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(SimpleRepairCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -128,7 +130,7 @@ public class SimpleRepairCommand implements Command {
             
             if ( MWServ.getInstance().getRTT().getState() == Thread.State.TERMINATED ){
                 CampaignMain.cm.toUser("FSM|Sorry your repair order could not be processed the repair thread has been terminated. Staff has been notified.",Username,false);
-                MWLogger.errLog("AM:NOTE: Repair Thread has been terminated! Use the restartrepairthread command to restart it! If all else fails reboot!");
+                LOGGER.error("AM:NOTE: Repair Thread has been terminated! Use the restartrepairthread command to restart it! If all else fails reboot!");
                 return;
             }
 
@@ -139,15 +141,14 @@ public class SimpleRepairCommand implements Command {
             unit.addRepairCost(-1);
             player.setSave();
             time = setWorkHours(rolls,techs,unit.getEntity(),player.getMyHouse());
-            MWLogger.errLog("Repair Time: "+time);
+            LOGGER.error("Repair Time: "+time);
             MWServ.getInstance().getRTT().getRepairList().add(
                     RepairTrackingThread.Repair(player, unitID, techs, time,false));
             CampaignMain.cm.toUser("FSM|Repairs have begone on your "+unit.getModelName()+" <b>At a Cost of "+CampaignMain.cm.moneyOrFluMessage(true,true,cost)+"</b>",Username,false);
             CampaignMain.cm.toUser("PL|UU|"+unitID+"|"+unit.toString(true),Username,false);
 
         }catch(Exception ex){
-            MWLogger.errLog("Unable to Process Repair Unit Command!");
-            MWLogger.errLog(ex);
+            LOGGER.error("Unable to Process Repair Unit Command!", ex);
         }
         
 	}//end process()

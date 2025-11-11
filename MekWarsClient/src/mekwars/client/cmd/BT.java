@@ -27,16 +27,17 @@ import java.util.StringTokenizer;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.CCommPanel;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-/**
+    /**
  * @author Spork
  * 
  * Handles Build Table up/downloading for admins/mods
  * 
  */
 public class BT extends Command {
-
+        private static final Logger LOGGER = LogManager.getLogger(BT.class);
 	/**
 	 * @param client
 	 */
@@ -61,7 +62,7 @@ public class BT extends Command {
 			while(folderT.hasMoreTokens()) {
 				//Token 1 is the folder
 				String dName = folderT.nextToken();
-				MWLogger.infoLog(dName);
+				LOGGER.info(dName);
 				// Token 2 is the names of the lists
 				if(folderT.hasMoreTokens()) {
 					StringTokenizer listT = new StringTokenizer(folderT.nextToken(), "*");
@@ -90,7 +91,7 @@ public class BT extends Command {
             while(folderT.hasMoreTokens()) {
                 //Token 1 is the folder
                 String dName = folderT.nextToken();
-                MWLogger.infoLog(dName);
+                LOGGER.info(dName);
                 // Token 2 is the names of the lists
                 if(folderT.hasMoreTokens()) {
                     StringTokenizer listT = new StringTokenizer(folderT.nextToken(), "*");
@@ -141,11 +142,11 @@ public class BT extends Command {
 					out.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					MWLogger.errLog(e);
+					LOGGER.error("Exception: ", e);
 				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
 		} else if ( cmd.equalsIgnoreCase("VS") ) {
 		    mwclient.setWaiting(false);

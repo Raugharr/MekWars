@@ -42,7 +42,6 @@ import javax.swing.table.TableRowSorter;
 
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import megamek.client.Client;
 import megamek.client.ui.swing.AdvancedSearchDialog;
@@ -59,13 +58,13 @@ import megamek.common.MechView;
 import megamek.common.TechConstants;
 import megamek.common.UnitType;
 import megamek.common.loaders.EntityLoadingException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-    public class NewUnitViewerDialog extends JDialog implements Runnable,
+public class NewUnitViewerDialog extends JDialog implements Runnable,
         KeyListener, ActionListener {
 
-        /**
-         *
-         */
+    private static final Logger LOGGER = LogManager.getLogger(NewUnitViewerDialog.class);
         private static final long serialVersionUID = 8144354264100884817L;
 
         private JButton btnSelectClose;
@@ -800,7 +799,7 @@ import megamek.common.loaders.EntityLoadingException;
 
                         dispose();
                     } catch (Exception ex) {
-                        MWLogger.errLog(ex);
+                        LOGGER.error("Exception: ", ex);
                         // MMClient.mwClientLog.clientErrLog("Problem with
                         // actionPerformed in RepodDialog");
                     }
@@ -852,7 +851,7 @@ import megamek.common.loaders.EntityLoadingException;
 
                         dispose();
                     } catch (Exception ex) {
-                        MWLogger.errLog(ex);
+                        LOGGER.error("Exception: ", ex);
                         // MMClient.mwClientLog.clientErrLog("Problem with
                         // actionPerformed in RepodDialog");
                     }

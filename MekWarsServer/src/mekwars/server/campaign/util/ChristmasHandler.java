@@ -30,12 +30,13 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.util.scheduler.EndChristmasJob;
 import mekwars.server.campaign.util.scheduler.StartChristmasJob;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A class to handle scheduling of distribution of meks during the Christmas season.  Historically,
@@ -45,6 +46,8 @@ import mekwars.server.campaign.util.scheduler.StartChristmasJob;
  * @version 2016.10.26
  */
 public class ChristmasHandler {
+    private static final Logger LOGGER = LogManager.getLogger(ChristmasHandler.class);
+
 	private static ChristmasHandler handler;
 	
 	/**
@@ -115,7 +118,7 @@ public class ChristmasHandler {
 			startDate = sdf.parse(CampaignMain.cm.getCampaignOptions().getConfig("Christmas_StartDate"));
 			endDate = sdf.parse(CampaignMain.cm.getCampaignOptions().getConfig("Christmas_EndDate"));
 			} catch (ParseException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 		Date today = new Date();
 		if(today.after(startDate) && today.before(endDate)) {
@@ -236,7 +239,7 @@ public class ChristmasHandler {
 			
 			end = sdf.parse(CampaignMain.cm.getCampaignOptions().getConfig("Christmas_EndDate"));
 		} catch (ParseException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 		schedule(start, end);
 	}
@@ -363,7 +366,7 @@ public class ChristmasHandler {
 				gifts.put(scanner.nextLine().toLowerCase(), true);
 			}
 		} catch (FileNotFoundException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		} finally {
 			if (scanner != null) {
 				scanner.close();
@@ -386,13 +389,13 @@ public class ChristmasHandler {
 				writer.write(s.toLowerCase() + "\n");
 			}
 		} catch (IOException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		} finally {
 			if (writer != null) {
 				try {
 					writer.close();
 				} catch (IOException e) {
-					MWLogger.errLog(e);
+					LOGGER.error("Exception: ", e);
 				}
 			}
 		}

@@ -48,7 +48,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Allows URLs to be opened in the system browser on Windows and Unix.
@@ -58,8 +59,9 @@ import mekwars.common.util.MWLogger;
  * @author Stephen Ostermiller http://ostermiller.org/contact.pl?regarding=Java+Utilities
  * @since ostermillerutils 1.00.00
  */
+//TODO: Can probably modernize this
 public class Browser {
-
+    private static final Logger LOGGER = LogManager.getLogger(Browser.class);
     /**
      * The dialog that allows user configuration of the options for this class.
      *
@@ -314,10 +316,10 @@ public class Browser {
                     try {
                          Class<?> mrjFileUtils = Class.forName("com.apple.mrj.MRJFileUtils");
                          Method openURL = mrjFileUtils.getMethod("openURL", new Class[] {Class.forName("java.lang.String")});
-                         openURL.invoke(null, new Object[] {url});
+                         openURL.invoke(null, url);
                          //com.apple.mrj.MRJFileUtils.openURL(url);
                     } catch (Exception x){
-                         MWLogger.errLog(x.getMessage());
+                         LOGGER.error(x.getMessage());
                          throw new IOException(labels.getString("failed"));
                     }
                 }
@@ -430,7 +432,7 @@ public class Browser {
                         }
                     } catch (IOException x){
                         // the command was not a valid command.
-                    	MWLogger.errLog(labels.getString("warning") + " " + x.getMessage());
+                    	LOGGER.error(labels.getString("warning") + " " + x.getMessage());
                     }
                 }
                 if (!found){
@@ -692,7 +694,7 @@ public class Browser {
             } catch (InterruptedException x){
             }
         } catch (IOException e){
-        	MWLogger.errLog(e.getMessage());
+        	LOGGER.error(e.getMessage());
         }
         System.exit(0);
     }

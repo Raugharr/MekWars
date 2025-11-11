@@ -31,18 +31,20 @@ import java.util.Vector;
 
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.pilot.SPilotSkills;
 import mekwars.server.campaign.pilot.skills.SPilotSkill;
 import mekwars.server.campaign.pilot.skills.TraitSkill;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Helge Richter
  */
 
 public class PilotQueues {
-	
+    private static final Logger LOGGER = LogManager.getLogger(PilotQueues.class);
+
     private Vector<LinkedList<SPilot>> queues = new Vector<LinkedList<SPilot>>(Unit.MAXBUILD,1);
 	private Vector<Integer> baseGunnery = new Vector<Integer>(Unit.MAXBUILD,1);
 	private Vector<Integer> basePiloting = new Vector<Integer>(Unit.MAXBUILD,1);
@@ -397,7 +399,7 @@ public class PilotQueues {
         	fis.close();
 
         } catch (Exception e) {
-        	MWLogger.errLog("A problem occured while retreiving a name from the " + factionString + " Pilotnames File! Tried using Pilotnames.txt instead.");
+        	LOGGER.error("A problem occured while retreiving a name from the " + factionString + " Pilotnames File! Tried using Pilotnames.txt instead.");
         	result = SPilot.getRandomPilotName(CampaignMain.cm.getR());
         }finally{
         	

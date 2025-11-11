@@ -99,7 +99,7 @@ public class WeaponSpecialistSkill extends SPilotSkill {
                 effectedWeaponBV += weapon.getType().getBV(unit);
             }
         }
-        //MWLogger.debugLog("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
+        //LOGGER.debug("bvSkillDelta=" + bvSkillDelta + " effectedWeaponBV=" + effectedWeaponBV + 
         //        " sumWeaponBV=" + sumWeaponBV);
         return (int) (unit.calculateBattleValue(false, true) *  (effectedWeaponBV /sumWeaponBV) * (bvSkillDelta - 1));
     }

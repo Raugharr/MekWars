@@ -29,8 +29,7 @@ import mekwars.server.campaign.SPlayer;
  * Return a human readable string that describes the pilots
  * currently in a player's personal queues.
  */
-public class DisplayPlayerPersonalPilotQueueCommand implements Command {
-	
+public class  DisplayPlayerPersonalPilotQueueCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

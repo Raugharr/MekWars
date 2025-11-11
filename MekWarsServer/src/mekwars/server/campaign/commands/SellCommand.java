@@ -23,20 +23,22 @@ package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.UnitUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Helge Richter
  *  
  */
 public class SellCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(SellCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -211,7 +213,7 @@ public class SellCommand implements Command {
 		if (! CampaignMain.cm.getBooleanConfig("HiddenBMUnits")) {
 			CampaignMain.cm.doSendHouseMail(p.getMyHouse(), "NOTE", p.getName() + " added a unit to the market [" + unitToSell.getModelName() + "].");
 		}
-		MWLogger.bmLog(p.getName() + " added a " + unitToSell.getModelName() + ". Asking: " + minBid + ". Length: " + salesTicks);
+        LOGGER.info("{} added a {}. Asking: {}. Length: {}", p.getName(), unitToSell.getModelName(), minBid, salesTicks);
 				
 	}//end process()
 }//end SellCommand.java

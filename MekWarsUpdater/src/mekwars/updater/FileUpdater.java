@@ -28,7 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public abstract class FileUpdater<T> {
-    private static final Logger logger = LogManager.getLogger(FileUpdater.class);
+    private static final Logger LOGGER = LogManager.getLogger(FileUpdater.class);
     private static final String DATA_DIR = "data/";
 
     private String inFilename;
@@ -45,7 +45,7 @@ public abstract class FileUpdater<T> {
     }
 
     public void process() {
-        logger.info("Beginning to update file '{}'", getInFilename());
+        LOGGER.info("Beginning to update file '{}'", getInFilename());
         try {
             createBackup();
             ArrayList<T> elements = deserialize();
@@ -54,10 +54,10 @@ public abstract class FileUpdater<T> {
                 writer.write(xml);
             }
         } catch (IOException e) {
-            logger.error("Unable to update file '{}': '{}'", getInFilename(), e.getMessage());
-            logger.error(e);
+            LOGGER.error("Unable to update file '{}': '{}'", getInFilename(), e.getMessage());
+            LOGGER.error("Exception: ", e);
         }
-        logger.info("Finished updating file '{}'", getInFilename());
+        LOGGER.info("Finished updating file '{}'", getInFilename());
     }
 
     protected void createBackup() throws IOException {

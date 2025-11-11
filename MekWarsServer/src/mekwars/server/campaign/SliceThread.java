@@ -16,8 +16,9 @@
 
 package mekwars.server.campaign;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author urgru A barebones timing thread which calls slices in CampaignMain.
@@ -28,6 +29,8 @@ import mekwars.server.campaign.CampaignMain;
  */
 
 public class SliceThread extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(SliceThread.class);
+
     CampaignMain myCampaign;
     long until;
     int Duration;
@@ -49,7 +52,7 @@ public class SliceThread extends Thread {
         try {
             this.wait(time);
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }// end ExtendedWait(time)
 
@@ -85,7 +88,7 @@ public class SliceThread extends Thread {
                         }
                     }
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                     myCampaign.doSendToAllOnlinePlayers("Slice skipped. Errors occured", true);
                 }
                 sleepTime = (int)(Duration - (System.currentTimeMillis() - startTime));
@@ -93,7 +96,7 @@ public class SliceThread extends Thread {
                 
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 }

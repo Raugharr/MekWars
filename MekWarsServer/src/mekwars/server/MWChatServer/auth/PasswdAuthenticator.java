@@ -34,11 +34,12 @@ package mekwars.server.MWChatServer.auth;
 
 import java.io.IOException;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.util.MWPasswd;
 import mekwars.server.util.MWPasswdRecord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Authenitcator that reads from a password file.<p>
@@ -51,7 +52,8 @@ import mekwars.server.util.MWPasswdRecord;
  * is returned.
  */
 public class PasswdAuthenticator extends NullAuthenticator {
-	
+    private static final Logger LOGGER = LogManager.getLogger(PasswdAuthenticator.class);
+
 	public PasswdAuthenticator(MWChatServer server, boolean allowGuests, boolean storeGuests) {
 		super(server, allowGuests, storeGuests);
 	}
@@ -63,7 +65,7 @@ public class PasswdAuthenticator extends NullAuthenticator {
             MWPasswdRecord record = MWPasswd.getRecord(userId, password);
             
             if (record == null) {
-            	MWLogger.debugLog("record is null for: "+userId);
+            	LOGGER.debug("record is null for: "+userId);
             	if (_allowGuests) {
             		Auth auth = super.authenticate(client, password);
             		if (_storeGuests) {
@@ -80,7 +82,7 @@ public class PasswdAuthenticator extends NullAuthenticator {
             
         }
         catch (IOException e) {
-            MWLogger.errLog(e);
+            LOGGER.error("Exception: ", e);
             throw new Exception(userId);
         }
     }

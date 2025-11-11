@@ -79,17 +79,19 @@ import mekwars.client.gui.utilities.MekWarsTableCellRenderer;
 import mekwars.common.Army;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 /**
  * Headquarters Panel
  */
 
 public class CHQPanel extends JPanel {
+    private static final Logger LOGGER = LogManager.getLogger(CHQPanel.class);
+
     private static final long serialVersionUID = -5137503055464771160L;
 
     MWClient mwclient;
@@ -1963,7 +1965,7 @@ public class CHQPanel extends JPanel {
                                     if (cm.getType() == Unit.MEK) {
                                         String pilotString = mm.getName() + " (" + mm.getGunnery() + "/" + mm.getPiloting();
                                         String skills = mm.getSkillString(true);
-                                        if (skills.trim().equals("")) {
+                                        if (skills.trim().isEmpty()) {
                                             pilotString += ")";
                                         } else {
                                             pilotString += ", " + skills + ")";
@@ -1977,7 +1979,7 @@ public class CHQPanel extends JPanel {
                                     } else {
                                         String pilotString = mm.getName() + " (" + mm.getGunnery();
                                         String skills = mm.getSkillString(true);
-                                        if (skills.trim().equals("")) {
+                                        if (skills.trim().isEmpty()) {
                                             pilotString += ")";
                                         } else {
                                             pilotString += ", " + skills + ")";
@@ -3158,8 +3160,8 @@ public class CHQPanel extends JPanel {
             fireTableDataChanged();
         }
 
-        public MekTableModel.Renderer getRenderer() {
-            return new MekTableModel.Renderer(mwclient);
+        public Renderer getRenderer() {
+            return new Renderer(mwclient);
         }
 
         public class Renderer extends MechInfo implements TableCellRenderer {
@@ -3174,7 +3176,7 @@ public class CHQPanel extends JPanel {
                 try {
                     mt.loadFromFile("mechset.txt");
                 } catch (IOException ex) {
-                    MWLogger.errLog("Unable to read data/images/units/mechset.txt");
+                    LOGGER.error("Unable to read data/images/units/mechset.txt");
                 }
             }
 

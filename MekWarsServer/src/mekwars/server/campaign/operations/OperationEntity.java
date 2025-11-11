@@ -20,16 +20,18 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import megamek.common.IEntityRemovalConditions;
 import megamek.common.Mech;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class OperationEntity {
-	
+    private static final Logger LOGGER = LogManager.getLogger(OperationEntity.class);
+
 	//IVARS
 	private String ownerName;
 	
@@ -82,7 +84,7 @@ public class OperationEntity {
     		StringTokenizer STR = new StringTokenizer(ST.nextToken(),"~");
     		while (STR.hasMoreElements()){
     			String kill = STR.nextToken();
-    			if (!kill.trim().equals("")){
+    			if (!kill.trim().isEmpty()){
     				Integer killid = Integer.parseInt(kill);
     				kills.add(killid);
     			}
@@ -152,8 +154,8 @@ public class OperationEntity {
     			this.setOffBoardRange(Integer.parseInt(ST.nextToken()));
         }
         catch(Exception ex){
-            MWLogger.errLog("Error while parsing the following String: "+s);
-            MWLogger.errLog(ex);
+            LOGGER.error("Error while parsing the following String: "+s);
+            LOGGER.error("Exception: ", ex);
         }
 	}//end OperationEntity()
 	

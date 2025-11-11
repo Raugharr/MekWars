@@ -20,7 +20,7 @@ import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Safelist;
 
 public class HtmlSanitizer {
-    private static final Logger logger = LogManager.getLogger(HtmlSanitizer.class);
+    private static final Logger LOGGER = LogManager.getLogger(HtmlSanitizer.class);
     private static final String configFilename = "HTMLSanitizer.cfg";
     
     private Cleaner htmlCleaner = null;
@@ -82,13 +82,13 @@ public class HtmlSanitizer {
             in.close();
             fstream.close();
         } catch (FileNotFoundException e) {
-            logger.error("No HTMLSanitizer.cfg found.");
+            LOGGER.error("No HTMLSanitizer.cfg found.");
         } catch (IOException e) {
-            logger.error(e);
+            LOGGER.error("Exception: ", e);
         }
         
         for (String tag : allowedTags) {
-            logger.error("Adding to whitelist: " + tag);
+            LOGGER.error("Adding to whitelist: " + tag);
             whitelist.addTags(tag);
         }
         
@@ -99,7 +99,7 @@ public class HtmlSanitizer {
                 whitelist.addAttributes(att, attribute);
             }
         }
-        logger.info(whitelist.toString());
+        LOGGER.info(whitelist.toString());
         htmlCleaner = new Cleaner(whitelist);
     }
 

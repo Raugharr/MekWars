@@ -28,12 +28,12 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class WholeNumberField extends JTextField {
-    /**
-     * 
-     */
+    private static final Logger LOGGER = LogManager.getLogger(WholeNumberField.class);
+
     private static final long serialVersionUID = 3640879107242018821L;
     private Toolkit toolkit;
     private NumberFormat integerFormatter;
@@ -87,7 +87,7 @@ public class WholeNumberField extends JTextField {
                     result[j++] = source[i];
                 else {
                     toolkit.beep();
-                    MWLogger.errLog("insertString: " + source[i]);
+                    LOGGER.error("insertString: " + source[i]);
                 }
             }
             super.insertString(offs, new String(result, 0, j), a);

@@ -23,8 +23,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.util.ExclusionList;
 
-public class NoPlayCommand implements Command {
-
+public class  NoPlayCommand  implements Command {
     int accessLevel = 0;
     String syntax = "";
 

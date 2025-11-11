@@ -31,7 +31,6 @@ import java.util.Vector;
 
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
-import mekwars.common.util.MWLogger;
 import megamek.common.AmmoType;
 
 /**
@@ -50,42 +49,42 @@ import megamek.common.AmmoType;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class CampaignData implements TerrainProvider {
-    private static final Logger logger = LogManager.getLogger(CampaignData.class);
+    private static final Logger LOGGER = LogManager.getLogger(CampaignData.class);
 
     public static CampaignData cd;
 
     /**
      * All different Houses are stored here. key=Integer (id), value=House
      */
-    private TreeMap<Integer, House> factions = new TreeMap<Integer, House>();
+    private TreeMap<Integer, House> factions = new TreeMap<>();
 
     /**
      * All different House ids are stored here key=String (name), value=int id
      */
-    private TreeMap<String, Integer> factionid = new TreeMap<String, Integer>();
+    private TreeMap<String, Integer> factionid = new TreeMap<>();
 
     /**
      * This is a list with all planet information stored. key=Integer (id),
      * value=Planet (or subclasses for server and client)
      */
-    private TreeMap<Integer, Planet> planets = new TreeMap<Integer, Planet>();
+    private TreeMap<Integer, Planet> planets = new TreeMap<>();
 
     /**
      * This is a list with planet id stored. key=String (name), value=int id
      */
-    private TreeMap<String, Integer> planetid = new TreeMap<String, Integer>();
+    private TreeMap<String, Integer> planetid = new TreeMap<>();
 
     /**
      * List of all terrains that can occur on surfaces of planets.
      */
-    private ArrayList<Terrain> terrains = new ArrayList<Terrain>();
-    private ArrayList<AdvancedTerrain> advTerrains = new ArrayList<AdvancedTerrain>();
+    private ArrayList<Terrain> terrains = new ArrayList<>();
+    private ArrayList<AdvancedTerrain> advTerrains = new ArrayList<>();
     
 
-    private Hashtable<String, String> ServerBannedAmmo = new Hashtable<String, String>();
-    private Vector<Integer> bannedTargetingSystems = new Vector<Integer>();
-    private Hashtable<String, Integer> commands = new Hashtable<String, Integer>();
-    private TreeMap<String, String> planetOpFlags = new TreeMap<String, String>();
+    private Hashtable<String, String> ServerBannedAmmo = new Hashtable<>();
+    private Vector<Integer> bannedTargetingSystems = new Vector<>();
+    private Hashtable<String, Integer> commands = new Hashtable<>();
+    private TreeMap<String, String> planetOpFlags = new TreeMap<>();
 
     private Properties serverConfigs = new Properties();
 
@@ -110,7 +109,7 @@ public class CampaignData implements TerrainProvider {
             Integer planetID = planetid.get(name.toLowerCase());
             return getPlanet(planetID);
         } catch (Exception ex) {
-            MWLogger.errLog("Could not find planet: " + name);
+            LOGGER.error("Could not find planet: {}", name);
             return null;
         }
     }
@@ -174,7 +173,7 @@ public class CampaignData implements TerrainProvider {
      * @see You should use XStream to initialize CampaignData
      */
     public void addPlanet(Planet planet) {
-        logger.info("Adding Planet: '{}'", planet.getName());
+        LOGGER.info("Adding Planet: '{}'", planet.getName());
         if (planet.getId() == -1) {
             planet.setId(getUnusedPlanetID());
         }
@@ -243,7 +242,7 @@ public class CampaignData implements TerrainProvider {
      * @TODO You should use XStream to initialize CampaignData
      */
     public void addHouse(House faction) {
-        logger.info("Adding House: '{}'", faction.getName());
+        LOGGER.info("Adding House: '{}'", faction.getName());
         factions.put(faction.getId(), faction);
         factionid.put(faction.getName().toLowerCase(), faction.getId());
     }
@@ -535,7 +534,7 @@ public class CampaignData implements TerrainProvider {
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
     public void addTerrain(Terrain terrain) {
-        logger.info("Adding Terrain: '{}'", terrain.getName());
+        LOGGER.info("Adding Terrain: '{}'", terrain.getName());
         terrain.setId(getUnusedTerrainID());
         terrains.add(terrain);
         terrains.trimToSize();
@@ -574,7 +573,7 @@ public class CampaignData implements TerrainProvider {
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
     public void addAdvancedTerrain(AdvancedTerrain newAdvTerrain) {
-        logger.info("Adding AdvancedTerrain: '{}'", newAdvTerrain.getName());
+        LOGGER.info("Adding AdvancedTerrain: '{}'", newAdvTerrain.getName());
         newAdvTerrain.setId(getUnusedAdvTerrainID());
         advTerrains.add(newAdvTerrain);
         advTerrains.trimToSize();
@@ -614,18 +613,18 @@ public class CampaignData implements TerrainProvider {
      *      try { House h = (House) Class.forName(type).newInstance();
      *      in.readObject(h, this, "faction"); factions.put(new
      *      Integer(h.getId()), h); } catch (InstantiationException e) {
-     *      MWLogger.errLog(e); } catch (IllegalAccessException e) {
-     *      MWLogger.errLog(e); } catch (ClassNotFoundException e) {
-     *      MWLogger.errLog(e); } } in.endDataBlock("factions");
+     *      LOGGER.error("Exception: ", e); } catch (IllegalAccessException e) {
+     *      LOGGER.error("Exception: ", e); } catch (ClassNotFoundException e) {
+     *      LOGGER.error("Exception: ", e); } } in.endDataBlock("factions");
      * 
      *      in.startDataBlock("planets"); planets.clear(); size =
      *      in.readInt("planetsCount"); for (int i = 0; i < size; ++i) { String
      *      type = in.readString("planetsType"); try { Planet p = (Planet)
      *      Class.forName(type).newInstance(); in.readObject(p, this, "planet");
      *      planets.put(new Integer(p.getId()), p); } catch
-     *      (InstantiationException e) { MWLogger.errLog(e); } catch
-     *      (IllegalAccessException e) { MWLogger.errLog(e); } catch
-     *      (ClassNotFoundException e) { MWLogger.errLog(e); } }
+     *      (InstantiationException e) { LOGGER.error("Exception: ", e); } catch
+     *      (IllegalAccessException e) { LOGGER.error("Exception: ", e); } catch
+     *      (ClassNotFoundException e) { LOGGER.error("Exception: ", e); } }
      *      in.endDataBlock("planets"); }
      */
     /**
@@ -829,7 +828,7 @@ public class CampaignData implements TerrainProvider {
 
         if (getCommandTable().get(command.toUpperCase()) != null) {
             level = getCommandTable().get(command.toUpperCase()).intValue();
-            // MWLogger.errLog("Command: "+command+" level: "+level);
+            // LOGGER.error("Command: "+command+" level: "+level);
         }
 
         return level;

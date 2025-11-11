@@ -44,7 +44,7 @@ import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
 import megamek.common.planetaryconditions.Atmosphere;
@@ -69,11 +69,13 @@ import mekwars.server.campaign.mercenaries.MercHouse;
 import mekwars.server.campaign.operations.resolvers.NewShortResolver;
 import mekwars.server.campaign.operations.resolvers.ShortOpPlayers;
 import mekwars.server.campaign.pilot.SPilot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // IMPORTS
 
 public class ShortOperation implements Comparable<Object> {
-
+    private static final Logger LOGGER = LogManager.getLogger(ShortOperation.class);
     // IVARS
 
     // progress info. finished short ops removed from
@@ -249,7 +251,7 @@ public class ShortOperation implements Comparable<Object> {
         for (SArmy currA : possibleDefenders) {
             toLog += currA.getName() + "/" + currA.getID() + " ";
         }
-        MWLogger.gameLog(toLog);
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, toLog);
 
         Operation o = CampaignMain.cm.getOpsManager().getOperation(opName);
 
@@ -301,7 +303,7 @@ public class ShortOperation implements Comparable<Object> {
                 int maxPlayersPerTeam = o.getIntValue("TeamSize");
                 int maxPlayers = Math.max(2, Math.min(8, maxTeams)) * maxPlayersPerTeam;
 
-                // MWLogger.errLog("Max Teams: "+maxTeams+" Players
+                // LOGGER.error("Max Teams: "+maxTeams+" Players
                 // Per
                 // Team: "+maxPlayersPerTeam+" Max Players: "+maxPlayers+"
                 // Current Players: "+this.getAllPlayerNames().size());
@@ -389,7 +391,7 @@ public class ShortOperation implements Comparable<Object> {
             int maxPlayers = Math.max(2, Math.min(8, maxTeams)) * maxPlayersPerTeam;
 
             isTeamOp = true;
-            // MWLogger.errLog("Max Teams: "+maxTeams+" Players Per
+            // LOGGER.error("Max Teams: "+maxTeams+" Players Per
             // Team:
             // "+maxPlayersPerTeam+" Max Players: "+maxPlayers+" Current
             // Players: "+this.getAllPlayerNames().size());
@@ -1512,7 +1514,7 @@ public class ShortOperation implements Comparable<Object> {
                     toStore.append(")");
                 }
             }
-            MWLogger.resultsLog(toStore.toString());
+            LOGGER.info(LogMarkerHolder.RESULTS_MARKER, toStore.toString());
 
             /*
              * send a Finished Game entry to faction mates. same as when
@@ -1772,9 +1774,9 @@ public class ShortOperation implements Comparable<Object> {
 
         if (isTeamOp) {
             CampaignMain.cm.toUser("PL|STN|" + p.getTeamNumber(), lowerName, false);
-            MWLogger.debugLog(p.getName() + " Team: " + p.getTeamNumber());
+            LOGGER.debug(p.getName() + " Team: " + p.getTeamNumber());
             CampaignMain.cm.toUser("GMEP|" + teamEdge[p.getTeamNumber() - 1], lowerName, false);
-            MWLogger.debugLog("Sent team edge to " + p.getName());
+            LOGGER.debug("Sent team edge to " + p.getName());
         }
         // send starting edge and autoarmy
         else if (defenders.containsKey(lowerName)) {
@@ -1877,7 +1879,7 @@ public class ShortOperation implements Comparable<Object> {
     public void addInProgressUpdate(String s) {
 
         StringTokenizer tokenizer = new StringTokenizer(s, "*");
-        MWLogger.debugLog("IPU Sent: " + s);
+        LOGGER.debug("IPU Sent: " + s);
 
         // see if we're dealing with a pilot or unit
         if (s.startsWith("MW*")) {
@@ -1944,7 +1946,7 @@ public class ShortOperation implements Comparable<Object> {
                 chickenThreads.put(playername, newThread);
 
                 // add creation to log
-                MWLogger.gameLog("Created chicken thread for " + shortID + "/" + currPlayer.getName() + "(" + opName + ")");
+                LOGGER.info(LogMarkerHolder.GAME_MARKER, "Created chicken thread for " + shortID + "/" + currPlayer.getName() + "(" + opName + ")");
             }
         }// end while(poss defenders remain)
 
@@ -1953,7 +1955,7 @@ public class ShortOperation implements Comparable<Object> {
          * those players who have multiple armies able to defend, start the
          * threads.
          */
-        MWLogger.gameLog("Starting all chicken threads for #" + shortID + " (" + opName + ")");
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "Starting all chicken threads for #" + shortID + " (" + opName + ")");
         for (OpsChickenThread ct : chickenThreads.values()) {
             ct.start();
         }
@@ -2242,7 +2244,7 @@ public class ShortOperation implements Comparable<Object> {
                     resultString += defendArm.getInaccurateDescription();
                 }
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
         }
 
@@ -2261,7 +2263,7 @@ public class ShortOperation implements Comparable<Object> {
                     }
 
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
 
@@ -2458,8 +2460,8 @@ public class ShortOperation implements Comparable<Object> {
                     defendString += nameString + " players ";
                 }
             } catch (Exception ex) {
-                MWLogger.errLog("Unable to find defenders for operation: " + opName);
-                MWLogger.errLog(ex);
+                LOGGER.error("Unable to find defenders for operation: " + opName);
+                LOGGER.error("Exception: ", ex);
             }
         }
 
@@ -2884,13 +2886,13 @@ public class ShortOperation implements Comparable<Object> {
 
                 // skip if the operation doesn't allow capturing of this unit type
                 if (!currFacility.canBeRaided(type, o)) {
-                    MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
+                    LOGGER.debug("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
                     continue;
                 }
 
                 // skip if the operation doesn't allow capturing of this unit type
                 if (!currFacility.canBeRaided(type, o)) {
-                    MWLogger.debugLog("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
+                    LOGGER.debug("Can not capture unit type (" + type + ") for operation '" + o.getName() + "' as it is not allowed.");
                     continue;
                 }
 
@@ -2898,7 +2900,7 @@ public class ShortOperation implements Comparable<Object> {
                 int ppAvailable = losingHouse.getPP(currFacility.getWeightclass(), type);
                 int ppNeed = currFacility.getPPCost(currFacility.getWeightclass(), type);
                 if (ppNeed > ppAvailable) {
-                    MWLogger.debugLog("Not enough PP to capture a unit.  Needed: " + ppNeed + ", available: " + ppAvailable);
+                    LOGGER.debug("Not enough PP to capture a unit.  Needed: " + ppNeed + ", available: " + ppAvailable);
                     continue;
                 }
 
@@ -2924,10 +2926,10 @@ public class ShortOperation implements Comparable<Object> {
                         SUnit unit = captured.get(i);
 
                         if (unit.isOMGUnit()) {
-                            MWLogger.debugLog("Removing an OMG-UR-FD from captured units for operation '" + o.getName() + "'.");
+                            LOGGER.debug("Removing an OMG-UR-FD from captured units for operation '" + o.getName() + "'.");
                             captured.remove(i);
                         } else if (!unit.canBeCapturedInOperation(o)) {
-                            MWLogger.debugLog("Removing an '" + unit.getModelName() + "' from captured units for operation '" + o.getName() + "'.");
+                            LOGGER.debug("Removing an '" + unit.getModelName() + "' from captured units for operation '" + o.getName() + "'.");
                             captured.remove(i);
                         }
                     }

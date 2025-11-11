@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
 
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.MWLogger;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
@@ -27,14 +27,17 @@ import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.operations.ShortOperation;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * DefendCommand is analagous to the Task system's
  * "join" command - it allows a player to register
  * himself as the defender for an attack.
  */
-public class AcceptAttackFromReserveCommand implements Command {
-	
+public class  AcceptAttackFromReserveCommand  implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(AcceptAttackFromReserveCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -226,7 +229,7 @@ public class AcceptAttackFromReserveCommand implements Command {
 			toSend += ".";
 		
 		//tell the defender that he has succesfully joined the attack.
-		MWLogger.gameLog("AcceptAttackFromReserve: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "AcceptAttackFromReserve: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
 		CampaignMain.cm.toUser(toSend,Username,true);
 		
 	}//end process

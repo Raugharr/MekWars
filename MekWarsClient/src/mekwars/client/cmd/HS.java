@@ -20,14 +20,15 @@ package mekwars.client.cmd;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-/**
+ /**
  * Updates the faction status screen
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class HS extends Command {
-
+     private static final Logger LOGGER = LogManager.getLogger(HS.class);
 	/**
 	 * @see Command#Command(MMClient)
 	 */
@@ -51,7 +52,7 @@ public class HS extends Command {
 			try{
 				this.issueSubCommand(cmdName, cmdData);
 			}catch(Exception ex){
-				MWLogger.errLog(ex);
+				LOGGER.error("Exception: ", ex);
 			}
 			
 			if(cmdName.equals("CA"))
@@ -69,7 +70,7 @@ public class HS extends Command {
 	 */
 	private void issueSubCommand(String cmdName, String cmdData) {
 		
-		//MWLogger.errLog("HS Subcommand: " + cmdName + " Data: " + cmdData);
+		//LOGGER.error("HS Subcommand: " + cmdName + " Data: " + cmdData);
 		
 		if (cmdName.equals("FN")) //set faction name, HS|FN 
 			mwclient.getMainFrame().getMainPanel().getHSPanel().setFactionName(cmdData);

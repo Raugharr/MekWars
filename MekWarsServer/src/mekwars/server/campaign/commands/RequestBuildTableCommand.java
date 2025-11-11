@@ -25,12 +25,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
-public class RequestBuildTableCommand implements Command {
-
+    public class RequestBuildTableCommand implements Command {
+        private static final Logger LOGGER = LogManager.getLogger(RequestBuildTableCommand.class);
 	/*
 	 * This command allows an Admin to upload a single build table
 	 * from a directory on their local machine.  The directory structure
@@ -128,7 +129,7 @@ public class RequestBuildTableCommand implements Command {
 				}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 			}
 			CampaignMain.cm.toUser("BT|BT|" + folder + "|" + table + toReturn.toString(), Username, false);
 			

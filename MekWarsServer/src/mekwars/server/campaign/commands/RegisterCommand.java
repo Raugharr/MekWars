@@ -18,12 +18,13 @@ package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.util.MWPasswd;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -32,7 +33,8 @@ import mekwars.server.util.MWPasswd;
  * Syntax  /c Register#Name,Password
  */
 public class RegisterCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(RegisterCommand.class);
+
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -60,7 +62,7 @@ public class RegisterCommand implements Command {
                 regname = str.nextToken().trim().toLowerCase();
                 pw = str.nextToken();
             }catch (Exception ex){
-                MWLogger.errLog("Failure to register: "+regname);
+                LOGGER.error("Failure to register: {}", regname);
                 return;
             }
             
@@ -74,7 +76,7 @@ public class RegisterCommand implements Command {
             		regged = true;
             } catch (Exception ex) {
                 //Username already registered, ignore error.
-                //MWLogger.errLog(ex);
+                //LOGGER.error("Exception: ", ex);
                 regged = true;
             }
              
@@ -113,14 +115,11 @@ public class RegisterCommand implements Command {
 
             //acknowledge registration
             CampaignMain.cm.toUser("AM:\"" + regname + "\" successfully registered.", Username);
-            MWLogger.modLog("New nickname registered: " + regname);
+            LOGGER.info("New nickname registered: " + regname);
             CampaignMain.cm.doSendModMail("NOTE","New nickname registered: " + regname + " by: " + Username);
     	
         } catch (Exception e) {
-            MWLogger.errLog(e);
-            MWLogger.errLog("^ Not supposed to happen! ^");
-            MWLogger.errLog(e);
-            MWLogger.errLog("Not supposed to happen");
+            LOGGER.error("Not supposed to happen", e);
         }
     }
 }

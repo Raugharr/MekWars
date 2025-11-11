@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.Random;
 import java.util.Vector;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -38,7 +40,6 @@ import org.quartz.JobExecutionException;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
@@ -51,6 +52,7 @@ import mekwars.server.campaign.SUnit;
  * @version 2016.10.10
  */
 public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentifiableByUser {
+    private static final Logger LOGGER = LogManager.getLogger(UserActivityInfluenceJob.class);
 
 	// parameter names specific to this job
     public static final String PLAYER_NAME = "player name";
@@ -76,7 +78,7 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
         
         SPlayer p = CampaignMain.cm.getPlayer(playerName);
         if (p == null) {
-        	MWLogger.errLog("Null player " + playerName + " in UserActivityInfluenceJob.");
+        	LOGGER.error("Null player " + playerName + " in UserActivityInfluenceJob.");
         	UserActivityInfluenceJob.stop(playerName);
         	return;
         }
@@ -232,7 +234,7 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
             fileName = "./data/influencemessages/CommonInfluenceMessages.txt";
             messageFile = new File(fileName);
             if (!messageFile.exists()) {
-                MWLogger.errLog("A problem occured with your CommonInfluenceMessages File!");
+                LOGGER.error("A problem occured with your CommonInfluenceMessages File!");
                 return "";
             }
         }
@@ -245,7 +247,7 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
 			fis = new FileInputStream(messageFile);
 			dis = new BufferedReader(new InputStreamReader(fis));
 
-			MWLogger.debugLog("getting random flu message");
+			LOGGER.debug("getting random flu message");
 			int messages = Integer.parseInt(dis.readLine());
 			int messageLine = rand.nextInt(messages);
 			while (dis.ready()) {
@@ -259,24 +261,24 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
 			dis.close();
 			fis.close();
 		} catch (NumberFormatException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		} catch (FileNotFoundException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		} catch (IOException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		} finally {
 			if (dis != null) {
 				try {
 					dis.close();
 				} catch (IOException e) {
-					MWLogger.errLog(e);
+					LOGGER.error("Exception: ", e);
 				}
 			}
 			if (fis != null) {
 				try {
 					fis.close();
 				} catch (IOException e) {
-					MWLogger.errLog(e);
+					LOGGER.error("Exception: ", e);
 				}
 			}
 		}

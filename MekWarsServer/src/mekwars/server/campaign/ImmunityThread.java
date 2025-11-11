@@ -19,8 +19,9 @@ package mekwars.server.campaign;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.util.OpponentListHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author urgru
@@ -30,7 +31,8 @@ import mekwars.server.campaign.util.OpponentListHelper;
  * prevent concurrent modification errors.
  */
 public final class ImmunityThread extends Thread {//no extension
-	
+    private static final Logger LOGGER = LogManager.getLogger(ImmunityThread.class);
+
 	//VARIABLES
 	private TreeMap<String,Long> immunePlayers;
 	
@@ -49,7 +51,7 @@ public final class ImmunityThread extends Thread {//no extension
 		try {
 			this.wait(time);
 		} catch (Exception ex) {
-			MWLogger.errLog(ex);
+			LOGGER.error("Exception: ", ex);
 		}
 	}
 	

@@ -24,16 +24,18 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import megamek.common.MechFileParser;
 import megamek.common.MechSummary;
 import megamek.common.MechSummaryCache;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @version 2016.10.26
  */
 public class UnitCosts {
+    private static final Logger LOGGER = LogManager.getLogger(UnitCosts.class);
 
     Vector<Vector<Double>> minCostUnitList = new Vector<Vector<Double>>(4, 1);
     Vector<Vector<Double>> maxCostUnitList = new Vector<Vector<Double>>(4, 1);
@@ -144,10 +146,10 @@ public class UnitCosts {
             in.close();
 
         } catch (FileNotFoundException fnf) {
-            MWLogger.errLog("Unable to load Meks.zip for UnitCosts.loadUnitCosts");
+            LOGGER.error("Unable to load Meks.zip for UnitCosts.loadUnitCosts");
         } catch (Exception ex) {
-            MWLogger.errLog("Error with Meks.zip file " + entityName);
-            MWLogger.errLog(ex);
+            LOGGER.error("Error with Meks.zip file " + entityName);
+            LOGGER.error("Exception: ", ex);
         }
 
         try {
@@ -177,10 +179,10 @@ public class UnitCosts {
             in.close();
 
         } catch (FileNotFoundException fnf) {
-            MWLogger.errLog("Unable to load Vehicles.zip for UnitCosts.loadUnitCosts");
+            LOGGER.error("Unable to load Vehicles.zip for UnitCosts.loadUnitCosts");
         } catch (Exception ex) {
-            MWLogger.errLog("Error with Vehicles.zip file " + entityName);
-            MWLogger.errLog(ex);
+            LOGGER.error("Error with Vehicles.zip file " + entityName);
+            LOGGER.error("Exception: ", ex);
         }
 
         try {
@@ -209,10 +211,10 @@ public class UnitCosts {
             in.close();
 
         } catch (FileNotFoundException fnf) {
-            MWLogger.errLog("Unable to load Infantry.zip for UnitCosts.loadUnitCosts");
+            LOGGER.error("Unable to load Infantry.zip for UnitCosts.loadUnitCosts");
         } catch (Exception ex) {
-            MWLogger.errLog("Error with Infantry.zip file " + entityName);
-            MWLogger.errLog(ex);
+            LOGGER.error("Error with Infantry.zip file " + entityName);
+            LOGGER.error("Exception: ", ex);
         }
     }
 

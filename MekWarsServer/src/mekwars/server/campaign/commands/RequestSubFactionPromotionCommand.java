@@ -22,8 +22,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 
-public class RequestSubFactionPromotionCommand implements Command {
-
+public class  RequestSubFactionPromotionCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

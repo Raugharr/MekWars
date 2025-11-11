@@ -25,8 +25,7 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnitFactory;
 
 //refreshfactory#planet#factory#useflu(true/false)
-public class RefreshFactoryCommand implements Command {
-
+public class  RefreshFactoryCommand  implements Command {
 	int accessLevel = IAuthenticator.GUEST;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

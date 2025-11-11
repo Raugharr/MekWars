@@ -21,7 +21,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import mekwars.server.MWServ;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
@@ -36,6 +35,8 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.pilot.SPilot;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -44,6 +45,7 @@ import mekwars.server.campaign.pilot.SPilot;
  *
  */
 public class UseInfluenceCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(UseInfluenceCommand.class);
 
 	int accessLevel = 0;
 	String syntax = "";
@@ -267,8 +269,7 @@ public class UseInfluenceCommand implements Command {
 				player.addReward(-unitTotalRewardPointCost);
 			} catch (Exception ex){
 				CampaignMain.cm.toUser("AM:An error has occured while trying to create your requested unit. Please contact an admin. Faction: "+factionstring +" Type: "+unitType+" Class: "+unitWeight,Username,true);
-				MWLogger.errLog(ex);
-				MWLogger.errLog("Error creating unit in "+this.getClass().getName());
+				LOGGER.error("Error creating unit in "+this.getClass().getName());
 			}
             break;
 

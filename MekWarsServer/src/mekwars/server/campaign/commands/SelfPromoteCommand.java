@@ -23,8 +23,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
 
-public class SelfPromoteCommand implements Command {
-
+public class  SelfPromoteCommand  implements Command {
     int accessLevel = 2;
 
     public int getExecutionLevel() {

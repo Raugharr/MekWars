@@ -14,7 +14,6 @@
  *
  *         Server Configuration Page. All new Server Options need to be added To this page as well.
  */
-
 package mekwars.operationseditor.gui.dialog;
 
 import java.awt.BorderLayout;
@@ -63,14 +62,12 @@ import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.VerticalLayout;
 import mekwars.common.campaign.operations.DefaultOperation;
 import mekwars.common.flags.FlagSet;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OperationsDialog extends JFrame implements ActionListener, KeyListener, MouseListener {
-
-    /**
-     *
-     */
+    private static final Logger LOGGER = LogManager.getLogger(OperationsDialog.class);
     private static final long serialVersionUID = -238767483230471330L;
     private final static String windowName = "MekWars Operations Editor";
     private final static int SHORT_OP = 0;
@@ -140,7 +137,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             System.setOut(ps);
             System.setErr(ps);
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("", ex);
         }
 
         JMenuBar menuBar = new JMenuBar();
@@ -4122,7 +4119,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
             System.err.println("Unable to save file");
-            MWLogger.errLog(ex);
+            LOGGER.error("", ex);
         }
 
     }
@@ -4170,12 +4167,12 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             }
         } catch (Exception ex) {
             System.err.println("Error loading file " + filePathName);
-            MWLogger.errLog(ex);
+            LOGGER.error("", ex);
         } finally {
             try {
                 dis.close();
             } catch (IOException e) {
-                MWLogger.errLog(e);
+                LOGGER.error("", e);
             }
         }
 
@@ -4524,7 +4521,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
             fis.close();
 
         } catch (Exception ex) {
-            MWLogger.errLog("Unable to read " + opFile);
+            LOGGER.error("Unable to read " + opFile);
             return;
         }
 

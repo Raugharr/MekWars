@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.pilot.skills.AstechSkill;
 import mekwars.server.campaign.pilot.skills.BufferedVDNI;
@@ -33,11 +32,14 @@ import mekwars.server.campaign.pilot.skills.TacticalGeniusSkill;
 import mekwars.server.campaign.pilot.skills.TraitSkill;
 import mekwars.server.campaign.pilot.skills.VDNI;
 import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SPilotSkills {
-    private static Hashtable<Integer, SPilotSkill> pilotSkills = new Hashtable<Integer, SPilotSkill>();
+    private static final Logger LOGGER = LogManager.getLogger(SPilotSkills.class);
 
-	
+    private static Hashtable<Integer, SPilotSkill> pilotSkills = new Hashtable<>();
+
 	 public static void initializePilotSkills() {
 	        // PilotSkills
 	        pilotSkills.put(PilotSkill.DodgeManeuverSkillID, (new DodgeManeuverSkill(PilotSkill.DodgeManeuverSkillID)));
@@ -121,7 +123,7 @@ public class SPilotSkills {
 	                }
 	                skillBuilder.trimToSize();
 	                /*
-	                 * //MWLogger.errLog("Pilot: "+p.getName()+" Skill:
+	                 * //LOGGER.error("Pilot: "+p.getName()+" Skill:
 	                 * "+skill.getName()+" Rnd "+rnd+ " chance: "+chance); if ( rnd
 	                 * <= chance ) return skill; //else rnd -=
 	                 * skill.getChance(unitType,p);
@@ -130,7 +132,7 @@ public class SPilotSkills {
 
 	            return skillBuilder.elementAt(CampaignMain.cm.getRandomNumber(skillBuilder.size()));
 	        } catch (Exception ex) {
-	            MWLogger.errLog("Problems during skill earning! Skill Table Size = " + skillBuilder.size() + " total = " + total);
+	            LOGGER.error("Problems during skill earning! Skill Table Size = " + skillBuilder.size() + " total = " + total);
 	            return null;
 	        }
 	    }

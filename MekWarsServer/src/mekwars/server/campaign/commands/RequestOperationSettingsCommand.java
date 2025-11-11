@@ -22,8 +22,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.operations.ShortOperation;
 
-public class RequestOperationSettingsCommand implements Command {
-	
+public class  RequestOperationSettingsCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

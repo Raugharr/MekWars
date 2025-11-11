@@ -29,9 +29,10 @@ package mekwars.server.MWChatServer;
 
 import java.net.Socket;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWChatServer.commands.ICommands;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This is the representation of a Client, on the server side. All the
@@ -41,6 +42,7 @@ import mekwars.server.MWChatServer.commands.ICommands;
  * @see CommandMakerRemote
  */
 public class MWChatClient implements IConnectionListener, ICommands {
+    private static final Logger LOGGER = LogManager.getLogger(MWChatClient.class);
 
 	protected AbstractConnectionHandler _connectionHandler;
 	protected MWChatServer _server;
@@ -146,8 +148,8 @@ public class MWChatClient implements IConnectionListener, ICommands {
            try{
             throw new NullPointerException();
            }catch (Exception ex){
-               MWLogger.errLog("Null user in setUserId report the following error to Torren");
-               MWLogger.errLog(ex);
+               LOGGER.error("Null user in setUserId report the following error to Torren");
+               LOGGER.error("Exception: ", ex);
            }
         }
 		// it's possible for this to be called multiple times
@@ -187,7 +189,7 @@ public class MWChatClient implements IConnectionListener, ICommands {
 	 */
 	public void incomingMessage(String msg) {
 		// deal with message
-		// MWLogger.infoLog("incoming mesage: "+msg);
+		// LOGGER.info("incoming mesage: "+msg);
 		CommandProcessorRemote.process(msg, this);
 	}
 

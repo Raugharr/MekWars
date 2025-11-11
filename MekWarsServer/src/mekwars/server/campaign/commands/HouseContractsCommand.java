@@ -25,8 +25,7 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.mercenaries.MercHouse;
 
-public class HouseContractsCommand implements Command {
-	
+public class  HouseContractsCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}

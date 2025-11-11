@@ -21,15 +21,17 @@ import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.common.House;
 import mekwars.common.Planet;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AdminReturnPlanetsToOriginalOwnersCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AdminReturnPlanetsToOriginalOwnersCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -69,7 +71,7 @@ public class AdminReturnPlanetsToOriginalOwnersCommand implements Command {
 			
 			//cast to planet
 			SPlanet p = (SPlanet)currP;
-			MWLogger.mainLog("Returning planet " + p.getName() + " to original owner");
+			LOGGER.info("Returning planet " + p.getName() + " to original owner");
 			int totalCP	= p.getConquestPoints();
 			//get original owner
 			SHouse origOwner = CampaignMain.cm.getHouseFromPartialString(p.getOriginalOwner(), Username);

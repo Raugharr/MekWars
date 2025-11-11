@@ -60,10 +60,11 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MyImageView extends View implements ImageObserver, MouseListener, MouseMotionListener {
-	
+    private static final Logger LOGGER = LogManager.getLogger(MyImageView.class);
 	// --- Attribute Values ------------------------------------------
 	
 	public static final String
@@ -360,7 +361,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 	/** My attributes may have changed. */
 	@Override
 	public void changedUpdate(DocumentEvent e, Shape a, ViewFactory f) {
-		if(DEBUG) MWLogger.infoLog("ImageView: changedUpdate begin...");
+		if(DEBUG) LOGGER.info("ImageView: changedUpdate begin...");
 		super.changedUpdate(e,a,f);
 		float align = getVerticalAlignment();
 		
@@ -373,11 +374,11 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 		boolean wChanged = fWidth!=width;
 		if( hChanged || wChanged || getVerticalAlignment()!=align ) {
 			if(DEBUG)
-				MWLogger.infoLog("ImageView: calling preferenceChanged");
+				LOGGER.info("ImageView: calling preferenceChanged");
 			getParent().preferenceChanged(this,hChanged,wChanged);
 		}
 		if(DEBUG)
-			MWLogger.infoLog("ImageView: changedUpdate end; valign="+getVerticalAlignment());
+			LOGGER.info("ImageView: changedUpdate end; valign="+getVerticalAlignment());
 	}
 	
 	
@@ -554,7 +555,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 		if( changed != 0 ) {
 			// May need to resize myself, asynchronously:
 			if( DEBUG )
-				MWLogger.infoLog("ImageView: resized to "+fWidth+"x"+fHeight);
+				LOGGER.info("ImageView: resized to "+fWidth+"x"+fHeight);
 			
 			Document doc = getDocument();
 			try {
@@ -727,7 +728,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 				&& getSelectionState()==2 ) {
 			// Click in selected grow-box:
 			if(DEBUG)
-				MWLogger.infoLog("ImageView: grow!!! Size="+fWidth+"x"+fHeight);
+				LOGGER.info("ImageView: grow!!! Size="+fWidth+"x"+fHeight);
 			Point loc = fComponent.getLocationOnScreen();
 			fGrowBase = new Point(loc.x+e.getX() - fWidth,
 					loc.y+e.getY() - fHeight);
@@ -831,7 +832,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 		
 		buffer = out.toByteArray();
 		if (buffer.length == 0) {
-			MWLogger.errLog("warning: " + gifFile +
+			LOGGER.error("warning: " + gifFile +
 			" is zero-length");
 			return null;
 		}
@@ -845,7 +846,7 @@ public class MyImageView extends View implements ImageObserver, MouseListener, M
 			if( sMissingImageIcon == null )
 				sMissingImageIcon = makeIcon(MISSING_IMAGE_SRC);
 		}catch( Exception x ) {
-			MWLogger.errLog("ImageView: Couldn't load image icons");
+			LOGGER.error("ImageView: Couldn't load image icons");
 		}
 	}
 	

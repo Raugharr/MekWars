@@ -22,13 +22,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import mekwars.common.util.MWLogger;
 import megamek.common.Entity;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -39,7 +40,8 @@ import mekwars.server.campaign.commands.Command;
  * Syntax  /c buildtablevalidator#era
  */
 public class BuildTableValidatorCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(BuildTableValidatorCommand.class);
+
 	int accessLevel = IAuthenticator.MODERATOR;
 	String syntax = "[Standard/Reward/Rare]";
 	public int getExecutionLevel(){return accessLevel;}
@@ -145,13 +147,13 @@ public class BuildTableValidatorCommand implements Command {
 
 				}
 			} catch (Exception e) {
-				MWLogger.errLog(e);
+				LOGGER.error("Exception: ", e);
 				return "Error from FileReader of BufferedReader while opening files. Check permissions.";
 			} finally {
 				try {
 					dis.close();
 				} catch (IOException e) {
-					MWLogger.errLog(e);
+					LOGGER.error("Exception: ", e);
 				}
 			}
 		}

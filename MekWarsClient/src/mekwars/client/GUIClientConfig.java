@@ -34,18 +34,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import mekwars.common.campaign.clientutils.IClientConfig;
-import mekwars.common.util.MWLogger;
 
 
 /**
  * Class for Client's configuration.
  */
 public class GUIClientConfig implements IClientConfig {
-	private static final Logger logger = LogManager.getLogger(GUIClientConfig.class);
+	private static final Logger LOGGER = LogManager.getLogger(GUIClientConfig.class);
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 415432969624634387L;
     // VARIABLES
     public static final String IMAGE_PATH = "data/images/";
@@ -78,11 +74,11 @@ public class GUIClientConfig implements IClientConfig {
                 config.load(fis);
                 fis.close();
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
                 JOptionPane.showMessageDialog(null, "Unable to load Backup config file");
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             JOptionPane.showMessageDialog(null, "Unable to load main config file");
         }
 
@@ -97,7 +93,7 @@ public class GUIClientConfig implements IClientConfig {
         } catch (FileNotFoundException fnfe) {
             // Exception simply means serverdata.dat is not present.
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 
         // if a -d arg was passed, set dedicated to true
@@ -539,7 +535,7 @@ public class GUIClientConfig implements IClientConfig {
             fos.close();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Failed to create config file. Check folder write access privledges?");
-			logger.fatal(ex.getMessage());
+			LOGGER.error("Exception: ", ex);
             System.exit(0);
         }
     }
@@ -550,13 +546,13 @@ public class GUIClientConfig implements IClientConfig {
      * used to replace the UNITCAMO image with the newly selected imageicon.
      */
     public void loadImage(String imagename, String image, int width, int height) {
-        if (imagename.equals("")) {
+        if (imagename.isEmpty()) {
             return;
         }
         try {
             images.put(image, new ImageIcon(new ImageIcon(imagename).getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT)));
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -679,8 +675,8 @@ public class GUIClientConfig implements IClientConfig {
             fos.close();
             ps.close();
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Failed backingup config file");
+            LOGGER.error("Exception: ", ex);
+            LOGGER.error("Failed backingup config file");
             return;
         }
         try {
@@ -690,8 +686,8 @@ public class GUIClientConfig implements IClientConfig {
             fos.close();
             ps.close();
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Failed saving config file");
+            LOGGER.error("Exception: ", ex);
+            LOGGER.error("Failed saving config file");
         }
     }
 

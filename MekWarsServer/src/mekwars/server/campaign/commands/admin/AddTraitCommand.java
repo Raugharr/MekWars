@@ -19,14 +19,15 @@ package mekwars.server.campaign.commands.admin;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import mekwars.server.MWServ;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AddTraitCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AddTraitCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "Faction#TraitName#Skill$Skill$Skill$Skill";
 	public int getExecutionLevel(){return accessLevel;}
@@ -57,10 +58,10 @@ public class AddTraitCommand implements Command {
 			skillList = command.nextToken();
 			confirmString = command.nextToken();
 		}catch (Exception ex){
-		    MWLogger.errLog(ex);
+		    LOGGER.error("Exception: ", ex);
 		}		
 
-		//MWLogger.errLog("faction: "+faction+" Trait: "+traitName+" skills: "+skillList+" Confirm: "+confirmString);
+		//LOGGER.error("faction: "+faction+" Trait: "+traitName+" skills: "+skillList+" Confirm: "+confirmString);
 		
 		if ( !confirmString.equals("CONFIRM") )
 		    return;

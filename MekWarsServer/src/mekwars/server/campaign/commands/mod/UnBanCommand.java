@@ -51,14 +51,12 @@ public class UnBanCommand implements Command {
                 MWServ.getInstance().getBanAccounts().remove(account);
                 MWServ.getInstance().bansUpdate();
                 CampaignMain.cm.doSendModMail("NOTE",Username + " unbanned " + account);
-                //MWLogger.modLog(Username + " unbanned " + account);
 
                 CampaignMain.cm.toUser("AM:You unbanned " + account, Username);
                 CampaignMain.cm.toUser("AM:Don't forget to unban any assotiated IP's as well with the unbanip command", Username);
             } else {
             	CampaignMain.cm.toUser("AM:Unban failed for " + account, Username);
             	CampaignMain.cm.doSendModMail("NOTE",Username + " tried to uban " + account + ", but failed.");
-                //MWLogger.modLog(Username + " tried to uban " + account + ", but failed.");
             }
         }catch(Exception ex){
             CampaignMain.cm.toUser("AM:Syntax: unban (Username)<br>Don't forget to unban any assotiated IP's as well with the unbanip command", Username);

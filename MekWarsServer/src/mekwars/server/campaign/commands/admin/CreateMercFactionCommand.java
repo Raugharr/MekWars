@@ -23,8 +23,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.campaign.mercenaries.MercHouse;
 
-public class CreateMercFactionCommand implements Command {
-    
+public class  CreateMercFactionCommand  implements Command {
     int accessLevel = IAuthenticator.ADMIN;
     String syntax = "Faction Name#htmlhexcolor#abbreviation";
     public int getExecutionLevel(){return accessLevel;}

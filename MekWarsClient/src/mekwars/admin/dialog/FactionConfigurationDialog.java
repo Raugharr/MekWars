@@ -49,11 +49,12 @@ import javax.swing.border.EtchedBorder;
 import mekwars.client.MWClient;
 import mekwars.common.Unit;
 import mekwars.common.VerticalLayout;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class FactionConfigurationDialog implements ActionListener {
-
+    private static final Logger LOGGER = LogManager.getLogger(FactionConfigurationDialog.class);
     private final static String okayCommand = "okay";
     private final static String cancelCommand = "cancel";
     private String windowName = "";
@@ -4297,7 +4298,7 @@ public final class FactionConfigurationDialog implements ActionListener {
 
                 key = checkBox.getName();
                 if ( key == null ){
-                    MWLogger.errLog("Null Checkbox: "+checkBox.getToolTipText());
+                    LOGGER.error("Null Checkbox: "+checkBox.getToolTipText());
                     continue;
                 }
                 checkBox.setSelected(Boolean.parseBoolean(mwclient.getServerConfigs(key)));
@@ -4307,7 +4308,7 @@ public final class FactionConfigurationDialog implements ActionListener {
 
                 key = radioButton.getName();
                 if ( key == null ){
-                    MWLogger.errLog("Null RadioButton: "+radioButton.getToolTipText());
+                    LOGGER.error("Null RadioButton: "+radioButton.getToolTipText());
                     continue;
                 }
                 radioButton.setSelected(Boolean.parseBoolean(mwclient.getServerConfigs(key)));

@@ -14,7 +14,6 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-
 package mekwars.client.campaign;
 
 import java.io.BufferedReader;
@@ -34,7 +33,6 @@ import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.campaign.targetsystems.TargetSystem;
 import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
 import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
@@ -46,18 +44,19 @@ import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.OffBoardDirection;
 import megamek.common.WeaponType;
-import megamek.common.enums.Gender;
 import megamek.common.equipment.AmmoMounted;
 import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class for unit object used by Client
  */
 public class CUnit extends Unit {
+    private static final Logger LOGGER = LogManager.getLogger(CUnit.class);
 
-    // VARIABLES
     protected Entity unitEntity;
 
     private int BV;
@@ -67,7 +66,6 @@ public class CUnit extends Unit {
     private String htmlQuirkList = " ";
     private String quirkList = " ";
 
-    // CONSTRUCTORS
     public CUnit() {
         init();
     }
@@ -77,7 +75,6 @@ public class CUnit extends Unit {
         init();
     }
 
-    // PRIVATE METHODS
     private void init() {
         unitEntity = null;
         BV = 0;
@@ -85,13 +82,11 @@ public class CUnit extends Unit {
         setProducer("unknown origin");
     }
 
-    // PUBLIC METHODS
     public boolean setData(String data) {
-
         StringTokenizer ST;
         String element;
         String unitDamage = null;
-        MWLogger.infoLog("PDATA: " + data);
+        LOGGER.info("PDATA: " + data);
 
         ST = new StringTokenizer(data, "$");
         element = TokenReader.readString(ST);
@@ -458,7 +453,7 @@ public class CUnit extends Unit {
             tinfo += "Hits: " + Integer.toString(getPilot().getHits()) + "<br>";
         }
 
-        if (!armyText.equals("")) {
+        if (!armyText.isEmpty()) {
             tinfo += armyText + "<br>";
         }
 
@@ -557,7 +552,7 @@ public class CUnit extends Unit {
         unitEntity.setCrew(UnitUtils.createEntityPilot(this, unitEntity.isClan()));
 
         if (unitEntity == null) {
-            MWLogger.errLog("Error unit failed to load. Exiting.");
+            LOGGER.error("Error unit failed to load. Exiting.");
             System.exit(1);
         }
 
@@ -611,7 +606,6 @@ public class CUnit extends Unit {
         return pilotIsRepairing;
     }
 
-    // STATIC METHODS
     /**
      * A method which returns the MU cost of a specified campaign unit.
      *
@@ -640,10 +634,10 @@ public class CUnit extends Unit {
                 result = 0;
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
         return result;
-    }// end getPriceForCUnit()
+    }
 
     /**
      * A method which returns the influence cost of a specified campaign mech.
@@ -841,4 +835,4 @@ public class CUnit extends Unit {
     public TargetSystem getTargetSystem() {
         return targetSystem;
     }
-}// end CUnit.java
+}

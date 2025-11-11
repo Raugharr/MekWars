@@ -55,7 +55,6 @@ import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.campaign.targetsystems.TargetSystem;
 import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
 import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
 import mekwars.server.MWServ;
@@ -77,7 +76,7 @@ import org.apache.logging.log4j.Logger;
  */
 
 public final class SUnit extends Unit implements Comparable<SUnit> {
-    private static final Logger logger = LogManager.getLogger(SUnit.class);
+    private static final Logger LOGGER = LogManager.getLogger(SUnit.class);
 
     // VARIABLES
     private Integer BV = 0;
@@ -712,7 +711,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             }
             return s;
         } catch (Exception ex) {
-            logger.error("Unable to Load SUnit: '{}', '{}'", s, ex.getMessage());
+            LOGGER.error("Unable to Load SUnit: '{}', '{}'", s, ex.getMessage());
             // the unit should still be good return what did get set
             return s;
         }
@@ -926,7 +925,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             while (ski.hasNext()) {
                 SPilotSkill skill = (SPilotSkill) ski.next();
                 if (skill.getName().equals("Weapon Specialist") && p.getWeapon().equals("Default")) {
-                    // MWLogger.errLog("setPilot inside");
+                    // LOGGER.error("setPilot inside");
                     p.getSkills().remove(skill);
                     ((WeaponSpecialistSkill) skill).assignWeapon(getEntity(), p);
                     skill.addToPilot(p);
@@ -1064,7 +1063,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
         MechSummary mechSummary = MechSummaryCache.getInstance().getMech(filename);
         if (mechSummary == null) {
-            logger.error("Cannot find MechSummary for '{}', please validate units.cache is correct", filename);
+            LOGGER.error("Cannot find MechSummary for '{}', please validate units.cache is correct", filename);
             return UnitUtils.createOMG();
         }
         try {
@@ -1075,7 +1074,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             
             return fileParser.getEntity();
         } catch (EntityLoadingException e) {
-            logger.error("Cannot load unit '{}': {}", filename, e);
+            LOGGER.error("Cannot load unit '{}': {}", filename, e);
             return UnitUtils.createOMG();
         }
     } // end loadMech
@@ -1159,7 +1158,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
     public boolean hasSemiGuided() {
         for (Mounted ammo : getEntity().getAmmo()) {
-            // MWLogger.errLog("ammo type:
+            // LOGGER.error("ammo type:
             // "+((AmmoType)ammo.getType()).getMunitionType());
             if (((AmmoType) ammo.getType()).getMunitionType().contains(AmmoType.Munitions.M_SEMIGUIDED)) {
                 return true;
@@ -1226,8 +1225,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             loadedUnits = new MULParser(entityFile, null).getEntities();
             loadedUnits.trimToSize();
         } catch (Exception ex) {
-            MWLogger.errLog("Unable to load file " + entityFile.getName());
-            MWLogger.errLog(ex);
+            LOGGER.error("Unable to load file " + entityFile.getName());
+            LOGGER.error("Exception: ", ex);
             return mulUnits;
         }
 
@@ -1378,7 +1377,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         
         if (refigureWeightClass) {
             cm.setWeightclass(cm.getEntity().getWeightClass());
-            MWLogger.debugLog("Setting " + cm.getEntity().getModel() + " to weight class " + cm.getEntity().getWeightClass());
+            LOGGER.debug("Setting " + cm.getEntity().getModel() + " to weight class " + cm.getEntity().getWeightClass());
         }
         
         SPilot pilot = null;

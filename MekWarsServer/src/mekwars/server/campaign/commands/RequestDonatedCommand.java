@@ -30,8 +30,7 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
 
-public class RequestDonatedCommand implements Command {
-
+public class  RequestDonatedCommand  implements Command {
     int accessLevel = 0;
     String syntax = "";
 

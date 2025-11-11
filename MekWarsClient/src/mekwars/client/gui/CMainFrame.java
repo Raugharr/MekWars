@@ -80,16 +80,15 @@ import mekwars.client.gui.dialog.buildtableviewer.BuildTableViewer;
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.StringUtils;
 import mekwars.operationseditor.gui.dialog.OperationsDialog;
-import megamek.MegaMek;
 import megamek.client.ui.swing.UnitLoadingDialog;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CMainFrame extends JFrame {
-    /**
-     *
-     */
+    private static final Logger LOGGER = LogManager.getLogger(CMainFrame.class);
+
     private static final long serialVersionUID = -1198882220815512476L;
 
     JPanel contentPane;
@@ -278,7 +277,7 @@ public class CMainFrame extends JFrame {
             // factored out to reduce bloat
             createMenu();
         } catch (Exception e) {
-            MWLogger.errLog(e);
+            LOGGER.error("Exception: ", e);
         }
         setJMenuBar(jMenuBar1);
         enableMenu();
@@ -402,18 +401,16 @@ public class CMainFrame extends JFrame {
                 jMenuMod = (JMenu) moderatorMenu;
                 jMenuBar1.add(jMenuMod);
             } catch (Exception ex) {
-                MWLogger.errLog("ModeratorMenu creation FAILED!");
-                MWLogger.errLog(ex);
+                LOGGER.error("ModeratorMenu creation FAILED!", ex);
             }
             try {
                 AdminMenu adminMenu = new AdminMenu();
                 adminMenu.createMenu(mwclient);
                 jMenuBar1.remove(jMenuAdmin);
-                jMenuAdmin = (JMenu) adminMenu;
+                jMenuAdmin = adminMenu;
                 jMenuBar1.add(jMenuAdmin);
             } catch (Exception ex) {
-                MWLogger.errLog("AdminMenu creation FAILED!");
-                MWLogger.errLog(ex);
+                LOGGER.error("AdminMenu creation FAILED!", ex);
             }
 
             jMenuBar1.remove(jMenuOperations);
@@ -1162,7 +1159,7 @@ public class CMainFrame extends JFrame {
                 try {
                     Browser.displayURL("http://sourceforge.net/tracker/?group_id=122002&atid=692058");
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         };
@@ -1171,7 +1168,7 @@ public class CMainFrame extends JFrame {
                 try {
                     Browser.displayURL("http://sourceforge.net/tracker/?group_id=47079&atid=448394");
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         };
@@ -1180,7 +1177,7 @@ public class CMainFrame extends JFrame {
                 try {
                     Browser.displayURL("http://sourceforge.net/tracker/?group_id=47079&atid=448397");
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         };
@@ -1189,7 +1186,7 @@ public class CMainFrame extends JFrame {
                 try {
                     Browser.displayURL("http://sourceforge.net/tracker/?group_id=122002&atid=692061");
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         };
@@ -3008,7 +3005,7 @@ public class CMainFrame extends JFrame {
         try {
             createMenu();
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
         enableMenu();
         this.repaint();
@@ -3019,7 +3016,7 @@ public class CMainFrame extends JFrame {
         // login call of UOE occures before the menu is
         // created. return to stop NPE's.
         if (jMenuAttackMenu == null) {
-            MWLogger.errLog("Attack Menu is Null!");
+            LOGGER.error("Attack Menu is Null!");
             return;
         }
 
@@ -3057,25 +3054,25 @@ public class CMainFrame extends JFrame {
                 try {
                     setIconImage(mwclient.getConfig().getImage("RESERVE").getImage());
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             } else if (status == MWClient.STATUS_ACTIVE) {
                 try {
                     setIconImage(mwclient.getConfig().getImage("ACTIVE").getImage());
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             } else if (status == MWClient.STATUS_FIGHTING) {
                 try {
                     setIconImage(mwclient.getConfig().getImage("FIGHT").getImage());
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             } else if ((status == MWClient.STATUS_LOGGEDOUT) || (status == MWClient.STATUS_DISCONNECTED)) {
                 try {
                     setIconImage(mwclient.getConfig().getImage("LOGOUT").getImage());
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         }
@@ -3085,7 +3082,7 @@ public class CMainFrame extends JFrame {
             try {
                 setIconImage(mwclient.getConfig().getImage("TRAY").getImage());
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
             }
         }
 
@@ -3176,7 +3173,7 @@ public class CMainFrame extends JFrame {
                 fis.close();
 
             } catch (Exception ex) {
-                MWLogger.errLog("Unable to read " + opFile);
+                LOGGER.error("Unable to read " + opFile);
                 return;
             }
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setoperation#short#" + opData.toString());
@@ -3212,7 +3209,7 @@ public class CMainFrame extends JFrame {
             fis.close();
 
         } catch (Exception ex) {
-            MWLogger.errLog("Unable to read " + opFile);
+            LOGGER.error("Unable to read " + opFile);
             return;
         }
 
@@ -3283,7 +3280,7 @@ public class CMainFrame extends JFrame {
             fis.close();
 
         } catch (Exception ex) {
-            MWLogger.errLog("Unable to read " + opFile);
+            LOGGER.error("Unable to read " + opFile);
             return;
         }
 

@@ -46,12 +46,12 @@ import mekwars.common.VerticalLayout;
 import mekwars.common.campaign.operations.DefaultOperation;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.MMNetXStream;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OperationViewerDialog extends JDialog implements Runnable {
-    /**
-     * 
-     */
+    private static final Logger LOGGER = LogManager.getLogger(OperationViewerDialog.class);
+
     private static final long serialVersionUID = 1L;
 
     public class TemplateElement {
@@ -164,7 +164,7 @@ public class OperationViewerDialog extends JDialog implements Runnable {
                 } catch (FileNotFoundException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                    MWLogger.errLog(e);
+                    LOGGER.error("Exception: ", e);
                 }
                 o = new Operation(fileEntry.getName().replace(".xml", ""), new DefaultOperation(), p);
                 ops.put(o.getName(), new OpViewerOpPane(getOpHTML(o)));
@@ -293,11 +293,11 @@ public class OperationViewerDialog extends JDialog implements Runnable {
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                MWLogger.errLog(e);
+                LOGGER.error("Exception: ", e);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                MWLogger.errLog(e);
+                LOGGER.error("Exception: ", e);
             } 
             
         }

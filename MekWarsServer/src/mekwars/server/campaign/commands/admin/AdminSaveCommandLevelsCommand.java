@@ -23,14 +23,16 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import mekwars.server.MWServ;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class AdminSaveCommandLevelsCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AdminSaveCommandLevelsCommand.class);
+
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -68,8 +70,8 @@ public class AdminSaveCommandLevelsCommand implements Command {
 			}	
 		}
 		catch (Exception ex){
-		    MWLogger.errLog(ex);
-		    MWLogger.errLog("Unable to save command levels");
+		    LOGGER.error("Exception: ", ex);
+		    LOGGER.error("Unable to save command levels");
 		} finally {
 			p.close();
 		}

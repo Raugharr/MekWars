@@ -5,8 +5,9 @@ import mekwars.common.CampaignData;
 import mekwars.common.Influences;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
-import mekwars.common.util.MWLogger;
 import mekwars.dedicatedhost.MWDedHost;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.io.*;
@@ -24,6 +25,7 @@ import java.util.Map;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class DataFetchClient {
+    private static final Logger LOGGER = LogManager.getLogger(DataFetchClient.class);
 
     private String hostAddr;
     private String cacheDir;
@@ -88,7 +90,7 @@ public class DataFetchClient {
 
                 localConfigTimestamp = tempTime.substring(11);//remove "#Timestamp="
             } catch (Exception e) {
-                MWLogger.errLog("Problems reading timestamp from local configuration.");
+                LOGGER.error("Problems reading timestamp from local configuration.");
             }
 
             //now get the Server MD5
@@ -97,10 +99,10 @@ public class DataFetchClient {
                 BinReader in = openConnection("ConfigTimestamp");
                 serverConfigTimestamp = in.readLine("ConfigTimestamp");
             } catch (Exception e) {
-                MWLogger.errLog("Problems connecting to server to get config timestamp.");
+                LOGGER.error("Problems connecting to server to get config timestamp.");
             }
 
-            MWLogger.errLog("Local Config: " + localConfigTimestamp + " Server Config: " + serverConfigTimestamp);
+            LOGGER.error("Local Config: {} Server Config: {}", localConfigTimestamp, serverConfigTimestamp);
             if (localConfigTimestamp.equals(serverConfigTimestamp)) {
                 timestampMatch = true;
                 try {
@@ -150,7 +152,7 @@ public class DataFetchClient {
                         dedHost.serverConfigs.load(configFile);
                         configFile.close();
                     } catch (Exception ex) {
-                        MWLogger.errLog(ex);
+                        LOGGER.error("Exception: ", ex);
                     }
                 }//end catch for read-in
             }
@@ -187,7 +189,7 @@ public class DataFetchClient {
 
         serverVersion = serverVersion.substring(0, serverVersion.lastIndexOf("."));
 
-        MWLogger.errLog("Client Version: " + clientVersion + " Server Version: " + serverVersion);
+        LOGGER.error("Client Version: {} Server Version: {}", clientVersion, serverVersion);
         mustUpdate = !serverVersion.equalsIgnoreCase(clientVersion);
 
         //If the versions dont match then the client has to update anyways
@@ -196,7 +198,7 @@ public class DataFetchClient {
             String forceUpdateKey = binreader.readLine("ForceUpdateKey");
             String clientUpdateKey = dedHost.getConfigParam("UPDATEKEY");
 
-            MWLogger.errLog("Server Key: " + forceUpdateKey);
+            LOGGER.error("Server Key: " + forceUpdateKey);
             //the server update key starts out blank. So the update only works
             //after a key is set server side.
             if (forceUpdateKey.trim().length() > 1)
@@ -214,9 +216,9 @@ public class DataFetchClient {
                         Runtime runtime = Runtime.getRuntime();
                         String[] call = {"java", "-jar", "./MekWarsAutoUpdate.jar", "PLAYER"};
                         runtime.exec(call);
-                        MWLogger.errLog("Starting Update!");
+                        LOGGER.error("Starting Update!");
                     } catch (Exception ex) {
-                        MWLogger.errLog(ex);
+                        LOGGER.error("Exception: ", ex);
                     }
                 }
                 System.exit(0);
@@ -240,7 +242,7 @@ public class DataFetchClient {
                     }
 
                 } catch (Exception ex) {
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Exception: ", ex);
                 }
 
             }
@@ -278,13 +280,13 @@ public class DataFetchClient {
 
                 localListTimestamp = tempTime.substring(11);//remove "#Timestamp="
             } catch (Exception e) {
-                MWLogger.errLog("Problems reading timestamp from local OpList.");
+                LOGGER.error("Problems reading timestamp from local OpList.");
             }
 
             //now get the server list's timestamp ...
             BinReader in = openConnection("OpListTimestamp");
             String serverListTimestamp = in.readLine("OpListTimestamp");
-            MWLogger.errLog("Local OpList: " + localListTimestamp + " Server OpList: " + serverListTimestamp);
+            LOGGER.error("Local OpList: " + localListTimestamp + " Server OpList: " + serverListTimestamp);
             if (localListTimestamp.equals(serverListTimestamp))
                 timestampMatch = true;
 
@@ -321,8 +323,8 @@ public class DataFetchClient {
                     fops.close();
 
                 }
-            } catch (Exception exe) {
-                MWLogger.errLog(exe);
+            } catch (Exception ex) {
+                LOGGER.error("Exception: ", ex);
             }
         }//end if(!md5Match)
     }//end getOpListMD5
@@ -363,7 +365,7 @@ public class DataFetchClient {
                 //in.close();
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
 
     }
@@ -374,8 +376,8 @@ public class DataFetchClient {
             BinReader in = openConnection("ServerMegaMekGameOptionsMD5");
             result = in.readLine("ServerMegaMekGameOptionsMD5");
         } catch (Exception ex) {
-            MWLogger.errLog("Error retriving MD5 for game options");
-            MWLogger.errLog(ex);
+            LOGGER.error("Error retriving MD5 for game options");
+            LOGGER.error("Exception: ", ex);
         }
         return result;
     }
@@ -393,7 +395,7 @@ public class DataFetchClient {
             localGameOptions = new File("./mmconf/gameoptions.xml");
             if (localGameOptions.exists()) {
 
-                MWLogger.errLog("- local gameoptions.xml exists. checking MD5.");
+                LOGGER.error("- local gameoptions.xml exists. checking MD5.");
 
                 //try to connect
                 try {
@@ -404,15 +406,15 @@ public class DataFetchClient {
                     String ServerMegaMekGameOptionsMD5 = this.getServerMegaMekGameOptionsMD5();
 
                     if (localOptionsMD5.equals(ServerMegaMekGameOptionsMD5)) {
-                        MWLogger.errLog("- MD5 matches leaving alone.");
+                        LOGGER.error("- MD5 matches leaving alone.");
                         return;
                     }
                 } catch (Exception ex) {
-                    MWLogger.errLog("- Error checking gameoptions.xml");
+                    LOGGER.error("- Error checking gameoptions.xml");
                 }
             }
 
-            MWLogger.errLog("- MD5 mismatch. Pulling gameoptions.xml from the server!");
+            LOGGER.error("- MD5 mismatch. Pulling gameoptions.xml from the server!");
             //MMClient.MWDedHostLog.clientErrLog("- opening connection to datafeed. requesting Trait Files");
             BinReader in = openConnection("ServerMegaMekGameOptions");
             FileOutputStream fops = null;
@@ -441,7 +443,7 @@ public class DataFetchClient {
                 //in.close();
             }
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -484,11 +486,8 @@ public class DataFetchClient {
 
             Data.importAccessLevels(in);
             //in.close();
-        } catch (IOException e) {
-            MWLogger.errLog(e);
-            return false;
-        } catch (RuntimeException e) {
-            MWLogger.errLog(e);
+        } catch (IOException | RuntimeException e) {
+            LOGGER.error("Exception: ", e);
             return false;
         }
         return true;
@@ -505,13 +504,13 @@ public class DataFetchClient {
      */
     private BinReader openConnection(String cmd, int timeout) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        MWLogger.infoLog("Command: " + cmd);
+        LOGGER.info("Command: " + cmd);
         if (dataSocket == null
                 || dataSocket.isClosed()
                 || dataSocket.isInputShutdown()
                 || dataSocket.isOutputShutdown()) {
             this.closeDataConnection();
-            MWLogger.infoLog("Trying to connect to " + hostAddr + " at port " + dataPort);
+            LOGGER.info("Trying to connect to " + hostAddr + " at port " + dataPort);
             dataSocket = new Socket(hostAddr, dataPort);
             dataSocket.setKeepAlive(true);
         } else {//clean out any old data first.
@@ -523,7 +522,7 @@ public class DataFetchClient {
         if (lastTimestamp == null)
             out.println("", "lasttimestamp");
         else {
-            MWLogger.infoLog("writing timestamp " + sdf.format(lastTimestamp));
+            LOGGER.info("writing timestamp " + sdf.format(lastTimestamp));
             out.println(sdf.format(lastTimestamp), "lasttimestamp");
         }
         out.flush();
@@ -533,11 +532,10 @@ public class DataFetchClient {
             //lastTimestamp =
             sdf.parse(in.readLine("lasttimestamp"));
         } catch (ParseException e) {
-            MWLogger.errLog(e);
-            MWLogger.infoLog("Timestamp could not be parsed.. left unchanged.");
+            LOGGER.error("Exception: ", e);
+            LOGGER.info("Timestamp could not be parsed.. left unchanged.");
         } catch (SocketException se) {
-            MWLogger.errLog("Socket Exception Error: DataFetchClient");
-            MWLogger.errLog(se);
+            LOGGER.error("Socket Exception Error: DataFetchClient", se);
             this.closeDataConnection();
             return openConnection(cmd, timeout);
         } catch (NullPointerException NPE) {
@@ -568,7 +566,7 @@ public class DataFetchClient {
                 fw.write(Long.toString(lastTimestamp.getTime()));
                 fw.close();
             } catch (IOException e) {
-                MWLogger.errLog(e);
+                LOGGER.error("Exception: ", e);
             }
         }
         try {
@@ -576,8 +574,7 @@ public class DataFetchClient {
             data.binOut(binOut);
             binOut.close();
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
-            MWLogger.errLog("Error saving data.");
+            LOGGER.error("Error saving data.", ex);
         }
     }
 
@@ -599,13 +596,13 @@ public class DataFetchClient {
         try {
             if (dataSocket == null)
                 return;
-            MWLogger.infoLog("Closing Socket.");
+            LOGGER.info("Closing Socket.");
             dataSocket.shutdownInput();
             dataSocket.shutdownOutput();
             dataSocket.close();
             dataSocket = null;
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             dataSocket = null;
         }
     }

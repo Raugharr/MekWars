@@ -31,7 +31,6 @@
  * Modified by Torren (Jason Tighe)
  * From Megamek.client.MechSelectorDialgo.java
  */
-
 package mekwars.client.gui.dialog;
 
 import java.awt.Dimension;
@@ -67,7 +66,6 @@ import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.CMainFrame;
 import mekwars.client.gui.MechInfo;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.UnitUtils;
 import megamek.client.ui.swing.UnitFailureDialog;
@@ -79,16 +77,15 @@ import megamek.common.MechSummaryCache;
 import megamek.common.MechSummaryComparator;
 import megamek.common.MechView;
 import megamek.common.loaders.EntityLoadingException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * Allows a user to sort through a list of MechSummaries and select one
  */
-
 public class RepodSelectorDialog extends JFrame implements ActionListener, KeyListener, ListSelectionListener, Runnable, WindowListener, ItemListener {
+    private static final Logger LOGGER = LogManager.getLogger(RepodSelectorDialog.class);
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -6467246609231845514L;
 
     // how long after a key is typed does a new search begin
@@ -144,7 +141,7 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
                 global = true;
             } else if (tempstr.contains(".")) {
                 String chassieMods = ST.nextToken();
-                // MWLogger.errLog("Chassie: "+tempstr+" mods: "+chassieMods+" ChassieList: "+chassieList);
+                // LOGGER.error("Chassie: "+tempstr+" mods: "+chassieMods+" ChassieList: "+chassieList);
                 this.chassieList.put(tempstr, chassieMods);
             }
         }
@@ -288,7 +285,7 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
                 }// end if(chassie)
             }// end for(all mechs)
         } catch (Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             System.err.println("mechs size: " + mechs.length + " x: " + x);
         }
         mechsCurrent = new MechSummary[vMechs.size()];
@@ -333,7 +330,7 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         String result = makeLength(ms.getModel(), 12) + " " + makeLength(ms.getChassis(), 10) + " " + makeLength("" + ms.getTons(), 3) + " " + makeLength("" + ms.getBV(), 5);
 
         String chassieMods = chassieList.get(UnitUtils.getMechSummaryFileName(ms));
-        // MWLogger.errLog("Name: "+ms.getName()+" Mods: "+chassieMods);
+        // LOGGER.error("Name: "+ms.getName()+" Mods: "+chassieMods);
 
         StringTokenizer mods = new StringTokenizer(chassieMods, "$");
         result += " " + makeLength(mods.nextToken() + mwclient.moneyOrFluMessage(true, true, -1), 5);
@@ -361,7 +358,7 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
                 Thread.sleep(125);
                 dispose();
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
                 // MMClient.mwClientLog.clientErrLog("Problem with actionPerformed in RepodDialog");
             }
         }
@@ -375,7 +372,7 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
                 Thread.sleep(125);
                 dispose();
             } catch (Exception ex) {
-                MWLogger.errLog(ex);
+                LOGGER.error("Exception: ", ex);
                 // MMClient.mwClientLog.clientErrLog("Problem with actionPerformed in RepodDialog");
             }
         }
@@ -398,7 +395,7 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
             previewMech(entity);
         } catch (EntityLoadingException ex) {
             System.out.println("Unable to load mech: " + ms.getSourceFile() + ": " + ms.getEntryName() + ": " + ex.getMessage());
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
             clearMechPreview();
             return;
         }

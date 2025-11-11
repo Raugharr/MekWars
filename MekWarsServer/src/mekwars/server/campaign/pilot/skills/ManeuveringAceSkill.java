@@ -78,7 +78,7 @@ public class ManeuveringAceSkill extends SPilotSkill {
             total *= baseBVMod;
             return (int) total;
         } catch (Exception ex) {
-            // MWLogger.errLog(ex);
+            // LOGGER.error("Exception: ", ex);
             return 0;
         }
     }
@@ -95,7 +95,7 @@ public class ManeuveringAceSkill extends SPilotSkill {
             total *= baseBVMod;
             return (int) total;
         } catch (Exception ex) {
-            // MWLogger.errLog(ex);
+            // LOGGER.error("Exception: ", ex);
             return 0;
         }
     }

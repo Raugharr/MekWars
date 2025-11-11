@@ -1,19 +1,24 @@
 package mekwars.client.common.campaign.clientutils;
 
 
-import mekwars.common.CampaignData;
+import megamek.common.Building;
+import megamek.common.Game;
+import megamek.common.enums.GamePhase;
+import megamek.common.event.*;
+import megamek.server.Server;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
+import mekwars.client.common.campaign.clientutils.protocol.IClient;
+import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
 import mekwars.common.MMGame;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.IClientConfig;
 import mekwars.common.campaign.clientutils.IClientUser;
 import mekwars.common.campaign.clientutils.IGameHost;
 import mekwars.common.campaign.clientutils.SerializeEntity;
-import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
 import mekwars.common.campaign.clientutils.protocol.TransportCodec;
-import mekwars.common.util.MWLogger;
-import mekwars.client.common.campaign.clientutils.protocol.CConnector;
-import mekwars.client.common.campaign.clientutils.protocol.IClient;
-import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,33 +28,10 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
-import megamek.common.Building;
-import megamek.common.Game;
-import megamek.common.IGame;
-import megamek.common.enums.GamePhase;
-import megamek.common.event.GameBoardChangeEvent;
-import megamek.common.event.GameBoardNewEvent;
-import megamek.common.event.GameCFREvent;
-import megamek.common.event.GameEndEvent;
-import megamek.common.event.GameEntityChangeEvent;
-import megamek.common.event.GameEntityNewEvent;
-import megamek.common.event.GameEntityNewOffboardEvent;
-import megamek.common.event.GameEntityRemoveEvent;
-import megamek.common.event.GameListener;
-import megamek.common.event.GameMapQueryEvent;
-import megamek.common.event.GameNewActionEvent;
-import megamek.common.event.GamePhaseChangeEvent;
-import megamek.common.event.GamePlayerChangeEvent;
-import megamek.common.event.GamePlayerChatEvent;
-import megamek.common.event.GamePlayerConnectedEvent;
-import megamek.common.event.GamePlayerDisconnectedEvent;
-import megamek.common.event.GameReportEvent;
-import megamek.common.event.GameSettingsChangeEvent;
-import megamek.common.event.GameTurnChangeEvent;
-import megamek.common.event.GameVictoryEvent;
-import megamek.server.Server;
 
 public abstract class GameHost implements GameListener, IGameHost {
+    private static final Logger LOGGER = LogManager.getLogger(GameHost.class);
+    
     public static final int STATUS_DISCONNECTED = 0;
     public static final int STATUS_LOGGEDOUT = 1;
     public static final int STATUS_RESERVE = 2;
@@ -176,8 +158,8 @@ public abstract class GameHost implements GameListener, IGameHost {
 
         }// end try
         catch (Exception ex) {
-            MWLogger.errLog("Error reporting game!");
-            MWLogger.errLog(ex);
+            LOGGER.error("Error reporting game!");
+            LOGGER.error("Exception: ", ex);
         }
     }
 
@@ -237,7 +219,7 @@ public abstract class GameHost implements GameListener, IGameHost {
 
 	public void gameVictory(GameVictoryEvent e) {
         sendGameReport();
-        MWLogger.infoLog("GAME END");	
+        LOGGER.info("GAME END");	
 	}
     
     protected abstract void sendGameReport();
@@ -282,14 +264,14 @@ public abstract class GameHost implements GameListener, IGameHost {
                     && savedFile.isFile()
                     && (lastTime < (System.currentTimeMillis() - daysInSeconds))) {
                 try {
-                    MWLogger.infoLog("Purging File: "
+                    LOGGER.info("Purging File: "
                             + savedFile.getName() + " Time: " + lastTime
                             + " purge Time: "
                             + (System.currentTimeMillis() - daysInSeconds));
                     savedFile.delete();
                 } catch (Exception ex) {
-                    MWLogger.errLog("Error trying to delete these files!");
-                    MWLogger.errLog(ex);
+                    LOGGER.error("Error trying to delete these files!");
+                    LOGGER.error("Exception: ", ex);
                 }
             }
         }
@@ -372,7 +354,7 @@ public abstract class GameHost implements GameListener, IGameHost {
         try {
             Connector.send(IClient.PROTOCOL_PREFIX + "comm" + "\t" + TransportCodec.encode(s));
         } catch (Exception e) {
-            MWLogger.errLog(e);
+            LOGGER.error("Exception: ", e);
         }
     }
 }

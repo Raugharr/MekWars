@@ -18,29 +18,29 @@
 package mekwars.server.MWChatServer.commands;
 
 import mekwars.common.comm.TransportCodec;
-import mekwars.common.util.MWLogger;
 import mekwars.server.ServerWrapper;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-/**
- *
- * @author  Administrator
- */
 public class Command extends CommandBase implements ICommands {
-  
-  /** @return true if this message should be distributed to other clients
-   */
-  public boolean process(MWChatClient client, String[] args) {
-    try {
-		((ServerWrapper)client.getServer()).processCommand(client.getUserId(), TransportCodec.unescape(args[1]));
-    } catch (Exception e) {
-      MWLogger.errLog(e);
-      MWLogger.errLog("Not supposed to happen");
+    private static final Logger LOGGER = LogManager.getLogger(Command.class);
+
+    /**
+     * @return true if this message should be distributed to other clients
+     */
+    public boolean process(MWChatClient client, String[] args) {
+        try {
+            ((ServerWrapper) client.getServer()).processCommand(client.getUserId(), TransportCodec.unescape(args[1]));
+        } catch (Exception e) {
+            LOGGER.error("Exception: ", e);
+            LOGGER.error("Not supposed to happen");
+        }
+        return false;
     }
-    return false;
-  }
-  
-  public void processDistributed(String client, String origin, String[] args, MWChatServer server) {
-  }  
+
+    public void processDistributed(String client, String origin, String[] args, MWChatServer server) {
+
+    }
 }

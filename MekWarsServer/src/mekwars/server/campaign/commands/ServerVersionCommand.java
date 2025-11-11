@@ -21,8 +21,7 @@ import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 
-public class ServerVersionCommand implements Command {
-	
+public class  ServerVersionCommand  implements Command {
 	//conforming methods
 	public int getExecutionLevel(){return 0;}
 	public void setExecutionLevel(int i) {}

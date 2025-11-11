@@ -24,7 +24,6 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import mekwars.common.House;
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -138,7 +137,6 @@ public class SingASongCommand implements Command {
 			try {
 				dis.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
 			}
 		}
 		
@@ -169,7 +167,6 @@ public class SingASongCommand implements Command {
 			try {
 				dis.close();
 			} catch (IOException e) {
-				MWLogger.errLog(e);
 			}
 		}
 		

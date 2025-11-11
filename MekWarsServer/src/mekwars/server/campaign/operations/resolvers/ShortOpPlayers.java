@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import mekwars.common.CampaignData;
-import mekwars.common.util.MWLogger;
+import mekwars.common.log.LogMarkerHolder;
 import mekwars.server.campaign.SPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ShortOpPlayers {
+    private static final Logger LOGGER = LogManager.getLogger(ShortOpPlayers.class);
 	private HashMap<Integer, Team> teams;
 	
 	public void addTeam(int id, Vector<SPlayer> p) {
@@ -29,10 +32,10 @@ public class ShortOpPlayers {
 	 */
 	public void reportTeams() {
 		for( int id : teams.keySet()) {
-			MWLogger.testLog("SOP Reporting: TeamID " + id);
+            LOGGER.info(LogMarkerHolder.TEST_MARKER, "SOP Reporting: TeamID {}", id);
 			Team t = getTeam(id);
 			for(SPlayer p : t.getPlayers()) {
-				MWLogger.testLog("==> " + p.getName());
+                LOGGER.info(LogMarkerHolder.TEST_MARKER, "==> {}", p.getName());
 			}
 		}
 	}

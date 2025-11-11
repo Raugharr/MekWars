@@ -39,7 +39,6 @@ import javax.swing.SpringLayout;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.Equipment;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
@@ -48,8 +47,11 @@ import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class ComponentDisplayDialog extends JDialog implements ActionListener {
+    private static final Logger LOGGER = LogManager.getLogger(ComponentDisplayDialog.class);
 
     // store the client backlink for other things to use
     private static final long serialVersionUID = 8839724432360797850L;
@@ -89,7 +91,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         // stored values.
         displayType = type;
 
-        MWLogger.errLog("Year: " + mwclient.getServerConfigs("CampaignYear"));
+        LOGGER.error("Year: " + mwclient.getServerConfigs("CampaignYear"));
         int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
 
         

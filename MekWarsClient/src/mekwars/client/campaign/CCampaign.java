@@ -26,8 +26,9 @@ import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.dialog.ArmyViewerDialog;
 import mekwars.common.BMEquipment;
 import mekwars.common.util.ComponentToCritsConverter;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class for Campaign object used by Client
@@ -35,6 +36,7 @@ import mekwars.common.util.TokenReader;
  * TODO: Properly comment this class.
  */
 public class CCampaign {
+    private static final Logger LOGGER = LogManager.getLogger(CCampaign.class);
 
     MWClient mwclient;
     CPlayer Player;
@@ -49,7 +51,7 @@ public class CCampaign {
         if (f.exists() && !f.isDirectory()) {f.delete();}
         if (!f.exists()) {
             try {f.mkdirs();}
-            catch (Exception e) {MWLogger.errLog(e);}
+            catch (Exception e) {LOGGER.error("Exception: ", e);}
         }
     }
 
@@ -231,7 +233,7 @@ public class CCampaign {
             }
             mwclient.setWaiting(false);
         }catch(Exception ex) {
-            MWLogger.errLog(ex);
+            LOGGER.error("Exception: ", ex);
         }
     }
 }

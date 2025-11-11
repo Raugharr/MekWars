@@ -20,16 +20,18 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import mekwars.common.CampaignData;
 import mekwars.common.Unit;
-import mekwars.common.util.MWLogger;
+import mekwars.common.log.LogMarkerHolder;
 import megamek.common.IEntityRemovalConditions;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SArmy;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class OperationReporter {
+    public class OperationReporter {
+    private static final Logger LOGGER = LogManager.getLogger(OperationReporter.class);
 
 	private OperationReportEntry opData = new OperationReportEntry();
 	private Vector<String> winnerSet = new Vector<String>();
@@ -50,8 +52,9 @@ public class OperationReporter {
 		StringBuilder wNames = new StringBuilder();
 		
 		while(it.hasNext()) {
-			if (count > 0)
-				wNames.append(", ");
+			if (count > 0) {
+                wNames.append(", ");
+            }
 			String name = it.next();
 			
 			if (name.equalsIgnoreCase("Draw") ) {
@@ -60,16 +63,10 @@ public class OperationReporter {
 				try {
 					wNames.append(winners.get(name).getName());
 				} catch (Exception e) {
-					if (wNames==null) {
-						MWLogger.testLog("wNames is null");
-					} else if (winners == null) {
-						MWLogger.testLog("winners is null");
-					} else {
-						MWLogger.testLog("Winners must have returned a null object");
-						MWLogger.testLog("looking for: " + name);
-						MWLogger.testLog("size: " + winners.size());
-						MWLogger.testLog("conents: " + winners.keySet().toString());
-					}
+                    LOGGER.info(LogMarkerHolder.TEST_MARKER, "Winners must have returned a null object");
+                    LOGGER.info(LogMarkerHolder.TEST_MARKER, "looking for: {}", name);
+                    LOGGER.info(LogMarkerHolder.TEST_MARKER, "size: {}", winners.size());
+                    LOGGER.info(LogMarkerHolder.TEST_MARKER, "contents: {}", winners.keySet());
 				}
 			}
 			count++;
@@ -120,15 +117,15 @@ public class OperationReporter {
 	
 	public void commit() {
 		opData.setEndTime(System.currentTimeMillis());
-				
-		MWLogger.resultsLog("Operation Finished: ");
-		MWLogger.resultsLog("  OpType: " + opData.getOpType());
-		MWLogger.resultsLog("  Planet: " + opData.getPlanet() + ", Terrain: " + opData.getTerrain() + ", Theme: " + opData.getTheme());
-		MWLogger.resultsLog("  Attacker(s): " + opData.getAttackers() + " (" + opData.getAttackerSize() + " units)  --  Defender(s): " + opData.getDefenders() + " (" + opData.getDefenderSize() + " units)");
-		MWLogger.resultsLog("  BVs: Attacker: " + opData.getAttackerStartBV() + " / " + opData.getAttackerEndBV() + "  --  Defender: " + opData.getDefenderStartBV() + " / " + opData.getDefenderEndBV());
-		MWLogger.resultsLog("  Attacker Won: " + Boolean.toString(opData.attackerIsWinner()));
-		MWLogger.resultsLog("  Winner(s): " + opData.getWinners() + "  --  Loser(s): " + opData.getLosers());
-		MWLogger.resultsLog("  Game Length: " + opData.getHumanReadableGameLength());
+
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "Operation Finished: ");
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  OpType: " + opData.getOpType());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Planet: " + opData.getPlanet() + ", Terrain: " + opData.getTerrain() + ", Theme: " + opData.getTheme());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Attacker(s): " + opData.getAttackers() + " (" + opData.getAttackerSize() + " units)  --  Defender(s): " + opData.getDefenders() + " (" + opData.getDefenderSize() + " units)");
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  BVs: Attacker: " + opData.getAttackerStartBV() + " / " + opData.getAttackerEndBV() + "  --  Defender: " + opData.getDefenderStartBV() + " / " + opData.getDefenderEndBV());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Attacker Won: " + opData.attackerIsWinner());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Winner(s): " + opData.getWinners() + "  --  Loser(s): " + opData.getLosers());
+        LOGGER.info(LogMarkerHolder.RESULTS_MARKER, "  Game Length: " + opData.getHumanReadableGameLength());
 	}
 	
 	public void closeOperation(boolean draw, boolean attackerWon) {

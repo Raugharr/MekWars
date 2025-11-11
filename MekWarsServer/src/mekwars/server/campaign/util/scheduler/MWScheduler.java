@@ -1,6 +1,6 @@
 /*
  * MekWars - Copyright (C) 2025
- * 
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,9 +17,11 @@
 package mekwars.server.campaign.util.scheduler;
 
 import java.util.Date;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import mekwars.common.CampaignData;
 import mekwars.common.House;
-import mekwars.common.util.MWLogger;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
@@ -38,6 +40,7 @@ import org.quartz.impl.StdSchedulerFactory;
  * @version 2016.10.10
  */
 public class MWScheduler implements ScheduleHandler {
+    private static final Logger LOGGER = LogManager.getLogger(MWScheduler.class);
 
 	private static MWScheduler handler = null;
 	private static Scheduler scheduler = null;
@@ -109,7 +112,7 @@ public class MWScheduler implements ScheduleHandler {
 		} else if (scheduleType == ScheduleHandler.TYPE_CHRISTMAS_END) {
 			
 		} else {
-			MWLogger.errLog("Unknown ScheduleType in changeFrequency: " + scheduleType);
+			LOGGER.error("Unknown ScheduleType in changeFrequency: " + scheduleType);
 			CampaignMain.cm.doSendModMail("SERVER", "Unknown ScheduleType in changeFrequency: " + scheduleType);
 		}
 	}
@@ -123,8 +126,8 @@ public class MWScheduler implements ScheduleHandler {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
 			scheduler.start();
 		} catch (SchedulerException e) {
-			MWLogger.errLog(e);
-			MWLogger.errLog("Unable to start scheduler!");
+			LOGGER.error("Exception: ", e);
+			LOGGER.error("Unable to start scheduler!");
 		}
 	}
 	
@@ -138,7 +141,7 @@ public class MWScheduler implements ScheduleHandler {
 			scheduler.shutdown();
 		} catch (SchedulerException e) {
 			CampaignMain.cm.doSendModMail("SERVER", e.getStackTrace().toString());
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 
@@ -151,7 +154,7 @@ public class MWScheduler implements ScheduleHandler {
 	@Override
 	public void scheduleChristmas(Date startDate, Date endDate) {
 		// TODO Auto-generated method stub
-		MWLogger.infoLog("Scheduling Christmas");
+		LOGGER.info("Scheduling Christmas");
 	}
 
 	/**
@@ -167,7 +170,7 @@ public class MWScheduler implements ScheduleHandler {
 		try {
 			scheduler.scheduleJob(job, trigger);
 		} catch (SchedulerException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 
@@ -181,7 +184,7 @@ public class MWScheduler implements ScheduleHandler {
 		try {
 			scheduler.unscheduleJob(key);
 		} catch (SchedulerException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 
@@ -206,7 +209,7 @@ public class MWScheduler implements ScheduleHandler {
 		try {
 			scheduler.rescheduleJob(oldKey, newTrigger);
 		} catch (SchedulerException e) {
-			MWLogger.errLog(e);
+			LOGGER.error("Exception: ", e);
 		}
 	}
 	

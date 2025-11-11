@@ -29,10 +29,12 @@ import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 
 import mekwars.client.MWClient;
 import mekwars.common.Planet;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 class MMNetHyperLinkListener implements HyperlinkListener {
-	
+    private static final Logger LOGGER = LogManager.getLogger(MMNetHyperLinkListener.class);
+
 	MWClient mwclient;
 	protected boolean isHovering = false;
 	protected String Tooltip = null;
@@ -74,23 +76,23 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 			try
 			{
 				Tooltip = (String)e.getSourceElement().getAttributes().getAttribute(HTML.getAttributeKey("alt"));
-				MWLogger.infoLog(Tooltip);
+				LOGGER.info(Tooltip);
 				if (HSPanel != null)
 					HSPanel.setInfoText(Tooltip);
 			}
 			catch (Exception ex)
 			{
-				MWLogger.errLog(ex);
+				LOGGER.error("Exception: ", ex);
 			}
-			//MWLogger.infoLog("hyperlinkUpdate fired");
-			//MWLogger.infoLog("     entered->");
+			//LOGGER.info("hyperlinkUpdate fired");
+			//LOGGER.info("     entered->");
 		}
 		else if (e.getEventType() == HyperlinkEvent.EventType.EXITED) {
 			isHovering = false;
 			if (HSPanel != null)
 				HSPanel.setInfoText("");
 			Tooltip = null;
-			//MWLogger.infoLog("     <-exited");
+			//LOGGER.info("     <-exited");
 		}
 		
 		
@@ -113,7 +115,7 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 						command = command.substring(7);
 						StringTokenizer commandStr = new StringTokenizer(command,"*");
 						command = commandStr.nextToken() +", "+commandStr.nextToken(); 
-						MWLogger.errLog("Command "+command);	
+						LOGGER.error("Command "+command);
 						mwclient.sendChat("/mail "+command);
 					}
 					else if (e.getDescription().startsWith("MEKINFO")) {
@@ -209,8 +211,8 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 						Browser.displayURL(e.getURL().toExternalForm());
 					}
 				}
-				catch (Throwable t) {
-					MWLogger.errLog((Exception)t);
+				catch (Throwable throwable) {
+					LOGGER.error("Exception: ", throwable);
 				}
 			}
 		}

@@ -25,8 +25,7 @@ import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 
-public class FireTechsCommand implements Command {
-	
+public class  FireTechsCommand  implements Command {
 	int accessLevel = 0;
 	String syntax = "Syntax: /firetechs numberOfTech#techType";
 	public int getExecutionLevel(){return accessLevel;}

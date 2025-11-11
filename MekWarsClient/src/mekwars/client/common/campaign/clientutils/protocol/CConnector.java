@@ -34,17 +34,18 @@ package mekwars.client.common.campaign.clientutils.protocol;
 import java.io.IOException;
 import java.net.Socket;
 
-import mekwars.client.common.campaign.clientutils.protocol.IClient;
 import mekwars.client.gui.SplashWindow;
 import mekwars.common.campaign.clientutils.protocol.IConnectionHandler;
 import mekwars.common.campaign.clientutils.protocol.IConnectionListener;
-import mekwars.common.util.MWLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  *
  */
 public class CConnector implements IConnectionListener {
+    private static final Logger LOGGER = LogManager.getLogger(CConnector.class);
     protected IClient Client;
 
     protected String _host = "";
@@ -87,7 +88,7 @@ public class CConnector implements IConnectionListener {
     	if ( message.indexOf("CH%7c%2fc+sendclientdata%23") < 0
     	        && message.indexOf("CH%7c%2fc+sendtomisc%23") < 0
     	        && message.indexOf("/pong") < 0) {
-            MWLogger.infoLog("SENT: " + message);
+            LOGGER.info("SENT: " + message);
         }
       _connectionHandler.queueMessage(message);
     }
@@ -110,24 +111,24 @@ public class CConnector implements IConnectionListener {
 
       try {
         if (_connected) {
-            MWLogger.errLog("already connected...");
+            LOGGER.error("already connected...");
             return;
         }
 
-        if (_host.equals("") || _port == -1)
+        if (_host.isEmpty() || _port == -1)
         {
-            MWLogger.errLog("no host or port set...");
+            LOGGER.error("no host or port set...");
             return;
         }
 
         IOException ioexception = null;
 
-        MWLogger.errLog("Opening socket connection to " + _host + ":" + _port);
+        LOGGER.error("Opening socket connection to " + _host + ":" + _port);
         Socket s = null;
         try {
           s = new Socket(_host, _port);
-          MWLogger.errLog("CConnector: connected to " + _host + ":" + _port);
-          //MWLogger.errLog("setting NO_DELAY = true");
+          LOGGER.error("CConnector: connected to " + _host + ":" + _port);
+          //LOGGER.error("setting NO_DELAY = true");
           s.setTcpNoDelay(true);
           _connectionHandler = new ConnectionHandlerLocal(s);
           _connectionHandler.setListener(this);
@@ -136,7 +137,7 @@ public class CConnector implements IConnectionListener {
           return;
         }
         catch (IOException e) {ioexception = e;}
-        MWLogger.errLog("giving up");
+        LOGGER.error("giving up");
         if (ioexception != null) {throw ioexception;}
       }
       catch (IOException e) {
@@ -145,7 +146,7 @@ public class CConnector implements IConnectionListener {
             splash.setStatus(splash.STATUS_CONNECTFAILED);
         }
 
-        MWLogger.errLog(e);
+        LOGGER.error("Exception: ", e);
         /*Object[] options = {"Exit"};
         int selectedValue = JOptionPane.showOptionDialog(null,"Could not connect to " + _host + ":" + _port,"Connection error!",JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,null,options,options[0]);
         if (selectedValue == 0)

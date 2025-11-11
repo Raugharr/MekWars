@@ -18,8 +18,9 @@ package mekwars.server.campaign;
 
 import java.util.Properties;
 
-import mekwars.common.util.MWLogger;
 import mekwars.server.MWServ;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Torren Oct 22, 2004 Loads the default settings for the server config If any configs are added please add them to this function as well as
@@ -27,6 +28,8 @@ import mekwars.server.MWServ;
  * @version 2016.10.06
  */
 public class DefaultServerOptions {
+    private static final Logger LOGGER = LogManager.getLogger(DefaultServerOptions.class);
+
     private Properties defaults; // default server config
 
     protected void createDefaults() {
@@ -1482,9 +1485,9 @@ public class DefaultServerOptions {
         try {
             CampaignMain.cm.saveConfigureFile(CampaignMain.cm.getCampaignOptions().getConfig(), filename);
         } catch (Exception ex) {
-            MWLogger.errLog("Unable to save config file.");
-            MWLogger.errLog(ex);
-            MWLogger.errLog(ex.getMessage());
+            LOGGER.error("Unable to save config file.");
+            LOGGER.error("Exception: ", ex);
+            LOGGER.error(ex.getMessage());
         }
     }
 

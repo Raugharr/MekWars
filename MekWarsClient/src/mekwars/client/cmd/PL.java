@@ -24,17 +24,18 @@ import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
 import mekwars.client.common.campaign.clientutils.GameHost;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
  */
 
 public class PL extends Command {
-
+    private static final Logger LOGGER = LogManager.getLogger(PL.class);
     /**
      * @param client
      */
@@ -222,10 +223,10 @@ public class PL extends Command {
                     }
                 }
             }
-            MWLogger.infoLog(player.getMyHouse().getSupportedUnits().toString());
+            LOGGER.info(player.getMyHouse().getSupportedUnits().toString());
         } else if (cmd.equals("CSU")) {
             // clear supported units
-            MWLogger.infoLog("Clearing Supported Units");
+            LOGGER.info("Clearing Supported Units");
             player.getMyHouse().supportedUnits.clear();
             player.getMyHouse().setNonFactionUnitsCostMore(Boolean.parseBoolean(mwclient.getServerConfigs("UseNonFactionUnitsIncreasedTechs")));
         } else if (cmd.equals("SMA")) {
@@ -266,7 +267,7 @@ public class PL extends Command {
         } else if (cmd.equals("STS")) {
             int unitID = TokenReader.readInt(st);
             int targetType = TokenReader.readInt(st);
-            //MWLogger.errLog("Setting Targeting for Unit " + unitID + " to " + targetType);
+            //LOGGER.error("Setting Targeting for Unit " + unitID + " to " + targetType);
             player.getUnit(unitID).setTargetSystem(targetType);
             mwclient.doParseDataInput("CH|AM: Targeting for unit " + unitID + " set to " + player.getUnit(unitID).getTargetSystemTypeDesc());
         } else {

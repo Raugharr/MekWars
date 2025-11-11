@@ -31,8 +31,7 @@ import mekwars.server.campaign.commands.Command;
 /**
  * @author Helge Richter
  */
-public class AdminCreateFactionCommand implements Command {
-    
+public class  AdminCreateFactionCommand  implements Command {
     int accessLevel = IAuthenticator.ADMIN;
     String syntax = "name#color(hex)#basegunner#basePilot#Abbreviation";
     public int getExecutionLevel(){return accessLevel;}

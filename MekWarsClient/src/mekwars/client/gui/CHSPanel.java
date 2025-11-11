@@ -54,29 +54,26 @@ import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.client.gui.MWUnitDisplayHelper;
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
-import mekwars.common.util.MWLogger;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.UnitUtils;
 import megamek.client.generator.RandomGenderGenerator;
-import megamek.client.ui.swing.unitDisplay.UnitDisplay;
 import megamek.common.Crew;
 import megamek.common.CrewType;
 import megamek.common.Entity;
 import megamek.common.Infantry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * SHouse Status Panel
  */
 
 public class CHSPanel extends JPanel {
+    private static final Logger LOGGER = LogManager.getLogger(CHSPanel.class);
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -6985292870326367798L;
     MWClient mwclient;
     CPlayer thePlayer;
@@ -463,14 +460,14 @@ public class CHSPanel extends JPanel {
         // if weight and type map is null, there is no way to change the
         // factory.
         if (weightAndTypeMap == null) {
-            MWLogger.errLog("Error updating factory: null treemap at weight & type.");
+            LOGGER.error("Error updating factory: null treemap at weight & type.");
             return;
         }
 
         // no factory with matching name on planet. return.
         String oldFactoryInfo = weightAndTypeMap.get(planet + "$" + factoryName);
         if (oldFactoryInfo == null) {
-            MWLogger.errLog("Error updating factory: null oldFactory.");
+            LOGGER.error("Error updating factory: null oldFactory.");
             return;
         }
 
@@ -804,7 +801,7 @@ public class CHSPanel extends JPanel {
         if (s == null) {
             hsButtonSpringPanel.setVisible(true);
             lblInfo.setVisible(false);
-        } else if (s.equals("")) {
+        } else if (s.isEmpty()) {
             hsButtonSpringPanel.setVisible(true);
             lblInfo.setVisible(false);
         } else {
