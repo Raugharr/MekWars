@@ -157,6 +157,7 @@ import org.apache.logging.log4j.Logger;
 
 public final class CampaignMain implements Serializable {
     private static final Logger LOGGER = LogManager.getLogger(CampaignMain.class);
+
     private static final long serialVersionUID = -8671163467590633378L;
     public static final String DEFAULT_CONFIG_PATH = "data/campaignconfig.txt";
 
@@ -983,7 +984,7 @@ public final class CampaignMain implements Serializable {
             try {
                 CampaignMain.cm.toUser("CC|NT|" + TickJob.millisecondsUntilNextFire() + "|" + false, Username, false);
             } catch (Exception exception) {
-                logger.catching(exception);
+                LOGGER.catching(exception);
             }
 
             // Check for Christmas
