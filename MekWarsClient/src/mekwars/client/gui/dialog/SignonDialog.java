@@ -20,6 +20,7 @@ package mekwars.client.gui.dialog;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -30,6 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import mekwars.client.MWClient;
 import mekwars.client.common.ServerInfo;
+import mekwars.client.gui.SplashWindow;
 
 public final class SignonDialog implements ActionListener {
 	
@@ -53,8 +55,10 @@ public final class SignonDialog implements ActionListener {
 	
 	private JDialog dialog;
 	private JOptionPane pane;
+    private MWClient mwClient;
 	
-	public SignonDialog(MWClient mwclient) {
+	public SignonDialog(MWClient mwClient) {
+        this.mwClient = mwClient;
 		
 		// Create the labels and buttons
 		JLabel usernameLabel  = new JLabel("Username: ", SwingConstants.LEFT);
@@ -119,24 +123,24 @@ public final class SignonDialog implements ActionListener {
 		dialog.getRootPane().setDefaultButton(okayButton);
 		
 		//Is a username known? if so, show it..
-		usernameField.setText(mwclient.getConfig().getParam("NAME"));
-		passwordField.setText(mwclient.getConfig().getParam("NAMEPASSWORD"));
-		ipaddressField.setText(mwclient.getConfig().getParam("SERVERIP"));
-		chatPortField.setText(mwclient.getConfig().getParam("SERVERPORT"));
-		dataPortField.setText(mwclient.getConfig().getParam("DATAPORT"));
+		usernameField.setText(mwClient.getConfig().getParam("NAME"));
+		passwordField.setText(mwClient.getConfig().getParam("NAMEPASSWORD"));
+		ipaddressField.setText(mwClient.getConfig().getParam("SERVERIP"));
+		chatPortField.setText(mwClient.getConfig().getParam("SERVERPORT"));
+		dataPortField.setText(mwClient.getConfig().getParam("DATAPORT"));
 		
 		// Show the dialog and get the user's input
 		dialog.setVisible(true);
 		dialog.requestFocus();
 		usernameField.requestFocus();
-		dialog.setLocationRelativeTo(mwclient.getMainFrame());
+		dialog.setLocationRelativeTo(mwClient.getMainFrame());
 		if (pane.getValue() == okayButton) {
-			mwclient.getConfig().setParam("NAME",usernameField.getText());
-			mwclient.setUsername(usernameField.getText());
-			mwclient.setPassword(new String(passwordField.getPassword()));
-			mwclient.getConfig().setParam("SERVERPORT",chatPortField.getText());
-			mwclient.getConfig().setParam("DATAPORT", dataPortField.getText());
-			mwclient.getConfig().setParam("SERVERIP",ipaddressField.getText());
+			mwClient.getConfig().setParam("NAME",usernameField.getText());
+			mwClient.setUsername(usernameField.getText());
+			mwClient.setPassword(new String(passwordField.getPassword()));
+			mwClient.getConfig().setParam("SERVERPORT",chatPortField.getText());
+			mwClient.getConfig().setParam("DATAPORT", dataPortField.getText());
+			mwClient.getConfig().setParam("SERVERIP",ipaddressField.getText());
 		} else {
             //not ok with signing on? ok. quit!
             System.exit(0);
@@ -161,6 +165,9 @@ public final class SignonDialog implements ActionListener {
 		} else if (command.equals(okayCommand)) {
 			pane.setValue(okayButton);
 			dialog.dispose();
+            mwClient.connectDataFetcher();
+            SplashWindow splashWindow = new SplashWindow(mwClient, Locale.US);
+            splashWindow.setVisible(true);
 		} else if (command.equals(cancelCommand)) {
 			pane.setValue(cancelButton);
 			dialog.dispose();

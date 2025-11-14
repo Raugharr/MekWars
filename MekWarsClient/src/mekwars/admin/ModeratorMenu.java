@@ -607,8 +607,7 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModCreateUnit_actionPerformed(ActionEvent e) {
-        UnitLoadingDialog unitLoadingDialog = new UnitLoadingDialog(mwclient.getMainFrame());
-        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(mwclient.getMainFrame(), unitLoadingDialog, mwclient,NewUnitViewerDialog.UNIT_SELECTOR);
+        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(mwclient.getMainFrame(), mwclient,NewUnitViewerDialog.UNIT_SELECTOR);
         unitSelector.setName("Unit Selector");
         new Thread(unitSelector).start();
     }

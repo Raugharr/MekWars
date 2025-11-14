@@ -79,7 +79,7 @@ public final class MWDedHost extends GameHost implements IClient {
 
     DataFetchClient dataFetcher;
 
-    public static final String CLIENT_VERSION = "0.8.0.0"; // change this with
+    public static final String CLIENT_VERSION = "9.0.0"; // change this with
     // all client
     // changes @Torren
 
@@ -148,16 +148,6 @@ public final class MWDedHost extends GameHost implements IClient {
         LOGGER.info("Starting MekWars Client Version: " + CLIENT_VERSION);
         try {
             config = new DedConfig(true);
-
-            /*
-             * clear any cache'd unit files. these will be rebuilt later in the
-             * start process. clearing @ each start ensures that updates take
-             * hold properly.
-             */
-            File cache = new File("./data/mechfiles/units.cache");
-            if (cache.exists()) {
-                cache.delete();
-            }
 
             /*
              * Config files have been loaded, and command line args have been

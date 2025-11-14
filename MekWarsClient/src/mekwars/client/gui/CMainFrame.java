@@ -33,12 +33,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.text.DecimalFormat;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
@@ -54,9 +51,9 @@ import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-
-import mekwars.admin.ModeratorMenu;
+import megamek.client.ui.swing.UnitLoadingDialog;
 import mekwars.admin.AdminMenu;
+import mekwars.admin.ModeratorMenu;
 import mekwars.client.CUser;
 import mekwars.client.ClientThread;
 import mekwars.client.MWClient;
@@ -65,6 +62,7 @@ import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.gui.SplashWindow;
 import mekwars.client.gui.dialog.ComponentConverterDialog;
 import mekwars.client.gui.dialog.ConfigurationDialog;
 import mekwars.client.gui.dialog.HouseNameDialog;
@@ -246,8 +244,8 @@ public class CMainFrame extends JFrame {
     private menuPopupSound popupSound;
 
     // CONSTRUCTOR
-    public CMainFrame(MWClient myC) {
-        mwclient = myC;
+    public CMainFrame(MWClient mwClient) {
+        mwclient = mwClient;
         theCampaign = mwclient.getCampaign();
         thePlayer = mwclient.getPlayer();
         MainPanel = new CMainPanel(mwclient, this);
@@ -360,38 +358,6 @@ public class CMainFrame extends JFrame {
             mod = true;
         }
 
-        /*
-         * jMenuCampaign.setEnabled(!disconnected);
-         * jMenuCommander.setEnabled(loggedin); jMenuTask.setEnabled(active);
-         * jMenuHost.setEnabled(!disconnected);
-         * jMenuFileConnect.setEnabled(disconnected);
-         * jMenuFileConnectTo.setEnabled(disconnected);
-         * jMenuFileRegister.setEnabled(!disconnected);
-         * jMenuFileMail.setEnabled(!disconnected);
-         * jMenuFileLastOnline.setEnabled(!disconnected);
-         * jMenuCampaignTasks.setEnabled(loggedin);
-         * jMenuCampaignPlayers.setEnabled(loggedin);
-         * jMenuCampaignISStatus.setEnabled(loggedin);
-         * jMenuCampaignHouses.setEnabled(loggedin);
-         * jMenuCampaignPlanet.setEnabled(loggedin);
-         * jMenuCampaignPlanetRange.setEnabled(loggedin);
-         * jMenuCampaignBMStatus.setEnabled(loggedin);
-         */
-        // jMenuCampaignTraderStatus.setEnabled(loggedin);
-        /*
-         * jMenuCampaignMercStatus.setEnabled(loggedin);
-         * jMenuCampaignUMercs.setEnabled(loggedin);
-         * jMenuCampaignTick.setEnabled(loggedin);
-         * jMenuCampaignLogin.setEnabled(loggedout);
-         * jMenuCampaignActivate.setEnabled(reserve);
-         * jMenuCampaignDeactivate.setEnabled(active);
-         * jMenuCampaignLogout.setEnabled(loggedin);
-         * jMenuCampaignEnroll.setEnabled(loggedout);
-         */
-        // jMenuCampaignUnenroll.setEnabled(loggedin);
-        // Client.errorMessage("Mod "+mod+" Admin "+admin+" Level
-        // "+Client.getUser(Client.getUsername()).getUserlevel()+" Status:
-        // "+this.getClient().getMyStatus()+" StatusII: "+Client.getMyStatus());
         if ((mod || admin) && !hasAdminMenus) {
             // dont print an entire trace if the jar is missing.
             try {
@@ -901,9 +867,6 @@ public class CMainFrame extends JFrame {
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c housecontracts");
             }
         });
-
-        // jMenuTask.setText("Task");
-        // jMenuTask.setMnemonic('T');
 
         jMenuHost.setText("Host");
         jMenuHost.setMnemonic('S');
@@ -2403,12 +2366,8 @@ public class CMainFrame extends JFrame {
     }
 
     public void jMenuHelpViewUnit_actionPerformed() {
-
-        UnitLoadingDialog unitLoadingDialog = new UnitLoadingDialog(mwclient.getMainFrame());
-        //UnitViewerDialog unitSelector = new UnitViewerDialog(mwclient.getMainFrame(), unitLoadingDialog, mwclient, UnitViewerDialog.UNIT_VIEWER);
-        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(this, unitLoadingDialog, mwclient,NewUnitViewerDialog.UNIT_VIEWER);
+        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(this, mwclient,NewUnitViewerDialog.UNIT_VIEWER);
         new Thread(unitSelector).run();
-        // unitSelector.setVisible(true);
     }
 
     public void jMenuLeaderPromote_actionPerformed() {
@@ -2522,8 +2481,7 @@ public class CMainFrame extends JFrame {
     }
 
     public void jMenuLeaderResearchUnit_actionPerformed() {
-        UnitLoadingDialog unitLoadingDialog = new UnitLoadingDialog(mwclient.getMainFrame());
-        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(this, unitLoadingDialog, mwclient,NewUnitViewerDialog.UNIT_VIEWER);
+        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(this, mwclient,NewUnitViewerDialog.UNIT_VIEWER);
         unitSelector.setName("Unit Selector");
         new Thread(unitSelector).start();
     }
