@@ -16,13 +16,16 @@
 
 package mekwars.server.campaign.commands;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
+import mekwars.common.Influences;
 import mekwars.common.Planet;
 import mekwars.common.UnitFactory;
 import mekwars.common.util.UnitUtils;
@@ -669,104 +672,144 @@ public class  DefectCommand  implements Command {
             }
         }
 
-        findEmptyPlanet(house);
-
+        // Create build tables for the new faction
+        createBuildTables(house);
+        
+        // Create a new planet for the faction
+        SPlanet homePlanet = createNewPlanet(house);
+        
+        // Set initial house ranking based on the home planet's conquest points
+        if (homePlanet != null) {
+            house.setInitialHouseRanking(homePlanet.getConquestPoints());
+        } else {
+            // Fallback to a default ranking if planet creation failed
+            house.setInitialHouseRanking(1000);
+        }
+        
         house.updated();
-
         return house;
     }
 
-    public void findEmptyPlanet(SHouse house) {
-        LinkedList<Planet> planetList = new LinkedList<Planet>();
-
-        for (Planet newPlanet : CampaignMain.cm.getData().getAllPlanets()) {
-            int totalCP = newPlanet.getConquestPoints();
-
-            if (newPlanet.getInfluence().getInfluence(-1) == totalCP)
-                planetList.add(newPlanet);
-        }
-
-        if (planetList.size() < 1) {
-            LOGGER.error("Error Unable to find planet for new faction " + house.getName());
-            CampaignMain.cm.doSendModMail("NOTE", "Error Unable to find planet for new faction " + house.getName());
-        }
-
-        String[] factoryNames = { "Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lamda", "Mu", "Nu", "Xi", "Omikron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega" };
-        int planetNumber = CampaignMain.cm.getRandomNumber(planetList.size());
-
-        SPlanet planet = (SPlanet) planetList.get(planetNumber);
-        planet.setConquestPoints(1000);
-        planet.setCompProduction(1000);
-        int baseCommonBuildTableShare = CampaignMain.cm.getIntegerConfig("BaseCommonBuildTableShares");
-
-        for (int weight = 0; weight <= SUnit.ASSAULT; weight++) {
-            for (int type = 0; type < SUnit.MAXBUILD; type++) {
-                String weightName = SUnit.getWeightClassDesc(weight);
-                String typeName = SUnit.getTypeClassDesc(type);
-                int maxFactories = CampaignMain.cm.getIntegerConfig("Starting" + weightName + typeName + "Factory");
-                int factoryType = UnitFactory.BUILDMEK;
-
-                switch (type) {
-                case SUnit.VEHICLE:
-                    factoryType = UnitFactory.BUILDVEHICLES;
-                    break;
-                case SUnit.INFANTRY:
-                    factoryType = UnitFactory.BUILDINFANTRY;
-                    break;
-                case SUnit.BATTLEARMOR:
-                    factoryType = UnitFactory.BUILDBATTLEARMOR;
-                    break;
-                case SUnit.AERO:
-                    factoryType = UnitFactory.BUILDAERO;
-                    break;
-                case SUnit.PROTOMEK:
-                    factoryType = UnitFactory.BUILDPROTOMECHS;
-                    break;
-                default:
-                    factoryType = UnitFactory.BUILDMEK;
-                    break;
-                }
-
-                for (int count = 0; count < maxFactories; count++) {
-                    String factoryName = factoryNames[count] + " " + weightName + " " + typeName + " Factory";
-                    SUnitFactory factory = new SUnitFactory(factoryName, planet, weightName, house.getName(), 0, CampaignMain.cm.getIntegerConfig("BaseFactoryRefreshRate"), factoryType, BuildTable.STANDARD, 0);
-                    planet.getUnitFactories().add(factory);
-                }
-
-                try {
-                    String buildTableName = "./data/buildtables/"+BuildTable.STANDARD+"/";
-                    String rewardbuildTableName = "./data/buildtables/"+BuildTable.REWARD+"/";
-                    if (type == SUnit.MEK) {
-                        buildTableName += house.getName() + "_" + weightName + ".txt";
-                        rewardbuildTableName += house.getName() + "_" + weightName + ".txt";
-                    } else {
-                        buildTableName += house.getName() + "_" + weightName + typeName + ".txt";
-                        rewardbuildTableName += house.getName() + "_" + weightName + typeName + ".txt";
+    /**
+     * Creates a new planet for the given house with random coordinates
+     * @param house The house to create the planet for
+     * @return The created SPlanet object, or null if creation failed
+     */
+    public SPlanet createNewPlanet(SHouse house) {
+        try {
+            // Generate random coordinates within a reasonable range
+            Random random = new Random();
+            double x = 100 + random.nextDouble() * 800; // Random x between 100 and 900
+            double y = 100 + random.nextDouble() * 600; // Random y between 100 and 700
+            
+            // Create influence map with 100% control for the new faction
+            HashMap<Integer, Integer> influenceMap = new HashMap<>();
+            influenceMap.put(house.getId(), 1000); // 1000 = 100% control points
+            
+            // Create the planet with the faction's name as the planet name
+            String planetName = house.getName();
+            SPlanet planet = new SPlanet(planetName, new Influences(influenceMap), 1000, x, y);
+            
+            // Set planet properties
+            planet.setBaysProvided(CampaignMain.cm.getIntegerConfig("StartingPlanetBays"));
+            planet.setConquestPoints(1000); // Full control points
+            planet.setOriginalOwner(house.getName());
+            planet.setCompProduction(1000);
+            
+            // Add the planet to the campaign and set the owner
+            CampaignMain.cm.addPlanet(planet);
+            planet.setOwner(null, house, true);
+            
+            // Set up factories
+            String[] factoryNames = { "Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa" };
+            int baseCommonBuildTableShare = CampaignMain.cm.getIntegerConfig("BaseCommonBuildTableShares");
+            
+            for (int weight = 0; weight <= SUnit.ASSAULT; weight++) {
+                for (int type = 0; type < SUnit.MAXBUILD; type++) {
+                    String weightName = SUnit.getWeightClassDesc(weight);
+                    String typeName = SUnit.getTypeClassDesc(type);
+                    int maxFactories = CampaignMain.cm.getIntegerConfig("Starting" + weightName + typeName + "Factory");
+                    int factoryType = getFactoryType(type);
+                    
+                    for (int count = 0; count < maxFactories && count < factoryNames.length; count++) {
+                        String factoryName = factoryNames[count] + " " + weightName + " " + typeName + " Factory";
+                        SUnitFactory factory = new SUnitFactory(factoryName, planet, weightName, house.getName(), 
+                                0, CampaignMain.cm.getIntegerConfig("BaseFactoryRefreshRate"), 
+                                factoryType, BuildTable.STANDARD, 0);
+                        planet.getUnitFactories().add(factory);
                     }
-                    FileOutputStream out = new FileOutputStream(buildTableName);
-                    PrintStream ps = new PrintStream(out);
-                    ps.println(baseCommonBuildTableShare + " Common");
-                    ps.close();
-                    out.close();
-                    out = new FileOutputStream(rewardbuildTableName);
-                    ps = new PrintStream(out);
-                    ps.println(baseCommonBuildTableShare + " Common");
-                    ps.close();
-                    out.close();
-                } catch (Exception ex) {
-                    LOGGER.error("Exception: ", ex);
                 }
             }
+            
+            planet.updated();
+            return planet;
+            
+        } catch (Exception e) {
+            LOGGER.error("Error creating new planet for faction " + house.getName(), e);
+            CampaignMain.cm.doSendModMail("ERROR", "Failed to create planet for new faction " + house.getName() + ": " + e.getMessage());
+            return null;
         }
-
-        HashMap<Integer,Integer> flu = new HashMap<Integer,Integer>();
-        flu.put(house.getId(),planet.getConquestPoints());
-        planet.getInfluence().setInfluence(flu);
-        planet.setBaysProvided(CampaignMain.cm.getIntegerConfig("StartingPlanetBays"));
-        
-        planet.setOwner(null, planet.checkOwner(), true);
-        house.setInitialHouseRanking(planet.getConquestPoints());
-        
-        planet.updated();
     }
-}// end DefectCommand.java
+    
+    /**
+     * Helper method to get the factory type based on unit type
+     * @param unitType The type of unit (VEHICLE, INFANTRY, etc.)
+     * @return The corresponding factory type constant
+     */
+    private int getFactoryType(int unitType) {
+        switch (unitType) {
+            case SUnit.VEHICLE: return UnitFactory.BUILDVEHICLES;
+            case SUnit.INFANTRY: return UnitFactory.BUILDINFANTRY;
+            case SUnit.BATTLEARMOR: return UnitFactory.BUILDBATTLEARMOR;
+            case SUnit.AERO: return UnitFactory.BUILDAERO;
+            case SUnit.PROTOMEK: return UnitFactory.BUILDPROTOMECHS;
+            default: return UnitFactory.BUILDMEK;
+        }
+    }
+
+    /**
+     * Creates build tables for a new faction
+     * @param house The house to create build tables for
+     */
+    private void createBuildTables(SHouse house) {
+        try {
+            int baseCommonBuildTableShare = CampaignMain.cm.getIntegerConfig("BaseCommonBuildTableShares");
+            
+            for (int weight = 0; weight <= SUnit.ASSAULT; weight++) {
+                for (int type = 0; type < SUnit.MAXBUILD; type++) {
+                    String weightName = SUnit.getWeightClassDesc(weight);
+                    String typeName = SUnit.getTypeClassDesc(type);
+                    
+                    String buildTableName = "./data/buildtables/" + BuildTable.STANDARD + "/";
+                    String rewardBuildTableName = "./data/buildtables/" + BuildTable.REWARD + "/";
+                    
+                    if (type == SUnit.MEK) {
+                        buildTableName += house.getName() + "_" + weightName + ".txt";
+                        rewardBuildTableName += house.getName() + "_" + weightName + ".txt";
+                    } else {
+                        buildTableName += house.getName() + "_" + weightName + typeName + ".txt";
+                        rewardBuildTableName += house.getName() + "_" + weightName + typeName + ".txt";
+                    }
+                    
+                    // Create standard build table
+                    File buildTableFile = new File(buildTableName);
+                    if (!buildTableFile.getParentFile().exists()) {
+                        buildTableFile.getParentFile().mkdirs();
+                    }
+                    
+                    try (PrintStream ps = new PrintStream(new FileOutputStream(buildTableFile))) {
+                        ps.println(baseCommonBuildTableShare + " Common");
+                    }
+                    
+                    // Create reward build table
+                    try (PrintStream ps = new PrintStream(new FileOutputStream(rewardBuildTableName))) {
+                        ps.println(baseCommonBuildTableShare + " Common");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error creating build tables for faction " + house.getName(), e);
+            CampaignMain.cm.doSendModMail("ERROR", "Failed to create build tables for new faction " + house.getName() + ": " + e.getMessage());
+        }
+    }
+}
