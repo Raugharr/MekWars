@@ -46,6 +46,7 @@ public class ServerRegisterResolver extends AbstractResolver<ServerRegister, HPG
         }
         HPGSubscriber subscriber = new HPGSubscriber(UUID.randomUUID());
 
+        connection.setSubscriber(subscriber);
         subscriber.setTracker(tracker);
         subscriber.setName(message.getName());
         subscriber.setUrl(message.getLink());

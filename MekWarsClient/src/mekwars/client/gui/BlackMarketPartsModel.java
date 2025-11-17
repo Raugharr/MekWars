@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CCampaign;
-import mekwars.client.gui.utilities.MekWarsTableCellRenderer;
+import mekwars.client.gui.utilities.MWTableCellRenderer;
 import mekwars.common.BMEquipment;
 
 /**
@@ -188,7 +188,7 @@ public class BlackMarketPartsModel extends AbstractTableModel {
                 return c;
             }
 
-            MekWarsTableCellRenderer.setupTigerStripes(this, table, row);
+            MWTableCellRenderer.setupTigerStripes(this, table, row);
 
             if (bme.isCostUp()) {
                 c.setForeground(new Color(195, 11, 00));

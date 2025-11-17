@@ -75,7 +75,7 @@ import mekwars.client.gui.dialog.BulkRepairDialog;
 import mekwars.client.gui.dialog.CustomUnitDialog;
 import mekwars.client.gui.dialog.PromotePilotDialog;
 import mekwars.client.gui.dialog.SolFreeBuildDialog;
-import mekwars.client.gui.utilities.MekWarsTableCellRenderer;
+import mekwars.client.gui.utilities.MWTableCellRenderer;
 import mekwars.common.Army;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
@@ -3393,7 +3393,7 @@ public class CHQPanel extends JPanel {
                         setText("");
                     }
                 }
-                MekWarsTableCellRenderer.setupTigerStripes(this, table, column);
+                MWTableCellRenderer.setupTigerStripes(this, table, column);
                 return c;
             }
         }// end Renderer

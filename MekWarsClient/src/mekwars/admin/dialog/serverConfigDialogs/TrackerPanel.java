@@ -59,14 +59,10 @@ public class TrackerPanel extends JPanel {
 		uuidPanel.add(new JLabel(" "));
 		uuidPanel.add(new JLabel("UUID: " + uuid));
 		
-		baseCheckBox = new JCheckBox("Regenerate");
-		baseCheckBox.setName("TrackerResetUUID");
-		uuidPanel.add(baseCheckBox);
-		
 		detailsPanel.setLayout(new VerticalLayout());
 		
 		baseCheckBox = new JCheckBox("Register This Server on the Tracker");
-		baseCheckBox.setName("UseTracker");
+		baseCheckBox.setName("TrackerEnabled");
 		detailsPanel.add(baseCheckBox);
 		
 		JPanel panel1 = new JPanel(new SpringLayout());

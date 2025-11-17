@@ -47,6 +47,7 @@ import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.Constructor;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -60,6 +61,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -83,7 +85,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-
 import megamek.MMConstants;
 import megamek.Version;
 import megamek.client.ui.swing.GameOptionsDialog;
@@ -122,7 +123,9 @@ import mekwars.client.gui.commands.MailGCmd;
 import mekwars.client.gui.commands.PingGCmd;
 import mekwars.client.gui.dialog.InfluencePointsDialog;
 import mekwars.client.gui.dialog.RewardPointsDialog;
+import mekwars.client.gui.dialog.ServerBrowserDialog;
 import mekwars.client.gui.dialog.SignonDialog;
+import mekwars.client.net.hpgnet.HPGClient;
 import mekwars.client.protocol.DataFetchClient;
 import mekwars.client.util.RepairManagmentThread;
 import mekwars.client.util.SalvageManagmentThread;
@@ -190,6 +193,7 @@ public final class MWClient extends GameHost implements IClient {
 
     SplashWindow splash = null;
     private Game game = new Game();
+    private HPGClient hpgClient; 
 
     public static final String GUI_PREFIX = "/"; // prefix for commands in GUI
 
@@ -332,6 +336,7 @@ public final class MWClient extends GameHost implements IClient {
                 LOGGER.error("Unable to find MekWarsDed.jar");
             }
         } else {
+            hpgClient = new HPGClient(this);
             setLookAndFeel(false);
             if (Config.isParam("ENABLESPLASHSCREEN")) {
                 splash = new SplashWindow();
@@ -387,6 +392,21 @@ public final class MWClient extends GameHost implements IClient {
             if (shouldShowSignOn) {
                 if (splash != null) {
                     splash.setStatus(splash.STATUS_INPUTWAIT);
+                }
+                try {
+                    String trackerEnabledConfig = getConfigParam("TrackerEnabled");
+                    if (Boolean.parseBoolean(trackerEnabledConfig)) {
+                        String trackerAddress = getConfigParam("TrackerAddress");
+                        hpgClient.connect(new InetSocketAddress(trackerAddress,
+                                    HPGClient.TRACKER_PORT));
+
+                        ServerBrowserDialog serverBrowserDialog = new ServerBrowserDialog(null,
+                                Locale.US, this);
+
+                        serverBrowserDialog.setVisible(true);
+                    }
+                } catch (IOException e) {
+                    LOGGER.error("Exception: ", e);    
                 }
                 new SignonDialog(this);
                 if (splash != null) {
@@ -2112,7 +2132,7 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public GUIClientConfig getConfig() {
-        return (GUIClientConfig) (Config);
+        return (GUIClientConfig) Config;
     }
 
     public void setConfig() {
@@ -3870,13 +3890,17 @@ public final class MWClient extends GameHost implements IClient {
         }
         return null;
     }
+
+    public HPGClient getHpgClient() {
+        return hpgClient;
+    }
 }
 
 /**
  * @author http://www.anyexample.com
  */
 class AePlayWave extends Thread {
-    private static final Logger logger = LogManager.getLogger(AePlayWave.class);
+    private static final Logger LOGGER = LogManager.getLogger(AePlayWave.class);
 
     private String filename;
 
@@ -3903,7 +3927,7 @@ class AePlayWave extends Thread {
 
         File soundFile = new File(filename);
         if (!soundFile.exists()) {
-            logger.error("Wave file not found: {}", filename);
+            LOGGER.error("Wave file not found: {}", filename);
             return;
         }
 
@@ -3911,10 +3935,10 @@ class AePlayWave extends Thread {
         try {
             audioInputStream = AudioSystem.getAudioInputStream(soundFile);
         } catch (UnsupportedAudioFileException e1) {
-            logger.catching(e1);
+            LOGGER.catching(e1);
             return;
         } catch (IOException e1) {
-            logger.catching(e1);
+            LOGGER.catching(e1);
             return;
         }
 
@@ -3926,10 +3950,10 @@ class AePlayWave extends Thread {
             auline = (SourceDataLine) AudioSystem.getLine(info);
             auline.open(format);
         } catch (LineUnavailableException e) {
-            logger.catching(e);
+            LOGGER.catching(e);
             return;
         } catch (Exception e) {
-            logger.catching(e);
+            LOGGER.catching(e);
             return;
         }
 
@@ -3955,7 +3979,7 @@ class AePlayWave extends Thread {
                 }
             }
         } catch (IOException e) {
-            logger.catching(e);
+            LOGGER.catching(e);
             return;
         } finally {
             auline.drain();
@@ -3967,7 +3991,7 @@ class AePlayWave extends Thread {
 
         File soundFile = new File(filename);
         if (!soundFile.exists()) {
-            logger.error("Wave file not found: {}", filename);
+            LOGGER.error("Wave file not found: {}", filename);
             return;
         }
 
@@ -3975,10 +3999,10 @@ class AePlayWave extends Thread {
         try {
             audioInputStream = AudioSystem.getAudioInputStream(soundFile);
         } catch (UnsupportedAudioFileException e1) {
-            logger.catching(e1);
+            LOGGER.catching(e1);
             return;
         } catch (IOException e1) {
-            logger.catching(e1);
+            LOGGER.catching(e1);
             return;
         }
 
@@ -3990,10 +4014,10 @@ class AePlayWave extends Thread {
             auline = (SourceDataLine) AudioSystem.getLine(info);
             auline.open(format);
         } catch (LineUnavailableException e) {
-            logger.catching(e);
+            LOGGER.catching(e);
             return;
         } catch (Exception e) {
-            logger.catching(e);
+            LOGGER.catching(e);
             return;
         }
 
@@ -4009,7 +4033,7 @@ class AePlayWave extends Thread {
                 }
             }
         } catch (IOException e) {
-            logger.catching(e);
+            LOGGER.catching(e);
             return;
         } finally {
             auline.drain();
