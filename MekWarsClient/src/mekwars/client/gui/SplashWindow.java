@@ -23,47 +23,51 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
-
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-
+import javax.swing.SwingWorker;
+import megamek.common.MechSummaryCache;
 import mekwars.client.MWClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class SplashWindow {
-	
-	public JFrame splashWindow;
+public class SplashWindow extends JDialog {
+    private static final Logger LOGGER = LogManager.getLogger(SplashWindow.class);
+    private static final int STATUS_OPERATIONS = 0;
+    private static final int STATUS_FETCHINGDATA = 1;
+    private static final int STATUS_LOADINGMECHS = 2;
+    private static final int STATUS_MIN = STATUS_OPERATIONS;
+    private static final int STATUS_MAX = STATUS_LOADINGMECHS + 1;
+    private static final int UPDATE_FREQUENCY = 50;
+    private static final int PROGRESS_BAR_FREQUENCY = 150;
+
 	private boolean continueAnimating;
 	private JLabel imageLabel;
 	private JLabel versionLabel;
-	private AnimationThread animator;
-	private int currentStatus;
 	private JProgressBar progressBar;
+    private Task task;
+    private ResourceBundle resourceMap;
 	
-	public final int STATUS_INITIALIZING = 0;
-	public final int STATUS_FETCHINGDATA = 1;
-	public final int STATUS_CONSTRUCTINGGUI = 2;
-	public final int STATUS_CONNECTING = 3;
-	public final int STATUS_INPUTWAIT = 4;
-	public final int STATUS_DATAERROR = 5;
-	public final int STATUS_CONNECTFAILED = 6;
-	
-	public SplashWindow() {
+	public SplashWindow(MWClient mwClient, Locale locale) {
+        super((JFrame)null, true);
 		
+        this.resourceMap = ResourceBundle.getBundle("mekwars.SplashWindow", locale);
 		continueAnimating = true;
-		currentStatus = STATUS_INITIALIZING;
 		
-		splashWindow = new JFrame();
-        splashWindow.setUndecorated(true);
+        setUndecorated(true);
 	
-        progressBar = new JProgressBar(0,9);
-		progressBar.setMaximumSize(new Dimension(350,10));
+        progressBar = new JProgressBar(STATUS_MIN, STATUS_MAX);
+		progressBar.setMaximumSize(new Dimension(350, 10));
 		progressBar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		progressBar.setAlignmentY(Component.LEFT_ALIGNMENT);
 		
@@ -79,8 +83,9 @@ public class SplashWindow {
 		splashImage.setImage(tempImage);
 		
 		//format the label
-		imageLabel = new JLabel("<HTML><CENTER>MekWars Client " + MWClient.CLIENT_VERSION + "</CENTER></HTML>",splashImage, SwingConstants.CENTER);
-		splashWindow.setTitle("MekWars Client " + MWClient.CLIENT_VERSION);
+        String text = "<HTML><CENTER>" + resourceMap.getString("title.text") + " " + MWClient.CLIENT_VERSION + "</CENTER></HTML>";
+		imageLabel = new JLabel(text, splashImage, SwingConstants.CENTER);
+		setTitle("MekWars Client " + MWClient.CLIENT_VERSION);
 		imageLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		imageLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		imageLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -93,8 +98,8 @@ public class SplashWindow {
 		JPanel windowPanel = new JPanel();
 		
 		//give the labels a fixed amount of buffer space
-		imageLabel.setBorder(BorderFactory.createEmptyBorder(0,0,4,0));
-		versionLabel.setBorder(BorderFactory.createEmptyBorder(4,0,0,0));	
+		imageLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 4, 0));
+		versionLabel.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));	
 		
 		//use a box layout to align panel components vertically
 		windowPanel.setLayout(new BoxLayout(windowPanel, BoxLayout.Y_AXIS));
@@ -109,23 +114,15 @@ public class SplashWindow {
 		
 		//give the panel an attractive border
 		windowPanel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(Color.BLACK,1),
-				BorderFactory.createEmptyBorder(6,6,6,6)));
+				BorderFactory.createLineBorder(Color.BLACK, 1),
+				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
 		
-		splashWindow.getContentPane().add(windowPanel);
-		splashWindow.getContentPane().add(progressBar,BorderLayout.SOUTH);
-		splashWindow.pack();
-		splashWindow.setLocationRelativeTo(null);
-		
-		splashWindow.setVisible(true);
-		animator = new AnimationThread(this);
-		animator.start();
-	}
-	
-	public void dispose() {
-		continueAnimating = false;
-		splashWindow.setVisible(false);
-		splashWindow.dispose();
+		getContentPane().add(windowPanel);
+		getContentPane().add(progressBar, BorderLayout.SOUTH);
+		pack();
+		setLocationRelativeTo(null);
+        task = new Task(mwClient, this);
+        task.execute();    
 	}
 	
 	public boolean shouldAnimate() {
@@ -139,97 +136,54 @@ public class SplashWindow {
 	public JProgressBar getProgressBar() {
 		return progressBar;
 	}
-	
-	public void setStatus(int i) {
-		currentStatus = i;
-	}
-	
-	public int getStatus() {
-		return currentStatus;
-	}
-	
-	
-}
 
-class AnimationThread extends Thread {
-	
-	//vars
-	private SplashWindow splash;
-	private int cycle;
-	private int progress;
-	
-	private final String initializing = "Initializing";
-	private final String constructing = "Constructing GUI";
-	private final String fetching = "Downloading Data";
-	private final String connecting = "Connecting to Server";
-	
-	public AnimationThread(SplashWindow s) {
-		splash = s;
-		progress = 0;
-		cycle = 0;
-	}
-	
-	private void setLabelText(String s) {
-		splash.getImageLabel().setText("<HTML><CENTER><b>" + s + "</b></CENTER></HTML>");
-		splash.getProgressBar().setValue(progress);
-	}
-	
-	@Override
-	public synchronized void run() {
-		
-		//shouldAnimate is essentially a perpetual true, but someone
-		//suggested this as a potential remedy to the infamous "splash
-		//crash," so what the hell ... lets try it! @urgru 11.21.05
-	    	while (splash.shouldAnimate()) {
-				
-				try {
-					
-					//update the current task every 150 ms (every cycle), add
-					//a bullet to progress meter every .6 seconds (every 4th cycle)
-					wait(150);
-					cycle++;
-					if(cycle == 4) { cycle = 0; }
-					
-					int currStatus = splash.getStatus();
-					if (currStatus == splash.STATUS_DATAERROR || currStatus == splash.STATUS_INPUTWAIT || currStatus == splash.STATUS_CONNECTFAILED) {
-						//do not advanced the progress meter. roll back the cycle.
-						cycle--;
-					} else if (cycle == 0) {
-						progress++;
-						if (progress == 10) { progress = 0; }
-					}
-						
-					
-					if (currStatus == splash.STATUS_INITIALIZING) 
-						this.setLabelText(initializing);
-					
-					else if(currStatus == splash.STATUS_FETCHINGDATA)
-						this.setLabelText(fetching);
-					
-					else if(currStatus == splash.STATUS_CONSTRUCTINGGUI)
-						this.setLabelText(constructing);
-					
-					else if(currStatus == splash.STATUS_CONNECTING)
-						this.setLabelText(connecting);
-					
-					else if(currStatus == splash.STATUS_INPUTWAIT)
-						splash.getImageLabel().setText("<HTML><CENTER><b>Connecting to Server<br>[Waiting for Input]</b></CENTER></HTML>");
-					
-					else if (currStatus == splash.STATUS_DATAERROR)
-						splash.getImageLabel().setText("<HTML><CENTER><b>Downloading Data<br>[Data Access Error]</b></CENTER></HTML>");
-	
-					else if (currStatus == splash.STATUS_CONNECTFAILED)
-						splash.getImageLabel().setText("<HTML><CENTER><b>Connecting to Server<br>[Connection Failed]</b></CENTER></HTML>");
-					
-					if (!splash.shouldAnimate())
-						return;
-					
-				} catch (Exception e) {
-					splash.getImageLabel().setText("Error in animation thread!");
-					return;
-				}
-				
-			}//end while
-	   
-	}//end run()
-}//end AnimationThread
+    private void setLabelText(String s) {
+        getImageLabel().setText("<HTML><CENTER><b>" + s + "</b></CENTER></HTML>");
+    }
+
+    class Task extends SwingWorker<Void, Void> {
+        private MWClient mwClient;
+        private SplashWindow splashWindow;
+        private boolean mechSummaryLoaded = false;
+        private MechSummaryCache.Listener mechSummaryCacheListener = () -> {
+            mechSummaryLoaded = true;
+        };
+
+        public Task(MWClient mwClient, SplashWindow splashWindow) {
+            this.mwClient = mwClient;
+            this.splashWindow = splashWindow;
+        }
+
+        @Override
+        public Void doInBackground() {
+            try {
+                MechSummaryCache.getInstance().addListener(mechSummaryCacheListener);
+                setLabelText(resourceMap.getString("operations.text"));
+                progressBar.setValue(progressBar.getValue() + 1);
+                mwClient.setupAllOps();
+                Thread.sleep(PROGRESS_BAR_FREQUENCY);
+
+                setLabelText(resourceMap.getString("data.text"));
+                progressBar.setValue(progressBar.getValue() + 1);
+                mwClient.getData();
+                Thread.sleep(PROGRESS_BAR_FREQUENCY);
+
+                setLabelText(resourceMap.getString("mechs.text"));
+                while (mechSummaryLoaded == false) {
+                    Thread.sleep(UPDATE_FREQUENCY);
+                }
+            MechSummaryCache.getInstance().removeListener(mechSummaryCacheListener);
+            } catch (Exception exception) {
+                LOGGER.error("Exception: ", exception);
+            }
+            return null;
+        }
+
+        @Override
+        public void done() {
+            mwClient.setupMainFrame();
+            splashWindow.dispose();
+            mwClient.connectToServer();
+        }
+    }
+}

@@ -1303,8 +1303,7 @@ public class AdminMenu extends JMenu {
     }
 
     public void jMenuAdminOmniVariantMod_actionPerformed(ActionEvent e) {
-        UnitLoadingDialog unitLoadingDialog = new UnitLoadingDialog(mwclient.getMainFrame());
-        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(mwclient.getMainFrame(), unitLoadingDialog, mwclient,NewUnitViewerDialog.OMNI_VARIANT_SELECTOR);
+        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(mwclient.getMainFrame(), mwclient,NewUnitViewerDialog.OMNI_VARIANT_SELECTOR);
         unitSelector.setName("Unit Selector");
         new Thread(unitSelector).start();
     }

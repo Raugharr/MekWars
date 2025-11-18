@@ -52,7 +52,6 @@ public class CConnector implements IConnectionListener {
     protected int _port = -1;
     protected boolean _connected = false;
     protected IConnectionHandler _connectionHandler;
-    private SplashWindow splash;
 
     public CConnector(IClient client) {
         Client = client;
@@ -142,25 +141,12 @@ public class CConnector implements IConnectionListener {
       }
       catch (IOException e) {
 
-      	if (splash != null) {
-            splash.setStatus(splash.STATUS_CONNECTFAILED);
-        }
-
         LOGGER.error("Exception: ", e);
-        /*Object[] options = {"Exit"};
-        int selectedValue = JOptionPane.showOptionDialog(null,"Could not connect to " + _host + ":" + _port,"Connection error!",JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,null,options,options[0]);
-        if (selectedValue == 0)
-        	System.exit(0);//exit, if they so choose*/ //Bad to do to a ded. Deds should retry every 60 seconds. --Torren.
-
         return;
       }
     }
 
     public void closeConnection() {
       _connectionHandler.shutdown(true);
-    }
-
-    public void setSplashWindow(SplashWindow s) {
-    	splash = s;
     }
 }

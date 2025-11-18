@@ -117,7 +117,6 @@ import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
 import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.CMainFrame;
-import mekwars.client.gui.SplashWindow;
 import mekwars.client.gui.commands.IGUICommand;
 import mekwars.client.gui.commands.MailGCmd;
 import mekwars.client.gui.commands.PingGCmd;
@@ -191,7 +190,6 @@ public final class MWClient extends GameHost implements IClient {
     Dimension MapSize;
     int mapMedium = 0;
 
-    SplashWindow splash = null;
     private Game game = new Game();
     private HPGClient hpgClient; 
 
@@ -210,7 +208,7 @@ public final class MWClient extends GameHost implements IClient {
 
     CCampaign theCampaign;
     CPlayer myPlayer;
-    CMainFrame MainFrame;
+    CMainFrame mainFrame;
 
     int Status = STATUS_DISCONNECTED;
     int LastStatus = STATUS_DISCONNECTED;
@@ -259,7 +257,6 @@ public final class MWClient extends GameHost implements IClient {
         boolean dedicated = false;
         int i;
         
-        boolean enableSplashScreen = true;
         LOGGER.info("Starting MekWars Client Version: {}", CLIENT_VERSION);
         try {
             for (i = 0; i < args.length; i++) {
@@ -267,29 +264,8 @@ public final class MWClient extends GameHost implements IClient {
                         || args[i].equalsIgnoreCase("-d")) {
                     dedicated = true;
                 }
-                // add more args?
-                else if (args[i].equalsIgnoreCase("-disableSplash")) {
-                    enableSplashScreen = false;
-                } else if (args[i].equalsIgnoreCase("-enableSplash")) {
-                    enableSplashScreen = true;
-                }
             }
             config = new GUIClientConfig(dedicated);
-
-            if (!enableSplashScreen) {
-                config.setParam("ENABLESPLASHSCREEN", "false");
-            } else {
-                config.setParam("ENABLESPLASHSCREEN", "true");
-            }
-            /*
-             * clear any cache'd unit files. these will be rebuilt later in the
-             * start process. clearing @ each start ensures that updates take
-             * hold properly.
-             */
-            File cache = new File("./data/mechfiles/units.cache");
-            if (cache.exists()) {
-                cache.delete();
-            }
 
             /*
              * Config files have been loaded, and command line args have been
@@ -338,9 +314,6 @@ public final class MWClient extends GameHost implements IClient {
         } else {
             hpgClient = new HPGClient(this);
             setLookAndFeel(false);
-            if (Config.isParam("ENABLESPLASHSCREEN")) {
-                splash = new SplashWindow();
-            }
         }
 
         try {
@@ -350,7 +323,6 @@ public final class MWClient extends GameHost implements IClient {
             LOGGER.catching(ex);
         }
         Connector = new CConnector(this);
-        Connector.setSplashWindow(splash);// may set null if ded.
 
         Users = Collections.synchronizedList(new Vector<CUser>(1, 1));
 
@@ -361,11 +333,6 @@ public final class MWClient extends GameHost implements IClient {
             myPlayer = theCampaign.getPlayer();
             createProtCommands();
             createGUICommands();
-
-            // indicate that the splash is trying to get data
-            if (splash != null) {
-                splash.setStatus(splash.STATUS_FETCHINGDATA);
-            }
 
             /*
              * @urgru 11.24.05 SignOnDialog used to be shown in later in
@@ -390,9 +357,6 @@ public final class MWClient extends GameHost implements IClient {
             }
 
             if (shouldShowSignOn) {
-                if (splash != null) {
-                    splash.setStatus(splash.STATUS_INPUTWAIT);
-                }
                 try {
                     String trackerEnabledConfig = getConfigParam("TrackerEnabled");
                     if (Boolean.parseBoolean(trackerEnabledConfig)) {
@@ -409,61 +373,9 @@ public final class MWClient extends GameHost implements IClient {
                     LOGGER.error("Exception: ", e);    
                 }
                 new SignonDialog(this);
-                if (splash != null) {
-                    splash.setStatus(splash.STATUS_FETCHINGDATA);
-                }
             }
-
-            // Start the data fetcher, get ops/map/etc
-            dataFetcher = new DataFetchClient(Integer.parseInt(Config
-                    .getParam("DATAPORT")), Integer.parseInt(Config
-                    .getParam("SOCKETTIMEOUTDELAY")));
-
-            try {
-                BufferedReader dis = new BufferedReader(new InputStreamReader(
-                        new FileInputStream("data/servers/"
-                                + Config.getParam("SERVERIP") + "."
-                                + Config.getParam("SERVERPORT")
-                                + "/dataLastUpdated.dat")));
-                Date lastTS = new Date(Long.parseLong(dis.readLine()));
-                dataFetcher.setLastTimestamp(lastTS);
-                dis.close();
-            } catch (Throwable t) {
-                LOGGER.error("Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.");
-            }
-            dataFetcher.setData(Config.getParam("SERVERIP"), getCacheDir());
-
-            /*
-             * Now that the data fetcher has been created, get the OpList.txt.
-             * Note that this is BEFORE map data and other fetch/checks, because
-             * the Ops absolutely must be available in order to contruct the
-             * GUI.
-             */
-            try {
-                dataFetcher.checkForMostRecentOpList();
-            } catch (IOException e) {
-
-                Object[] options = { "Exit", "Continue" };
-                int selectedValue = JOptionPane
-                        .showOptionDialog(
-                                null,
-                                "No OpList. This usually means that you were unable to "
-                                        + "connect to the server to fetch a copy. Do you wish to exit?",
-                                "Startup " + "error!",
-                                JOptionPane.DEFAULT_OPTION,
-                                JOptionPane.ERROR_MESSAGE, null, options,
-                                options[0]);
-                if (selectedValue == 0) {
-                    System.exit(0); // exit, if they so choose
-                }
-            }
-
-            setupAllOps();
-
-        }
-
         // Dedicated servers have no GUI, no signon dialogs, etc.
-        else {
+        } else {
             createProtCommands();
             dataFetcher = new DataFetchClient(Integer.parseInt(Config
                     .getParam("DATAPORT")), Integer.parseInt(Config
@@ -490,25 +402,17 @@ public final class MWClient extends GameHost implements IClient {
             } catch (Exception ex) {
                 LOGGER.catching(ex);
             }
-
+            getData();
         }
 
-        System.err.println("Get Data Time: " + System.currentTimeMillis());
-        System.err.flush();
-
-        getData();
-        System.err.println("Done Getting Data Time: "
-                + System.currentTimeMillis());
-        System.err.flush();
-
-        // set New timestamp
-        dataFetcher.setLastTimestamp(new Date(System.currentTimeMillis()));
-        dataFetcher.store();
 
         myUsername = getConfigParam("NAME");
 
         // if this is dedicated host, we mark its name with "[Dedicated]" stamp
         if (isDedicated() && !myUsername.startsWith("[Dedicated]")) {
+            // set New timestamp
+            dataFetcher.setLastTimestamp(new Date(System.currentTimeMillis()));
+            dataFetcher.store();
             Config.setParam("NAME", "[Dedicated] " + Config.getParam("NAME"));
             myUsername = Config.getParam("NAME");
         }
@@ -528,195 +432,32 @@ public final class MWClient extends GameHost implements IClient {
          * starts. This prevents the creation of multiple threads when the host
          * is restarted, or after disconnections.
          */
-        System.err.println("staring PAS Time: " + System.currentTimeMillis());
-        System.err.flush();
-
         LOGGER.info("Starting pAS");
         PurgeAutoSaves pAS = new PurgeAutoSaves();
         new Thread(pAS).start();
-
-        System.err.println("PAS Started Time: " + System.currentTimeMillis());
-        System.err.flush();
-
         /*
          * Load IP and Port to connect to from the config. In older code the
          * signon dialog was shown at this point. The dialog has been moved, and
          * is now displayed -before- the client attempts to fetch vital data,
          * like the map.
          */
-        if (splash != null) {
-            splash.setStatus(splash.STATUS_CONNECTING);
-        }
-        String chatServerIP = "";
-        int chatServerPort = -1;
-        try {
-            chatServerIP = Config.getParam("SERVERIP");
-            chatServerPort = Config.getIntParam("SERVERPORT");
-        } catch (Exception e) {
-            LOGGER.catching(e);
-            System.exit(1);
-        }
 
         /*
          * Non-dedicated. Draw the UI, shut down the splash screen, and then
          * request any stored messages.
          */
-        if (!isDedicated()) {
 
-            // make the main frame
-            System.err.println("Creating CMainFrame Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-            MainFrame = new CMainFrame(this);
-            System.err.println("CMainFrame Created Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-
-            try {
-                MainFrame.setIconImage(((GUIClientConfig) Config).getImage("LOGOUT").getImage());
-            } catch (Exception ex) {
-                LOGGER.catching(ex);
-            }
-
-            System.err.println("Packing/Validating CMainFrame Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-
-            if (packFrame) {
-                MainFrame.pack();
-            } else {
-                MainFrame.validate();
-            }
-            System.err.println("done packing/validating CMainFrame Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            Dimension frameSize = MainFrame.getSize();
-
-            MainFrame.setExtendedState(Integer
-                    .parseInt(getConfigParam("WINDOWSTATE")));
-            MainFrame.setSize(Integer.parseInt(getConfigParam("WINDOWWIDTH")),
-                    Integer.parseInt(getConfigParam("WINDOWHEIGHT")));
-            MainFrame.setLocation(
-                    Integer.parseInt(getConfigParam("WINDOWLEFT")),
-                    Integer.parseInt(getConfigParam("WINDOWTOP")));
-            // check for unacceptable dimensions
-            if (frameSize.height > screenSize.height) {
-                frameSize.height = screenSize.height;
-            }
-            if (frameSize.width > screenSize.width) {
-                frameSize.width = screenSize.width;
-                // MainFrame.setLocation((screenSize.width - frameSize.width) /
-                // 2,
-                // (screenSize.height - frameSize.height) / 2);
-            }
-
-            // set the initial mute value
-            setSoundMuted(getConfig().isParam("DISABLEALLSOUND"));
-
-            System.err.println("Attack Menu Update Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-
-            // build the attack menu. at this point we know we have the
-            // necessary data.
-            MainFrame.updateAttackMenu();
-            System.err.println("Attack Menu Update done Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-
-            System.err.println("MainFrame Visible Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-
-            System.err.println("Creating Browser Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-
-            System.err.println("Connecting to Server Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-            connectToServer(chatServerIP, chatServerPort);
-            System.err.println("Connected to Server Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-            // make the main frame visible
-            try {
-                System.err.println("making mainframe visible: "
-                        + System.currentTimeMillis());
-                System.err.flush();
-                // init the gui
-                if (splash != null) {
-                    splash.setStatus(splash.STATUS_CONSTRUCTINGGUI);
-                }
-
-                MainFrame.setVisible(true);
-
-                if (splash != null) {
-                    System.err.println("splash not null: "
-                            + System.currentTimeMillis());
-                    System.err.flush();
-                    splash.getProgressBar().setValue(9);
-                    System.err.println("progress bar set to 9: "
-                            + System.currentTimeMillis());
-                    System.err.flush();
-                    splash.getProgressBar().setVisible(false);
-                    System.err.println("progressbar going bye bye: "
-                            + System.currentTimeMillis());
-                    System.err.flush();
-                    splash.dispose();
-                    System.err.println("splash going bye bye: "
-                            + System.currentTimeMillis());
-                    System.err.flush();
-                }
-                System.err.println("splash going to null: "
-                        + System.currentTimeMillis());
-                System.err.flush();
-
-                splash = null;// nuke the splash
-                System.err
-                        .println("splash null: " + System.currentTimeMillis());
-                System.err.flush();
-            } catch (Exception ex) {
-                LOGGER.error("Error closing splash / opening main frame.");
-                LOGGER.catching(ex);
-            }
-            System.err.println("MainFrame Visible Done Time: "
-                    + System.currentTimeMillis());
-            System.err.flush();
-
-            // refresh the GUI views one last time
-            refreshGUI(REFRESH_STATUS);
-            refreshGUI(REFRESH_PLAYERPANEL);
-            refreshGUI(REFRESH_BMPANEL);
-            refreshGUI(REFRESH_HQPANEL);
-
-            /*
-             * Send client version and saved mail request to the server. Doing
-             * this after the main frame is build and visible will (I hope) fix
-             * the "PM Ping Crash" TT users have with Client 0.1.44.5.
-             */
-            sendChat(GameHost.CAMPAIGN_PREFIX + "c setclientversion#"
-                    + myUsername.trim() + "#" + CLIENT_VERSION);
-            sendChat("/getsavedmail");
-
-            // Lets start the repair thread
-            if (Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair"))) {
-                RMT = new RepairManagmentThread(
-                        Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
-                        this);
-                RMT.start();
-            }
-            if (Boolean.parseBoolean(getServerConfigs("UsePartsRepair"))) {
-                SMT = new SalvageManagmentThread(
-                        Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
-                        this);
-                SMT.start();
-            }
-        }
         // repeated connection attempts for dedicated hosts.
-        else {
+        if (isDedicated()) {
+            String chatServerIP = "";
+            int chatServerPort = -1;
+            try {
+                chatServerIP = Config.getParam("SERVERIP");
+                chatServerPort = Config.getIntParam("SERVERPORT");
+            } catch (Exception e) {
+                LOGGER.catching(e);
+                System.exit(1);
+            }
             int retryCount = 0;
             while ((Status == STATUS_DISCONNECTED) && (retryCount++ < 20)) {
                 connectToServer(chatServerIP, chatServerPort);
@@ -1600,6 +1341,52 @@ public final class MWClient extends GameHost implements IClient {
         LastPing = lastping;
     }
 
+    /*
+     * Connect the DataFetcher to the server and get all relevent information from it.
+     */
+    public void connectDataFetcher() {
+        try {
+            dataFetcher = new DataFetchClient(Integer.parseInt(Config
+                .getParam("DATAPORT")), Integer.parseInt(Config
+                .getParam("SOCKETTIMEOUTDELAY")));
+
+            BufferedReader dis = new BufferedReader(new InputStreamReader(
+                new FileInputStream(getCacheDir() + "/dataLastUpdated.dat")
+            ));
+            Date lastTS = new Date(Long.parseLong(dis.readLine()));
+            dataFetcher.setLastTimestamp(lastTS);
+            dis.close();
+        } catch (Exception exception) {
+            LOGGER.error("Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.", exception);
+        }
+        // Start the data fetcher, get ops/map/etc
+
+        dataFetcher.setData(Config.getParam("SERVERIP"), getCacheDir());
+        /*
+         * Now that the data fetcher has been created, get the OpList.txt.
+         * Note that this is BEFORE map data and other fetch/checks, because
+         * the Ops absolutely must be available in order to contruct the
+         * GUI.
+         */
+        try {
+            dataFetcher.checkForMostRecentOpList();
+        } catch (IOException e) {
+            Object[] options = { "Exit", "Continue" };
+            int selectedValue = JOptionPane
+                    .showOptionDialog(
+                            null,
+                            "No OpList. This usually means that you were unable to "
+                                    + "connect to the server to fetch a copy. Do you wish to exit?",
+                            "Startup " + "error!",
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.ERROR_MESSAGE, null, options,
+                            options[0]);
+            if (selectedValue == 0) {
+                System.exit(0); // exit, if they so choose
+            }
+        }
+    }
+
     public Vector<String> getIgnorePublic() {
         return IgnorePublic;
     }
@@ -1712,7 +1499,7 @@ public final class MWClient extends GameHost implements IClient {
 
         @Override
         public void run() {
-            (MainFrame.getMainPanel().getCommPanel()).setChat(input, channel,
+            (getMainFrame().getMainPanel().getCommPanel()).setChat(input, channel,
                     tabName);
         }
         //@salient discord bot chat capture
@@ -1729,7 +1516,6 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public void addToChat(String s, int channel, String tabName) {
-
         s = "<BODY  <font size=\"" + Config.getParam("CHATFONTSIZE") + "\">"
                 + s + "</font></BODY>";
         try {
@@ -1737,7 +1523,6 @@ public final class MWClient extends GameHost implements IClient {
         } catch (Exception ex) {
             LOGGER.catching(ex);
         }
-
     }
 
     protected Vector<String> splitString(String string, String splitter) {
@@ -1925,7 +1710,7 @@ public final class MWClient extends GameHost implements IClient {
 
         try {
             if (isRedraw) {
-                MainFrame.setVisible(false);
+                getMainFrame().setVisible(false);
             }
             LookAndFeelInfo lookAndFeelInfo = getLookAndFeel(lookAndFeel);
             if (lookAndFeelInfo != null) {
@@ -1935,8 +1720,8 @@ public final class MWClient extends GameHost implements IClient {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
             if (isRedraw) {
-                SwingUtilities.updateComponentTreeUI(MainFrame);
-                MainFrame.setVisible(true);
+                SwingUtilities.updateComponentTreeUI(getMainFrame());
+                getMainFrame().setVisible(true);
                 getMainFrame().getMainPanel().getUserListPanel()
                         .resetActivityButton();
             }
@@ -1960,28 +1745,28 @@ public final class MWClient extends GameHost implements IClient {
 
         @Override
         public void run() {
-            if (MainFrame == null) {
+            if (getMainFrame() == null) {
                 return;
             }// return if main frame not yet drawn (still fetching data)
             try {
                 switch (mode) {
                     case REFRESH_USERLIST:
-                        MainFrame.getMainPanel().getUserListPanel().refresh();
+                        getMainFrame().getMainPanel().getUserListPanel().refresh();
                         break;
                     case REFRESH_PLAYERPANEL:
-                        MainFrame.getMainPanel().getPlayerPanel().refresh();
+                        getMainFrame().getMainPanel().getPlayerPanel().refresh();
                         break;
                     case REFRESH_BATTLETABLE:
-                        MainFrame.refreshBattleTable();
+                        getMainFrame().refreshBattleTable();
                         break;
                     case REFRESH_HQPANEL:
-                        MainFrame.getMainPanel().getHQPanel().refresh();
+                        getMainFrame().getMainPanel().getHQPanel().refresh();
                         break;
                     case REFRESH_STATUS:
-                        MainFrame.changeStatus(Status, LastStatus);
+                        getMainFrame().changeStatus(Status, LastStatus);
                         break;
                     case REFRESH_BMPANEL:
-                        MainFrame.getMainPanel().getBMPanel().refresh();
+                        getMainFrame().getMainPanel().getBMPanel().refresh();
                         break;
                 }
             } catch (Exception ex) {
@@ -2003,9 +1788,9 @@ public final class MWClient extends GameHost implements IClient {
         // Show a popup with a message
         if (!isDedicated()) {
 
-            // JOptionPane.showInternalMessageDialog(MainFrame.getContentPane(),
+            // JOptionPane.showInternalMessageDialog(getMainFrame().getContentPane(),
             // Error);
-            final JDialog dialog = new JDialog(MainFrame, "Message");
+            final JDialog dialog = new JDialog(getMainFrame(), "Message");
 
             // Add contents to it.
             JLabel label = new JLabel("<html>" + Text + "</html>");
@@ -2042,7 +1827,7 @@ public final class MWClient extends GameHost implements IClient {
             Dimension d = dialog.getPreferredSize();
             d.setSize(d.getWidth() + 20, d.getHeight() + 40);
             dialog.setSize(d);
-            dialog.setLocationRelativeTo(MainFrame);
+            dialog.setLocationRelativeTo(getMainFrame());
             dialog.setVisible(true);
 
         } else {
@@ -2076,7 +1861,7 @@ public final class MWClient extends GameHost implements IClient {
 
     public void setSoundMuted(boolean b) {
         SoundMuted = b;
-        MainFrame.setSoundMuted(b);
+        getMainFrame().setSoundMuted(b);
 
         // see if the setting should be saved
         if (b != getConfig().isParam("DISABLEALLSOUND")) {
@@ -2089,6 +1874,57 @@ public final class MWClient extends GameHost implements IClient {
             getConfig().saveConfig();
         }
 
+    }
+
+    public void setupMainFrame() {
+        String chatServerIP = "";
+        int chatServerPort = -1;
+        try {
+            chatServerIP = Config.getParam("SERVERIP");
+            chatServerPort = Config.getIntParam("SERVERPORT");
+        } catch (Exception e) {
+            LOGGER.catching(e);
+        }
+
+        // make the main frame
+        this.mainFrame = new CMainFrame(this);
+
+        try {
+            getMainFrame().setIconImage(((GUIClientConfig) Config).getImage("LOGOUT").getImage());
+        } catch (Exception ex) {
+            LOGGER.catching(ex);
+        }
+
+        if (packFrame) {
+            getMainFrame().pack();
+        } else {
+            getMainFrame().validate();
+        }
+        getMainFrame().setExtendedState(Integer
+                .parseInt(getConfigParam("WINDOWSTATE")));
+        getMainFrame().setSize(Integer.parseInt(getConfigParam("WINDOWWIDTH")),
+                Integer.parseInt(getConfigParam("WINDOWHEIGHT")));
+        getMainFrame().setLocation(
+                Integer.parseInt(getConfigParam("WINDOWLEFT")),
+                Integer.parseInt(getConfigParam("WINDOWTOP")));
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = getMainFrame().getSize();
+        // check for unacceptable dimensions
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // set the initial mute value
+        setSoundMuted(getConfig().isParam("DISABLEALLSOUND"));
+
+        // build the attack menu. at this point we know we have the
+        // necessary data.
+        getMainFrame().updateAttackMenu();
+        getMainFrame().setVisible(true);
     }
 
     public boolean isMuted() {
@@ -2112,7 +1948,7 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public CMainFrame getMainFrame() {
-        return MainFrame;
+        return mainFrame;
     }
 
     public synchronized Collection<CUser> getUsers() {
@@ -2184,7 +2020,7 @@ public final class MWClient extends GameHost implements IClient {
     @Override
     public void errorMessage(String message) {
         if (!isDedicated()) {
-            JOptionPane.showMessageDialog(MainFrame, message);
+            JOptionPane.showMessageDialog(getMainFrame(), message);
         } else {
             LOGGER.error(message);
         }
@@ -2316,6 +2152,16 @@ public final class MWClient extends GameHost implements IClient {
         // connect to specific ip and port
         // System exits from connector on failure.
         Connector.connect(ip, port);
+        if (!isDedicated()) {
+            /*
+             * Send client version and saved mail request to the server. Doing
+             * this after the main frame is build and visible will (I hope) fix
+             * the "PM Ping Crash" TT users have with Client 0.1.44.5.
+             */
+            sendChat(GameHost.CAMPAIGN_PREFIX + "c setclientversion#"
+                    + getUsername().trim() + "#" + MWClient.CLIENT_VERSION);
+            sendChat("/getsavedmail");
+        }
     }
 
     public void goodbye() {
@@ -2432,7 +2278,7 @@ public final class MWClient extends GameHost implements IClient {
         try {
             myServer = new Server(gpassword, myPort, new GameManager());
             if (loadSavegame) {
-                FileDialog f = new FileDialog(MainFrame, "Load Savegame");
+                FileDialog f = new FileDialog(getMainFrame(), "Load Savegame");
                 f.setDirectory(System.getProperty("user.dir") + "/savegames");
                 f.setVisible(true);
                 myServer.loadGame(new File(f.getDirectory(), f.getFile()));
@@ -2772,7 +2618,6 @@ public final class MWClient extends GameHost implements IClient {
      * @return Returns the data.
      */
     public CampaignData getData() {
-
         if ((data == null) && !isDedicated()) {
 
             // Lets reload everything from the cache and then pull down and
@@ -2792,8 +2637,22 @@ public final class MWClient extends GameHost implements IClient {
                     throw new Exception("data still empty");
                 }
                 refreshData();
+                dataFetcher.setLastTimestamp(new Date(System.currentTimeMillis()));
                 dataFetcher.store();
                 LOGGER.info("cache data loaded");
+                // Lets start the repair thread
+                if (Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair"))) {
+                    RMT = new RepairManagmentThread(
+                            Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
+                            this);
+                    RMT.start();
+                }
+                if (Boolean.parseBoolean(getServerConfigs("UsePartsRepair"))) {
+                    SMT = new SalvageManagmentThread(
+                            Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
+                            this);
+                    SMT.start();
+                }
             } catch (Throwable e) {
 
                 if (!(e instanceof FileNotFoundException)) {
@@ -2804,9 +2663,6 @@ public final class MWClient extends GameHost implements IClient {
                     data = dataFetcher.getAllData();
                     dataFetcher.store();
                 } catch (ConnectException e1) {
-                    if (splash != null) {
-                        splash.setStatus(splash.STATUS_DATAERROR);
-                    }
                     LOGGER.error(getCacheDir());
                     LOGGER.catching(e1);
                     Object[] options = { "Exit", "Continue" };
@@ -2816,20 +2672,14 @@ public final class MWClient extends GameHost implements IClient {
                             JOptionPane.ERROR_MESSAGE, null, options,
                             options[0]);
                     if (selectedValue == 0) {
-                        System.exit(0);// exit, if they so choose
+                        System.exit(0);
                     }
                 } catch (IOException e1) {
-                    if (splash != null) {
-                        splash.setStatus(splash.STATUS_DATAERROR);
-                    }
                     LOGGER.catching(e1);
                     JOptionPane
                             .showMessageDialog(null,
                                     "Server is busy while fetching planet data.\nTry again later.");
                 } catch (Throwable e1) {
-                    if (splash != null) {
-                        splash.setStatus(splash.STATUS_DATAERROR);
-                    }
                     LOGGER.catching((Exception) e1);
                     Object[] options = { "Exit", "Continue" };
                     int selectedValue = JOptionPane
@@ -2844,9 +2694,6 @@ public final class MWClient extends GameHost implements IClient {
                     if (selectedValue == 0) {
                         System.exit(0);// exit, if they so choose
                     }
-                }
-                if (splash != null) {
-                    splash.setStatus(splash.STATUS_FETCHINGDATA);
                 }
             }
 
@@ -3839,8 +3686,7 @@ public final class MWClient extends GameHost implements IClient {
         return mmClientThreads;
     }
 
-    private void chatCaptureForBot(String username, String addon, String input) //@salient
-    {
+    private void chatCaptureForBot(String username, String addon, String input) { //@salient
         if(!Boolean.parseBoolean(getServerConfigs("Enable_Bot_Chat")))
             return;
 
