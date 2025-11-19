@@ -66,10 +66,6 @@ task stageFiles(type: Copy) {
 
     dependsOn gradle.includedBuild('megamek').task(':megamek:stageFiles')
 
-	file(fileStagingDir).mkdirs()
-	File batFile = new File("${fileStagingDir}/MekWars.bat")
-	batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
-	from batFile
     from clientdist
     into fileStagingDir
 }
@@ -77,6 +73,20 @@ task stageFiles(type: Copy) {
 tasks.named ('run') {
     workingDir = file('client-dist')
 }
+
+tasks.named('installDist') {
+    doLast {
+        def jarTask = tasks.named('jar').get()
+        def jvmArgs = (project.application.applicationDefaultJvmArgs ?: []).join(' ')
+        def jarName = jarTask.archiveFileName.get()    // MekWars.jar
+        def baseName = jarTask.archiveBaseName.get()   // MekWars
+
+        def installDir = file("$buildDir/install/${project.name}")
+        File batFile = new File(installDir, "${baseName}.bat")
+        batFile.text = "start /min javaw -Dlog4j2.configurationFile=log4j2.xml -Xmx2048m -Dsun.java2d.d3d=false -Dsun.awt.disablegrab=true -Dflatlaf.uiScale=1.0 -jar \"%~dp0MekWars.jar\" %*"
+    }
+}
+
 
 distributions {
     main {
