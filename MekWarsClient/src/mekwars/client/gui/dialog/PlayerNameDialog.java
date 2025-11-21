@@ -83,7 +83,7 @@ public class PlayerNameDialog extends JDialog implements ActionListener {
 		 */
 		
 		//super, and variable saves
-		super(client.getMainFrame(),boxText, true);//dummy frame as owner
+		super(client.getGUIClient().getMainFrame(),boxText, true);//dummy frame as owner
 		
 		//loop through all players, checking faction, if needed
 		Vector<String> factionPlayers = new Vector<String>(1,1);

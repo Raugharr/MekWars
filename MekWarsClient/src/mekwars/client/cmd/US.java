@@ -21,6 +21,7 @@ import java.util.StringTokenizer;
 
 import mekwars.client.CUser;
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -52,6 +53,6 @@ public class US extends Command {
 		if (mwclient.isDedicated() )
 			return;
 		
-		mwclient.refreshGUI(MWClient.REFRESH_USERLIST);
+		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_USERLIST);
 	}
 }

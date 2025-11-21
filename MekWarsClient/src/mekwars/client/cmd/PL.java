@@ -20,6 +20,7 @@ package mekwars.client.cmd;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
@@ -150,7 +151,7 @@ public class PL extends Command {
             player.setHouseFightingFor(TokenReader.readString(st));
         } else if (cmd.equals("SUL")) {// Players Unit Logo
             player.setLogo(TokenReader.readString(st));
-            mwclient.getMainFrame().getMainPanel().getPlayerPanel().refresh();
+            mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_PLAYERPANEL);
         } else if (cmd.equals("AP2PPQ")) {
             player.getPersonalPilotQueue().addPilot(st);
         } else if (cmd.equals("RPPPQ")) {
@@ -185,7 +186,7 @@ public class PL extends Command {
                 damage = TokenReader.readString(data);
             }
 
-            mwclient.getMainFrame().getMainPanel().getHSPanel().showInfoWindow(filename, BV, gunnery, piloting, damage);
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().showInfoWindow(filename, BV, gunnery, piloting, damage);
         } else if (cmd.equals("VURD")) {
             StringTokenizer data = new StringTokenizer(TokenReader.readString(st), "#");
             String filename = TokenReader.readString(data);
@@ -202,14 +203,14 @@ public class PL extends Command {
         } else if (cmd.equals("UDAO")) {
             mwclient.updateOpData(true);
             if (!mwclient.isDedicated()) {
-                mwclient.getMainFrame().updateAttackMenu();
+                mwclient.getGUIClient().getMainFrame().updateAttackMenu();
             }
         } else if (cmd.equals("RMF")) {
             mwclient.retrieveMul(TokenReader.readString(st));
         } else if (cmd.equals("SMFD")) {
-            mwclient.getMainFrame().showMulFileList(TokenReader.readString(st));
+            mwclient.getGUIClient().getMainFrame().showMulFileList(TokenReader.readString(st));
         } else if (cmd.equals("CAFM")) {
-            mwclient.getMainFrame().createArmyFromMul(TokenReader.readString(st));
+            mwclient.getGUIClient().getMainFrame().createArmyFromMul(TokenReader.readString(st));
         } else if (cmd.equals("USU")) {
             // Update Supported Units
             while (st.hasMoreTokens()) {
@@ -237,7 +238,7 @@ public class PL extends Command {
             int id = TokenReader.readInt(st);
             mwclient.getData().removeHouse(id);
         } else if (cmd.equals("UDT")) {
-            mwclient.addToChat(TokenReader.readString(st), mwclient.getConfig().getIntParam("USERDEFINDMESSAGETAB"));
+            mwclient.getGUIClient().addToChat(TokenReader.readString(st), mwclient.getConfig().getIntParam("USERDEFINDMESSAGETAB"));
         } else if (cmd.equals("CCC")) {
             mwclient.getCampaign().setComponentConverter(st.nextToken());
         } else if (cmd.equals("SUD")) {
@@ -274,8 +275,8 @@ public class PL extends Command {
             return;
         }
 
-        mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
-        mwclient.refreshGUI(MWClient.REFRESH_PLAYERPANEL);
-        mwclient.refreshGUI(MWClient.REFRESH_BMPANEL);
+        mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
+        mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_PLAYERPANEL);
+        mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_BMPANEL);
     }
 }

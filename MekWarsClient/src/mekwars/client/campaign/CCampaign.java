@@ -22,6 +22,7 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.dialog.ArmyViewerDialog;
 import mekwars.common.BMEquipment;
@@ -67,7 +68,7 @@ public class CCampaign {
 
         if (element.equals("PS")) {
             if (!Player.setData(command)) {
-                mwclient.addToChat("Player data load failed!<br>");
+                mwclient.getGUIClient().addToChat("Player data load failed!<br>");
                 return(false);
             }
             return(true);
@@ -82,8 +83,8 @@ public class CCampaign {
                     mwclient.doPlaySound(mwclient.getConfigParam("SOUNDONATTACK"));
                 }
 
-                mwclient.addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_HMAIL);
-                mwclient.addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_PMAIL,"Server");
+                mwclient.getGUIClient().addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_HMAIL);
+                mwclient.getGUIClient().addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_PMAIL,"Server");
                 if (mwclient.getConfig().isParam("POPUPONATTACK")) {
                     int opID = TokenReader.readInt(ST);
                     int teams = TokenReader.readInt(ST);
@@ -105,7 +106,7 @@ public class CCampaign {
                     for (CBMUnit currUnit : BlackMarket.values()) {
                         currUnit.decrementSalesTicks();
                     }
-                    mwclient.refreshGUI(MWClient.REFRESH_BMPANEL);
+                    mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_BMPANEL);
                 }
             }
             return (true);
@@ -114,7 +115,7 @@ public class CCampaign {
         {
             if (!setData(command))
             {
-                mwclient.addToChat("<b>Error: Campaign data load failed.</b><br>");
+                mwclient.getGUIClient().addToChat("<b>Error: Campaign data load failed.</b><br>");
                 return(false);
             }
             return(true);
@@ -123,7 +124,7 @@ public class CCampaign {
         {
             if (!Player.decodeCommand(command))
             {
-                mwclient.addToChat("<b>Error: Player data load failed.</b><br>");
+                mwclient.getGUIClient().addToChat("<b>Error: Player data load failed.</b><br>");
                 return(false);
             }
             return(true);
@@ -132,7 +133,7 @@ public class CCampaign {
         {
             if (!showMsg(command))
             {
-                mwclient.addToChat("<b>Error: Message show failed.</b><br>");
+                mwclient.getGUIClient().addToChat("<b>Error: Message show failed.</b><br>");
                 return(false);
             }
             return(true);
@@ -141,13 +142,13 @@ public class CCampaign {
         {
             if (!showStatus(command))
             {
-                mwclient.addToChat("<b>Error: Status show failed.</b><br>");
+                mwclient.getGUIClient().addToChat("<b>Error: Status show failed.</b><br>");
                 return(false);
             }
             return(true);
         }
 
-        mwclient.addToChat("<b>Error: Wrong campaign command from server.</b><br>");
+        mwclient.getGUIClient().addToChat("<b>Error: Wrong campaign command from server.</b><br>");
         return(false);
     }
 
@@ -205,7 +206,7 @@ public class CCampaign {
     }
 
     protected boolean showStatus(String command) {
-        mwclient.addToChat(command);
+        mwclient.getGUIClient().addToChat(command);
         return(true);
     }
 

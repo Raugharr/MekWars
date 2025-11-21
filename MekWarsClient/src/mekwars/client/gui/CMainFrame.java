@@ -51,7 +51,6 @@ import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-import megamek.client.ui.swing.UnitLoadingDialog;
 import mekwars.admin.AdminMenu;
 import mekwars.admin.ModeratorMenu;
 import mekwars.client.CUser;
@@ -62,7 +61,6 @@ import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.client.gui.SplashWindow;
 import mekwars.client.gui.dialog.ComponentConverterDialog;
 import mekwars.client.gui.dialog.ConfigurationDialog;
 import mekwars.client.gui.dialog.HouseNameDialog;
@@ -79,8 +77,9 @@ import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.StringUtils;
+import mekwars.client.gui.dialog.InfluencePointsDialog;
+import mekwars.client.gui.dialog.RewardPointsDialog;
 import mekwars.operationseditor.gui.dialog.OperationsDialog;
-import megamek.client.ui.swing.UnitLoadingDialog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -286,7 +285,7 @@ public class CMainFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent evt) {
                 if (mwclient.isServerRunning()) {
-                    int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to exit?", "You are hosting a game!", JOptionPane.YES_NO_OPTION);
+                    int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to exit?", "You are hosting a game!", JOptionPane.YES_NO_OPTION);
                     if (result == JOptionPane.YES_OPTION) {
                         mwclient.goodbye();
                         System.exit(0);
@@ -770,7 +769,7 @@ public class CMainFrame extends JFrame {
         jMenuCampaignRewardPoints.setMnemonic('P');
         jMenuCampaignRewardPoints.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.rewardPointsDialog();
+                new RewardPointsDialog(mwclient);
             }
         });
 
@@ -779,7 +778,7 @@ public class CMainFrame extends JFrame {
         //jMenuCampaignRewardPoints.setMnemonic('P');
         jMenuCampaignInfluencePoints.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.influencePointsDialog();
+                new InfluencePointsDialog(mwclient);
             }
         });
 
@@ -1010,7 +1009,7 @@ public class CMainFrame extends JFrame {
         jMenuLeaderResearchTech.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                int option = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Do you wish to research tech?", "Research?", JOptionPane.YES_NO_OPTION);
+                int option = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Do you wish to research tech?", "Research?", JOptionPane.YES_NO_OPTION);
 
                 if (option == JOptionPane.NO_OPTION) {
                     return;
@@ -1566,10 +1565,10 @@ public class CMainFrame extends JFrame {
             return;
         }
         if (h1 == h2) {
-            mwclient.addToChat("That is your faction. Target an enemy faction.");
+            mwclient.getGUIClient().addToChat("That is your faction. Target an enemy faction.");
             return;
         }
-        //mwclient.addToChat("findcp " + h1 + "#" + h2 + "#" + Perc);
+        //mwclient.getGUIClient().addToChat("findcp " + h1 + "#" + h2 + "#" + Perc);
         mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "findcp " + h1 + "#" + h2 + "#" + Perc);
     }  //BarukKhazad 20151129 - end 2
 
@@ -1879,7 +1878,7 @@ public class CMainFrame extends JFrame {
         int unitType = 0;
 
         // determine the unit type to use
-        String pUnitTypeString = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select a pilot unit type", "Unit Type Selection", JOptionPane.INFORMATION_MESSAGE, null, pUnitType, pUnitType[0]);
+        String pUnitTypeString = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select a pilot unit type", "Unit Type Selection", JOptionPane.INFORMATION_MESSAGE, null, pUnitType, pUnitType[0]);
 
         if ((pUnitTypeString == null) || (pUnitTypeString.length() == 0)) {
             return;
@@ -1892,7 +1891,7 @@ public class CMainFrame extends JFrame {
         }
 
         // determine the weight class to use
-        String pWeightClassString = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select a pilot unit size", "Weight Class Selection", JOptionPane.INFORMATION_MESSAGE, null, pWeightClass, pWeightClass[0]);
+        String pWeightClassString = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select a pilot unit size", "Weight Class Selection", JOptionPane.INFORMATION_MESSAGE, null, pWeightClass, pWeightClass[0]);
 
         if ((pWeightClassString == null) || (pWeightClassString.length() == 0)) {
             return;
@@ -1921,7 +1920,7 @@ public class CMainFrame extends JFrame {
         combo.setEditable(false);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select a pilot.");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select a pilot.");
         combo.grabFocus();
         combo.getEditor().selectAll();
 
@@ -1954,7 +1953,7 @@ public class CMainFrame extends JFrame {
         int unitType = 0;
 
         // determine the unit type to use
-        String pUnitTypeString = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select a pilot unit type", "Unit Type Selection", JOptionPane.INFORMATION_MESSAGE, null, pUnitType, pUnitType[0]);
+        String pUnitTypeString = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select a pilot unit type", "Unit Type Selection", JOptionPane.INFORMATION_MESSAGE, null, pUnitType, pUnitType[0]);
 
         if ((pUnitTypeString == null) || (pUnitTypeString.length() == 0)) {
             return;
@@ -1967,7 +1966,7 @@ public class CMainFrame extends JFrame {
         }
 
         // determine the weight class to use
-        String pWeightClassString = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select a pilot unit size", "Weight Class Selection", JOptionPane.INFORMATION_MESSAGE, null, pWeightClass, pWeightClass[0]);
+        String pWeightClassString = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select a pilot unit size", "Weight Class Selection", JOptionPane.INFORMATION_MESSAGE, null, pWeightClass, pWeightClass[0]);
 
         if ((pWeightClassString == null) || (pWeightClassString.length() == 0)) {
             return;
@@ -1996,7 +1995,7 @@ public class CMainFrame extends JFrame {
         combo.setEditable(false);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select a pilot.");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select a pilot.");
         combo.grabFocus();
         combo.getEditor().selectAll();
 
@@ -2163,12 +2162,12 @@ public class CMainFrame extends JFrame {
 
         int techs = Integer.parseInt(techsToFire);
         if (!useAdvanceRepairs && (thePlayer.getTechs() <= 0)) {
-            mwclient.addToChat("<b>You have no hired techs to fire.<b>");
+            mwclient.getGUIClient().addToChat("<b>You have no hired techs to fire.<b>");
             return;
         }
 
         if (!useAdvanceRepairs && ((techs < 1) || (techs > thePlayer.getTechs()))) {
-            mwclient.addToChat("<b>Try picking a number between 1 and " + thePlayer.getTechs() + "<b>");
+            mwclient.getGUIClient().addToChat("<b>Try picking a number between 1 and " + thePlayer.getTechs() + "<b>");
             return;
         }
 
@@ -2183,7 +2182,7 @@ public class CMainFrame extends JFrame {
             combo.setEditable(true);
             JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-            JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select tech to fire.");
+            JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select tech to fire.");
             combo.grabFocus();
             combo.getEditor().selectAll();
 
@@ -2224,7 +2223,7 @@ public class CMainFrame extends JFrame {
 
         int techs = Integer.parseInt(techsToHire);
         if (techs < 1) {
-            mwclient.addToChat("Try picking a number greater then 0");
+            mwclient.getGUIClient().addToChat("Try picking a number greater then 0");
             return;
         }
 
@@ -2237,7 +2236,7 @@ public class CMainFrame extends JFrame {
             combo.setEditable(false);
             JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-            JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select tech to hire.");
+            JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select tech to hire.");
             combo.grabFocus();
             combo.getEditor().selectAll();
 
@@ -2281,7 +2280,7 @@ public class CMainFrame extends JFrame {
         }
 
         // determine the unit type to use
-        String pUnitTypeString = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select unit type", "Unit Type Selection", JOptionPane.INFORMATION_MESSAGE, null, pUnitType, pUnitType[0]);
+        String pUnitTypeString = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select unit type", "Unit Type Selection", JOptionPane.INFORMATION_MESSAGE, null, pUnitType, pUnitType[0]);
 
         if ((pUnitTypeString == null) || (pUnitTypeString.length() == 0)) {
             return;
@@ -2290,7 +2289,7 @@ public class CMainFrame extends JFrame {
         unitType = Unit.getTypeIDForName(pUnitTypeString);
 
         // determine the weight class to use
-        String pWeightClassString = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select unit size", "Weight Class Selection", JOptionPane.INFORMATION_MESSAGE, null, pWeightClass, pWeightClass[0]);
+        String pWeightClassString = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select unit size", "Weight Class Selection", JOptionPane.INFORMATION_MESSAGE, null, pWeightClass, pWeightClass[0]);
 
         if ((pWeightClassString == null) || (pWeightClassString.length() == 0)) {
             return;
@@ -2316,11 +2315,11 @@ public class CMainFrame extends JFrame {
 
         int bays = Integer.parseInt(baysToFire);
         if (thePlayer.getFreeBays() <= 0) {
-            mwclient.addToChat("<b>You have no free bays to return.<b>");
+            mwclient.getGUIClient().addToChat("<b>You have no free bays to return.<b>");
             return;
         }
         if ((bays < 1) || (bays > thePlayer.getFreeBays())) {
-            mwclient.addToChat("<b>Try picking a number between 1 and " + thePlayer.getFreeBays() + "<b>");
+            mwclient.getGUIClient().addToChat("<b>Try picking a number between 1 and " + thePlayer.getFreeBays() + "<b>");
             return;
         }
         mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c sellbays#" + bays);
@@ -2344,7 +2343,7 @@ public class CMainFrame extends JFrame {
 
         int bays = Integer.parseInt(baysToHire);
         if (bays < 1) {
-            mwclient.addToChat("Try picking a number greater then 0");
+            mwclient.getGUIClient().addToChat("Try picking a number greater then 0");
             return;
         }
         mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c buybays#" + bays);
@@ -2504,7 +2503,7 @@ public class CMainFrame extends JFrame {
         combo.setEditable(false);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Unit Type");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Unit Type");
         combo.grabFocus();
         combo.getEditor().selectAll();
 
@@ -2526,7 +2525,7 @@ public class CMainFrame extends JFrame {
         combo.setEditable(false);
         jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        dlg = jop.createDialog(mwclient.getMainFrame(), "Unit Weight");
+        dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Unit Weight");
         combo.grabFocus();
         combo.getEditor().selectAll();
 
@@ -2916,7 +2915,7 @@ public class CMainFrame extends JFrame {
         combo.setEditable(false);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select mul file.");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select mul file.");
         combo.grabFocus();
         combo.getEditor().selectAll();
 
@@ -3075,7 +3074,7 @@ public class CMainFrame extends JFrame {
         combo.setEditable(false);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select mul file.");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select mul file.");
         combo.grabFocus();
         combo.getEditor().selectAll();
 
@@ -3142,7 +3141,7 @@ public class CMainFrame extends JFrame {
 
     public void jMenuSetNewOperationFile_actionPerformed(ActionEvent e) {
 
-        String opName = JOptionPane.showInputDialog(mwclient.getMainFrame().getContentPane(), "New Op Name?");
+        String opName = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame().getContentPane(), "New Op Name?");
 
         if ((opName == null) || (opName.trim().length() < 1)) {
             return;

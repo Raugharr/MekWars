@@ -77,7 +77,7 @@ public class SubFactionNameDialog extends JDialog implements ActionListener {
 		 */
 		
 		//super, and variable saves
-		super(mwclient.getMainFrame(),boxText, true);//dummy frame as owner
+		super(mwclient.getGUIClient().getMainFrame(),boxText, true);//dummy frame as owner
 		this.faction = mwclient.getData().getHouseByName(factionName);
 		
 		//setup the a list of names to feed into a list
@@ -179,7 +179,7 @@ public class SubFactionNameDialog extends JDialog implements ActionListener {
 		this.getRootPane().setDefaultButton(okayButton);
 		
 		//center the dialog.
-		this.setLocationRelativeTo(mwclient.getMainFrame());
+		this.setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
        
 	}
 	

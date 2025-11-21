@@ -15,23 +15,8 @@ package mekwars.client;
 // This is the Client used for connecting to the master server.
 // @Author: Helge Richter (McWizard@gmx.de)
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.extras.FlatInspector;
-import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FileDialog;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,7 +46,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -76,15 +60,7 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import megamek.MMConstants;
 import megamek.Version;
 import megamek.client.ui.swing.GameOptionsDialog;
@@ -116,14 +92,9 @@ import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand
 import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
 import mekwars.client.gui.CCommPanel;
-import mekwars.client.gui.CMainFrame;
 import mekwars.client.gui.commands.IGUICommand;
 import mekwars.client.gui.commands.MailGCmd;
 import mekwars.client.gui.commands.PingGCmd;
-import mekwars.client.gui.dialog.InfluencePointsDialog;
-import mekwars.client.gui.dialog.RewardPointsDialog;
-import mekwars.client.gui.dialog.ServerBrowserDialog;
-import mekwars.client.gui.dialog.SignonDialog;
 import mekwars.client.net.hpgnet.HPGClient;
 import mekwars.client.protocol.DataFetchClient;
 import mekwars.client.util.RepairManagmentThread;
@@ -153,62 +124,53 @@ public final class MWClient extends GameHost implements IClient {
 
     private static final long serialVersionUID = 6056977040880995791L;
     // Holds campaign data as factions and planets..
-    CampaignData data = null;
-    DataFetchClient dataFetcher;
-    Thread updateDataFetcher;
+    private CampaignData data = null;
+    private DataFetchClient dataFetcher;
 
     public static final Version CLIENT_VERSION = new Version("9.0.0"); // change this with
 
     // all client
     // changes @Torren
-    TimeOutThread TO;
-    Collection<CUser> Users;
-    Server myServer = null;
-    List<ClientThread> mmClientThreads = new ArrayList<>();
-    Vector<IBasicOption> GameOptions = new Vector<IBasicOption>(1, 1);
+    private TimeOutThread TO;
+    private Collection<CUser> Users;
+    private Server myServer = null;
+    private List<ClientThread> mmClientThreads = new ArrayList<>();
+    private Vector<IBasicOption> GameOptions = new Vector<IBasicOption>(1, 1);
+    private GUIClient guiClient;
 
-    boolean SignOff = false;
-    boolean packFrame = false;
-    boolean SoundMuted = false;
+    private boolean SignOff = false;
+    private boolean SoundMuted = false;
 
-    String password = "";
-    String myDedOwners = "";
-    int myPort = -1;
-    int gameCount = 0; // number of games played on a ded
-    long lastResetCheck = System.currentTimeMillis();
-    int dedRestartAt = 50; // number of games played on a ded before auto
+    private String password = "";
+    private String myDedOwners = "";
+    private int myPort = -1;
+    private int gameCount = 0; // number of games played on a ded
+    private long lastResetCheck = System.currentTimeMillis();
+    private int dedRestartAt = 50; // number of games played on a ded before auto
     // restart.
 
-    long TimeOut = 120;
-    long LastPing = 0;
+    private long TimeOut = 120;
+    private long LastPing = 0;
 
-    PlanetEnvironment currentEnvironment;
-    AdvancedTerrain aTerrain = null;
+    private PlanetEnvironment currentEnvironment;
+    private AdvancedTerrain aTerrain = null;
 
-    TreeMap<String, String[]> allOps;// all operations, from OpList.txt
+    private TreeMap<String, String[]> allOps;// all operations, from OpList.txt
 
-    Dimension MapSize;
-    int mapMedium = 0;
+    private Dimension MapSize;
+    private int mapMedium = 0;
 
     private Game game = new Game();
     private HPGClient hpgClient; 
 
     public static final String GUI_PREFIX = "/"; // prefix for commands in GUI
 
-    public static final int REFRESH_STATUS = 0;
-    public static final int REFRESH_USERLIST = 1;
-    public static final int REFRESH_PLAYERPANEL = 2;
-    public static final int REFRESH_BATTLETABLE = 4;
-    public static final int REFRESH_HQPANEL = 5;
-    public static final int REFRESH_BMPANEL = 6;
-
     public static final int IGNORE_PUBLIC = 0;
     public static final int IGNORE_HOUSE = 1;
     public static final int IGNORE_PRIVATE = 2;
 
-    CCampaign theCampaign;
-    CPlayer myPlayer;
-    CMainFrame mainFrame;
+    private CCampaign theCampaign;
+    private CPlayer myPlayer;
 
     int Status = STATUS_DISCONNECTED;
     int LastStatus = STATUS_DISCONNECTED;
@@ -287,21 +249,6 @@ public final class MWClient extends GameHost implements IClient {
         ProtCommands = new TreeMap<>();
         Config = config;
 
-        // set up the splash screen. do this before any
-        // other non-main/non-static actions.
-        FlatLaf.registerCustomDefaultsSource("mekwars.themes");
-        FlatInspector.install("ctrl shift alt X");
-        FlatUIDefaultsInspector.install("ctrl shift alt Y");
-        FlatLightLaf.setup();
-        FlatIntelliJLaf.setup();
-        FlatDarkLaf.setup();
-        FlatDarculaLaf.setup();
-
-        UIManager.installLookAndFeel("Flat Light", "com.formdev.flatlaf.FlatLightLaf");
-        UIManager.installLookAndFeel("Flat IntelliJ", "com.formdev.flatlaf.FlatIntelliJLaf");
-        UIManager.installLookAndFeel("Flat Dark", "com.formdev.flatlaf.FlatDarkLaf");
-        UIManager.installLookAndFeel("Flat Darcula", "com.formdev.flatlaf.FlatDarculaLaf");
-
         if (isDedicated()) {
             try {
                 Runtime runTime = Runtime.getRuntime();
@@ -313,7 +260,7 @@ public final class MWClient extends GameHost implements IClient {
             }
         } else {
             hpgClient = new HPGClient(this);
-            setLookAndFeel(false);
+            guiClient = new GUIClient(this, config);
         }
 
         try {
@@ -356,24 +303,6 @@ public final class MWClient extends GameHost implements IClient {
                 shouldShowSignOn = true;
             }
 
-            if (shouldShowSignOn) {
-                try {
-                    String trackerEnabledConfig = getConfigParam("TrackerEnabled");
-                    if (Boolean.parseBoolean(trackerEnabledConfig)) {
-                        String trackerAddress = getConfigParam("TrackerAddress");
-                        hpgClient.connect(new InetSocketAddress(trackerAddress,
-                                    HPGClient.TRACKER_PORT));
-
-                        ServerBrowserDialog serverBrowserDialog = new ServerBrowserDialog(null,
-                                Locale.US, this);
-
-                        serverBrowserDialog.setVisible(true);
-                    }
-                } catch (IOException e) {
-                    LOGGER.error("Exception: ", e);    
-                }
-                new SignonDialog(this);
-            }
         // Dedicated servers have no GUI, no signon dialogs, etc.
         } else {
             createProtCommands();
@@ -478,6 +407,13 @@ public final class MWClient extends GameHost implements IClient {
         LastPing = System.currentTimeMillis() / 1000;
         TO = new TimeOutThread(this);
         TO.run();
+    }
+
+    /*
+     * Get the GUIClient, will be NULL for dedicated servers.
+     */
+    public GUIClient getGUIClient() {
+        return guiClient;
     }
 
     /*
@@ -1266,7 +1202,7 @@ public final class MWClient extends GameHost implements IClient {
             sendChat(input);
             s = "Sent command: " + '"'
                     + input.substring(CAMPAIGN_PREFIX.length()) + '"';
-            addToChat(s, CCommPanel.CHANNEL_PLOG, null);
+            getGUIClient().addToChat(s, CCommPanel.CHANNEL_PLOG, null);
         }
 
         else {
@@ -1281,7 +1217,7 @@ public final class MWClient extends GameHost implements IClient {
                         + getShortTime() + "</font>" + s;
 
             }
-            addToChat(s, CCommPanel.CHANNEL_PLOG, null);
+            getGUIClient().addToChat(s, CCommPanel.CHANNEL_PLOG, null);
             chatCaptureForBot(myUsername,addon,input); //@salient
         }
     }// end processGUIInput
@@ -1486,45 +1422,6 @@ public final class MWClient extends GameHost implements IClient {
         return result;
     }
 
-    protected class CAddToChat implements Runnable {
-        String input = "";
-        int channel = -1;
-        String tabName = "";
-
-        public CAddToChat(String tinput, int tchannel, String ttabName) {
-            input = tinput;
-            channel = tchannel;
-            tabName = ttabName;
-        }
-
-        @Override
-        public void run() {
-            (getMainFrame().getMainPanel().getCommPanel()).setChat(input, channel,
-                    tabName);
-        }
-        //@salient discord bot chat capture
-        //if i wanted to capture multiple channels
-        //i'd have to do it here?
-    }
-
-    public void addToChat(String s) {
-        addToChat(s, CCommPanel.CHANNEL_MAIN, null);
-    }
-
-    public void addToChat(String s, int channel) {
-        addToChat(s, channel, null);
-    }
-
-    public void addToChat(String s, int channel, String tabName) {
-        s = "<BODY  <font size=\"" + Config.getParam("CHATFONTSIZE") + "\">"
-                + s + "</font></BODY>";
-        try {
-            SwingUtilities.invokeLater(new CAddToChat(s, channel, tabName));
-        } catch (Exception ex) {
-            LOGGER.catching(ex);
-        }
-    }
-
     protected Vector<String> splitString(String string, String splitter) {
         Vector<String> vector = new Vector<String>(1, 1);
         String[] splitted = string.split(splitter);
@@ -1699,142 +1596,6 @@ public final class MWClient extends GameHost implements IClient {
         return allOps;
     }
 
-    /*
-     * Rewritten in order to allow ConfigPage to reset the skin on the fly.
-     *
-     * @urgru 2.21.05
-     */
-    public void setLookAndFeel(boolean isRedraw) {
-        String lookAndFeel = Config.getParam("LOOKANDFEEL");
-        LOGGER.info("SetLookAndFeel: {}", lookAndFeel);
-
-        try {
-            if (isRedraw) {
-                getMainFrame().setVisible(false);
-            }
-            LookAndFeelInfo lookAndFeelInfo = getLookAndFeel(lookAndFeel);
-            if (lookAndFeelInfo != null) {
-                UIManager.setLookAndFeel(lookAndFeelInfo.getClassName());
-            } else {
-                LOGGER.error("Invalid LookAndFeel '{}'", lookAndFeel);
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            }
-            if (isRedraw) {
-                SwingUtilities.updateComponentTreeUI(getMainFrame());
-                getMainFrame().setVisible(true);
-                getMainFrame().getMainPanel().getUserListPanel()
-                        .resetActivityButton();
-            }
-        } catch (Exception ex) {
-            LOGGER.catching(ex);
-            try {
-                UIManager.setLookAndFeel(UIManager
-                        .getSystemLookAndFeelClassName());
-            } catch (Exception e) {
-                LOGGER.catching(e);
-            }
-        }
-    }
-
-    protected class CRefreshGUI implements Runnable {
-        protected int mode = -1;
-
-        public CRefreshGUI(int tmode) {
-            mode = tmode;
-        }
-
-        @Override
-        public void run() {
-            if (getMainFrame() == null) {
-                return;
-            }// return if main frame not yet drawn (still fetching data)
-            try {
-                switch (mode) {
-                    case REFRESH_USERLIST:
-                        getMainFrame().getMainPanel().getUserListPanel().refresh();
-                        break;
-                    case REFRESH_PLAYERPANEL:
-                        getMainFrame().getMainPanel().getPlayerPanel().refresh();
-                        break;
-                    case REFRESH_BATTLETABLE:
-                        getMainFrame().refreshBattleTable();
-                        break;
-                    case REFRESH_HQPANEL:
-                        getMainFrame().getMainPanel().getHQPanel().refresh();
-                        break;
-                    case REFRESH_STATUS:
-                        getMainFrame().changeStatus(Status, LastStatus);
-                        break;
-                    case REFRESH_BMPANEL:
-                        getMainFrame().getMainPanel().getBMPanel().refresh();
-                        break;
-                }
-            } catch (Exception ex) {
-                // do nothing
-            }
-        }
-    }
-
-    public void refreshGUI(int mode) {
-        try {
-            SwingUtilities.invokeLater(new CRefreshGUI(mode));
-        } catch (Exception ex) {
-            LOGGER.catching(ex);
-        }
-    }
-
-    public void showInfoWindow(String Text) {
-
-        // Show a popup with a message
-        if (!isDedicated()) {
-
-            // JOptionPane.showInternalMessageDialog(getMainFrame().getContentPane(),
-            // Error);
-            final JDialog dialog = new JDialog(getMainFrame(), "Message");
-
-            // Add contents to it.
-            JLabel label = new JLabel("<html>" + Text + "</html>");
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            Container contentPane = dialog.getContentPane();
-            contentPane.setLayout(new GridBagLayout());
-            GridBagConstraints gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.ipadx = 30;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.weighty = 1.0;
-            gridBagConstraints.insets = new Insets(0, 0, 0, 10);
-            contentPane.add(label, gridBagConstraints);
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.weightx = 0;
-            gridBagConstraints.weighty = 0;
-            JPanel panel = new JPanel();
-            panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-            JButton okButton = new JButton("OK");
-            panel.add(okButton);
-            contentPane.add(panel, gridBagConstraints);
-
-            okButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent event) {
-                    dialog.setVisible(false);
-                    dialog.dispose();
-                }
-            });
-
-            // Show it.
-            Dimension d = dialog.getPreferredSize();
-            d.setSize(d.getWidth() + 20, d.getHeight() + 40);
-            dialog.setSize(d);
-            dialog.setLocationRelativeTo(getMainFrame());
-            dialog.setVisible(true);
-
-        } else {
-            LOGGER.info(Text);
-        }
-    }
-
     public void doPlaySound(String filename) {
         doPlaySound(filename, true);
     }
@@ -1861,7 +1622,7 @@ public final class MWClient extends GameHost implements IClient {
 
     public void setSoundMuted(boolean b) {
         SoundMuted = b;
-        getMainFrame().setSoundMuted(b);
+        getGUIClient().getMainFrame().setSoundMuted(b);
 
         // see if the setting should be saved
         if (b != getConfig().isParam("DISABLEALLSOUND")) {
@@ -1874,57 +1635,6 @@ public final class MWClient extends GameHost implements IClient {
             getConfig().saveConfig();
         }
 
-    }
-
-    public void setupMainFrame() {
-        String chatServerIP = "";
-        int chatServerPort = -1;
-        try {
-            chatServerIP = Config.getParam("SERVERIP");
-            chatServerPort = Config.getIntParam("SERVERPORT");
-        } catch (Exception e) {
-            LOGGER.catching(e);
-        }
-
-        // make the main frame
-        this.mainFrame = new CMainFrame(this);
-
-        try {
-            getMainFrame().setIconImage(((GUIClientConfig) Config).getImage("LOGOUT").getImage());
-        } catch (Exception ex) {
-            LOGGER.catching(ex);
-        }
-
-        if (packFrame) {
-            getMainFrame().pack();
-        } else {
-            getMainFrame().validate();
-        }
-        getMainFrame().setExtendedState(Integer
-                .parseInt(getConfigParam("WINDOWSTATE")));
-        getMainFrame().setSize(Integer.parseInt(getConfigParam("WINDOWWIDTH")),
-                Integer.parseInt(getConfigParam("WINDOWHEIGHT")));
-        getMainFrame().setLocation(
-                Integer.parseInt(getConfigParam("WINDOWLEFT")),
-                Integer.parseInt(getConfigParam("WINDOWTOP")));
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = getMainFrame().getSize();
-        // check for unacceptable dimensions
-        if (frameSize.height > screenSize.height) {
-            frameSize.height = screenSize.height;
-        }
-        if (frameSize.width > screenSize.width) {
-            frameSize.width = screenSize.width;
-        }
-
-        // set the initial mute value
-        setSoundMuted(getConfig().isParam("DISABLEALLSOUND"));
-
-        // build the attack menu. at this point we know we have the
-        // necessary data.
-        getMainFrame().updateAttackMenu();
-        getMainFrame().setVisible(true);
     }
 
     public boolean isMuted() {
@@ -1945,10 +1655,6 @@ public final class MWClient extends GameHost implements IClient {
 
     public boolean isBotsOnSameTeam() {
         return botsOnSameTeam;
-    }
-
-    public CMainFrame getMainFrame() {
-        return mainFrame;
     }
 
     public synchronized Collection<CUser> getUsers() {
@@ -2010,9 +1716,9 @@ public final class MWClient extends GameHost implements IClient {
             message = "<font color=\"" + sysColour + "\"><b>" + message
                     + "</b></font>";
 
-            addToChat(message, CCommPanel.CHANNEL_SLOG);
+            getGUIClient().addToChat(message, CCommPanel.CHANNEL_SLOG);
             if (Config.isParam("MAINCHANNELSM")) {
-                addToChat(message);
+                getGUIClient().addToChat(message);
             }
         }
     }
@@ -2020,7 +1726,7 @@ public final class MWClient extends GameHost implements IClient {
     @Override
     public void errorMessage(String message) {
         if (!isDedicated()) {
-            JOptionPane.showMessageDialog(getMainFrame(), message);
+            JOptionPane.showMessageDialog(getGUIClient().getMainFrame(), message);
         } else {
             LOGGER.error(message);
         }
@@ -2047,7 +1753,7 @@ public final class MWClient extends GameHost implements IClient {
                 LOGGER.error("COMMAND ERROR: unknown protocol command '{}' from server.", incoming);
                 if (incoming.equalsIgnoreCase("denied    /denied")) {
                     // let them know it's a wrong password
-                    JOptionPane.showMessageDialog(getMainFrame(),
+                    JOptionPane.showMessageDialog(getGUIClient().getMainFrame(),
                             "Unknown Username/Password combination.");
                 }
                 return;
@@ -2060,7 +1766,6 @@ public final class MWClient extends GameHost implements IClient {
 
     @Override
     public void connectionLost() {
-
         Status = STATUS_DISCONNECTED;
         if (SignOff) {
             return;
@@ -2095,7 +1800,7 @@ public final class MWClient extends GameHost implements IClient {
             }
         } else {
             Users.clear();
-            refreshGUI(REFRESH_STATUS);
+            getGUIClient().getMainFrame().changeStatus(Status, LastStatus);
         }
     }
 
@@ -2125,17 +1830,8 @@ public final class MWClient extends GameHost implements IClient {
                 + ST.nextToken());
         Status = STATUS_LOGGEDOUT;
         if (!isDedicated()) {
-            refreshGUI(REFRESH_STATUS);
+            getGUIClient().getMainFrame().changeStatus(Status, LastStatus);
         }
-    }
-
-    public void rewardPointsDialog() {
-        new RewardPointsDialog(this);
-    }
-
-    //@Salient
-    public void influencePointsDialog() {
-        new InfluencePointsDialog(this);
     }
 
     // IClient interface
@@ -2169,26 +1865,26 @@ public final class MWClient extends GameHost implements IClient {
         if (!isDedicated() && (Status > STATUS_LOGGEDOUT)) {
             getConfig().setParam(
                     "PANELDIVIDER",
-                    Integer.toString(getMainFrame().getMainPanel()
+                    Integer.toString(getGUIClient().getMainFrame().getMainPanel()
                             .getTabSPane().getDividerLocation()));
             getConfig().setParam(
                     "VERTICALDIVIDER",
-                    Integer.toString(getMainFrame().getMainPanel()
+                    Integer.toString(getGUIClient().getMainFrame().getMainPanel()
                             .getMainSPane().getDividerLocation()));
             getConfig().setParam(
                     "PLAYERPANELDIVIDER",
-                    Integer.toString(getMainFrame().getMainPanel()
+                    Integer.toString(getGUIClient().getMainFrame().getMainPanel()
                             .getSideSPane().getDividerLocation()));
             getConfig().setParam("WINDOWSTATE",
-                    Integer.toString(getMainFrame().getExtendedState()));
+                    Integer.toString(getGUIClient().getMainFrame().getExtendedState()));
             getConfig().setParam("WINDOWHEIGHT",
-                    Integer.toString(getMainFrame().getHeight()));
+                    Integer.toString(getGUIClient().getMainFrame().getHeight()));
             getConfig().setParam("WINDOWWIDTH",
-                    Integer.toString(getMainFrame().getWidth()));
+                    Integer.toString(getGUIClient().getMainFrame().getWidth()));
             getConfig().setParam("WINDOWLEFT",
-                    Integer.toString(getMainFrame().getX()));
+                    Integer.toString(getGUIClient().getMainFrame().getX()));
             getConfig().setParam("WINDOWTOP",
-                    Integer.toString(getMainFrame().getY()));
+                    Integer.toString(getGUIClient().getMainFrame().getY()));
             getConfig().saveConfig();
         }
         if (Status != STATUS_DISCONNECTED) {
@@ -2229,7 +1925,7 @@ public final class MWClient extends GameHost implements IClient {
                 // Entries
                 ip = IA.getHostAddress();
             } catch (Exception ex) {
-                showInfoWindow("Couldn't set IP. Please check the spelling of mwconfig.txt's IP value or comment it out to use autodetection.");
+                getGUIClient().showInfoWindow("Couldn't set IP. Please check the spelling of mwconfig.txt's IP value or comment it out to use autodetection.");
                 return;
             }
         }
@@ -2251,7 +1947,7 @@ public final class MWClient extends GameHost implements IClient {
                 }
                 System.exit(0);
             } else {
-                showInfoWindow("You are using an invalid version of MegaMek. Please use version "
+                getGUIClient().showInfoWindow("You are using an invalid version of MegaMek. Please use version "
                         + MMVersion);
             }
             return;
@@ -2278,7 +1974,7 @@ public final class MWClient extends GameHost implements IClient {
         try {
             myServer = new Server(gpassword, myPort, new GameManager());
             if (loadSavegame) {
-                FileDialog f = new FileDialog(getMainFrame(), "Load Savegame");
+                FileDialog f = new FileDialog(getGUIClient().getMainFrame(), "Load Savegame");
                 f.setDirectory(System.getProperty("user.dir") + "/savegames");
                 f.setVisible(true);
                 myServer.loadGame(new File(f.getDirectory(), f.getFile()));
@@ -2414,7 +2110,7 @@ public final class MWClient extends GameHost implements IClient {
             if ((toJoin.getCurrentPlayers().size() >= toJoin.getMaxPlayers())
                     && !toJoin.getCurrentPlayers().contains(myUsername)
                     && !isMod()) {
-                showInfoWindow("This game is already full");
+                getGUIClient().showInfoWindow("This game is already full");
                 return;
             }
 
@@ -2438,7 +2134,7 @@ public final class MWClient extends GameHost implements IClient {
             serverSend("JG|" + toJoin.getHostName());
             toJoin = null;
         } else {
-            showInfoWindow("You have to select a game!");
+            getGUIClient().showInfoWindow("You have to select a game!");
         }
     }
 
@@ -2530,17 +2226,16 @@ public final class MWClient extends GameHost implements IClient {
              * MMClient.LOGGER.error("Exception: ", e);
              * JOptionPane.showMessageDialog(null,
              * "The map data could not be retrieved. The map will be disabled.\nTry again later."
-             * ); getMainFrame().getMainPanel().getMapPanel().setEnabled(false);
+             * ); getGUIClient().getMainFrame().getMainPanel().getMapPanel().setEnabled(false);
              * }
              */
         }
-        updateDataFetcher = null;
         // refresh the changed set... if more than one place want
         // to know about, maybe a listener system would be better..
         Map<Integer, Influences> changesSinceLastRefresh = dataFetcher
                 .getChangesSinceLastRefresh();
-        if (getMainFrame() != null) {
-            getMainFrame().getMainPanel().getMapPanel().getMap()
+        if (getGUIClient().getMainFrame() != null) {
+            getGUIClient().getMainFrame().getMainPanel().getMapPanel().getMap()
                     .dataFetched(changesSinceLastRefresh);
         }
         LOGGER.info("update for new planet data finished");
@@ -2745,9 +2440,9 @@ public final class MWClient extends GameHost implements IClient {
      */
     public void processTick(int time) {
         // set tick counter
-        getMainFrame().getMainPanel().getPlayerPanel()
+        getGUIClient().getMainFrame().getMainPanel().getPlayerPanel()
                 .setNextTick(System.currentTimeMillis() + time);
-        getMainFrame().getMainPanel().getMapPanel().getMap().processTick();
+        getGUIClient().getMainFrame().getMainPanel().getMapPanel().getMap().processTick();
         System.gc(); // Decicded to have the client do a GC every tick as
         // well.
     }
@@ -2833,41 +2528,41 @@ public final class MWClient extends GameHost implements IClient {
 
         // update the activity button
         if (Status == MWClient.STATUS_FIGHTING) {
-            // this.getMainFrame().getMainPanel().getUserListPanel().setActivityButton(false);
-            getMainFrame().getMainPanel().getUserListPanel()
+            // this.getGUIClient().getMainFrame().getMainPanel().getUserListPanel().setActivityButton(false);
+            getGUIClient().getMainFrame().getMainPanel().getUserListPanel()
                     .setActivityButtonEnabled(false);
         } else if (Status == MWClient.STATUS_ACTIVE) {
             if (LastStatus != MWClient.STATUS_FIGHTING) {
-                getMainFrame().getMainPanel().getUserListPanel()
+                getGUIClient().getMainFrame().getMainPanel().getUserListPanel()
                         .setActivityButton(false);
             }
-            getMainFrame().getMainPanel().getUserListPanel()
+            getGUIClient().getMainFrame().getMainPanel().getUserListPanel()
                     .setActivityButtonEnabled(true);
         } else if (Status == MWClient.STATUS_DISCONNECTED) {
-            getMainFrame().getMainPanel().getUserListPanel()
+            getGUIClient().getMainFrame().getMainPanel().getUserListPanel()
                     .setActivateButtonText("Disconnected");
-            getMainFrame().getMainPanel().getUserListPanel()
+            getGUIClient().getMainFrame().getMainPanel().getUserListPanel()
                     .setActivityButtonEnabled(false);
         } else if (Status == MWClient.STATUS_LOGGEDOUT) {
-            getMainFrame().getMainPanel().getUserListPanel()
+            getGUIClient().getMainFrame().getMainPanel().getUserListPanel()
                     .setActivateButtonText("Login");
-            getMainFrame().getMainPanel().getUserListPanel()
+            getGUIClient().getMainFrame().getMainPanel().getUserListPanel()
                     .setActivityButtonEnabled(true);
         } else if (Status == MWClient.STATUS_RESERVE) {
             if (LastStatus != MWClient.STATUS_LOGGEDOUT) {
-                getMainFrame().getMainPanel().getUserListPanel()
+                getGUIClient().getMainFrame().getMainPanel().getUserListPanel()
                         .setActivityButton(true);
             }
-            getMainFrame().getMainPanel().getUserListPanel()
+            getGUIClient().getMainFrame().getMainPanel().getUserListPanel()
                     .setActivityButtonEnabled(true);
         }
 
         // update the CMainFrame Attack menu
-        getMainFrame().updateAttackMenu();
+        getGUIClient().getMainFrame().updateAttackMenu();
 
-        refreshGUI(REFRESH_STATUS);
-        refreshGUI(REFRESH_HQPANEL);
-        refreshGUI(REFRESH_PLAYERPANEL);
+        getGUIClient().getMainFrame().changeStatus(Status, LastStatus);
+        getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
+        getGUIClient().refreshGUI(GUIClient.REFRESH_PLAYERPANEL);
     }
 
     public String getServerConfigs(String key) {
@@ -3174,7 +2869,7 @@ public final class MWClient extends GameHost implements IClient {
             }
             GameOptions gameOptions = new GameOptions();
             gameOptions.loadOptions();
-            GameOptionsDialog MMGOD = new GameOptionsDialog(getMainFrame(),
+            GameOptionsDialog MMGOD = new GameOptionsDialog(getGUIClient().getMainFrame(),
                     gameOptions, true);
             MMGOD.update(gameOptions);
             MMGOD.setEditable(true);
@@ -3509,7 +3204,7 @@ public final class MWClient extends GameHost implements IClient {
             }
         }
 
-        getMainFrame().getMainPanel().refreshBME();
+        getGUIClient().getMainFrame().getMainPanel().refreshBME();
     }
 
     public void updatePlayerPartsCache(String data) {
@@ -3524,7 +3219,7 @@ public final class MWClient extends GameHost implements IClient {
             getPlayer().getPartsCache().add(key, value);
         }
 
-        getMainFrame().getMainPanel().refreshBME();
+        getGUIClient().getMainFrame().getMainPanel().refreshBME();
     }
 
     public void updateClient() {
@@ -3724,17 +3419,6 @@ public final class MWClient extends GameHost implements IClient {
             return null;
         }
         return new Camouflage(parent.toString(), filename.toString());
-    }
-
-    public LookAndFeelInfo getLookAndFeel(String name) {
-        LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
-
-        for (LookAndFeelInfo lookAndFeel : lookAndFeels) {
-            if (lookAndFeel.getName().equals(name)) {
-                return lookAndFeel;
-            }
-        }
-        return null;
     }
 
     public HPGClient getHpgClient() {

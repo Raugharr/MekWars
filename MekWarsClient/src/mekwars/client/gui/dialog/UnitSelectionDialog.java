@@ -76,7 +76,7 @@ public class UnitSelectionDialog extends JDialog implements ActionListener {
 	public UnitSelectionDialog(MWClient mwclient, String boxText, String labelText) {
 		
 		//super, and variable saves
-		super(mwclient.getMainFrame(),boxText, true);//dummy frame as owner
+		super(mwclient.getGUIClient().getMainFrame(),boxText, true);//dummy frame as owner
 		
 		//make the label
 		comboLabel = new JLabel(labelText, SwingConstants.CENTER);
@@ -133,7 +133,7 @@ public class UnitSelectionDialog extends JDialog implements ActionListener {
 		generalLayout.add(new JLabel("\n"));
 		this.getContentPane().add(generalLayout);
 		this.pack();
-		this.setLocationRelativeTo(mwclient.getMainFrame());
+		this.setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
 		this.checkMinimumSize();
 		this.setResizable(true);
 		

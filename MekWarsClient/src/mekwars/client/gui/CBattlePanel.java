@@ -337,32 +337,32 @@ public class CBattlePanel extends JPanel {
 			if (s.startsWith("J|"))
 				mwclient.startClient(s.substring(2),true);
 			if (s.startsWith("S|")){
-				mwclient.getMainFrame().stopHost(); mwclient.stopHost();
+				mwclient.getGUIClient().getMainFrame().stopHost(); mwclient.stopHost();
 			}
 			
 			if (s.startsWith("RESTART|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-			    int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to restart\n\r"+currName+"?","Restart?", JOptionPane.YES_NO_OPTION);
+			    int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to restart\n\r"+currName+"?","Restart?", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",restart");
 			} else if (s.startsWith("RESET|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to reset\n\r"+currName+"?","Reset?", JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to reset\n\r"+currName+"?","Reset?", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",reset");
 			} else if (s.startsWith("DIE|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to kill\n\r"+currName+"?","Kill?", JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to kill\n\r"+currName+"?","Kill?", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",die");
 			} else if (s.startsWith("START|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to start\n\r"+currName+"?","Start?", JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to start\n\r"+currName+"?","Start?", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",start");
 			} else if (s.startsWith("STOP|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to stop\n\r"+currName+"?","Stop?", JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to stop\n\r"+currName+"?","Stop?", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",stop");
 			} else if (s.startsWith("OWNERS|")){
@@ -370,12 +370,12 @@ public class CBattlePanel extends JPanel {
 				mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",owners");
 			} else if (s.startsWith("CLEAROWNERS|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to clear the owners of\n\r"+currName+"?","Clear the owners?", JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to clear the owners of\n\r"+currName+"?","Clear the owners?", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION)
 				    mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",clearowners");
 			} else if (s.startsWith("ADDOWNERS|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				String result = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter a list of owners you want to add to\n\r"+currName+"\n\r(sperated by $)","Add Owners", JOptionPane.OK_CANCEL_OPTION);
+				String result = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter a list of owners you want to add to\n\r"+currName+"\n\r(sperated by $)","Add Owners", JOptionPane.OK_CANCEL_OPTION);
 				if (result != null && result.length() > 1)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",owner "+result);
 			} else if (s.startsWith("GETPORT|")){
@@ -383,7 +383,7 @@ public class CBattlePanel extends JPanel {
 				mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",port");
 			} else if (s.startsWith("SETPORT|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				String result = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter a new port for\n\r"+currName,"New Port", JOptionPane.OK_CANCEL_OPTION);
+				String result = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter a new port for\n\r"+currName,"New Port", JOptionPane.OK_CANCEL_OPTION);
 				if (result != null && result.length() > 1)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",port "+result);
 			} else if (s.startsWith("GSGPD|")){
@@ -391,7 +391,7 @@ public class CBattlePanel extends JPanel {
 				mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",savegamepurge");
 			} else if (s.startsWith("SSGPD|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				String result = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter a new day for\n\r"+currName,"New days out to purge", JOptionPane.OK_CANCEL_OPTION);
+				String result = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter a new day for\n\r"+currName,"New days out to purge", JOptionPane.OK_CANCEL_OPTION);
 				if (result != null && result.length() >= 1)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",savegamepurge "+result);
 			} else if (s.startsWith("PING|")){
@@ -415,29 +415,29 @@ public class CBattlePanel extends JPanel {
             } else if (s.startsWith("LOADGAME|")){
 				String currName = s.substring(s.indexOf('|') + 1);
 	            String result = null;
-	            result = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter name of the save file on\n\r"+currName+"\n\r(leave blank to load autosave.sav)","Load Game", JOptionPane.OK_CANCEL_OPTION);
+	            result = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter name of the save file on\n\r"+currName+"\n\r(leave blank to load autosave.sav)","Load Game", JOptionPane.OK_CANCEL_OPTION);
 				if (result != null)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",loadgame "+result);
 			} else if (s.startsWith("LOADAUTOSAVE|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to load the autosave game on\n\r"+currName+"?","Load Auto Saved Game?", JOptionPane.YES_NO_OPTION);
+				int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to load the autosave game on\n\r"+currName+"?","Load Auto Saved Game?", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION)
 			    	mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",loadautosave");
 			} else if (s.startsWith("SETNAME|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				String result = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter a new name for\n\r"+currName+"\n\rNote: This will kill the Ded. A restart will be required.","New Name", JOptionPane.OK_CANCEL_OPTION);
+				String result = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter a new name for\n\r"+currName+"\n\rNote: This will kill the Ded. A restart will be required.","New Name", JOptionPane.OK_CANCEL_OPTION);
 				if (result != null && result.length() > 1){
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",name "+result);
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",die");
 				}
 			} else if (s.startsWith("SETCOMMENT|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				String result = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter a new comment for\n\r"+currName,"New Comment", JOptionPane.OK_CANCEL_OPTION);
+				String result = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter a new comment for\n\r"+currName,"New Comment", JOptionPane.OK_CANCEL_OPTION);
 				if (result != null && result.length() > 1)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",comment "+result);
 			} else if (s.startsWith("SETPLAYERS|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				String result = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter the max number of players for\n\r"+currName,"New Players", JOptionPane.OK_CANCEL_OPTION);
+				String result = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter the max number of players for\n\r"+currName,"New Players", JOptionPane.OK_CANCEL_OPTION);
 				if (result != null && result.length() > 0)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",players "+result);
 			} else if (s.startsWith("CURRENTRESTART|")){
@@ -445,7 +445,7 @@ public class CBattlePanel extends JPanel {
 				mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",restartcount");
 			} else if (s.startsWith("SETRESTART|")){
 				String currName = s.substring(s.indexOf('|') + 1);
-				String result = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter a new restart count for\n\r"+currName,"New Restart", JOptionPane.OK_CANCEL_OPTION);
+				String result = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter a new restart count for\n\r"+currName,"New Restart", JOptionPane.OK_CANCEL_OPTION);
 				if (result != null && result.length() >= 1)
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",restartcount "+result);
 			} else if (s.startsWith("GETUPDATEURL|")){
@@ -453,7 +453,7 @@ public class CBattlePanel extends JPanel {
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",getupdateurl");
             } else if (s.startsWith("SETUPDATEURL|")){
             	String currName = s.substring(s.indexOf('|') + 1);
-                String result = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter a new update url for\n\r"+currName,"New Update URL", JOptionPane.OK_CANCEL_OPTION);
+                String result = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter a new update url for\n\r"+currName,"New Update URL", JOptionPane.OK_CANCEL_OPTION);
                 if (result != null && result.length() >= 1)
                     mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+currName+",setupdateurl "+result);
             }

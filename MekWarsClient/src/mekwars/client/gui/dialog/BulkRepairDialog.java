@@ -200,8 +200,8 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         addKeyListener(this);
 
         this.repaint();
-        // this.setLocation((mwclient.getMainFrame().getWidth()/2)-(this.getWidth()/2),(mwclient.getMainFrame().getHeight()/2)-(this.getHeight()/2));
-        setLocationRelativeTo(mwclient.getMainFrame());
+        // this.setLocation((mwclient.getGUIClient().getMainFrame().getWidth()/2)-(this.getWidth()/2),(mwclient.getGUIClient().getMainFrame().getHeight()/2)-(this.getHeight()/2));
+        setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
 
         // this.pack();
         setVisible(true);

@@ -64,7 +64,7 @@ public class LPU extends Command {
 		JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION);
 		
-		JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select a unit.");
+		JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select a unit.");
 		combo.grabFocus();
 		combo.getEditor().selectAll();
 		

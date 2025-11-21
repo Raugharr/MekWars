@@ -299,7 +299,7 @@ public class TableViewerDialog extends JFrame implements ItemListener {
         // load the default tables/units
         loadTables();
         refresh();
-        setLocationRelativeTo(mwclient.getMainFrame());
+        setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
         setVisible(true);
     }
 
@@ -315,7 +315,7 @@ public class TableViewerDialog extends JFrame implements ItemListener {
     public void setVisible(boolean show) {
 
         pack();
-        setLocationRelativeTo(mwclient.getMainFrame());
+        setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
 
         this.setSize(720, 575);
         setResizable(false);

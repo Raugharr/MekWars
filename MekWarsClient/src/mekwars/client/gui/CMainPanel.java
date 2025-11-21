@@ -292,7 +292,6 @@ public class CMainPanel extends JPanel implements ChangeListener, ComponentListe
     }
 
     public void changeStatus(int status, int laststatus) {
-
         if (status == MWClient.STATUS_RESERVE) {
             if (laststatus == MWClient.STATUS_LOGGEDOUT) {
                 UserListPanel.setLoggedIn(true);

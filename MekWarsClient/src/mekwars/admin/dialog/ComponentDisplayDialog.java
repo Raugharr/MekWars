@@ -83,7 +83,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
 
     public ComponentDisplayDialog(MWClient c, int type) {
         
-        super(c.getMainFrame(), "Component Display Dialog", true);
+        super(c.getGUIClient().getMainFrame(), "Component Display Dialog", true);
 
         // save the client
         mwclient = c;
@@ -152,7 +152,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
         dialog.getRootPane().setDefaultButton(cancelButton);
 
         dialog.setMaximumSize(dim);
-        dialog.setLocationRelativeTo(mwclient.getMainFrame());
+        dialog.setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
         // Show the dialog and get the user's input
         dialog.setModal(true);
         dialog.pack();
@@ -1020,7 +1020,7 @@ public final class ComponentDisplayDialog extends JDialog implements ActionListe
                 // reduce bandwidth only send things that have changed.
                 /*
                  * if ( !mwclient.getServerConfigs(key).equalsIgnoreCase(value)
-                 * ) mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+
+                 * ) mwclient.sendChat(GameHost.CAMPAIGN_PREFIX+
                  * "c AdminChangeBlackMarketConfig#"+key+"#"+value+"#CONFIRM");
                  */
             }

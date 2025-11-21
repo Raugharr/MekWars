@@ -110,7 +110,7 @@ public class ArmyViewerDialog extends JDialog implements ActionListener, ListSel
     public static final int AVD_ATTACKFROMRESERVE = 2;
     
 	public ArmyViewerDialog(MWClient mwclient, String opName, StringTokenizer validArmyList, int mode, String planet, String defender, int opid, int teamNumbers) {
-        super(mwclient.getMainFrame(),"Army Viewer", true);//dummy frame as owner
+        super(mwclient.getGUIClient().getMainFrame(),"Army Viewer", true);//dummy frame as owner
     	
 		//save params
 		player = mwclient.getPlayer();

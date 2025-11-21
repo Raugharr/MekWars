@@ -55,9 +55,9 @@ public class RUD extends Command {
             } else {
                 String chassieList = ST.nextToken();
                 UnitLoadingDialog unitLoadingDialog = new UnitLoadingDialog(
-                        mwclient.getMainFrame());
+                        mwclient.getGUIClient().getMainFrame());
                 RepodSelectorDialog repodSelector = new RepodSelectorDialog(
-                        mwclient.getMainFrame(), unitLoadingDialog, mwclient,
+                        mwclient.getGUIClient().getMainFrame(), unitLoadingDialog, mwclient,
                         chassieList, unitId);
                 Thread.sleep(125);
                 new Thread(repodSelector).start();

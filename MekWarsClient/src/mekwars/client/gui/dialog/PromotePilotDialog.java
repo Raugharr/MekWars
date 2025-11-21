@@ -126,7 +126,7 @@ public class PromotePilotDialog extends JFrame implements ActionListener, KeyLis
         addKeyListener(this);
 
         this.repaint();
-        setLocationRelativeTo(mwclient.getMainFrame());
+        setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
 
         pack();
         setVisible(true);

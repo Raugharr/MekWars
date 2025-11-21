@@ -244,7 +244,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         // Show the dialog and get the user's input
         dialog.setModal(true);
         dialog.pack();
-        dialog.setLocationRelativeTo(c.getMainFrame());
+        dialog.setLocationRelativeTo(c.getGUIClient().getMainFrame());
         dialog.setVisible(true);
 
     }
@@ -254,7 +254,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
 
         if (command.equals(okayCommand)) {
             if (!saveAllData()) {
-                JOptionPane.showMessageDialog(mwclient.getMainFrame(), "Unable to Save Data, Check Error Logs");
+                JOptionPane.showMessageDialog(mwclient.getGUIClient().getMainFrame(), "Unable to Save Data, Check Error Logs");
             }
             try {
                 mwclient.refreshData();

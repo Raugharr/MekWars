@@ -60,7 +60,7 @@ public class HS extends Command {
 		}
         
 		//only update after all commands processed
-        mwclient.getMainFrame().getMainPanel().getHSPanel().updateDisplay();
+        mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().updateDisplay();
 	}
 	
 	/**
@@ -73,22 +73,22 @@ public class HS extends Command {
 		//LOGGER.error("HS Subcommand: " + cmdName + " Data: " + cmdData);
 		
 		if (cmdName.equals("FN")) //set faction name, HS|FN 
-			mwclient.getMainFrame().getMainPanel().getHSPanel().setFactionName(cmdData);
+			mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().setFactionName(cmdData);
 		else if (cmdName.equals("AU")) //add HS unit, HS|AU|
-			mwclient.getMainFrame().getMainPanel().getHSPanel().addFactionUnit(cmdData);
+			mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().addFactionUnit(cmdData);
 		else if (cmdName.equals("RU")) //remove HS unit, HS|RU|
-			mwclient.getMainFrame().getMainPanel().getHSPanel().removeFactionUnit(cmdData);
+			mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().removeFactionUnit(cmdData);
 		else if (cmdName.equals("CC")) //change components for a class/type, HS|CC
-			mwclient.getMainFrame().getMainPanel().getHSPanel().changeFactionComponents(cmdData);
+			mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().changeFactionComponents(cmdData);
 		
 		else if (cmdName.equals("AF")) //add a factory, HS|AF
-			mwclient.getMainFrame().getMainPanel().getHSPanel().addFactionFactory(cmdData);
+			mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().addFactionFactory(cmdData);
 		else if (cmdName.equals("RF")) //remove a factory, HS|RF
-			mwclient.getMainFrame().getMainPanel().getHSPanel().removeFactionFactory(cmdData);
+			mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().removeFactionFactory(cmdData);
 		else if (cmdName.equals("CF")) //change a factory, HS|CF
-			mwclient.getMainFrame().getMainPanel().getHSPanel().changeFactionFactory(cmdData);
+			mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().changeFactionFactory(cmdData);
 		
 		else if (cmdName.equals("CA"))//clear all HS data. usually used by defect.
-			mwclient.getMainFrame().getMainPanel().getHSPanel().clearHouseStatusData();
+			mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().clearHouseStatusData();
 	}
 }

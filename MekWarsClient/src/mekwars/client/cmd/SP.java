@@ -20,6 +20,7 @@ package mekwars.client.cmd;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 import mekwars.client.gui.CCommPanel;
 
 /**
@@ -40,10 +41,10 @@ public class SP extends Command {
 	@Override
 	public void execute(String input) {
 		StringTokenizer st = decode(input);
-        if (mwclient.getConfig().isParam("POPUPONMESSAGE"))
-        	mwclient.showInfoWindow(st.nextToken());
-        else 
-        	mwclient.addToChat(st.nextToken(),CCommPanel.CHANNEL_MISC);
+        if (mwclient.getConfig().isParam("POPUPONMESSAGE")) {
+        	mwclient.getGUIClient().showInfoWindow(st.nextToken());
+		} else { 
+        	mwclient.getGUIClient().addToChat(st.nextToken(), CCommPanel.CHANNEL_MISC);
+		}
 	}
-
 }

@@ -821,17 +821,17 @@ public class AdminMenu extends JMenu {
      */
 
     public void jMenuAdminCreatePlanet_actionPerformed(ActionEvent e) {
-        String planetName = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Planet Name?");
+        String planetName = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Planet Name?");
         if ((planetName == null) || (planetName.length() == 0)) {
             return;
         }
 
-        String xcord = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Planet x coord");
+        String xcord = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Planet x coord");
         if ((xcord == null) || (xcord.length() == 0)) {
             return;
         }
 
-        String ycord = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Planet y coord?");
+        String ycord = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Planet y coord?");
         if ((ycord == null) || (ycord.length() == 0)) {
             return;
         }
@@ -872,7 +872,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String factoryName = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Factory Name");
+        String factoryName = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Factory Name");
 
         if ((factoryName == null) || (factoryName.length() == 0)) {
             return;
@@ -887,7 +887,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String factoryTypestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select factory production", "Factory Production", JOptionPane.INFORMATION_MESSAGE, null, factoryTypes, factoryTypes[0]);
+        String factoryTypestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select factory production", "Factory Production", JOptionPane.INFORMATION_MESSAGE, null, factoryTypes, factoryTypes[0]);
 
         if ((factoryTypestr == null) || (factoryTypestr.length() == 0)) {
             return;
@@ -901,19 +901,19 @@ public class AdminMenu extends JMenu {
 
         int factoryTypeint = i;
 
-        String factorySizestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select a factory size", "FactorySize", JOptionPane.INFORMATION_MESSAGE, null, factorySize, factorySize[0]);
+        String factorySizestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select a factory size", "FactorySize", JOptionPane.INFORMATION_MESSAGE, null, factorySize, factorySize[0]);
 
         if ((factorySizestr == null) || (factorySizestr.length() == 0)) {
             return;
         }
 
-        String factoryBuildTable = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Factory Build Table");
+        String factoryBuildTable = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Factory Build Table");
 
         if (factoryBuildTable == null) {
             return;
         }
 
-        String factoryAccessLevel = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Factory Access Level", 0);
+        String factoryAccessLevel = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Factory Access Level", 0);
 
         if ((factoryAccessLevel == null) || (factoryAccessLevel.length() == 0)) {
             return;
@@ -955,7 +955,7 @@ public class AdminMenu extends JMenu {
         combo.setEditable(true);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select factory to destroy.");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select factory to destroy.");
         combo.grabFocus();
         combo.getEditor().selectAll();
 
@@ -995,14 +995,14 @@ public class AdminMenu extends JMenu {
 
         /*
          * String terrainType =
-         * JOptionPane.showInputDialog(mwclient.getMainFrame(),"Terrain Type");
+         * JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(),"Terrain Type");
          */
 
         JComboBox<String> combo = new JComboBox<String>(names.toArray(new String[names.size()]));
         combo.setEditable(false);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select a Terrain Type.");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select a Terrain Type.");
         combo.grabFocus();
         combo.getEditor().selectAll();
 
@@ -1019,7 +1019,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String terrainChance = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Terrain Chance", 100);
+        String terrainChance = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Terrain Chance", 100);
 
         if ((terrainChance == null) || (terrainChance.length() == 0)) {
             return;
@@ -1041,7 +1041,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String terrainType = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select the Terrain position: start with 0 for the top most terrain in the information box");
+        String terrainType = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select the Terrain position: start with 0 for the top most terrain in the information box");
 
         if ((terrainType == null) || (terrainType.length() == 0)) {
             return;
@@ -1086,7 +1086,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String points = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Number of Points(Negative to remove Points)", "0");
+        String points = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Number of Points(Negative to remove Points)", "0");
 
         if ((points == null) || (points.length() == 0)) {
             return;
@@ -1097,7 +1097,7 @@ public class AdminMenu extends JMenu {
     }
 
     public void jMenuAdminTerminateAll_actionPerformed(ActionEvent e) {
-        int confirm = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to terminate all waiting/running games?");
+        int confirm = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to terminate all waiting/running games?");
         if (confirm != JOptionPane.YES_OPTION) {
             return;
         }
@@ -1115,7 +1115,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String fluFilePrefix = JOptionPane.showInputDialog(mwclient.getMainFrame(), mwclient.moneyOrFluMessage(false, true, -1) + " File Prefix:");
+        String fluFilePrefix = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), mwclient.moneyOrFluMessage(false, true, -1) + " File Prefix:");
 
         if ((fluFilePrefix == null) || (fluFilePrefix.length() == 0)) {
             return;
@@ -1138,18 +1138,18 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String Typestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select component type", "Component Type", JOptionPane.INFORMATION_MESSAGE, null, Types, Types[0]);
+        String Typestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select component type", "Component Type", JOptionPane.INFORMATION_MESSAGE, null, Types, Types[0]);
 
         if ((Typestr == null) || (Typestr.length() == 0)) {
             return;
         }
 
-        String Sizestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select a component size", "Component Size", JOptionPane.INFORMATION_MESSAGE, null, Size, Size[0]);
+        String Sizestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select a component size", "Component Size", JOptionPane.INFORMATION_MESSAGE, null, Size, Size[0]);
         if ((Sizestr == null) || (Sizestr.length() == 0)) {
             return;
         }
 
-        String components = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Amount of Components to add(negative number to subtract)");
+        String components = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Amount of Components to add(negative number to subtract)");
         if ((components == null) || (components.length() == 0)) {
             return;
         }
@@ -1186,7 +1186,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String amount = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Amount");
+        String amount = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Amount");
         if ((amount == null) || (amount.length() == 0)) {
             return;
         }
@@ -1207,19 +1207,19 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String unitTypestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select Unit Type", "Unit Type", JOptionPane.INFORMATION_MESSAGE, null, unitTypes, unitTypes[0]);
+        String unitTypestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select Unit Type", "Unit Type", JOptionPane.INFORMATION_MESSAGE, null, unitTypes, unitTypes[0]);
 
         if ((unitTypestr == null) || (unitTypestr.length() == 0)) {
             return;
         }
 
-        String unitClassstr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select Unit Class", "Unit Class", JOptionPane.INFORMATION_MESSAGE, null, unitClass, unitClass[0]);
+        String unitClassstr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select Unit Class", "Unit Class", JOptionPane.INFORMATION_MESSAGE, null, unitClass, unitClass[0]);
 
         if ((unitClassstr == null) || (unitClassstr.length() == 0)) {
             return;
         }
 
-        String priceMod = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Price Modifier:");
+        String priceMod = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Price Modifier:");
 
         if ((priceMod == null) || (priceMod.length() == 0)) {
             return;
@@ -1241,19 +1241,19 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String unitTypestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select Unit Type", "Unit Type", JOptionPane.INFORMATION_MESSAGE, null, unitTypes, unitTypes[0]);
+        String unitTypestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select Unit Type", "Unit Type", JOptionPane.INFORMATION_MESSAGE, null, unitTypes, unitTypes[0]);
 
         if ((unitTypestr == null) || (unitTypestr.length() == 0)) {
             return;
         }
 
-        String unitClassstr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select Unit Class", "Unit Class", JOptionPane.INFORMATION_MESSAGE, null, unitClass, unitClass[0]);
+        String unitClassstr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select Unit Class", "Unit Class", JOptionPane.INFORMATION_MESSAGE, null, unitClass, unitClass[0]);
 
         if ((unitClassstr == null) || (unitClassstr.length() == 0)) {
             return;
         }
 
-        String fluMod = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Price Modifier:");
+        String fluMod = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Price Modifier:");
 
         if ((fluMod == null) || (fluMod.length() == 0)) {
             return;
@@ -1277,7 +1277,7 @@ public class AdminMenu extends JMenu {
         techCombo.setEditable(false);
 
         JOptionPane jop = new JOptionPane(techCombo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select Tech Level");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select Tech Level");
         techCombo.grabFocus();
         techCombo.getEditor().selectAll();
 
@@ -1303,7 +1303,7 @@ public class AdminMenu extends JMenu {
     }
 
     public void jMenuAdminOmniVariantMod_actionPerformed(ActionEvent e) {
-        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(mwclient.getMainFrame(), mwclient,NewUnitViewerDialog.OMNI_VARIANT_SELECTOR);
+        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(mwclient.getGUIClient().getMainFrame(), mwclient,NewUnitViewerDialog.OMNI_VARIANT_SELECTOR);
         unitSelector.setName("Unit Selector");
         new Thread(unitSelector).start();
     }
@@ -1438,7 +1438,7 @@ public class AdminMenu extends JMenu {
 
         Object[] unitTypes = { "Mek", "Vehicles", "Infantry", "ProtoMeks", "BattleArmor", "Aero" };
 
-        String unitTypestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select Unit Type", "Unit Type", JOptionPane.INFORMATION_MESSAGE, null, unitTypes, unitTypes[0]);
+        String unitTypestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select Unit Type", "Unit Type", JOptionPane.INFORMATION_MESSAGE, null, unitTypes, unitTypes[0]);
 
         if ((unitTypestr == null) || (unitTypestr.length() == 0)) {
             return;
@@ -1446,13 +1446,13 @@ public class AdminMenu extends JMenu {
 
         int unitTypeint = Unit.getTypeIDForName(unitTypestr);
 
-        String gunnery = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Base Gunnery");
+        String gunnery = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Base Gunnery");
 
         if ((gunnery == null) || (gunnery.length() == 0)) {
             return;
         }
 
-        String piloting = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Base Piloting");
+        String piloting = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Base Piloting");
 
         if ((piloting == null) || (piloting.length() == 0)) {
             return;
@@ -1482,7 +1482,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String level = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Level");
+        String level = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Level");
 
         if ((level == null) || (level.length() == 0)) {
             return;
@@ -1513,7 +1513,7 @@ public class AdminMenu extends JMenu {
         combo.setEditable(true);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select factory to toggle the lock on.");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select factory to toggle the lock on.");
         combo.grabFocus();
         combo.getEditor().selectAll();
 
@@ -1540,13 +1540,13 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String xSize = JOptionPane.showInputDialog(mwclient.getMainFrame(), "X size");
+        String xSize = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "X size");
 
         if ((xSize == null) || (xSize.length() == 0)) {
             return;
         }
 
-        String ySize = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Y Size");
+        String ySize = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Y Size");
 
         if ((ySize == null) || (ySize.length() == 0)) {
             return;
@@ -1592,13 +1592,13 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String xSize = JOptionPane.showInputDialog(mwclient.getMainFrame(), "X size");
+        String xSize = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "X size");
 
         if ((xSize == null) || (xSize.length() == 0)) {
             return;
         }
 
-        String ySize = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Y Size");
+        String ySize = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Y Size");
 
         if ((ySize == null) || (ySize.length() == 0)) {
             return;
@@ -1642,13 +1642,13 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String lowTemp = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Low Temp");
+        String lowTemp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Low Temp");
 
         if ((lowTemp == null) || (lowTemp.length() == 0)) {
             return;
         }
 
-        String hiTemp = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Hi Temp");
+        String hiTemp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Hi Temp");
 
         if ((hiTemp == null) || (hiTemp.length() == 0)) {
             return;
@@ -1668,7 +1668,7 @@ public class AdminMenu extends JMenu {
             return;
         }
 
-        String grav = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Gravity");
+        String grav = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Gravity");
 
         if ((grav == null) || (grav.length() == 0)) {
             return;
@@ -1686,8 +1686,8 @@ public class AdminMenu extends JMenu {
 
         if (commandNamestr != null) {
             String input = GameHost.CAMPAIGN_PREFIX + commandNamestr;
-            mwclient.getMainFrame().getMainPanel().getCommPanel().setInput(input);
-            mwclient.getMainFrame().getMainPanel().getCommPanel().focusInputField();
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().setInput(input);
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().focusInputField();
         }
     }
 

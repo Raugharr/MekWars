@@ -25,6 +25,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.CPlayerPanel;
 import mekwars.client.util.CArmyComparator;
@@ -292,7 +293,7 @@ public class CPlayer extends Player {
         for (Iterator<CArmy> i = Armies.iterator(); i.hasNext();) {
             if (i.next().getID() == lanceID) {
                 i.remove();
-                mwclient.getMainFrame().updateAttackMenu();// removing an army
+                mwclient.getGUIClient().getMainFrame().updateAttackMenu();// removing an army
                 // needs to reset
                 // menu
                 return (true);
@@ -370,16 +371,16 @@ public class CPlayer extends Player {
          * Now that we have a house set, we can check for BM access properly. Do
          * the BM buy and sell button checks.
          */
-        if (mwclient.getMainFrame().getMainPanel().getBMPanel() != null) {
-            mwclient.getMainFrame().getMainPanel().getBMPanel().checkFactionAccess();
+        if (mwclient.getGUIClient().getMainFrame().getMainPanel().getBMPanel() != null) {
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getBMPanel().checkFactionAccess();
         }
 
         /*
          * Same thing for the HQ. We have a house, so we can rebuild the button
          * bar w/ or w/o a reset button, as appropriate.
          */
-        if (mwclient.getMainFrame().getMainPanel().getHQPanel() != null) {
-            mwclient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
+        if (mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel() != null) {
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel().reinitialize();
         }
     }
 
@@ -793,7 +794,7 @@ public class CPlayer extends Player {
             getArmy(army).setBV(bv);
             getArmy(army).getC3Network().remove(unitid);
         }
-        mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
+        mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
     }
 
     /**
@@ -836,7 +837,7 @@ public class CPlayer extends Player {
         }// end while(more tokens)
 
         // update the CMainFrame Attack menu
-        mwclient.getMainFrame().updateAttackMenu();
+        mwclient.getGUIClient().getMainFrame().updateAttackMenu();
 
     }// end updateOperations
 
@@ -983,7 +984,7 @@ public class CPlayer extends Player {
                 adminExcludes.add(curr);
             }
         }
-        mwclient.getMainFrame().getMainPanel().getUserListPanel().repaint();
+        mwclient.getGUIClient().getMainFrame().getMainPanel().getUserListPanel().repaint();
     }
 
     /**
@@ -1000,7 +1001,7 @@ public class CPlayer extends Player {
                 playerExcludes.add(curr);
             }
         }
-        mwclient.getMainFrame().getMainPanel().getUserListPanel().repaint();
+        mwclient.getGUIClient().getMainFrame().getMainPanel().getUserListPanel().repaint();
     }
 
     public ArrayList<String> getAdminExcludes() {
@@ -1386,7 +1387,7 @@ public class CPlayer extends Player {
                 setHangarPurchasePenalty(type, weight, Integer.parseInt(st.nextToken()));
             }
         }
-        mwclient.getMainFrame().getMainPanel().getHSPanel().updateDisplay();
+        mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().updateDisplay();
     }
 
     public boolean isClan() {

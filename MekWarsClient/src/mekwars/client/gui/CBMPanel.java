@@ -169,7 +169,7 @@ public class CBMPanel extends JPanel {
 
 
                         //refresh the camo ... may have changed.
-                        mwclient.getMainFrame().getMainPanel().getBMPanel().resetCamo();
+                        mwclient.getGUIClient().getMainFrame().getMainPanel().getBMPanel().resetCamo();
 
                     } else {//dim them all
                         btnRecallBid.setEnabled(false);
@@ -396,7 +396,7 @@ public class CBMPanel extends JPanel {
             if (auctionID != -1) {//-1 is the default value. indicates null auction.
 
                 //generate a new option dialog
-                String playerBidString = JOptionPane.showInputDialog(mwclient.getMainFrame(), "<HTML><center>How much would you like to bid on the " + mm.getModelName() + "?<BR>Minimum is " + mwclient.moneyOrFluMessage(true,true,mm.getMinBid())+".</center></HTML>","Amount to Bid", JOptionPane.PLAIN_MESSAGE);
+                String playerBidString = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "<HTML><center>How much would you like to bid on the " + mm.getModelName() + "?<BR>Minimum is " + mwclient.moneyOrFluMessage(true,true,mm.getMinBid())+".</center></HTML>","Amount to Bid", JOptionPane.PLAIN_MESSAGE);
 
                 //Clicked Cancel
                 if ( (playerBidString == null) || (playerBidString.trim().length() == 0)) {

@@ -92,7 +92,7 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
 		 */
 		
 		//super, and variable saves
-		super(mwclient.getMainFrame(),boxText, true);//dummy frame as owner
+		super(mwclient.getGUIClient().getMainFrame(),boxText, true);//dummy frame as owner
 		this.planets = mwclient.getData().getAllPlanets();
 		//setup the a list of names to feed into a list
 		planetNames = new TreeSet<String>();//tree to alpha sort

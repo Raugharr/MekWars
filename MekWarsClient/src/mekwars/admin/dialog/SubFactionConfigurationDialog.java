@@ -206,7 +206,7 @@ public final class SubFactionConfigurationDialog implements ActionListener {
 
 
         //Show the dialog and get the user's input
-        dialog.setLocationRelativeTo(mwclient.getMainFrame());
+        dialog.setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
         dialog.setModal(true);
         dialog.pack();
         dialog.setVisible(true);
@@ -231,7 +231,7 @@ public final class SubFactionConfigurationDialog implements ActionListener {
             
                 mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c SetSubFactionConfig#"+this.subFactionConfig.getConfig("Name")+"#"+houseName+"#"+configPairs.toString());
             }
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c adminsave");
+            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsave");
             mwclient.refreshData();
             
         }

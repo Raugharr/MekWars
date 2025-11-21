@@ -18,6 +18,7 @@
 package mekwars.client.cmd;
 
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -37,8 +38,8 @@ public class CC extends Command {
 	@Override
 	public void execute(String input) {
 		mwclient.getCampaign().decodeCommand(input);
-		mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
-		mwclient.refreshGUI(MWClient.REFRESH_PLAYERPANEL);
-		mwclient.refreshGUI(MWClient.REFRESH_BMPANEL);
+		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
+		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_PLAYERPANEL);
+		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_BMPANEL);
 	}
 }
