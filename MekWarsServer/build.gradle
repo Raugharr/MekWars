@@ -59,14 +59,23 @@ jar {
 
 task stageFiles(type: Copy) {
     description = 'Stages files that are to be copied into the distribution.'
-
-	file(fileStagingDir).mkdirs()
-	File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
-	batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
-	from batFile
     from serverdist
-	into fileStagingDir
+    into fileStagingDir
 }
+
+tasks.named('installDist') {
+    doLast {
+        def jarTask = tasks.named('jar').get()
+        def jvmArgs = project.application.applicationDefaultJvmArgs.join(' ')
+        def jarName = jarTask.archiveFileName.get()
+        def baseName = jarTask.archiveBaseName.get()
+
+        def installDir = file("$buildDir/install/${project.name}")
+        File batFile = new File(installDir, "${baseName}.bat")
+        batFile.text = "start /min javaw ${jvmArgs} -jar \"%~dp0${jarName}\" %*"
+    }
+}
+
 
 tasks.named('run') {
     workingDir = file(serverdist)
