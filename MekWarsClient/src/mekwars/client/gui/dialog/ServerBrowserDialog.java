@@ -146,10 +146,14 @@ public class ServerBrowserDialog extends JDialog implements CallbackResolverList
             String serverPort = String.valueOf(selectedServer.getServerPort());
             String dataPort = String.valueOf(selectedServer.getDataPort());
 
-            mwClient.getConfig().setParam("SERVERPORT", serverPort);
-            mwClient.getConfig().setParam("DATAPORT", dataPort);
-            mwClient.getConfig().setParam("SERVERIP", selectedServer.getHostname());
             dispose();
+            new SignonDialog(
+                    mwClient,
+                    resourceMap.getLocale(),
+                    selectedServer.getHostname(),
+                    serverPort,
+                    dataPort
+            );
         } else {
             String errorString = MessageFormat.format(
                 resourceMap.getString("joinError.text"),
@@ -172,9 +176,6 @@ public class ServerBrowserDialog extends JDialog implements CallbackResolverList
         constraints.anchor = GridBagConstraints.PAGE_START;
         add(new JScrollPane(setupServerTable()), constraints);
 
-        JPanel buttonPanel = new JPanel();
-
-        buttonPanel.setLayout(new GridBagLayout());
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
         constraints.gridy = 0;
@@ -183,6 +184,8 @@ public class ServerBrowserDialog extends JDialog implements CallbackResolverList
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;
         constraints.anchor = GridBagConstraints.PAGE_START;
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+
         add(buttonPanel, constraints);
 
         setupButtonPanel(buttonPanel);
