@@ -58,12 +58,12 @@ public class MailGCmd extends CGUICommand {
 			
 			if (mwclient.getConfig().isParam("USEMULTIPLEPM")){
 				int maxTabs =  mwclient.getConfig().getIntParam("MAXPMTABS");
-				if ( mwclient.getMainFrame().getMainPanel().getCommPanel().findMailTab(receiver) == null ){
-					int count = mwclient.getMainFrame().getMainPanel().getCommPanel().countMailTabs();
+				if ( mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().findMailTab(receiver) == null ){
+					int count = mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().countMailTabs();
 					
 					if ( count >= maxTabs ){
 						String sysColour = mwclient.getConfigParam("SYSMESSAGECOLOR");
-						mwclient.addToChat("<font color=\""+sysColour+"\"><b>You already have the max number of PM tabs open! Close one before starting a new session.</b></font>");
+						mwclient.getGUIClient().addToChat("<font color=\""+sysColour+"\"><b>You already have the max number of PM tabs open! Close one before starting a new session.</b></font>");
 						return false;
 					}
 				}
@@ -132,18 +132,18 @@ public class MailGCmd extends CGUICommand {
 		message = "<font color=\""+fontcolor+"\">" + message + "</font>";
 		
 		if (mwclient.getConfig().isParam("USEMULTIPLEPM")) {
-			mailTab = mwclient.getMainFrame().getMainPanel().getCommPanel().findMailTab(tabName); 
+			mailTab = mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().findMailTab(tabName); 
 			if (mailTab == null)
-				mwclient.getMainFrame().getMainPanel().getCommPanel().createMailTab(tabName);
+				mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().createMailTab(tabName);
 		}
 		
 		//add to PM Channel
-		mwclient.addToChat(message, CCommPanel.CHANNEL_PMAIL, tabName);
+		mwclient.getGUIClient().addToChat(message, CCommPanel.CHANNEL_PMAIL, tabName);
 		
 		//if should be shown in main, add there as well
 		if (Config.isParam("MAINCHANNELPM")) {
 			String sysColour = mwclient.getConfigParam("SYSMESSAGECOLOR");
-			mwclient.addToChat("<font color=\""+sysColour+"\"><b>Private Mail: </b></font>" + message);
+			mwclient.getGUIClient().addToChat("<font color=\""+sysColour+"\"><b>Private Mail: </b></font>" + message);
 		}
 		
 	}

@@ -311,7 +311,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             userName = st.nextToken();
 
             // Build a picklist of flags
-            String fName = (String)JOptionPane.showInputDialog(mwclient.getMainFrame(),"Select a Flag", "Player Flags", JOptionPane.INFORMATION_MESSAGE, null, mwclient.getPlayer().getFlags().getFlagNames().toArray(), null);
+            String fName = (String)JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(),"Select a Flag", "Player Flags", JOptionPane.INFORMATION_MESSAGE, null, mwclient.getPlayer().getFlags().getFlagNames().toArray(), null);
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SetPlayerFlags#" + userName + "#" + fName + "#toggle");
         }
         if (command.equals("KK") && st.hasMoreElements()) {
@@ -360,7 +360,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             userName = st.nextToken();
             {
 
-                String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), mwclient.moneyOrFluMessage(false, true, -1) + " Amount,- to remove");
+                String exp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), mwclient.moneyOrFluMessage(false, true, -1) + " Amount,- to remove");
                 if (exp == null || exp.length() == 0)
                     return;
 
@@ -372,7 +372,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             userName = st.nextToken();
             {
 
-                String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), mwclient.moneyOrFluMessage(true, true, -1) + " Amount,- to remove");
+                String exp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), mwclient.moneyOrFluMessage(true, true, -1) + " Amount,- to remove");
                 if (exp == null || exp.length() == 0)
                     return;
 
@@ -384,7 +384,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             userName = st.nextToken();
             {
 
-                String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Exp Amount,- to remove");
+                String exp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Exp Amount,- to remove");
                 if (exp == null || exp.length() == 0)
                     return;
 
@@ -396,7 +396,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             userName = st.nextToken();
             {
 
-                String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Reward Amount,- to remove");
+                String exp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Reward Amount,- to remove");
                 if (exp == null || exp.length() == 0)
                     return;
 
@@ -414,7 +414,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             combo.setEditable(false);
             JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-            JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select Tech Type.");
+            JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select Tech Type.");
             combo.grabFocus();
             combo.getEditor().selectAll();
 
@@ -427,7 +427,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             if (value == JOptionPane.CANCEL_OPTION)
                 return;
 
-            String amount = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Tech Amount,- to remove");
+            String amount = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Tech Amount,- to remove");
             if (amount == null || amount.length() == 0)
                 return;
 
@@ -455,7 +455,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
             userName = st.nextToken();
             // fluff to set
-            String newfluff = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Fluff? (Leave blank to remove)", user.getFluff());
+            String newfluff = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Fluff? (Leave blank to remove)", user.getFluff());
 
             if (newfluff != null)
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c fluff#" + userName + "#" + newfluff);
@@ -464,7 +464,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
             userName = st.nextToken();
             // confirm the strip
-            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to strip " + userName + "'s units?");
+            int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to strip " + userName + "'s units?");
             if (result == JOptionPane.YES_OPTION)
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c stripunits#" + userName);
         }
@@ -472,7 +472,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
             userName = st.nextToken();
             // confirm action
-            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to reset " + userName + "'s free mek limit?");
+            int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to reset " + userName + "'s free mek limit?");
             if (result == JOptionPane.YES_OPTION)
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c resetfreemeks#" + userName);
         }
@@ -480,7 +480,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
             userName = st.nextToken();
             // confirm action
-            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to unlock " + userName + "'s units?");
+            int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to unlock " + userName + "'s units?");
             if (result == JOptionPane.YES_OPTION)
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ADMINUNLOCKUNITSMC#" + userName);
         }
@@ -488,7 +488,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
             userName = st.nextToken();
             // confirm action
-            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to recalc " + userName + "'s hangar bv?");
+            int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to recalc " + userName + "'s hangar bv?");
             if (result == JOptionPane.YES_OPTION)
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c ADMINRECALCHANGARBVMC#" + userName);
         }
@@ -569,19 +569,19 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             Object[] Types = { "All", "Mek", "ProtoMek" };
             Object[] Size = { "All", "Light", "Medium", "Heavy", "Assault" };
 
-            String Typestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select pilot unit type", "Pilot Unit Type", JOptionPane.INFORMATION_MESSAGE, null, Types, Types[0]);
+            String Typestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select pilot unit type", "Pilot Unit Type", JOptionPane.INFORMATION_MESSAGE, null, Types, Types[0]);
 
             if (Typestr == null || Typestr.length() == 0)
                 return;
 
-            String Sizestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select a pilot unit size", "Pilot Unit Size", JOptionPane.INFORMATION_MESSAGE, null, Size, Size[0]);
+            String Sizestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select a pilot unit size", "Pilot Unit Size", JOptionPane.INFORMATION_MESSAGE, null, Size, Size[0]);
             if (Sizestr == null || Sizestr.length() == 0)
                 return;
 
             String position = "ALL";
 
             if (!Typestr.equalsIgnoreCase("all") && !Sizestr.equalsIgnoreCase("all")) {
-                position = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Pilot Number?", "Number,Range 1-9, or ALL", JOptionPane.OK_OPTION, null, null, "0");
+                position = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Pilot Number?", "Number,Range 1-9, or ALL", JOptionPane.OK_OPTION, null, null, "0");
                 if (position == null || position.length() == 0)
                     return;
             }
@@ -593,29 +593,29 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             Object[] Types = { "Mek", "ProtoMek" };
             Object[] Size = { "Light", "Medium", "Heavy", "Assault" };
 
-            String Typestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select pilot type", "Pilot Type", JOptionPane.INFORMATION_MESSAGE, null, Types, Types[0]);
+            String Typestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select pilot type", "Pilot Type", JOptionPane.INFORMATION_MESSAGE, null, Types, Types[0]);
 
             if (Typestr == null || Typestr.length() == 0)
                 return;
 
-            String Sizestr = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Select a pilot size", "Pilot Size", JOptionPane.INFORMATION_MESSAGE, null, Size, Size[0]);
+            String Sizestr = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Select a pilot size", "Pilot Size", JOptionPane.INFORMATION_MESSAGE, null, Size, Size[0]);
             if (Sizestr == null || Sizestr.length() == 0)
                 return;
 
-            String gunnery = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Gunnery skill", 4);
+            String gunnery = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Gunnery skill", 4);
 
             if (gunnery == null || gunnery.length() == 0) {
                 return;
             }
 
-            String piloting = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Piloting Mod", 5);
+            String piloting = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Piloting Mod", 5);
 
             if (piloting == null || piloting.length() == 0) {
                 return;
             }
 
             String skills = null;
-            skills = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Skills Mod (comma delimited)");
+            skills = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Skills Mod (comma delimited)");
 
             if (skills == null) {
                 return;
@@ -631,11 +631,11 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         if (command.equals("RPC") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            String partName = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Part?", "Part Name", JOptionPane.OK_OPTION, null, null, "");
+            String partName = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Part?", "Part Name", JOptionPane.OK_OPTION, null, null, "");
             if (partName == null || partName.length() == 0)
                 return;
 
-            String amount = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Amount", "Amount To Remove", JOptionPane.OK_OPTION, null, null, "0");
+            String amount = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Amount", "Amount To Remove", JOptionPane.OK_OPTION, null, null, "0");
             if (amount == null || amount.length() == 0)
                 return;
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RemoveParts#" + userName + "#" + partName + "#" + amount);
@@ -643,11 +643,11 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
         if (command.equals("APC") && st.hasMoreElements()) {
 
             userName = st.nextToken();
-            String partName = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Part?", "Part Name", JOptionPane.OK_OPTION, null, null, "");
+            String partName = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Part?", "Part Name", JOptionPane.OK_OPTION, null, null, "");
             if (partName == null || partName.length() == 0)
                 return;
 
-            String amount = (String) JOptionPane.showInputDialog(mwclient.getMainFrame(), "Amount", "Amount To Add", JOptionPane.OK_OPTION, null, null, "0");
+            String amount = (String) JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Amount", "Amount To Add", JOptionPane.OK_OPTION, null, null, "0");
             if (amount == null || amount.length() == 0)
                 return;
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AddParts#" + userName + "#" + partName + "#" + amount);
@@ -656,7 +656,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
 
             userName = st.nextToken();
 
-            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to strip " + userName + "'s parts?");
+            int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to strip " + userName + "'s parts?");
             if (result == JOptionPane.YES_OPTION)
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c StripAllPartsCache#" + userName + "#CONFIRM");
         }

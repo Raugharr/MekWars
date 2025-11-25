@@ -43,9 +43,9 @@ public class SM extends Command {
         if (st.hasMoreElements())
         {
             if (mwclient.getConfig().isParam("MAINCHANNELMISC"))
-            	mwclient.addToChat(st.nextToken());
+            	mwclient.getGUIClient().addToChat(st.nextToken());
             else
-            	mwclient.addToChat(st.nextToken(),CCommPanel.CHANNEL_MISC);
+            	mwclient.getGUIClient().addToChat(st.nextToken(),CCommPanel.CHANNEL_MISC);
         }
 	}
 }

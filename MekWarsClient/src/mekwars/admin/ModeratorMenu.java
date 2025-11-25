@@ -395,7 +395,7 @@ public class ModeratorMenu extends JMenu {
         if ((name == null) || (name.length() == 0)) {
             return;
         }
-        String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Exp Amount,- to remove");
+        String exp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Exp Amount,- to remove");
         if ((exp == null) || (exp.length() == 0)) {
             return;
         }
@@ -418,7 +418,7 @@ public class ModeratorMenu extends JMenu {
         if ((name == null) || (name.length() == 0)) {
             return;
         }
-        String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), mwclient.moneyOrFluMessage(true, true, -1) + " Amount,- to remove");
+        String exp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), mwclient.moneyOrFluMessage(true, true, -1) + " Amount,- to remove");
         if ((exp == null) || (exp.length() == 0)) {
             return;
         }
@@ -440,7 +440,7 @@ public class ModeratorMenu extends JMenu {
         if ((name == null) || (name.length() == 0)) {
             return;
         }
-        String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), mwclient.moneyOrFluMessage(false, true, -1) + " Amount,- to remove");
+        String exp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), mwclient.moneyOrFluMessage(false, true, -1) + " Amount,- to remove");
         if ((exp == null) || (exp.length() == 0)) {
             return;
         }
@@ -459,7 +459,7 @@ public class ModeratorMenu extends JMenu {
             name = player;
         }
 
-        String exp = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Reward Amount,- to remove");
+        String exp = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Reward Amount,- to remove");
         if ((exp == null) || (exp.length() == 0)) {
             return;
         }
@@ -468,7 +468,7 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModListCommands_actionPerformed(ActionEvent e) {
-        String name = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Partial Command");
+        String name = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Partial Command");
         if (name == null) {
             return;
         }
@@ -480,7 +480,7 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModTerminate_actionPerformed(ActionEvent e) {
-        String id = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Game ID");
+        String id = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Game ID");
         if ((id == null) || (id.length() == 0)) {
             return;
         }
@@ -500,7 +500,7 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModLog_actionPerformed(ActionEvent e) {
-        String name = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Enter comments you would like to add the the mod log");
+        String name = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Enter comments you would like to add the the mod log");
         if ((name == null) || (name.length() == 0)) {
             return;
         }
@@ -517,12 +517,12 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        String mode = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Mode (add/remove)");
+        String mode = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Mode (add/remove)");
         if ((mode == null) || (mode.length() == 0)) {
             return;
         }
 
-        String offender = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Player to add");
+        String offender = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Player to add");
 
         if ((offender == null) || (offender.length() == 0)) {
             return;
@@ -541,7 +541,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        String elo = JOptionPane.showInputDialog(mwclient.getMainFrame(), "ELO");
+        String elo = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "ELO");
         if ((elo == null) || (elo.length() == 0)) {
             return;
         }
@@ -559,7 +559,7 @@ public class ModeratorMenu extends JMenu {
             return;
         }
 
-        String elo = JOptionPane.showInputDialog(mwclient.getMainFrame(), "Price Mod Amount(- to remove)");
+        String elo = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Price Mod Amount(- to remove)");
         if ((elo == null) || (elo.length() == 0)) {
             return;
         }
@@ -607,7 +607,7 @@ public class ModeratorMenu extends JMenu {
     }
 
     public void jMenuModCreateUnit_actionPerformed(ActionEvent e) {
-        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(mwclient.getMainFrame(), mwclient,NewUnitViewerDialog.UNIT_SELECTOR);
+        NewUnitViewerDialog unitSelector = new NewUnitViewerDialog(mwclient.getGUIClient().getMainFrame(), mwclient,NewUnitViewerDialog.UNIT_SELECTOR);
         unitSelector.setName("Unit Selector");
         new Thread(unitSelector).start();
     }
@@ -632,7 +632,7 @@ public class ModeratorMenu extends JMenu {
         combo.setEditable(false);
         JOptionPane jop = new JOptionPane(combo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
-        JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select a factory.");
+        JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select a factory.");
         combo.grabFocus();
         combo.getEditor().selectAll();
 

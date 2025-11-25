@@ -297,7 +297,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                 item = new JMenuItem("Purchase Factory");
                 item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent ae) {
-                        mwclient.getMainFrame().jMenuLeaderPurchaseFactory_actionPerformed(p == null ? null : p.getName());
+                        mwclient.getGUIClient().getMainFrame().jMenuLeaderPurchaseFactory_actionPerformed(p == null ? null : p.getName());
                     }
                 });
                 popup.add(item);

@@ -1394,7 +1394,7 @@ public final class ConfigurationDialog implements ActionListener {
         // int h = dialog.getSize().height;
         // int y = (dim.height - h) / 2;
 
-        dialog.setLocationRelativeTo(mwclient.getMainFrame());
+        dialog.setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
         dialog.setVisible(true);
 
         if (pane.getValue() == okayButton) {
@@ -1647,7 +1647,7 @@ public final class ConfigurationDialog implements ActionListener {
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "setautoreorder " + autoReOrder.isSelected());
             }
 
-            mwclient.getMainFrame().getMainPanel().recreateMainTPane(mwclient.getMainFrame());
+            mwclient.getGUIClient().getMainFrame().getMainPanel().recreateMainTPane(mwclient.getGUIClient().getMainFrame());
 
             /*
              * Last but not least, figure out which (if any) components need to
@@ -1660,7 +1660,7 @@ public final class ConfigurationDialog implements ActionListener {
             boolean mapBrightnessChanged = false;
 
             if (!mwclient.getConfigParam("LOOKANDFEEL").equals(originalLookAndFeel)) {
-                mwclient.setLookAndFeel(true);
+                mwclient.getGUIClient().setLookAndFeel(true);
             }
 
             if (!mwclient.getConfigParam("UNITHEX").equals(originalUnitHex)) {
@@ -1674,17 +1674,17 @@ public final class ConfigurationDialog implements ActionListener {
 
             if (columnsChanged || unitHexChanged) {
                 // only reinit. no image loading.
-                mwclient.getMainFrame().getMainPanel().selectFirstTab();
-                mwclient.getMainFrame().getMainPanel().getCommPanel().selectFirstTab();
-                mwclient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
+                mwclient.getGUIClient().getMainFrame().getMainPanel().selectFirstTab();
+                mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().selectFirstTab();
+                mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel().reinitialize();
             }
 
             if (mapBrightnessChanged) {
-                mwclient.getMainFrame().getMainPanel().getMapPanel().repaint();
+                mwclient.getGUIClient().getMainFrame().getMainPanel().getMapPanel().repaint();
             }
 
             if (!mwclient.getConfigParam("BMPREVIEWIMAGE").equalsIgnoreCase(originalBMPreview)) {
-                mwclient.getMainFrame().getMainPanel().getBMPanel().resetButtonBar();
+                mwclient.getGUIClient().getMainFrame().getMainPanel().getBMPanel().resetButtonBar();
             }
         } else {
             dialog.dispose();
@@ -1702,7 +1702,7 @@ public final class ConfigurationDialog implements ActionListener {
             dialog.dispose();
         } else if (command.equals(camoCommand)) {
             FileCamouflage fileCamouflage = new FileCamouflage(new File(Configuration.camoDir(), mwclient.getConfigParam("UNITCAMO")));
-            CamoChooserDialog camoDialog = new CamoChooserDialog(mwclient.getMainFrame(), fileCamouflage);
+            CamoChooserDialog camoDialog = new CamoChooserDialog(mwclient.getGUIClient().getMainFrame(), fileCamouflage);
             if (camoDialog.showDialog().isConfirmed()) {
                 Camouflage selectedItem = camoDialog.getSelectedItem();
                 mwclient.getConfig().setParam("UNITCAMO", selectedItem.getCategory() + selectedItem.getFilename());
@@ -1710,13 +1710,13 @@ public final class ConfigurationDialog implements ActionListener {
                 mwclient.setConfig();
                 // then reload images and update the GUI
                 mwclient.getConfig().loadImage(GUIClientConfig.CAMO_PATH + selectedItem.getCategory() + selectedItem.getFilename(), "CAMO", 84, 72);
-                mwclient.getMainFrame().getMainPanel().selectFirstTab();
-                mwclient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
+                mwclient.getGUIClient().getMainFrame().getMainPanel().selectFirstTab();
+                mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel().reinitialize();
             }
         } else if (command.equals(lookAndFeelCommand)) {
             try {
                 String selectedItem = (String) lookandfeelComboBox.getSelectedItem();
-                LookAndFeelInfo lookAndFeelInfo = mwclient.getLookAndFeel(selectedItem);
+                LookAndFeelInfo lookAndFeelInfo = mwclient.getGUIClient().getLookAndFeel(selectedItem);
 
                 if (lookAndFeelInfo == null) {
                     logger.error("Invalid LookAndFeel '{}'", selectedItem);

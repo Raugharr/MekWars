@@ -23,7 +23,7 @@
  */
 package mekwars.operationseditor;
 
-
+import mekwars.client.MWClient;
 import mekwars.operationseditor.gui.dialog.OperationsDialog;
 
 public class MainOperations{
@@ -42,7 +42,7 @@ public class MainOperations{
     
     public static void main(Object o) {
         try {
-        	new OperationsDialog(o);
+        	new OperationsDialog((MWClient) o);
         } catch (Exception e) {
         	System.err.println(e);
         }

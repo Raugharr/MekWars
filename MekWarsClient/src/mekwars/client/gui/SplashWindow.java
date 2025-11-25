@@ -181,7 +181,7 @@ public class SplashWindow extends JDialog {
 
         @Override
         public void done() {
-            mwClient.setupMainFrame();
+            mwClient.getGUIClient().setupMainFrame();
             splashWindow.dispose();
             mwClient.connectToServer();
         }

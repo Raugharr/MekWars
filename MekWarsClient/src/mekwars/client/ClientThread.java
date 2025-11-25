@@ -164,7 +164,7 @@ public class ClientThread extends Thread implements CloseClientListener {
 
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RequestOperationSettings");
             while (mwclient.isWaiting()) {
-                mwclient.addToChat("Retrieving Operation Data Please Wait..");
+                mwclient.getGUIClient().addToChat("Retrieving Operation Data Please Wait..");
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -179,7 +179,7 @@ public class ClientThread extends Thread implements CloseClientListener {
             client.connect();
         } catch (Exception ex) {
             client = null;
-            mwclient.showInfoWindow("Couldn't join this game!");
+            mwclient.getGUIClient().showInfoWindow("Couldn't join this game!");
             LOGGER.info(serverip + " " + serverport);
             return;
         }

@@ -496,7 +496,7 @@ public class NewUnitViewerDialog extends JDialog implements Runnable,
 			panelMekView.reset();
 		}
 
-		//client.getMainFrame().loadPreviewImage(lblImage, selectedUnit, client.getLocalPlayer());
+		//client.getGUIClient().getMainFrame().loadPreviewImage(lblImage, selectedUnit, client.getLocalPlayer());
 	}
 
 	public Entity getSelectedEntity() {
@@ -568,7 +568,7 @@ public class NewUnitViewerDialog extends JDialog implements Runnable,
 				 MechSummaryCache.getInstance().getFailedFiles();
 			 if ((hFailedFiles != null) && (hFailedFiles.size() > 0)) {
 				 // self-showing dialog
-				 new UnitFailureDialog(client.getMainFrame(), hFailedFiles);
+				 new UnitFailureDialog(client.getGUIClient().getMainFrame(), hFailedFiles);
 			 }
 		 }
 		 
@@ -767,21 +767,21 @@ public class NewUnitViewerDialog extends JDialog implements Runnable,
 					MechSummary ms = getSelectedMechSummary();
 					String unit = ms.getName();
 					setVisible(false);
-					String moneyMod = JOptionPane.showInputDialog(client.getMainFrame(), "Money Mod for " + unit, 0);
+					String moneyMod = JOptionPane.showInputDialog(client.getGUIClient().getMainFrame(), "Money Mod for " + unit, 0);
 
 					if ((moneyMod == null) || (moneyMod.length() == 0)) {
 						dispose();
 						return;
 					}
 
-					String compMod = JOptionPane.showInputDialog(client.getMainFrame(), "Comp Mod for " + unit, 0);
+					String compMod = JOptionPane.showInputDialog(client.getGUIClient().getMainFrame(), "Comp Mod for " + unit, 0);
 
 					if ((compMod == null) || (compMod.length() == 0)) {
 						dispose();
 						return;
 					}
 
-					String fluMod = JOptionPane.showInputDialog(client.getMainFrame(), "Flu Mod for " + unit, 0);
+					String fluMod = JOptionPane.showInputDialog(client.getGUIClient().getMainFrame(), "Flu Mod for " + unit, 0);
 
 					if ((fluMod == null) || (fluMod.length() == 0)) {
 						dispose();
@@ -811,21 +811,21 @@ public class NewUnitViewerDialog extends JDialog implements Runnable,
 					unitFile = UnitUtils.getMechSummaryFileName(ms);
 
 
-					String fluff = JOptionPane.showInputDialog(client.getMainFrame(), "Fluff text for " + unit);
+					String fluff = JOptionPane.showInputDialog(client.getGUIClient().getMainFrame(), "Fluff text for " + unit);
 
 					if ((fluff == null) || (fluff.length() == 0)) {
 						dispose();
 						return;
 					}
 
-					String gunnery = JOptionPane.showInputDialog(client.getMainFrame(), "Gunnery skill for " + unit, 99);
+					String gunnery = JOptionPane.showInputDialog(client.getGUIClient().getMainFrame(), "Gunnery skill for " + unit, 99);
 
 					if ((gunnery == null) || (gunnery.length() == 0)) {
 						dispose();
 						return;
 					}
 
-					String piloting = JOptionPane.showInputDialog(client.getMainFrame(), "Piloting Mod for " + unit, 99);
+					String piloting = JOptionPane.showInputDialog(client.getGUIClient().getMainFrame(), "Piloting Mod for " + unit, 99);
 
 					if ((piloting == null) || (piloting.length() == 0)) {
 						dispose();
@@ -833,7 +833,7 @@ public class NewUnitViewerDialog extends JDialog implements Runnable,
 					}
 
 					String skills = null;
-					skills = JOptionPane.showInputDialog(client.getMainFrame(), "Skills Mod for " + unit + " (comma delimited)");
+					skills = JOptionPane.showInputDialog(client.getGUIClient().getMainFrame(), "Skills Mod for " + unit + " (comma delimited)");
 
 					if (skills == null) {
 						dispose();

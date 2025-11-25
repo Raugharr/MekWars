@@ -19,8 +19,8 @@ package mekwars.client.gui.commands;
 
 import javax.swing.AbstractAction;
 
-import mekwars.client.common.campaign.clientutils.protocol.CConnector;
 import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.protocol.CConnector;
 
 /**
  * Abstract class for GUI Commands

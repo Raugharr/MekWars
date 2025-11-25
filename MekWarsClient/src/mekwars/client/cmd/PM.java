@@ -74,18 +74,18 @@ public class PM extends Command {
                 if (mwclient.getConfig().isParam("USEMULTIPLEPM")) {
                     int maxTabs =  mwclient.getConfig().getIntParam("MAXPMTABS");
                     //Check to see if the Mail tab exists if not create a new one.
-                    mailTab = mwclient.getMainFrame().getMainPanel().getCommPanel().findMailTab(tabName); 
+                    mailTab = mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().findMailTab(tabName); 
                     if (mailTab == null){
-                        int count = mwclient.getMainFrame().getMainPanel().getCommPanel().countMailTabs();
+                        int count = mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().countMailTabs();
                         
                         if ( count >= maxTabs ){
                             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "mail "+name+", "+mwclient.getConfigParam("MAXPMMESSAGE"));
                             String sysColour = mwclient.getConfigParam("SYSMESSAGECOLOR");
                             message = "<font color=\""+sysColour+"\"><b>"+name+" tried to PM you while you where busy</b></font>";
-                            mwclient.addToChat(message);
+                            mwclient.getGUIClient().addToChat(message);
                             return;
                         }
-                        mwclient.getMainFrame().getMainPanel().getCommPanel().createMailTab(tabName);
+                        mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().createMailTab(tabName);
                     }
                 }                
                 //draw a factioncolour from the datafeed
@@ -141,13 +141,13 @@ public class PM extends Command {
 					message = mwclient.getShortTime() + message;
 				
 				//put the message in PM panel
-				mwclient.addToChat(message, CCommPanel.CHANNEL_PMAIL,tabName);
+				mwclient.getGUIClient().addToChat(message, CCommPanel.CHANNEL_PMAIL,tabName);
                 
                 //if PMs show in main, make it red and show there too
                 if (mwclient.getConfig().isParam("MAINCHANNELPM")) {
                 	String sysColour = mwclient.getConfigParam("SYSMESSAGECOLOR");
                     message = "<font color=\""+sysColour+"\"><b>Private Mail: </b></font>" + message;
-                    mwclient.addToChat(message);
+                    mwclient.getGUIClient().addToChat(message);
                 }
                 
                 /*
