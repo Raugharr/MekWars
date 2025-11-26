@@ -37,8 +37,9 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.CMainFrame;
-import mekwars.client.gui.dialog.SignonDialog;
+import mekwars.client.gui.SplashWindow;
 import mekwars.client.gui.dialog.ServerBrowserDialog;
+import mekwars.client.gui.dialog.SignonDialog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -60,15 +61,29 @@ public class GUIClient {
     public GUIClient(MWClient mwClient, GUIClientConfig config) {
         this.mwClient = mwClient;
         this.config = config;
+    }
+
+    public void init() {
+        boolean shouldAutoconnect = Boolean.parseBoolean(config.getParam("AUTOCONNECT"))
+            && !config.getParam("SERVERIP").trim().isEmpty()
+            && !config.getParam("NAME").trim().isEmpty()
+            && !config.getParam("NAMEPASSWORD").trim().isEmpty();
 
         setupFlatLaf();
-        if (mwClient.getHpgClient().isConnected()) {
+        if (shouldAutoconnect) {
+            mwClient.connectDataFetcher();
+            SplashWindow splashWindow = new SplashWindow(mwClient, getLocale());
+            splashWindow.setVisible(true);
+            mwClient.setUsername(config.getParam("NAME"));
+        } else if (mwClient.getHpgClient().isConnected()) {
             ServerBrowserDialog serverBrowserDialog = new ServerBrowserDialog(null,
                     locale, mwClient);
 
             serverBrowserDialog.setVisible(true);
+
+        } else {
+            new SignonDialog(mwClient, getLocale());
         }
-            new SignonDialog(mwClient);
     }
 
     public MWClient getMWClient() {

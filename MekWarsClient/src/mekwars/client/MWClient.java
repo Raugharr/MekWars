@@ -258,9 +258,6 @@ public final class MWClient extends GameHost implements IClient {
             } catch (Exception ex) {
                 LOGGER.error("Unable to find MekWarsDed.jar");
             }
-        } else {
-            hpgClient = new HPGClient(this);
-            guiClient = new GUIClient(this, config);
         }
 
         try {
@@ -281,27 +278,20 @@ public final class MWClient extends GameHost implements IClient {
             createProtCommands();
             createGUICommands();
 
-            /*
-             * @urgru 11.24.05 SignOnDialog used to be shown in later in
-             * construction. This made it impossible for players to change the
-             * target IP and/or DATAPORT before attempting to fetch needed data.
-             * Although a properly configured serverdata.dat would keep this
-             * from bothering end users, it was pissing off server admins who
-             * were testing clients against multiple servers. ---- 12.4.05
-             * Addition: Show SignOnDialog if username is blank, or if a
-             * player's password is unsaved. Tool tip for autoconnect cbox
-             * updated to reflect this requirement. Fix for BUG 1275136.
-             */
-            boolean shouldShowSignOn = false;
-            if (!Boolean.parseBoolean(getConfigParam("AUTOCONNECT"))) {
-                shouldShowSignOn = true;
-            } else if (getConfigParam("SERVERIP").trim().equals("")) {
-                shouldShowSignOn = true;
-            } else if (getConfigParam("NAME").trim().equals("")) {
-                shouldShowSignOn = true;
-            } else if (getConfigParam("NAMEPASSWORD").trim().equals("")) {
-                shouldShowSignOn = true;
+            hpgClient = new HPGClient(this);
+            try {
+                String trackerEnabledConfig = getConfigParam("TrackerEnabled");
+                if (Boolean.parseBoolean(trackerEnabledConfig)) {
+                    String trackerAddress = getConfigParam("TrackerAddress");
+                    hpgClient.connect(new InetSocketAddress(trackerAddress,
+                                HPGClient.TRACKER_PORT));
+                }
+            } catch (IOException e) {
+                LOGGER.error("Unable to connect to HPGTracker");
             }
+
+            guiClient = new GUIClient(this, config);
+            guiClient.init();
 
         // Dedicated servers have no GUI, no signon dialogs, etc.
         } else {
@@ -414,6 +404,10 @@ public final class MWClient extends GameHost implements IClient {
      */
     public GUIClient getGUIClient() {
         return guiClient;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     /*
@@ -1750,11 +1744,12 @@ public final class MWClient extends GameHost implements IClient {
                 return;
             }
             if (pcommand == null) {
-                LOGGER.error("COMMAND ERROR: unknown protocol command '{}' from server.", incoming);
-                if (incoming.equalsIgnoreCase("denied    /denied")) {
+                if (incoming.equalsIgnoreCase("denied	/denied")) {
                     // let them know it's a wrong password
                     JOptionPane.showMessageDialog(getGUIClient().getMainFrame(),
                             "Unknown Username/Password combination.");
+                } else {
+                    LOGGER.error("COMMAND ERROR: unknown protocol command '{}' from server.", incoming);
                 }
                 return;
             }

@@ -132,11 +132,12 @@ public class GUIClientConfig implements IClientConfig {
         // general properties
         defaults.setProperty("NAME", "");
         defaults.setProperty("NAMEPASSWORD", "");
+        defaults.setProperty("NAMEPASSWORDSAVED", "false");
         defaults.setProperty("PORT", "2346");
         defaults.setProperty("SERVERIP", "");
         defaults.setProperty("SERVERPORT", "2347");
         defaults.setProperty("DATAPORT", "4867");
-        defaults.setProperty("AUTOCONNECT", "NO");
+        defaults.setProperty("AUTOCONNECT", "false");
         defaults.setProperty("TIMEOUT", "180");
         // GUI properties
         defaults.setProperty("LOOKANDFEEL", "system"); // look and feel type
