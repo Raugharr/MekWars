@@ -19,6 +19,7 @@ package mekwars.client.cmd;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 import mekwars.common.MMGame;
 
 /**
@@ -72,6 +73,6 @@ public class SL extends Command {
 		}
 		
 		//refresh affected portion of the GUI
-        mwclient.refreshGUI(MWClient.REFRESH_BATTLETABLE);
+        mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_BATTLETABLE);
 	}
 }

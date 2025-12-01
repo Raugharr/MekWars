@@ -455,9 +455,9 @@ public class CUserListPanel extends JPanel implements ActionListener{
                     //don't show mail/money/mute/noplay for player himself
                     CUser user = ((CUserListModel)UserList.getModel()).getUser(row);
                     String input = MWClient.GUI_PREFIX + "mail " + user.getName() + ", ";
-                    input = input + mwclient.getMainFrame().getMainPanel().getCommPanel().getInput();
-                    mwclient.getMainFrame().getMainPanel().getCommPanel().setInput(input);
-                    mwclient.getMainFrame().getMainPanel().getCommPanel().focusInputField();
+                    input = input + mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().getInput();
+                    mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().setInput(input);
+                    mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().focusInputField();
                 }
 
             }
@@ -793,21 +793,21 @@ public class CUserListPanel extends JPanel implements ActionListener{
             if (command.equals("MA") && st.hasMoreElements()) {
                 userName = st.nextToken();
                 if (true)
-                    mwclient.getMainFrame().jMenuFileMail_actionPerformed(userName);
+                    mwclient.getGUIClient().getMainFrame().jMenuFileMail_actionPerformed(userName);
                 return;
             }
             //send Money
             if (command.equals("MO") && st.hasMoreElements()) {
                 userName = st.nextToken();
                 if (true)
-                    mwclient.getMainFrame().jMenuCommanderTransferMoney_actionPerformed(userName);
+                    mwclient.getGUIClient().getMainFrame().jMenuCommanderTransferMoney_actionPerformed(userName);
                 return;
             }
 
             if (command.equals("MR") && st.hasMoreElements())
             {
                 userName = st.nextToken();
-                mwclient.getMainFrame().jMenuCommanderTransferRewardPoints_actionPerformed(userName);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderTransferRewardPoints_actionPerformed(userName);
                 return;
             }
 
@@ -815,28 +815,28 @@ public class CUserListPanel extends JPanel implements ActionListener{
             if (command.equals("MI") && st.hasMoreElements())
             {
                 userName = st.nextToken();
-                mwclient.getMainFrame().jMenuCommanderTransferInfluence_actionPerformed(userName);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderTransferInfluence_actionPerformed(userName);
                 return;
             }
 
             if (command.equals("TU") && st.hasMoreElements()) {
                 userName = st.nextToken();
                 if (true)
-                    mwclient.getMainFrame().jMenuCommanderTransferUnit_actionPerformed(userName, -1);
+                    mwclient.getGUIClient().getMainFrame().jMenuCommanderTransferUnit_actionPerformed(userName, -1);
                 return;
             }
 
             if (command.equals("TP") && st.hasMoreElements()) {
                 userName = st.nextToken();
                 if (true)
-                    mwclient.getMainFrame().jMenuCommanderTransferPilot_actionPerformed(userName);
+                    mwclient.getGUIClient().getMainFrame().jMenuCommanderTransferPilot_actionPerformed(userName);
                 return;
             }
 
             if (command.equals("DSU") && st.hasMoreElements()) {
                 userName = st.nextToken();
                 if (true)
-                    mwclient.getMainFrame().jMenuCommanderDirectSell_actionPerformed(userName,null);
+                    mwclient.getGUIClient().getMainFrame().jMenuCommanderDirectSell_actionPerformed(userName,null);
                 return;
             }
 

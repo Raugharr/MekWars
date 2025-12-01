@@ -86,7 +86,7 @@ public class PlanetSearchDialog extends JDialog implements ActionListener {
 		 */
 		
 		//super, and variable saves
-		super(mwclient.getMainFrame(),"Planet Search", true);//dummy frame as owner
+		super(mwclient.getGUIClient().getMainFrame(),"Planet Search", true);//dummy frame as owner
 		this.map = map;
 		this.planets = mwclient.getData().getAllPlanets();
 		

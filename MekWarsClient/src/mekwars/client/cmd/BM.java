@@ -20,6 +20,7 @@ package mekwars.client.cmd;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -53,9 +54,9 @@ public class BM extends Command {
 		else if (cmd.equals("CU")) //change BM unit, BM|CU
 			mwclient.getCampaign().changeBMUnit(st.nextToken());
 		
-		mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
-		mwclient.refreshGUI(MWClient.REFRESH_PLAYERPANEL);
-		mwclient.refreshGUI(MWClient.REFRESH_BMPANEL);
+		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
+		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_PLAYERPANEL);
+		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_BMPANEL);
 		
 	}
 }

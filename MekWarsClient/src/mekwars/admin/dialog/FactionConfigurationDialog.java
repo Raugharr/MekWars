@@ -4235,7 +4235,7 @@ public final class FactionConfigurationDialog implements ActionListener {
 
 
         //Show the dialog and get the user's input
-        dialog.setLocationRelativeTo(mwclient.getMainFrame());
+        dialog.setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
         dialog.setModal(true);
         dialog.pack();
         dialog.setVisible(true);

@@ -21,6 +21,7 @@ import java.util.StringTokenizer;
 
 import mekwars.client.CUser;
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -55,7 +56,7 @@ public class PI extends Command {
             if (user != null) {
             	user.setCampaignData(mwclient, st.nextToken());
             	if ( user.getName().equalsIgnoreCase(mwclient.getPlayer().getName())){
-            	    mwclient.getMainFrame().enableMenu();
+            	    mwclient.getGUIClient().getMainFrame().enableMenu();
             	}
             }
         } else if (task.equals("CS")) {
@@ -85,6 +86,6 @@ public class PI extends Command {
             }
         } 
         
-        mwclient.refreshGUI(MWClient.REFRESH_USERLIST);
+        mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_USERLIST);
 	}
 }

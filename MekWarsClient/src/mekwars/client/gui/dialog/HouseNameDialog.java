@@ -91,7 +91,7 @@ public class HouseNameDialog extends JDialog implements ActionListener {
 		 */
 		
 		//super, and variable saves
-		super(mwclient.getMainFrame(),boxText, true);//dummy frame as owner
+		super(mwclient.getGUIClient().getMainFrame(),boxText, true);//dummy frame as owner
 		this.factions = mwclient.getData().getAllHouses();
 		this.addblank = addblank;
 		

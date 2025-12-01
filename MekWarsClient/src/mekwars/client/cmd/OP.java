@@ -68,7 +68,7 @@ public class OP extends Command {
 			o.writeToXmlFile(folder, fileName);			
 			break;
 		case "view":
-			ojd = new OperationViewerDialog(mwclient.getMainFrame(), mwclient);
+			ojd = new OperationViewerDialog(mwclient.getGUIClient().getMainFrame(), mwclient);
 			new Thread(ojd).run();
 			break;
 		case "md5":
@@ -235,7 +235,7 @@ public class OP extends Command {
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "getops getsome#" + sb.toString());
 				} else {
 					// Our ops are good
-					ojd = new OperationViewerDialog(mwclient.getMainFrame(), mwclient);
+					ojd = new OperationViewerDialog(mwclient.getGUIClient().getMainFrame(), mwclient);
 					new Thread(ojd).run();
 				}
 			}			

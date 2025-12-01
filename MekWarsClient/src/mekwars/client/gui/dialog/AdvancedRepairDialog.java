@@ -205,7 +205,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         setExtendedState(Frame.NORMAL);
 
         this.repaint();
-        setLocationRelativeTo(mwclient.getMainFrame());
+        setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
 
         pack();
         setVisible(true);

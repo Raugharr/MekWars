@@ -28,6 +28,7 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 
 import mekwars.client.MWClient;
+import mekwars.client.gui.dialog.RewardPointsDialog;
 import mekwars.common.Planet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -129,17 +130,17 @@ class MMNetHyperLinkListener implements HyperlinkListener {
                         String battleDamage = "";
                         if ( ST.hasMoreTokens() )
                             battleDamage = ST.nextToken();
-						mwclient.getMainFrame().getMainPanel().getHSPanel().showInfoWindow(filename, BV, gunnery, piloting, battleDamage);
+						mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().showInfoWindow(filename, BV, gunnery, piloting, battleDamage);
 					}
                     else if (e.getDescription().startsWith("MWUSERP")) {
 						String command = e.getDescription();
 						command = command.substring(7);
-						mwclient.rewardPointsDialog();
+						new RewardPointsDialog(mwclient);
 					}
                     else if (e.getDescription().startsWith("MWREG")) {
 						String command = e.getDescription();
 						command = command.substring(5);
-						mwclient.getMainFrame().jMenuFileRegister_actionPerformed();
+						mwclient.getGUIClient().getMainFrame().jMenuFileRegister_actionPerformed();
 					}
 					else if (e.getDescription().startsWith("JUMPTOPLANET")) {
 						String command = e.getDescription();
@@ -148,7 +149,7 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 						String planetName = ST.nextToken();
 						
 						//fetch the map
-						InnerStellarMap map = mwclient.getMainFrame().getMainPanel().getMapPanel().getMap();
+						InnerStellarMap map = mwclient.getGUIClient().getMainFrame().getMainPanel().getMapPanel().getMap();
 						
 						//get the planet
 						Planet currPlanet = mwclient.getData().getPlanetByName(planetName);
@@ -164,7 +165,7 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 							 * the map is (top or bottom) and send the correct tab to the front.
 							 */
 							if (mwclient.getConfig().isParam("MAPTABONCLICK") && mwclient.getConfig().isParam("MAPTABVISIBLE"))
-								mwclient.getMainFrame().getMainPanel().selectMapTab();
+								mwclient.getGUIClient().getMainFrame().getMainPanel().selectMapTab();
 						}
 					}
 					
@@ -174,7 +175,7 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 						
 						//open a warning dialog
 						Object[] options = { " Defect ", " Cancel " };
-						int confirmed = JOptionPane.showOptionDialog(mwclient.getMainFrame(),"Are you SURE you want to defect?",
+						int confirmed = JOptionPane.showOptionDialog(mwclient.getGUIClient().getMainFrame(),"Are you SURE you want to defect?",
 					                        "Defection Confirmation", JOptionPane.DEFAULT_OPTION,
 					                        JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 
@@ -184,7 +185,7 @@ class MMNetHyperLinkListener implements HyperlinkListener {
 					}
 					
 					else if (e.getDescription().startsWith("MWSOLDEFECT")) {
-						mwclient.getMainFrame().jMenuCommanderDefect_actionPerformed();
+						mwclient.getGUIClient().getMainFrame().jMenuCommanderDefect_actionPerformed();
 					}
 					
                     else if (e.getDescription().startsWith("REMOVEQUEUEDWORKORDER")){

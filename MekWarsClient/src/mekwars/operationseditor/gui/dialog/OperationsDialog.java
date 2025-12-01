@@ -92,7 +92,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
     private String filePathName = "./data/operations";
     private JOptionPane pane;
     private JScrollPane scrollPane;
-    private Object mwclient = null;
+    private MWClient mwclient = null;
 
     JPanel contentPane;
 
@@ -125,7 +125,7 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
      *         This change to the code removes the tediousness of having to add a new var to 3 locations when it is used. Now only 1 location needs to be added
      *         and that is the vars placement on the tab in the UI.
      */
-    public OperationsDialog(Object o) {
+    public OperationsDialog(MWClient o) {
         // super("Ops Editor");
         if (o != null) {
             mwclient = o;
@@ -4448,35 +4448,35 @@ public class OperationsDialog extends JFrame implements ActionListener, KeyListe
         jMenuRetrieveOperationFile.setText("Retrieve Operation File");
         jMenuRetrieveOperationFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ((MWClient) mwclient).getMainFrame().jMenuRetrieveOperationFile_actionPerformed(e);
+                mwclient.getGUIClient().getMainFrame().jMenuRetrieveOperationFile_actionPerformed(e);
             }
         });
 
         jMenuSetOperationFile.setText("Set Operation File");
         jMenuSetOperationFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ((MWClient) mwclient).getMainFrame().jMenuSetOperationFile_actionPerformed(e);
+                mwclient.getGUIClient().getMainFrame().jMenuSetOperationFile_actionPerformed(e);
             }
         });
 
         jMenuSetNewOperationFile.setText("Set New Operation File");
         jMenuSetNewOperationFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ((MWClient) mwclient).getMainFrame().jMenuSetNewOperationFile_actionPerformed(e);
+                mwclient.getGUIClient().getMainFrame().jMenuSetNewOperationFile_actionPerformed(e);
             }
         });
 
         jMenuSendAllOperationFiles.setText("Send All Local Op Files");
         jMenuSendAllOperationFiles.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ((MWClient) mwclient).getMainFrame().jMenuSendAllOperationFiles_actionPerformed(e);
+                mwclient.getGUIClient().getMainFrame().jMenuSendAllOperationFiles_actionPerformed(e);
             }
         });
 
         jMenuUpdateOperations.setText("Update Operations");
         jMenuUpdateOperations.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ((MWClient) mwclient).getMainFrame().jMenuUpdateOperations_actionPerformed(e);
+                mwclient.getGUIClient().getMainFrame().jMenuUpdateOperations_actionPerformed(e);
             }
         });
 

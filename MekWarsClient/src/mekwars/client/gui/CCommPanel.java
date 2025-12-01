@@ -637,7 +637,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
             if (receiver != null && !receiver.equals("")) {
                 s = MWClient.GUI_PREFIX + "mail " + receiver + "," + s;
             } else {
-                mwclient.showInfoWindow("No receiver set.");
+                mwclient.getGUIClient().showInfoWindow("No receiver set.");
                 chatField.setText(s);
                 return false;
             }
@@ -649,7 +649,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
             if (receiver != null && !receiver.equals("")) {
                 s = MWClient.GUI_PREFIX + "mail " + receiver + "," + s;
             } else {
-                mwclient.showInfoWindow("No receiver set.");
+                mwclient.getGUIClient().showInfoWindow("No receiver set.");
                 chatField.setText(s);
                 return false;
             }
@@ -668,7 +668,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
                 if (receiver != null && !receiver.equals(""))
                     s += "|" + receiver;
                 else {
-                    mwclient.showInfoWindow("No receiver set.");
+                    mwclient.getGUIClient().showInfoWindow("No receiver set.");
                     chatField.setText(s);
                     return false;
                 }
@@ -680,7 +680,7 @@ public class CCommPanel extends JPanel implements ChangeListener, ComponentListe
                 if (receiver != null && !receiver.equals(""))
                     s += "|" + receiver;
                 else {
-                    mwclient.showInfoWindow("No receiver set.");
+                    mwclient.getGUIClient().showInfoWindow("No receiver set.");
                     chatField.setText(s);
                     return false;
                 }

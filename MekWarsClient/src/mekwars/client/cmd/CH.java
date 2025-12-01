@@ -180,19 +180,19 @@ public class CH extends Command {
                     }
 
                     if (isModMail) {
-                        mwclient.addToChat(message, CCommPanel.CHANNEL_MOD);
+                        mwclient.getGUIClient().addToChat(message, CCommPanel.CHANNEL_MOD);
                      // also add to main, if configured to do so
                         if (mwclient.getConfig().isParam("MAINCHANNELMM")) {
-                            mwclient.addToChat("<font color=\"red\" size=\"" + fontSize + "\"><b>Mod Mail: </b></font>" + message);
+                            mwclient.getGUIClient().addToChat("<font color=\"red\" size=\"" + fontSize + "\"><b>Mod Mail: </b></font>" + message);
                         }
                     }
                     else {
                         // add message to faction panel
-                        mwclient.addToChat(message, CCommPanel.CHANNEL_HMAIL);
+                        mwclient.getGUIClient().addToChat(message, CCommPanel.CHANNEL_HMAIL);
 
                         // also add to main, if configured to do so
                         if (mwclient.getConfig().isParam("MAINCHANNELHM")) {
-                            mwclient.addToChat("<font color=\"red\" size=\"" + fontSize + "\"><b>House Mail: </b></font>" + message);
+                            mwclient.getGUIClient().addToChat("<font color=\"red\" size=\"" + fontSize + "\"><b>House Mail: </b></font>" + message);
                         }
                     }
                 }
@@ -202,8 +202,8 @@ public class CH extends Command {
             else if (nextString.startsWith("(Error Log):")) {
                 message = nextString.substring(nextString.indexOf(":") + 1);
                 message = mwclient.getShortTime() + message;
-                mwclient.addToChat(message, CCommPanel.CHANNEL_ERROR);
-            }// end ErrorLog
+                mwclient.getGUIClient().addToChat(message, CCommPanel.CHANNEL_ERROR);
+            }// end Erro.getGUIClient()rLog
 
             else if (nextString.startsWith("(In Character)")) {
 
@@ -317,11 +317,11 @@ public class CH extends Command {
                         message = mwclient.getShortTime() + message;
                     }
 
-                    mwclient.addToChat(message, CCommPanel.CHANNEL_RPG);
+                    mwclient.getGUIClient().addToChat(message, CCommPanel.CHANNEL_RPG);
 
                     // also add to main, if configured to do so
                     if (mwclient.getConfig().isParam("MAINCHANNELRPG")) {
-                        mwclient.addToChat("<font color=\"red\" size=\"" + fontSize + "\"><b>In Character: </b></font>" + message);
+                        mwclient.getGUIClient().addToChat("<font color=\"red\" size=\"" + fontSize + "\"><b>In Character: </b></font>" + message);
                     }
                 }
             }// end In Character
@@ -424,7 +424,7 @@ public class CH extends Command {
                     }
 
                     // append message to chat
-                    mwclient.addToChat(message);
+                    mwclient.getGUIClient().addToChat(message);
                 }
             }
 
@@ -448,7 +448,7 @@ public class CH extends Command {
                     message = nextString;
                 }
                 wasSystemMessage = true;
-                mwclient.addToChat(message);
+                mwclient.getGUIClient().addToChat(message);
             }
 
             /*
@@ -468,7 +468,7 @@ public class CH extends Command {
                     }
 
                     // keep logging, even if sound is disabled
-                    mwclient.addToChat(message, CCommPanel.CHANNEL_PLOG);// log the message
+                    mwclient.getGUIClient().addToChat(message, CCommPanel.CHANNEL_PLOG);// log the message
                 }
 
                 else if (mwclient.hasKeyWords(message)) {
@@ -478,7 +478,7 @@ public class CH extends Command {
                     }
 
                     // keep logging, even if sound is disabled
-                    mwclient.addToChat(message, CCommPanel.CHANNEL_PLOG);
+                    mwclient.getGUIClient().addToChat(message, CCommPanel.CHANNEL_PLOG);
                 }
             }
 

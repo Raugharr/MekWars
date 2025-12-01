@@ -298,7 +298,7 @@ public final class TraitDialog implements ActionListener, KeyListener{
 		loadAllFiles();
 		
 		factionComboBox.setSelectedIndex(0);
-		dialog.setLocationRelativeTo(mwclient.getMainFrame());
+		dialog.setLocationRelativeTo(mwclient.getGUIClient().getMainFrame());
 		//Show the dialog and get the user's input
 		dialog.setModal(true);
 		dialog.pack();

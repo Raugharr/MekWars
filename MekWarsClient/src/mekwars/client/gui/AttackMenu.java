@@ -519,7 +519,7 @@ public class AttackMenu extends JMenu implements ActionListener {
             holderPanel.add(attackCombo);
                         
             JOptionPane jop = new JOptionPane(holderPanel, JOptionPane.QUESTION_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
-            JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select army and attack type.");
+            JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select army and attack type.");
             armyCombo.grabFocus();
             armyCombo.getEditor().selectAll();
             dlg.setVisible(true);
@@ -570,7 +570,7 @@ public class AttackMenu extends JMenu implements ActionListener {
             JComboBox attackCombo = new JComboBox(allEligibles.toArray());
             attackCombo.setEditable(false);
             JOptionPane jop = new JOptionPane(attackCombo, JOptionPane.QUESTION_MESSAGE,JOptionPane.OK_CANCEL_OPTION);
-            JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select an operation.");
+            JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select an operation.");
             dlg.setVisible(true);
             
             if ( (Integer)jop.getValue() == JOptionPane.CANCEL_OPTION )

@@ -65,6 +65,7 @@ import megamek.common.icons.Camouflage;
 import megamek.common.icons.FileCamouflage;
 import mekwars.client.GUIClientConfig;
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 import mekwars.client.campaign.CArmy;
 import mekwars.client.campaign.CBMUnit;
 import mekwars.client.campaign.CPlayer;
@@ -145,8 +146,8 @@ public class CHQPanel extends JPanel {
      */
     public void reinitialize() {
 
-        // mwclient.getMainFrame().getMainPanel().selectFirstTab();
-        // mwclient.getMainFrame().getMainPanel().getCommPanel().selectFirstTab();
+        // mwclient.getGUIClient().getMainFrame().getMainPanel().selectFirstTab();
+        // mwclient.getGUIClient().getMainFrame().getMainPanel().getCommPanel().selectFirstTab();
 
         // remove all the old components.
         removeAll();
@@ -269,7 +270,7 @@ public class CHQPanel extends JPanel {
         if (mwclient.getPlayer().getArmies().size() == 0)
             return;
         //get confirm
-        int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to remove all of your armies?", "Remove all armies?", JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to remove all of your armies?", "Remove all armies?", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.NO_OPTION)
               return;        //Baruk Khazad! 20151204 - end block 1
         // only remove all if he's logged in, not fighting/active/logout/discon
@@ -296,7 +297,7 @@ public class CHQPanel extends JPanel {
 
     private void reloadAllUnitsButtonActionPerformed(ActionEvent evt) {
         if (mwclient.getPlayer().getHangar().size() > 0) {
-            int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to reload all the ammo on all your units?", "Reload all units?", JOptionPane.YES_NO_OPTION);
+            int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to reload all the ammo on all your units?", "Reload all units?", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
                 for (CUnit unit : mwclient.getPlayer().getHangar()) {
@@ -316,7 +317,7 @@ public class CHQPanel extends JPanel {
 
     private void setCamoButtonActionPerformed(ActionEvent evt) {
         FileCamouflage fileCamouflage = new FileCamouflage(new File(Configuration.camoDir(), mwclient.getConfigParam("UNITCAMO")));
-        CamoChooserDialog camoDialog = new CamoChooserDialog(mwclient.getMainFrame(), fileCamouflage);
+        CamoChooserDialog camoDialog = new CamoChooserDialog(mwclient.getGUIClient().getMainFrame(), fileCamouflage);
         if(camoDialog.showDialog().isConfirmed()) {
             Camouflage selectedItem = camoDialog.getSelectedItem();
             mwclient.getConfig().setParam("UNITCAMO", selectedItem.getCategory() + selectedItem.getFilename());
@@ -324,8 +325,8 @@ public class CHQPanel extends JPanel {
             mwclient.setConfig();
             // then reload images and update the GUI
             mwclient.getConfig().loadImage(GUIClientConfig.CAMO_PATH + selectedItem.getCategory() + selectedItem.getFilename(), "CAMO", 84, 72);
-            mwclient.getMainFrame().getMainPanel().selectFirstTab();
-            mwclient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
+            mwclient.getGUIClient().getMainFrame().getMainPanel().selectFirstTab();
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel().reinitialize();
         }
     }
 
@@ -2097,7 +2098,7 @@ public class CHQPanel extends JPanel {
                 // check attack options
             } else if (command.equalsIgnoreCase("AO")) {
                 int lid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderCheckAttack_actionPerformed(lid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderCheckAttack_actionPerformed(lid);
                 // check access
             } else if (command.equalsIgnoreCase("CAA")) {
                 int armyID = Integer.parseInt(st.nextToken());
@@ -2108,7 +2109,7 @@ public class CHQPanel extends JPanel {
                 attackCombo.getEditor().selectAll();
 
                 JOptionPane jop = new JOptionPane(attackCombo, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-                JDialog dlg = jop.createDialog(mwclient.getMainFrame(), "Select Operation.");
+                JDialog dlg = jop.createDialog(mwclient.getGUIClient().getMainFrame(), "Select Operation.");
                 attackCombo.grabFocus();
                 attackCombo.getEditor().selectAll();
                 dlg.setVisible(true);
@@ -2122,34 +2123,34 @@ public class CHQPanel extends JPanel {
                 // Remove Army
             } else if (command.equalsIgnoreCase("RA")) {
                 int lid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderRemoveLance_actionPerformed(lid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderRemoveLance_actionPerformed(lid);
                 // rename army
             } else if (command.equalsIgnoreCase("LA")) {
                 int lid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderPlayerLockArmy_actionPerformed(lid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderPlayerLockArmy_actionPerformed(lid);
                 // lock army
             } else if (command.equalsIgnoreCase("ULA")) {
                 int lid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderPlayerUnlockArmy_actionPerformed(lid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderPlayerUnlockArmy_actionPerformed(lid);
                 // unlock army
             } else if (command.equalsIgnoreCase("DAA")) {
                 int lid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderDisableArmy_actionPerformed(lid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderDisableArmy_actionPerformed(lid);
             } else if (command.equalsIgnoreCase("NA")) {
                 int mid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderNameArmy_actionPerformed(mid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderNameArmy_actionPerformed(mid);
                 // set Lower Unit Limit
             } else if (command.equalsIgnoreCase("SLUL")) {
                 int lid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderSetLowerUnitLimit_actionPerformed(lid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderSetLowerUnitLimit_actionPerformed(lid);
                 // set upper Unit Limit
             } else if (command.equalsIgnoreCase("SUUL")) {
                 int lid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderSetUpperUnitLimit_actionPerformed(lid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderSetUpperUnitLimit_actionPerformed(lid);
                 // Set Force Size you plan on facing
             } else if (command.equalsIgnoreCase("SFS")) {
                 int aid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderSetForceSizeToFace_actionPerformed(aid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderSetForceSizeToFace_actionPerformed(aid);
                 // showtofaction - army
             } else if (command.equalsIgnoreCase("SATH")) {
                 int lid = Integer.parseInt(st.nextToken());
@@ -2575,7 +2576,7 @@ public class CHQPanel extends JPanel {
                 // rename pilot
             } else if (command.equalsIgnoreCase("RP")) {
                 int mid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderNamePilot_actionPerformed(mid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderNamePilot_actionPerformed(mid);
                 // Promote Pilot
             } else if (command.equalsIgnoreCase("PP")) {
                 int mid = Integer.parseInt(st.nextToken());
@@ -2671,7 +2672,7 @@ public class CHQPanel extends JPanel {
                 int row = Integer.parseInt(st.nextToken());
                 int col = Integer.parseInt(st.nextToken());
                 CUnit mek = MekTable.getMekAt(row, col);
-                int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to reload all the ammo on this unit " + mwclient.getPlayer().getName() + "?", "Reload it?", JOptionPane.YES_NO_OPTION);
+                int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to reload all the ammo on this unit " + mwclient.getPlayer().getName() + "?", "Reload it?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RELOADALLAMMO#" + mek.getId());
                 }
@@ -2725,7 +2726,7 @@ public class CHQPanel extends JPanel {
                 // transfer mek
             } else if (command.equalsIgnoreCase("TM")) {
                 int mid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderTransferUnit_actionPerformed(null, mid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderTransferUnit_actionPerformed(null, mid);
                 // repod mek
             } else if (command.equalsIgnoreCase("RM")) {
                 int mid = Integer.parseInt(st.nextToken());
@@ -2733,7 +2734,7 @@ public class CHQPanel extends JPanel {
                 // add to bm
             } else if (command.equalsIgnoreCase("AB")) {
                 int mid = Integer.parseInt(st.nextToken());
-                mwclient.getMainFrame().jMenuCommanderAddToBM_actionPerformed(mid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderAddToBM_actionPerformed(mid);
                 // remove from market
             } else if (command.equalsIgnoreCase("RFM")) {
                 int mid = Integer.parseInt(st.nextToken());
@@ -2747,11 +2748,11 @@ public class CHQPanel extends JPanel {
                 // direct sell unit
             } else if (command.equalsIgnoreCase("DSU")) {
                 String mid = st.nextToken();
-                mwclient.getMainFrame().jMenuCommanderDirectSell_actionPerformed(null, mid);
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderDirectSell_actionPerformed(null, mid);
                 // scrap mek
             } else if (command.equalsIgnoreCase("S")) {
                 int num = Integer.parseInt(st.nextToken());
-                int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to scrap this unit?", "Scrap it?", JOptionPane.YES_NO_OPTION);
+                int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to scrap this unit?", "Scrap it?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c scrap#" + num);
                     // Maintain Mek
@@ -2759,24 +2760,24 @@ public class CHQPanel extends JPanel {
             //@Salient for SOL freebuild option
             } else if (command.equalsIgnoreCase("DL")) {
                 int num = Integer.parseInt(st.nextToken());
-                //int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to Remove this unit?", "Delete it?", JOptionPane.YES_NO_OPTION);
+                //int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to Remove this unit?", "Delete it?", JOptionPane.YES_NO_OPTION);
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "SOLDELETEUNIT " + num);
             } else if (command.equalsIgnoreCase("MM")) {
                 int num = Integer.parseInt(st.nextToken());
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setmaintained#" + num);
-                mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
+                mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
                 // unmaintain mek
             } else if (command.equalsIgnoreCase("UMM")) {
                 int num = Integer.parseInt(st.nextToken());
-                int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to stop maintaining this unit?", "Unmaintain?", JOptionPane.YES_NO_OPTION);
+                int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to stop maintaining this unit?", "Unmaintain?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setunmaintained#" + num);
                 }
-                mwclient.refreshGUI(MWClient.REFRESH_HQPANEL);
+                mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
                 // donate mek
             } else if (command.equalsIgnoreCase("DO")) {
                 int mid = Integer.parseInt(st.nextToken());
-                int result = JOptionPane.showConfirmDialog(mwclient.getMainFrame(), "Are you sure you want to donate this unit?", "Donate?", JOptionPane.YES_NO_OPTION);
+                int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to donate this unit?", "Donate?", JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {
                     mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c donate#" + mid);
                     // buy mek
@@ -2806,9 +2807,9 @@ public class CHQPanel extends JPanel {
                 int pid = Integer.parseInt(st.nextToken());
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXP#" + uid + "#" + pid);
             } else if (command.equalsIgnoreCase("FET")) {// fire excess techs
-                mwclient.getMainFrame().jMenuCommanderFireTechs_actionPerformed();
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderFireTechs_actionPerformed();
             } else if (command.equalsIgnoreCase("SEB")) {// sell excess bays
-                mwclient.getMainFrame().jMenuCommanderSellBays_actionPerformed();
+                mwclient.getGUIClient().getMainFrame().jMenuCommanderSellBays_actionPerformed();
             } else if (command.equals("RPU")) {// reposition unit
                 int armyid = Integer.parseInt(st.nextToken());
                 int unitid = Integer.parseInt(st.nextToken());

@@ -21,6 +21,7 @@ import java.util.StringTokenizer;
 
 import mekwars.client.CUser;
 import mekwars.client.MWClient;
+import mekwars.client.GUIClient;
 
 /**
  * @author Imi (immanuel.scholz@gmx.de)
@@ -51,7 +52,7 @@ public class UG extends Command {
             user = mwclient.getUser(mmci.getName());
         }
 
-        mwclient.refreshGUI(MWClient.REFRESH_USERLIST);
+        mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_USERLIST);
 
         if (mwclient.isDedicated()){
             return;
@@ -71,7 +72,7 @@ public class UG extends Command {
             	toSend = mwclient.getShortTime() + toSend;
             
             if (mwclient.getConfig().isParam("SHOWENTERANDEXIT") && !mmci.getName().equalsIgnoreCase("Nobody"))
-            	mwclient.addToChat(toSend);
+            	mwclient.getGUIClient().addToChat(toSend);
             
             //Play the sound
             mwclient.doPlaySound(mwclient.getConfigParam("SOUNDONEXIT"));

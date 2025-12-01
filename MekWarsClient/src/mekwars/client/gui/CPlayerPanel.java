@@ -196,7 +196,7 @@ public class CPlayerPanel extends JScrollPane {
 
         if (mwclient.getConfig().isParam("LOGO")) {
             try{
-                lblLogo.setBackground(mwclient.getMainFrame().getBackground());
+                lblLogo.setBackground(mwclient.getGUIClient().getMainFrame().getBackground());
                 lblLogo.getDocument().remove(0,lblLogo.getDocument().getLength());
                 ((HTMLEditorKit) lblLogo.getEditorKit()).read(
                     new StringReader(mwclient.getPlayer().getLogo()), lblLogo.getDocument(),0);

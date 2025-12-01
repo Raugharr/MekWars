@@ -135,7 +135,7 @@ public class BT extends Command {
 				while(st.hasMoreTokens())
 					p.println(st.nextToken());
 				if ( isMod ){
-				    mwclient.addToChat("Received build table " + folder + "/" + table,CCommPanel.CHANNEL_MISC);
+				    mwclient.getGUIClient().addToChat("Received build table " + folder + "/" + table,CCommPanel.CHANNEL_MISC);
 				}
 				p.close();
 				try {

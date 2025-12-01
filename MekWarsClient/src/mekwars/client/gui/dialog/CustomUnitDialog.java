@@ -137,7 +137,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
 
     /** Creates new CustomMechDialog */
     public CustomUnitDialog(MWClient mwclient, Entity entity, Pilot pilot, CUnit unit) {
-        super(mwclient.getMainFrame());
+        super(mwclient.getGUIClient().getMainFrame());
 
         this.entity = entity;
         this.mwclient = mwclient;
@@ -882,11 +882,11 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 try {
                     offBoardDistance = Integer.parseInt(fldOffBoardDistance.getText());
                 } catch (NumberFormatException e) {
-                    mwclient.showInfoWindow("Please enter valid numbers for off board distance.");
+                    mwclient.getGUIClient().showInfoWindow("Please enter valid numbers for off board distance.");
                     return;
                 }
                 if (offBoardDistance < 17) {
-                    mwclient.showInfoWindow("Offboard units need to be at least one mapsheet (17 hexes) away.");
+                    mwclient.getGUIClient().showInfoWindow("Offboard units need to be at least one mapsheet (17 hexes) away.");
                     return;
                 }
                 entity.setOffBoard(offBoardDistance, OffBoardDirection.NORTH);

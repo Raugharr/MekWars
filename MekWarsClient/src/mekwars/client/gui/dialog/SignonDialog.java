@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2004 
+ * MekWars - Copyright (C) 2025 
  * 
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
@@ -17,160 +17,338 @@
 
 package mekwars.client.gui.dialog;
 
-import java.awt.GridLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Set;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import mekwars.client.MWClient;
-import mekwars.client.common.ServerInfo;
 import mekwars.client.gui.SplashWindow;
 
-public final class SignonDialog implements ActionListener {
+public final class SignonDialog extends JDialog implements ActionListener {
+    private static final int DIALOG_WIDTH = 450;
+    private static final int DIALOG_HEIGHT = 300;
 	
-	private static final String usernameCommand = "user";
-	private static final String passwordCommand = "password";
-	private static final String okayCommand = "okay";
-	private static final String cancelCommand = "cancel";
-	private static final String windowName = "MekWars Login";
-	private static final String ipaddressCommand = "ip address";
-	private static final String chatPortCommand = "chatport";
-	private static final String dataPortCommand = "dataport";
+	private static final String USERNAME_COMMAND = "user";
+	private static final String PASSWORD_COMMAND = "password";
+	private static final String OKAY_COMMAND = "okay";
+	private static final String CANCEL_COMMAND = "cancel";
+	private static final String IP_ADDRESS_COMMAND = "ip address";
+	private static final String CHAT_PORT_COMMAND = "chatport";
+	private static final String DATA_PORT_COMMAND = "dataport";
 	
-	private final JTextField usernameField = new JTextField();
-	private final JPasswordField passwordField = new JPasswordField();
-	private final JTextField ipaddressField = new JTextField();
-	private final JTextField chatPortField = new JTextField();
-	private final JTextField dataPortField = new JTextField();
 	
-	private final JButton okayButton = new JButton("OK");
-	private final JButton cancelButton = new JButton("Cancel");
+    private JCheckBox savePassword;
+	private JCheckBox autoconnect;
 	
-	private JDialog dialog;
-	private JOptionPane pane;
     private MWClient mwClient;
-	
-	public SignonDialog(MWClient mwClient) {
-        this.mwClient = mwClient;
-		
-		// Create the labels and buttons
-		JLabel usernameLabel  = new JLabel("Username: ", SwingConstants.LEFT);
-		JLabel passwordLabel  = new JLabel("Password (none if unregistered): ", SwingConstants.LEFT);
-		JLabel ipaddressLabel = new JLabel("IP Address: ",SwingConstants.LEFT);
-		JLabel chatPortLabel  = new JLabel("Chat Port: ",SwingConstants.LEFT);
-		JLabel dataPortLabel  = new JLabel("Data Port: ",SwingConstants.LEFT);
-		
-		// Set the actions to generate
-		usernameField.setActionCommand(usernameCommand);
-		passwordField.setActionCommand(passwordCommand);
-		chatPortField.setActionCommand(chatPortCommand);
-		dataPortField.setActionCommand(dataPortCommand);
-		ipaddressField.setActionCommand(ipaddressCommand);
-		okayButton.setActionCommand(okayCommand);
-		cancelButton.setActionCommand(cancelCommand);
-		
-		// Set the listeners to this object
-		usernameField.addActionListener(this);
-		passwordField.addActionListener(this);
-		ipaddressField.addActionListener(this);
-		chatPortField.addActionListener(this);
-		okayButton.addActionListener(this);
-		cancelButton.addActionListener(this);
-		
-		// Set tool tips (balloon help)
-		usernameLabel.setToolTipText("Username for remote systems");
-		passwordLabel.setToolTipText("Password for remote systems");
-		ipaddressLabel.setToolTipText("IP address for remote systems");
-		chatPortLabel.setToolTipText("Port which server uses to host chat");
-		dataPortLabel.setToolTipText("Port which server uses to host data");
-		okayButton.setToolTipText("Use this username and password");
-		cancelButton.setToolTipText("Quit MekWars");
-		ipaddressField.setToolTipText("IP address for remote systems");
-		
-		// Create the panel holding the labels and text fields
-		JPanel textPanel = new JPanel(new GridLayout(5,4), false);
-		textPanel.add(usernameLabel);
-		textPanel.add(usernameField);
-		textPanel.add(passwordLabel);
-		textPanel.add(passwordField);
-		textPanel.add(ipaddressLabel);
-		textPanel.add(ipaddressField);
-		textPanel.add(chatPortLabel);
-		textPanel.add(chatPortField);
-		textPanel.add(dataPortLabel);
-		textPanel.add(dataPortField);
-		
-		// Create the panel that will hold the entire UI
-		JPanel mainPanel = new JPanel(false);
-		
-		// Set the user's options
-		Object[] options = {okayButton, cancelButton};
-		
-		// Create the pane containing the buttons
-		pane = new JOptionPane(textPanel, JOptionPane.PLAIN_MESSAGE,
-				JOptionPane.DEFAULT_OPTION, null, options,
-				usernameField);
-		
-		// Create the main dialog and set the default button
-		dialog = pane.createDialog(mainPanel, windowName);
-		dialog.getRootPane().setDefaultButton(okayButton);
-		
-		//Is a username known? if so, show it..
-		usernameField.setText(mwClient.getConfig().getParam("NAME"));
-		passwordField.setText(mwClient.getConfig().getParam("NAMEPASSWORD"));
-		ipaddressField.setText(mwClient.getConfig().getParam("SERVERIP"));
-		chatPortField.setText(mwClient.getConfig().getParam("SERVERPORT"));
-		dataPortField.setText(mwClient.getConfig().getParam("DATAPORT"));
-		
-		// Show the dialog and get the user's input
-		dialog.setVisible(true);
-		dialog.requestFocus();
-		usernameField.requestFocus();
-		dialog.setLocationRelativeTo(mwClient.getMainFrame());
-		if (pane.getValue() == okayButton) {
-			mwClient.getConfig().setParam("NAME",usernameField.getText());
-			mwClient.setUsername(usernameField.getText());
-			mwClient.setPassword(new String(passwordField.getPassword()));
-			mwClient.getConfig().setParam("SERVERPORT",chatPortField.getText());
-			mwClient.getConfig().setParam("DATAPORT", dataPortField.getText());
-			mwClient.getConfig().setParam("SERVERIP",ipaddressField.getText());
-		} else {
-            //not ok with signing on? ok. quit!
-            System.exit(0);
-        }
-	}
+    private ResourceBundle resourceMap;
+    private JTextField usernameField = new JTextField();
+    private JPasswordField passwordField;
+    private JTextField ipaddressField;
+    private JTextField chatPortField;
+    private JTextField dataPortField;
 
-	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand();
-		if (command.equals(usernameCommand)) {
-			passwordField.requestFocus();
-		} else if (command.equals(passwordCommand)) {
-			ipaddressField.requestFocus();
-		} 
-		else if ( command.equals(ipaddressCommand)){
-			chatPortField.requestFocus();
-		} else if ( command.equals(chatPortCommand)){
-			dataPortField.requestFocus();
-		} else if (command.equals(dataPortCommand)){
-			okayButton.doClick(200);
-			pane.setValue(okayButton);
-			dialog.dispose();
-		} else if (command.equals(okayCommand)) {
-			pane.setValue(okayButton);
-			dialog.dispose();
+    public SignonDialog(MWClient mwClient, Locale locale) {
+        this(null, mwClient, locale);
+    }
+
+    public SignonDialog(JFrame parent, MWClient mwClient, Locale locale) {
+        this.mwClient = mwClient;
+        this.resourceMap = ResourceBundle.getBundle("mekwars.SignonDialog", locale);
+        setupLayout(
+            mwClient.getConfig().getParam("NAME"),
+            mwClient.getConfig().getParam("NAMEPASSWORD"),
+            mwClient.getConfig().getParam("SERVERIP"),
+            mwClient.getConfig().getParam("SERVERPORT"),
+            mwClient.getConfig().getParam("DATAPORT"),
+            Boolean.valueOf(mwClient.getConfig().getParam("NAMEPASSWORDSAVED")),
+            Boolean.valueOf(mwClient.getConfig().getParam("AUTOCONNECT"))
+        );
+        setLocationRelativeTo(parent);
+    }
+
+    public SignonDialog(MWClient mwClient, Locale locale, String hostname, String chatPort,
+            String dataPort) {
+        this(null, mwClient, locale, hostname, chatPort, dataPort);
+    }
+
+    public SignonDialog(JFrame parent, MWClient mwClient, Locale locale, String hostname,
+            String chatPort, String dataPort) {
+        super(parent, true);
+        this.mwClient = mwClient;
+        this.resourceMap = ResourceBundle.getBundle("mekwars.SignonDialog", locale);
+        setupLayout(
+            mwClient.getConfig().getParam("NAME"),
+            mwClient.getConfig().getParam("NAMEPASSWORD"),
+            hostname,
+            chatPort,
+            dataPort,
+            Boolean.valueOf(mwClient.getConfig().getParam("NAMEPASSWORDSAVED")),
+            Boolean.valueOf(mwClient.getConfig().getParam("AUTOCONNECT"))
+        );
+        setLocationRelativeTo(parent);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        if (USERNAME_COMMAND.equals(command)) {
+            ((Component) e.getSource()).requestFocus();
+        } else if (PASSWORD_COMMAND.equals(command)) {
+            ((Component) e.getSource()).requestFocus();
+        } else if (IP_ADDRESS_COMMAND.equals(command)) {
+            ((Component) e.getSource()).requestFocus();
+        } else if (CHAT_PORT_COMMAND.equals(command)) {
+            ((Component) e.getSource()).requestFocus();
+        } else if (DATA_PORT_COMMAND.equals(command)) {
+            JButton okayButton = (JButton) e.getSource();
+            okayButton.doClick(200);
+            dispose();
+        } else if (OKAY_COMMAND.equals(command)) {
+            connect();
+            dispose();
             mwClient.connectDataFetcher();
-            SplashWindow splashWindow = new SplashWindow(mwClient, Locale.US);
+            SplashWindow splashWindow = new SplashWindow(mwClient, resourceMap.getLocale());
             splashWindow.setVisible(true);
-		} else if (command.equals(cancelCommand)) {
-			pane.setValue(cancelButton);
-			dialog.dispose();
-		}
-	}
+        } else if (CANCEL_COMMAND.equals(command)) {
+            dispose();
+        }
+    }
+
+    protected void setupLayout(String username, String password, String hostname, String chatPort,
+            String dataPort, boolean shouldSavePassword, boolean shouldAutoconnect) {
+
+        setTitle(resourceMap.getString("title.text"));
+        setMinimumSize(new Dimension(DIALOG_WIDTH, DIALOG_HEIGHT));
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+
+        setLayout(new GridBagLayout());
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        add(setupPane(), constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        add(setupButtonPane(), constraints);
+
+        pack();
+        setVisible(true);
+        
+        ////Is a username known? if so, show it..
+        usernameField.setText(username);
+        if (shouldSavePassword) {
+            passwordField.setText(password);
+        }
+        ipaddressField.setText(hostname);
+        chatPortField.setText(chatPort);
+        dataPortField.setText(dataPort);
+        savePassword.setSelected(shouldSavePassword);
+        autoconnect.setSelected(shouldAutoconnect);
+    }
+
+    protected JPanel setupPane() {
+        JPanel textPane = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(5, 5, 5, 5);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+
+        final Set forwardKeys = textPane.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS);
+        final Set newForwardKeys = new HashSet(forwardKeys);
+        newForwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+        textPane.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, newForwardKeys);
+
+        JLabel usernameLabel = new JLabel(
+            resourceMap.getString("username.text"),
+            SwingConstants.LEFT
+        );
+        usernameLabel.setToolTipText(resourceMap.getString("username.tooltip"));
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.weightx = 0.2;
+        textPane.add(usernameLabel, constraints);
+
+        usernameField = new JTextField();
+        usernameField.setActionCommand(USERNAME_COMMAND);
+        usernameField.addActionListener(this);
+        usernameField.setToolTipText(resourceMap.getString("username.tooltip"));
+        usernameField.setName("usernameField");
+        constraints.gridy = 0;
+        constraints.gridx = 1;
+        constraints.weightx = 0.60;
+        textPane.add(usernameField, constraints);
+
+        constraints.weightx = 0.0;
+
+        JLabel passwordLabel = new JLabel(
+            resourceMap.getString("password.text"),
+            SwingConstants.LEFT
+        );
+        passwordLabel.setToolTipText(resourceMap.getString("password.tooltip"));
+        constraints.gridy = 1;
+        constraints.gridx = 0;
+        textPane.add(passwordLabel, constraints);
+
+        passwordField = new JPasswordField();
+        passwordField.setActionCommand(PASSWORD_COMMAND);
+        passwordField.addActionListener(this);
+        passwordField.setToolTipText(resourceMap.getString("password.tooltip"));
+        passwordField.setName("passwordField");
+        constraints.gridy = 1;
+        constraints.gridx = 1;
+        textPane.add(passwordField, constraints);
+
+        JLabel ipaddressLabel = new JLabel(
+            resourceMap.getString("ipAddress.text"),
+            SwingConstants.LEFT
+        );
+        ipaddressLabel.setToolTipText(resourceMap.getString("ipAddress.tooltip"));
+        constraints.gridy = 2;
+        constraints.gridx = 0;
+        textPane.add(ipaddressLabel, constraints);
+
+        ipaddressField = new JTextField();
+        ipaddressField.addActionListener(this);
+        ipaddressField.setActionCommand(IP_ADDRESS_COMMAND);
+        ipaddressField.setToolTipText(resourceMap.getString("ipAddress.tooltip"));
+        ipaddressField.setName("ipaddressField");
+        constraints.gridy = 2;
+        constraints.gridx = 1;
+        textPane.add(ipaddressField, constraints);
+
+        JLabel chatPortLabel = new JLabel(
+            resourceMap.getString("chatPort.text"),
+            SwingConstants.LEFT
+        );
+        chatPortLabel.setToolTipText(resourceMap.getString("chatPort.tooltip"));
+        constraints.gridy = 3;
+        constraints.gridx = 0;
+        textPane.add(chatPortLabel, constraints);
+
+        chatPortField = new JTextField();
+        chatPortField.addActionListener(this);
+        chatPortField.setActionCommand(CHAT_PORT_COMMAND);
+        chatPortField.setToolTipText(resourceMap.getString("chatPort.tooltip"));
+        chatPortField.setName("chatPortField");
+        constraints.gridy = 3;
+        constraints.gridx = 1;
+        textPane.add(chatPortField, constraints);
+
+        JLabel dataPortLabel = new JLabel(
+            resourceMap.getString("dataPort.text"),
+            SwingConstants.LEFT
+        );
+        dataPortLabel.setToolTipText(resourceMap.getString("dataPort.tooltip"));
+        constraints.gridy = 4;
+        constraints.gridx = 0;
+        textPane.add(dataPortLabel, constraints);
+
+        dataPortField = new JTextField();
+        dataPortField.setActionCommand(DATA_PORT_COMMAND);
+        dataPortField.setToolTipText(resourceMap.getString("dataPort.tooltip"));
+        dataPortField.setName("dataPortField");
+        constraints.gridy = 4;
+        constraints.gridx = 1;
+        textPane.add(dataPortField, constraints);
+
+        savePassword = new JCheckBox(resourceMap.getString("savePassword.text"));
+        savePassword.addItemListener((e) -> {
+            if (e.getStateChange() == ItemEvent.DESELECTED) {
+                autoconnect.setSelected(false);
+            }
+        });
+        savePassword.setName("savePassword");
+        constraints.gridy = 5;
+        constraints.gridx = 0;
+        textPane.add(savePassword, constraints);
+
+        autoconnect = new JCheckBox(resourceMap.getString("autoconnect.text"));
+        autoconnect.setName("autoconnect");
+        autoconnect.addItemListener((e) -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                savePassword.setSelected(true);
+            }
+        });
+        constraints.gridy = 5;
+        constraints.gridx = 1;
+        textPane.add(autoconnect, constraints);
+        return textPane;
+    }
+
+    protected JPanel setupButtonPane() {
+        JPanel buttonPane = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(5, 5, 5, 5);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+
+        constraints = new GridBagConstraints();
+        constraints.insets = new Insets(5, 5, 5, 5);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+
+        JButton okayButton = new JButton(resourceMap.getString("okayButton.text"));
+        okayButton.setActionCommand(OKAY_COMMAND);
+        okayButton.addActionListener(this);
+        okayButton.setName("ok");
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.weightx = 0.8;
+        constraints.anchor = GridBagConstraints.CENTER;
+        buttonPane.add(okayButton, constraints);
+
+        JButton cancelButton = new JButton(resourceMap.getString("cancelButton.text"));
+        cancelButton.setActionCommand(CANCEL_COMMAND);
+        cancelButton.addActionListener(this);
+        cancelButton.setName("cancel");
+        constraints.gridy = 0;
+        constraints.gridx = 1;
+        constraints.weightx = 0.2;
+        buttonPane.add(cancelButton, constraints);
+        return buttonPane;
+
+    }
+
+    protected void connect() {
+       mwClient.setUsername(usernameField.getText());
+       mwClient.getConfig().setParam("NAME", usernameField.getText());
+       mwClient.getConfig().setParam("SERVERPORT", chatPortField.getText());
+       mwClient.getConfig().setParam("DATAPORT", dataPortField.getText());
+       mwClient.getConfig().setParam("SERVERIP", ipaddressField.getText());
+       mwClient.getConfig().setParam(
+           "NAMEPASSWORDSAVED",
+           String.valueOf(savePassword.isSelected())
+       );
+       mwClient.getConfig().setParam("AUTOCONNECT", String.valueOf(autoconnect.isSelected()));
+       if (savePassword.isSelected()) {
+           mwClient.getConfig().setParam(
+               "NAMEPASSWORD",
+               String.valueOf(passwordField.getPassword())
+           );
+       } else {
+           mwClient.getConfig().setParam("NAMEPASSWORD", "");
+       }
+       mwClient.setPassword(String.valueOf(passwordField.getPassword()));
+       mwClient.getConfig().saveConfig();
+    }
 }
