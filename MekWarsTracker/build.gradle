@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-	id 'java-common-conventions'
+    id 'java-common-conventions'
 }
 
 sourceSets {
@@ -8,32 +8,33 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
-	}
+    }
 }
 
 dependencies {
-	implementation project(':MekWarsCommon')
+    implementation project(':MekWarsCommon')
 }
 
 application {
-	mainClassName = 'mekwars.tracker.MWTracker'
+    mainClassName = 'mekwars.tracker.MWTracker'
     applicationDefaultJvmArgs = [
-			'-Dlog4j2.configurationFile=log4j2.xml',
+            '-Dlog4j2.configurationFile=log4j2.xml',
             '-Xmx4096m',
             '-Dsun.awt.disablegrab=true'
     ]
 }
 
 jar {
-	archiveFileName = 'MekWarsTracker.jar'
-	manifest {
-		attributes(
-		  'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
-		  'Main-Class': mainClassName
-		)
-	}
+    archiveFileName = 'MekWarsTracker.jar'
+    manifest {
+        attributes(
+          'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+          'Main-Class': mainClassName
+        )
+    }
 }
 
 test {  
+    jvmArgs "-Dlog4j2.configurationFile=log4j2.xml"
     useJUnitPlatform()
 }

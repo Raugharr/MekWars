@@ -22,7 +22,7 @@ sourceSets {
 
 dependencies {
     implementation project(':MekWarsCommon')
-	implementation 'org.jsoup:jsoup:1.21.2'
+    implementation 'org.jsoup:jsoup:1.21.2'
     testImplementation "org.mockito:mockito-junit-jupiter:5.11.0"
     testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
     testImplementation "org.mockito:mockito-junit-jupiter:5.11.0"
@@ -59,6 +59,11 @@ jar {
 
 task stageFiles(type: Copy) {
     description = 'Stages files that are to be copied into the distribution.'
+
+    file(fileStagingDir).mkdirs()
+    File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
+    batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
+    from batFile
     from serverdist
     into fileStagingDir
 }
@@ -97,5 +102,6 @@ distributions {
 }
 
 test {  
+    jvmArgs "-Dlog4j2.configurationFile=log4j2.xml"
     useJUnitPlatform()
 }
