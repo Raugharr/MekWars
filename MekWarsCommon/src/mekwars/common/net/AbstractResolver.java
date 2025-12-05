@@ -16,6 +16,8 @@
 
 package mekwars.common.net;
 
+import java.io.IOException;
+
 /*
  * Base class that is capable of resolving a packet recieved by a {@link ConnectionHandler}
  */
@@ -40,5 +42,5 @@ public abstract class AbstractResolver<S extends AbstractPacket, T extends Conne
      * Called when the {@link ConnectionHandler} has recieved a packet that can be resolved by this
      * class.
      */
-    protected abstract void receive(S message, T connection);
+    protected abstract void receive(S message, T connection) throws IOException;
 }

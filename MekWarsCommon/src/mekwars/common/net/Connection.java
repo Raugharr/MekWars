@@ -21,16 +21,23 @@ import com.esotericsoftware.kryo.io.ByteBufferInput;
 import com.esotericsoftware.kryo.io.ByteBufferOutput;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import mekwars.common.net.packets.PacketType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Connection {
-    private static final Logger logger = LogManager.getLogger(Connection.class);
+public class Connection implements AutoCloseable {
+    public static final int HEARTBEAT_INTERVAL = 20_000;
+    public static final int HEARTBEAT_TIMEOUT = HEARTBEAT_INTERVAL * 2;
+    private static final Logger LOGGER = LogManager.getLogger(Connection.class);
+    private static long NEXT_ID = 1;
 
+    private long id;
+    private long nextHeartbeat;
     private SocketChannel socket;
     private SelectionKey socketKey;
     private ByteBufferInput input;
@@ -57,29 +64,34 @@ public class Connection {
         return socket.isConnected();
     }
 
+    /*
+     * Connects to the the provided address.
+     * @throws IOException
+     */
     public void connect(InetSocketAddress address) throws IOException {
         if (!isConnected()) {
             socket = SocketChannel.open(address);
-            for (Listener listener : listeners) {
-                listener.connected(this);
-            }
         }
     }
 
     public void close() {
-        if (isConnected()) { 
+        if (isConnected()) {
             output.close();
             input.close();
             try {
                 socket.close();
             } catch (IOException exception) {
-                logger.catching(exception);
+                LOGGER.error("Unable to close Connection", exception);
             }
 
             for (Listener listener : listeners) {
                 listener.disconnected(this);
             }
         }
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getIpAddress() {
@@ -111,16 +123,21 @@ public class Connection {
      * write buffer. Declares to the socket channel that a write is ready to be performed.
      * In order for the packet to be send to the socket, send must be invoked.
      */
-    public void write(AbstractPacket packet) {
+    public void write(AbstractPacket packet) throws IOException {
+        if (!isConnected()) {
+            throw new SocketException("Connection is closed.");
+        }
         synchronized (getOutput()) {
             ByteBuffer buffer = getOutput().getByteBuffer();
 
             getOutput().setBuffer(buffer);
             final int start = buffer.position();
             output.writeInt(0); //Leave space for packet length
-            output.writeInt(packet.getId().getType());
+            output.writeInt(packet.getId().getType(), 2);
+            output.writeBoolean(packet.isSystemPacket());
             kryos.get().writeObject(output, packet);
             final int end = buffer.position();
+            LOGGER.debug("writing {} bytes {}", buffer.position(), packet);
 
             buffer.position(start);
             // Don't count the packet type or length ints.
@@ -129,31 +146,36 @@ public class Connection {
             socketKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
         }
         if (socketKey.isWritable()) {
-            try {
-                send();
-            } catch (Exception exception) {
-                logger.catching(exception);
-                close();
-            }
+            send();
         }
     }
+
 
     /*
      * Writes all data from the Connection's write buffer into the socket.
      */
     public void send() throws IOException {
-        synchronized (getOutput()) {
-            ByteBuffer buffer = getOutput().getByteBuffer();
+        if (!isConnected()) {
+            throw new SocketException("Connection is closed.");
+        }
 
-            socketKey.interestOps(SelectionKey.OP_READ);
-            buffer.flip();
-            while (buffer.hasRemaining()) {
-                if (socket.write(getOutput().getByteBuffer()) == 0) {
-                    socketKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-                    break;
+        try {
+            synchronized (getOutput()) {
+                ByteBuffer buffer = getOutput().getByteBuffer();
+
+                socketKey.interestOps(SelectionKey.OP_READ);
+                buffer.flip();
+                while (buffer.hasRemaining()) {
+                    if (socket.write(getOutput().getByteBuffer()) == 0) {
+                        socketKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+                        break;
+                    }
                 }
+                buffer.compact();
             }
-            buffer.compact();
+        } catch (IOException exception) {
+            LOGGER.error("Unable to send packet", exception);
+            close();
         }
     }
 
@@ -162,25 +184,55 @@ public class Connection {
      * will be deserialized into an AbstractPacket via {@link #readObject}.
      */
     public void read(ConnectionHandler handler) throws IOException {
-        synchronized (getInput()) {
-            ByteBuffer buffer = getInput().getByteBuffer();
-            int bytesRead = socket.read(buffer);
+        if (!isConnected()) {
+            throw new SocketException("Connection is closed.");
+        }
 
-            if (bytesRead == -1) {
-                close(); 
-            }
+        try  {
+            synchronized (getInput()) {
+                ByteBuffer buffer = getInput().getByteBuffer();
+                int bytesRead = socket.read(buffer);
 
-            getInput().setBuffer(buffer);
-            buffer.flip();
-            AbstractPacket packet = readObject(handler);
-            while (packet != null) {
-                handler.processPacket(packet, this);
-                if (buffer.remaining() <= PacketHeader.SIZE) {
-                    break;
+                if (bytesRead == -1) {
+                    close(); 
+                    return;
                 }
-                packet = readObject(handler);
+
+                getInput().setBuffer(buffer);
+                buffer.flip();
+                LOGGER.debug("reading {} bytes", buffer.limit());
+                AbstractPacket packet = readObject(handler);
+                while (packet != null) {
+                    handler.processPacket(packet, this);
+                    if (buffer.remaining() <= PacketHeader.SIZE) {
+                        break;
+                    }
+                    packet = readObject(handler);
+                }
+                buffer.compact();
             }
-            buffer.compact();
+        } catch (IOException exception) {
+            close();
+        }
+    }
+
+    public void heartbeat() {
+        nextHeartbeat = System.currentTimeMillis() + HEARTBEAT_INTERVAL;
+    }
+
+    public void serverHeartbeat() {
+        nextHeartbeat = System.currentTimeMillis() + HEARTBEAT_TIMEOUT;
+    }
+
+    public long getNextHeartbeat() {
+        return nextHeartbeat;
+    }
+
+    public void onConnect() {
+        id = NEXT_ID;
+        NEXT_ID++;
+        for (Listener listener : listeners) {
+            listener.connected(this);
         }
     }
 
@@ -215,18 +267,23 @@ public class Connection {
         AbstractPacket.Type packetType = null;
         
         try {
-            packetType = handler.getPacketType(packetState.getType());
+            if (packetState.isSystemPacket()) {
+                packetType = PacketType.fromInteger(packetState.getType());
+            } else {
+                packetType = handler.getPacketType(packetState.getType());
+            }
         } catch (InvalidPacketException exception) {
-            logger.error("Unable to find packet type: '{}'", packetState.getType());
-            logger.catching(exception);
+            LOGGER.error("Unable to find packet type: '{}'", packetState.getType());
+            LOGGER.catching(exception);
+            packetState = null;
             return null;
         } 
         // Completed reading the packet reset the packetState.
         packetState = null;
-        AbstractPacket packet = kryos.get().readObject(
+        LOGGER.debug("reading packet class: {}", packetType.getPacketClass());
+        return kryos.get().readObject(
           getInput(),
           packetType.getPacketClass()
         );
-        return packet;
     }
 }

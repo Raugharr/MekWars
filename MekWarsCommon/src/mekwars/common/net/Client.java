@@ -16,19 +16,13 @@
 
 package mekwars.common.net;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Output;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Properties;
-import java.util.UUID;
+import mekwars.common.net.packets.Ping;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,7 +32,7 @@ import org.apache.logging.log4j.Logger;
 public abstract class Client extends ConnectionHandler {
     private static final int BUFFER_SIZE = 4096;
     private static final int JOIN_WAIT_TIME = 100;
-    private static final int SELECT_WAIT = 1000;
+    private static final int SELECT_WAIT = 100;
     private static final Logger logger = LogManager.getLogger(Client.class);
 
     private Selector selector;
@@ -46,10 +40,6 @@ public abstract class Client extends ConnectionHandler {
     private ConnectionListener connectionListener;
     private Thread connectionThread;
     
-    public Client() {
-        super();
-    }
-
     /*
      * Attemps to connect to the given address.
      * If the connection is successful, a thread is created to listen to all messages.
@@ -61,10 +51,11 @@ public abstract class Client extends ConnectionHandler {
         socket.configureBlocking(false);
         SelectionKey clientKey = socket.register(selector, SelectionKey.OP_READ);
         connection = createConnection(getKryos(), socket, clientKey, BUFFER_SIZE, BUFFER_SIZE);
+        connection.heartbeat();
         clientKey.attach(connection);
         logger.info("Connected to to {}:{}", connection.getIpAddress(), connection.getPort());
 
-        connectionListener = new ConnectionListener(this, address);
+        connectionListener = new ConnectionListener(this);
         connectionThread = new Thread(connectionListener, "Client Listener");
         connectionThread.start();
     }
@@ -123,6 +114,15 @@ public abstract class Client extends ConnectionHandler {
     }
 
     public boolean isConnected() {
-        return (connection != null && connection.isConnected());
+        return connection != null && connection.isConnected();
+    }
+
+    public void heartbeat() throws Exception {
+        long currentTime = System.currentTimeMillis();
+
+        if (currentTime >= connection.getNextHeartbeat()) {
+            connection.heartbeat();
+            connection.write(new Ping());
+        }
     }
 }

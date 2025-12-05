@@ -21,26 +21,32 @@ import com.esotericsoftware.kryo.io.ByteBufferOutput;
 
 public class PacketHeader {
     // Size of the PacketHeader in bytes.
-    public static final int SIZE = 8;
+    public static final int SIZE = 7;
 
     private int length;
-    private int type;
+    private short type;
+    private boolean systemPacket;
 
-    public PacketHeader(int length, int type) {
+    public PacketHeader(int length, short type, boolean systemPacket) {
         this.length = length;
         this.type = type;
+        this.systemPacket = systemPacket;
     }
 
     public PacketHeader(ByteBufferInput buffer) {
-        this(buffer.readInt(), buffer.readInt());
+        this((int) buffer.readInt(), (short) buffer.readInt(2), buffer.readInt(1) != 0);
     }
 
     public int getLength() {
         return length;
     }
 
-    public int getType() {
+    public short getType() {
         return type;
+    }
+    
+    public boolean isSystemPacket() {
+        return systemPacket;
     }
 
     /*
@@ -48,6 +54,7 @@ public class PacketHeader {
      */
     public void write(ByteBufferOutput output) {
         output.writeInt(length); //Leave space for packet length
-        output.writeInt(type);
+        output.writeInt(type, 2);
+        output.writeBoolean(systemPacket);
     }
 }

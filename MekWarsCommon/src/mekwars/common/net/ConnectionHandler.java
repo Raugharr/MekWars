@@ -17,14 +17,13 @@
 package mekwars.common.net;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.ByteBufferInput;
-import com.esotericsoftware.kryo.io.ByteBufferOutput;
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.net.SocketException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
+import mekwars.common.net.resolvers.PingResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +49,7 @@ public abstract class ConnectionHandler {
     /*
      * Determines which Resolver can process the given packet.
      */
-    public void processPacket(AbstractPacket packet, Connection connection) {
+    public void processPacket(AbstractPacket packet, Connection connection) throws IOException {
         for (AbstractResolver resolver : resolvers) {
             if (resolver.canResolve(packet.getId())) {
                 resolver.receive(packet, connection);
@@ -64,16 +63,17 @@ public abstract class ConnectionHandler {
      * Called when a connection can be read.
      */
     public void readConnection(SelectionKey key) throws IOException {
-        SocketChannel channel = (SocketChannel) key.channel();
         Connection connection = (Connection) key.attachment();
-        AbstractPacket packet = null;
         
         try {
             connection.read(this);
+        } catch (SocketException exception) {
+            logger.error("Unable to read connection", exception); 
+            connection.close();
         } catch (Exception exception) {
-           logger.catching(exception); 
-           // Reset the buffer to try to get back to a valid state.
-           connection.getInput().getByteBuffer().clear();
+            logger.error("Unable to read connection", exception); 
+            // Reset the buffer to try to get back to a valid state.
+            connection.getInput().getByteBuffer().clear();
         }
     }
 
@@ -81,7 +81,6 @@ public abstract class ConnectionHandler {
      * Called when a connection can be written to.
      */
     public void writeConnection(SelectionKey key) throws IOException {
-        SocketChannel channel = (SocketChannel) key.channel();
         Connection connection = (Connection) key.attachment();
 
         connection.send();
@@ -96,6 +95,10 @@ public abstract class ConnectionHandler {
     }
 
     public abstract Iterator<SelectionKey> select() throws IOException;
+
+    public void heartbeat() throws Exception {
+
+    }
     
     /*
      * Disconnects the Client from the Server.
@@ -119,5 +122,7 @@ public abstract class ConnectionHandler {
     /*
      * Called when the ConnectionHandler is intialized to setup all {@link Resolver}'s.
      */
-    protected abstract void addResolvers();
+    protected void addResolvers() {
+        addResolver(new PingResolver(this));
+    }
 }

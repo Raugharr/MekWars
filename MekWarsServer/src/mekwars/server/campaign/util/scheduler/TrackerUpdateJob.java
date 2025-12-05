@@ -45,7 +45,8 @@ public class TrackerUpdateJob implements Job {
         HPGSubscribedClient client = MWServ.getInstance().getHpgClient();
 
         if (client.isConnected() == false) {
-            String trackerAddress = MWServ.getInstance().getCampaign().getConfig("TrackerAddress");
+            String trackerAddress = MWServ.getInstance().getCampaign().getCampaignOptions()
+                .getConfig("TrackerAddress");
 
             try {
                 InetSocketAddress address = new InetSocketAddress(
@@ -58,10 +59,14 @@ public class TrackerUpdateJob implements Job {
             }
         }
 
-        if (client.getHpgId() == null) {
-            client.getConnection().write(client.getServerRegister());
-        } else {
-            client.getConnection().write(client.getServerUpdate());
+        try {
+            if (client.getHpgId() == null) {
+                client.getConnection().write(client.getServerRegister());
+            } else {
+                client.getConnection().write(client.getServerUpdate());
+            }
+        } catch (IOException exception) {
+            logger.error("Unable to connect to HPGTracker");
         }
     }
 
