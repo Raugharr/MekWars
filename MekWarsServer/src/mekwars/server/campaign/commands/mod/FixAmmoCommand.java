@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
 import mekwars.common.util.StringUtils;
 import megamek.common.AmmoType;
 import megamek.common.Entity;
-import megamek.common.equipment.AmmoMounted;
+import megamek.common.Mounted;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -97,8 +97,8 @@ public class FixAmmoCommand implements Command {
 		
 		baseLine = SUnit.loadMech(unit.getUnitFilename());
 		
-		List<AmmoMounted> baseLineAmmo = baseLine.getAmmo();
-		List<AmmoMounted> currentAmmo = en.getAmmo();
+		List<Mounted> baseLineAmmo = baseLine.getAmmo();
+		List<Mounted> currentAmmo = en.getAmmo();
 		
 		if ( baseLineAmmo.size() < 1)
 			unit.getEntity().getAmmo().clear();

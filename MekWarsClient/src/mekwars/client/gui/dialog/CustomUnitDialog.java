@@ -75,7 +75,6 @@ import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
-import megamek.common.equipment.AmmoMounted;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -320,7 +319,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
         /*
          * Loop through all ammo?
          */
-        for (AmmoMounted m : entity.getAmmo()) {
+        for (Mounted m : entity.getAmmo()) {
 
             AmmoType at = (AmmoType) m.getType();
             

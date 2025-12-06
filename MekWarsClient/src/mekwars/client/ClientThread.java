@@ -23,7 +23,6 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import megamek.client.AbstractClient;
 import megamek.client.Client;
 import megamek.client.CloseClientListener;
 import megamek.client.bot.BotClient;
@@ -99,9 +98,16 @@ public class ClientThread extends Thread implements CloseClientListener {
         if (serverip.indexOf("127.0.0.1") != -1) {
             serverip = "127.0.0.1";
         }
-        MegaMekGUI megaMekGUI = new MegaMekGUI();
-        megaMekGUI.createController();
-        controller = megaMekGUI.getKeyDispatcher();
+        /*
+         * TODO: When upgrading past 49.19.1 the below three lines should be used to replace the
+         * lines under the === in this comment.
+         * MegaMekGUI megaMekGUI = new MegaMekGUI();
+         * megaMekGUI.createController();
+         * controller = megaMekGUI.getKeyDispatcher();
+         * =================================
+         * controller = new MegaMekController();
+         */
+        controller = new MegaMekController();
         KeyboardFocusManager kbfm = KeyboardFocusManager
                 .getCurrentKeyboardFocusManager();
         kbfm.addKeyEventDispatcher(controller);
@@ -149,7 +155,7 @@ public class ClientThread extends Thread implements CloseClientListener {
         }
 
         if (swingGui != null) {
-                for (AbstractClient client2 : swingGui.getLocalBots().values()) {
+                for (Client client2 : swingGui.getLocalBots().values()) {
                     client2.die();
                 }
                 swingGui.getLocalBots().clear();
@@ -459,7 +465,7 @@ public class ClientThread extends Thread implements CloseClientListener {
                 if (!mwclient.getConfig().getParam("UNITCAMO").equals(Camouflage.NO_CAMOUFLAGE)) {
                     Camouflage camouflage = mwclient.getCamouflage();
 
-                    if(camouflage != null) {
+                    if (camouflage != null) {
                         client.getLocalPlayer().setCamouflage(camouflage);
                         playerUpdate = true;
                     }

@@ -44,7 +44,6 @@ import megamek.common.Mounted;
 import megamek.common.Tank;
 import megamek.common.WeaponType;
 import megamek.common.enums.Gender;
-import megamek.common.equipment.AmmoMounted;
 import megamek.common.loaders.EntityLoadingException;
 import megamek.common.options.PilotOptions;
 import mekwars.common.CampaignData;
@@ -174,7 +173,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
         boolean wasChanged = false;
 
-        for (AmmoMounted mAmmo : en.getAmmo()) {
+        for (Mounted mAmmo : en.getAmmo()) {
             AmmoType ammoType = (AmmoType) mAmmo.getType();
             EnumSet<Munitions> munition = ammoType.getMunitionType();
 
@@ -481,7 +480,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             unitEntity = getEntity();
             msg.append(((Mech) unitEntity).isAutoEject());
         }
-        List<AmmoMounted> en_Ammo = unitEntity.getAmmo();
+        List<Mounted> en_Ammo = unitEntity.getAmmo();
         msg.append(en_Ammo.size());
         for (Mounted mAmmo : en_Ammo) {
 
@@ -620,7 +619,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                 Entity en = getEntity();
                 int maxCrits = TokenReader.readInt(ST);
                 defaultField = TokenReader.readString(ST);
-                List<AmmoMounted> e = en.getAmmo();
+                List<Mounted> e = en.getAmmo();
                 for (int count = 0; count < maxCrits; count++) {
                     int weaponType = Integer.parseInt(defaultField);
                     String ammoName = TokenReader.readString(ST);
@@ -639,7 +638,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                         hotloaded = false;
                     }
 
-                    AmmoMounted mWeapon = e.get(count);
+                    Mounted mWeapon = e.get(count);
 
                     AmmoType ammoType = getEntityAmmo(weaponType, ammoName);
                     if (ammoType == null) {

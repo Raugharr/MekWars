@@ -2038,8 +2038,8 @@ public final class MWClient extends GameHost implements IClient {
     public void resetGame() { // reset hosted game
         if (myServer != null) {
             myServer.resetGame();
-            ((Game)myServer.getGame()).getGameListeners().clear();
-            myServer.getGame().addGameListener(this);
+            ((Game) myServer.getGame()).getGameListeners().clear();
+            ((Game) myServer.getGame()).addGameListener(this);
         }
     }
 
@@ -2047,7 +2047,7 @@ public final class MWClient extends GameHost implements IClient {
         if ((myServer != null) && (filename != null) && !filename.isEmpty()) {
             boolean loaded = myServer.loadGame(new File("./savegames/",
                     filename));
-                    myServer.getGame().addGameListener(this);
+            ((Game) myServer.getGame()).addGameListener(this);
             return loaded;
         }
 

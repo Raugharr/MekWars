@@ -36,8 +36,6 @@ import megamek.common.MechView;
 import megamek.common.Player;
 import megamek.common.TechConstants;
 import megamek.common.UnitType;
-import megamek.common.equipment.AmmoMounted;
-import megamek.common.equipment.WeaponMounted;
 import mekwars.client.MWClient;
 
 public class MWUnitDisplay extends JPanel {

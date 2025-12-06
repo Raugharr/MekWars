@@ -24,7 +24,6 @@ import megamek.common.AmmoType.Munitions;
 import megamek.common.BattleArmor;
 import megamek.common.Entity;
 import megamek.common.Mounted;
-import megamek.common.equipment.AmmoMounted;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
@@ -90,9 +89,9 @@ public class SetUnitAmmoCommand implements Command {
         }
 
         int location = 0;
-        AmmoMounted mWeapon = null;
+        Mounted mWeapon = null;
 
-        for (AmmoMounted weapon : en.getAmmo()) {
+        for (Mounted weapon : en.getAmmo()) {
             if (location == weaponLocation) {
                 mWeapon = weapon;
                 break;

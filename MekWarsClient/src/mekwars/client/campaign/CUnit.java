@@ -44,7 +44,7 @@ import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.OffBoardDirection;
 import megamek.common.WeaponType;
-import megamek.common.equipment.AmmoMounted;
+import megamek.common.enums.Gender;
 import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
@@ -176,14 +176,14 @@ public class CUnit extends Unit {
         {
             try {
                 int maxCrits = TokenReader.readInt(ST);
-                List<AmmoMounted> ammoMountedList = unitEntity.getAmmo();
+                List<Mounted> ammoMountedList = unitEntity.getAmmo();
                 for (int count = 0; count < maxCrits; count++) {
                     int weaponType = TokenReader.readInt(ST);
                     String ammoName = TokenReader.readString(ST);
                     int shots = TokenReader.readInt(ST);
                     boolean hotloaded = TokenReader.readBoolean(ST);
 
-                    AmmoMounted mWeapon = ammoMountedList.get(count);
+                    Mounted mWeapon = ammoMountedList.get(count);
 
                     AmmoType at = getEntityAmmo(weaponType, ammoName);
                     mWeapon.changeAmmoType(at);

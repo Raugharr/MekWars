@@ -56,7 +56,6 @@ import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
-import megamek.common.equipment.WeaponMounted;
 import megamek.common.options.IOption;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.commands.*;
@@ -2655,7 +2654,7 @@ public final class CampaignMain implements Serializable {
         return gamesCompleted;
     }
 
-    public int getMachineGunCount(List<WeaponMounted> weaponList) {
+    public int getMachineGunCount(List<Mounted> weaponList) {
         int count = 0;
 
         for (Mounted weapons : weaponList) {
