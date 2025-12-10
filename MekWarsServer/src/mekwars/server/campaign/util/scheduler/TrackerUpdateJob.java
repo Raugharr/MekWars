@@ -24,15 +24,10 @@ import mekwars.server.net.hpgnet.HPGSubscribedClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SimpleTrigger;
-import org.quartz.TriggerKey;
-
-import com.esotericsoftware.kryo.io.Output;
-import java.io.*;
 
 public class TrackerUpdateJob implements Job {
     private static final Logger logger = LogManager.getLogger(TrackerUpdateJob.class);

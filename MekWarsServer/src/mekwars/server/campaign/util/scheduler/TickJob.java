@@ -27,6 +27,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.util.Statistics;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.quartz.DateBuilder;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -39,7 +40,7 @@ public class TickJob implements Job {
     public static final String JOB_IDENTITY = "TickJob";
     public static final String JOB_GROUP = "TickGroup";
     public static final String TRIGGER_IDENTITY = "TickTrigger";
-    public static final int TICK_TIME = 15;
+    public static final int TICK_TIME = 15; // In minutes
     private static final int NEWS_TICK_INTERVAL = 8;
     private static final int TIME_IN_MILISEC = TICK_TIME * 1000 * 60;
 
@@ -88,6 +89,7 @@ public class TickJob implements Job {
             .withSchedule(simpleSchedule()
                 .withIntervalInMinutes(TICK_TIME)
                 .repeatForever())
+             .startAt(DateBuilder.futureDate(TICK_TIME, DateBuilder.IntervalUnit.MINUTE))
             .build();
 
         MWScheduler.getInstance().scheduleJob(job, trigger);
