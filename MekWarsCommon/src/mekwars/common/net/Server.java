@@ -16,21 +16,17 @@
 
 package mekwars.common.net;
 
-import com.esotericsoftware.kryo.io.ByteBufferInput;
-import com.esotericsoftware.kryo.io.ByteBufferOutput;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.channels.spi.SelectorProvider;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.PriorityQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,34 +34,32 @@ public abstract class Server extends ConnectionHandler {
     private static final Logger logger = LogManager.getLogger(Server.class);
     private static final int BUFFER_SIZE = 4096;
     private static final int JOIN_WAIT_TIME = 100;
-    private static final int SELECT_WAIT = 1000;
+    private static final int SELECT_WAIT = 100;
 
-    private InetSocketAddress address;
     private ServerSocketChannel serverSocket;
     private Selector selector;
     private ConnectionListener connectionListener;
     private Thread serverThread;
     private ArrayList<Connection> connections;
     private ArrayList<Listener> listeners;
-    private Listener dispatchListener = new Listener() {
-        public void connect(Connection connection) {
-            connections.add(connection);
-            for (Listener listener : Server.this.listeners) {
-                listener.connected(connection);
-            }
-        }
+    private Listener dispatchListener = new DispatchListener();
 
-        public void disconnect(Connection connection) {
-            connections.remove(connection);
-            for (Listener listener : Server.this.listeners) {
-                listener.disconnected(connection);
+    /*
+     * List of all connections ordered by their heartbeat timeout.
+     */
+    private PriorityQueue<Connection> connectionTimeoutQueue = new PriorityQueue<Connection>(
+        new Comparator<Connection>() {
+            @Override
+            public int compare(Connection left, Connection right) {
+                return Long.compare(left.getNextHeartbeat(), right.getNextHeartbeat());
             }
         }
-    };
+    );
 
     public Server() {
         super();
         this.connections = new ArrayList<Connection>();
+        this.listeners = new ArrayList<Listener>();
     }
 
     /*
@@ -91,7 +85,7 @@ public abstract class Server extends ConnectionHandler {
             logger.catching(exception);
             return;
         }
-        connectionListener = new ConnectionListener(this, address);
+        connectionListener = new ConnectionListener(this);
         serverThread = new Thread(connectionListener, "Server Listener");
         serverThread.start();
     }
@@ -141,9 +135,13 @@ public abstract class Server extends ConnectionHandler {
         SelectionKey clientKey = channel.register(key.selector(), SelectionKey.OP_READ);
         Connection connection = createConnection(getKryos(), channel, clientKey,
                 BUFFER_SIZE, BUFFER_SIZE);
+
+        connectionTimeoutQueue.add(connection);
+        connection.serverHeartbeat();
+
         clientKey.attach(connection);
         connection.addListener(dispatchListener);
-        connections.add(connection);
+        connection.onConnect();
         logger.info("Accepting connection from '{}'", connection.getIpAddress());
     }
 
@@ -173,5 +171,42 @@ public abstract class Server extends ConnectionHandler {
 
     public int connectedClients() {
         return connections.size();
+    }
+
+    public void heartbeat() throws Exception {
+        Connection connection = connectionTimeoutQueue.peek();
+
+        while (connection != null) {
+            long timeoutTime = connection.getNextHeartbeat();
+
+            connectionTimeoutQueue.poll();
+            if (timeoutTime > System.currentTimeMillis()) {
+                connectionTimeoutQueue.add(connection);
+                break;
+            }
+            if (connection.isConnected()) {
+                logger.info("No connection from Connection #{}, disconnecting", connection.getId());
+                connection.close();
+            }
+            connection = connectionTimeoutQueue.peek();
+       }
+    }
+
+    private class DispatchListener extends Listener {
+        @Override
+        public void connected(Connection connection) {
+            connections.add(connection);
+            for (Listener listener : Server.this.listeners) {
+                listener.connected(connection);
+            }
+        }
+
+        @Override
+        public void disconnected(Connection connection) {
+            connections.remove(connection);
+            for (Listener listener : Server.this.listeners) {
+                listener.disconnected(connection);
+            }
+        }
     }
 }

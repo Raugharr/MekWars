@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2004 
+ * MekWars - Copyright (C) 2025
  * 
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
@@ -14,7 +14,7 @@
  * for more details.
  */
 
-package mekwars.common.net.hpgnet.packets;
+package mekwars.common.net.packets;
 
 import mekwars.common.net.AbstractPacket;
 
@@ -22,9 +22,11 @@ import mekwars.common.net.AbstractPacket;
  * Contains information that should be periodically sent to the HPGNet server.
  */
 public class Ping extends AbstractPacket {
-    public Ping() {}
-
     public PacketType getId() {
         return PacketType.PING;
+    }
+
+    public boolean isSystemPacket() {
+        return true;
     }
 }

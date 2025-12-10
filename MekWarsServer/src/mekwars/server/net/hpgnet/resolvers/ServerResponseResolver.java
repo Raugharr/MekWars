@@ -20,7 +20,6 @@ import java.io.IOException;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.Connection;
-import mekwars.common.net.InvalidPacketException;
 import mekwars.common.net.hpgnet.packets.PacketType;
 import mekwars.common.net.hpgnet.packets.ServerResponse;
 import mekwars.server.net.hpgnet.HPGSubscribedClient;
@@ -34,7 +33,7 @@ public class ServerResponseResolver extends AbstractResolver<ServerResponse, Con
         super(client);
     }
 
-    public void receive(ServerResponse message, Connection connection) {
+    public void receive(ServerResponse message, Connection connection) throws IOException {
         if (message.getStatus() != ServerResponse.Status.OK) {
             if (message.getStatus() == ServerResponse.Status.BAD_TRACKER_ID) {
                 logger.warn("Invalid TrackerId, Requesting new TrackerId.");

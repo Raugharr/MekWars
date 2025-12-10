@@ -24,12 +24,13 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.commons.support.HierarchyTraversalMode;
-import org.junit.platform.commons.support.ReflectionSupport;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,35 +47,51 @@ public class ClientTest {
     @Mock
     private Connection connection;
 
-    @Mock ThreadLocal<Kryo> kryos;
+    @Mock
+    private ThreadLocal<Kryo> kryos;
 
-    @Test
-    public void connectTest() {
-        Client client = mock(CALLS_REAL_METHODS);
+    @Spy
+    private Client client;
 
-        MockedStatic<Selector> selectorClass = mockStatic(Selector.class);
+    private MockedStatic<Selector> selectorClass;
+    private MockedStatic<SocketChannel> socketClass;
+
+    @BeforeEach
+    void init() {
+        selectorClass = mockStatic(Selector.class);
         selectorClass.when(Selector::open).thenReturn(selector);
 
-        MockedStatic<SocketChannel> socketClass = mockStatic(SocketChannel.class);
+        socketClass = mockStatic(SocketChannel.class);
         socketClass.when(() -> SocketChannel.open(any(InetSocketAddress.class)))
             .thenReturn(socketChannel);
 
+        assertDoesNotThrow(() ->
+            when(socketChannel.register(any(Selector.class), anyInt())).thenReturn(selectionKey)
+        );
+
+        when(connection.getIpAddress()).thenReturn("localhost");
+        when(connection.getPort()).thenReturn(1234);
+        when(client.getKryos()).thenReturn(kryos);
+        when(client.createConnection(
+            any(ThreadLocal.class),
+            any(SocketChannel.class),
+            any(SelectionKey.class),
+            anyInt(),
+            anyInt()
+        )).thenReturn(connection);
+    }
+
+    @AfterEach
+    void teardown() {
+        connection.close();
+        selectorClass.close();
+        socketClass.close();
+    }
+
+    @Test
+    public void connectTest() {
         assertDoesNotThrow(() -> {
-            when(socketChannel.register(any(Selector.class), anyInt())).thenReturn(selectionKey);
-            InetSocketAddress address = new InetSocketAddress("localhost", 1234);
-
-            when(connection.getIpAddress()).thenReturn("localhost");
-            when(connection.getPort()).thenReturn(1234);
-            when(client.getKryos()).thenReturn(kryos);
-            when(client.createConnection(
-                any(ThreadLocal.class),
-                any(SocketChannel.class),
-                any(SelectionKey.class),
-                anyInt(),
-                anyInt()
-            )).thenReturn(connection);
-
-            client.connect(address);
+            client.connect(mock(InetSocketAddress.class));
             verify(client).createConnection(
                 any(ThreadLocal.class),
                 eq(socketChannel),
@@ -84,5 +101,15 @@ public class ClientTest {
             );
             verify(selectionKey).attach(eq(connection));
         });
+    }
+
+    @Test
+    public void heartbeatTest() {
+        when(connection.getNextHeartbeat())
+            .thenReturn(System.currentTimeMillis() - 100)
+            .thenReturn(System.currentTimeMillis() + 100); 
+        assertDoesNotThrow(() -> client.connect(mock(InetSocketAddress.class)));
+        assertDoesNotThrow(() -> client.heartbeat());
+        assertDoesNotThrow(() -> verify(connection).write(any(AbstractPacket.class)));
     }
 }

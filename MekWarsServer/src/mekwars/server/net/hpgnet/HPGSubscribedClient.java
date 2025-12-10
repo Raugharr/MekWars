@@ -105,6 +105,7 @@ public class HPGSubscribedClient extends Client {
     }
 
     protected void addResolvers() {
+		super.addResolvers();
         addResolver(new ServerResponseResolver(this));
         addResolver(new ServerRegisterResponseResolver(this));
     }

@@ -21,18 +21,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.esotericsoftware.kryo.Kryo;
-import java.lang.reflect.Field;
+import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
+import mekwars.common.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.commons.support.HierarchyTraversalMode;
-import org.junit.platform.commons.support.ReflectionSupport;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +46,6 @@ public class ServerTest {
     @Mock
     private ConnectionListener connectionListener;
 
-    @Mock
     private Connection connection;
 
     @Mock
@@ -64,29 +66,22 @@ public class ServerTest {
     @Mock
     private SocketChannel socketChannel;
 
-    @Mock
+    @Spy
     private Server server;
-    private ArrayList<Connection> connections;
 
     @BeforeEach
     void beforeEach() {
-        connections = new ArrayList<Connection>();
-        Field connectionsField = ReflectionSupport
-          .findFields(Server.class, f -> f.getName().equals("connections"),
-            HierarchyTraversalMode.TOP_DOWN)
-          .get(0);
-
-        connectionsField.setAccessible(true);
-        assertDoesNotThrow(() -> {
-            connectionsField.set(server, new ArrayList<Connection>());
-        });
+        connection = spy(new Connection(kryos, 1024, 1024));
     }
 
     @Test
     public void closeTest() {
+        ArrayList<Connection> connections = new ArrayList<Connection>();
         connections.add(connection);
-        doCallRealMethod().when(server).close();
+        TestUtils.setField(Server.class, server, "connections", connections);
+        doNothing().when(connection).close();
         assertDoesNotThrow(() -> {
+            assertEquals(1, server.connectedClients());
             server.close();
             assertEquals(0, server.connectedClients());
         });
@@ -94,15 +89,19 @@ public class ServerTest {
 
     @Test
     public void acceptConnectionTest() {
+        MockedStatic<SocketChannel> socketClass = mockStatic(SocketChannel.class);
+        socketClass.when(() -> SocketChannel.open(any(InetSocketAddress.class)))
+            .thenAnswer((address) -> {
+                return socketChannel;
+            });
+
         assertDoesNotThrow(() -> {
             doCallRealMethod().when(server).acceptConnection(any(SelectionKey.class));
-            when(server.connectedClients()).thenCallRealMethod();
-            when(server.getConnections()).thenCallRealMethod();
             when(key.channel()).thenReturn(serverSocketChannel);
             when(key.selector()).thenReturn(selector);
             when(serverSocketChannel.accept()).thenReturn(socketChannel);
             when(server.getKryos()).thenReturn(kryos);
-            when(connection.getIpAddress()).thenReturn("localhost");
+            doReturn("localhost").when(connection).getIpAddress();
 
             when(socketChannel.register(any(Selector.class), anyInt()))
                 .thenReturn(clientSelectionKey);
@@ -119,5 +118,41 @@ public class ServerTest {
 
         assertEquals(1, server.connectedClients());
         assertEquals(connection, server.getConnections().next());
+        verify(connection).serverHeartbeat();
+        verify(connection).onConnect();
+        socketClass.close();
+    }
+
+    @Nested
+    public class ProcessHeartbeatsTest {
+        private ArrayList<Connection> connections = new ArrayList<Connection>();
+
+        @BeforeEach
+        void beforeEach() {
+            connections.add(connection);
+            TestUtils.setField(Server.class, server, "connections", connections);
+            PriorityQueue<Connection> connectionTimeoutQueue = (PriorityQueue<Connection>)
+                TestUtils.getField(
+                    Server.class,
+                    server,
+                    "connectionTimeoutQueue"
+                );
+            connectionTimeoutQueue.add(connection);
+        }
+
+        @Test
+        public void heartbeatStaleTest() {
+            doReturn(true).when(connection).isConnected();
+            doNothing().when(connection).close();
+            assertDoesNotThrow(() -> server.heartbeat());
+            verify(connection).close();
+        }
+
+        @Test
+        public void heartbeatFreshTest() {
+            connection.serverHeartbeat();
+            assertDoesNotThrow(() -> server.heartbeat());
+            verify(server, never()).close();
+        }
     }
 }

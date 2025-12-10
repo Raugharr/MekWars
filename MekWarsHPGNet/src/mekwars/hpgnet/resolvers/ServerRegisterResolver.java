@@ -16,6 +16,7 @@
 
 package mekwars.hpgnet.resolvers;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 import mekwars.common.net.AbstractPacket;
@@ -24,7 +25,6 @@ import mekwars.common.net.ConnectionHandler;
 import mekwars.common.net.hpgnet.packets.PacketType;
 import mekwars.common.net.hpgnet.packets.ServerRegister;
 import mekwars.common.net.hpgnet.packets.ServerRegisterResponse;
-import mekwars.common.net.hpgnet.packets.ServerResponse;
 import mekwars.hpgnet.HPGNet;
 import mekwars.hpgnet.HPGSubscriber;
 import mekwars.hpgnet.HPGConnection;
@@ -34,7 +34,7 @@ public class ServerRegisterResolver extends AbstractResolver<ServerRegister, HPG
         super(handler);
     }
 
-    public void receive(ServerRegister message, HPGConnection connection) {
+    public void receive(ServerRegister message, HPGConnection connection) throws IOException {
         HPGNet tracker = HPGNet.getInstance();
         String ipAddress = connection.getIpAddress();
 

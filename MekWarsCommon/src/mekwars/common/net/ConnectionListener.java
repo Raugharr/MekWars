@@ -16,13 +16,8 @@
 
 package mekwars.common.net;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.logging.log4j.LogManager;
@@ -33,37 +28,45 @@ import org.apache.logging.log4j.Logger;
  * calling {@link ConnectionHandler#processKey} when one is received. 
  */
 public class ConnectionListener implements Runnable {
-    private static final Logger logger = LogManager.getLogger(ConnectionListener.class);
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionListener.class);
 
     private AtomicBoolean shouldRun;
-    private InetSocketAddress address;
     private ConnectionHandler connectionHandler;
 
-    public ConnectionListener(ConnectionHandler connectionHandler, InetSocketAddress address) {
+    public ConnectionListener(ConnectionHandler connectionHandler) {
         this.shouldRun = new AtomicBoolean(true);
-        this.address = address;
         this.connectionHandler = connectionHandler;
     }
 
+    @Override
     public void run() {
         while (shouldRun.get()) {
-            Iterator<SelectionKey> iterator = null;
-
             try {
-                iterator = connectionHandler.select();
-            } catch (Exception exception) {
-                logger.catching(exception);
-            }
+                Iterator<SelectionKey> iterator = null;
 
-            while (iterator.hasNext()) {
-                SelectionKey key = iterator.next();
-
-                iterator.remove();
                 try {
-                    connectionHandler.processKey(key);
-                } catch (Exception exception) {
-                    logger.catching(exception);
+                    connectionHandler.heartbeat();
+                    iterator = connectionHandler.select();
+                } catch (IOException exception) {
+                    connectionHandler.close();
+                    LOGGER.error("Unable to run ConnectionListener", exception);
+                    return;
                 }
+
+                while (iterator.hasNext()) {
+                    SelectionKey key = iterator.next();
+
+                    iterator.remove();
+                    try {
+                        connectionHandler.processKey(key);
+                    } catch (IOException exception) {
+                        Connection connection = (Connection) key.attachment();
+                        connection.close();
+                        LOGGER.error("Unable to process key", exception);
+                    }
+                }
+            } catch (Exception exception) {
+                LOGGER.error("Unable to run ConnectionListener", exception);
             }
         }
     }

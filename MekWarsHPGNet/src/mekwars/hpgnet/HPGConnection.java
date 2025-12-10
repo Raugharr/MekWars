@@ -23,23 +23,30 @@ import mekwars.common.net.Connection;
 import mekwars.common.net.Listener;
 import mekwars.common.net.hpgnet.packets.ServerRegister;
 import mekwars.common.net.hpgnet.packets.ServerUpdate;
+import org.apache.logging.log4j.LogManager;
 
 public class HPGConnection extends Connection {
     private HPGSubscriber subscriber;
+    private static final Listener disconnectListener = new Listener() {
+        @Override
+        public void disconnected(Connection connection) {
+            HPGConnection hpgConnection = (HPGConnection) connection;
+
+            if (hpgConnection.getSubscriber() != null) {
+                hpgConnection.getSubscriber().setOnline(false);
+            }
+        }
+    };
 
     public HPGConnection(ThreadLocal<Kryo> kryos, int inputLen, int outputLen) {
         super(kryos, inputLen, outputLen);
-        addListener(new Listener() {
-            @Override
-            public void disconnected(Connection connection) {
-                ((HPGConnection) connection).getSubscriber().setOnline(false);
-            }
-        });
+        addListener(disconnectListener);
     }
 
     public HPGConnection(ThreadLocal<Kryo> kryos, SocketChannel socket,
             SelectionKey socketKey, int inputLen, int outputLen) {
         super(kryos, socket, socketKey, inputLen, outputLen);
+        addListener(disconnectListener);
     }
 
     public HPGSubscriber getSubscriber() {
