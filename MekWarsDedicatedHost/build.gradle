@@ -56,17 +56,17 @@ jar {
 }
 
 task stageFiles(type: Copy) {
-	file(fileStagingDir).mkdirs()
-	File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
-	batFile.text = "start /min java ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
-	from batFile
-	into fileStagingDir
+    file(fileStagingDir).mkdirs()
+    File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
+    batFile.text = "start /min java ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
+    from batFile
+    into fileStagingDir
 }
 
 distributions {
     main {
         contents {
-			from stageFiles
+            from stageFiles
             from project(':MekWarsClient').jar
             from jar
             from "${mmDir}/megamek/build/libs/MegaMek.jar"
@@ -80,5 +80,6 @@ distributions {
 }
 
 test {
+    jvmArgs "-Dlog4j2.configurationFile=log4j2.xml"
     useJUnitPlatform()
 }

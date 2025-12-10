@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-	id 'java-common-conventions'
+    id 'java-common-conventions'
 }
 
 sourceSets {
@@ -8,7 +8,7 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
-	}
+    }
 
     test {
         java {
@@ -19,18 +19,19 @@ sourceSets {
 
 application {
     applicationDefaultJvmArgs = [
-		'-Dlog4j2.configurationFile=log4j2.xml',
-		'-Xmx4096m',
-		'-Dsun.awt.disablegrab=true'
+        '-Dlog4j2.configurationFile=log4j2.xml',
+        '-Xmx4096m',
+        '-Dsun.awt.disablegrab=true'
     ]
 }
 
 ext {
-	data = "data"
-	docs = "docs"
-	mmconf = "mmconf"
+    data = "data"
+    docs = "docs"
+    mmconf = "mmconf"
 }
 
 test {  
-	useJUnitPlatform()
+    jvmArgs "-Dlog4j2.configurationFile=log4j2.xml"
+    useJUnitPlatform()
 }
