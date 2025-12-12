@@ -14,14 +14,14 @@ jobs:
       - name: Checkout MekWars
         uses: actions/checkout@v5
         with:
-          ref: upgrade-49.20
+          ref: main
           path: MekWars
 
       - name: Checkout MegaMek
         uses: actions/checkout@v5
         with:
           repository: MegaMek/megamek
-          ref: v0.49.20
+          ref: ${{ vars.MEGAMEK_VERSION }}
           path: megamek
 
       - name: Set up JDK 11
