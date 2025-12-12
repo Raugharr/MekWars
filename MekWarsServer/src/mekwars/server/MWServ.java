@@ -40,8 +40,6 @@ import java.util.TimeZone;
 import java.util.UUID;
 import java.util.Vector;
 import megamek.Version;
-import mekwars.server.campaign.ImmunityThread;
-import mekwars.server.campaign.SliceThread;
 import megamek.common.EquipmentType;
 import megamek.common.MechSummaryCache;
 import mekwars.common.MMGame;
@@ -57,10 +55,12 @@ import mekwars.server.campaign.DefaultServerOptions;
 import mekwars.server.campaign.ImmunityThread;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SliceThread;
-import mekwars.server.campaign.util.scheduler.TrackerUpdateJob;
+import mekwars.server.campaign.operations.OperationWriter;
 import mekwars.server.campaign.util.scheduler.TickJob;
+import mekwars.server.campaign.util.scheduler.TrackerUpdateJob;
 import mekwars.server.dataProvider.Server;
 import mekwars.server.net.hpgnet.HPGSubscribedClient;
+import mekwars.server.io.FileSystem;
 import mekwars.server.util.AutomaticBackup;
 import mekwars.server.util.IpCountry;
 import mekwars.server.util.RepairTrackingThread;
@@ -99,7 +99,6 @@ public class MWServ {
     private RepairTrackingThread RTT;
     private AutomaticBackup aub = new AutomaticBackup(System.currentTimeMillis());
     private HPGSubscribedClient hpgClient;
-
     /*
      * List of Abreviations for the protocol used by the client only: NG = New
      * Game (NG|<IP>|<Port>|<MaxPlayers>|<Version>|<Comment>) CG = Close Game
@@ -117,8 +116,6 @@ public class MWServ {
      */
 
     public static void main(String[] argv) {
-        MWServ.getInstance();
-        
         String trackerAddress = MWServ.getInstance().getCampaign().getConfig("TrackerAddress");
 
         try {
@@ -126,7 +123,7 @@ public class MWServ {
                     trackerAddress,
                     HPGSubscribedClient.TRACKER_PORT
                 );
-            MWServ.getInstance().getHpgClient().connect(address);
+            getInstance().getHpgClient().connect(address);
         } catch (IOException exception) {
             LOGGER.warn("Unable to connect to tracker");
         }
@@ -135,6 +132,18 @@ public class MWServ {
             TrackerUpdateJob.submit();
         }
         TickJob.submit();
+
+        try {
+            OperationWriter operationWriter = new OperationWriter();
+            operationWriter.writeOpList(
+                getInstance().getCampaign().getOpsManager().getOperations().values()
+            );
+
+            FileSystem.getInstance().calculateChecksums();
+        } catch (IOException exception) {
+            LOGGER.error("Unable to calculate checksums", exception);
+        }
+
         //start server
         LOGGER.info("Entering main loop cycle. Starting the server...");
         MWServ.getInstance().startServer();
@@ -144,14 +153,14 @@ public class MWServ {
         System.exit(0);
     }
     
-    public synchronized static MWServ getInstance() {
+    public static MWServ getInstance() {
         if (instance == null) {
             instance = new MWServ();
         }
         return instance;
     }
 
-    MWServ() {
+    public MWServ() {
         LOGGER.info("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
         EquipmentType.initializeTypes();
         MechSummaryCache.getInstance();
@@ -159,6 +168,12 @@ public class MWServ {
         LOGGER.info("Loading configuration...");
         loadConfig();
         LOGGER.info("Configuration loaded.");
+
+        try {
+            FileSystem.getInstance().createDirectories();
+        } catch (IOException exception) {
+            LOGGER.error("Unable to create directories", exception);
+        }
 
         if (Boolean.parseBoolean(getConfigParam("RESOLVECOUNTRY"))) {
             ipToCountry = new IpCountry("./data/iplist.txt", "./data/countrynames.txt");
@@ -172,6 +187,7 @@ public class MWServ {
         campaign = new CampaignMain(getConfigParam("CAMPAIGNCONFIG"));
         campaign.start();
         LOGGER.info("Environment created.");
+
         //this.addToNewsFeed("MekWars Server Started!", "Server News", "");
         // create & start a data provider
         int dataport = -1;
@@ -190,7 +206,7 @@ public class MWServ {
         LOGGER.info("Initializing log subsystem. Touching log files.");
         LOGGER.info("Main channel log touched.");
         LOGGER.info(LogMarkerHolder.GAME_MARKER, "Game log touched.");
-        LOGGER.error("Command log touched.");
+        LOGGER.info("Command log touched.");
         LOGGER.info(LogMarkerHolder.PM_MARKER, "Private messages (PM) log touched.");
         LOGGER.info("Black Market (BM) log touched.");
         LOGGER.info("Server info log touched.");
@@ -266,7 +282,6 @@ public class MWServ {
             fis.close();
         } catch (Exception ex) {
             try {
-                LOGGER.info("Creating new File");
                 LOGGER.info("Creating new File");
                 if (filename.equals("./data/mails.txt")) {
                     FileOutputStream out = new FileOutputStream(filename);

@@ -36,12 +36,14 @@
 
 package mekwars.server.campaign.operations;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 import java.util.TreeMap;
-
 import mekwars.common.campaign.operations.ModifyingOperation;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.server.MWServ;
@@ -53,11 +55,13 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.operations.newopmanager.AbstractOperationManager;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
+import mekwars.server.io.FileSystem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class OperationManager extends AbstractOperationManager implements I_OperationManager {
     private static final Logger LOGGER = LogManager.getLogger(OperationManager.class);
+    
     /**
      * Construction of the Manager is keystone event for
      * Operations system. Construction triggers attempts to
@@ -88,7 +92,6 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
         disconnectionDurations = new TreeMap<String, Long>();
         
         loadOperations();
-        
     }//end constructor
 
     //METHODS
@@ -250,7 +253,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
         return ops.get(name);
     }
     
-    public TreeMap<String, Operation> getOperations(){
+    public TreeMap<String, Operation> getOperations() {
         return ops;
     }
     
@@ -989,81 +992,73 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
         shortValidator.checkOperations(a, display, ops);
     }
 
-    public void loadOperations(){
-        /*
-         * Check for the operations directories.
-         * If they're missing create them. 
-         */
-        File shortDir = new File("./data/operations/short/");
-        File longDir = new File("./data/operations/long/");
-        File modDir = new File("./data/operations/modifiers/");
-        try {
-            if (!shortDir.exists()) {
-                shortDir.mkdirs();
-            }
-            if (!longDir.exists()) {
-                longDir.mkdir();
-            }
-            if (!modDir.exists()) {
-                modDir.mkdir();
-            }
-        } catch (Exception e) {
-            LOGGER.error("Error while creating operations directories.");
-        }
-        
+    public void loadOperations() {
         ops.clear();
         mods.clear();
         MULOnlyArmiesOpsLoad = false;
         
-        /*
-         * read the shortoperation's subdir and do loads. since every
-         * long has a corresponding short, its possible to do loads
-         * via the short names only (loader handles this properly)
-         */
-        String[] shortNames = shortDir.list();
-        for (int i = 0; i < shortNames.length; i++) {
-            Operation currOp = opLoader.loadOpValues(shortNames[i]);
-            LOGGER.info("Loading short operation '{}'", currOp.getName());
-            ops.put(currOp.getName(), currOp);
-            if (currOp.getBooleanValue("MULArmiesOnly")) {
-                MULOnlyArmiesOpsLoad = true;
+        try {
+            /*
+             * read the shortoperation's subdir and do loads. since every
+             * long has a corresponding short, its possible to do loads
+             * via the short names only (loader handles this properly)
+             */
+            Path operationsShortDir = FileSystem.getInstance().getOperationsShortDir();
+            try (Stream<Path> paths = Files.walk(operationsShortDir)) {
+                paths.filter(Files::isRegularFile).forEach((shortFile) -> {
+                    Operation currOp = opLoader.loadOpValues(shortFile.getFileName().toString());
+                    LOGGER.info("Loading short operation '{}'", currOp.getName());
+
+                    ops.put(currOp.getName(), currOp);
+                    if (currOp.getBooleanValue("MULArmiesOnly")) {
+                        MULOnlyArmiesOpsLoad = true;
+                        }
+                });
             }
-        }
-        
-        /*
-         * read the mod operations subdir and do loads. add the mods to
-         * target ops' modmaps as the loads occur. Throw error if, for some
-         * reason, a given target cannot be found.
-         */
-        String[] modNames = modDir.list();
-        for (int i = 0; i < modNames.length; i++) {
-            ModifyingOperation currMod = opLoader.loadModOpValues(modNames[i]);
-            LOGGER.info("Loading mod operation '{}'", currMod.getName());
-            mods.put(currMod.getName(), currMod);
             
             /*
-             * mod loaded. now, try to put it into standard op's trees.
-             * targets are a string w/ ; as deliminter. trim to remove leading
-             * and trailing spaces.
+             * read the mod operations subdir and do loads. add the mods to
+             * target ops' modmaps as the loads occur. Throw error if, for some
+             * reason, a given target cannot be found.
              */
-            String targets = currMod.getValueAsString("LinkedOperations");
-            StringTokenizer st = new StringTokenizer(targets, ";");
-            while (st.hasMoreTokens()) {
-                String currTarget = st.nextToken().trim();
-                Operation currOp = ops.get(currTarget);
-                if (currOp == null) {
-                    LOGGER.error("Error assigning modop target. Mod: " + currMod.getName() + " Target: " + currTarget);
-                } else {
-                    currOp.addModifyingOperation(currMod);
-                }
-            }//end while(more targets)
-        }//end modOp loading
-        
+            Path operationsModifiersDir = FileSystem.getInstance().getOperationsModifiersDir();
+
+            try (Stream<Path> paths = Files.walk(operationsModifiersDir)) {
+                    paths.filter(Files::isRegularFile).forEach((modFile) -> {
+                        ModifyingOperation currMod = opLoader.loadModOpValues(modFile.getFileName().toString());
+                        LOGGER.info("Loading mod operation '{}'", currMod.getName());
+                        mods.put(currMod.getName(), currMod);
+                        
+                        /*
+                         * mod loaded. now, try to put it into standard op's trees.
+                         * targets are a string w/ ; as deliminter. trim to remove leading
+                         * and trailing spaces.
+                         */
+                        String targets = currMod.getValueAsString("LinkedOperations");
+                        StringTokenizer st = new StringTokenizer(targets, ";");
+                        while (st.hasMoreTokens()) {
+                            String currTarget = st.nextToken().trim();
+                            Operation currOp = ops.get(currTarget);
+                            if (currOp == null) {
+                                LOGGER.error("Error assigning modop target. Mod: " + currMod.getName() + " Target: " + currTarget);
+                            } else {
+                                currOp.addModifyingOperation(currMod);
+                            }
+                        }
+                });
+            }
+        } catch (IOException exception) {
+            LOGGER.error("Unable to read operation", exception);
+        }
         /*
          * Now that all Ops are loaded, write out the crib sheet for clients.
          */
-        opWriter.writeOpList(ops);
-        if(ops.isEmpty()) {
+        // try {
+        //     opWriter.writeOpList(ops.values());
+        // } catch (IOException exception) {
+        //     LOGGER.catching(exception);
+        // }
+        if (ops.isEmpty()) {
             LOGGER.error("No operations loaded");
         }
     }
@@ -1072,9 +1067,10 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
      * Lets us know if MUL only ops have been loaded
      * This effects the status of commands like activate
      * attack and defend.
+     *
      * @return
      */
     public boolean hasMULOnlyOps() {
         return MULOnlyArmiesOpsLoad;
     }
-}//end OperationsManager class
+}

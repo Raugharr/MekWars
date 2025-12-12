@@ -1,7 +1,3 @@
-package mekwars.common.util;
-
-import java.awt.Color;
-
 /*
  * MekWars - Copyright (C) 2005 
  * 
@@ -17,6 +13,10 @@ import java.awt.Color;
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
+
+package mekwars.common.util;
+
+import java.awt.Color;
 
 public final class StringUtils {
 

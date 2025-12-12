@@ -14,10 +14,14 @@ import mekwars.server.campaign.operations.ShortValidator;
 
 public class NewOperationManager extends AbstractOperationManager implements I_OperationManager {
 
-    private OperationManager tempOpManager = new OperationManager();
+    private OperationManager tempOpManager;
     
     private int nextShortID = 0;
     private int nextLongID = 0;
+
+    public NewOperationManager() {
+        tempOpManager = new OperationManager();
+    }
     
     @Override
     public String tick() {

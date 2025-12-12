@@ -42,98 +42,98 @@ import org.apache.logging.log4j.Logger;
 public class OperationLoader {
     private static final Logger LOGGER = LogManager.getLogger(OperationLoader.class);
 
-	//IVARS
-	DefaultOperation defaults;
-	
-	//CONSTRUCTORS
-	public OperationLoader() {
-		defaults = new DefaultOperation();
-	}
+    //IVARS
+    DefaultOperation defaults;
+    
+    //CONSTRUCTORS
+    public OperationLoader() {
+        defaults = new DefaultOperation();
+    }
 
-	//METHODS
-	
-	/**
-	 * Method which loads an operations values from server flat
-	 * files. Unspecified values will revert to hardcoded defaults.
-	 * 
-	 * NOTE: two files are read, but only one Properties/Hashmap
-	 * is populated.
-	 * 
-	 * Also note: # can be used w/i op files as a comment. tabs
-	 *            are treated as whitespace. property names are
-	 *            case sensitive.
-	 * 
-	 * Suggested formatting follows ...
-	 * ---
-	 * 
-	 * #COMMENT RE: SETTING
-	 * #MORE COMMENT DETAIL
-	 * Param1			= value
-	 * LongNameParam	= value
-	 * 
-	 * #COMMENTS ON NEW BLOCK
-	 * Param2			= value
-	 * 
-	 * - See Properties javadoc for additional commenting info.
-	 * 
-	 * @urgru 5/30/05 
-	 */
-	public Operation loadOpValues(String opName) {
-		
-		Properties opValues = new Properties();
-		
-		//attempt to load shortvals
-		String shortFilename = "./data/operations/short/"+ opName;
-		try {
-			opValues.load(new FileInputStream(shortFilename));
-		} catch (Exception e) {
-			LOGGER.error("Problems loading short op: " + opName);
-			LOGGER.error("Exception: ", e);
-		}
-		
-		//attempt to load longvals
-		String longFilename = "./data/operations/long/"+ opName;
-		try {
-			opValues.load(new FileInputStream(longFilename));
-		} catch (Exception e) {
-			//exception loading long. presume that its intentionally
-			//missing and this is a short-only operation
-		}
-		
-		opName = opName.substring(0, opName.length() - 4);//remove ".txt"
-		return new Operation(opName.trim(), defaults, opValues);
-	}
-	
-	/**
-	 * Method which loads modifying operations from flat files. Unspecified
-	 * values revert to those of the underlying operation first, and then to
-	 * values from DefaultOperation.
-	 * 
-	 * Unlike standard operations, which read from 2 files, modops only read
-	 * from one flat file.
-	 * 
-	 * See this.loadOpValues() and Properties javadoc for commenting info.
-	 * 
-	 * NOTE: addition of modops to standard Op's mod treemaps is handled in
-	 * OperationManager.java, shortly after this load method.
-	 * 
-	 * @urgru 6/10/05
-	 */
-	public ModifyingOperation loadModOpValues(String opName) {
-		
-		Properties modValues = new Properties();
-		
-		//attempt load
-		String modFilename = "./data/operations/modifiers/"+ opName;
-		try {
-			modValues.load(new FileInputStream(modFilename));
-		} catch (Exception e) {
-			LOGGER.error("Problems loading mod op: " + opName);
-			LOGGER.error("Exception: ", e);
-		}
-		
-		opName = opName.substring(0, opName.length() - 5);//remove ".txt"
-		return new ModifyingOperation(opName.trim(), modValues);
-	}
-	
+    //METHODS
+    
+    /**
+     * Method which loads an operations values from server flat
+     * files. Unspecified values will revert to hardcoded defaults.
+     * 
+     * NOTE: two files are read, but only one Properties/Hashmap
+     * is populated.
+     * 
+     * Also note: # can be used w/i op files as a comment. tabs
+     *            are treated as whitespace. property names are
+     *            case sensitive.
+     * 
+     * Suggested formatting follows ...
+     * ---
+     * 
+     * #COMMENT RE: SETTING
+     * #MORE COMMENT DETAIL
+     * Param1            = value
+     * LongNameParam    = value
+     * 
+     * #COMMENTS ON NEW BLOCK
+     * Param2            = value
+     * 
+     * - See Properties javadoc for additional commenting info.
+     * 
+     * @urgru 5/30/05 
+     */
+    public Operation loadOpValues(String opName) {
+        
+        Properties opValues = new Properties();
+        
+        //attempt to load shortvals
+        String shortFilename = "./data/operations/short/"+ opName;
+        try {
+            opValues.load(new FileInputStream(shortFilename));
+        } catch (Exception e) {
+            LOGGER.error("Problems loading short op: " + opName);
+            LOGGER.error("Exception: ", e);
+        }
+        
+        //attempt to load longvals
+        String longFilename = "./data/operations/long/"+ opName;
+        try {
+            opValues.load(new FileInputStream(longFilename));
+        } catch (Exception e) {
+            //exception loading long. presume that its intentionally
+            //missing and this is a short-only operation
+        }
+        
+        opName = opName.substring(0, opName.length() - 4);//remove ".txt"
+        return new Operation(opName.trim(), defaults, opValues);
+    }
+    
+    /**
+     * Method which loads modifying operations from flat files. Unspecified
+     * values revert to those of the underlying operation first, and then to
+     * values from DefaultOperation.
+     * 
+     * Unlike standard operations, which read from 2 files, modops only read
+     * from one flat file.
+     * 
+     * See this.loadOpValues() and Properties javadoc for commenting info.
+     * 
+     * NOTE: addition of modops to standard Op's mod treemaps is handled in
+     * OperationManager.java, shortly after this load method.
+     * 
+     * @urgru 6/10/05
+     */
+    public ModifyingOperation loadModOpValues(String opName) {
+        
+        Properties modValues = new Properties();
+        
+        //attempt load
+        String modFilename = "./data/operations/modifiers/"+ opName;
+        try {
+            modValues.load(new FileInputStream(modFilename));
+        } catch (Exception e) {
+            LOGGER.error("Problems loading mod op: " + opName);
+            LOGGER.error("Exception: ", e);
+        }
+        
+        opName = opName.substring(0, opName.length() - 5);//remove ".txt"
+        return new ModifyingOperation(opName.trim(), modValues);
+    }
+    
 }//end OperationsManager class

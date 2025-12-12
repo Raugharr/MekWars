@@ -32,9 +32,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -148,6 +151,7 @@ import mekwars.server.campaign.util.WhoToHTML;
 import mekwars.server.campaign.util.scheduler.MWScheduler;
 import mekwars.server.campaign.util.scheduler.TickJob;
 import mekwars.server.campaign.votes.VoteManager;
+import mekwars.server.io.FileSystem;
 import mekwars.server.util.MWPasswd;
 import mekwars.server.util.HtmlSanitizer;
 import mekwars.server.util.discord.DiscordMessageHandler;
@@ -215,16 +219,6 @@ public final class CampaignMain implements Serializable {
     public CampaignMain(String configFilename) {
         cm = this;
 
-        // make sure vital folders exist
-        File f = new File("./campaign/");
-        if (!f.exists()) {
-            f.mkdir();
-        }
-        f = new File("./campaign/players/");
-        if (!f.exists()) {
-            f.mkdir();
-        }
-
         campaignOptions = new CampaignOptions(configFilename);
         if (!getConfig("AllowedMegaMekVersion").equals("-1")) {
             getCampaignOptions().getConfig().setProperty("AllowedMegaMekVersion", megamek.MMConstants.VERSION.toString());
@@ -248,32 +242,23 @@ public final class CampaignMain implements Serializable {
     }
     
     public void start() {
-        File terrainFile = new File("./data/terrain.xml");
-        Terrain[] terrainList = (Terrain[]) getXStream().fromXML(terrainFile);
-        for (Terrain terrain : terrainList) {
-            getData().addTerrain(terrain);
-        }
-        // Parse Terrain
-        File advancedTerrainFile = new File("./data/advancedTerrain.xml");
-        AdvancedTerrain[] advancedTerrainList = (AdvancedTerrain[]) getXStream().fromXML(advancedTerrainFile);
-        for (AdvancedTerrain advancedTerrain : advancedTerrainList) {
-            getData().addAdvancedTerrain(advancedTerrain);
-        }
-
-        cm.loadTopUnitID();
         gamesCompleted = 0;
+        cm.loadTopUnitID();
 
+        try {
+            loadTerrainData();
+            loadAdvancedTerrainData();
+        } catch (IOException exception) {
+            LOGGER.error("Unable to parse file", exception);
+        }
         // Read the data from the SHouse Data File
         loadFactionData();
         loadPlanetData();
 
         try {
-            MekwarsFileReader dis = new MekwarsFileReader("./campaign/banammo.dat");
-            while (dis.ready()) {
-                String line = dis.readLine();
+            for (String line : Files.readAllLines(FileSystem.getInstance().getBanAmmo())) {
                 loadBanAmmo(line);
             }
-            dis.close();
         } catch (FileNotFoundException fne) {
             LOGGER.info("No banned ammo data found.");
         } catch (Exception ex) {
@@ -293,22 +278,16 @@ public final class CampaignMain implements Serializable {
         if (Boolean.parseBoolean(cm.getConfig("UseCalculatedCosts"))) {
             unitCostLists = new UnitCosts();
             unitCostLists.loadUnitCosts();
-            // LOGGER.error(unitCostLists.displayUnitCostsLists());
         }
 
         // Load the Mech-Statistics
         try {
-            MekwarsFileReader dis = new MekwarsFileReader("./campaign/mechstat.dat");
-            while (dis.ready()) {
-                String line = dis.readLine();
+            for (String line : Files.readAllLines(FileSystem.getInstance().getMechStat())) {
                 MechStatistics m = new MechStatistics(line);
                 MechStats.put(m.getMechFileName(), m);
             }
-            dis.close();
         } catch (Exception ex) {
-            LOGGER.error("Problems reading unit statistics data");
-            LOGGER.error("Exception: ", ex);
-            LOGGER.info("No Mech Statistic Data found");
+            LOGGER.error("Problems reading unit statistics data", ex);
         }
 
         if (Boolean.parseBoolean(getConfig("HTMLOUTPUT"))) {
@@ -347,16 +326,14 @@ public final class CampaignMain implements Serializable {
     public void loadSupportUnitDefinitions() {
         LOGGER.info("Entering loadSupportUnitDefinitions");
 
-        File tsFile = new File("./data/supportunits.txt");
-        if (!tsFile.exists()) {
+        Path tsPath = FileSystem.getSupportUnits();
+        if (!Files.exists(tsPath)) {
             return;
         }
 
         Vector<String> units = new Vector<String>();
         try {
-            MekwarsFileReader dis = new MekwarsFileReader(tsFile);
-            while (dis.ready()) {
-                String line = dis.readLine();
+            for (String line : Files.readAllLines(tsPath)) {
                 line = line.trim().toLowerCase();
                 if (line.startsWith("#") || line.length() < 5) {
                     continue;
@@ -366,22 +343,12 @@ public final class CampaignMain implements Serializable {
                     LOGGER.info("Adding Support Unit: " + line);
                 }
             }
-            dis.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Unable to read {}", tsPath.toString(), e);
         } finally {
             CampaignMain.cm.setSupportUnits(units);
         }
     }
-
-    /*
-     * public void saveData() { try { data.saveData(new File("campaign")); /
-     * MMNetXStream xml = new MMNetXStream(new DomDriver()); for (Iterator i =
-     * data.getAllHouses().iterator(); i.hasNext();) { SHouse h = (SHouse)
-     * i.next(); xml.toXML(h.getMembers(), new
-     * FileWriter("./campaign/members"+h.getName()+".xml")); } } catch
-     * (IOException e) { LOGGER.error("Exception: ", e); } }
-     */
 
     /**
      * Saves the current campaign state to a file system.
@@ -511,7 +478,7 @@ public final class CampaignMain implements Serializable {
         if(CampaignMain.cm.getBooleanConfig("UseNewOpManager")) {
             opsManager = new NewOperationManager();
         } else {
-            opsManager = new OperationManager();            
+            opsManager = new OperationManager();
         }
     }
 
@@ -3488,6 +3455,39 @@ public final class CampaignMain implements Serializable {
         }
     }
 
+    /**
+     * Loads terrain data.
+     *
+     * @throws IOException When the terrain file cannot be opened.
+     */
+    public void loadTerrainData() throws IOException {
+        Path path = FileSystem.getInstance().getTerrain();
+
+        try (InputStream inputStream = Files.newInputStream(path)) {
+            Terrain[] terrainList = (Terrain[]) getXStream().fromXML(inputStream);
+            for (Terrain terrain : terrainList) {
+                getData().addTerrain(terrain);
+            }
+        }
+    }
+
+    /**
+     * Loads advanced terrain data.
+     *
+     * @throws IOException When the advanced terrain file cannot be opened.
+     */
+    public void loadAdvancedTerrainData() throws IOException {
+        Path path = FileSystem.getInstance().getAdvancedTerrain();
+
+        try (InputStream inputStream = Files.newInputStream(path)) {
+            AdvancedTerrain[] advancedTerrainList = (AdvancedTerrain[]) getXStream().
+                fromXML(inputStream);
+            for (AdvancedTerrain advancedTerrain : advancedTerrainList) {
+                getData().addAdvancedTerrain(advancedTerrain);
+            }
+        }
+    }
+
     public void loadFactionData() {
         File factionFile = new File("./campaign/factions");
 
@@ -3505,9 +3505,7 @@ public final class CampaignMain implements Serializable {
                         addHouse(house);
                     }
                 } catch (Exception ex) {
-                    LOGGER.error("Error while reading faction data -- bailing out");
-                    LOGGER.error("Exception: ", ex);
-                    LOGGER.info("Error while reading Faction Data!");
+                    LOGGER.error("Error while reading faction data -- bailing out", ex);
                     System.exit(1);
                 }
                 // Add the Newbie-SHouse
