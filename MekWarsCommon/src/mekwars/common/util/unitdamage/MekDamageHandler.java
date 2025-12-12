@@ -11,8 +11,6 @@ import megamek.common.IArmorState;
 import megamek.common.Mech;
 import megamek.common.MiscType;
 import megamek.common.Mounted;
-import megamek.common.equipment.AmmoMounted;
-import megamek.common.equipment.MiscMounted;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -130,16 +128,14 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
 
                     Mounted mounted = cs.getMount();
                     if ((mounted != null) && (mounted.getType() instanceof MiscType)) {
-                        MiscMounted miscMounted = (MiscMounted) mounted;
-
-                           if (miscMounted.getType().isShield()
-                               && (miscMounted.getBaseDamageCapacity() != miscMounted.getCurrentDamageCapacity(unit, x))
+                           if (((MiscType) mounted.getType()).isShield()
+                               && (mounted.getBaseDamageCapacity() != mounted.getCurrentDamageCapacity(unit, x))
                                && (shieldHitsLeft == -1)
                                && ((x == Mech.LOC_LARM) || (x == Mech.LOC_RARM))) {
 
                             float shieldcrits = Math.max(1, UnitUtils.getNumberOfCrits(unit, cs));
-                            float basePoints = miscMounted.getBaseDamageCapacity();
-                            float currentPoints = miscMounted.getCurrentDamageCapacity(unit, x);
+                            float basePoints = mounted.getBaseDamageCapacity();
+                            float currentPoints = mounted.getCurrentDamageCapacity(unit, x);
                             float tempHits = 0;
 
                             tempHits = shieldcrits / basePoints;
@@ -194,9 +190,7 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
                         result.append(delimiter2);
                         hasData = true;
                     } else if ((mounted != null) && mounted.getType() instanceof MiscType) {
-                        MiscMounted miscMounted = (MiscMounted) mounted;
-
-                        if (miscMounted.getType().isShield()
+                        if (((MiscType) mounted.getType()).isShield()
                                 && ((x == Mech.LOC_LARM) || (x == Mech.LOC_RARM))
                                 && (shieldHitsLeft > 0)) {
                             result.append(x);
@@ -365,7 +359,7 @@ public class MekDamageHandler extends AbstractUnitDamageHandler {
 
         if ((ammo != null) && ammo.hasMoreTokens()) {
             int locationCount = 0;
-            Iterator<AmmoMounted> munitions = unit.getAmmo().iterator();
+            Iterator<Mounted> munitions = unit.getAmmo().iterator();
 
             // make sure the unit actually has ammo.
             if (munitions.hasNext()) {

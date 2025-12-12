@@ -37,12 +37,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import megamek.client.ui.dialogs.CamoChooserDialog;
 import megamek.common.Configuration;
 import megamek.common.icons.Camouflage;
-import megamek.common.icons.FileCamouflage;
+import mekwars.client.GUIClient;
 import mekwars.client.GUIClientConfig;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
@@ -1691,6 +1690,7 @@ public final class ConfigurationDialog implements ActionListener {
         }
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         String command = event.getActionCommand();
 
@@ -1701,8 +1701,18 @@ public final class ConfigurationDialog implements ActionListener {
             pane.setValue(cancelButton);
             dialog.dispose();
         } else if (command.equals(camoCommand)) {
-            FileCamouflage fileCamouflage = new FileCamouflage(new File(Configuration.camoDir(), mwclient.getConfigParam("UNITCAMO")));
-            CamoChooserDialog camoDialog = new CamoChooserDialog(mwclient.getGUIClient().getMainFrame(), fileCamouflage);
+            /**
+             * TODO: When upgrading past 49.19.1 the below two lines should be used to replace the
+             * lines under the === in this comment.
+             * FileCamouflage fileCamouflage = new FileCamouflage(new File(Configuration.camoDir(), mwclient.getConfigParam("UNITCAMO")));
+             * CamoChooserDialog camoDialog = new CamoChooserDialog(guiClient.getMainFrame(), fileCamouflage);
+             * ===========================
+             * Camouflage camouflage = new Camouflage(GUIClientConfig.CAMO_PATH, mwclient.getConfigParam("UNITCAMO"));
+             * CamoChooserDialog camoDialog = new CamoChooserDialog(guiClient.getMainFrame(), camouflage);
+            */
+            GUIClient guiClient = mwclient.getGUIClient();
+            Camouflage camouflage = new Camouflage(GUIClientConfig.CAMO_PATH, mwclient.getConfigParam("UNITCAMO"));
+            CamoChooserDialog camoDialog = new CamoChooserDialog(guiClient.getMainFrame(), camouflage);
             if (camoDialog.showDialog().isConfirmed()) {
                 Camouflage selectedItem = camoDialog.getSelectedItem();
                 mwclient.getConfig().setParam("UNITCAMO", selectedItem.getCategory() + selectedItem.getFilename());
@@ -1710,8 +1720,8 @@ public final class ConfigurationDialog implements ActionListener {
                 mwclient.setConfig();
                 // then reload images and update the GUI
                 mwclient.getConfig().loadImage(GUIClientConfig.CAMO_PATH + selectedItem.getCategory() + selectedItem.getFilename(), "CAMO", 84, 72);
-                mwclient.getGUIClient().getMainFrame().getMainPanel().selectFirstTab();
-                mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel().reinitialize();
+                guiClient.getMainFrame().getMainPanel().selectFirstTab();
+                guiClient.getMainFrame().getMainPanel().getHQPanel().reinitialize();
             }
         } else if (command.equals(lookAndFeelCommand)) {
             try {

@@ -29,7 +29,7 @@ subprojects {
 
 ext {
     lib = "lib"
-    mmVersion = "49.20"
+    mmVersion = "49.19.1"
     mmDir = "${rootDir}/../megamek"
 }
 

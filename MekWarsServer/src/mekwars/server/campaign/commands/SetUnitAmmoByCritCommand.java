@@ -25,7 +25,6 @@ import megamek.common.BattleArmor;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mounted;
-import megamek.common.equipment.AmmoMounted;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
@@ -93,17 +92,16 @@ public class SetUnitAmmoByCritCommand implements Command {
             CampaignMain.cm.toUser("AM:SetUnitAmmo command failed. Weapon has no ammo types", Username, true);
             return;
         }
-        AmmoMounted ammoMounted = (AmmoMounted) mWeapon;
         AmmoType currAmmo = (AmmoType) mWeapon.getType();
         AmmoType ammoType = unit.getEntityAmmo(weaponType, ammoName);
 
         if (shots == 0) { // dumping ammo
             if (usingCrits) {
-                p.updatePartsCache(currAmmo.getInternalName(), ammoMounted.getUsableShotsLeft());
+                p.updatePartsCache(currAmmo.getInternalName(), mWeapon.getUsableShotsLeft());
             }
 
-            ammoMounted.changeAmmoType(ammoType);
-            ammoMounted.setShotsLeft(0);
+            mWeapon.changeAmmoType(ammoType);
+            mWeapon.setShotsLeft(0);
 
             unit.setEntity(en);
 
@@ -198,8 +196,8 @@ public class SetUnitAmmoByCritCommand implements Command {
                 }
                 p.updatePartsCache(currAmmo.getInternalName(), mWeapon.getUsableShotsLeft());
                 p.updatePartsCache(ammoType.getInternalName(), -newAmmoAmount);
-                ammoMounted.changeAmmoType(ammoType);
-                ammoMounted.setShotsLeft(newAmmoAmount);
+                mWeapon.changeAmmoType(ammoType);
+                mWeapon.setShotsLeft(newAmmoAmount);
                 unit.setEntity(en);
                 p.checkAndUpdateArmies(unit);
                 CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), Username, false);
@@ -227,7 +225,7 @@ public class SetUnitAmmoByCritCommand implements Command {
             p.addMoney(-cost);
         }// end else(check for confirmation)
 
-        ammoMounted.changeAmmoType(ammoType);
+        mWeapon.changeAmmoType(ammoType);
         unit.setEntity(en);
         p.checkAndUpdateArmies(unit);
         CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), Username, false);

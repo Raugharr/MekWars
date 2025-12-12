@@ -9,15 +9,14 @@ import megamek.common.Entity;
 import megamek.common.IArmorState;
 import megamek.common.Mounted;
 import megamek.common.Tank;
-import megamek.common.equipment.AmmoMounted;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class VehicleDamageHandler extends AbstractUnitDamageHandler {
     private static final Logger LOGGER = LogManager.getLogger(VehicleDamageHandler.class);
 
-	@Override
-	public String buildDamageString(Entity unit, boolean sendAmmo) {
+    @Override
+    public String buildDamageString(Entity unit, boolean sendAmmo) {
         StringBuilder result = new StringBuilder();
         String delimiter = "-";
         String delimiter2 = "%";
@@ -183,7 +182,7 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
         }
         return result.toString();
 
-	}
+    }
 
 	@Override
 	public void applyDamageString(Entity unit, String report, boolean isRepairing) {
@@ -273,7 +272,7 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
 
         if ((ammo != null) && ammo.hasMoreTokens()) {
             int locationCount = 0;
-            Iterator<AmmoMounted> munitions = unit.getAmmo().iterator();
+            Iterator<Mounted> munitions = unit.getAmmo().iterator();
 
             // make sure the unit actually has ammo.
             if (munitions.hasNext()) {
@@ -297,6 +296,5 @@ public class VehicleDamageHandler extends AbstractUnitDamageHandler {
                 }
             }
         }
-	}
-
+    }
 }
