@@ -95,11 +95,6 @@ if (localProperties.exists()) {
 }
 
 test {  
+    jvmArgs "-Dlog4j2.configurationFile=log4j2.xml"
     useJUnitPlatform()
-}
-
-
-task testCicd(type: Test) {
-    useJUnitPlatform()
-    exclude 'MekWarsClient/test/mekwars/client/gui/dialog/*'
 }

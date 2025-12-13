@@ -16,13 +16,12 @@
 
 package mekwars.hpgnet.resolvers;
 
+import java.io.IOException;
 import java.util.Date;
-import java.util.UUID;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.ConnectionHandler;
 import mekwars.common.net.hpgnet.packets.PacketType;
-import mekwars.common.net.hpgnet.packets.ServerRegister;
 import mekwars.common.net.hpgnet.packets.ServerResponse;
 import mekwars.common.net.hpgnet.packets.ServerUpdate;
 import mekwars.hpgnet.HPGNet;
@@ -38,7 +37,7 @@ public class ServerUpdateResolver extends AbstractResolver<ServerUpdate, HPGConn
         super(handler);
     }
 
-    public void receive(ServerUpdate message, HPGConnection connection) {
+    public void receive(ServerUpdate message, HPGConnection connection) throws IOException {
         HPGNet tracker = HPGNet.getInstance();
         synchronized (tracker.getSubscribers()) {
             HPGSubscriber subscriber = tracker.getSubscriber(message.getUid());

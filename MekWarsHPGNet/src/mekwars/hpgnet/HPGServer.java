@@ -15,7 +15,6 @@
 package mekwars.hpgnet;
 
 import com.esotericsoftware.kryo.Kryo;
-import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import mekwars.common.net.AbstractPacket;
@@ -51,6 +50,7 @@ public class HPGServer extends Server {
     }
 
     protected void addResolvers() {
+        super.addResolvers();
         addResolver(new ServerUpdateResolver(this));
         addResolver(new ServerRegisterResolver(this));
         addResolver(new ServerQueryAllResolver(this));

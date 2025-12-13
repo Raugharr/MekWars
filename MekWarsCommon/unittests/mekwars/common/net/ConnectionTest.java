@@ -23,8 +23,9 @@ import static org.mockito.Mockito.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.ByteBufferInput;
 import com.esotericsoftware.kryo.io.ByteBufferOutput;
-import com.esotericsoftware.kryo.io.Input;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,37 +37,75 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class ConnectionTest {
+    @Mock
+    private SocketChannel channel;
+
+    @Mock
+    private SelectionKey key;
+
+    private ThreadLocal<Kryo> kryos;
+    private Connection connection;
+
+    @BeforeEach
+    void init() {
+        kryos = ThreadLocal.withInitial(() -> {
+            Kryo kryo = new Kryo();
+        
+            kryo.register(MockPacket.class);
+            return kryo;
+        });
+        connection = spy(new Connection(kryos, channel, key, 1024, 1024));
+    }
+
+    @Test
+    public void sendWhenNotConnectedTest() {
+        when(channel.isConnected()).thenReturn(false);
+        assertThrows(SocketException.class, () -> {
+            connection.send();
+        });
+    }
+
     @Nested
     public class WriteOnlyTest {
-        @Mock
-        SelectionKey key;
-        @Mock SocketChannel channel;
-        ThreadLocal<Kryo> kryos;
-        Connection connection;
-
-        @BeforeEach
-        void beforeEach() {
-            kryos = ThreadLocal.withInitial(() -> {
-                Kryo kryo = new Kryo();
-            
-                kryo.register(MockPacket.class);
-                return kryo;
-            });
-            connection = spy(new Connection(kryos, channel, key, 1024, 1024));
-        }
-
         @Test
         public void writePacketTest() {
             when(key.isWritable()).thenReturn(false);
-            connection.write(new MockPacket());
+            when(channel.isConnected()).thenReturn(true);
+            assertDoesNotThrow(() -> {
+                connection.write(new MockPacket());
+            });
 
-            assertEquals(PacketHeader.SIZE + 3, connection.getOutput().getByteBuffer().position());
+            ByteBuffer byteBuffer = connection.getOutput().getByteBuffer();
+
+            assertEquals(PacketHeader.SIZE + 3, byteBuffer.position());
+            // byteBuffer.flip();
+            // // assertEquals(, byteBuffer.getShort());
+            // assertEquals(3, byteBuffer.getInt());
+            // assertEquals(MockPacketType.MOCK_PACKET.getType(), byteBuffer.getInt());
+            // assertEquals(0, byteBuffer.get());
+        }
+
+        @Test
+        public void sendFailsTest() {
+            when(key.isWritable()).thenReturn(false);
+            when(channel.isConnected()).thenReturn(true);
+
+            assertDoesNotThrow(() -> {
+                connection.write(new MockPacket());
+                when(channel.write(any(ByteBuffer.class))).thenThrow(new ClosedChannelException());
+                connection.send();
+            });
+
+            verify(connection).close();
         }
 
         @Test
         public void writeThenReadTest() {
             when(key.isWritable()).thenReturn(false);
-            connection.write(new MockPacket());
+            when(channel.isConnected()).thenReturn(true);
+            assertDoesNotThrow(() -> {
+                connection.write(new MockPacket());
+            });
 
             verify(key).interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
             assertDoesNotThrow(() -> {
@@ -77,7 +116,10 @@ public class ConnectionTest {
         @Test
         public void writeAndReadTest() {
             when(key.isWritable()).thenReturn(true);
-            connection.write(new MockPacket());
+            when(channel.isConnected()).thenReturn(true);
+            assertDoesNotThrow(() -> {
+                connection.write(new MockPacket());
+            });
 
             verify(key).interestOps(SelectionKey.OP_READ);
             assertDoesNotThrow(() -> {
@@ -89,36 +131,19 @@ public class ConnectionTest {
     @Nested
     public class ReadOnlyTest {
         @Mock
-        SocketChannel channel;
+        private ConnectionHandler handler;
 
-        @Mock
-        SelectionKey key;
-        @Mock
-        ConnectionHandler handler;
-
-        MockPacket packet;
-        ThreadLocal<Kryo> kryos;
-        Connection connection;
-        ByteBufferInput input;
-        ByteBufferOutput output; 
-        PacketHeader header;
+        private MockPacket packet;
+        private ByteBufferInput input;
+        private ByteBufferOutput output; 
+        private PacketHeader header;
 
         @BeforeEach
-        void beforeEach() {
+        void setup() {
             packet = new MockPacket();
-            kryos = new ThreadLocal<Kryo>() {
-                @Override
-                protected Kryo initialValue() {
-                    Kryo kryo = new Kryo();
-                
-                    kryo.register(MockPacket.class);
-                    return kryo;
-                }   
-            };
-            connection = new Connection(kryos, channel, key, 1024, 1024);
             input = connection.getInput();
             output = new ByteBufferOutput(input.getByteBuffer()); 
-            header = new PacketHeader(3, packet.getId().getType());
+            header = new PacketHeader(3, (short) packet.getId().getType(), false);
         }
 
         @Test
@@ -165,6 +190,19 @@ public class ConnectionTest {
 
             assertDoesNotThrow(() -> {
                 assertNull(connection.readObject(handler));
+            });
+        }
+
+        @Test
+        public void readClosedSocketTest() {
+            ByteBuffer buffer = output.getByteBuffer();
+            output.setBuffer(buffer);
+
+            when(channel.isConnected()).thenReturn(true);
+            assertDoesNotThrow(() -> {
+                when(channel.read(buffer)).thenThrow(ClosedChannelException.class);
+                connection.read(handler);
+                verify(connection).close();
             });
         }
     }

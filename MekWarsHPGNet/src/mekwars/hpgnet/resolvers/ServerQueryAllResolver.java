@@ -16,6 +16,7 @@
 
 package mekwars.hpgnet.resolvers;
 
+import java.io.IOException;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.ConnectionHandler;
@@ -32,7 +33,7 @@ public class ServerQueryAllResolver extends AbstractResolver<ServerQueryAll, HPG
         super(handler);
     }
 
-    public void receive(ServerQueryAll message, HPGConnection connection) {
+    public void receive(ServerQueryAll message, HPGConnection connection) throws IOException {
         HPGNet tracker = HPGNet.getInstance();
 
         var responses = tracker.getSubscribers().stream()

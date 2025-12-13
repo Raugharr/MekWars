@@ -24,6 +24,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +103,6 @@ public class ServerBrowserDialog extends JDialog implements CallbackResolverList
      */
     public void resolverUpdate(AbstractPacket abstractMessage, Connection connection) {
         ServerQueryAllResponse message = (ServerQueryAllResponse) abstractMessage;
-        serverModel.clearItems();
         List<ServerInfo> newList = new ArrayList<ServerInfo>();
 
         joinButton.setEnabled(false);
@@ -130,11 +130,16 @@ public class ServerBrowserDialog extends JDialog implements CallbackResolverList
     }
 
     protected void updateServerList(boolean showDialog) {
-        if (mwClient.getHpgClient().getConnection().isConnected()) {
+        try {
             mwClient.getHpgClient().getConnection().write(new ServerQueryAll());
-        } else if (showDialog) {
-            JOptionPane.showMessageDialog(this, resourceMap.getString("refreshError.text"),
-                    "Error", JOptionPane.ERROR_MESSAGE); 
+        } catch (IOException exception) {
+            if (showDialog) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    resourceMap.getString("refreshError.text"),
+                    "Error", JOptionPane.ERROR_MESSAGE
+                ); 
+            }
         }
     }
 

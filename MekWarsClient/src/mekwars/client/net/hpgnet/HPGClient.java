@@ -38,6 +38,7 @@ public class HPGClient extends Client {
     }
 
     protected void addResolvers() {
+        super.addResolvers();
         serverQueryAllResponseResolver = new ServerQueryAllResponseResolver(this);
         addResolver(serverQueryAllResponseResolver);
     }

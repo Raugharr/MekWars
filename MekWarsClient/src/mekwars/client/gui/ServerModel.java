@@ -104,7 +104,8 @@ public class ServerModel extends MWTableModel<ServerInfo> {
                 }
             }
             if (found == false) {
-                removeRow(index);
+                iterator.remove();
+                fireTableRowsDeleted(index, index);
             }
             found = false;
             index = 0;

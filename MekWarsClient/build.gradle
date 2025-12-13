@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-	id 'java-common-conventions'
+    id 'java-common-conventions'
     id 'edu.sc.seis.launch4j' version '2.5.4'
 }
 
@@ -87,17 +87,25 @@ tasks.named('installDist') {
     }
 }
 
-
 distributions {
     main {
         contents {
             from stageFiles
             from jar
             from "${mmDir}/megamek/build/libs/MegaMek.jar"
+
             from (project.sourceSets.main.runtimeClasspath.files
                     .findAll { it.name.endsWith(".jar") }) {
                 into "${lib}"
             }
+
+            // execute build with -PexcludeData to skip data copy
+            if (!project.hasProperty('excludeData')) {
+                from("${mmDir}/megamek/data/images") {
+                    into "data/images"
+                }
+            }
+
             duplicatesStrategy = 'exclude'
         }
     }
@@ -111,5 +119,6 @@ createExe {
 }
 
 test {
+    jvmArgs "-Dlog4j2.configurationFile=log4j2.xml"
     useJUnitPlatform()
 }

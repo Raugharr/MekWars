@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2004 
+ * MekWars - Copyright (C) 2025
  * 
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
@@ -17,18 +17,10 @@
 package mekwars.common.net;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.ByteBufferOutput;
+import mekwars.common.net.packets.Ping;
 
-public abstract class AbstractPacket {
-    public interface Type {
-        int getType();
-
-        Class<? extends AbstractPacket> getPacketClass();
-    }
-
-    public abstract Type getId();
-
-    public boolean isSystemPacket() {
-        return false;
+public class KryoUtil {
+    public static void register(Kryo kryo) {
+        kryo.register(Ping.class);
     }
 }

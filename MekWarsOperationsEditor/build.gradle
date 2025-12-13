@@ -42,11 +42,11 @@ jar {
 }
 
 task stageFiles(type: Copy) {
-	file(fileStagingDir).mkdirs()
-	File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
-	batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
-	from batFile
-	into fileStagingDir
+    file(fileStagingDir).mkdirs()
+    File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
+    batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
+    from batFile
+    into fileStagingDir
 }
 
 distributions {
