@@ -18,7 +18,8 @@ package mekwars.common;
 import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
+import mekwars.common.entities.Entity;
+import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 
@@ -26,9 +27,9 @@ import mekwars.common.util.BinWriter;
  * A Terrain Base Terrain container for all environments. Each environment can be a different theme to allow for different times of year.
  */
 
-final public class Terrain {
+final public class Terrain implements Entity {
     // id
-    private int id = -1;
+    private int id = EntityStore.UNSET_ID;
     private String name = "None";
     private Vector<PlanetEnvironment> environments = new Vector<PlanetEnvironment>(10, 1);
 

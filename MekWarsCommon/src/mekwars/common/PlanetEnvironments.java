@@ -38,11 +38,6 @@ import mekwars.common.util.BinWriter;
 public class PlanetEnvironments {
 
     /**
-     * An terrain provider to get terrain information from.
-     */
-    public static transient TerrainProvider data;
-
-    /**
      * The list of all continents. Type=Continent
      */
     private ArrayList<Continent> continents = new ArrayList<Continent>();

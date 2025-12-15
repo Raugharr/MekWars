@@ -2894,7 +2894,6 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
     public void createNoneHouse() {
         setName("None");
-        setId(-1);
         setConquerable(false);
         setHouseDefectionTo(false);
         setHouseDefectionFrom(false);

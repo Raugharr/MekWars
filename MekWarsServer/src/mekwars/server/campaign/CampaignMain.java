@@ -240,8 +240,6 @@ public final class CampaignMain implements Serializable {
         partsmarket = new PartsMarket();
         SPilotSkills.initializePilotSkills();
 
-        // Load & Init Data
-        data = new CampaignData();
         xstream = new SMMNetXStream();
 
         // load megamek gameoptions;
@@ -1751,15 +1749,11 @@ public final class CampaignMain implements Serializable {
     }
 
     public void addPlanet(SPlanet p) {
-
-        if (p.getOriginalOwner().trim().equals("")) {
+        if (p.getOriginalOwner().isEmpty()) {
             if (p.getOwner() == null) {
                 p.setOriginalOwner(cm.getConfig("NewbieHouseName"));
             }
             p.setOriginalOwner(p.getOwner().getName());
-        }
-        if (CampaignData.cd.getPlanet(p.getId()) != null) {
-            LOGGER.error("Duplicate Planet ID: " + CampaignData.cd.getPlanet(p.getId()).getName()  + " and " + p.getName());
         }
         data.addPlanet(p);
     }
@@ -2404,16 +2398,6 @@ public final class CampaignMain implements Serializable {
 
     public SHouse getHouseFromPartialString(String HouseString) {
         return getHouseFromPartialString(HouseString, null);
-    }
-
-    public SHouse getHouseFromDBID(int DBId) {
-        for (House currH : data.getAllHouses()) {
-            SHouse sh = (SHouse) currH;
-            if (sh.getDBId() == DBId) {
-                return sh;
-            }
-        }
-        return null;
     }
 
     public SHouse getHouseById(int id) {
@@ -3510,6 +3494,10 @@ public final class CampaignMain implements Serializable {
         // Check for new faction save location
         if (!factionFile.exists() || factionFile.listFiles().length < 1) {
             if (data.getAllHouses().size() == 0) {
+                SHouse none = new MercHouse();
+                none.createNoneHouse();
+                addHouse(none);
+                
                 try {
                     factionFile = new File("./data/factions.xml");
                     SHouse[] factionList = (SHouse[]) getXStream().fromXML(factionFile);
@@ -3525,9 +3513,6 @@ public final class CampaignMain implements Serializable {
                 // Add the Newbie-SHouse
                 SHouse solaris = new NewbieHouse(CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
                 addHouse(solaris);
-                SHouse none = new MercHouse();
-                none.createNoneHouse();
-                addHouse(none);
             }
             return;
         }
@@ -3564,13 +3549,6 @@ public final class CampaignMain implements Serializable {
                 LOGGER.error("Unable to load " + faction.getName());
             }
         }
-
-        if (data.getHouse(-1) == null) {
-            SHouse none = new MercHouse();
-            none.createNoneHouse();
-            addHouse(none);
-        }
-
         // load the various construction modifiers for the houses added above
         factionFile = new File("./campaign/costmodifiers");
         if (!factionFile.exists()) {

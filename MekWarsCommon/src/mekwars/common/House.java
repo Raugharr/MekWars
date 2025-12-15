@@ -20,6 +20,8 @@
  */
 package mekwars.common;
 
+import mekwars.common.entities.Entity;
+import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.HTMLConverter;
@@ -36,9 +38,7 @@ import megamek.common.TechConstants;
  * @author Helge Richter
  * 
  */
-public class House {
-    private static int HouseId = 0;
-
+public class House implements Entity {
     public static final int RED_VALUE = 0;
     public static final int GREEN_VALUE = 1;
     public static final int BLUE_VALUE = 2;
@@ -47,8 +47,7 @@ public class House {
     private String logo = "";
     private String factionFluFile = "Common";
 
-    private Integer id;
-    private int dbId = 0;
+    private int id;
     private Vector<Integer> baseGunner = new Vector<Integer>(Unit.MAXBUILD, 1);
     private Vector<Integer> basePilot = new Vector<Integer>(Unit.MAXBUILD, 1);
     private Vector<String> basePilotSkills = new Vector<String>(Unit.MAXBUILD, 1);
@@ -284,22 +283,11 @@ public class House {
      * @return Returns the id.
      */
     public int getId() {
-        if (id == null)
-            return -1;
-        return id.intValue();
+        return id;
     }
-
-    public int getDBId() {
-        return dbId;
-    }
-
-    public void setDBId(int id) {
-        dbId = id;
-    }
-
 
     public House() {
-        this.id = HouseId++;
+        setId(EntityStore.UNSET_ID);
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
             baseGunner.add(4);
             basePilot.add(5);
@@ -311,7 +299,7 @@ public class House {
      * Write itself to an binary stream.
      */
     public void binOut(BinWriter out) throws IOException {
-        out.println(id.intValue(), "id");
+        out.println(id, "id");
         out.println(name, "name");
         out.println(logo, "logo");
         out.println(getBaseGunner(), "baseGunner");

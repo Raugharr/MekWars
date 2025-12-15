@@ -214,11 +214,8 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         }
 
         int id = TokenReader.readInt(ST);
-        if (id == -1) {
-        	id = CampaignData.cd.getUnusedPlanetID();
-        }
         setId(id);
-       setMinPlanetOwnerShip(TokenReader.readInt(ST));
+        setMinPlanetOwnerShip(TokenReader.readInt(ST));
 
         setHomeWorld(TokenReader.readBoolean(ST));
 
