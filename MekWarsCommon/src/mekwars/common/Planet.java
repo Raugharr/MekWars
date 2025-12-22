@@ -23,13 +23,13 @@ package mekwars.common;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.ArrayList;
-
+import java.util.TreeMap;
+import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.Position;
+import mekwars.common.entities.Entity;
 import megamek.common.planetaryconditions.PlanetaryConditions;
 
 /**
@@ -37,15 +37,13 @@ import megamek.common.planetaryconditions.PlanetaryConditions;
  * 
  */
 
-public class Planet implements Comparable<Object>, MutableSerializable {
-    private static int PlanetId = 0;
-
+public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     // VARIABLES
     /**
      * Unique id of this planet. Mutable field (although it will not change, it
      * has to be transfered)
      */
-    private int id;
+    private int id = EntityStore.UNSET_ID;
 
     /**
      * name of the planet. Should be unique among planets too.
@@ -144,7 +142,6 @@ public class Planet implements Comparable<Object>, MutableSerializable {
         if(influence == null) {
             throw new IllegalArgumentException();
         }
-        setId(PlanetId++);
         setName(name);
         setPosition(position);
         setInfluence(influence);
@@ -160,7 +157,7 @@ public class Planet implements Comparable<Object>, MutableSerializable {
     /**
      * Read the stream back to a Planet object.
      */
-    public Planet(BinReader in, Map<Integer, House> factions, CampaignData data) throws IOException {
+    public Planet(BinReader in, CampaignData data) throws IOException {
         this.binIn(in, data);
     }
 

@@ -16,9 +16,6 @@
 
 package mekwars.common;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,10 +25,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 import java.util.Vector;
-
+import megamek.common.AmmoType;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
-import megamek.common.AmmoType;
+import mekwars.common.persistence.NamedEntityStore;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * TODO: It seems, that all operations done here are needed independly of the
@@ -53,33 +52,10 @@ public class CampaignData implements TerrainProvider {
 
     public static CampaignData cd;
 
-    /**
-     * All different Houses are stored here. key=Integer (id), value=House
-     */
-    private TreeMap<Integer, House> factions = new TreeMap<>();
-
-    /**
-     * All different House ids are stored here key=String (name), value=int id
-     */
-    private TreeMap<String, Integer> factionid = new TreeMap<>();
-
-    /**
-     * This is a list with all planet information stored. key=Integer (id),
-     * value=Planet (or subclasses for server and client)
-     */
-    private TreeMap<Integer, Planet> planets = new TreeMap<>();
-
-    /**
-     * This is a list with planet id stored. key=String (name), value=int id
-     */
-    private TreeMap<String, Integer> planetid = new TreeMap<>();
-
-    /**
-     * List of all terrains that can occur on surfaces of planets.
-     */
-    private ArrayList<Terrain> terrains = new ArrayList<>();
-    private ArrayList<AdvancedTerrain> advTerrains = new ArrayList<>();
-    
+    private NamedEntityStore<House> factions = new NamedEntityStore<>();
+    private NamedEntityStore<Planet> planets = new NamedEntityStore<>();
+    private NamedEntityStore<Terrain> terrains = new NamedEntityStore<>();
+    private NamedEntityStore<AdvancedTerrain> advancedTerrains = new NamedEntityStore<>();
 
     private Hashtable<String, String> ServerBannedAmmo = new Hashtable<>();
     private Vector<Integer> bannedTargetingSystems = new Vector<>();
@@ -104,14 +80,7 @@ public class CampaignData implements TerrainProvider {
      * for a planet instead (if you have the choice).
      */
     public Planet getPlanetByName(String name) {
-
-        try {
-            Integer planetID = planetid.get(name.toLowerCase());
-            return getPlanet(planetID);
-        } catch (Exception ex) {
-            LOGGER.error("Could not find planet: {}", name);
-            return null;
-        }
+        return planets.getByName(name);
     }
 
     /**
@@ -122,36 +91,6 @@ public class CampaignData implements TerrainProvider {
         for (UnitFactory e : p.getUnitFactories()) {
             if (e.getName().equalsIgnoreCase(name)) {
                 return e;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @author Torren (Jason Tighe)
-     * @param planet
-     * @param Factory
-     * 
-     *            Updates the Client side factories Useful for the factory
-     *            Refresh with RP
-     */
-    public void updateFactoryTick(String planet, String factory, int tick) {
-        Planet p = getPlanetByName(planet);
-        UnitFactory unitFactory = getFactoryByName(p, factory);
-        unitFactory.setTicksUntilRefresh(tick);
-    }
-
-    /**
-     * Check if the planet name was only partial and complete it..
-     */
-    public Planet getPlanetByPartialName(String name) {
-        for (Planet p : getAllPlanets()) {
-            if (p.getName().equals(name)) {
-                return p;
-            }
-
-            if (p.getName().indexOf(name) != -1) {
-                return p;
             }
         }
         return null;
@@ -173,12 +112,7 @@ public class CampaignData implements TerrainProvider {
      * @see You should use XStream to initialize CampaignData
      */
     public void addPlanet(Planet planet) {
-        LOGGER.info("Adding Planet: '{}'", planet.getName());
-        if (planet.getId() == -1) {
-            planet.setId(getUnusedPlanetID());
-        }
-        planets.put(planet.getId(), planet);
-        planetid.put(planet.getName().toLowerCase(), planet.getId());
+        planets.put(planet);
     }
 
     /**
@@ -188,7 +122,6 @@ public class CampaignData implements TerrainProvider {
      *            The id of the blown up planet.
      */
     public void removePlanet(int id) {
-        planetid.remove(getPlanet(id).getName().toLowerCase());
         planets.remove(id);
     }
 
@@ -197,22 +130,6 @@ public class CampaignData implements TerrainProvider {
      */
     public void clearPlanets() {
         planets.clear();
-    }
-
-    /**
-     * Retrieve an unused id for planets.
-     * 
-     * @TODO There should be no need for such function, since ID's should
-     *       extracted from ressource files. This function will vanish if ids
-     *       are part of the ressource.
-     * @return An Planet id not used yet.
-     */
-    public int getUnusedPlanetID() {
-        int id = 0;
-        while (planets.keySet().contains(id)) {
-            id++;
-        }
-        return id;
     }
 
     /**
@@ -242,9 +159,7 @@ public class CampaignData implements TerrainProvider {
      * @TODO You should use XStream to initialize CampaignData
      */
     public void addHouse(House faction) {
-        LOGGER.info("Adding House: '{}'", faction.getName());
-        factions.put(faction.getId(), faction);
-        factionid.put(faction.getName().toLowerCase(), faction.getId());
+        factions.put(faction);
     }
 
     /**
@@ -255,8 +170,12 @@ public class CampaignData implements TerrainProvider {
      *            id
      */
     public void removeHouse(int id) {
-        String factionName = getHouse(id).getName().toLowerCase();
-        factionid.remove(factionName);
+        House faction = factions.get(id);
+
+        if (faction == null) {
+            return;
+        }
+        String factionName = faction.getName().toLowerCase();
         factions.remove(id);
 
         File factionFile = new File("./campaign/factions/" + factionName + ".dat");
@@ -279,12 +198,7 @@ public class CampaignData implements TerrainProvider {
      *       transmitting the factions name instead of its id.
      */
     public House getHouseByName(String name) {
-        try {
-            House h = getHouse(factionid.get(name.toLowerCase()));
-            return h;
-        } catch (Exception ex) {
-            return null;
-        }
+        return factions.getByName(name);
     }
 
     /**
@@ -292,43 +206,6 @@ public class CampaignData implements TerrainProvider {
      */
     public void clearHouses() {
         factions.clear();
-    }
-
-    /**
-     * Retrieve an unused id for terrains. Only used upon start up of a new
-     * server using XML files.
-     * 
-     * @return An terrain id not used yet.
-     */
-    public int getUnusedTerrainID() {
-        int id = -1;
-        int hid = -1;
-        for (Terrain e : terrains) {
-            hid = e.getId();
-            if (hid > id) {
-                id = hid;
-            }
-        }
-        id++;
-        return id;
-    }
-    /**
-     * Retrieve an unused id for advterrains. Only used upon start up of a new
-     * server using XML files.
-     * 
-     * @return An terrain id not used yet.
-     */
-    public int getUnusedAdvTerrainID() {
-        int id = -1;
-        int hid = -1;
-        for (AdvancedTerrain e : advTerrains) {
-            hid = e.getId();
-            if (hid > id) {
-                id = hid;
-            }
-        }
-        id++;
-        return id;
     }
 
     /**
@@ -384,11 +261,11 @@ public class CampaignData implements TerrainProvider {
      */
     public void binTerrainsOut(BinWriter out) throws IOException {
         out.println(terrains.size(), "terrains.size");
-        for (Terrain pe : terrains) {
+        for (Terrain pe : terrains.values()) {
             pe.binOut(out);
         }
-        out.println(advTerrains.size(), "advTerrains.size");
-        for (AdvancedTerrain pe : advTerrains) {
+        out.println(advancedTerrains.size(), "advTerrains.size");
+        for (AdvancedTerrain pe : advancedTerrains.values()) {
             pe.binOut(out);
         }
         
@@ -423,7 +300,6 @@ public class CampaignData implements TerrainProvider {
      */
     public CampaignData() {
         cd = this;
-        PlanetEnvironments.data = this;
     }
 
     /**
@@ -431,7 +307,6 @@ public class CampaignData implements TerrainProvider {
      */
     public CampaignData(BinReader in) throws IOException {
         cd = this;
-        PlanetEnvironments.data = this;
         int size = in.readInt("terrains.size");
         for (int i = 0; i < size; ++i) {
             Terrain pe = new Terrain();
@@ -452,101 +327,33 @@ public class CampaignData implements TerrainProvider {
 
         size = in.readInt("planets.size");
         for (int i = 0; i < size; ++i) {
-            addPlanet(new Planet(in, factions, this));
+            addPlanet(new Planet(in, this));
         }
     }
-
-    /**
-     * Updates sent Planets due a differential update.
-     * 
-     * @param changesSinceLastRefresh
-     *            A map to hold the change in planet ids that got updated this
-     *            refresh. Structure is as follows: key=planetID(Integer),
-     *            value=Influences(differential)
-     */
-    public void decodeMutablePlanets(BinReader in, Map<Integer, Influences> changesSinceLastRefresh) throws IOException {
-        int count = in.readInt("mutableplanetsize");
-        System.out.println("retrieving " + count + " planets due differential update.");
-        changesSinceLastRefresh.clear();
-        for (int i = 0; i < count; ++i) {
-            int id = in.readInt("planetid");
-            Influences infOld = new Influences(getPlanet(id).getInfluence());
-            getPlanet(id).decodeMutableFields(in, this);
-            Influences infNew = getPlanet(id).getInfluence();
-            changesSinceLastRefresh.put(id, infNew.difference(infOld));
-        }
-    }
-
-    /**
-     * Writes some planets due a differential update
-     * 
-     * @param ids
-     *            A collection of java.lang.Integer with the ids to send.
-     */
-    public void encodeMutablePlanets(BinWriter out, Collection<Integer> ids) throws IOException {
-        out.println(ids.size(), "mutableplanetsize");
-        for (Integer id : ids) {
-            out.println(id, "planetid");
-            getPlanet(id).encodeMutableFields(out, this);
-        }
-    }
-
-    /**
-     * Saves itself to disk. This uses the dynamic type of each object to make a
-     * copy as close to the real data as possible. Use loadData() to read it
-     * back to memory.
-     * 
-     * public void saveData(File directory) throws IOException { if (directory
-     * == null) throw new
-     * IllegalArgumentException("Please specify a directory."); if
-     * (directory.exists() && !directory.isDirectory()) throw new
-     * IllegalArgumentException(directory.getName()+" is not a directory."); if
-     * (!directory.exists()) directory.mkdir(); MMNetXStream xml = new
-     * MMNetXStream(new DomDriver()); xml.toXML(this,new
-     * FileWriter(directory.getPath()+"/data.xml"));
-     * 
-     * DatWriter datWriter = new
-     * DatWriter(directory.getPath()+"/CampaignData.dat");
-     * datWriter.write(this,"CampaignData"); datWriter.close(); }
-     */
 
     /**
      * @see common.TerrainProvider#getTerrain(int)
      */
     public Terrain getTerrain(int id) {
-        for (Terrain env : terrains) {
-            if (env.getId() == id) {
-                return env;
-            }
-        }
-        return null;
-
+        return terrains.get(id);
     }
 
     /**
      * @see common.TerrainProvider#getAllTerrains()
      */
     public Collection<Terrain> getAllTerrains() {
-        return terrains;
+        return terrains.values();
     }
 
     /**
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
     public void addTerrain(Terrain terrain) {
-        LOGGER.info("Adding Terrain: '{}'", terrain.getName());
-        terrain.setId(getUnusedTerrainID());
-        terrains.add(terrain);
-        terrains.trimToSize();
+        terrains.put(terrain);
     }
 
-    public Terrain getTerrainByName(String TerrainName) {
-        for (Terrain env : terrains) {
-            if (env.getName().equalsIgnoreCase(TerrainName)) {
-                return env;
-            }
-        }
-        return null;
+    public Terrain getTerrainByName(String name) {
+        return terrains.getByName(name);
     }
 
     /*adding the advanced terrain to the campaign data*/
@@ -554,79 +361,27 @@ public class CampaignData implements TerrainProvider {
      * @see common.TerrainProvider#getAdvancedTerrain(int)
      */
     public AdvancedTerrain getAdvancedTerrain(int id) {
-        for (AdvancedTerrain env : advTerrains) {
-            if (env.getId() == id) {
-                return env;
-            }
-        }
-        return new AdvancedTerrain();
+        return advancedTerrains.get(id);
     }
 
     /**
      * @see common.TerrainProvider#getAllTerrains()
      */
     public Collection<AdvancedTerrain> getAllAdvancedTerrains() {
-        return advTerrains;
+        return advancedTerrains.values();
     }
 
     /**
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
     public void addAdvancedTerrain(AdvancedTerrain newAdvTerrain) {
-        LOGGER.info("Adding AdvancedTerrain: '{}'", newAdvTerrain.getName());
-        newAdvTerrain.setId(getUnusedAdvTerrainID());
-        advTerrains.add(newAdvTerrain);
-        advTerrains.trimToSize();
+        advancedTerrains.put(newAdvTerrain);
     }
 
-    public AdvancedTerrain getAdvancedTerrainByName(String AdvTerrainName) {
-        for (AdvancedTerrain env : advTerrains) {
-            if (env.getName().equalsIgnoreCase(AdvTerrainName)) {
-                return env;
-            }
-        }
-        return new AdvancedTerrain();
+    public AdvancedTerrain getAdvancedTerrainByName(String name) {
+        return advancedTerrains.getByName(name);
     }
 
-    
-    /**
-     * @see common.persistence.MMNetSerializable#binOut(common.persistence.TreeWriter)
-     * 
-          public void binOut(TreeWriter out) { out.write(terrains, "terrains");
-     *      out.startDataBlock("factions"); out.write(factions.size(),
-     *      "factionsCount"); for (House h : factions.values()) {
-     *      out.write(h.getClass().getName(), "factionType"); out.write(h,
-     *      "faction"); } out.endDataBlock("factions");
-     *      out.startDataBlock("planets"); out.write(factions.size(),
-     *      "planetsCount"); for (Planet p : planets.values()) {
-     *      out.write(p.getClass().getName(), "planetType"); out.write(p,
-     *      "planet"); } out.endDataBlock("planets"); }
-     */
-
-    /**
-     * @see common.persistence.MMNetSerializable#binIn(common.persistence.TreeReader)
-     * 
-          public void binIn(TreeReader in, CampaignData dataProvider) throws
-     *      IOException { terrains.clear(); in.startDataBlock("factions");
-     *      factions.clear(); int size = in.readInt("factionsCount"); for (int i
-     *      = 0; i < size; ++i) { String type = in.readString("factionType");
-     *      try { House h = (House) Class.forName(type).newInstance();
-     *      in.readObject(h, this, "faction"); factions.put(new
-     *      Integer(h.getId()), h); } catch (InstantiationException e) {
-     *      LOGGER.error("Exception: ", e); } catch (IllegalAccessException e) {
-     *      LOGGER.error("Exception: ", e); } catch (ClassNotFoundException e) {
-     *      LOGGER.error("Exception: ", e); } } in.endDataBlock("factions");
-     * 
-     *      in.startDataBlock("planets"); planets.clear(); size =
-     *      in.readInt("planetsCount"); for (int i = 0; i < size; ++i) { String
-     *      type = in.readString("planetsType"); try { Planet p = (Planet)
-     *      Class.forName(type).newInstance(); in.readObject(p, this, "planet");
-     *      planets.put(new Integer(p.getId()), p); } catch
-     *      (InstantiationException e) { LOGGER.error("Exception: ", e); } catch
-     *      (IllegalAccessException e) { LOGGER.error("Exception: ", e); } catch
-     *      (ClassNotFoundException e) { LOGGER.error("Exception: ", e); } }
-     *      in.endDataBlock("planets"); }
-     */
     /**
      * @author Torren (Jason Tighe)
      * 
@@ -811,6 +566,7 @@ public class CampaignData implements TerrainProvider {
                 commandTemp.put(commandName, accessLevel);
             }
         } catch (Exception ex) {
+            LOGGER.error("Unable to import acccess levels", ex);
         } // in is empty move on.
         setCommandTable(commandTemp);
     }
@@ -828,7 +584,6 @@ public class CampaignData implements TerrainProvider {
 
         if (getCommandTable().get(command.toUpperCase()) != null) {
             level = getCommandTable().get(command.toUpperCase()).intValue();
-            // LOGGER.error("Command: "+command+" level: "+level);
         }
 
         return level;

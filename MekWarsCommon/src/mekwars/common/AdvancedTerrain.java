@@ -19,7 +19,8 @@ package mekwars.common;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
-
+import mekwars.common.entities.Entity;
+import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.TokenReader;
@@ -38,9 +39,9 @@ import megamek.common.planetaryconditions.WindDirection;
  * @@author Torren (Jason Tighe) allows So's to set up each individual terrain on a planet.
  */
 
-final public class AdvancedTerrain {
+public class AdvancedTerrain implements Entity {
     private String displayName = "none";
-    private int id = 0;
+    private int id = EntityStore.UNSET_ID;
     private String name = "none";
     
     //NOTE: These fields are unused and kept to keep the xml file consistent
@@ -112,6 +113,8 @@ final public class AdvancedTerrain {
         }
 
         result += "$";
+        result += name;
+        result += "$";
         result += lowTemp;
         result += "$";
         result += highTemp;
@@ -181,7 +184,7 @@ final public class AdvancedTerrain {
 
     public void binIn(BinReader in) throws IOException {
         displayName = in.readLine("displayName");
-        name = displayName;
+        name = in.readLine("name");
         lowTemp = in.readInt("lowTemp");
         highTemp = in.readInt("highTemp");
         gravity = in.readDouble("gravity");
@@ -217,8 +220,8 @@ final public class AdvancedTerrain {
     }
 
     public void binOut(BinWriter out) throws IOException {
-
         out.println(displayName, "displayName");
+        out.println(name, "name");
         out.println(lowTemp, "lowTemp");
         out.println(highTemp, "highTemp");
         out.println(gravity, "gravity");
@@ -551,6 +554,7 @@ final public class AdvancedTerrain {
         AdvancedTerrain clone = new AdvancedTerrain();
         clone.setAtmosphere(atmosphere);
         clone.setDisplayName(displayName);
+        clone.setName(name);
         clone.setDownPourChance(downPourChance);
         clone.setDuskChance(duskChance);
         clone.setEMI(emi);
