@@ -1695,6 +1695,7 @@ public final class CampaignMain implements Serializable {
                 }
             } catch (Exception ex) {
                 LOGGER.error("Error while reading Planet Data: {}", ex.toString());
+                LOGGER.error("Exception", ex);
                 System.exit(1);
             }
 
@@ -3508,9 +3509,13 @@ public final class CampaignMain implements Serializable {
                     LOGGER.error("Error while reading faction data -- bailing out", ex);
                     System.exit(1);
                 }
-                // Add the Newbie-SHouse
-                SHouse solaris = new NewbieHouse(CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
-                addHouse(solaris);
+
+                String newbieHouseName = CampaignMain.cm.getConfig("NewbieHouseName");
+                if (data.getHouseByName(newbieHouseName) == null) {
+                    // Add the Newbie-SHouse
+                    SHouse solaris = new NewbieHouse(newbieHouseName, "#33CCCC", 4, 5, "SOL");
+                    addHouse(solaris);
+                }
             }
             return;
         }
