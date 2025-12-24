@@ -57,13 +57,17 @@ public class NamedEntityStore<T extends Entity> extends EntityStore<T> {
      * @return The {@link Entity} of the given name.
      */
     public T getByName(String name) {
-         Integer id = entityNames.get(name.toLowerCase());
+        if (name == null) {
+            return null;
+        }
 
-         if (id == null) {
-             LOGGER.warn("Unable to find '{}'", name.toLowerCase());
-             return null;
-         }
-         return get(id);
+        Integer id = entityNames.get(name.toLowerCase());
+
+        if (id == null) {
+            LOGGER.warn("Unable to find '{}'", name.toLowerCase());
+            return null;
+        }
+        return get(id);
     }
 
     /**
