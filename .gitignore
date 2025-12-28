@@ -5,7 +5,6 @@ MekWarsServer/build
 MekWarsClient/build
 MekWarsCommon/build
 MekWarsOperationsEditor/build
-MekWarsTracker/build
 MekWarsDedicatedHost/build
 MekWarsHPGNet/build
 MekWarsHPGNet/hpg-dist
