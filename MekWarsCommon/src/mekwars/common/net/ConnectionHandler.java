@@ -64,7 +64,7 @@ public abstract class ConnectionHandler {
                 return;
             }
         }
-        logger.warn("Packet '{}' not processed", packet.getClass().getSimpleName());
+        logger.warn("Packet '{}' not processed, no resolver found", packet.getClass().getSimpleName());
     }
 
     /**

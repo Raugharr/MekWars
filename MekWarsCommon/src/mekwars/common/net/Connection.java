@@ -364,6 +364,34 @@ public class Connection implements AutoCloseable {
     }
 
     /**
+     * Write helper method decoupled in order to allow callee's determine how to catch the
+     * {@link KryoBufferOverFlowException} if thrown.
+     *
+     * @param packet The packet to write.
+     *
+     * @param start Initial bytebuffer position.
+     *
+     * @throws KryoBufferOverFlowException When Output has no more space available to write to.
+     */
+    protected void writeInner(AbstractPacket packet, int start) throws KryoBufferOverflowException {
+        ByteBuffer buffer = getOutput().getByteBuffer();
+
+        getOutput().setBuffer(buffer, bufferLimit());
+        output.writeInt(0); //Leave space for packet length
+        output.writeInt(packet.getType().getType(), 2);
+        output.writeBoolean(packet.getType().isSystemPacket());
+        kryos.get().writeObject(output, packet);
+        final int end = output.position();
+
+        output.setPosition(start);
+        final int length = end - start - PacketHeader.SIZE;
+        // Don't count the packet type or length ints.
+        output.writeInt(length);
+        output.setPosition(end);
+        LOGGER.debug("writing {} bytes {}", length + PacketHeader.SIZE, packet);
+    }
+
+    /**
      * Deserializes an AbstractPacket from the socket.
      *
      * @return null if there are not enough bytes to create a PacketHeader, there are not enough

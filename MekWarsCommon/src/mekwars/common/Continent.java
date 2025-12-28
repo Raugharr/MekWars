@@ -20,11 +20,18 @@
  */
 package mekwars.common;
 
+import com.esotericsoftware.kryo.serializers.FieldSerializer.Bind;
+import mekwars.common.serializers.TerrainIdSerializer;
+import mekwars.common.serializers.AdvancedTerrainIdSerializer;
+
 /**
  * @author Helge Richter
  */
 public class Continent {
+    @Bind(serializer = TerrainIdSerializer.class, canBeNull = false)
 	private Terrain environment;
+
+    @Bind(serializer = AdvancedTerrainIdSerializer.class, canBeNull = false)
 	private AdvancedTerrain advTerrain;
 	private int size = 1;
 	private int id = -1;

@@ -31,11 +31,13 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -43,8 +45,12 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import mekwars.client.MWClient;
 import mekwars.client.gui.SplashWindow;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class SignonDialog extends JDialog implements ActionListener {
+    private static final Logger LOGGER = LogManager.getLogger(SignonDialog.class);
+
     private static final int DIALOG_WIDTH = 450;
     private static final int DIALOG_HEIGHT = 300;
 	
@@ -127,9 +133,26 @@ public final class SignonDialog extends JDialog implements ActionListener {
         } else if (OKAY_COMMAND.equals(command)) {
             connect();
             dispose();
-            mwClient.connectDataFetcher();
-            SplashWindow splashWindow = new SplashWindow(mwClient, resourceMap.getLocale());
-            splashWindow.setVisible(true);
+            try {
+                mwClient.connectDataClient();
+                SplashWindow splashWindow = new SplashWindow(mwClient, resourceMap.getLocale());
+                splashWindow.setVisible(true);
+            } catch (Exception exception) {
+                Object[] options = { "Exit" };
+                JOptionPane.showOptionDialog(
+                    null,
+                    "Unable to connect to the server!",
+                    "Startup error!",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.ERROR_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+                );
+                LOGGER.error("Unable to connect to the server!", exception);
+                // TODO: We can do better here.
+                System.exit(1);
+            }
         } else if (CANCEL_COMMAND.equals(command)) {
             dispose();
         }

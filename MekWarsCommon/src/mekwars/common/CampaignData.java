@@ -21,14 +21,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 import java.util.Vector;
 import megamek.common.AmmoType;
+import mekwars.common.entities.Entity;
+import mekwars.common.persistence.EntityStore;
+import mekwars.common.persistence.NamedEntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
-import mekwars.common.persistence.NamedEntityStore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -126,6 +127,14 @@ public class CampaignData implements TerrainProvider {
     }
 
     /**
+     * @param collection The collection used to upsert the {@link CampaignData CampaignData's}
+     * {@link Planet}
+     */
+    public void updatePlanets(Collection<Planet> collection) {
+        updateEntities(collection, planets);
+    }
+
+    /**
      * Remove all planets.
      */
     public void clearPlanets() {
@@ -187,6 +196,14 @@ public class CampaignData implements TerrainProvider {
         if (factionFile.exists()) {
             factionFile.delete();
         }
+    }
+
+    /**
+     * @param collection The collection used to upsert the {@link CampaignData CampaignData's}
+     * {@link House}
+     */
+    public void updateHouses(Collection<House> collection) {
+        updateEntities(collection, factions);
     }
 
     /**
@@ -352,6 +369,18 @@ public class CampaignData implements TerrainProvider {
         terrains.put(terrain);
     }
 
+    public void removeTerrain(int id) {
+        terrains.remove(id);
+    }
+
+    public void updateTerrains(Collection<Terrain> collection) {
+        updateEntities(collection, terrains);
+    }
+
+    /**
+     * @param collection The collection used to upsert the {@link CampaignData CampaignData's}
+     * {@link Terrain}
+     */
     public Terrain getTerrainByName(String name) {
         return terrains.getByName(name);
     }
@@ -362,6 +391,18 @@ public class CampaignData implements TerrainProvider {
      */
     public AdvancedTerrain getAdvancedTerrain(int id) {
         return advancedTerrains.get(id);
+    }
+
+    public void removeAdvancedTerrain(int id) {
+        advancedTerrains.remove(id);
+    }
+
+    /**
+     * @param collection The collection used to upsert the {@link CampaignData CampaignData's}
+     * {@link AdvancedTerrain}
+     */
+    public void updateAdvancedTerrains(Collection<AdvancedTerrain> collection) {
+        updateEntities(collection, advancedTerrains);
     }
 
     /**
@@ -602,10 +643,7 @@ public class CampaignData implements TerrainProvider {
     }
 
     public boolean targetSystemIsBanned(int id) {
-        if (bannedTargetingSystems.contains(id)) {
-            return true;
-        }
-        return false;
+        return bannedTargetingSystems.contains(id);
     }
     
     public House getHouseFromPartialString(String houseString) {
@@ -629,5 +667,14 @@ public class CampaignData implements TerrainProvider {
 
         // only one match! send it back.
         return theMatch;
+    }
+
+    protected <T extends Entity> void updateEntities(Collection<T> updateEntities, EntityStore<T> entityStore) {
+        for (T entity : updateEntities) {
+            if (entityStore.get(entity.getId()) != null) {
+                entityStore.remove(entity.getId());
+            }
+            entityStore.put(entity);
+        }
     }
 }

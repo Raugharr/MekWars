@@ -1491,7 +1491,7 @@ public class DefaultServerOptions {
     }
 
     public void createConfig() {
-            createConfig(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG"));
+        createConfig(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG"));
     }
 
     public Properties getServerDefaults() {

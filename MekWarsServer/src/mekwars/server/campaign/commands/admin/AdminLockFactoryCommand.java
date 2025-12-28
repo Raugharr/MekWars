@@ -93,6 +93,7 @@ public class AdminLockFactoryCommand implements Command {
 				//server.MWLogger.modLog(Username + " has unlocked "+ uf.getName()+" on planet "+p.getName());
 				CampaignMain.cm.doSendModMail("NOTE",Username + " has unlocked "+ uf.getName()+" on planet "+p.getName());
 			}
+            p.updated();
 
 		} catch (Exception ex){
 			CampaignMain.cm.toUser("Command failed. Make sure format was: /c adminlockfactory#planetname#factoryname", Username, true);

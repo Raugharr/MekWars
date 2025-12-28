@@ -59,8 +59,9 @@ import mekwars.server.campaign.operations.OperationWriter;
 import mekwars.server.campaign.util.scheduler.TickJob;
 import mekwars.server.campaign.util.scheduler.TrackerUpdateJob;
 import mekwars.server.dataProvider.Server;
-import mekwars.server.net.hpgnet.HPGSubscribedClient;
+import mekwars.server.net.data.DataServer;
 import mekwars.server.io.FileSystem;
+import mekwars.server.net.hpgnet.HPGSubscribedClient;
 import mekwars.server.util.AutomaticBackup;
 import mekwars.server.util.IpCountry;
 import mekwars.server.util.RepairTrackingThread;
@@ -116,23 +117,6 @@ public class MWServ {
      */
 
     public static void main(String[] argv) {
-        String trackerAddress = MWServ.getInstance().getCampaign().getConfig("TrackerAddress");
-
-        try {
-            CampaignOptions campaignOptions = MWServ.getInstance().getCampaign().getCampaignOptions();
-
-            if (campaignOptions.getBooleanConfig("TrackerEnabled")) {
-                InetSocketAddress address = new InetSocketAddress(
-                        trackerAddress,
-                        HPGSubscribedClient.TRACKER_PORT
-                    );
-                MWServ.getInstance().getHpgClient().connect(address);
-                TrackerUpdateJob.submit();
-            }
-        } catch (IOException exception) {
-            LOGGER.warn("Unable to connect to tracker");
-        }
-        TickJob.submit();
 
         try {
             OperationWriter operationWriter = new OperationWriter();
@@ -265,6 +249,23 @@ public class MWServ {
 
     // this will just loop and take in info...
     public void startServer() {
+        String trackerAddress = MWServ.getInstance().getCampaign().getConfig("TrackerAddress");
+
+        try {
+            CampaignOptions campaignOptions = MWServ.getInstance().getCampaign().getCampaignOptions();
+
+            if (campaignOptions.getBooleanConfig("TrackerEnabled")) {
+                InetSocketAddress address = new InetSocketAddress(
+                        trackerAddress,
+                        HPGSubscribedClient.TRACKER_PORT
+                    );
+                MWServ.getInstance().getHpgClient().connect(address);
+                TrackerUpdateJob.submit();
+            }
+        } catch (IOException exception) {
+            LOGGER.warn("Unable to connect to tracker");
+        }
+        TickJob.submit();
         try {
             myCommunicator = ServerWrapper.createServer(this);
             myCommunicator.start();

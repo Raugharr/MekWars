@@ -122,7 +122,7 @@ public final class MWClient extends GameHost implements IClient {
 
     // Holds campaign data as factions and planets..
     private CampaignData data = null;
-    private DataFetchClient dataFetcher;
+    private DataClient dataClient;
 
     public static final Version CLIENT_VERSION = new Version("9.0.0"); // change this with
 
@@ -266,6 +266,7 @@ public final class MWClient extends GameHost implements IClient {
         Connector = new CConnector(this);
 
         Users = Collections.synchronizedList(new Vector<CUser>(1, 1));
+        dataClient = new DataClient(this);
 
         // Non-ded's get a GUI, show signon dialog, etc.
         if (!isDedicated()) {
@@ -293,19 +294,6 @@ public final class MWClient extends GameHost implements IClient {
         // Dedicated servers have no GUI, no signon dialogs, etc.
         } else {
             createProtCommands();
-            dataFetcher = new DataFetchClient(Integer.parseInt(Config
-                    .getParam("DATAPORT")), Integer.parseInt(Config
-                    .getParam("SOCKETTIMEOUTDELAY")));
-            dataFetcher.setData(Config.getParam("SERVERIP"), FileSystem.getInstance().getConfigDir().toString());
-            try {
-                dataFetcher.getServerConfigData(this);
-            } catch (Exception ex) {
-                LOGGER.error("Error While getting server config file.");
-                LOGGER.catching(ex);
-            }
-
-            dataFetcher.closeDataConnection();
-
             // Remove any MM option files that deds may have.
             File localGameOptions = new File("./mmconf");
             try {
@@ -1856,7 +1844,7 @@ public final class MWClient extends GameHost implements IClient {
         if (Status != STATUS_DISCONNECTED) {
             // serverSend("GB");
             Connector.send(IClient.PROTOCOL_PREFIX + "signoff");
-            dataFetcher.closeDataConnection();
+            dataClient.close();
             Connector.closeConnection();
         }
 
@@ -2133,15 +2121,6 @@ public final class MWClient extends GameHost implements IClient {
         return aTerrain;
     }
 
-    public void getBlackMarketSettings() {
-        try {
-            dataFetcher.getBlackMarketSettings(this);
-        } catch (Exception ex) {
-            LOGGER.catching(ex);
-        }
-
-    }
-
     protected class TimeOutThread extends Thread {
         MWClient mwclient;
 
@@ -2374,7 +2353,6 @@ public final class MWClient extends GameHost implements IClient {
             // close the connection.a
             dataFetcher.closeDataConnection();
         }
-
         return data;
     }
 
@@ -2520,15 +2498,6 @@ public final class MWClient extends GameHost implements IClient {
         }
         return CampaignData.cd.getServerConfigs().getProperty(key).trim();
     }
-
-    //@Salient ... ugh... how can i get to the damn house configs
-//    public String getHouseConfigs(String key)
-//    {
-//        //CampaignData.cd.ge
-//        SHouse house = CampaignData.cd.getHouseByName(this.getPlayer().getHouse());
-//
-//        return CampaignData.cd.getServerConfigs().getProperty(key).trim();
-//    }
 
     public Properties getServerConfigs() {
         return CampaignData.cd.getServerConfigs();

@@ -67,6 +67,7 @@ public abstract class Client extends ConnectionHandler {
             selector = null;
         }
 
+        // TODO: This should be in Connection.java
         if (connection != null && connection.isConnected()) {
             try {
                 connection.write(new CloseConnection());

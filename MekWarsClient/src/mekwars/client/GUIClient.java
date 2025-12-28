@@ -26,6 +26,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.JButton;
@@ -75,7 +76,14 @@ public class GUIClient {
         setupFlatLaf();
         if (shouldAutoconnect) {
             mwClient.setUsername(config.getParam("NAME"));
-            mwClient.connectDataFetcher();
+            try {
+                mwClient.connectDataFetcher();
+            } catch (Exception exception) {
+                // TODO: Make this better? This should display where ever we came from but we don't
+                // have any history mechanic.
+                new SignonDialog(mwClient, getLocale());
+                return;
+            }
             SplashWindow splashWindow = new SplashWindow(mwClient, getLocale());
             splashWindow.setVisible(true);
         } else if (mwClient.getHpgClient().isConnected()) {

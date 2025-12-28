@@ -14,15 +14,17 @@
  * for more details.
  */
 
-package mekwars.common.net;
+package mekwars.common.net.data;
 
 import com.esotericsoftware.kryo.Kryo;
-import mekwars.common.net.packets.CloseConnection;
-import mekwars.common.net.packets.Ping;
+import mekwars.common.net.KryoUtil;
 
-public class KryoUtil {
-    public static void register(Kryo kryo) {
-        kryo.register(Ping.class);
-        kryo.register(CloseConnection.class);
+public class KryoThreadLocal extends ThreadLocal<Kryo> {
+    @Override
+    protected Kryo initialValue() {
+        Kryo kryo = new Kryo();
+
+        DataKryoUtil.register(kryo);
+        return kryo;
     }
 }

@@ -38,6 +38,12 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import megamek.common.MechSummaryCache;
 import mekwars.client.MWClient;
+import mekwars.client.net.data.resolvers.ServerConnectResponseResolver;
+import mekwars.client.net.data.resolvers.UpdateEntitiesResolver;
+import mekwars.common.net.AbstractPacket;
+import mekwars.common.net.CallbackResolverListener;
+import mekwars.common.net.Connection;
+import mekwars.common.net.data.packets.DataPacketType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -141,9 +147,11 @@ public class SplashWindow extends JDialog {
         getImageLabel().setText("<HTML><CENTER><b>" + s + "</b></CENTER></HTML>");
     }
 
-    class Task extends SwingWorker<Void, Void> {
+    class Task extends SwingWorker<Void, Void> implements CallbackResolverListener {
         private MWClient mwClient;
         private SplashWindow splashWindow;
+        // private boolean connected = false;
+        // private boolean dataLoaded = false;
         private boolean mechSummaryLoaded = false;
         private MechSummaryCache.Listener mechSummaryCacheListener = () -> {
             mechSummaryLoaded = true;
@@ -152,7 +160,18 @@ public class SplashWindow extends JDialog {
         public Task(MWClient mwClient, SplashWindow splashWindow) {
             this.mwClient = mwClient;
             this.splashWindow = splashWindow;
+            // mwClient.getDataClient().registerResolverListener(ServerConnectResponseResolver.class, this);
+            // mwClient.getDataClient().registerResolverListener(UpdateEntitiesResolver.class, this);
         }
+
+        // public void resolverUpdate(AbstractPacket message, Connection connection) {
+        //     if (message.getType().getType() == DataPacketType.SERVER_CONNECT_RESPONSE.getType()) {
+        //         mwClient.setupAllOps();
+        //         connected = true;
+        //     } else if(message.getType().getType() == DataPacketType.UPDATE_ENTITIES.getType()) {
+        //         dataLoaded = true;
+        //     }
+        // }
 
         @Override
         public Void doInBackground() {
@@ -181,6 +200,8 @@ public class SplashWindow extends JDialog {
 
         @Override
         public void done() {
+            // mwClient.getDataClient().unregisterResolverListener(ServerConnectResponseResolver.class, this);
+            // mwClient.getDataClient().unregisterResolverListener(UpdateEntitiesResolver.class, this);
             mwClient.getGUIClient().setupMainFrame();
             splashWindow.dispose();
             mwClient.connectToServer();
