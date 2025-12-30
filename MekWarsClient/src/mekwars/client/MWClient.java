@@ -17,6 +17,7 @@ package mekwars.client;
 
 import java.awt.Dimension;
 import java.awt.FileDialog;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +27,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
@@ -34,6 +36,7 @@ import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -91,6 +94,7 @@ import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
+import mekwars.client.io.FileSystem;
 import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.commands.IGUICommand;
 import mekwars.client.gui.commands.MailGCmd;
@@ -196,7 +200,6 @@ public final class MWClient extends GameHost implements IClient {
     // ignored
     Vector<String> KeyWords = new Vector<String>(1, 1); // words announced with
     // sound
-    private String cacheDir;
 
     // Starting edge for players in building ops
     private int playerStartingEdge = Buildings.EDGE_UNKNOWN;
@@ -228,6 +231,7 @@ public final class MWClient extends GameHost implements IClient {
                 }
             }
             config = new GUIClientConfig(dedicated);
+            FileSystem.getInstance().createDirectories();
 
             /*
              * Config files have been loaded, and command line args have been
@@ -299,7 +303,7 @@ public final class MWClient extends GameHost implements IClient {
             dataFetcher = new DataFetchClient(Integer.parseInt(Config
                     .getParam("DATAPORT")), Integer.parseInt(Config
                     .getParam("SOCKETTIMEOUTDELAY")));
-            dataFetcher.setData(Config.getParam("SERVERIP"), getCacheDir());
+            dataFetcher.setData(Config.getParam("SERVERIP"), FileSystem.getInstance().getConfigDir().toString());
             try {
                 dataFetcher.getServerConfigData(this);
             } catch (Exception ex) {
@@ -1276,13 +1280,14 @@ public final class MWClient extends GameHost implements IClient {
      */
     public void connectDataFetcher() {
         try {
+            FileSystem.getInstance().setConfigDir(Config);
             dataFetcher = new DataFetchClient(Integer.parseInt(Config
                 .getParam("DATAPORT")), Integer.parseInt(Config
                 .getParam("SOCKETTIMEOUTDELAY")));
 
             BufferedReader dis = new BufferedReader(new InputStreamReader(
-                new FileInputStream(getCacheDir() + "/dataLastUpdated.dat")
-            ));
+                new FileInputStream(FileSystem.getInstance().getDataLastUpdated().toString()
+            )));
             Date lastTS = new Date(Long.parseLong(dis.readLine()));
             dataFetcher.setLastTimestamp(lastTS);
             dis.close();
@@ -1291,7 +1296,7 @@ public final class MWClient extends GameHost implements IClient {
         }
         // Start the data fetcher, get ops/map/etc
 
-        dataFetcher.setData(Config.getParam("SERVERIP"), getCacheDir());
+        dataFetcher.setData(Config.getParam("SERVERIP"), FileSystem.getInstance().getConfigDir().toString());
         /*
          * Now that the data fetcher has been created, get the OpList.txt.
          * Note that this is BEFORE map data and other fetch/checks, because
@@ -1498,17 +1503,15 @@ public final class MWClient extends GameHost implements IClient {
      * design ... *sigh*
      */
     public void setupAllOps() {
-
         allOps = new TreeMap<String, String[]>();
         try {
-
-            File f = new File(cacheDir + "/OpList.txt");
-            if (!f.exists()) {
+            Path opListPath = FileSystem.getInstance().getOpList();
+            if (!Files.exists(opListPath)) {
                 LOGGER.error("OpList.txt does not exist.");
                 return;
             }
 
-            FileInputStream in = new FileInputStream(cacheDir + "/OpList.txt");
+            InputStream in = new BufferedInputStream(Files.newInputStream(FileSystem.getInstance().getOpList()));
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             // skip past the first line - its just a timestamp.
@@ -2321,7 +2324,7 @@ public final class MWClient extends GameHost implements IClient {
                 dataFetcher.checkServerVersion(this);
                 // data = dataFetcher.getAllData();
 
-                data = dataFetcher.getCacheData(getCacheDir());
+                data = dataFetcher.getCacheData(FileSystem.getInstance().getConfigDir().toString());
                 if ((data == null) || (data.getAllPlanets().size() == 0)
                         || (data.getAllHouses().size() == 0)) {
                     throw new Exception("data still empty");
@@ -2353,7 +2356,6 @@ public final class MWClient extends GameHost implements IClient {
                     data = dataFetcher.getAllData();
                     dataFetcher.store();
                 } catch (ConnectException e1) {
-                    LOGGER.error(getCacheDir());
                     LOGGER.catching(e1);
                     Object[] options = { "Exit", "Continue" };
                     int selectedValue = JOptionPane.showOptionDialog(null,
@@ -2440,23 +2442,6 @@ public final class MWClient extends GameHost implements IClient {
         getGUIClient().getMainFrame().getMainPanel().getMapPanel().getMap().processTick();
         System.gc(); // Decicded to have the client do a GC every tick as
         // well.
-    }
-
-    /**
-     * Return the directory, where all cache files can go into. The dirname
-     * depends on the server you connect.
-     */
-    public String getCacheDir() {
-        // if (cacheDir == null) {
-        // first access. Check if need to create directory.
-        cacheDir = "data/servers/" + Config.getParam("SERVERIP") + "."
-                + Config.getParam("SERVERPORT");
-        File dir = new File(cacheDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        // }
-        return cacheDir;
     }
 
     public void setIgnoreHouse() {
@@ -2703,8 +2688,7 @@ public final class MWClient extends GameHost implements IClient {
     public void saveBannedTargetingSystems(String timestamp) {
         // Save banned targeting systems
         try {
-            FileOutputStream out = new FileOutputStream(cacheDir
-                    + "/bantargeting.dat");
+            OutputStream out = Files.newOutputStream(FileSystem.getInstance().getBanTargeting());
             PrintStream p = new PrintStream(out);
             p.println(timestamp);
             for (Integer targetingSytem : getData().getBannedTargetingSystems()) {
@@ -2744,8 +2728,7 @@ public final class MWClient extends GameHost implements IClient {
         try {
 
             // output streams
-            FileOutputStream out = new FileOutputStream(cacheDir
-                    + "/banammo.dat");
+            OutputStream out = Files.newOutputStream(FileSystem.getInstance().getBanAmmo());
             PrintStream p = new PrintStream(out);
 
             // timestamp
@@ -3121,7 +3104,7 @@ public final class MWClient extends GameHost implements IClient {
     public void updateOpData(boolean deleteCache) {
         try {
             if (deleteCache) {
-                new File(cacheDir + "/OpList.txt").delete();
+                Files.delete(FileSystem.getInstance().getOpList());
             }
 
             dataFetcher.checkForMostRecentOpList();

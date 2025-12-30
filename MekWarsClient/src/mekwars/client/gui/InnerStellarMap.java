@@ -61,6 +61,7 @@ import mekwars.admin.AdminMapPopupMenu;
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CArmy;
 import mekwars.client.gui.dialog.PlanetSearchDialog;
+import mekwars.client.io.FileSystem;
 import mekwars.common.House;
 import mekwars.common.Influences;
 import mekwars.common.Planet;
@@ -378,7 +379,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
         addMouseMotionListener(this);
         addMouseWheelListener(this);
 
-        conf = loadMapConf(client.getCacheDir());
+        conf = loadMapConf(FileSystem.getInstance().getConfigDir().toString());
 
         try {
             parseOverlayFile();
@@ -1016,7 +1017,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
      */
     public void processTick() {
         try {
-            new MMNetXStream().toXML(conf, new FileWriter(mwclient.getCacheDir() + "/mapconf.xml"));
+            new MMNetXStream().toXML(conf, new FileWriter(FileSystem.getInstance().getConfigDir() + "/mapconf.xml"));
         } catch (IOException ioe) {
             LOGGER.error("Exception: ", ioe);
         }

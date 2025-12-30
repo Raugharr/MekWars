@@ -51,5 +51,4 @@ public interface I_OperationManager {
     public int getLongID(SHouse h, SPlanet p);
     public boolean hasSpecificLongOnPlanet(SHouse h, SPlanet p, Operation o);
     public boolean hasLongOnPlanet(SHouse h, SPlanet p);
-    
 }

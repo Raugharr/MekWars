@@ -23,14 +23,14 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 //Syntax updateoperations
-public class  UpdateOperationsCommand  implements Command {
+public class UpdateOperationsCommand implements Command {
     int accessLevel = IAuthenticator.ADMIN;
     public int getExecutionLevel(){return accessLevel;}
     public void setExecutionLevel(int i) {accessLevel = i;}
 	String syntax = "";
 	public String getSyntax() { return syntax;}
 
-    public void process(StringTokenizer command,String Username) {
+    public void process(StringTokenizer command, String Username) {
         
         //access level check
         int userLevel = MWServ.getInstance().getUserLevel(Username);

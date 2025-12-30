@@ -43,8 +43,8 @@ public class MMNetXStream extends XStream {
     protected void setup() {
         // you may add shortcuts here, so XStream will not 
         // write the whole class name each time ;-)
-    	registerConverter(new PointConverter());
-    	
+        registerConverter(new PointConverter());
+
         alias("advancedTerrain", AdvancedTerrain.class);
         alias("point", java.awt.Point.class);
         // Enables reference marshalling.

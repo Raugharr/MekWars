@@ -26,17 +26,18 @@
  */
 package mekwars.server.campaign.operations;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
 import java.util.TreeSet;
-
 import mekwars.common.House;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.server.campaign.CampaignMain;
+import mekwars.server.io.FileSystem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -62,22 +63,15 @@ public class OperationWriter {
 	}
 
 	//METHODS
-	public void writeOpList(TreeMap<String,Operation> ops) {
-		
-		//path to our file
-		String path = "./data/operations/OpList.txt";
-		
-		//if there is an old file, delete before rewriting
-		File oldFile = new File(path);
-		if (oldFile.exists())
-			oldFile.delete();
+    public void writeOpList(Collection<Operation> operations) throws IOException {
+		Path path = FileSystem.getInstance().getOpList();
 	
 		//construct a new file
 		try{
-			PrintStream ps = new PrintStream(new FileOutputStream(path));
+			PrintStream ps = new PrintStream(new FileOutputStream(path.toString()));
 			ps.println("#Timestamp=" + System.currentTimeMillis());
 			
-			for (Operation currO : ops.values()){
+			for (Operation currO : operations){
 				String name = currO.getName() + "*";
 				String range = currO.getValue("OperationRange") + "*";
 				String color = currO.getValue("OperationColor") + "*";
@@ -161,6 +155,5 @@ public class OperationWriter {
 		} catch (Exception ex) {
 			LOGGER.error("Exception: ", ex);
 		}
-		
-	}//end writeOpList
-}//end OperationsManager class
+	}
+}

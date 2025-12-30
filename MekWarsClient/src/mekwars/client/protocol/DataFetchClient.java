@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 
 import mekwars.client.MWClient;
 import mekwars.client.gui.CMainFrame;
+import mekwars.client.io.FileSystem;
 import mekwars.common.CampaignData;
 import mekwars.common.Equipment;
 import mekwars.common.House;
@@ -236,7 +237,7 @@ public class DataFetchClient {
     public void getBannedAmmoData(MWClient mwclient) throws IOException {
 
         boolean timestampMatch = false;
-        File localban = new File(cacheDir + "/banammo.dat");
+        File localban = FileSystem.getInstance().getBanAmmo().toFile();
         if (localban.exists()) {
 
             // get the local timetamp
@@ -277,7 +278,7 @@ public class DataFetchClient {
             mwclient.saveBannedAmmo(timestamp);
         } else {// load from the banned file.
             try {
-                FileInputStream fis = new FileInputStream(mwclient.getCacheDir() + "/banammo.dat");
+                FileInputStream fis = new FileInputStream(FileSystem.getInstance().getBanAmmo().toString());
                 BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
                 while (dis.ready()) {
                     String line = dis.readLine();
@@ -300,7 +301,7 @@ public class DataFetchClient {
     public void getBanTargetingData(MWClient mwclient) throws IOException {
 
         boolean timestampMatch = false;
-        File localban = new File(cacheDir + "/bantargeting.dat");
+        File localban = FileSystem.getInstance().getBanTargeting().toFile();
         if (localban.exists()) {
 
             // get the local timetamp
@@ -339,7 +340,7 @@ public class DataFetchClient {
             mwclient.saveBannedTargetingSystems(timestamp);
         } else {// load from the banned file.
             try {
-                FileInputStream fis = new FileInputStream(mwclient.getCacheDir() + "/bantargeting.dat");
+                FileInputStream fis = new FileInputStream(FileSystem.getInstance().getBanTargeting().toString());
                 BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
                 dis.readLine();
                 mwclient.loadBanTargeting(dis.readLine());

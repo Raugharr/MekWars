@@ -44,6 +44,7 @@ import javax.swing.SwingConstants;
 
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.io.FileSystem;
 import mekwars.common.House;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.util.SpringLayoutHelper;
@@ -376,7 +377,7 @@ public final class TraitDialog implements ActionListener, KeyListener{
 	}
 	
 	private void loadFactionTraits(String faction){
-	    File traitFile = new File(mwclient.getCacheDir() + "/"+faction.toLowerCase()+"traitnames.txt");
+	    File traitFile = new File(FileSystem.getInstance().getConfigDir().toString() + "/" + faction.toLowerCase() + "traitnames.txt");
 	    TreeSet<String> names = new TreeSet<String>();
 	    if ( traitComboBox.getItemCount() > 0)
 	        traitComboBox.removeAllItems();
@@ -411,7 +412,7 @@ public final class TraitDialog implements ActionListener, KeyListener{
 	}
 	
 	private void populateTraits(String faction, String trait){
-	    File traitFile = new File(mwclient.getCacheDir() + "/"+faction.toLowerCase()+"traitnames.txt");
+	    File traitFile = new File(FileSystem.getInstance().getConfigDir().toString() + "/" + faction.toLowerCase() + "traitnames.txt");
 
 		gunneryLaserText.setText("0");
 		gunneryBalisticText.setText("0");
