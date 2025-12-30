@@ -42,7 +42,6 @@ application {
 
 ext {
     fileStagingDir = "${buildDir}/files"
-    clientdist = "client-dist"
     lib = "lib"
     data = "data"
     docs = "docs"
@@ -66,12 +65,14 @@ task stageFiles(type: Copy) {
 
     dependsOn gradle.includedBuild('megamek').task(':megamek:stageFiles')
 
-    from clientdist
-    into fileStagingDir
-}
+	from projectDir
 
-tasks.named ('run') {
-    workingDir = file('client-dist')
+	include "data/**"
+	include "docs/**"
+	include "mconf/**"
+	include "userdata/**"
+
+    into fileStagingDir
 }
 
 tasks.named('installDist') {
@@ -90,20 +91,18 @@ tasks.named('installDist') {
 distributions {
     main {
         contents {
-            from stageFiles
             from jar
-            from "${mmDir}/megamek/build/libs/MegaMek.jar"
-
-            from (project.sourceSets.main.runtimeClasspath.files
-                    .findAll { it.name.endsWith(".jar") }) {
-                into "${lib}"
-            }
 
             // execute build with -PexcludeData to skip data copy
-            if (!project.hasProperty('excludeData')) {
-                from("${mmDir}/megamek/data/images") {
-                    into "data/images"
-                }
+			if (!project.hasProperty('excludeData')) {
+				from (project.sourceSets.main.runtimeClasspath.files
+						.findAll { it.name.endsWith(".jar") }) {
+					into lib
+				}
+
+				from stageFiles
+				from "${mmDir}/megamek/build/libs/MegaMek.jar"
+				from "${mmDir}/megamek/build/files"
             }
 
             duplicatesStrategy = 'exclude'
