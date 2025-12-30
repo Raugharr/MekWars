@@ -1559,7 +1559,7 @@
 		</continent>
 	</planet>
 	<planet>
-		<name>Victoria</name>
+		<name>Victoria (Meglan)</name>
 		<componentProduction>100</componentProduction>
 		<xCoord>227</xCoord>
 		<yCoord>-178</yCoord>
@@ -6397,10 +6397,12 @@
 		</unitFactory>
 		<continent>
 			<terrain>Jungle</terrain>
+			<advancedTerrain>temperate</advancedTerrain>
 			<size>40</size>
 		</continent>
 		<continent>
 			<terrain>Plains</terrain>
+			<advancedTerrain>temperate</advancedTerrain>
 			<size>60</size>
 		</continent>
 	</planet>

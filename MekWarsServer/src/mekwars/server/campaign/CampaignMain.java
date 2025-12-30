@@ -718,7 +718,7 @@ public final class CampaignMain implements Serializable {
 
             // keep parsing until we find a players name!
             while (report2.hasMoreTokens()) {
-                SPlayer player = this.getPlayer(report2.nextToken(), false, true);
+                SPlayer player = this.getPlayer(report2.nextToken(), true);
                 if (player != null) {
                     if (!players.contains(player.getName().toLowerCase())) {
                         players.add(player.getName().toLowerCase());
@@ -1089,10 +1089,10 @@ public final class CampaignMain implements Serializable {
      * searched prior to* reading the text file.
      */
     public SPlayer getPlayer(String playerName) {
-        return getPlayer(playerName, true, false);
+        return getPlayer(playerName, false);
     }
 
-    public SPlayer getPlayer(String pName, boolean save, boolean mute) {
+    public SPlayer getPlayer(String pName, boolean mute) {
 
         // Fix for Draw games.
         if (pName.equalsIgnoreCase("DRAW") || pName.toUpperCase().startsWith("DRAW#")) {
@@ -1118,7 +1118,7 @@ public final class CampaignMain implements Serializable {
          * no online player, so try to read from a file.
          */
 
-        result = loadPlayerFile(pName, false, mute);
+        result = loadPlayerFile(pName, mute);
 
         if (result != null) {
             lostSouls.put(pName.toLowerCase(), result);
@@ -1135,7 +1135,7 @@ public final class CampaignMain implements Serializable {
      * .getPlayer(String name) instead. A player who is loaded is put into the
      * CampaignMain
      */
-    private SPlayer loadPlayerFile(String name, boolean explicitName, boolean mute) {
+    private SPlayer loadPlayerFile(String name, boolean mute) {
 
         if (!name.startsWith("[Dedicated]") && !name.startsWith("War Bot")) {
 
@@ -1145,12 +1145,7 @@ public final class CampaignMain implements Serializable {
                 // log the load attempt & create readers
                 LOGGER.info("Loading pfile for: " + name);
 
-                File pFile = null;
-                if (explicitName) {
-                    pFile = new File("./campaign/players/" + name);
-                } else {
-                    pFile = new File("./campaign/players/" + name.toLowerCase() + ".dat");
-                }
+                File pFile = new File("./campaign/players/" + name.toLowerCase() + ".dat");
 
                 if (!pFile.exists()) {
                     return null;
@@ -1695,6 +1690,7 @@ public final class CampaignMain implements Serializable {
                 }
             } catch (Exception ex) {
                 LOGGER.error("Error while reading Planet Data: {}", ex.toString());
+                LOGGER.error("Exception", ex);
                 System.exit(1);
             }
 
@@ -2731,7 +2727,7 @@ public final class CampaignMain implements Serializable {
             }
             if (player.lastModified() + days < System.currentTimeMillis()) {
                 String playerName = player.getName().substring(0, player.getName().indexOf(".dat"));
-                SPlayer p = this.getPlayer(playerName, false, true);
+                SPlayer p = this.getPlayer(playerName, true);
                 p.addExperience(100, true);
                 Command c = CampaignMain.cm.getServerCommands().get("UNENROLL");
                 c.process(new StringTokenizer("CONFIRM", "#"), playerName);
@@ -3508,9 +3504,13 @@ public final class CampaignMain implements Serializable {
                     LOGGER.error("Error while reading faction data -- bailing out", ex);
                     System.exit(1);
                 }
-                // Add the Newbie-SHouse
-                SHouse solaris = new NewbieHouse(CampaignMain.cm.getConfig("NewbieHouseName"), "#33CCCC", 4, 5, "SOL");
-                addHouse(solaris);
+
+                String newbieHouseName = CampaignMain.cm.getConfig("NewbieHouseName");
+                if (data.getHouseByName(newbieHouseName) == null) {
+                    // Add the Newbie-SHouse
+                    SHouse solaris = new NewbieHouse(newbieHouseName, "#33CCCC", 4, 5, "SOL");
+                    addHouse(solaris);
+                }
             }
             return;
         }

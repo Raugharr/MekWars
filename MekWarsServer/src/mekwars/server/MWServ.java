@@ -119,17 +119,18 @@ public class MWServ {
         String trackerAddress = MWServ.getInstance().getCampaign().getConfig("TrackerAddress");
 
         try {
-            InetSocketAddress address = new InetSocketAddress(
-                    trackerAddress,
-                    HPGSubscribedClient.TRACKER_PORT
-                );
-            getInstance().getHpgClient().connect(address);
+            CampaignOptions campaignOptions = MWServ.getInstance().getCampaign().getCampaignOptions();
+
+            if (campaignOptions.getBooleanConfig("TrackerEnabled")) {
+                InetSocketAddress address = new InetSocketAddress(
+                        trackerAddress,
+                        HPGSubscribedClient.TRACKER_PORT
+                    );
+                MWServ.getInstance().getHpgClient().connect(address);
+                TrackerUpdateJob.submit();
+            }
         } catch (IOException exception) {
             LOGGER.warn("Unable to connect to tracker");
-        }
-        CampaignOptions campaignOptions = MWServ.getInstance().getCampaign().getCampaignOptions();
-        if (campaignOptions.getBooleanConfig("TrackerEnabled")) {
-            TrackerUpdateJob.submit();
         }
         TickJob.submit();
 
