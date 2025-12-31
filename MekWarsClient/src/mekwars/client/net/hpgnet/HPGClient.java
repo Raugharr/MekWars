@@ -31,7 +31,6 @@ public class HPGClient extends Client {
     private static KryoThreadLocal kryos = new KryoThreadLocal();
 
     private MWClient mwClient;
-    private ServerQueryAllResponseResolver serverQueryAllResponseResolver;
 
     public HPGClient(MWClient mwClient) {
         this.mwClient = mwClient;
@@ -39,8 +38,7 @@ public class HPGClient extends Client {
 
     protected void addResolvers() {
         super.addResolvers();
-        serverQueryAllResponseResolver = new ServerQueryAllResponseResolver(this);
-        addResolver(serverQueryAllResponseResolver);
+        addResolver(new ServerQueryAllResponseResolver(this));
     }
 
     public ThreadLocal<Kryo> getKryos() {
@@ -53,13 +51,5 @@ public class HPGClient extends Client {
 
     public AbstractPacket.Type getPacketType(int packetType) throws InvalidPacketException {
         return PacketType.fromInteger(packetType);
-    }
-
-    public void registerServerQueryAllResponse(CallbackResolverListener listener) {
-        serverQueryAllResponseResolver.addListener(listener);
-    }
-
-    public void unregisterServerQueryAllResponse(CallbackResolverListener listener) {
-        serverQueryAllResponseResolver.removeListener(listener);
     }
 }

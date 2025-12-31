@@ -134,4 +134,24 @@ public abstract class ConnectionHandler {
         addResolver(new PingResolver(this));
         addResolver(new CloseConnectionResolver(this));
     }
+
+    public void registerResolverListener(Class<? extends AbstractResolver> resolverClass,
+            CallbackResolverListener listener) {
+
+        for (AbstractResolver resolver : resolvers) {
+            if (resolver.getClass() == resolverClass) {
+                resolver.addListener(listener);
+            }
+        }
+    }
+
+    public void unregisterResolverListener(Class<? extends AbstractResolver> resolverClass,
+            CallbackResolverListener listener) {
+
+        for (AbstractResolver resolver : resolvers) {
+            if (resolver.getClass() == resolverClass) {
+                resolver.removeListener(listener);
+            }
+        }
+    }
 }

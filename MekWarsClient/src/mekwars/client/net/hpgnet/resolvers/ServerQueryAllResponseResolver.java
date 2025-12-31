@@ -15,14 +15,14 @@
 package mekwars.client.net.hpgnet.resolvers;
 
 import mekwars.common.net.AbstractPacket;
-import mekwars.common.net.CallbackResolver;
+import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.Connection;
 import mekwars.common.net.ConnectionHandler;
 import mekwars.common.net.hpgnet.packets.PacketType;
 import mekwars.common.net.hpgnet.packets.ServerQueryAllResponse;
 
 public class ServerQueryAllResponseResolver
-    extends CallbackResolver<ServerQueryAllResponse, Connection> {
+    extends AbstractResolver<ServerQueryAllResponse, Connection> {
 
     public ServerQueryAllResponseResolver(ConnectionHandler handler) {
         super(handler);
