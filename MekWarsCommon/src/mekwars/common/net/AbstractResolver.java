@@ -18,8 +18,8 @@ package mekwars.common.net;
 
 import java.io.IOException;
 
-/*
- * Base class that is capable of resolving a packet recieved by a {@link ConnectionHandler}
+/**
+ * Base class that is capable of resolving an {@link AbstractPacket} recieved by a {@link ConnectionHandler}
  */
 public abstract class AbstractResolver<S extends AbstractPacket, T extends Connection> {
     private ConnectionHandler handler;
@@ -28,8 +28,9 @@ public abstract class AbstractResolver<S extends AbstractPacket, T extends Conne
         this.handler = handler;
     }
 
-    /*
+    /**
      * Determines if this Reosolver can resolve the given packet type.
+     *
      * @return true if the Resolver can resolve the packetType otherwise, false.
      */
     public abstract boolean canResolve(AbstractPacket.Type packetType);
@@ -38,7 +39,7 @@ public abstract class AbstractResolver<S extends AbstractPacket, T extends Conne
         return handler;
     }
 
-    /*
+    /**
      * Called when the {@link ConnectionHandler} has recieved a packet that can be resolved by this
      * class.
      */

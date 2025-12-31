@@ -23,6 +23,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
+import mekwars.common.net.resolvers.CloseConnectionResolver;
 import mekwars.common.net.resolvers.PingResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +33,7 @@ import org.apache.logging.log4j.Logger;
  * This can be any type of a connection that expects a response like a {@link Connection} or a
  * SocketChannel.
  *
- * When the ConnectionHandler recieves a packet, it will resolve it with a {@link Resolver}. 
+ * When the ConnectionHandler recieves a packet, it will resolve it with a {@link AbstractResolver Resolver}. 
  * 
  * {@link Connection} that expecets to recieve a response from messages. Handles processing responses from a connection though {@link AbstractResolver}.
  */
@@ -52,11 +53,16 @@ public abstract class ConnectionHandler {
     public void processPacket(AbstractPacket packet, Connection connection) throws IOException {
         for (AbstractResolver resolver : resolvers) {
             if (resolver.canResolve(packet.getId())) {
+                logger.debug(
+                    "Using resolver {} on connection {}",
+                    resolver.getClass().getSimpleName(),
+                    connection.getId()
+                );
                 resolver.receive(packet, connection);
                 return;
             }
         }
-        logger.warn("Packet type '{}' not processed", packet.getId());
+        logger.warn("Packet '{}' not processed", packet.getClass().getSimpleName());
     }
 
     /*
@@ -124,5 +130,6 @@ public abstract class ConnectionHandler {
      */
     protected void addResolvers() {
         addResolver(new PingResolver(this));
+        addResolver(new CloseConnectionResolver(this));
     }
 }

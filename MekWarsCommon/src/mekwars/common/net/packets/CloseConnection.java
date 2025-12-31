@@ -1,5 +1,5 @@
 /*
- * MekWars - Copyright (C) 2004 
+ * MekWars - Copyright (C) 2025
  * 
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
@@ -14,21 +14,15 @@
  * for more details.
  */
 
-package mekwars.common.net;
+package mekwars.common.net.packets;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.ByteBufferOutput;
+import mekwars.common.net.AbstractPacket;
 
-public abstract class AbstractPacket {
-    public interface Type {
-        int getType();
-
-        Class<? extends AbstractPacket> getPacketClass();
-
-        default boolean isSystemPacket() {
-            return false;
-        }
+/*
+ * Contains information that should be periodically sent to the HPGNet server.
+ */
+public class CloseConnection extends AbstractPacket {
+    public PacketType getId() {
+        return PacketType.CLOSE_CONNECTION;
     }
-
-    public abstract Type getId();
 }

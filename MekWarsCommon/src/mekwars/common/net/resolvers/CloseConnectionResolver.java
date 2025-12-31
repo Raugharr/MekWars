@@ -1,8 +1,6 @@
 /*
  * MekWars - Copyright (C) 2025
  * 
- * Original author - Bob Eldred (spork@mekwars.org)  
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -22,15 +20,15 @@ import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.Connection;
 import mekwars.common.net.ConnectionHandler;
 import mekwars.common.net.packets.PacketType;
-import mekwars.common.net.packets.Ping;
+import mekwars.common.net.packets.CloseConnection;
 
-public class PingResolver extends AbstractResolver<Ping, Connection> {
-    public PingResolver(ConnectionHandler handler) {
+public class CloseConnectionResolver extends AbstractResolver<CloseConnection, Connection> {
+    public CloseConnectionResolver(ConnectionHandler handler) {
         super(handler);
     }
 
-    public void receive(Ping message, Connection connection) throws IOException {
-        connection.serverHeartbeat();
+    public void receive(CloseConnection message, Connection connection) throws IOException {
+        connection.close();
     }
 
     public boolean canResolve(AbstractPacket.Type packetType) {
