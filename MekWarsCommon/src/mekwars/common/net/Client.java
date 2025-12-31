@@ -47,14 +47,10 @@ public abstract class Client extends ConnectionHandler {
      */
     public void connect(InetSocketAddress address) throws IOException {
         selector = Selector.open();
-        SocketChannel socket = SocketChannel.open(address);
 
-        socket.configureBlocking(false);
-        SelectionKey clientKey = socket.register(selector, SelectionKey.OP_READ);
-        connection = createConnection(getKryos(), socket, clientKey, BUFFER_SIZE, BUFFER_SIZE);
+        connection = createConnection(getKryos(), BUFFER_SIZE, BUFFER_SIZE);
         connection.heartbeat();
-        clientKey.attach(connection);
-        connection.onConnect();
+        connection.connect(address, selector);
         logger.info("Connected to to {}:{}", connection.getIpAddress(), connection.getPort());
 
         connectionListener = new ConnectionListener(this);

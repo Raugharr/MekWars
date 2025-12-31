@@ -130,18 +130,13 @@ public abstract class Server extends ConnectionHandler {
     public void acceptConnection(SelectionKey key) throws IOException {
         ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
         SocketChannel channel = serverChannel.accept();
-        channel.configureBlocking(false);
-
-        SelectionKey clientKey = channel.register(key.selector(), SelectionKey.OP_READ);
-        Connection connection = createConnection(getKryos(), channel, clientKey,
-                BUFFER_SIZE, BUFFER_SIZE);
+        Connection connection = createConnection(getKryos(), BUFFER_SIZE, BUFFER_SIZE);
 
         connectionTimeoutQueue.add(connection);
         connection.serverHeartbeat();
 
-        clientKey.attach(connection);
         connection.addListener(dispatchListener);
-        connection.onConnect();
+        connection.connect(channel, selector);
         logger.info("Accepting connection from '{}'", connection.getIpAddress());
     }
 

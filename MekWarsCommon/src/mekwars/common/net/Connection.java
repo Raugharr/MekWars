@@ -61,35 +61,38 @@ public class Connection implements AutoCloseable {
         this.listeners = new ArrayList<Listener>();
     }
 
-    /**
-     * TODO: Remove this constructor and instead use the above constructor, then call connect.
-     * onConnect can then be made private.
-     * Accepts a socket that has been already opened.
-     */
-    public Connection(ThreadLocal<Kryo> kryos, SocketChannel socket, SelectionKey socketKey,
-            int inputLen, int outputLen) {
-        this(kryos, inputLen, outputLen);
-        this.socket = socket;
-        this.socketKey = socketKey;
-    }
-
     public boolean isConnected() {
-        return socket.isConnected();
+        return socket != null && socket.isConnected();
     }
 
-    /*
+    /**
+     * Connects to the the provided socket.
+     *
+     */
+    public void connect(SocketChannel socketChannel, Selector selector) throws IOException {
+        if (!isConnected()) {
+            socketChannel.configureBlocking(false);
+            this.socket = socketChannel;
+            this.socketKey = socket.register(selector, SelectionKey.OP_READ);
+            this.id = NEXT_ID;
+            socketKey.attach(this);
+            NEXT_ID++;
+            for (Listener listener : listeners) {
+                listener.connected(this);
+            }
+        }
+    }
+
+    /**
      * Connects to the the provided address.
      *
      * @throws IOException When the SocketChannel is not able to be opened.
      */
     public void connect(InetSocketAddress address, Selector selector) throws IOException {
-        if (!isConnected()) {
-            this.socket = SocketChannel.open(address);
-            this.socketKey = socket.register(selector, SelectionKey.OP_READ);
-            onConnect();
-        }
+        connect(SocketChannel.open(address), selector);
     }
 
+    @Override
     public void close() {
         if (isConnected()) {
             output.close();
@@ -135,7 +138,7 @@ public class Connection implements AutoCloseable {
         listeners.remove(listener);
     }
 
-    /*
+    /**
      * Serializes the given packet and writes the binary representation into the Connection's
      * write buffer. Declares to the socket channel that a write is ready to be performed.
      * In order for the packet to be send to the socket, send must be invoked.
@@ -172,7 +175,7 @@ public class Connection implements AutoCloseable {
     }
 
 
-    /*
+    /**
      * Writes all data from the Connection's write buffer into the socket.
      */
     public void send() throws IOException {
@@ -200,7 +203,7 @@ public class Connection implements AutoCloseable {
         }
     }
 
-    /*
+    /**
      * Reads from the socket into the {@link Connection}'s read buffer. Every full packet found
      * will be deserialized into an AbstractPacket via {@link #readObject}.
      */
@@ -237,9 +240,6 @@ public class Connection implements AutoCloseable {
         }
     }
 
-    /**
-     * 
-     */
     public void heartbeat() {
         nextHeartbeat = System.currentTimeMillis() + HEARTBEAT_INTERVAL;
     }
@@ -253,17 +253,6 @@ public class Connection implements AutoCloseable {
     }
 
     /**
-     *
-     */
-    public void onConnect() {
-        id = NEXT_ID;
-        NEXT_ID++;
-        for (Listener listener : listeners) {
-            listener.connected(this);
-        }
-    }
-
-    /*
      * Deserializes an AbstractPacket from the socket.
      *
      * @return null if there are not enough bytes to create a PacketHeader, there are not enough
