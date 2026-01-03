@@ -36,8 +36,9 @@ public class ServerResponse extends AbstractPacket {
         this.status = status;
     }
 
-    public PacketType getId() {
-        return PacketType.SERVER_RESPONSE;
+    @Override
+    public HpgPacketType getType() {
+        return HpgPacketType.SERVER_RESPONSE;
     }
 
     public Status getStatus() {

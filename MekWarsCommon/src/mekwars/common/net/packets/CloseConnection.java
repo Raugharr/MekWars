@@ -22,7 +22,8 @@ import mekwars.common.net.AbstractPacket;
  * Contains information that should be periodically sent to the HPGNet server.
  */
 public class CloseConnection extends AbstractPacket {
-    public PacketType getId() {
-        return PacketType.CLOSE_CONNECTION;
+    @Override
+    public SystemPacketType getType() {
+        return SystemPacketType.CLOSE_CONNECTION;
     }
 }

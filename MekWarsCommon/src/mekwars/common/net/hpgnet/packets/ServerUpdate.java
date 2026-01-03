@@ -37,8 +37,9 @@ public class ServerUpdate extends AbstractPacket {
         this.gamesComplete = gamesComplete;
     }
 
-    public PacketType getId() {
-        return PacketType.SERVER_UPDATE;
+    @Override
+    public HpgPacketType getType() {
+        return HpgPacketType.SERVER_UPDATE;
     }
 
     public UUID getUid() {

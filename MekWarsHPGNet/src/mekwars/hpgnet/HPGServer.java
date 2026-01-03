@@ -15,14 +15,12 @@
 package mekwars.hpgnet;
 
 import com.esotericsoftware.kryo.Kryo;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.Connection;
 import mekwars.common.net.InvalidPacketException;
 import mekwars.common.net.Server;
 import mekwars.common.net.hpgnet.KryoThreadLocal;
-import mekwars.common.net.hpgnet.packets.PacketType;
+import mekwars.common.net.hpgnet.packets.HpgPacketType;
 import mekwars.hpgnet.resolvers.ServerQueryAllResolver;
 import mekwars.hpgnet.resolvers.ServerRegisterResolver;
 import mekwars.hpgnet.resolvers.ServerUpdateResolver;
@@ -44,8 +42,8 @@ public class HPGServer extends Server {
     }
 
     @Override
-    public AbstractPacket.Type getPacketType(int packetType) throws InvalidPacketException {
-        return PacketType.fromInteger(packetType);
+    public AbstractPacket.PacketType getPacketType(int packetType) throws InvalidPacketException {
+        return HpgPacketType.fromInteger(packetType);
     }
 
     protected void addResolvers() {

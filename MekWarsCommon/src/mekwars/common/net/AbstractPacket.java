@@ -16,11 +16,19 @@
 
 package mekwars.common.net;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.ByteBufferOutput;
-
+/**
+ * Base class for any packet that can be serialized by Kryo and sent over the network.
+ */
 public abstract class AbstractPacket {
-    public interface Type {
+    /**
+     * Enum interface that declares all packets that can be in a protocol. When creating a new
+     * protocol it is convention to create an Enum class that inherits this interface that contains
+     * all PacketTypes of the protocol. Additionally it is convention to define a static method
+     * PacketType fromInteger(int type), where PacketType is the Enum inheriting PacketType in order to
+     * convert an integer back into a PacketType. This is necessary as a {@link ConnectionHandler} needs
+     * to know how to convert an integer into a PacketType ({@see ConnectionHandler#getPacketType}). 
+     */
+    public interface PacketType {
         int getType();
 
         Class<? extends AbstractPacket> getPacketClass();
@@ -30,5 +38,5 @@ public abstract class AbstractPacket {
         }
     }
 
-    public abstract Type getId();
+    public abstract PacketType getType();
 }

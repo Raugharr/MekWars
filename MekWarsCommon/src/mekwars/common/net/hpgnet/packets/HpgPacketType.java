@@ -19,7 +19,7 @@ package mekwars.common.net.hpgnet.packets;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.InvalidPacketException;
 
-public enum PacketType implements AbstractPacket.Type {
+public enum HpgPacketType implements AbstractPacket.PacketType {
     SERVER_REGISTER(0, ServerRegister.class),
     SERVER_UPDATE(1, ServerUpdate.class),
     SERVER_QUERY_ALL(2, ServerQueryAll.class),
@@ -31,7 +31,7 @@ public enum PacketType implements AbstractPacket.Type {
     private final int type;
     private final Class<? extends AbstractPacket> klass;
 
-    private PacketType(int type, Class<? extends AbstractPacket> klass) {
+    private HpgPacketType(int type, Class<? extends AbstractPacket> klass) {
         this.type = type;
         this.klass = klass;
     }
@@ -44,7 +44,7 @@ public enum PacketType implements AbstractPacket.Type {
         return klass;
     }
 
-    public static PacketType fromInteger(int type) throws InvalidPacketException {
+    public static HpgPacketType fromInteger(int type) throws InvalidPacketException {
         switch (type) {
             case 0: return SERVER_REGISTER;
             case 1: return SERVER_UPDATE;

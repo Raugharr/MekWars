@@ -17,15 +17,12 @@
 package mekwars.server.net.hpgnet;
 
 import com.esotericsoftware.kryo.Kryo;
-import java.io.IOException;
-import java.net.Socket;
-import java.nio.channels.SocketChannel;
 import java.util.UUID;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.Client;
 import mekwars.common.net.InvalidPacketException;
 import mekwars.common.net.hpgnet.KryoThreadLocal;
-import mekwars.common.net.hpgnet.packets.PacketType;
+import mekwars.common.net.hpgnet.packets.HpgPacketType;
 import mekwars.common.net.hpgnet.packets.ServerRegister;
 import mekwars.common.net.hpgnet.packets.ServerUpdate;
 import mekwars.server.MWServ;
@@ -96,8 +93,8 @@ public class HPGSubscribedClient extends Client {
         );
     }
 
-    public AbstractPacket.Type getPacketType(int packetType) throws InvalidPacketException {
-        return PacketType.fromInteger(packetType);
+    public AbstractPacket.PacketType getPacketType(int packetType) throws InvalidPacketException {
+        return HpgPacketType.fromInteger(packetType);
     }
 
     public ThreadLocal<Kryo> getKryos() {
@@ -105,7 +102,7 @@ public class HPGSubscribedClient extends Client {
     }
 
     protected void addResolvers() {
-		super.addResolvers();
+        super.addResolvers();
         addResolver(new ServerResponseResolver(this));
         addResolver(new ServerRegisterResponseResolver(this));
     }

@@ -20,13 +20,13 @@ import java.io.IOException;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.ConnectionHandler;
-import mekwars.common.net.hpgnet.packets.PacketType;
+import mekwars.common.net.hpgnet.packets.HpgPacketType;
 import mekwars.common.net.hpgnet.packets.ServerQueryAll;
 import mekwars.common.net.hpgnet.packets.ServerQueryAllResponse;
 import mekwars.common.net.hpgnet.packets.ServerQueryResponse;
 import mekwars.hpgnet.HPGNet;
-import mekwars.hpgnet.HPGSubscriber;
 import mekwars.hpgnet.HPGConnection;
+import mekwars.hpgnet.HPGSubscriber;
 
 public class ServerQueryAllResolver extends AbstractResolver<ServerQueryAll, HPGConnection> {
     public ServerQueryAllResolver(ConnectionHandler handler) {
@@ -46,7 +46,7 @@ public class ServerQueryAllResolver extends AbstractResolver<ServerQueryAll, HPG
         connection.write(new ServerQueryAllResponse(responses));
     }
 
-    public boolean canResolve(AbstractPacket.Type packetType) {
-        return packetType.getType() == PacketType.SERVER_QUERY_ALL.getType();
+    public boolean canResolve(AbstractPacket.PacketType packetType) {
+        return packetType.getType() == HpgPacketType.SERVER_QUERY_ALL.getType();
     }
 }

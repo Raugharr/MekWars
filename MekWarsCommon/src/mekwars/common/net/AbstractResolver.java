@@ -37,7 +37,7 @@ public abstract class AbstractResolver<S extends AbstractPacket, T extends Conne
      *
      * @return true if the Resolver can resolve the packetType otherwise, false.
      */
-    public abstract boolean canResolve(AbstractPacket.Type packetType);
+    public abstract boolean canResolve(AbstractPacket.PacketType packetType);
 
     public ConnectionHandler getHandler() {
         return handler;

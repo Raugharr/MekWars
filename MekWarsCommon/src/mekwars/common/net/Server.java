@@ -136,7 +136,7 @@ public abstract class Server extends ConnectionHandler {
         connection.serverHeartbeat();
 
         connection.addListener(dispatchListener);
-        connection.connect(channel, selector);
+        connection.connect(channel, key.selector());
         logger.info("Accepting connection from '{}'", connection.getIpAddress());
     }
 

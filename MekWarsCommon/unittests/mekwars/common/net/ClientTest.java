@@ -53,6 +53,9 @@ public class ClientTest {
     @Spy
     private Client client;
 
+    @Mock
+    private InetSocketAddress socketAddress;
+
     private MockedStatic<Selector> selectorClass;
     private MockedStatic<SocketChannel> socketClass;
 
@@ -65,17 +68,11 @@ public class ClientTest {
         socketClass.when(() -> SocketChannel.open(any(InetSocketAddress.class)))
             .thenReturn(socketChannel);
 
-        assertDoesNotThrow(() ->
-            when(socketChannel.register(any(Selector.class), anyInt())).thenReturn(selectionKey)
-        );
-
         when(connection.getIpAddress()).thenReturn("localhost");
         when(connection.getPort()).thenReturn(1234);
         when(client.getKryos()).thenReturn(kryos);
         when(client.createConnection(
             any(ThreadLocal.class),
-            any(SocketChannel.class),
-            any(SelectionKey.class),
             anyInt(),
             anyInt()
         )).thenReturn(connection);
@@ -91,15 +88,16 @@ public class ClientTest {
     @Test
     public void connectTest() {
         assertDoesNotThrow(() -> {
-            client.connect(mock(InetSocketAddress.class));
+            client.connect(socketAddress);
             verify(client).createConnection(
                 any(ThreadLocal.class),
-                eq(socketChannel),
-                eq(selectionKey),
                 anyInt(),
                 anyInt()
             );
-            verify(selectionKey).attach(eq(connection));
+            verify(connection).connect(
+                eq(socketAddress),
+                any(Selector.class)
+            );
         });
     }
 

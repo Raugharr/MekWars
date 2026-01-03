@@ -17,11 +17,10 @@
 package mekwars.server.net.hpgnet.resolvers;
 
 import java.util.Properties;
-import java.util.UUID;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.Connection;
-import mekwars.common.net.hpgnet.packets.PacketType;
+import mekwars.common.net.hpgnet.packets.HpgPacketType;
 import mekwars.common.net.hpgnet.packets.ServerRegisterResponse;
 import mekwars.server.MWServ;
 import mekwars.server.net.hpgnet.HPGSubscribedClient;
@@ -48,8 +47,8 @@ public class ServerRegisterResponseResolver extends AbstractResolver<ServerRegis
         MWServ.getInstance().saveConfigs();
     }
 
-    public boolean canResolve(AbstractPacket.Type packetType) {
-        return packetType.getType() == PacketType.SERVER_REGISTER_RESPONSE.getType();
+    public boolean canResolve(AbstractPacket.PacketType packetType) {
+        return packetType.getType() == HpgPacketType.SERVER_REGISTER_RESPONSE.getType();
     }
 
     @Override

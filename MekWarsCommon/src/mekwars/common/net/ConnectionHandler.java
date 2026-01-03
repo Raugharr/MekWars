@@ -35,8 +35,8 @@ import org.apache.logging.log4j.Logger;
  *
  * When the ConnectionHandler recieves a packet, it will resolve it with a
  * {@link AbstractResolver Resolver}. 
- * 
- * {@link Connection} that expecets to recieve a response from messages. Handles processing
+ *
+ * {@link Connection} that expects to recieve a response from messages. Handles processing
  * responses from a connection though {@link AbstractResolver}.
  */
 public abstract class ConnectionHandler {
@@ -54,7 +54,7 @@ public abstract class ConnectionHandler {
      */
     public void processPacket(AbstractPacket packet, Connection connection) throws IOException {
         for (AbstractResolver resolver : resolvers) {
-            if (resolver.canResolve(packet.getId())) {
+            if (resolver.canResolve(packet.getType())) {
                 logger.debug(
                     "Using resolver {} on connection {}",
                     resolver.getClass().getSimpleName(),
@@ -119,7 +119,7 @@ public abstract class ConnectionHandler {
      *
      * @throws InvalidPacketException When packetType is an invalid type.
      */
-    public abstract AbstractPacket.Type getPacketType(int packetType) throws InvalidPacketException;
+    public abstract AbstractPacket.PacketType getPacketType(int packetType) throws InvalidPacketException;
 
     public abstract ThreadLocal<Kryo> getKryos();
 

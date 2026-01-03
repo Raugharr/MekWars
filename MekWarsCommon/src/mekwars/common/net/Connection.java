@@ -27,7 +27,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
-import mekwars.common.net.packets.PacketType;
+import mekwars.common.net.packets.SystemPacketType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,7 +75,7 @@ public class Connection implements AutoCloseable {
             this.socket = socketChannel;
             this.socketKey = socket.register(selector, SelectionKey.OP_READ);
             this.id = NEXT_ID;
-            socketKey.attach(this);
+            this.socketKey.attach(this);
             NEXT_ID++;
             for (Listener listener : listeners) {
                 listener.connected(this);
@@ -157,8 +157,8 @@ public class Connection implements AutoCloseable {
             getOutput().setBuffer(buffer);
             final int start = buffer.position();
             output.writeInt(0); //Leave space for packet length
-            output.writeInt(packet.getId().getType(), 2);
-            output.writeBoolean(packet.getId().isSystemPacket());
+            output.writeInt(packet.getType().getType(), 2);
+            output.writeBoolean(packet.getType().isSystemPacket());
             kryos.get().writeObject(output, packet);
             final int end = buffer.position();
             LOGGER.debug("writing {} bytes {}", buffer.position(), packet);
@@ -226,8 +226,10 @@ public class Connection implements AutoCloseable {
                 buffer.flip();
                 LOGGER.debug("reading {} bytes", buffer.limit());
                 AbstractPacket packet = readObject(handler);
-                while (packet != null) {
-                    handler.processPacket(packet, this);
+                while (true) {
+                    if (packet != null) {
+                        handler.processPacket(packet, this);
+                    }
                     if (buffer.remaining() <= PacketHeader.SIZE) {
                         break;
                     }
@@ -283,11 +285,11 @@ public class Connection implements AutoCloseable {
             return null;
         }
 
-        AbstractPacket.Type packetType = null;
+        AbstractPacket.PacketType packetType = null;
         
         try {
             if (packetState.isSystemPacket()) {
-                packetType = PacketType.fromInteger(packetState.getType());
+                packetType = SystemPacketType.fromInteger(packetState.getType());
             } else {
                 packetType = handler.getPacketType(packetState.getType());
             }

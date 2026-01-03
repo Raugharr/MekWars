@@ -17,7 +17,7 @@
 
 package mekwars.common.net;
 
-public enum MockPacketType implements AbstractPacket.Type {
+public enum MockPacketType implements AbstractPacket.PacketType {
     MOCK_PACKET(0, MockPacket.class);
 
     private final int type;

@@ -20,7 +20,8 @@ package mekwars.common.net;
 public class MockPacket extends AbstractPacket {
     String message = "foo";
 
-    public MockPacketType getId() {
+    @Override
+    public MockPacketType getType() {
         return MockPacketType.MOCK_PACKET;
     }
 }

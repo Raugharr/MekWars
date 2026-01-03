@@ -24,7 +24,7 @@ import mekwars.common.net.CallbackResolverListener;
 import mekwars.common.net.Client;
 import mekwars.common.net.InvalidPacketException;
 import mekwars.common.net.hpgnet.KryoThreadLocal;
-import mekwars.common.net.hpgnet.packets.PacketType;
+import mekwars.common.net.hpgnet.packets.HpgPacketType;
 
 public class HPGClient extends Client {
     public static final int TRACKER_PORT = 13731;
@@ -49,7 +49,7 @@ public class HPGClient extends Client {
         return mwClient;
     }
 
-    public AbstractPacket.Type getPacketType(int packetType) throws InvalidPacketException {
-        return PacketType.fromInteger(packetType);
+    public AbstractPacket.PacketType getPacketType(int packetType) throws InvalidPacketException {
+        return HpgPacketType.fromInteger(packetType);
     }
 }

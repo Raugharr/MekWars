@@ -19,14 +19,14 @@ package mekwars.common.net.packets;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.InvalidPacketException;
 
-public enum PacketType implements AbstractPacket.Type {
+public enum SystemPacketType implements AbstractPacket.PacketType {
     PING(0, Ping.class),
     CLOSE_CONNECTION(1, CloseConnection.class);
 
     private final int type;
     private final Class<? extends AbstractPacket> klass;
 
-    PacketType(int type, Class<? extends AbstractPacket> klass) {
+    SystemPacketType(int type, Class<? extends AbstractPacket> klass) {
         this.type = type;
         this.klass = klass;
     }
@@ -43,7 +43,7 @@ public enum PacketType implements AbstractPacket.Type {
         return true;
     }
 
-    public static PacketType fromInteger(int type) throws InvalidPacketException {
+    public static SystemPacketType fromInteger(int type) throws InvalidPacketException {
         switch (type) {
             case 0: return PING;
             case 1: return CLOSE_CONNECTION;
