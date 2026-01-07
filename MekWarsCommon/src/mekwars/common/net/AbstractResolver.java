@@ -17,30 +17,51 @@
 package mekwars.common.net;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-/*
- * Base class that is capable of resolving a packet recieved by a {@link ConnectionHandler}
+/**
+ * Base class that is capable of resolving an {@link AbstractPacket} recieved by a {@link ConnectionHandler}
  */
 public abstract class AbstractResolver<S extends AbstractPacket, T extends Connection> {
     private ConnectionHandler handler;
+    private List<CallbackResolverListener> listeners;
 
     public AbstractResolver(ConnectionHandler handler) {
         this.handler = handler;
+        listeners = new ArrayList<CallbackResolverListener>();
     }
 
-    /*
+    /**
      * Determines if this Reosolver can resolve the given packet type.
+     *
      * @return true if the Resolver can resolve the packetType otherwise, false.
      */
-    public abstract boolean canResolve(AbstractPacket.Type packetType);
+    public abstract boolean canResolve(AbstractPacket.PacketType packetType);
 
     public ConnectionHandler getHandler() {
         return handler;
     }
 
-    /*
+    /**
      * Called when the {@link ConnectionHandler} has recieved a packet that can be resolved by this
      * class.
      */
-    protected abstract void receive(S message, T connection) throws IOException;
+    protected void receive(S message, T connection) throws IOException {
+        for (CallbackResolverListener listener : listeners) {
+            listener.resolverUpdate(message, connection);
+        }
+    }
+
+    public void addListener(CallbackResolverListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(CallbackResolverListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void clearListeners() {
+        listeners.clear();
+    }
 }

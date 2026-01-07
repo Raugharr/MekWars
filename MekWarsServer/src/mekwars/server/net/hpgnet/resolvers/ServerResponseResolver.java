@@ -20,7 +20,7 @@ import java.io.IOException;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.Connection;
-import mekwars.common.net.hpgnet.packets.PacketType;
+import mekwars.common.net.hpgnet.packets.HpgPacketType;
 import mekwars.common.net.hpgnet.packets.ServerResponse;
 import mekwars.server.net.hpgnet.HPGSubscribedClient;
 import org.apache.logging.log4j.LogManager;
@@ -45,8 +45,8 @@ public class ServerResponseResolver extends AbstractResolver<ServerResponse, Con
         }
     }
 
-    public boolean canResolve(AbstractPacket.Type packetType) {
-        return packetType.getType() == PacketType.SERVER_RESPONSE.getType();
+    public boolean canResolve(AbstractPacket.PacketType packetType) {
+        return packetType.getType() == HpgPacketType.SERVER_RESPONSE.getType();
     }
 
     @Override

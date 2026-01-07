@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.esotericsoftware.kryo.Kryo;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -88,7 +89,7 @@ public class ServerTest {
     }
 
     @Test
-    public void acceptConnectionTest() {
+    public void acceptConnectionTest() throws IOException {
         MockedStatic<SocketChannel> socketClass = mockStatic(SocketChannel.class);
         socketClass.when(() -> SocketChannel.open(any(InetSocketAddress.class)))
             .thenAnswer((address) -> {
@@ -96,20 +97,18 @@ public class ServerTest {
             });
 
         assertDoesNotThrow(() -> {
-            doCallRealMethod().when(server).acceptConnection(any(SelectionKey.class));
+            doCallRealMethod().when(server).acceptConnection(eq(key));
             when(key.channel()).thenReturn(serverSocketChannel);
             when(key.selector()).thenReturn(selector);
             when(serverSocketChannel.accept()).thenReturn(socketChannel);
             when(server.getKryos()).thenReturn(kryos);
             doReturn("localhost").when(connection).getIpAddress();
 
-            when(socketChannel.register(any(Selector.class), anyInt()))
+            when(socketChannel.register(eq(selector), anyInt()))
                 .thenReturn(clientSelectionKey);
 
             when(server.createConnection(
                     any(ThreadLocal.class),
-                    any(SocketChannel.class),
-                    any(SelectionKey.class),
                     anyInt(),
                     anyInt()
             )).thenReturn(connection);
@@ -118,8 +117,11 @@ public class ServerTest {
 
         assertEquals(1, server.connectedClients());
         assertEquals(connection, server.getConnections().next());
-        verify(connection).serverHeartbeat();
-        verify(connection).onConnect();
+        verify(connection, atLeast(1)).serverHeartbeat();
+        verify(connection).connect(
+            socketChannel,
+            selector
+        );
         socketClass.close();
     }
 

@@ -23,18 +23,21 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
+import mekwars.common.net.resolvers.CloseConnectionResolver;
 import mekwars.common.net.resolvers.PingResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/*
+/**
  * Base implementation for ConnectionHandlers. A ConnectionHandler wraps a nonblocking connection.
  * This can be any type of a connection that expects a response like a {@link Connection} or a
  * SocketChannel.
  *
- * When the ConnectionHandler recieves a packet, it will resolve it with a {@link Resolver}. 
- * 
- * {@link Connection} that expecets to recieve a response from messages. Handles processing responses from a connection though {@link AbstractResolver}.
+ * When the ConnectionHandler recieves a packet, it will resolve it with a
+ * {@link AbstractResolver Resolver}. 
+ *
+ * {@link Connection} that expects to recieve a response from messages. Handles processing
+ * responses from a connection though {@link AbstractResolver}.
  */
 public abstract class ConnectionHandler {
     private static final Logger logger = LogManager.getLogger(ConnectionHandler.class);
@@ -46,20 +49,25 @@ public abstract class ConnectionHandler {
         addResolvers();
     }
 
-    /*
+    /**
      * Determines which Resolver can process the given packet.
      */
     public void processPacket(AbstractPacket packet, Connection connection) throws IOException {
         for (AbstractResolver resolver : resolvers) {
-            if (resolver.canResolve(packet.getId())) {
+            if (resolver.canResolve(packet.getType())) {
+                logger.debug(
+                    "Using resolver {} on connection {}",
+                    resolver.getClass().getSimpleName(),
+                    connection.getId()
+                );
                 resolver.receive(packet, connection);
                 return;
             }
         }
-        logger.warn("Packet type '{}' not processed", packet.getId());
+        logger.warn("Packet '{}' not processed", packet.getClass().getSimpleName());
     }
 
-    /*
+    /**
      * Called when a connection can be read.
      */
     public void readConnection(SelectionKey key) throws IOException {
@@ -77,7 +85,7 @@ public abstract class ConnectionHandler {
         }
     }
 
-    /*
+    /**
      * Called when a connection can be written to.
      */
     public void writeConnection(SelectionKey key) throws IOException {
@@ -86,12 +94,11 @@ public abstract class ConnectionHandler {
         connection.send();
     }
 
-    /*
+    /**
      * Called when a new connection is accepted.
      */
-    public Connection createConnection(ThreadLocal<Kryo> kryo, SocketChannel socket,
-            SelectionKey socketKey, int inputLen, int outputLen) {
-        return new Connection(kryo, socket, socketKey, inputLen, outputLen);
+    public Connection createConnection(ThreadLocal<Kryo> kryo, int inputLen, int outputLen) {
+        return new Connection(kryo, inputLen, outputLen);
     }
 
     public abstract Iterator<SelectionKey> select() throws IOException;
@@ -100,18 +107,19 @@ public abstract class ConnectionHandler {
 
     }
     
-    /*
+    /**
      * Disconnects the Client from the Server.
      */
     public abstract void close();
 
     public abstract void processKey(SelectionKey key) throws IOException;
 
-    /*
-     * Converts the packetType into an AbstractPacket.Type. If packetType is invalid an
-     * InvalidPacketException is thrown.
+    /**
+     * Converts the packetType into an AbstractPacket.Type.
+     *
+     * @throws InvalidPacketException When packetType is an invalid type.
      */
-    public abstract AbstractPacket.Type getPacketType(int packetType) throws InvalidPacketException;
+    public abstract AbstractPacket.PacketType getPacketType(int packetType) throws InvalidPacketException;
 
     public abstract ThreadLocal<Kryo> getKryos();
 
@@ -119,10 +127,31 @@ public abstract class ConnectionHandler {
         resolvers.add(resolver);
     }
 
-    /*
+    /**
      * Called when the ConnectionHandler is intialized to setup all {@link Resolver}'s.
      */
     protected void addResolvers() {
         addResolver(new PingResolver(this));
+        addResolver(new CloseConnectionResolver(this));
+    }
+
+    public void registerResolverListener(Class<? extends AbstractResolver> resolverClass,
+            CallbackResolverListener listener) {
+
+        for (AbstractResolver resolver : resolvers) {
+            if (resolver.getClass() == resolverClass) {
+                resolver.addListener(listener);
+            }
+        }
+    }
+
+    public void unregisterResolverListener(Class<? extends AbstractResolver> resolverClass,
+            CallbackResolverListener listener) {
+
+        for (AbstractResolver resolver : resolvers) {
+            if (resolver.getClass() == resolverClass) {
+                resolver.removeListener(listener);
+            }
+        }
     }
 }

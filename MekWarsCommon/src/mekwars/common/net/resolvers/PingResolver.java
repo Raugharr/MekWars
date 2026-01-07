@@ -21,8 +21,8 @@ import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.Connection;
 import mekwars.common.net.ConnectionHandler;
-import mekwars.common.net.packets.PacketType;
 import mekwars.common.net.packets.Ping;
+import mekwars.common.net.packets.SystemPacketType;
 
 public class PingResolver extends AbstractResolver<Ping, Connection> {
     public PingResolver(ConnectionHandler handler) {
@@ -33,8 +33,7 @@ public class PingResolver extends AbstractResolver<Ping, Connection> {
         connection.serverHeartbeat();
     }
 
-    public boolean canResolve(AbstractPacket.Type packetType) {
-        return packetType.getType() == PacketType.PING.getType();
+    public boolean canResolve(AbstractPacket.PacketType packetType) {
+        return packetType.isSystemPacket() && packetType.getType() == SystemPacketType.PING.getType();
     }
 }
-

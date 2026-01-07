@@ -48,6 +48,7 @@ import mekwars.client.MWClient;
 import mekwars.client.common.ServerInfo;
 import mekwars.client.gui.MWTable;
 import mekwars.client.gui.ServerModel;
+import mekwars.client.net.hpgnet.resolvers.ServerQueryAllResponseResolver;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.CallbackResolverListener;
 import mekwars.common.net.Connection;
@@ -76,7 +77,7 @@ public class ServerBrowserDialog extends JDialog implements CallbackResolverList
         List<ServerInfo> newList = new ArrayList<ServerInfo>();
         serverModel.setItems(newList);
 
-        mwClient.getHpgClient().registerServerQueryAllResponse(this);
+        mwClient.getHpgClient().registerResolverListener(ServerQueryAllResponseResolver.class, this);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -96,9 +97,11 @@ public class ServerBrowserDialog extends JDialog implements CallbackResolverList
         return selectedServer;
     }
 
-    /*
+    /**
      * Called whenever the HPGClient receives a ServerQueryAllResponse.
+     *
      * @param abstractMessage The received message.
+     *
      * @param connection The connection the message came from.
      */
     public void resolverUpdate(AbstractPacket abstractMessage, Connection connection) {
@@ -117,10 +120,10 @@ public class ServerBrowserDialog extends JDialog implements CallbackResolverList
     }
 
     public void close() {
-        mwClient.getHpgClient().unregisterServerQueryAllResponse(this);
+        mwClient.getHpgClient().unregisterResolverListener(ServerQueryAllResponseResolver.class, this);
     }
 
-    /*
+    /**
      * Returns if the currently selected server can be joined.
      */
     protected boolean canJoinServer() {
@@ -143,7 +146,7 @@ public class ServerBrowserDialog extends JDialog implements CallbackResolverList
         }
     }
 
-    /*
+    /**
      * Method caalled when we have selected a server to join.
      */
     protected void selectServer() {

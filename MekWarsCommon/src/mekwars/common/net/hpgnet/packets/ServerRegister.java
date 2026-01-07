@@ -66,7 +66,8 @@ public class ServerRegister extends AbstractPacket {
         return description;
     }
 
-    public PacketType getId() {
-        return PacketType.SERVER_REGISTER;
+    @Override
+    public HpgPacketType getType() {
+        return HpgPacketType.SERVER_REGISTER;
     }
 }

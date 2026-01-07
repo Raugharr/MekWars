@@ -24,12 +24,20 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
-import mekwars.common.net.packets.PacketType;
+import mekwars.common.net.packets.SystemPacketType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Generic connection that represents a connection either from a client to a server, or a server
+ * to a client.
+ * <p>
+ * Each Connection has a heartbeart, the server will disconnect the connection if the connection
+ * has not sent a {@link Ping} ({@see Client#heartbeat}) within HEARTBEAT_INTERVAL miliseconds.
+ */
 public class Connection implements AutoCloseable {
     public static final int HEARTBEAT_INTERVAL = 20_000;
     public static final int HEARTBEAT_TIMEOUT = HEARTBEAT_INTERVAL * 2;
@@ -53,27 +61,38 @@ public class Connection implements AutoCloseable {
         this.listeners = new ArrayList<Listener>();
     }
 
-    public Connection(ThreadLocal<Kryo> kryos, SocketChannel socket, SelectionKey socketKey,
-            int inputLen, int outputLen) {
-        this(kryos, inputLen, outputLen);
-        this.socket = socket;
-        this.socketKey = socketKey;
-    }
-
     public boolean isConnected() {
-        return socket.isConnected();
+        return socket != null && socket.isConnected();
     }
 
-    /*
-     * Connects to the the provided address.
-     * @throws IOException
+    /**
+     * Connects to the the provided socket.
+     *
      */
-    public void connect(InetSocketAddress address) throws IOException {
+    public void connect(SocketChannel socketChannel, Selector selector) throws IOException {
         if (!isConnected()) {
-            socket = SocketChannel.open(address);
+            socketChannel.configureBlocking(false);
+            this.socket = socketChannel;
+            this.socketKey = socket.register(selector, SelectionKey.OP_READ);
+            this.id = NEXT_ID;
+            this.socketKey.attach(this);
+            NEXT_ID++;
+            for (Listener listener : listeners) {
+                listener.connected(this);
+            }
         }
     }
 
+    /**
+     * Connects to the the provided address.
+     *
+     * @throws IOException When the SocketChannel is not able to be opened.
+     */
+    public void connect(InetSocketAddress address, Selector selector) throws IOException {
+        connect(SocketChannel.open(address), selector);
+    }
+
+    @Override
     public void close() {
         if (isConnected()) {
             output.close();
@@ -83,6 +102,7 @@ public class Connection implements AutoCloseable {
             } catch (IOException exception) {
                 LOGGER.error("Unable to close Connection", exception);
             }
+            LOGGER.debug("Closing connection {}", getId());
 
             for (Listener listener : listeners) {
                 listener.disconnected(this);
@@ -118,10 +138,14 @@ public class Connection implements AutoCloseable {
         listeners.remove(listener);
     }
 
-    /*
+    /**
      * Serializes the given packet and writes the binary representation into the Connection's
      * write buffer. Declares to the socket channel that a write is ready to be performed.
      * In order for the packet to be send to the socket, send must be invoked.
+     *
+     * @param packet The {@link AbstractPacket} to write to the socket.
+     *
+     * @throws IOException When the socket is unable to be written to.
      */
     public void write(AbstractPacket packet) throws IOException {
         if (!isConnected()) {
@@ -133,8 +157,8 @@ public class Connection implements AutoCloseable {
             getOutput().setBuffer(buffer);
             final int start = buffer.position();
             output.writeInt(0); //Leave space for packet length
-            output.writeInt(packet.getId().getType(), 2);
-            output.writeBoolean(packet.isSystemPacket());
+            output.writeInt(packet.getType().getType(), 2);
+            output.writeBoolean(packet.getType().isSystemPacket());
             kryos.get().writeObject(output, packet);
             final int end = buffer.position();
             LOGGER.debug("writing {} bytes {}", buffer.position(), packet);
@@ -151,7 +175,7 @@ public class Connection implements AutoCloseable {
     }
 
 
-    /*
+    /**
      * Writes all data from the Connection's write buffer into the socket.
      */
     public void send() throws IOException {
@@ -179,7 +203,7 @@ public class Connection implements AutoCloseable {
         }
     }
 
-    /*
+    /**
      * Reads from the socket into the {@link Connection}'s read buffer. Every full packet found
      * will be deserialized into an AbstractPacket via {@link #readObject}.
      */
@@ -202,8 +226,10 @@ public class Connection implements AutoCloseable {
                 buffer.flip();
                 LOGGER.debug("reading {} bytes", buffer.limit());
                 AbstractPacket packet = readObject(handler);
-                while (packet != null) {
-                    handler.processPacket(packet, this);
+                while (true) {
+                    if (packet != null) {
+                        handler.processPacket(packet, this);
+                    }
                     if (buffer.remaining() <= PacketHeader.SIZE) {
                         break;
                     }
@@ -228,18 +254,13 @@ public class Connection implements AutoCloseable {
         return nextHeartbeat;
     }
 
-    public void onConnect() {
-        id = NEXT_ID;
-        NEXT_ID++;
-        for (Listener listener : listeners) {
-            listener.connected(this);
-        }
-    }
-
-    /*
+    /**
      * Deserializes an AbstractPacket from the socket.
+     *
      * @return null if there are not enough bytes to create a PacketHeader, there are not enough
      * bytes to deserialize the {@link AbstractPacket}, or the packet type is invalid.
+     * Otherwise return the serialized {@link AbstractPacket}.
+     *
      * @throws IOException When the AbstractPacket cannot fit into the input buffer.
      */
     protected AbstractPacket readObject(ConnectionHandler handler) throws IOException {
@@ -264,11 +285,11 @@ public class Connection implements AutoCloseable {
             return null;
         }
 
-        AbstractPacket.Type packetType = null;
+        AbstractPacket.PacketType packetType = null;
         
         try {
             if (packetState.isSystemPacket()) {
-                packetType = PacketType.fromInteger(packetState.getType());
+                packetType = SystemPacketType.fromInteger(packetState.getType());
             } else {
                 packetType = handler.getPacketType(packetState.getType());
             }

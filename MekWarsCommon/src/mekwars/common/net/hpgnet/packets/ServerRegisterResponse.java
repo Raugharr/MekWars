@@ -35,7 +35,8 @@ public class ServerRegisterResponse extends AbstractPacket {
         return uid;
     }
 
-    public PacketType getId() {
-        return PacketType.SERVER_REGISTER_RESPONSE;
+    @Override
+    public HpgPacketType getType() {
+        return HpgPacketType.SERVER_REGISTER_RESPONSE;
     }
 }

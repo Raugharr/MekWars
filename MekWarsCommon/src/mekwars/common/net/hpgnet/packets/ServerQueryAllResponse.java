@@ -30,8 +30,9 @@ public class ServerQueryAllResponse extends AbstractPacket {
         this.queryResponses = queryResponses;
     }
 
-    public PacketType getId() {
-        return PacketType.SERVER_QUERY_ALL_RESPONSE;
+    @Override
+    public HpgPacketType getType() {
+        return HpgPacketType.SERVER_QUERY_ALL_RESPONSE;
     }
 
     public ServerQueryResponse[] getQueryResponses() {

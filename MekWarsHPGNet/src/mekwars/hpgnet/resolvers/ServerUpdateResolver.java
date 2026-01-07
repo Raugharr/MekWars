@@ -21,12 +21,12 @@ import java.util.Date;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.ConnectionHandler;
-import mekwars.common.net.hpgnet.packets.PacketType;
+import mekwars.common.net.hpgnet.packets.HpgPacketType;
 import mekwars.common.net.hpgnet.packets.ServerResponse;
 import mekwars.common.net.hpgnet.packets.ServerUpdate;
 import mekwars.hpgnet.HPGNet;
-import mekwars.hpgnet.HPGSubscriber;
 import mekwars.hpgnet.HPGConnection;
+import mekwars.hpgnet.HPGSubscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,7 +56,7 @@ public class ServerUpdateResolver extends AbstractResolver<ServerUpdate, HPGConn
         connection.write(new ServerResponse(ServerResponse.Status.OK));
     }
 
-    public boolean canResolve(AbstractPacket.Type packetType) {
-        return packetType.getType() == PacketType.SERVER_UPDATE.getType();
+    public boolean canResolve(AbstractPacket.PacketType packetType) {
+        return packetType.getType() == HpgPacketType.SERVER_UPDATE.getType();
     }
 }

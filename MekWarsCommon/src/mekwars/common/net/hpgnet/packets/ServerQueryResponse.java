@@ -34,8 +34,9 @@ public class ServerQueryResponse extends AbstractPacket {
         this.hostname = hostname;
     }
 
-    public PacketType getId() {
-        return PacketType.SERVER_QUERY_RESPONSE;
+    @Override
+    public HpgPacketType getType() {
+        return HpgPacketType.SERVER_QUERY_RESPONSE;
     }
 
     public ServerRegister getServerRegister() {

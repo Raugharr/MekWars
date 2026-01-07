@@ -43,12 +43,6 @@ public class HPGConnection extends Connection {
         addListener(disconnectListener);
     }
 
-    public HPGConnection(ThreadLocal<Kryo> kryos, SocketChannel socket,
-            SelectionKey socketKey, int inputLen, int outputLen) {
-        super(kryos, socket, socketKey, inputLen, outputLen);
-        addListener(disconnectListener);
-    }
-
     public HPGSubscriber getSubscriber() {
         return subscriber;
     }

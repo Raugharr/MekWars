@@ -22,12 +22,12 @@ import java.util.UUID;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.ConnectionHandler;
-import mekwars.common.net.hpgnet.packets.PacketType;
+import mekwars.common.net.hpgnet.packets.HpgPacketType;
 import mekwars.common.net.hpgnet.packets.ServerRegister;
 import mekwars.common.net.hpgnet.packets.ServerRegisterResponse;
 import mekwars.hpgnet.HPGNet;
-import mekwars.hpgnet.HPGSubscriber;
 import mekwars.hpgnet.HPGConnection;
+import mekwars.hpgnet.HPGSubscriber;
 
 public class ServerRegisterResolver extends AbstractResolver<ServerRegister, HPGConnection> {
     public ServerRegisterResolver(ConnectionHandler handler) {
@@ -64,7 +64,7 @@ public class ServerRegisterResolver extends AbstractResolver<ServerRegister, HPG
         connection.write(new ServerRegisterResponse(UUID.fromString(subscriber.getUuid())));
     }
 
-    public boolean canResolve(AbstractPacket.Type packetType) {
-        return packetType.getType() == PacketType.SERVER_REGISTER.getType();
+    public boolean canResolve(AbstractPacket.PacketType packetType) {
+        return packetType.getType() == HpgPacketType.SERVER_REGISTER.getType();
     }
 }

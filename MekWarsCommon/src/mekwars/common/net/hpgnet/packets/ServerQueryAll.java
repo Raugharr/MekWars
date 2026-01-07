@@ -24,7 +24,8 @@ import mekwars.common.net.AbstractPacket;
 public class ServerQueryAll extends AbstractPacket {
     public ServerQueryAll() {}
 
-    public PacketType getId() {
-        return PacketType.SERVER_QUERY_ALL;
+    @Override
+    public HpgPacketType getType() {
+        return HpgPacketType.SERVER_QUERY_ALL;
     }
 }

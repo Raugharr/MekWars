@@ -24,14 +24,13 @@ import mekwars.common.net.CallbackResolverListener;
 import mekwars.common.net.Client;
 import mekwars.common.net.InvalidPacketException;
 import mekwars.common.net.hpgnet.KryoThreadLocal;
-import mekwars.common.net.hpgnet.packets.PacketType;
+import mekwars.common.net.hpgnet.packets.HpgPacketType;
 
 public class HPGClient extends Client {
     public static final int TRACKER_PORT = 13731;
     private static KryoThreadLocal kryos = new KryoThreadLocal();
 
     private MWClient mwClient;
-    private ServerQueryAllResponseResolver serverQueryAllResponseResolver;
 
     public HPGClient(MWClient mwClient) {
         this.mwClient = mwClient;
@@ -39,8 +38,7 @@ public class HPGClient extends Client {
 
     protected void addResolvers() {
         super.addResolvers();
-        serverQueryAllResponseResolver = new ServerQueryAllResponseResolver(this);
-        addResolver(serverQueryAllResponseResolver);
+        addResolver(new ServerQueryAllResponseResolver(this));
     }
 
     public ThreadLocal<Kryo> getKryos() {
@@ -51,15 +49,7 @@ public class HPGClient extends Client {
         return mwClient;
     }
 
-    public AbstractPacket.Type getPacketType(int packetType) throws InvalidPacketException {
-        return PacketType.fromInteger(packetType);
-    }
-
-    public void registerServerQueryAllResponse(CallbackResolverListener listener) {
-        serverQueryAllResponseResolver.addListener(listener);
-    }
-
-    public void unregisterServerQueryAllResponse(CallbackResolverListener listener) {
-        serverQueryAllResponseResolver.removeListener(listener);
+    public AbstractPacket.PacketType getPacketType(int packetType) throws InvalidPacketException {
+        return HpgPacketType.fromInteger(packetType);
     }
 }

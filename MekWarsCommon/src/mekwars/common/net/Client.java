@@ -22,6 +22,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import mekwars.common.net.packets.CloseConnection;
 import mekwars.common.net.packets.Ping;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,19 +41,16 @@ public abstract class Client extends ConnectionHandler {
     private ConnectionListener connectionListener;
     private Thread connectionThread;
     
-    /*
+    /**
      * Attemps to connect to the given address.
      * If the connection is successful, a thread is created to listen to all messages.
      */
     public void connect(InetSocketAddress address) throws IOException {
         selector = Selector.open();
-        SocketChannel socket = SocketChannel.open(address);
 
-        socket.configureBlocking(false);
-        SelectionKey clientKey = socket.register(selector, SelectionKey.OP_READ);
-        connection = createConnection(getKryos(), socket, clientKey, BUFFER_SIZE, BUFFER_SIZE);
+        connection = createConnection(getKryos(), BUFFER_SIZE, BUFFER_SIZE);
         connection.heartbeat();
-        clientKey.attach(connection);
+        connection.connect(address, selector);
         logger.info("Connected to to {}:{}", connection.getIpAddress(), connection.getPort());
 
         connectionListener = new ConnectionListener(this);
@@ -70,7 +68,12 @@ public abstract class Client extends ConnectionHandler {
             selector = null;
         }
 
-        if (connection != null) {
+        if (connection != null && connection.isConnected()) {
+            try {
+                connection.write(new CloseConnection());
+            } catch (IOException exception) {
+                logger.error("Unable to declare connection closing", exception);
+            }
             connection.close();
             connection = null;
         }

@@ -12,23 +12,26 @@
  * for more details.
  */
 
-package mekwars.client.net.hpgnet.resolvers;
+package mekwars.common.net.resolvers;
 
+import java.io.IOException;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.Connection;
 import mekwars.common.net.ConnectionHandler;
-import mekwars.common.net.hpgnet.packets.HpgPacketType;
-import mekwars.common.net.hpgnet.packets.ServerQueryAllResponse;
+import mekwars.common.net.packets.CloseConnection;
+import mekwars.common.net.packets.SystemPacketType;
 
-public class ServerQueryAllResponseResolver
-    extends AbstractResolver<ServerQueryAllResponse, Connection> {
-
-    public ServerQueryAllResponseResolver(ConnectionHandler handler) {
+public class CloseConnectionResolver extends AbstractResolver<CloseConnection, Connection> {
+    public CloseConnectionResolver(ConnectionHandler handler) {
         super(handler);
     }
 
+    public void receive(CloseConnection message, Connection connection) throws IOException {
+        connection.close();
+    }
+
     public boolean canResolve(AbstractPacket.PacketType packetType) {
-        return packetType.getType() == HpgPacketType.SERVER_QUERY_ALL_RESPONSE.getType();
+        return packetType.isSystemPacket() && packetType.getType() == SystemPacketType.PING.getType();
     }
 }

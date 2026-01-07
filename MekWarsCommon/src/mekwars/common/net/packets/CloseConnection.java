@@ -21,12 +21,9 @@ import mekwars.common.net.AbstractPacket;
 /*
  * Contains information that should be periodically sent to the HPGNet server.
  */
-public class Ping extends AbstractPacket {
-    public PacketType getType() {
-        return SystemPacketType.PING;
-    }
-
-    public boolean isSystemPacket() {
-        return true;
+public class CloseConnection extends AbstractPacket {
+    @Override
+    public SystemPacketType getType() {
+        return SystemPacketType.CLOSE_CONNECTION;
     }
 }

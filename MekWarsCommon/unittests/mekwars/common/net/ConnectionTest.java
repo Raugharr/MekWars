@@ -27,6 +27,7 @@ import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -43,18 +44,26 @@ public class ConnectionTest {
     @Mock
     private SelectionKey key;
 
+    @Mock
+    private Selector selector;
+
     private ThreadLocal<Kryo> kryos;
     private Connection connection;
 
     @BeforeEach
-    void init() {
+    void init() throws Exception {
         kryos = ThreadLocal.withInitial(() -> {
             Kryo kryo = new Kryo();
         
             kryo.register(MockPacket.class);
             return kryo;
         });
-        connection = spy(new Connection(kryos, channel, key, 1024, 1024));
+        when(channel.register(
+            selector,
+            SelectionKey.OP_READ
+        )).thenReturn(key);
+        connection = spy(new Connection(kryos, 1024, 1024));
+        connection.connect(channel, selector);
     }
 
     @Test
@@ -78,11 +87,6 @@ public class ConnectionTest {
             ByteBuffer byteBuffer = connection.getOutput().getByteBuffer();
 
             assertEquals(PacketHeader.SIZE + 3, byteBuffer.position());
-            // byteBuffer.flip();
-            // // assertEquals(, byteBuffer.getShort());
-            // assertEquals(3, byteBuffer.getInt());
-            // assertEquals(MockPacketType.MOCK_PACKET.getType(), byteBuffer.getInt());
-            // assertEquals(0, byteBuffer.get());
         }
 
         @Test
@@ -143,7 +147,7 @@ public class ConnectionTest {
             packet = new MockPacket();
             input = connection.getInput();
             output = new ByteBufferOutput(input.getByteBuffer()); 
-            header = new PacketHeader(3, (short) packet.getId().getType(), false);
+            header = new PacketHeader(3, (short) packet.getType().getType(), false);
         }
 
         @Test
