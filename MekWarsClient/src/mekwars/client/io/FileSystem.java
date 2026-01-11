@@ -17,18 +17,13 @@
 
 package mekwars.client.io;
 
-import java.io.IOException;
-import java.lang.IllegalArgumentException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import mekwars.common.campaign.clientutils.IClientConfig;
-import mekwars.common.util.IOUtil;
-import mekwars.common.io.FileChecksum;
 import mekwars.common.io.AbstractFileSystem;
 
 public class FileSystem extends AbstractFileSystem {
     private Path configDir;
-    private Path campaignConfig;
 
     private static final String DIRECTORY_NAME_SERVERS = DIRECTORY_NAME_DATA + "servers/";
     private static final Path DIRECTORY_SERVERS = FileSystems.getDefault()
@@ -64,7 +59,6 @@ public class FileSystem extends AbstractFileSystem {
      */
     public void setConfigDir(String configDir) {
         this.configDir = FileSystems.getDefault().getPath(configDir);
-        this.campaignConfig = FileSystems.getDefault().getPath(configDir, FILE_NAME_CAMPAIGN_CONFIG);
     }
 
     /**
@@ -89,18 +83,11 @@ public class FileSystem extends AbstractFileSystem {
 
         String configDirName = DIRECTORY_NAME_SERVERS + serverIp + "." + serverPort;
         this.configDir = FileSystems.getDefault().getPath(configDirName);
-        this.campaignConfig = FileSystems.getDefault().getPath(
-            configDir.getFileName().toString(),
-            config.getParam("CAMPAIGNCONFIG")
-        );
+        calculateChecksums();
     }
 
     public Path getConfigDir() {
         return configDir;
-    }
-
-    public Path getCampaignConfig() {
-        return campaignConfig;
     }
 
     public Path[] getDirectories() {

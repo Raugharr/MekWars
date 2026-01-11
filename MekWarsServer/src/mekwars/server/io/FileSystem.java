@@ -149,6 +149,7 @@ public class FileSystem extends AbstractFileSystem {
         return DIRECTORY_OPERATIONS_LONG;
     }
 
+    @Override
     public Path getCampaignConfig() {
         return FileSystems.getDefault().getPath(
             getConfigDir().toString(),
