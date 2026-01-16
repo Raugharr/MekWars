@@ -32,7 +32,6 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class Server extends ConnectionHandler {
     private static final Logger logger = LogManager.getLogger(Server.class);
-    private static final int BUFFER_SIZE = 4096;
     private static final int JOIN_WAIT_TIME = 100;
     private static final int SELECT_WAIT = 100;
 
@@ -130,7 +129,7 @@ public abstract class Server extends ConnectionHandler {
     public void acceptConnection(SelectionKey key) throws IOException {
         ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
         SocketChannel channel = serverChannel.accept();
-        Connection connection = createConnection(getKryos(), BUFFER_SIZE, BUFFER_SIZE);
+        Connection connection = createConnection(getKryos());
 
         connectionTimeoutQueue.add(connection);
         connection.serverHeartbeat();

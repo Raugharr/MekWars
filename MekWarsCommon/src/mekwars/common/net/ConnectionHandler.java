@@ -97,8 +97,8 @@ public abstract class ConnectionHandler {
     /**
      * Called when a new connection is accepted.
      */
-    public Connection createConnection(ThreadLocal<Kryo> kryo, int inputLen, int outputLen) {
-        return new Connection(kryo, inputLen, outputLen);
+    public Connection createConnection(ThreadLocal<Kryo> kryo) {
+        return new Connection(kryo);
     }
 
     public abstract Iterator<SelectionKey> select() throws IOException;
