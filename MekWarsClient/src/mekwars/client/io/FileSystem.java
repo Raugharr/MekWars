@@ -61,7 +61,6 @@ public class FileSystem extends AbstractFileSystem {
         Path configPath = FileSystems.getDefault().getPath(configDir);
 
         this.configDir = configPath;
-        this.campaignConfig = FileSystems.getDefault().getPath(configDir, FILE_NAME_CAMPAIGN_CONFIG);
         Files.createDirectories(configPath);
     }
 
@@ -89,10 +88,6 @@ public class FileSystem extends AbstractFileSystem {
         Path configPath = FileSystems.getDefault().getPath(configDirName);
 
         this.configDir = configPath;
-        this.campaignConfig = FileSystems.getDefault().getPath(
-            configDir.getFileName().toString(),
-            config.getParam("CAMPAIGNCONFIG")
-        );
         Files.createDirectories(configPath);
         calculateChecksums();
     }

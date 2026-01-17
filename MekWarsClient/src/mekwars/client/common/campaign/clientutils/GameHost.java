@@ -39,7 +39,6 @@ public abstract class GameHost implements GameListener, IGameHost {
     public static final int STATUS_FIGHTING = 4;
     
     public static final String CAMPAIGN_PREFIX = "/"; // prefix for campaign commands
-    public static final String CAMPAIGN_PATH = "data/campaign/";
     public static final String COMMAND_DELIMITER = "|"; // delimiter for client commands
     
     public String myUsername = "";// public b/c used in RGTS command to set server status. HACK!

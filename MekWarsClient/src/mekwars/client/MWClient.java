@@ -110,7 +110,6 @@ import mekwars.common.PlanetEnvironment;
 import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.SerializeEntity;
-import mekwars.common.util.EntityUtil;
 import mekwars.common.util.GameReport;
 import mekwars.common.util.ThreadManager;
 import mekwars.common.util.TokenReader;
@@ -2843,7 +2842,6 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public int getTotalRepairCosts(Entity unit) {
-
         int cost = 0;
         int systemCrits = 0;
         int engineCrits = 0;
@@ -2936,76 +2934,10 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public int getTechLaborCosts(Entity unit, int techType) {
-        int cost = 0;
         int techCost = Integer.parseInt(getServerConfigs(UnitUtils
                 .techDescription(techType) + "TechRepairCost"));
-        int totalCrits = 0;
-        boolean damagedEngine = false;
 
-        for (int critLocation = 0; critLocation < unit.locations(); critLocation++) {
-            // These three location have rear armor so the user might be
-            // selecting that armor instead of crit.
-            if ((critLocation == Mech.LOC_CT) || (critLocation == Mech.LOC_LT)
-                    || (critLocation == Mech.LOC_RT)) {
-                if (unit.getArmor(critLocation, false) != unit.getOArmor(
-                        critLocation, false)) {
-                    cost += techCost;
-                }
-                if (unit.getArmor(critLocation, true) != unit.getOArmor(
-                        critLocation, true)) {
-                    cost += techCost;
-                }
-                if (unit.getInternal(critLocation) != unit
-                        .getOInternal(critLocation)) {
-                    cost += techCost;
-                }
-            }// end toros armor
-            else {
-                if (unit.getArmor(critLocation, false) != unit.getOArmor(
-                        critLocation, false)) {
-                    cost += techCost;
-                }
-                if (unit.getInternal(critLocation) != unit
-                        .getOInternal(critLocation)) {
-                    cost += techCost;
-                }
-            }// end armor
-
-            // check for damage system crits.
-            for (int critSlot = 0; critSlot < unit
-                    .getNumberOfCriticals(critLocation); critSlot++) {
-
-                CriticalSlot cs = unit.getCritical(critLocation, critSlot);
-
-                if (cs == null) {
-                    continue;
-                }
-
-                if (cs.isBreached()) {
-                    continue;
-                }
-
-                if (!cs.isDamaged()) {
-                    continue;
-                }
-
-                if (UnitUtils.isEngineCrit(cs)) {
-                    damagedEngine = true;
-                    continue;
-                }
-                totalCrits++;
-
-            }// end slot for
-        }// end location for
-
-        // check for damaged engines
-        if (damagedEngine) {
-            totalCrits = +UnitUtils.getNumberOfEngineCrits(unit);
-        }
-
-        cost += (techCost * totalCrits) + techCost;
-
-        return cost;
+        return UnitUtils.getTechLaborCosts(unit, techCost);
     }
 
     public void retrieveOpData(String type, String data) {
@@ -3110,7 +3042,6 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public void updatePartsBlackMarket(String data, int year) {
-
         StringTokenizer ST = new StringTokenizer(data, "#");
         boolean allowTechCrossOver = Boolean.parseBoolean(this
                 .getServerConfigs("AllowCrossOverTech"));
