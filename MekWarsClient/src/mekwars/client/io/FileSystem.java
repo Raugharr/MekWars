@@ -17,7 +17,9 @@
 
 package mekwars.client.io;
 
+import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import mekwars.common.campaign.clientutils.IClientConfig;
 import mekwars.common.io.AbstractFileSystem;
@@ -30,8 +32,6 @@ public class FileSystem extends AbstractFileSystem {
         .getPath(DIRECTORY_NAME_SERVERS);
 
     public static final String FILE_NAME_DATA_LAST_UPDATED = "dataLastUpdated.dat";
-    private static final Path FILE_DATA_LAST_UPDATED = FileSystems.getDefault()
-        .getPath(FILE_NAME_DATA_LAST_UPDATED);
 
     private static final Path[] DIRECTORIES = new Path[] {
         DIRECTORY_DATA,
@@ -57,8 +57,12 @@ public class FileSystem extends AbstractFileSystem {
     /**
      * Sets the config directory to configDir.
      */
-    public void setConfigDir(String configDir) {
-        this.configDir = FileSystems.getDefault().getPath(configDir);
+    public void setConfigDir(String configDir) throws IOException {
+        Path configPath = FileSystems.getDefault().getPath(configDir);
+
+        this.configDir = configPath;
+        this.campaignConfig = FileSystems.getDefault().getPath(configDir, FILE_NAME_CAMPAIGN_CONFIG);
+        Files.createDirectories(configPath);
     }
 
     /**
@@ -70,7 +74,7 @@ public class FileSystem extends AbstractFileSystem {
      * @throws IllegalArgumentException When config does not have the SERVERIP or SERVERPORT config
      * values
      */
-    public void setConfigDir(IClientConfig config) throws Exception {
+    public void setConfigDir(IClientConfig config) throws IOException {
         String serverIp = config.getParam("SERVERIP");
         String serverPort = config.getParam("SERVERPORT");
 
@@ -82,7 +86,14 @@ public class FileSystem extends AbstractFileSystem {
         }
 
         String configDirName = DIRECTORY_NAME_SERVERS + serverIp + "." + serverPort;
-        this.configDir = FileSystems.getDefault().getPath(configDirName);
+        Path configPath = FileSystems.getDefault().getPath(configDirName);
+
+        this.configDir = configPath;
+        this.campaignConfig = FileSystems.getDefault().getPath(
+            configDir.getFileName().toString(),
+            config.getParam("CAMPAIGNCONFIG")
+        );
+        Files.createDirectories(configPath);
         calculateChecksums();
     }
 

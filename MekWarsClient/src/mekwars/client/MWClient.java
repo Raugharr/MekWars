@@ -40,6 +40,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,6 +110,7 @@ import mekwars.common.PlanetEnvironment;
 import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.SerializeEntity;
+import mekwars.common.util.EntityUtil;
 import mekwars.common.util.GameReport;
 import mekwars.common.util.ThreadManager;
 import mekwars.common.util.TokenReader;
@@ -1271,16 +1273,30 @@ public final class MWClient extends GameHost implements IClient {
         LastPing = lastping;
     }
 
-    /*
+    /**
      * Connect the DataFetcher to the server and get all relevent information from it.
      */
     public void connectDataFetcher() {
         try {
             FileSystem.getInstance().setConfigDir(Config);
-            dataFetcher = new DataFetchClient(Integer.parseInt(Config
-                .getParam("DATAPORT")), Integer.parseInt(Config
-                .getParam("SOCKETTIMEOUTDELAY")));
+        } catch (IOException exception) {
+            LOGGER.error("Unable to set config directory", exception);
+            JOptionPane.showMessageDialog(
+                null,
+                MessageFormat.format(
+                    guiClient.getResourceString("errors.badConfigDir.text"),
+                    Config
+                ),
+                guiClient.getResourceString("errors.header.text"),
+                JOptionPane.ERROR_MESSAGE
+            );
+            System.exit(0);
+        }
+        dataFetcher = new DataFetchClient(Integer.parseInt(Config
+            .getParam("DATAPORT")), Integer.parseInt(Config
+            .getParam("SOCKETTIMEOUTDELAY")));
 
+        try {
             BufferedReader dis = new BufferedReader(new InputStreamReader(
                 new FileInputStream(FileSystem.getInstance().getDataLastUpdated().toString()
             )));
@@ -1288,7 +1304,7 @@ public final class MWClient extends GameHost implements IClient {
             dataFetcher.setLastTimestamp(lastTS);
             dis.close();
         } catch (Exception exception) {
-            LOGGER.error("Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.", exception);
+            LOGGER.warn("Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.", exception);
         }
         // Start the data fetcher, get ops/map/etc
 
@@ -1302,13 +1318,15 @@ public final class MWClient extends GameHost implements IClient {
         try {
             dataFetcher.checkForMostRecentOpList();
         } catch (IOException e) {
-            Object[] options = { "Exit", "Continue" };
+            Object[] options = {
+                guiClient.getResourceString("options.exit.text"),
+                guiClient.getResourceString("options.continue.text"),
+            };
             int selectedValue = JOptionPane
                     .showOptionDialog(
                             null,
-                            "No OpList. This usually means that you were unable to "
-                                    + "connect to the server to fetch a copy. Do you wish to exit?",
-                            "Startup " + "error!",
+                            guiClient.getResourceString("errors.header.text"),
+                            guiClient.getResourceString("errors.noOpList.text"),
                             JOptionPane.DEFAULT_OPTION,
                             JOptionPane.ERROR_MESSAGE, null, options,
                             options[0]);
