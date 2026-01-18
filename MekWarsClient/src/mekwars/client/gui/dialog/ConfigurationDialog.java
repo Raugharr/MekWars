@@ -242,25 +242,6 @@ public final class ConfigurationDialog implements ActionListener {
     private final JTextField memoryField = new JTextField();
     private final JTextField socketTimeOutField = new JTextField();
 
-    // Unit Status Icons
-    private final JCheckBox leftColumnDynamicCB = new JCheckBox();
-    private final JCheckBox leftPilotEjectCB = new JCheckBox();
-    private final JCheckBox leftRepairCB = new JCheckBox();
-    private final JCheckBox leftEngineCB = new JCheckBox();
-    private final JCheckBox leftEquipmentCB = new JCheckBox();
-    private final JCheckBox leftArmorCB = new JCheckBox();
-    private final JCheckBox leftAmmoCB = new JCheckBox();
-    private final JCheckBox leftCommanderCB = new JCheckBox();
-
-    private final JCheckBox rightColumnDynamicCB = new JCheckBox();
-    private final JCheckBox rightPilotEjectCB = new JCheckBox();
-    private final JCheckBox rightRepairCB = new JCheckBox();
-    private final JCheckBox rightEngineCB = new JCheckBox();
-    private final JCheckBox rightEquipmentCB = new JCheckBox();
-    private final JCheckBox rightArmorCB = new JCheckBox();
-    private final JCheckBox rightAmmoCB = new JCheckBox();
-    private final JCheckBox rightCommanderCB = new JCheckBox();
-
     // STOCK DIALOUG AND PANE
     private JDialog dialog;
     private JOptionPane pane;
@@ -777,56 +758,6 @@ public final class ConfigurationDialog implements ActionListener {
         soundPanel.add(soundPanelWrapper);
 
         /*
-         * HUD Panel Check boxes are used to display everything.
-         */
-        JPanel mainHUDSpring = new JPanel(new SpringLayout());
-
-        mainHUDSpring.add(new JLabel(" "));
-        mainHUDSpring.add(new JLabel("<html>Left<br>Column:</html>"));
-        mainHUDSpring.add(new JLabel("<html>Right<br>Column:</html>"));
-
-        mainHUDSpring.add(new JLabel("Dynamic"));
-        mainHUDSpring.add(leftColumnDynamicCB);
-        mainHUDSpring.add(rightColumnDynamicCB);
-
-        mainHUDSpring.add(new JLabel("<html><u>Status Groups</u></html>"));
-        mainHUDSpring.add(new JLabel(" "));
-        mainHUDSpring.add(new JLabel(" "));
-
-        mainHUDSpring.add(new JLabel("Pilot & Eject"));
-        mainHUDSpring.add(leftPilotEjectCB);
-        mainHUDSpring.add(rightPilotEjectCB);
-
-        mainHUDSpring.add(new JLabel("Repair / Maintanence"));
-        mainHUDSpring.add(leftRepairCB);
-        mainHUDSpring.add(rightRepairCB);
-
-        mainHUDSpring.add(new JLabel("Engine"));
-        mainHUDSpring.add(leftEngineCB);
-        mainHUDSpring.add(rightEngineCB);
-
-        mainHUDSpring.add(new JLabel("Equipment"));
-        mainHUDSpring.add(leftEquipmentCB);
-        mainHUDSpring.add(rightEquipmentCB);
-
-        mainHUDSpring.add(new JLabel("Armor & Structure"));
-        mainHUDSpring.add(leftArmorCB);
-        mainHUDSpring.add(rightArmorCB);
-
-        mainHUDSpring.add(new JLabel("Ammunition"));
-        mainHUDSpring.add(leftAmmoCB);
-        mainHUDSpring.add(rightAmmoCB);
-
-        mainHUDSpring.add(new JLabel("Commander"));
-        mainHUDSpring.add(leftCommanderCB);
-        mainHUDSpring.add(rightCommanderCB);
-
-        // Set up the springs
-        SpringLayoutHelper.setupSpringGrid(mainHUDSpring, 3);
-
-        unitHUDLayoutPanel.add(mainHUDSpring);
-
-        /*
          * Format the TAB VISIBILITY panel. Uses Spring Layout for the
          * Top/Bottom and Vis/Invis options. Box Layout w/ embedded flow layouts
          * for the to-main options. Dummy check boxes are created in the Top
@@ -1135,7 +1066,6 @@ public final class ConfigurationDialog implements ActionListener {
         ConfigPane.addTab("User", null, playerPanel, "Player and Formatting options");
         ConfigPane.addTab("Chat", null, chatPanel, "Chat and Messaging options");
         ConfigPane.addTab("Sounds", null, soundPanel, "Sound options");
-        ConfigPane.addTab("HUD Layout", null, unitHUDLayoutPanel, "Heads Up Display Layout");
         ConfigPane.addTab("Tab Layout", null, tabVisWrapper, "Tab visibility configurtion");
         ConfigPane.addTab("Tab Naming", null, tabNamingPanel, "Tab name configuration");
         ConfigPane.addTab("FKeys", null, keyBindPanel, "Function Key configuration");
@@ -1362,24 +1292,6 @@ public final class ConfigurationDialog implements ActionListener {
         memoryField.setText(mwclient.getConfig().getParam("DEDMEMORY").trim());
 
         pmReplyToSender.setSelected(mwclient.getConfig().isParam("REPLYTOSENDER"));
-
-        rightColumnDynamicCB.setSelected(mwclient.getConfig().isParam("RIGHTCOLUMNDYNAMIC"));
-        rightPilotEjectCB.setSelected(mwclient.getConfig().isParam("RIGHTPILOTEJECT"));
-        rightRepairCB.setSelected(mwclient.getConfig().isParam("RIGHTREPAIR"));
-        rightEngineCB.setSelected(mwclient.getConfig().isParam("RIGHTENGINE"));
-        rightEquipmentCB.setSelected(mwclient.getConfig().isParam("RIGHTEQUIPMENT"));
-        rightArmorCB.setSelected(mwclient.getConfig().isParam("RIGHTARMOR"));
-        rightAmmoCB.setSelected(mwclient.getConfig().isParam("RIGHTAMMO"));
-        rightCommanderCB.setSelected(mwclient.getConfig().isParam("RIGHTCOMMANDER"));
-        // Left Column
-        leftColumnDynamicCB.setSelected(mwclient.getConfig().isParam("LEFTCOLUMNDYNAMIC"));
-        leftPilotEjectCB.setSelected(mwclient.getConfig().isParam("LEFTPILOTEJECT"));
-        leftRepairCB.setSelected(mwclient.getConfig().isParam("LEFTREPAIR"));
-        leftEngineCB.setSelected(mwclient.getConfig().isParam("LEFTENGINE"));
-        leftEquipmentCB.setSelected(mwclient.getConfig().isParam("LEFTEQUIPMENT"));
-        leftArmorCB.setSelected(mwclient.getConfig().isParam("LEFTARMOR"));
-        leftAmmoCB.setSelected(mwclient.getConfig().isParam("LEFTAMMO"));
-        leftCommanderCB.setSelected(mwclient.getConfig().isParam("LEFTCOMMANDER"));
 
         testBuildTableBox.setSelected(mwclient.getConfig().isParam("USETESTBUILDTABLEVIEWER"));
         expandedUnitToolTipBox.setSelected(mwclient.getConfig().isParam("EXPANDEDUNITTOOLTIP"));
@@ -1614,25 +1526,6 @@ public final class ConfigurationDialog implements ActionListener {
             mwclient.getConfig().setParam("DEDAUTORESTART", restartField.getText().trim());
             mwclient.getConfig().setParam("DEDICATEDOWNERNAME", ownersField.getText().trim());
             mwclient.getConfig().setParam("DEDMEMORY", memoryField.getText().trim());
-
-            // Right Column
-            mwclient.getConfig().setParam("RIGHTCOLUMNDYNAMIC", Boolean.toString(rightColumnDynamicCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTPILOTEJECT", Boolean.toString(rightPilotEjectCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTREPAIR", Boolean.toString(rightRepairCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTENGINE", Boolean.toString(rightEngineCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTEQUIPMENT", Boolean.toString(rightEquipmentCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTARMOR", Boolean.toString(rightArmorCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTAMMO", Boolean.toString(rightAmmoCB.isSelected()));
-            mwclient.getConfig().setParam("RIGHTCOMMANDER", Boolean.toString(rightCommanderCB.isSelected()));
-            // Left Column
-            mwclient.getConfig().setParam("LEFTCOLUMNDYNAMIC", Boolean.toString(leftColumnDynamicCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTPILOTEJECT", Boolean.toString(leftPilotEjectCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTREPAIR", Boolean.toString(leftRepairCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTENGINE", Boolean.toString(leftEngineCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTEQUIPMENT", Boolean.toString(leftEquipmentCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTARMOR", Boolean.toString(leftArmorCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTAMMO", Boolean.toString(leftAmmoCB.isSelected()));
-            mwclient.getConfig().setParam("LEFTCOMMANDER", Boolean.toString(leftCommanderCB.isSelected()));
 
             mwclient.setIgnoreHouse();
             mwclient.setIgnorePrivate();

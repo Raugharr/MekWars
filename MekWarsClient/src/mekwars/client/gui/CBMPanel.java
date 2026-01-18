@@ -91,14 +91,10 @@ public class CBMPanel extends JPanel {
         hideBMUnits = Boolean.parseBoolean(mwclient.getServerConfigs("HiddenBMUnits"));
 
         pnlMekIconHolder = new JPanel();
-        pnlMekIconHolder.setMaximumSize(new Dimension(84,72));
-        pnlMekIconHolder.setMaximumSize(new Dimension(84,72));
+        pnlMekIconHolder.setMaximumSize(new Dimension(MechInfo.WIDTH, MechInfo.HEIGHT));
+        pnlMekIconHolder.setMaximumSize(new Dimension(MechInfo.WIDTH, MechInfo.HEIGHT));
 
         pnlMekIcon = new MechInfo(mwclient.getConfig().getImage("CAMO"));
-        pnlMekIcon.setMinimumSize(new Dimension(84,72));
-        pnlMekIcon.setPreferredSize(new Dimension(84,72));
-        pnlMekIcon.setMaximumSize(new Dimension(84,72));
-
         BlackMarketInfo = new BlackMarketModel(mwclient, hideBMUnits);
         theCampaign = client.getCampaign();
         Player = theCampaign.getPlayer();
@@ -436,9 +432,6 @@ public class CBMPanel extends JPanel {
 
             //refresh the camo ... may have been changed.
             pnlMekIcon = new MechInfo(mwclient.getConfig().getImage("CAMO"));
-            pnlMekIcon.setMinimumSize(new Dimension(84,72));
-            pnlMekIcon.setPreferredSize(new Dimension(84,72));
-            pnlMekIcon.setMaximumSize(new Dimension(84,72));
 
 
             try {

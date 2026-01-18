@@ -16,11 +16,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,8 +31,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.RGBImageFilter;
-import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -54,8 +55,6 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import megamek.client.ui.dialogs.CamoChooserDialog;
-import megamek.client.ui.swing.tileset.MechTileset;
-import megamek.common.Configuration;
 import megamek.common.Entity;
 import megamek.common.Infantry;
 import megamek.common.Mech;
@@ -63,7 +62,6 @@ import megamek.common.icons.Camouflage;
 import mekwars.client.GUIClient;
 import mekwars.client.GUIClientConfig;
 import mekwars.client.MWClient;
-import mekwars.client.GUIClient;
 import mekwars.client.campaign.CArmy;
 import mekwars.client.campaign.CBMUnit;
 import mekwars.client.campaign.CPlayer;
@@ -74,6 +72,7 @@ import mekwars.client.gui.dialog.BulkRepairDialog;
 import mekwars.client.gui.dialog.CustomUnitDialog;
 import mekwars.client.gui.dialog.PromotePilotDialog;
 import mekwars.client.gui.dialog.SolFreeBuildDialog;
+import mekwars.client.gui.icons.StatusIconsTable;
 import mekwars.client.gui.utilities.MWTableCellRenderer;
 import mekwars.common.Army;
 import mekwars.common.Unit;
@@ -91,19 +90,12 @@ import org.apache.logging.log4j.Logger;
 public class CHQPanel extends JPanel {
     private static final Logger LOGGER = LogManager.getLogger(CHQPanel.class);
 
-    private static final long serialVersionUID = -5137503055464771160L;
-
-    MWClient mwclient;
-
-    CPlayer Player;
-
-    public MekTableModel MekTable;
-
+    private MWClient mwclient;
+    private CPlayer Player;
+    private MekTableModel MekTable;
     protected MechTableMouseAdapter mouseAdapter;
 
     // graphical components
-
-    private GridBagConstraints gridBagConstraints;
 
     private JPanel pnlMeks;
     private JScrollPane spMeks;
@@ -126,7 +118,7 @@ public class CHQPanel extends JPanel {
         Player = mwclient.getPlayer();
         MekTable = new MekTableModel();
         mouseAdapter = new MechTableMouseAdapter();
-        gridBagConstraints = new GridBagConstraints();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
@@ -154,7 +146,7 @@ public class CHQPanel extends JPanel {
         Player = mwclient.getPlayer();
         MekTable = new MekTableModel();
         mouseAdapter = new MechTableMouseAdapter();
-        gridBagConstraints = new GridBagConstraints();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
@@ -182,14 +174,11 @@ public class CHQPanel extends JPanel {
         reloadAllUnitsButton = new JButton();
         //@Salient (mwosux@gmail.com) added for SolFreeBuild option
         solFreeBuildButton = new JButton();
-        // pnlMekIcon = new MechInfo(mwclient);
-        // btnShowMek = new JButton();
 
         setLayout(new GridBagLayout());
 
         createMeksPanel();
-        // tpMain.addTab("Meks", null, pnlMeks, "Command Your Meks");
-        gridBagConstraints = new GridBagConstraints();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -202,14 +191,15 @@ public class CHQPanel extends JPanel {
     }
 
     private void createMeksPanel() {
-        // pnlMeks.setLayout(new BoxLayout(pnlMeks, BoxLayout.Y_AXIS));
         pnlMeks.setLayout(new GridBagLayout());
         spMeks.setPreferredSize(new Dimension(300, 400));
-        tblMeks.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tblMeks.setDoubleBuffered(true);
-        tblMeks.setMaximumSize(new Dimension(2147483647, 10000));
+        tblMeks.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        // tblMeks.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        // tblMeks.setDoubleBuffered(true);
+        // tblMeks.setMaximumSize(new Dimension(2147483647, 10000));
         tblMeks.setPreferredScrollableViewportSize(new Dimension(300, 400));
-        tblMeks.setPreferredSize(new Dimension(300, 400));
+        tblMeks.setPreferredSize(new Dimension(1000, 400));
+
         tblMeks.setRowHeight(100);
         tblMeks.setRowSelectionAllowed(false);
         tblMeks.setColumnSelectionAllowed(false);
@@ -218,18 +208,17 @@ public class CHQPanel extends JPanel {
 
         tblMeks.setModel(MekTable);
         tblMeks.getColumnModel().getColumn(0).setPreferredWidth(120);
-        /*
-         * tblMeks.getColumnModel().getColumn(1).setPreferredWidth(90); tblMeks.getColumnModel().getColumn(2).setPreferredWidth(90); tblMeks.getColumnModel().getColumn(3).setPreferredWidth(90); tblMeks.getColumnModel().getColumn(4).setPreferredWidth(90); tblMeks.getColumnModel().getColumn(5).setPreferredWidth(30);
-         */
         tblMeks.getTableHeader().setReorderingAllowed(false);
+        //tblMeks.setDefaultRenderer(Object.class, MekTable.getRenderer());
         for (int i = 0; i < tblMeks.getColumnCount(); i++) {
             tblMeks.getColumnModel().getColumn(i).setCellRenderer(MekTable.getRenderer());
+            // tblMeks.getColumnModel().getColumn(i).setPreferredWidth(120);
         }
         tblMeks.addMouseListener(mouseAdapter);
         tblMeks.addMouseMotionListener(mouseAdapter);
 
         spMeks.setViewportView(tblMeks);
-        gridBagConstraints = new GridBagConstraints();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
@@ -257,7 +246,6 @@ public class CHQPanel extends JPanel {
     public void refresh() {
         useAdvanceRepairs = mwclient.isUsingAdvanceRepairs();
         MekTable.refreshModel();
-        tblMeks.setPreferredSize(new Dimension(tblMeks.getWidth(), tblMeks.getRowHeight() * (MekTable.getRowCount())));
         tblMeks.revalidate();
         mwclient.getPlayer().sortArmies();
     }
@@ -776,21 +764,13 @@ public class CHQPanel extends JPanel {
                     }
 
                     popup.show(e.getComponent(), e.getX(), e.getY());
-
-                }
-
-                else if ((row < 0) || (col == 0)) {
-
+                } else if ((row < 0) || (col == 0)) {
                     CArmy l = MekTable.getArmyAt(row);
+
                     if (l != null) {
-
                         int lid = l.getID();
+
                         if (l.getBV() > 0) {
-
-                            /*
-                             * if (!l.isReady()){ menuItem = new JMenuItem("Set Active"); menuItem.setActionCommand("SA|"+lid); menuItem.addActionListener(this); popup.add(menuItem); } else { menuItem = new JMenuItem("Set Inactive"); menuItem.setActionCommand("SI|"+lid); menuItem.addActionListener(this); popup.add(menuItem); }
-                             */
-
                             menuItem = new JMenuItem("Attack Options");
                             menuItem.setActionCommand("AO|" + lid);
                             menuItem.addActionListener(this);
@@ -831,7 +811,6 @@ public class CHQPanel extends JPanel {
                             AttackMenu aMenu = new AttackMenu(mwclient, lid, "-1");
                             aMenu.updateMenuItems(false);
                             popup.add(aMenu);
-
                             popup.addSeparator();
                         }
 
@@ -2890,12 +2869,9 @@ public class CHQPanel extends JPanel {
     }
 
     public class MekTableModel extends AbstractTableModel {
-
-        /**
-         *
-         */
         private static final long serialVersionUID = -7918520064078379615L;
 
+        @Override
         public int getColumnCount() {
             int count = Integer.parseInt(mwclient.getConfigParam("UNITAMOUNT")) + 1;
             return count;
@@ -2903,6 +2879,7 @@ public class CHQPanel extends JPanel {
         }
 
         // should be based on the number of mechs you can own
+        @Override
         public int getRowCount() {
             int hangarRows = getRowsForHangar();
             int armyRows = getRowsForArmies();
@@ -2920,7 +2897,6 @@ public class CHQPanel extends JPanel {
 
         // number of rows consumed by hangar
         public int getRowsForHangar() {
-
             /*
              * no matter how many free bays a person has, return only one. this this solitary space shows players' remaining technicians. also - do not allow any adjustment in HQ display for negative bays.
              */
@@ -2936,12 +2912,11 @@ public class CHQPanel extends JPanel {
         }
 
         public int getRowsForArmies() {
-
             int total = 0;
+
             for (CArmy currA : Player.getArmies()) {
                 total += getRowsForArmy(currA);
             }
-
             return total;
         }
 
@@ -2954,30 +2929,26 @@ public class CHQPanel extends JPanel {
         }
 
         public CArmy getArmyAt(int row) {
-
             for (CArmy currA : Player.getArmies()) {
                 int uses = getRowsForArmy(currA);
+
                 if (uses > row) {
                     return (currA);
                 }
                 row -= uses;
             }
-
             return null;
         }
 
         public int getOffset(int row) {
-
             for (CArmy currA : Player.getArmies()) {
-
                 int uses = getRowsForArmy(currA);
+
                 if (uses > row) {
                     return row * (getColumnCount() - 1);
                 }
-
                 row -= uses;
             }
-
             return 0;
         }
 
@@ -3003,6 +2974,7 @@ public class CHQPanel extends JPanel {
             return null;
         }
 
+        @Override
         public String getValueAt(int row, int col) {
             if (row < 0) {
                 return "";
@@ -3152,11 +3124,10 @@ public class CHQPanel extends JPanel {
                 } else if (army.getC3Network().get(cm.getId()) != null) {
                     result.append(" |L|");
                 }
-                if (!Boolean.parseBoolean(mwclient.getConfig().getParam("RIGHTCOMMANDER")) && !Boolean.parseBoolean(mwclient.getConfig().getParam("LEFTCOMMANDER")) && army.isCommander(cm.getId())) {
-                    result.append(" Cmdr");
+                if (army.isCommander(cm.getId())) {
+                    result.insert(0, "Cmdr ");
                 }
             }
-
             return result.toString();
         }
 
@@ -3174,32 +3145,24 @@ public class CHQPanel extends JPanel {
         }
 
         public class Renderer extends MechInfo implements TableCellRenderer {
-            private static final long serialVersionUID = -300922977373422309L;
-
-            int meknum;
-
-            MechTileset mt = new MechTileset(new File("data/images/units/"));
-
             public Renderer(MWClient client) {
                 super(client);
-                try {
-                    mt.loadFromFile("mechset.txt");
-                } catch (IOException ex) {
-                    LOGGER.error("Unable to read data/images/units/mechset.txt");
-                }
             }
 
+            @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = this;
+                MechInfo c = this;
                 setOpaque(true);
-                setText(getValueAt(row, column).toString());
-                setToolTipText(null);
+                c.setText(getValueAt(row, column).toString());
+                c.setToolTipText(null);
                 CArmy l = getArmyAt(row);
+                CUnit cm = getMekAt(row, column);
 
+                c.setUnit(cm, l);
                 if (l != null) {
                     if (column == 0) {
-                        setImageVisible(false);
-                        setToolTipText(l.getSkillInfoForDisplay());
+                        c.setImageVisible(false);
+                        c.setToolTipText(l.getSkillInfoForDisplay());
                         if (l.isLocked()) {
                             c.setBackground(new Color(235, 225, 5));
                         }
@@ -3209,15 +3172,13 @@ public class CHQPanel extends JPanel {
                     c.setBackground(UIManager.getColor("TableHeader.separatorColor"));
                     return c;
                 }
-                CUnit cm = getMekAt(row, column);
-                if (cm != null) {
 
+                if (cm != null) {
                     int inNumberofArmies = Player.getAmountOfTimesUnitExistsInArmies(cm.getId());
                     StringBuilder C3Text = new StringBuilder();
                     String description = "";
 
                     if (cm.getC3Level() > 0) {
-
                         if (cm.getC3Level() == Unit.C3_SLAVE) {
                             C3Text.append("C3 Slave");
                         } else if (cm.getC3Level() == Unit.C3_MASTER) {
@@ -3362,9 +3323,8 @@ public class CHQPanel extends JPanel {
                     } else {
                         description = cm.getDisplayInfo(C3Text.toString());
                     }
-                    setToolTipText(description);
-                    setUnit(cm, l);
-                    setImageVisible(true);
+                    c.setToolTipText(description);
+                    c.setImageVisible(true);
 
                     if (cm.getStatus() == Unit.STATUS_FORSALE) {
                         // a mild green for units that are on sale
@@ -3374,35 +3334,19 @@ public class CHQPanel extends JPanel {
                         c.setBackground(new Color(190, 150, 55));
                     } else if (useUnitLocking && cm.isLocked()) { //@Salient - mini campaign lock
                         c.setBackground(new Color(128, 0, 128)); //purple, i think.
-                    } else if (!mwclient.getConfig().isUsingStatusIcons()) {
-
-                        if (cm.getPilot().getName().equals("Vacant")) {
-                            // RFE 1545928 -Color for pilotless units
-                            c.setBackground(new Color(160, 190, 115));
-                        } else if (useAdvanceRepairs && UnitUtils.isRepairing(cm.getEntity())) {
-                            c.setBackground(new Color(0, 255, 127));
-                        } else if (useAdvanceRepairs && (mwclient.getRMT() != null) && mwclient.getRMT().hasQueuedOrders(cm.getId())) {
-                            c.setBackground(new Color(75, 00, 130));
-                        } else if (useAdvanceRepairs && UnitUtils.hasCriticalDamage(cm.getEntity())) {
-                            c.setBackground(Color.red);
-                        } else if (useAdvanceRepairs && UnitUtils.hasArmorDamage(cm.getEntity())) {
-                            c.setBackground(new Color(238, 238, 0));
-                        } else if (useAdvanceRepairs && !UnitUtils.hasAllAmmo(cm.getEntity())) {
-                            c.setBackground(new Color(255, 128, 255));
-                        }
                     }
                 } else {
-                    setImageVisible(false);
-                    meknum = (((row - getRowsForArmies()) * getColumnCount()) - 1) + column;
+                    c.setImageVisible(false);
+                    int meknum = (row - getRowsForArmies()) * getColumnCount() - 1 + column;
                     int freebays = Player.getFreeBays();
                     if (freebays < 0) {
                         freebays = 0;
                     }
                     if (meknum > (freebays + Player.getHangar().size())) {
-                        setText("");
+                        c.setText("");
                     }
                 }
-                MWTableCellRenderer.setupTigerStripes(this, table, column);
+                MWTableCellRenderer.setupTigerStripes(c, table, column);
                 return c;
             }
         }// end Renderer
