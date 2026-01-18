@@ -5,7 +5,7 @@
 2 Spider SDR-5V.mtf
 5 Stinger STG-3R.mtf
 5 Wasp WSP-1A.mtf
-5 Urbanmech UM-R60.mtf
+5 UrbanMech UM-R60.mtf
 1 Javelin JVN-10F.mtf
 3 Locust LCT-1E.mtf
 2 Ostscout OTT-7J.mtf
