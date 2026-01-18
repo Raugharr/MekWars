@@ -157,11 +157,11 @@ public class PM extends Command {
                  * 3) Keyword
                  */
                 if(mwclient.getConfig().isParam("ENABLEMESSAGESOUND"))
-                	mwclient.doPlaySound(mwclient.getConfig().getParam("SOUNDONMESSAGE"));
+                	mwclient.getSoundManager().doPlaySound(mwclient.getConfig().getParam("SOUNDONMESSAGE"));
                 else if (message.indexOf(mwclient.getUsername()) > -1 && mwclient.getConfig().isParam("ENABLECALLSOUND"))
-                	mwclient.doPlaySound("SOUNDONCALL");
+                	mwclient.getSoundManager().doPlaySound("SOUNDONCALL");
                 else if (mwclient.hasKeyWords(message) && mwclient.getConfig().isParam("ENABLEKEYWORDSOUND")) 
-                	mwclient.doPlaySound(mwclient.getConfig().getParam("SOUNDONKEYWORD"));
+                	mwclient.getSoundManager().doPlaySound(mwclient.getConfig().getParam("SOUNDONKEYWORD"));
             }
         }
 	}

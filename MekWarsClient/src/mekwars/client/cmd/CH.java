@@ -442,7 +442,7 @@ public class CH extends Command {
                 } else if (nextString.startsWith("ED:")) {
                     message = nextString.substring(3);
                     if (mwclient.getConfig().isParam("ENABLEENEMYDETECTEDSOUND")) {
-                        mwclient.doPlaySound(mwclient.getConfigParam("SOUNDONENEMYDETECTED"));
+                        mwclient.getSoundManager().doPlaySound(mwclient.getConfigParam("SOUNDONENEMYDETECTED"));
                     }
                 } else {
                     message = nextString;
@@ -464,7 +464,7 @@ public class CH extends Command {
 
                 else if ((!uncoloredName.equalsIgnoreCase(mwclient.getUsername()) || (uncoloredName.trim().length() < 1)) && (message.indexOf(mwclient.getUsername()) > -1)) {
                     if (mwclient.getConfig().isParam("ENABLECALLSOUND")) {
-                        mwclient.doPlaySound(mwclient.getConfig().getParam("SOUNDONCALL"));
+                        mwclient.getSoundManager().doPlaySound(mwclient.getConfig().getParam("SOUNDONCALL"));
                     }
 
                     // keep logging, even if sound is disabled
@@ -474,7 +474,7 @@ public class CH extends Command {
                 else if (mwclient.hasKeyWords(message)) {
 
                     if (mwclient.getConfig().isParam("ENABLEKEYWORDSOUND")) {
-                        mwclient.doPlaySound(mwclient.getConfig().getParam("SOUNDONKEYWORD"));
+                        mwclient.getSoundManager().doPlaySound(mwclient.getConfig().getParam("SOUNDONKEYWORD"));
                     }
 
                     // keep logging, even if sound is disabled

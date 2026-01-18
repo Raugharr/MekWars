@@ -114,33 +114,28 @@ public class CConnector implements IConnectionListener {
             return;
         }
 
-        if (_host.isEmpty() || _port == -1)
-        {
+        if (_host.isEmpty() || _port == -1) {
             LOGGER.error("no host or port set...");
             return;
         }
 
         IOException ioexception = null;
 
-        LOGGER.error("Opening socket connection to " + _host + ":" + _port);
+        LOGGER.info("Opening socket connection to " + _host + ":" + _port);
         Socket s = null;
         try {
           s = new Socket(_host, _port);
-          LOGGER.error("CConnector: connected to " + _host + ":" + _port);
-          //LOGGER.error("setting NO_DELAY = true");
+          LOGGER.info("CConnector: connected to " + _host + ":" + _port);
           s.setTcpNoDelay(true);
           _connectionHandler = new ConnectionHandlerLocal(s);
           _connectionHandler.setListener(this);
           _connected = true;
           Client.connectionEstablished();
           return;
-        }
-        catch (IOException e) {ioexception = e;}
+      } catch (IOException e) {ioexception = e;}
         LOGGER.error("giving up");
         if (ioexception != null) {throw ioexception;}
-      }
-      catch (IOException e) {
-
+      } catch (IOException e) {
         LOGGER.error("Exception: ", e);
         return;
       }

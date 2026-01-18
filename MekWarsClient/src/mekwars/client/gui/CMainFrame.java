@@ -940,9 +940,10 @@ public class CMainFrame extends JFrame {
 
         jMenuOptionsMute.setText("Mute");
         jMenuOptionsMute.setMnemonic('M');
+        jMenuOptionsMute.setState(mwclient.getSoundManager().isMuted());
         jMenuOptionsMute.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mwclient.setSoundMuted(jMenuOptionsMute.getState());
+                mwclient.getSoundManager().setSoundMuted(jMenuOptionsMute.getState());
             }
         });
 
@@ -2952,10 +2953,6 @@ public class CMainFrame extends JFrame {
     void this_componentResized(ComponentEvent e) {
     }
 
-    public void setSoundMuted(boolean b) {
-        jMenuOptionsMute.setState(b);
-    }
-
     public void refreshMenu() {
         hasAdminMenus = false;
         jMenuBar1.removeAll();
@@ -3285,7 +3282,7 @@ class menuSound implements MenuListener {
     public void menuSelected(MenuEvent arg0) {
 
         if (mwclient.getConfig().isParam("ENABLEMENUSOUND")) {
-            mwclient.doPlaySound(mwclient.getConfigParam("SOUNDONMENU"));
+            mwclient.getSoundManager().doPlaySound(mwclient.getConfigParam("SOUNDONMENU"));
         }
     }
 }
@@ -3307,7 +3304,7 @@ class menuPopupSound implements MenuListener {
     public void menuSelected(MenuEvent arg0) {
 
         if (mwclient.getConfig().isParam("ENABLEMENUPOPUPSOUND")) {
-            mwclient.doPlaySound(mwclient.getConfigParam("SOUNDONMENUPOPUP"));
+            mwclient.getSoundManager().doPlaySound(mwclient.getConfigParam("SOUNDONMENUPOPUP"));
         }
     }
 

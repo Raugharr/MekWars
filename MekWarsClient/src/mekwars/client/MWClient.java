@@ -55,14 +55,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 import megamek.MMConstants;
 import megamek.Version;
@@ -94,13 +86,14 @@ import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
-import mekwars.client.io.FileSystem;
 import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.commands.IGUICommand;
 import mekwars.client.gui.commands.MailGCmd;
 import mekwars.client.gui.commands.PingGCmd;
+import mekwars.client.io.FileSystem;
 import mekwars.client.net.hpgnet.HPGClient;
 import mekwars.client.protocol.DataFetchClient;
+import mekwars.client.sound.SoundManager;
 import mekwars.client.util.RepairManagmentThread;
 import mekwars.client.util.SalvageManagmentThread;
 import mekwars.common.AdvancedTerrain;
@@ -126,7 +119,6 @@ import org.apache.logging.log4j.Logger;
 public final class MWClient extends GameHost implements IClient {
     private static final Logger LOGGER = LogManager.getLogger(MWClient.class);
 
-    private static final long serialVersionUID = 6056977040880995791L;
     // Holds campaign data as factions and planets..
     private CampaignData data = null;
     private DataFetchClient dataFetcher;
@@ -143,7 +135,7 @@ public final class MWClient extends GameHost implements IClient {
     private GUIClient guiClient;
 
     private boolean SignOff = false;
-    private boolean SoundMuted = false;
+    private SoundManager soundManager;
 
     private String password = "";
     private String myDedOwners = "";
@@ -296,7 +288,7 @@ public final class MWClient extends GameHost implements IClient {
 
             guiClient = new GUIClient(this, config);
             guiClient.init();
-
+            soundManager = new SoundManager(config);
         // Dedicated servers have no GUI, no signon dialogs, etc.
         } else {
             createProtCommands();
@@ -412,6 +404,10 @@ public final class MWClient extends GameHost implements IClient {
 
     public String getPassword() {
         return password;
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
 
     /*
@@ -1593,51 +1589,6 @@ public final class MWClient extends GameHost implements IClient {
         return allOps;
     }
 
-    public void doPlaySound(String filename) {
-        doPlaySound(filename, true);
-    }
-
-    // This can happen quite often, since no check is made if the config option
-    // is set
-    public void doPlaySound(String filename, boolean inThread) {
-
-        if (SoundMuted) {
-            return;
-        }
-
-        try {
-            if (inThread) {
-                AePlayWave player = new AePlayWave(filename);
-                player.start();
-            } else {
-                AePlayWave.AePlayWaveNonThreaded(filename);
-            }
-        } catch (Exception ex) {
-            LOGGER.catching(ex);
-        }
-    }
-
-    public void setSoundMuted(boolean b) {
-        SoundMuted = b;
-        getGUIClient().getMainFrame().setSoundMuted(b);
-
-        // see if the setting should be saved
-        if (b != getConfig().isParam("DISABLEALLSOUND")) {
-            if (b == false) {
-                getConfig().setParam("DISABLEALLSOUND", "false");
-            } else {
-                getConfig().setParam("DISABLEALLSOUND", "true");
-            }
-
-            getConfig().saveConfig();
-        }
-
-    }
-
-    public boolean isMuted() {
-        return SoundMuted;
-    }
-
     public void setUsingBots(Boolean using) {
         usingBots = using;
     }
@@ -1893,7 +1844,7 @@ public final class MWClient extends GameHost implements IClient {
         }
 
         if (getConfig().isParam("ENABLEEXITCLIENTSOUND")) {
-            doPlaySound(getConfigParam("SOUNDONEXITCLIENT"), false);
+            getSoundManager().doPlaySound(getConfigParam("SOUNDONEXITCLIENT"), false);
         }
     }
 
@@ -3351,10 +3302,6 @@ public final class MWClient extends GameHost implements IClient {
         return false;
     }
 
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
     public List<ClientThread> getMMClients() {
         return mmClientThreads;
     }
@@ -3401,151 +3348,5 @@ public final class MWClient extends GameHost implements IClient {
 
     public HPGClient getHpgClient() {
         return hpgClient;
-    }
-}
-
-/**
- * @author http://www.anyexample.com
- */
-class AePlayWave extends Thread {
-    private static final Logger LOGGER = LogManager.getLogger(AePlayWave.class);
-
-    private String filename;
-
-    private static final int EXTERNAL_BUFFER_SIZE = 524288; // 128Kb
-
-    private enum Position {
-        LEFT, RIGHT, NORMAL
-    };
-
-    private Position curPosition;
-
-    public AePlayWave(String wavfile) {
-        filename = wavfile;
-        curPosition = Position.NORMAL;
-    }
-
-    public AePlayWave(String wavfile, Position p) {
-        filename = wavfile;
-        curPosition = p;
-    }
-
-    @Override
-    public synchronized void run() {
-
-        File soundFile = new File(filename);
-        if (!soundFile.exists()) {
-            LOGGER.error("Wave file not found: {}", filename);
-            return;
-        }
-
-        AudioInputStream audioInputStream = null;
-        try {
-            audioInputStream = AudioSystem.getAudioInputStream(soundFile);
-        } catch (UnsupportedAudioFileException e1) {
-            LOGGER.catching(e1);
-            return;
-        } catch (IOException e1) {
-            LOGGER.catching(e1);
-            return;
-        }
-
-        AudioFormat format = audioInputStream.getFormat();
-        SourceDataLine auline = null;
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-
-        try {
-            auline = (SourceDataLine) AudioSystem.getLine(info);
-            auline.open(format);
-        } catch (LineUnavailableException e) {
-            LOGGER.catching(e);
-            return;
-        } catch (Exception e) {
-            LOGGER.catching(e);
-            return;
-        }
-
-        if (auline.isControlSupported(FloatControl.Type.PAN)) {
-            FloatControl pan = (FloatControl) auline
-                    .getControl(FloatControl.Type.PAN);
-            if (curPosition == Position.RIGHT) {
-                pan.setValue(1.0f);
-            } else if (curPosition == Position.LEFT) {
-                pan.setValue(-1.0f);
-            }
-        }
-
-        auline.start();
-        int nBytesRead = 0;
-        byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];
-
-        try {
-            while (nBytesRead != -1) {
-                nBytesRead = audioInputStream.read(abData, 0, abData.length);
-                if (nBytesRead >= 0) {
-                    auline.write(abData, 0, nBytesRead);
-                }
-            }
-        } catch (IOException e) {
-            LOGGER.catching(e);
-            return;
-        } finally {
-            auline.drain();
-            auline.close();
-        }
-    }
-
-    public static void AePlayWaveNonThreaded(String filename) {
-
-        File soundFile = new File(filename);
-        if (!soundFile.exists()) {
-            LOGGER.error("Wave file not found: {}", filename);
-            return;
-        }
-
-        AudioInputStream audioInputStream = null;
-        try {
-            audioInputStream = AudioSystem.getAudioInputStream(soundFile);
-        } catch (UnsupportedAudioFileException e1) {
-            LOGGER.catching(e1);
-            return;
-        } catch (IOException e1) {
-            LOGGER.catching(e1);
-            return;
-        }
-
-        AudioFormat format = audioInputStream.getFormat();
-        SourceDataLine auline = null;
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-
-        try {
-            auline = (SourceDataLine) AudioSystem.getLine(info);
-            auline.open(format);
-        } catch (LineUnavailableException e) {
-            LOGGER.catching(e);
-            return;
-        } catch (Exception e) {
-            LOGGER.catching(e);
-            return;
-        }
-
-        auline.start();
-        int nBytesRead = 0;
-        byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];
-
-        try {
-            while (nBytesRead != -1) {
-                nBytesRead = audioInputStream.read(abData, 0, abData.length);
-                if (nBytesRead >= 0) {
-                    auline.write(abData, 0, nBytesRead);
-                }
-            }
-        } catch (IOException e) {
-            LOGGER.catching(e);
-            return;
-        } finally {
-            auline.drain();
-            auline.close();
-        }
     }
 }
