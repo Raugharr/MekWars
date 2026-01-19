@@ -136,14 +136,23 @@ public class AdminMapPopupMenu extends JMenu {
 			
 			public void actionPerformed(ActionEvent ex) {
 				String planetName = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(),"Planet Name?");
-				if ( planetName == null || planetName.length() == 0 )
-					return;
+				if (planetName != null && planetName.length() != 0) {
+                    if (CampaignData.cd.getPlanetByName(planetName) != null) {
+                        JOptionPane.showMessageDialog(mwclient.getGUIClient().getMainFrame(),
+                            "Planet with name " + planetName + " already exists.",
+                            "Unable to create planet",
+                            JOptionPane.WARNING_MESSAGE
+                        );
+                    } else {
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admincreateplanet#"
+                            + planetName + "#" + xcoord + "#" + ycoord);
+                        mwclient.refreshData();
+                        mp.repaint();
+                        int id = CampaignData.cd.getPlanetByName(planetName).getId();
+                        new PlanetEditorDialog(mwclient, planetName, id);
+                    }
+                }
 				
-				mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admincreateplanet#"+planetName+"#"+xcoord+"#"+ycoord);
-				mwclient.refreshData();
-				mp.repaint();
-				int id = CampaignData.cd.getPlanetByName(planetName).getId();
-				new PlanetEditorDialog(mwclient, planetName, id);
 			}
 		});
         if ( userLevel >= mwclient.getData().getAccessLevel("AdminCreatePlanet") )
