@@ -1,11 +1,33 @@
 package mekwars.client.common.campaign.clientutils;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.lang.reflect.Constructor;
+import java.net.InetAddress;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.Vector;
+import megamek.MMConstants;
+import megamek.Version;
 import megamek.common.Building;
+import megamek.common.Entity;
 import megamek.common.Game;
+import megamek.common.Mech;
+import megamek.common.MechWarrior;
 import megamek.common.enums.GamePhase;
 import megamek.common.event.*;
+import megamek.server.GameManager;
 import megamek.server.Server;
+import mekwars.client.cmd.Command;
 import mekwars.client.common.campaign.clientutils.protocol.CConnector;
 import mekwars.client.common.campaign.clientutils.protocol.IClient;
 import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
@@ -16,18 +38,9 @@ import mekwars.common.campaign.clientutils.IClientUser;
 import mekwars.common.campaign.clientutils.IGameHost;
 import mekwars.common.campaign.clientutils.SerializeEntity;
 import mekwars.common.campaign.clientutils.protocol.TransportCodec;
+import mekwars.common.util.UnitUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.Vector;
 
 public abstract class GameHost implements GameListener, IGameHost {
     private static final Logger LOGGER = LogManager.getLogger(GameHost.class);
@@ -55,12 +68,20 @@ public abstract class GameHost implements GameListener, IGameHost {
     protected Vector<String> decodeBuffer = new Vector<String>(1, 1);// used to buffer incoming data until CMainFrame is built
 
     protected Buildings buildingTemplate = null;
+
+    /**
+     * Maps the task prefixes as HS, PL, SP etc. to a command under package cmd.
+     * key: String, value: cmd.Command
+     */
+    HashMap<String, Command> commands = new HashMap<String, Command>();
     
     protected int savedGamesMaxDays = 30; // max number of days a save game can be before
     // its deleted.
     
     protected GamePhase currentPhase = GamePhase.DEPLOYMENT;
     protected int turn = 0;
+    protected int myPort = -1;
+    private int status = 0;
     
 	@Override
 	public void gameBoardChanged(GameBoardChangeEvent arg0) {
@@ -155,8 +176,7 @@ public abstract class GameHost implements GameListener, IGameHost {
              */
             sendServerGameUpdate();
 
-        }// end try
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LOGGER.error("Error reporting game!");
             LOGGER.error("Exception: ", ex);
         }
@@ -213,8 +233,6 @@ public abstract class GameHost implements GameListener, IGameHost {
 
         }
     }
-
-	protected abstract void sendServerGameUpdate();
 
 	public void gameVictory(GameVictoryEvent e) {
         sendGameReport();
@@ -354,6 +372,249 @@ public abstract class GameHost implements GameListener, IGameHost {
             Connector.send(IClient.PROTOCOL_PREFIX + "comm" + "\t" + TransportCodec.encode(s));
         } catch (Exception e) {
             LOGGER.error("Exception: ", e);
+        }
+    }
+
+    /**
+     * @throws InvalidVersionException When the GameHost's {@link Version} is not allowed.
+     *
+     * @throws DuplicateHostException When a GameHost is already started.
+     *
+     * @throws UnknownHostException If the IP of the GameHost cannot be found.
+     */
+    public void startHost(boolean dedicated, boolean deploy,
+            boolean loadSavegame) throws Exception {
+
+        //@salient - check quirk xml file sizes with server
+        if(Boolean.parseBoolean(getServerConfigs("EnableQuirks"))) {
+            File canon = new File("data" + File.separator + "canonUnitQuirks.xml");
+            File custom = new File("data" + File.separator + "mmconf" + File.separator + "unitQuirksOverride.xml");
+            long canonFileLength = canon.length(); // returns 0L if does not exist
+            long customFileLength = custom.length();        
+            sendChat(GameHost.CAMPAIGN_PREFIX + "c QUIRKCHECK#" + canonFileLength + "#" + customFileLength); 
+        }
+
+        // reread the config to allow the user to change setting during runtime
+        String ip = "127.0.0.1";
+        if (!getConfigParam("IP:").isEmpty()) {// IP Setting set, override IP
+            // detection.
+                ip = getConfigParam("IP:");
+                InetAddress IA = InetAddress.getByName(ip); // Resolve Dyndns
+                // Entries
+                ip = IA.getHostAddress();
+        }
+
+        Version MMVersion = new Version(getServerConfigs("AllowedMegaMekVersion"));
+        if (!MMVersion.equals("-1")
+                && !MMVersion.is(megamek.MMConstants.VERSION)) {
+            throw new InvalidVersionException("You are using an invalid version of MegaMek. Please use version " + MMVersion.toString());
+        }
+
+        if (servers.get(myUsername) != null) {
+            throw new DuplicateHostException("Attempted to start a second host while host was already running.");
+        }
+
+        int MaxPlayers = Integer.parseInt(getConfigParam("MAXPLAYERS:"));
+        String comment = getConfigParam("COMMENT:");
+        String gpassword = getConfigParam("GAMEPASSWORD:");
+
+        if (gpassword == null) {
+            gpassword = "";
+        }
+        try {
+            myServer = new Server(gpassword, myPort, new GameManager());
+            if (loadSavegame) {
+                loadSavegame();
+            }
+        } catch (Exception ex) {
+            try {
+                if (myServer == null) {
+                    LOGGER.error("Error opening dedicated server. Result = null host.", ex);
+                } else {
+                    LOGGER.error("Error opening dedicated server. Will attempt a .die().", ex);
+                    myServer.die();
+                    myServer = null;
+                }
+            } catch (Exception e) {
+                LOGGER.error("Further error while trying to clean up failed host attempt.", e);
+            }
+            return;
+        }
+
+       ((Game)myServer.getGame()).addGameListener(this);
+        // Send the new game info to the Server
+        serverSend("NG|"
+                + new MMGame(myUsername, ip, myPort, MaxPlayers,
+                        MMConstants.VERSION, comment)
+                        .toString());
+    }
+
+    // Stop & send the close game event to the Server
+    public void stopHost() {
+        serverSend("CG");// send close game to server
+        try {
+            if (myServer != null) {
+                myServer.die();
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Megamek Error: ", ex);
+        }
+        myServer = null;
+    }
+
+    public void retrieveOpData(String type, String data) {
+        StringTokenizer st = new StringTokenizer(data, "#");
+        String opName = st.nextToken();
+        File opFile = new File("./data/operations/" + type);
+
+        if (!opFile.exists()) {
+            opFile.mkdirs();
+        }
+
+        opFile = new File("./data/operations/" + type + "/" + opName + ".txt");
+        try {
+            FileOutputStream out = new FileOutputStream(opFile);
+            PrintStream p = new PrintStream(out);
+            while (st.hasMoreTokens()) {
+                p.println(st.nextToken().replaceAll("\\(pound\\)", "#"));
+            }
+            p.close();
+            out.close();
+        } catch (Exception ex) {
+            LOGGER.error("Exception: ", ex);
+        }
+    }
+
+    public void retrieveMul(String data) {
+        StringTokenizer st = new StringTokenizer(data, "#");
+        String mulName = st.nextToken();
+        File mulFile = new File("./data/armies/");
+
+        if (!mulFile.exists()) {
+            mulFile.mkdirs();
+        }
+
+        mulFile = new File("./data/armies/" + mulName);
+        try {
+            FileOutputStream out = new FileOutputStream(mulFile);
+            PrintStream p = new PrintStream(out);
+            while (st.hasMoreTokens()) {
+                p.println(st.nextToken().replaceAll("\\(pound\\)", "#"));
+            }
+            p.close();
+            out.close();
+        } catch (Exception ex) {
+            LOGGER.catching(ex);
+        }
+    }
+
+    /**
+     * Changes the duty to a new status.
+     * 
+     * @param newStatus
+     */
+    public void setStatus(int newStatus) {
+        status = newStatus;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getStatusString() {
+        if (status == STATUS_DISCONNECTED) {
+            return ("Not connected");
+        }
+        if (status == STATUS_LOGGEDOUT) {
+            return ("Logged out");
+        }
+        if (status == STATUS_RESERVE) {
+            return ("Reserve duty");
+        }
+        if (status == STATUS_ACTIVE) {
+            return ("Active duty");
+        }
+        if (status == STATUS_FIGHTING) {
+            return ("Fighting");
+        }
+        return ("");
+    }
+
+
+    protected void sendServerGameUpdate() {
+        // Report the mech stat
+
+        // Only send data for units currently on the board.
+        // any units removed from play will have already sent thier final
+        // update.
+        Iterator<Entity> en = ((Game)myServer.getGame()).getEntities();
+        while (en.hasNext()) {
+            Entity ent = en.next();
+            if (ent.getOwner().getName().startsWith("War Bot")
+                    || (!(ent instanceof MechWarrior)
+                            && !UnitUtils.hasArmorDamage(ent)
+                            && !UnitUtils.hasISDamage(ent)
+                            && !UnitUtils.hasCriticalDamage(ent)
+                            && !UnitUtils.hasLowAmmo(ent) && !UnitUtils
+                                .hasEmptyAmmo(ent))) {
+                continue;
+            }
+            if ((ent instanceof Mech) && (ent.getInternal(Mech.LOC_CT) <= 0)) {
+                serverSend("IPU|"
+                        + SerializeEntity.serializeEntity(ent, true, true,
+                                isUsingAdvanceRepairs()));
+            } else {
+                serverSend("IPU|"
+                        + SerializeEntity.serializeEntity(ent, true, false,
+                                isUsingAdvanceRepairs()));
+            }
+        }
+    }
+
+
+
+    /*
+     * Actual GUI-mode parseData. Before we started streaming data over the chat
+     * part, this was called directly. Now we buffer all incoming non-data chat
+     * and spit it out at once when the GUI draws. Once the GUI is up, this is
+     * called by a simple pass through from doParseDataInput(), above.
+     *
+     * Ded's call the helper directly to bypass the buffer.
+     */
+    protected void doParseDataHelper(String input) {
+        try {
+
+            // 0-length input is spurious call from MWDedHost constructor.
+            if (input.length() == 0) {
+                return;
+            }
+
+            StringTokenizer ST = null;
+            String task = null;
+
+            LOGGER.debug(input);
+
+            // Create a String Tokenizer to parse the elements of the input
+            ST = new StringTokenizer(input, COMMAND_DELIMITER);
+            task = ST.nextToken();
+
+            if (!commands.containsKey(task)) {
+                try {
+                    Class<?> cmdClass = Class.forName(getClass().getPackage().getName() + ".cmd." + task);
+                    Constructor<?> c = cmdClass.getConstructor(new Class[]
+                        { getClass() });
+                    Command cmd = (Command) c.newInstance(new Object[]
+                        { this });
+                    commands.put(task, cmd);
+                } catch (Exception e) {
+                    LOGGER.error("Unable to store command", e);
+                }
+            }
+            if (commands.containsKey(task)) {
+                commands.get(task).execute(input);
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Unable to parse data", ex);
         }
     }
 }

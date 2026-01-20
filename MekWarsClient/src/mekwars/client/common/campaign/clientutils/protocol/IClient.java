@@ -19,31 +19,29 @@ public interface IClient {
     public static final String DEFLATED = "/deflated";
 
     // called when there's a system message to show
-    public void systemMessage(String message);
+    void systemMessage(String message);
 
     // called when there's an error message to show
-    public void errorMessage(String message);
+    void errorMessage(String message);
 
     // called when there's server input to process
-    public void processIncoming(String incoming);
+    void processIncoming(String incoming);
 
     // called when connection is lost
-    public void connectionLost();
+    void connectionLost();
 
     // called when connection is established
-    public void connectionEstablished();
+    void connectionEstablished();
     
-    public CConnector getConnector();
+    CConnector getConnector();
 
-	public void startHost(boolean dedicated, boolean deploy, boolean loadSavedGame);
+    void startHost(boolean dedicated, boolean deploy, boolean loadSavedGame);
 
-	public boolean isDedicated();
+    boolean isDedicated();
 
-	public void setUsername(String name);
+    void setUsername(String name);
 
-	public void doParseDataInput(String input);
+    void doParseDataInput(String input);
 
-	public void parseDedDataInput(String input);
-
-	public void setLastPing(long lastPing);
+    void setLastPing(long lastPing);
 }

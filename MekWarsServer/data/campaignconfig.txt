@@ -1,6 +1,6 @@
-#Timestamp=1755982095530
+#Timestamp=1769909030156
 #Server Config
-#Sat Aug 23 15:48:15 CDT 2025
+#Sat Jan 31 19:23:50 CST 2026
 MediumAeroInf=2
 AssaultBattleArmorPrice=40
 MaxBMSalesTicks=100

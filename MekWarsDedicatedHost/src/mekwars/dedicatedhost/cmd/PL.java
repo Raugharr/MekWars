@@ -26,41 +26,42 @@ import mekwars.dedicatedhost.MWDedHost;
  */
 
 public class PL extends Command {
-	
-	/**
-	 * @param client
-	 */
-	public PL(MWDedHost mwclient) {
-		super(mwclient);
-	}
-	
-	/**
-	 * @see client.cmd.Command#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String input) {
-		StringTokenizer st = decode(input);
-		
-		String cmd = st.nextToken();
-		
-		if (!st.hasMoreTokens())
-			return;
+    
+    /**
+     * @param client
+     */
+    public PL(MWDedHost mwclient) {
+        super(mwclient);
+    }
+    
+    /**
+     * @see client.cmd.Command#execute(java.lang.String)
+     */
+    @Override
+    public void execute(String input) {
+        StringTokenizer st = decode(input);
+        
+        String cmd = st.nextToken();
+        
+        if (!st.hasMoreTokens()) {
+            return;
+        }
 
-		if(cmd.equals("GBB"))//Go bye bye
-			mwclient.getConnector().closeConnection();
-        else if(cmd.equals("RSOD"))//Retrieve Short Op Data
-            mwclient.retrieveOpData("short",st.nextToken());
-        else if(cmd.equals("UCP"))//Update/Set a clients param
+        if(cmd.equals("GBB")) {//Go bye bye
+            mwclient.getConnector().closeConnection();
+        } else if (cmd.equals("RSOD")) { //Retrieve Short Op Data
+            mwclient.retrieveOpData("short", st.nextToken());
+        } else if (cmd.equals("UCP")) { //Update/Set a clients param
             mwclient.updateParam(st);
-        else if ( cmd.equals("RMF") ) {
-        	mwclient.retrieveMul(st.nextToken());
-        } else if ( cmd.equals("UAR") ) {
-            while ( st.hasMoreTokens() ){
+        } else if (cmd.equals("RMF")) {
+            mwclient.retrieveMul(st.nextToken());
+        } else if (cmd.equals("UAR")) {
+            while (st.hasMoreTokens()) {
                 mwclient.getConfig().setParam(st.nextToken(), st.nextToken());
             }
             mwclient.getConfig().saveConfig();
+        } else {
+            return;
         }
-		else
-			return;
-	}
+    }
 }

@@ -59,6 +59,7 @@ distributions {
                 into "${lib}"
             }
             from "${mmDir}/megamek/build/libs/MegaMek.jar"
+            from "${mmDir}/megamek/build/files/data/mechfiles"
             duplicatesStrategy = 'exclude'
         }
     }
@@ -80,6 +81,7 @@ distributions {
                 into "${lib}"
             }
             from "${mmDir}/megamek/build/libs/MegaMek.jar"
+            from "${mmDir}/megamek/build/files"
             duplicatesStrategy = 'exclude'
         }
     }

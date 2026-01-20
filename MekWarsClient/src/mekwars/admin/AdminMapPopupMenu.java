@@ -161,7 +161,7 @@ public class AdminMapPopupMenu extends JMenu {
 		item = new JMenuItem("Destroy Planet");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ex) {
-				int result = JOptionPane.showConfirmDialog(new JFrame(),"Are you Sure you want to Destroy this planet?");
+				int result = JOptionPane.showConfirmDialog(new JFrame(),"Are you sure you want to Destroy this planet?");
 				if (result == JOptionPane.YES_OPTION)
 				{
 					mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c admindestroyplanet#"+ pname);

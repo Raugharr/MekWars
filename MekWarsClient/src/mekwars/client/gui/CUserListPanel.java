@@ -429,11 +429,11 @@ public class CUserListPanel extends JPanel implements ActionListener{
      */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == ActivityButton) {
-            if(mwclient.getMyStatus() == MWClient.STATUS_RESERVE)//is reserve                        
+            if(mwclient.getStatus() == MWClient.STATUS_RESERVE)//is reserve                        
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c activate#" + MWClient.CLIENT_VERSION);                    
-            else if (mwclient.getMyStatus() == MWClient.STATUS_ACTIVE)//is active
+            else if (mwclient.getStatus() == MWClient.STATUS_ACTIVE)//is active
                 mwclient.sendChat("/c deactivate");
-            else if (mwclient.getMyStatus() == MWClient.STATUS_LOGGEDOUT)//is logged out
+            else if (mwclient.getStatus() == MWClient.STATUS_LOGGEDOUT)//is logged out
                 mwclient.sendChat("/c login");
         }
     }

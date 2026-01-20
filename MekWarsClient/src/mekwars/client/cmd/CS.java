@@ -36,6 +36,6 @@ public class CS extends Command {
 	 */
 	@Override
 	public void execute(String input) {
-		mwclient.changeStatus(Integer.parseInt(decode(input).nextToken()));
+		mwclient.setStatus(Integer.parseInt(decode(input).nextToken()));
 	}
 }

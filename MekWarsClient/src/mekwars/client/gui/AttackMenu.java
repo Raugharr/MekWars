@@ -429,7 +429,7 @@ public class AttackMenu extends JMenu implements ActionListener {
             this.add(toAdd, 0);
             
             if ( Boolean.parseBoolean(mwclient.getServerConfigs("AllowAttackFromReserve")) 
-                    && mwclient.getMyStatus() == MWClient.STATUS_RESERVE){
+                    && mwclient.getStatus() == MWClient.STATUS_RESERVE){
                 this.add(new JSeparator());
                 toAdd = new JMenuItem("Attack From Reserve");
                 toAdd.addActionListener(this);
@@ -449,7 +449,7 @@ public class AttackMenu extends JMenu implements ActionListener {
             toAdd.setMnemonic('G');
             this.add(toAdd);
 
-            if (mwclient.getMyStatus() >= MWClient.STATUS_ACTIVE) {
+            if (mwclient.getStatus() >= MWClient.STATUS_ACTIVE) {
                 toAdd = new JMenuItem("Cancel Game");
                 toAdd.addActionListener(this);
                 toAdd.setActionCommand("cmdCancelGames");
@@ -605,11 +605,11 @@ public class AttackMenu extends JMenu implements ActionListener {
          * anything else is a nonstarter unless the player
          * is actually active.
          */
-        if (mwclient.getMyStatus() < MWClient.STATUS_ACTIVE) {
+        if (mwclient.getStatus() < MWClient.STATUS_ACTIVE) {
             String toUser = "CH|CLIENT: You must be active in order to initiate standard attacks.";
             mwclient.doParseDataInput(toUser);
             return;
-        } else if (mwclient.getMyStatus() == MWClient.STATUS_FIGHTING) {
+        } else if (mwclient.getStatus() == MWClient.STATUS_FIGHTING) {
             String toUser = "CH|CLIENT: You may not initiate an attack while you are in a game.";
             mwclient.doParseDataInput(toUser);
             return;

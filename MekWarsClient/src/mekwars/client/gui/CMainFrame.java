@@ -332,21 +332,21 @@ public class CMainFrame extends JFrame {
         userLevel = mwclient.getUserLevel();
         mwclient.loadServerCommmands();
 
-        if (mwclient.getMyStatus() == MWClient.STATUS_DISCONNECTED) {
+        if (mwclient.getStatus() == MWClient.STATUS_DISCONNECTED) {
             disconnected = true;
         }
-        if (mwclient.getMyStatus() == MWClient.STATUS_LOGGEDOUT) {
+        if (mwclient.getStatus() == MWClient.STATUS_LOGGEDOUT) {
             loggedout = true;
         }
-        if (mwclient.getMyStatus() == MWClient.STATUS_RESERVE) {
+        if (mwclient.getStatus() == MWClient.STATUS_RESERVE) {
             loggedin = true;
             reserve = true;
         }
-        if (mwclient.getMyStatus() == MWClient.STATUS_ACTIVE) {
+        if (mwclient.getStatus() == MWClient.STATUS_ACTIVE) {
             loggedin = true;
             active = true;
         }
-        if (mwclient.getMyStatus() == MWClient.STATUS_FIGHTING) {
+        if (mwclient.getStatus() == MWClient.STATUS_FIGHTING) {
             loggedin = true;
             // fighting = true;
         }
@@ -1428,7 +1428,7 @@ public class CMainFrame extends JFrame {
     public void jMenuFileConnect_actionPerformed() {
         mwclient.connectToServer();
         // Set Version upon reconnect.
-        if (!mwclient.getStatus().equals("Not connected")) {
+        if (!mwclient.getStatusString().equals("Not connected")) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c setclientversion#" + mwclient.myUsername.trim() + "#" + MWClient.CLIENT_VERSION);
         }
     }
