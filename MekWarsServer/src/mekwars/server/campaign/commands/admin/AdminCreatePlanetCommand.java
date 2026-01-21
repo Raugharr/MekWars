@@ -29,14 +29,15 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Helge Richter
  *
  */
 public class AdminCreatePlanetCommand implements Command {
-	
+    private static final Logger LOGGER = LogManager.getLogger(AdminCreatePlanetCommand.class);
 	int accessLevel = IAuthenticator.ADMIN;
 	String syntax = "Planet Name#Xcood#YCoord#";
 	public int getExecutionLevel(){return accessLevel;}
@@ -61,7 +62,13 @@ public class AdminCreatePlanetCommand implements Command {
 		HashMap<Integer,Integer> flu = new HashMap<Integer,Integer>();
 		flu.put(faction.getId(),100);
 		SPlanet planet = new SPlanet(PlanetName, new Influences(flu), 0, xcood, ycood);
-		CampaignMain.cm.addPlanet(planet);
+        try {
+            CampaignMain.cm.addPlanet(planet);
+        } catch (Exception exception) {
+            LOGGER.error("Unable to create planet", exception);
+            CampaignMain.cm.toUser("Unable to create planet " + planet, Username, true);
+            return;
+        }
 		planet.setOwner(null,faction,true);
 		planet.setOriginalOwner(faction.getName());
         planet.updated();
