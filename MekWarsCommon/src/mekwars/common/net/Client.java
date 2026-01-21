@@ -31,7 +31,6 @@ import org.apache.logging.log4j.Logger;
  * Represents a socket that has been connected to a remote address.
  */
 public abstract class Client extends ConnectionHandler {
-    private static final int BUFFER_SIZE = 4096;
     private static final int JOIN_WAIT_TIME = 100;
     private static final int SELECT_WAIT = 100;
     private static final Logger logger = LogManager.getLogger(Client.class);
@@ -48,7 +47,7 @@ public abstract class Client extends ConnectionHandler {
     public void connect(InetSocketAddress address) throws IOException {
         selector = Selector.open();
 
-        connection = createConnection(getKryos(), BUFFER_SIZE, BUFFER_SIZE);
+        connection = createConnection(getKryos());
         connection.heartbeat();
         connection.connect(address, selector);
         logger.info("Connected to to {}:{}", connection.getIpAddress(), connection.getPort());

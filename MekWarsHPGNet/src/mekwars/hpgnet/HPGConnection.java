@@ -38,8 +38,8 @@ public class HPGConnection extends Connection {
         }
     };
 
-    public HPGConnection(ThreadLocal<Kryo> kryos, int inputLen, int outputLen) {
-        super(kryos, inputLen, outputLen);
+    public HPGConnection(ThreadLocal<Kryo> kryos) {
+        super(kryos);
         addListener(disconnectListener);
     }
 
