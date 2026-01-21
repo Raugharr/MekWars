@@ -58,8 +58,8 @@ public class UG extends Command {
             return;
         }
         
-        if ( (mmci.isInvis() && mmci.getUserlevel() > mwclient.getUserLevel())
-                || mmci.getName().startsWith("[Dedicated]") ){
+        if ((mmci.isInvis() && mmci.getUserlevel() > mwclient.getUserLevel())
+                || mmci.getName().startsWith("[Dedicated]")) {
             return;
         }
 
@@ -75,7 +75,7 @@ public class UG extends Command {
             	mwclient.getGUIClient().addToChat(toSend);
             
             //Play the sound
-            mwclient.doPlaySound(mwclient.getConfigParam("SOUNDONEXIT"));
+            mwclient.getSoundManager().doPlaySound(mwclient.getConfigParam("SOUNDONEXIT"));
         }
 	}
 }

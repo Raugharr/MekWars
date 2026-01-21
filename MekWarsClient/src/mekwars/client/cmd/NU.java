@@ -85,7 +85,7 @@ public class NU extends Command {
 				mwclient.getGUIClient().addToChat(toSend);
 			
 			//play join sound, if one is configured
-			mwclient.doPlaySound(mwclient.getConfigParam("SOUNDONJOIN"));
+			mwclient.getSoundManager().doPlaySound(mwclient.getConfigParam("SOUNDONJOIN"));
 		}
 		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_USERLIST);
 	}

@@ -192,9 +192,6 @@ public class GUIClient {
             frameSize.width = screenSize.width;
         }
 
-        // set the initial mute value
-        getMWClient().setSoundMuted(config.isParam("DISABLEALLSOUND"));
-
         // build the attack menu. at this point we know we have the
         // necessary data.
         getMainFrame().updateAttackMenu();

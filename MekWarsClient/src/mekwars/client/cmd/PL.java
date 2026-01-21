@@ -125,7 +125,7 @@ public class PL extends Command {
             player.updateUnitMachineGuns(st);
         } else if (cmd.equals("BMW")) { // play a sound someone won the bm.
             if (mwclient.getConfig().isParam("ENABLEBMSOUND")) {
-                mwclient.doPlaySound(mwclient.getConfig().getParam("SOUNDONBMWIN"));
+                mwclient.getSoundManager().doPlaySound(mwclient.getConfig().getParam("SOUNDONBMWIN"));
             }
         } else if (cmd.equals("PPQ")) {
             player.getPersonalPilotQueue().fromString(TokenReader.readString(st));
