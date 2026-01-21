@@ -39,9 +39,9 @@ application {
 
 ext {
     fileStagingDir = "${buildDir}/files"
-    serverdist = "server-dist"
-    data = "${serverdist}/data"
-    mmconf = "${serverdist}/mmconf"
+    data = "data/"
+    docs = "docs/"
+    mmconf = "mmconf/"
     lib = "lib"
 }
 
@@ -61,10 +61,32 @@ task stageFiles(type: Copy) {
     description = 'Stages files that are to be copied into the distribution.'
 
     file(fileStagingDir).mkdirs()
+
+    dependsOn gradle.includedBuild('megamek').task(':megamek:unitFilesZip')
+
     File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
     batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
     from batFile
-    from serverdist
+    copy {
+        from data
+        into "${fileStagingDir}/${data}"
+    }
+
+    copy {
+        from docs
+        into "${fileStagingDir}/${docs}"
+    }
+
+    copy {
+        from mmconf
+        into "${fileStagingDir}/${mmconf}"
+    }
+
+    copy {
+        from "${mmDir}/megamek/build/files/data/mechfiles"
+        into "${fileStagingDir}/data/mechfiles"
+    }
+    from "quartz.properties"
     into fileStagingDir
 }
 
@@ -79,11 +101,6 @@ tasks.named('installDist') {
         File batFile = new File(installDir, "${baseName}.bat")
         batFile.text = "start /min javaw ${jvmArgs} -jar \"%~dp0${jarName}\" %*"
     }
-}
-
-
-tasks.named('run') {
-    workingDir = file(serverdist)
 }
 
 distributions {
