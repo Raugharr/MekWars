@@ -27,6 +27,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -57,10 +58,12 @@ public class GUIClient {
     private GUIClientConfig config;
     private CMainFrame mainFrame;
     private Locale locale = Locale.US;
+    private ResourceBundle resourceMap;
 
     public GUIClient(MWClient mwClient, GUIClientConfig config) {
         this.mwClient = mwClient;
         this.config = config;
+        this.resourceMap = ResourceBundle.getBundle("mekwars.guiClient", locale);
     }
 
     public void init() {
@@ -96,6 +99,10 @@ public class GUIClient {
 
     public Locale getLocale() {
         return locale;
+    }
+
+    public String getResourceString(String string) {
+       return resourceMap.getString(string); 
     }
 
     /*

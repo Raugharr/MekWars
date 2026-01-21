@@ -2744,4 +2744,74 @@ public class UnitUtils {
         );
         return innersphereMunitions.containsAll(munitionType);
     }
+
+    public static int getTechLaborCosts(Entity unit, int techCost) {
+        int cost = 0;
+        int totalCrits = 0;
+        boolean damagedEngine = false;
+
+        for (int critLocation = 0; critLocation < unit.locations(); critLocation++) {
+            // These three location have rear armor so the user might be
+            // selecting that armor instead of crit.
+            if ((critLocation == Mech.LOC_CT) || (critLocation == Mech.LOC_LT)
+                    || (critLocation == Mech.LOC_RT)) {
+                if (unit.getArmor(critLocation, false) != unit.getOArmor(
+                        critLocation, false)) {
+                    cost += techCost;
+                }
+                if (unit.getArmor(critLocation, true) != unit.getOArmor(
+                        critLocation, true)) {
+                    cost += techCost;
+                }
+                if (unit.getInternal(critLocation) != unit
+                        .getOInternal(critLocation)) {
+                    cost += techCost;
+                }
+            } else {
+                if (unit.getArmor(critLocation, false) != unit.getOArmor(
+                        critLocation, false)) {
+                    cost += techCost;
+                }
+                if (unit.getInternal(critLocation) != unit
+                        .getOInternal(critLocation)) {
+                    cost += techCost;
+                }
+            }
+
+            // check for damage system crits.
+            for (int critSlot = 0; critSlot < unit
+                    .getNumberOfCriticals(critLocation); critSlot++) {
+
+                CriticalSlot cs = unit.getCritical(critLocation, critSlot);
+
+                if (cs == null) {
+                    continue;
+                }
+
+                if (cs.isBreached()) {
+                    continue;
+                }
+
+                if (!cs.isDamaged()) {
+                    continue;
+                }
+
+                if (UnitUtils.isEngineCrit(cs)) {
+                    damagedEngine = true;
+                    continue;
+                }
+                totalCrits++;
+
+            }// end slot for
+        }// end location for
+
+        // check for damaged engines
+        if (damagedEngine) {
+            totalCrits = +UnitUtils.getNumberOfEngineCrits(unit);
+        }
+
+        cost += (techCost * totalCrits) + techCost;
+
+        return cost;
+    }
 }

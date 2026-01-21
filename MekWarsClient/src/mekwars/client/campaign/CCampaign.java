@@ -48,12 +48,6 @@ public class CCampaign {
     public CCampaign(MWClient client) {
         mwclient = client;
         Player = new CPlayer(mwclient);
-        File f = new File(MWClient.CAMPAIGN_PATH);
-        if (f.exists() && !f.isDirectory()) {f.delete();}
-        if (!f.exists()) {
-            try {f.mkdirs();}
-            catch (Exception e) {LOGGER.error("Exception: ", e);}
-        }
     }
 
     public boolean decodeCommand(String command) {

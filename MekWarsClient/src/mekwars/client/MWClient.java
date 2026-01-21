@@ -40,6 +40,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1271,16 +1272,30 @@ public final class MWClient extends GameHost implements IClient {
         LastPing = lastping;
     }
 
-    /*
+    /**
      * Connect the DataFetcher to the server and get all relevent information from it.
      */
     public void connectDataFetcher() {
         try {
             FileSystem.getInstance().setConfigDir(Config);
-            dataFetcher = new DataFetchClient(Integer.parseInt(Config
-                .getParam("DATAPORT")), Integer.parseInt(Config
-                .getParam("SOCKETTIMEOUTDELAY")));
+        } catch (IOException exception) {
+            LOGGER.error("Unable to set config directory", exception);
+            JOptionPane.showMessageDialog(
+                null,
+                MessageFormat.format(
+                    guiClient.getResourceString("errors.badConfigDir.text"),
+                    Config
+                ),
+                guiClient.getResourceString("errors.header.text"),
+                JOptionPane.ERROR_MESSAGE
+            );
+            System.exit(0);
+        }
+        dataFetcher = new DataFetchClient(Integer.parseInt(Config
+            .getParam("DATAPORT")), Integer.parseInt(Config
+            .getParam("SOCKETTIMEOUTDELAY")));
 
+        try {
             BufferedReader dis = new BufferedReader(new InputStreamReader(
                 new FileInputStream(FileSystem.getInstance().getDataLastUpdated().toString()
             )));
@@ -1288,7 +1303,7 @@ public final class MWClient extends GameHost implements IClient {
             dataFetcher.setLastTimestamp(lastTS);
             dis.close();
         } catch (Exception exception) {
-            LOGGER.error("Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.", exception);
+            LOGGER.warn("Couldn't read timestamp of last datafetch. Will need to fetch all planetchanges since last full update.", exception);
         }
         // Start the data fetcher, get ops/map/etc
 
@@ -1302,13 +1317,15 @@ public final class MWClient extends GameHost implements IClient {
         try {
             dataFetcher.checkForMostRecentOpList();
         } catch (IOException e) {
-            Object[] options = { "Exit", "Continue" };
+            Object[] options = {
+                guiClient.getResourceString("options.exit.text"),
+                guiClient.getResourceString("options.continue.text"),
+            };
             int selectedValue = JOptionPane
                     .showOptionDialog(
                             null,
-                            "No OpList. This usually means that you were unable to "
-                                    + "connect to the server to fetch a copy. Do you wish to exit?",
-                            "Startup " + "error!",
+                            guiClient.getResourceString("errors.header.text"),
+                            guiClient.getResourceString("errors.noOpList.text"),
                             JOptionPane.DEFAULT_OPTION,
                             JOptionPane.ERROR_MESSAGE, null, options,
                             options[0]);
@@ -2825,7 +2842,6 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public int getTotalRepairCosts(Entity unit) {
-
         int cost = 0;
         int systemCrits = 0;
         int engineCrits = 0;
@@ -2918,76 +2934,10 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public int getTechLaborCosts(Entity unit, int techType) {
-        int cost = 0;
         int techCost = Integer.parseInt(getServerConfigs(UnitUtils
                 .techDescription(techType) + "TechRepairCost"));
-        int totalCrits = 0;
-        boolean damagedEngine = false;
 
-        for (int critLocation = 0; critLocation < unit.locations(); critLocation++) {
-            // These three location have rear armor so the user might be
-            // selecting that armor instead of crit.
-            if ((critLocation == Mech.LOC_CT) || (critLocation == Mech.LOC_LT)
-                    || (critLocation == Mech.LOC_RT)) {
-                if (unit.getArmor(critLocation, false) != unit.getOArmor(
-                        critLocation, false)) {
-                    cost += techCost;
-                }
-                if (unit.getArmor(critLocation, true) != unit.getOArmor(
-                        critLocation, true)) {
-                    cost += techCost;
-                }
-                if (unit.getInternal(critLocation) != unit
-                        .getOInternal(critLocation)) {
-                    cost += techCost;
-                }
-            }// end toros armor
-            else {
-                if (unit.getArmor(critLocation, false) != unit.getOArmor(
-                        critLocation, false)) {
-                    cost += techCost;
-                }
-                if (unit.getInternal(critLocation) != unit
-                        .getOInternal(critLocation)) {
-                    cost += techCost;
-                }
-            }// end armor
-
-            // check for damage system crits.
-            for (int critSlot = 0; critSlot < unit
-                    .getNumberOfCriticals(critLocation); critSlot++) {
-
-                CriticalSlot cs = unit.getCritical(critLocation, critSlot);
-
-                if (cs == null) {
-                    continue;
-                }
-
-                if (cs.isBreached()) {
-                    continue;
-                }
-
-                if (!cs.isDamaged()) {
-                    continue;
-                }
-
-                if (UnitUtils.isEngineCrit(cs)) {
-                    damagedEngine = true;
-                    continue;
-                }
-                totalCrits++;
-
-            }// end slot for
-        }// end location for
-
-        // check for damaged engines
-        if (damagedEngine) {
-            totalCrits = +UnitUtils.getNumberOfEngineCrits(unit);
-        }
-
-        cost += (techCost * totalCrits) + techCost;
-
-        return cost;
+        return UnitUtils.getTechLaborCosts(unit, techCost);
     }
 
     public void retrieveOpData(String type, String data) {
@@ -3092,7 +3042,6 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public void updatePartsBlackMarket(String data, int year) {
-
         StringTokenizer ST = new StringTokenizer(data, "#");
         boolean allowTechCrossOver = Boolean.parseBoolean(this
                 .getServerConfigs("AllowCrossOverTech"));
