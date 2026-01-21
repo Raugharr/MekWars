@@ -78,7 +78,9 @@ public abstract class AbstractFileSystem {
      *
      * @return The path to the campaignconfig.txt file.
      */
-    public abstract Path getCampaignConfig();
+    public Path getCampaignConfig() {
+        return FileSystems.getDefault().getPath(getConfigDir().toString(), FILE_NAME_CAMPAIGN_CONFIG);
+    }
 
     /**
      * Returns The path to the directory that contains all shared configurations.
@@ -127,6 +129,7 @@ public abstract class AbstractFileSystem {
      * @throws IOException If there is an error in reading one of the files.
      */
     public void calculateChecksums() throws IOException {
+        checksumHash.clear();
         for (Path path : getConfigFiles()) {
             if (getFile(path.getFileName().toString()) == null && Files.exists(path)) {
                 FileChecksum fileChecksum = new FileChecksum(path);
