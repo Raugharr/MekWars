@@ -19,6 +19,7 @@ package mekwars.common.net;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.ByteBufferInput;
 import com.esotericsoftware.kryo.io.ByteBufferOutput;
+import com.esotericsoftware.kryo.io.KryoBufferOverflowException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
@@ -26,7 +27,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import mekwars.common.net.packets.SystemPacketType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,13 +54,21 @@ public class Connection implements AutoCloseable {
     private ByteBufferOutput output;
     private ThreadLocal<Kryo> kryos;
     private PacketHeader packetState;
-    private ArrayList<Listener> listeners;
+    private ConcurrentLinkedQueue<AbstractPacket> messageQueue;
+    private CopyOnWriteArrayList<Listener> listeners;
 
-    public Connection(ThreadLocal<Kryo> kryos, int inputLen, int outputLen) {
+    public Connection(ThreadLocal<Kryo> kryos) {
+        int bufferSize = bufferCapacity();
+        int bufferLimit = bufferLimit();
+
+        if (bufferLimit < bufferSize) {
+            bufferLimit = bufferSize;
+        }
         this.kryos = kryos;
-        this.input = new ByteBufferInput(inputLen);
-        this.output = new ByteBufferOutput(outputLen);
-        this.listeners = new ArrayList<Listener>();
+        this.input = new ByteBufferInput(bufferSize);
+        this.output = new ByteBufferOutput(bufferSize, bufferLimit);
+        this.listeners = new CopyOnWriteArrayList<Listener>();
+        this.messageQueue = new ConcurrentLinkedQueue<AbstractPacket>();
     }
 
     public boolean isConnected() {
@@ -66,8 +76,9 @@ public class Connection implements AutoCloseable {
     }
 
     /**
-     * Connects to the the provided socket.
+     * Connects to the the provided address.
      *
+     * @throws IOException
      */
     public void connect(SocketChannel socketChannel, Selector selector) throws IOException {
         if (!isConnected()) {
@@ -122,14 +133,6 @@ public class Connection implements AutoCloseable {
         return socket.socket().getPort();
     }
 
-    public ByteBufferInput getInput() {
-        return input;
-    }
-
-    public ByteBufferOutput getOutput() {
-        return output;
-    }
-
     public void addListener(Listener listener) {
         listeners.add(listener);
     }
@@ -151,26 +154,28 @@ public class Connection implements AutoCloseable {
         if (!isConnected()) {
             throw new SocketException("Connection is closed.");
         }
+
+        if (!messageQueue.isEmpty()) {
+            messageQueue.add(packet);
+            return;
+        }
         synchronized (getOutput()) {
             ByteBuffer buffer = getOutput().getByteBuffer();
+            int start = buffer.position();
 
-            getOutput().setBuffer(buffer);
-            final int start = buffer.position();
-            output.writeInt(0); //Leave space for packet length
-            output.writeInt(packet.getType().getType(), 2);
-            output.writeBoolean(packet.getType().isSystemPacket());
-            kryos.get().writeObject(output, packet);
-            final int end = buffer.position();
-            LOGGER.debug("writing {} bytes {}", buffer.position(), packet);
-
-            buffer.position(start);
-            // Don't count the packet type or length ints.
-            output.writeInt(end - start - PacketHeader.SIZE);
-            buffer.position(end);
-            socketKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-        }
-        if (socketKey.isWritable()) {
-            send();
+            try {
+                getOutput().setBuffer(buffer, bufferLimit());
+                writeInner(packet, start);
+                socketKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+            } catch (KryoBufferOverflowException exception) {
+                /*
+                 * Go back to the last valid position, then add the packet to the queue and try
+                 * again later.
+                 */
+                buffer.position(start);
+                messageQueue.add(packet);
+                LOGGER.warn(exception);
+            }
         }
     }
 
@@ -187,15 +192,67 @@ public class Connection implements AutoCloseable {
             synchronized (getOutput()) {
                 ByteBuffer buffer = getOutput().getByteBuffer();
 
-                socketKey.interestOps(SelectionKey.OP_READ);
                 buffer.flip();
                 while (buffer.hasRemaining()) {
                     if (socket.write(getOutput().getByteBuffer()) == 0) {
-                        socketKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
                         break;
                     }
                 }
                 buffer.compact();
+                getOutput().setBuffer(buffer, bufferLimit());
+                
+                /*
+                 * We do not write to the socket after filling it with data. This is intentional
+                 * to attempt to limit the amount of time here to prevent other Connections from
+                 * not getting called.
+                 */
+                while (true) {
+                    AbstractPacket packet = messageQueue.peek();
+
+                    if (packet == null) {
+                        break;
+                    }
+                    final int start = buffer.position();
+
+                    try {
+                        writeInner(packet, start);
+                        messageQueue.poll();
+                    } catch (KryoBufferOverflowException exception) {
+                        getOutput().setPosition(start);
+                        /*
+                         * If the entire buffer is available but we have a buffer overflow the
+                         * packet cannot fit in the buffer. If the packet is not removed from the
+                         * queue this will infinately loop.
+                         *
+                         * If start is not 0 then its possible once send() is called again we might
+                         * have enough space to serialize the packet.
+                         */
+                        if (start == 0) {
+                            LOGGER.error("Unable to send packet, packet '{}' to big", packet.getClass().getName());
+                            LOGGER.catching(exception);
+                            messageQueue.poll();
+                        } else {
+                            LOGGER.warn(exception);
+                            break;
+                        }
+                    }
+                }
+
+                /*
+                 * We know we have nothing more to write when buffer.position() == 0 because:
+                 * 1. buffer.compact() sets the position to the number of bytes it has written.
+                 * 2. writeInner is not called because our messageQueue is empty. 
+                 */
+                if (buffer.position() == 0) {
+                    /*
+                     * If we had to allocate more memory than normal, reset it to the normal amount
+                     * to prevent potentially having large amounts of memory allocated here.
+                     */
+                    if (output.getByteBuffer().capacity() == bufferCapacity()) {
+                        output = new ByteBufferOutput(bufferCapacity(), bufferLimit());
+                    }
+                    socketKey.interestOps(SelectionKey.OP_READ);
+                }
             }
         } catch (IOException exception) {
             LOGGER.error("Unable to send packet", exception);
@@ -222,20 +279,27 @@ public class Connection implements AutoCloseable {
                     return;
                 }
 
-                getInput().setBuffer(buffer);
                 buffer.flip();
+                getInput().setBuffer(buffer);
                 LOGGER.debug("reading {} bytes", buffer.limit());
                 AbstractPacket packet = readObject(handler);
-                while (true) {
-                    if (packet != null) {
-                        handler.processPacket(packet, this);
-                    }
-                    if (buffer.remaining() <= PacketHeader.SIZE) {
-                        break;
-                    }
+                while (packet != null) {
+                    handler.processPacket(packet, this);
                     packet = readObject(handler);
                 }
                 buffer.compact();
+
+                // Downsize the ByteBufferInput back to bufferCapacity() to save memory.
+                if (buffer.position() == 0 && buffer.capacity() > bufferCapacity()) {
+                    ByteBuffer newBuffer = ByteBuffer.allocateDirect(bufferCapacity());
+
+                    /*
+                     * We don't need to copy the bytes as buffer.position() == 0 tells us there is
+                     * nothing more to read.
+                     */
+                    newBuffer.order(buffer.order());
+                    input.setBuffer(newBuffer);
+                }
             }
         } catch (IOException exception) {
             close();
@@ -252,6 +316,51 @@ public class Connection implements AutoCloseable {
 
     public long getNextHeartbeat() {
         return nextHeartbeat;
+    }
+
+    protected ByteBufferInput getInput() {
+        return input;
+    }
+
+    protected ByteBufferOutput getOutput() {
+        return output;
+    }
+
+    protected ConcurrentLinkedQueue<AbstractPacket> getMessageQueue() {
+        return messageQueue;
+    }
+
+    protected int bufferCapacity() {
+        return 1024 * 4; // 4KB.
+    }
+
+    protected int bufferLimit() {
+        return 1024 * 1024 * 20; //20 MB.
+    }
+
+    /**
+     * Write helper method decoupled in order to allow callee's determine how to catch the
+     * {@link KryoBufferOverFlowException} if thrown.
+     *
+     * @param packet The packet to write.
+     *
+     * @param start Initial bytebuffer position.
+     *
+     * @throws KryoBufferOverFlowException When Output has no more space available to write to.
+     */
+    protected void writeInner(AbstractPacket packet, int start) throws KryoBufferOverflowException {
+        output.writeInt(0); //Leave space for packet length
+        output.writeInt(packet.getType().getType(), 2);
+        output.writeBoolean(packet.getType().isSystemPacket());
+        kryos.get().writeObject(output, packet);
+        final int end = output.position();
+
+        output.setPosition(start);
+        final int length = end - start - PacketHeader.SIZE;
+        // Don't count the packet type or length ints.
+        output.writeInt(length);
+        output.setPosition(end);
+        LOGGER.debug("writing {} bytes {}", length + PacketHeader.SIZE, packet);
     }
 
     /**
@@ -273,14 +382,23 @@ public class Connection implements AutoCloseable {
             }
 
             packetState = new PacketHeader(getInput());
+            int totalPacketSize = packetState.getLength() + PacketHeader.SIZE;
 
-            if (packetState.getLength() > buffer.capacity()) {
-                int length = packetState.getLength();
-                packetState = null;
-                throw new IOException("Packet length '" + length + "' exceeds buffer capacity '" + buffer.capacity() + "'");
+            if (totalPacketSize > buffer.capacity()) {
+                ByteBuffer newBuffer = ByteBuffer.allocateDirect(totalPacketSize);
+
+                newBuffer.put(buffer);
+                newBuffer.order(buffer.order());
+                input.setBuffer(newBuffer);
+                /*
+                 * We don't have the entire packet if we have to resize the buffer to fit the
+                 * packet.
+                 */
+                return null;
             }
         }
 
+        // Check to see if we have read the entire packet.
         if (buffer.remaining() < packetState.getLength()) {
             return null;
         }

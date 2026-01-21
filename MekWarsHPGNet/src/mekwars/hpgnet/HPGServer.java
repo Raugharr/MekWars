@@ -37,8 +37,8 @@ public class HPGServer extends Server {
     }
 
     @Override
-    public Connection createConnection(ThreadLocal<Kryo> kryos, int inputLen, int outputLen) {
-        return new HPGConnection(kryos, inputLen, outputLen);
+    public Connection createConnection(ThreadLocal<Kryo> kryos) {
+        return new HPGConnection(kryos);
     }
 
     @Override

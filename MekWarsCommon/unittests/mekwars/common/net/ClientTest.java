@@ -71,11 +71,8 @@ public class ClientTest {
         when(connection.getIpAddress()).thenReturn("localhost");
         when(connection.getPort()).thenReturn(1234);
         when(client.getKryos()).thenReturn(kryos);
-        when(client.createConnection(
-            any(ThreadLocal.class),
-            anyInt(),
-            anyInt()
-        )).thenReturn(connection);
+        when(client.createConnection(any(ThreadLocal.class)))
+            .thenReturn(connection);
     }
 
     @AfterEach
@@ -89,11 +86,7 @@ public class ClientTest {
     public void connectTest() {
         assertDoesNotThrow(() -> {
             client.connect(socketAddress);
-            verify(client).createConnection(
-                any(ThreadLocal.class),
-                anyInt(),
-                anyInt()
-            );
+            verify(client).createConnection(any(ThreadLocal.class));
             verify(connection).connect(
                 eq(socketAddress),
                 any(Selector.class)

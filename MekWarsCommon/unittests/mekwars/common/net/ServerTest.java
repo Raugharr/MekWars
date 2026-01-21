@@ -72,7 +72,7 @@ public class ServerTest {
 
     @BeforeEach
     void beforeEach() {
-        connection = spy(new Connection(kryos, 1024, 1024));
+        connection = spy(new Connection(kryos));
     }
 
     @Test
@@ -107,11 +107,8 @@ public class ServerTest {
             when(socketChannel.register(eq(selector), anyInt()))
                 .thenReturn(clientSelectionKey);
 
-            when(server.createConnection(
-                    any(ThreadLocal.class),
-                    anyInt(),
-                    anyInt()
-            )).thenReturn(connection);
+            when(server.createConnection(any(ThreadLocal.class)))
+                .thenReturn(connection);
             server.acceptConnection(key);
         });
 

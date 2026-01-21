@@ -23,12 +23,14 @@ import static org.mockito.Mockito.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.ByteBufferInput;
 import com.esotericsoftware.kryo.io.ByteBufferOutput;
+import java.io.IOException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -62,8 +64,15 @@ public class ConnectionTest {
             selector,
             SelectionKey.OP_READ
         )).thenReturn(key);
-        connection = spy(new Connection(kryos, 1024, 1024));
+        connection = spy(new Connection(kryos));
         connection.connect(channel, selector);
+    }
+
+    @AfterEach
+    void quit() throws Exception {
+        if (connection.isConnected()) {
+            connection.close();
+        }
     }
 
     @Test
@@ -78,7 +87,6 @@ public class ConnectionTest {
     public class WriteOnlyTest {
         @Test
         public void writePacketTest() {
-            when(key.isWritable()).thenReturn(false);
             when(channel.isConnected()).thenReturn(true);
             assertDoesNotThrow(() -> {
                 connection.write(new MockPacket());
@@ -91,7 +99,6 @@ public class ConnectionTest {
 
         @Test
         public void sendFailsTest() {
-            when(key.isWritable()).thenReturn(false);
             when(channel.isConnected()).thenReturn(true);
 
             assertDoesNotThrow(() -> {
@@ -105,7 +112,6 @@ public class ConnectionTest {
 
         @Test
         public void writeThenReadTest() {
-            when(key.isWritable()).thenReturn(false);
             when(channel.isConnected()).thenReturn(true);
             assertDoesNotThrow(() -> {
                 connection.write(new MockPacket());
@@ -114,20 +120,6 @@ public class ConnectionTest {
             verify(key).interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
             assertDoesNotThrow(() -> {
                 verify(connection, never()).send();
-            });
-        }
-
-        @Test
-        public void writeAndReadTest() {
-            when(key.isWritable()).thenReturn(true);
-            when(channel.isConnected()).thenReturn(true);
-            assertDoesNotThrow(() -> {
-                connection.write(new MockPacket());
-            });
-
-            verify(key).interestOps(SelectionKey.OP_READ);
-            assertDoesNotThrow(() -> {
-                verify(connection).send();
             });
         }
     }
@@ -148,6 +140,40 @@ public class ConnectionTest {
             input = connection.getInput();
             output = new ByteBufferOutput(input.getByteBuffer()); 
             header = new PacketHeader(3, (short) packet.getType().getType(), false);
+        }
+
+        @Nested
+        public class SmallBufferTest {
+            @BeforeEach
+            void init() throws Exception {
+                // Make the buffer force to resize to fit a single packet.
+                header = new PacketHeader(10, (short) packet.getType().getType(), false);
+            }
+
+            @Test
+            public void enlargeBufferTest() throws Exception {
+                output.setBuffer(ByteBuffer.allocateDirect(PacketHeader.SIZE));
+                ByteBuffer buffer = output.getByteBuffer();
+
+                header.write(output);
+
+                buffer.flip();
+                input.setBuffer(buffer);
+
+                AbstractPacket readPacket = connection.readObject(handler);
+                assertEquals(PacketHeader.SIZE + 10, connection.getInput().getByteBuffer().capacity());
+                assertNull(readPacket);
+            }
+
+            @Test
+            public void shrinkBufferTest() throws Exception {
+                doReturn(null).when(connection).readObject(eq(handler));
+                when(channel.isConnected()).thenReturn(true);
+                input.setBuffer(ByteBuffer.allocateDirect(connection.bufferCapacity() + 1));
+
+                connection.read(handler);
+                assertEquals(connection.bufferCapacity(), connection.getInput().getByteBuffer().capacity());
+            }
         }
 
         @Test
@@ -208,6 +234,71 @@ public class ConnectionTest {
                 connection.read(handler);
                 verify(connection).close();
             });
+        }
+    }
+
+    @Nested
+    public class SmallBufferTest {
+        @BeforeEach
+        void init() throws Exception {
+            connection.getOutput().setBuffer(ByteBuffer.allocateDirect(PacketHeader.SIZE + 3));
+            connection.getInput().setBuffer(ByteBuffer.allocateDirect(PacketHeader.SIZE + 3));
+        }
+
+        @Test
+        public void resizeOutputBufferTest() throws IOException {
+            when(connection.isConnected()).thenReturn(true);
+
+            connection.write(new MockPacket());
+            assertEquals(PacketHeader.SIZE + 3, connection.getOutput().position());
+
+            connection.write(new MockPacket());
+            assertEquals((PacketHeader.SIZE + 3) * 2, connection.getOutput().position());
+        }
+
+        @Test
+        public void queueMessageTest() throws IOException {
+            when(connection.bufferLimit())
+                .thenReturn(PacketHeader.SIZE + 3);
+            when(connection.isConnected()).thenReturn(true);
+            connection.write(new MockPacket());
+            when(channel.write(any(ByteBuffer.class)))
+                .thenAnswer(input -> {
+                   ByteBuffer byteBuffer = input.getArgument(0); 
+
+                   int written = 0;
+                   while (byteBuffer.position() < byteBuffer.limit()) {
+                       written += 1;
+                       byteBuffer.get();
+                   }
+                   return written;
+                });
+
+            assertEquals(PacketHeader.SIZE + 3, connection.getOutput().position());
+            verify(key).interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+
+            connection.write(new MockPacket());
+            assertEquals(PacketHeader.SIZE + 3, connection.getOutput().position());
+            assertEquals(1, connection.getMessageQueue().size());
+            verify(key).interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+
+            connection.write(new MockPacket());
+            assertEquals(PacketHeader.SIZE + 3, connection.getOutput().position());
+            assertEquals(2, connection.getMessageQueue().size());
+            verify(key).interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+
+            connection.send();
+            assertEquals(10, connection.getOutput().position());
+            assertEquals(1, connection.getMessageQueue().size());
+
+            connection.send();
+            assertEquals(10, connection.getOutput().position());
+            assertEquals(0, connection.getMessageQueue().size());
+
+            connection.send();
+            assertEquals(0, connection.getOutput().position());
+            assertEquals(0, connection.getMessageQueue().size());
+            verify(key).interestOps(SelectionKey.OP_READ);
         }
     }
 }
