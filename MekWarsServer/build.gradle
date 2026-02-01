@@ -81,11 +81,6 @@ task stageFiles(type: Copy) {
         from mmconf
         into "${fileStagingDir}/${mmconf}"
     }
-
-    copy {
-        from "${mmDir}/megamek/build/files/data/mechfiles"
-        into "${fileStagingDir}/data/mechfiles"
-    }
     from "quartz.properties"
     into fileStagingDir
 }
@@ -113,6 +108,7 @@ distributions {
                     .findAll { it.name.endsWith(".jar") }) {
                 into "${lib}"
             }
+            from "${mmDir}/megamek/build/files/data/mechfiles"
             duplicatesStrategy = 'exclude'
         }
     }
