@@ -74,10 +74,10 @@ public class GUIClient {
 
         setupFlatLaf();
         if (shouldAutoconnect) {
+            mwClient.setUsername(config.getParam("NAME"));
             mwClient.connectDataFetcher();
             SplashWindow splashWindow = new SplashWindow(mwClient, getLocale());
             splashWindow.setVisible(true);
-            mwClient.setUsername(config.getParam("NAME"));
         } else if (mwClient.getHpgClient().isConnected()) {
             ServerBrowserDialog serverBrowserDialog = new ServerBrowserDialog(null,
                     locale, mwClient);
