@@ -161,7 +161,7 @@ public class GUIClientConfig implements IClientConfig {
                                                        // in hangar bay
         defaults.setProperty("UNITHEX", "NO"); // hexes for units in hangar bay
                                                       // backgrounds in HQ
-        defaults.setProperty("UNITAMOUNT", "10"); // hexes for units in hangar
+        defaults.setProperty("UNITAMOUNT", "7"); // hexes for units in hangar
                                                   // bay
         // UserList properties
         defaults.setProperty("USERLISTBOLD", "YES"); // bold names on userlist
@@ -355,28 +355,6 @@ public class GUIClientConfig implements IClientConfig {
 
         defaults.setProperty("UPDATEKEY", "-1");
         defaults.setProperty("DEDMEMORY", "256");  //Had to up this - new MM is taking way more memory than before
-
-        // unitstatus setting
-        // Right column
-        defaults.setProperty("RIGHTCOLUMNDYNAMIC", "false");
-        defaults.setProperty("RIGHTPILOTEJECT", "false");
-        defaults.setProperty("RIGHTREPAIR", "false");
-        defaults.setProperty("RIGHTENGINE", "false");
-        defaults.setProperty("RIGHTEQUIPMENT", "false");
-        defaults.setProperty("RIGHTARMOR", "false");
-        defaults.setProperty("RIGHTAMMO", "false");
-        defaults.setProperty("RIGHTCOMMANDER", "false");
-        // Left Column
-        defaults.setProperty("LEFTCOLUMNDYNAMIC", "false");
-        defaults.setProperty("LEFTPILOTEJECT", "false");
-        defaults.setProperty("LEFTREPAIR", "false");
-        defaults.setProperty("LEFTENGINE", "false");
-        defaults.setProperty("LEFTEQUIPMENT", "false");
-        defaults.setProperty("LEFTARMOR", "false");
-        defaults.setProperty("LEFTAMMO", "false");
-        defaults.setProperty("LEFTCOMMANDER", "false");
-
-        // enable or disable splash screen
         defaults.setProperty("ENABLESPLASHSCREEN", "true");
 
         // Window Locations
@@ -602,49 +580,6 @@ public class GUIClientConfig implements IClientConfig {
         if (tparam.equalsIgnoreCase("YES") || tparam.equalsIgnoreCase("TRUE") || tparam.equalsIgnoreCase("ON")) {
             return true;
         }
-        return false;
-    }
-
-    public boolean isUsingStatusIcons() {
-
-        if (Boolean.parseBoolean(getParam("RIGHTPILOTEJECT"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("RIGHTREPAIR"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("RIGHTENGINE"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("RIGHTEQUIPMENT"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("RIGHTARMOR"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("RIGHTAMMO"))) {
-            return true;
-        }
-
-        if (Boolean.parseBoolean(getParam("LEFTPILOTEJECT"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("LEFTREPAIR"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("LEFTENGINE"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("LEFTEQUIPMENT"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("LEFTARMOR"))) {
-            return true;
-        }
-        if (Boolean.parseBoolean(getParam("LEFTAMMO"))) {
-            return true;
-        }
-
         return false;
     }
 

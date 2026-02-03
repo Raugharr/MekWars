@@ -187,8 +187,6 @@ public class RepodSelectorDialog extends JFrame implements ActionListener, KeyLi
         // set up the upper panel (combo boxes, preview image)
         pPreview = new MechInfo(mwclient);
         pPreview.setVisible(false);
-        pPreview.setMinimumSize(new Dimension(86, 74));
-        pPreview.setMaximumSize(new Dimension(86, 74));
         pUpper.setLayout(new FlowLayout(FlowLayout.CENTER));
         pUpper.add(pParams);
         pUpper.add(pPreview);
