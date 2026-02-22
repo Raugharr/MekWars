@@ -108,7 +108,10 @@ distributions {
                     .findAll { it.name.endsWith(".jar") }) {
                 into "${lib}"
             }
-            from "${mmDir}/megamek/build/files/data/mechfiles"
+            copy {
+                from "${mmDir}/megamek/build/files/data/mechfiles"
+                into "data/mechfiles"
+            }
             duplicatesStrategy = 'exclude'
         }
     }
