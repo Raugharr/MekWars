@@ -39,9 +39,9 @@ application {
 
 ext {
     fileStagingDir = "${buildDir}/files"
-    data = "data/"
-    docs = "docs/"
-    mmconf = "mmconf/"
+    data = "data"
+    docs = "docs"
+    mmconf = "mmconf"
     lib = "lib"
 }
 
@@ -57,45 +57,30 @@ jar {
     }
 }
 
-task stageFiles(type: Copy) {
-    description = 'Stages files that are to be copied into the distribution.'
+task mekWarsBat(type: Copy) {
 
-    file(fileStagingDir).mkdirs()
-
-    dependsOn gradle.includedBuild('megamek').task(':megamek:unitFilesZip')
+    if(!file(fileStagingDir).exists()) {
+        file(fileStagingDir).mkdirs()
+    }
 
     File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
     batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
     from batFile
-    copy {
-        from data
-        into "${fileStagingDir}/${data}"
-    }
-
-    copy {
-        from docs
-        into "${fileStagingDir}/${docs}"
-    }
-
-    copy {
-        from mmconf
-        into "${fileStagingDir}/${mmconf}"
-    }
-    from "quartz.properties"
-    into fileStagingDir
 }
 
-tasks.named('installDist') {
-    doLast {
-        def jarTask = tasks.named('jar').get()
-        def jvmArgs = project.application.applicationDefaultJvmArgs.join(' ')
-        def jarName = jarTask.archiveFileName.get()
-        def baseName = jarTask.archiveBaseName.get()
+task stageFiles(type: Copy) {
+    description = 'Stages files that are to be copied into the distribution.'
 
-        def installDir = file("$buildDir/install/${project.name}")
-        File batFile = new File(installDir, "${baseName}.bat")
-        batFile.text = "start /min javaw ${jvmArgs} -jar \"%~dp0${jarName}\" %*"
-    }
+    dependsOn gradle.includedBuild('megamek').task(':megamek:unitFilesZip')
+
+	from projectDir
+
+	include "data/**"
+	include "docs/**"
+	include "mconf/**"
+    from "quartz.properties"
+
+    into fileStagingDir
 }
 
 distributions {
@@ -103,6 +88,10 @@ distributions {
         contents {
             from stageFiles
             from jar
+            copy {
+                from  mekWarsBat
+                into "."
+            }
             from "${mmDir}/megamek/build/libs/MegaMek.jar"
             from (project.sourceSets.main.runtimeClasspath.files
                     .findAll { it.name.endsWith(".jar") }) {
