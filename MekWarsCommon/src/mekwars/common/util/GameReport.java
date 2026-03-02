@@ -20,12 +20,10 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-
+import megamek.common.Entity;
 import mekwars.common.GameInterface;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.clientutils.SerializeEntity;
-
-import megamek.common.Entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

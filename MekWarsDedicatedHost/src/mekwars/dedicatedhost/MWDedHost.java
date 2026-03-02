@@ -18,41 +18,27 @@
 package mekwars.dedicatedhost;
 
 import java.awt.Dimension;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.lang.reflect.Constructor;
-import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
-
-import mekwars.dedicatedhost.cmd.Command;
-import megamek.MMConstants;
-import megamek.common.Entity;
 import megamek.common.Game;
-import megamek.common.Mech;
-import megamek.common.MechWarrior;
 import megamek.common.enums.GamePhase;
 import megamek.common.event.GameCFREvent;
 import megamek.common.options.IOption;
 import megamek.common.preference.ClientPreferences;
 import megamek.common.preference.PreferenceManager;
-import megamek.server.GameManager;
 import megamek.server.Server;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.common.campaign.clientutils.protocol.CConnector;
@@ -62,13 +48,10 @@ import mekwars.client.common.campaign.clientutils.protocol.commands.CommPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.IProtCommand;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PingPCmd;
 import mekwars.client.common.campaign.clientutils.protocol.commands.PongPCmd;
-import mekwars.dedicatedhost.protocol.DataFetchClient;
-import mekwars.common.GameInterface;
 import mekwars.common.GameWrapper;
-import mekwars.common.MMGame;
 import mekwars.common.campaign.Buildings;
-import mekwars.common.campaign.clientutils.SerializeEntity;
-import mekwars.common.util.UnitUtils;
+import mekwars.common.util.GameReport;
+import mekwars.dedicatedhost.protocol.DataFetchClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,7 +74,6 @@ public final class MWDedHost extends GameHost implements IClient {
     boolean SignOff = false;
     String password = "";
     String myDedOwners = "";
-    int myPort = -1;
     int gameCount = 0; // number of games played on a ded
     long lastResetCheck = System.currentTimeMillis(); // how quick a reset check
     // can be done on a ded.
@@ -101,19 +83,9 @@ public final class MWDedHost extends GameHost implements IClient {
     // its deleted.
     long TimeOut = 120;
     long LastPing = 0;
-    int Status = 0;
-
-    private GamePhase currentPhase = GamePhase.DEPLOYMENT;
-    private int turn = 0;
 
     Dimension MapSize;
     Dimension BoardSize;
-
-    /**
-     * Maps the task prefixes as HS, PL, SP etc. to a command under package cmd.
-     * key: String, value: cmd.Command
-     */
-    HashMap<String, Command> commands = new HashMap<String, Command>();
 
     String LastQuery = ""; // receiver of last mail
     private String cacheDir;
@@ -126,24 +98,6 @@ public final class MWDedHost extends GameHost implements IClient {
     // Main-Method
     public static void main(String[] args) {
         DedConfig config;
-
-        /*
-         * put StdErr and StdOut into ./logs/megameklog.txt, because MegaMek
-         * uses StdOut and StdErr, but the part of MegaMek that sets that up
-         * does not get called when we launch MegaMek in MekWars Redirect output
-         * to logfiles, unless turned off. Moved megameklog.txt to the logs
-         * folder -- Torren
-         */
-        String logFileName = "./logs/megameklog.txt";
-
-        try {
-            PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(logFileName), 64));
-            System.setOut(ps);
-            System.setErr(ps);
-        } catch (Exception ex) {
-            LOGGER.error("Exception: ", ex);
-            LOGGER.error("Unable to redirect MegaMek output to " + logFileName);
-        }
 
         LOGGER.info("Starting MekWars Client Version: " + CLIENT_VERSION);
         try {
@@ -167,19 +121,16 @@ public final class MWDedHost extends GameHost implements IClient {
         }
     }
 
-    public MWDedHost(DedConfig config) {
-
+    public MWDedHost(DedConfig config) throws IOException {
         ProtCommands = new TreeMap<String, IProtCommand>();
-        
         Config = config;
-
         Connector = new CConnector(this);
-
         Users = Collections.synchronizedList(new Vector<CUser>(1, 1));
 
         createProtCommands();
         dataFetcher = new DataFetchClient(Integer.parseInt(Config.getParam("DATAPORT")), Integer.parseInt(Config.getParam("SOCKETTIMEOUTDELAY")));
         dataFetcher.setData(Config.getParam("SERVERIP"), getCacheDir());
+        dataFetcher.getServerConfigData(this);
         dataFetcher.closeDataConnection();
 
         // Remove any MM option files that deds may have.
@@ -194,13 +145,6 @@ public final class MWDedHost extends GameHost implements IClient {
         } catch (Exception ex) {
             LOGGER.error("Exception: ", ex);
         }
-
-        // set New timestamp
-        // this.dataFetcher.setLastTimestamp(new
-        // Date(System.currentTimeMillis()));
-        // this.dataFetcher.store();
-
-        getServerConfigData();
 
         myUsername = getConfigParam("NAME");
 
@@ -241,9 +185,9 @@ public final class MWDedHost extends GameHost implements IClient {
         }
 
         int retryCount = 0;
-        while ((Status == STATUS_DISCONNECTED) && (retryCount++ < 20)) {
+        while ((getStatus() == STATUS_DISCONNECTED) && (retryCount++ < 20)) {
             connectToServer(chatServerIP, chatServerPort);
-            if (Status == STATUS_DISCONNECTED) {
+            if (getStatus() == STATUS_DISCONNECTED) {
                 LOGGER.info("Couldn't connect to server. Retrying in 90 seconds.");
                 try {
                     Thread.sleep(90000);
@@ -288,69 +232,7 @@ public final class MWDedHost extends GameHost implements IClient {
      * Info (TI|TIMETILLNEXT) SP = Show PopupWindow SM = Show Miscellaneous
      * (Puts text into Misc Tab)
      */
-    public synchronized void doParseDataInput(String input) {
-
-        // non-null main frame, unbuffer or just pass through
-        if (decodeBuffer.size() > 0) {
-            Iterator<String> i = decodeBuffer.iterator();
-            while (i.hasNext()) {
-                String currS = i.next();
-                doParseDataHelper(currS);
-                i.remove();
-            }
-        } else {
-            doParseDataHelper(input);
-        }
-    }
-
-    /*
-     * Actual GUI-mode parseData. Before we started streaming data over the chat
-     * part, this was called directly. Now we buffer all incoming non-data chat
-     * and spit it out at once when the GUI draws. Once the GUI is up, this is
-     * called by a simple pass through from doParseDataInput(), above.
-     * 
-     * Ded's call the helper directly to bypass the buffer.
-     */
-    private void doParseDataHelper(String input) {
-        try {
-
-            // 0-length input is spurious call from MWDedHost constructor.
-            if (input.length() == 0) {
-                return;
-            }
-
-            StringTokenizer ST = null;
-            String task = null;
-
-            // debug info
-            LOGGER.info(input);
-
-            // Create a String Tokenizer to parse the elements of the input
-            ST = new StringTokenizer(input, COMMAND_DELIMITER);
-            task = ST.nextToken();
-
-            if (!commands.containsKey(task)) {
-                try {
-                    Class<?> cmdClass = Class.forName(getClass().getPackage().getName() + ".cmd." + task);
-                    Constructor<?> c = cmdClass.getConstructor(new Class[]
-                        { MWDedHost.class });
-                    Command cmd = (Command) c.newInstance(new Object[]
-                        { this });
-                    commands.put(task, cmd);
-                } catch (Exception e) {
-                    LOGGER.error("Exception: ", e);
-                }
-            }
-            if (commands.containsKey(task)) {
-                commands.get(task).execute(input);
-            }
-        } catch (Exception ex) {
-            LOGGER.error("Exception: ", ex);
-        }
-    }
-
-    public synchronized void parseDedDataInput(String data) {
-
+    public synchronized void doParseDataInput(String data) {
         // Debug info
         // LOGGER.info(data);
 
@@ -494,7 +376,6 @@ public final class MWDedHost extends GameHost implements IClient {
          * of an owner list.
          */
         while (myDedOwners.equals("") || own.hasMoreTokens()) {
-
             if (own.hasMoreTokens()) {
                 owner = own.nextToken();
             } else {
@@ -544,7 +425,6 @@ public final class MWDedHost extends GameHost implements IClient {
                     return;
 
                 } else if (command.equals("die")) { // shut the dedicated down
-
                     goodbye();
                     System.exit(0);
 
@@ -586,7 +466,6 @@ public final class MWDedHost extends GameHost implements IClient {
                     return;
 
                 } else if (command.startsWith("owner ")) { // add new owner(s)
-
                     LOGGER.info("Owner command received from " + name);
                     if (!myDedOwners.equals("")) {
                         myDedOwners = myDedOwners + "$";
@@ -619,7 +498,6 @@ public final class MWDedHost extends GameHost implements IClient {
                     return;
 
                 } else if (command.startsWith("port ")) {// new server port
-
                     LOGGER.info("Port (set) command received from " + name);
                     try {
                         port = Integer.parseInt(command.substring(("port ").length()).trim());
@@ -904,22 +782,8 @@ public final class MWDedHost extends GameHost implements IClient {
         LastQuery = name;
     }
 
-    public int getMyStatus() {
-        return Status;
-    }
-
     public void setLastPing(long lastping) {
         LastPing = lastping;
-    }
-
-    public String getStatus() {
-        if (Status == STATUS_DISCONNECTED) {
-            return ("Not connected");
-        }
-        if (Status == STATUS_LOGGEDOUT) {
-            return ("Logged out");
-        }
-        return ("");
     }
 
     public String getShortTime() {
@@ -991,7 +855,7 @@ public final class MWDedHost extends GameHost implements IClient {
     }
 
     public DedConfig getConfig() {
-        return (DedConfig) (Config);
+        return (DedConfig) Config;
     }
 
     public void setConfig() {
@@ -1016,7 +880,7 @@ public final class MWDedHost extends GameHost implements IClient {
             tparam = "";
         }
 
-        if (tparam.isEmpty() && p.equals("NAME") && isDedicated()) {
+        if (tparam.isEmpty() && p.equals("NAME")) {
             LOGGER.info("Error: no dedicated name set.");
             System.exit(1);
         }
@@ -1052,45 +916,38 @@ public final class MWDedHost extends GameHost implements IClient {
     }
 
     public void connectionLost() {
-
-        Status = STATUS_DISCONNECTED;
+        setStatus(STATUS_DISCONNECTED);
         if (SignOff) {
             return;
         }
 
         errorMessage("Connection lost.");
-        if (isDedicated()) {
+        // no point in having a server open w/o connection to campaign
+        // server
+        stopHost();
 
-            // no point in having a server open w/o connection to campaign
-            // server
-            stopHost();
+        // wait at least 90 seconds before trying to connect again
+        try {
+            Thread.sleep(90000);
+        } catch (Exception ex) {
+            LOGGER.error("Exception: ", ex);
+        }
 
-            // wait at least 90 seconds before trying to connect again
-            try {
-                Thread.sleep(90000);
-            } catch (Exception ex) {
-                LOGGER.error("Exception: ", ex);
-            }
-
-            // keep retrying every two minutes after the first 90 sec downtime.
-            while (Status == STATUS_DISCONNECTED) {
-                connectToServer(Config.getParam("SERVERIP"), Config.getIntParam("SERVERPORT"));
-                if (Status == STATUS_DISCONNECTED) {
-                    LOGGER.info("Couldn't reconnect to server. Retrying in 120 seconds.");
-                    try {
-                        Thread.sleep(90000);
-                    } catch (Exception ex) {
-                        LOGGER.error("Exception: ", ex);
-                    }
+        // keep retrying every two minutes after the first 90 sec downtime.
+        while (getStatus() == STATUS_DISCONNECTED) {
+            connectToServer(Config.getParam("SERVERIP"), Config.getIntParam("SERVERPORT"));
+            if (getStatus() == STATUS_DISCONNECTED) {
+                LOGGER.info("Couldn't reconnect to server. Retrying in 120 seconds.");
+                try {
+                    Thread.sleep(90000);
+                } catch (Exception ex) {
+                    LOGGER.error("Exception: ", ex);
                 }
             }
-        } else {
-            Users.clear();
         }
     }
 
     public void connectionEstablished() {
-
         LastPing = System.currentTimeMillis() / 1000;
         LOGGER.error("Connected. Signing on.");
 
@@ -1110,7 +967,7 @@ public final class MWDedHost extends GameHost implements IClient {
         }
 
         Connector.send(PROTOCOL_PREFIX + "signon\t" + getConfigParam("NAME") + "\t" + passToSend + "\t" + getProtocolVersion() + "\t" + Config.getParam("COLOR") + "\t" + CLIENT_VERSION + "\t" + ST.nextToken());
-        Status = STATUS_LOGGEDOUT;
+        setStatus(STATUS_LOGGEDOUT);
     }
 
     // IClient interface
@@ -1130,7 +987,7 @@ public final class MWDedHost extends GameHost implements IClient {
 
     public void goodbye() {
         SignOff = true;
-        if (Status != STATUS_DISCONNECTED) {
+        if (getStatus() != STATUS_DISCONNECTED) {
             // serverSend("GB");
             Connector.send(PROTOCOL_PREFIX + "signoff");
             dataFetcher.closeDataConnection();
@@ -1139,97 +996,26 @@ public final class MWDedHost extends GameHost implements IClient {
 
     }
 
+    @Override
     public void startHost(boolean dedicated, boolean deploy, boolean loadSavegame) {
-
-        // reread the config to allow the user to change setting during runtime
-        String ip = "127.0.0.1";
-        if (!getConfigParam("IP:").equals("")) {// IP Setting set, override IP
-            // detection.
-            try {
-                ip = getConfigParam("IP:");
-                InetAddress IA = InetAddress.getByName(ip); // Resolve Dyndns
-                // Entries
-                ip = IA.getHostAddress();
-            } catch (Exception ex) {
-                return;
-            }
-        }
-
-        String MMVersion = getServerConfigs("AllowedMegaMekVersion");
-        if (!MMVersion.equals("-1") && !MMVersion.equalsIgnoreCase(megamek.MMConstants.VERSION.toString())) {
-            LOGGER.error("You are using an invalid version of MegaMek. Please use version {}", MMVersion);
-            stopHost();
-            updateDed();
-            return;
-        }
-
-        if (servers.get(myUsername) != null) {
-            if (isDedicated()) {
-                LOGGER.error("Attempted to start a second host while host was already running.");
-            } else {
-                String toUser = "CH|CLIENT: You already have a host open.";
-                doParseDataInput(toUser);
-            }
-            return;
-        }
-
-        // int port = Integer.parseInt(getConfigParam("PORT:"));
-        int MaxPlayers = Integer.parseInt(getConfigParam("MAXPLAYERS:"));
-        String comment = getConfigParam("COMMENT:");
-        String gpassword = getConfigParam("GAMEPASSWORD:");
-
-        if (gpassword == null) {
-            gpassword = "";
-        }
         try {
-            myServer = new Server(gpassword, myPort, new GameManager());
-        } catch (Exception ex) {
-            try {
-                if (myServer == null) {
-                    LOGGER.error("Error opening dedicated server. Result = null host.");
-                    LOGGER.error("Exception: ", ex);
-                } else {
-                    LOGGER.error("Error opening dedicated server. Will attempt a .die().");
-                    LOGGER.error("Exception: ", ex);
-                    myServer.die();
-                    myServer = null;
-                }
-            } catch (Exception e) {
-                LOGGER.error("Further error while trying to clean up failed host attempt.");
-                LOGGER.error("Exception: ", e);
-            }
+            super.startHost(dedicated, deploy, loadSavegame);
+        } catch (Exception exception) {
+            LOGGER.error("Unable to start host", exception);
             return;
         }
-
-        ((Game)myServer.getGame()).addGameListener(this);
-        // Send the new game info to the Server
-        serverSend("NG|" + new MMGame(myUsername, ip, myPort, MaxPlayers, MMConstants.VERSION, comment).toString());
         clearSavedGames();
         purgeOldLogs();
         ClientPreferences cs = PreferenceManager.getClientPreferences();
         cs.setStampFilenames(Boolean.parseBoolean(getServerConfigs("MMTimeStampLogFile")));
     }
 
-    // Stop & send the close game event to the Server
-    public void stopHost() {
-
-        serverSend("CG");// send close game to server
-        try {
-            if (myServer != null) {
-                myServer.die();
-            }
-        } catch (Exception ex) {
-            LOGGER.error("Megamek Error:");
-            LOGGER.error("Exception: ", ex);
-        }
-        myServer = null;
-    }
 
     public void resetGame() { // reset hosted game
         if (myServer != null) {
             myServer.resetGame();
-            ((Game)myServer.getGame()).getGameListeners().clear();
-            ((Game)myServer.getGame()).addGameListener(this);
+            ((Game) myServer.getGame()).purgeGameListeners();
+            ((Game) myServer.getGame()).addGameListener(this);
         }
     }
 
@@ -1279,7 +1065,6 @@ public final class MWDedHost extends GameHost implements IClient {
     }
 
     public void closingGame(String hostName) {
-
         // update battles tab for all players, via server
         LOGGER.info("Leaving " + hostName);
         serverSend("LG|" + hostName);
@@ -1316,7 +1101,7 @@ public final class MWDedHost extends GameHost implements IClient {
                 } catch (Exception ex) {
                     LOGGER.error("Exception: ", ex);
                 }
-                if (mwdedhost.Status != MWDedHost.STATUS_DISCONNECTED) {
+                if (mwdedhost.getStatus() != MWDedHost.STATUS_DISCONNECTED) {
                     long timeout = (System.currentTimeMillis() / 1000) - LastPing;
                     if (timeout > mwdedhost.TimeOut) {
                         systemMessage("Ping timeout (" + timeout + " s)");
@@ -1354,15 +1139,6 @@ public final class MWDedHost extends GameHost implements IClient {
         return cacheDir;
     }
 
-    /**
-     * Changes the duty to a new status.
-     * 
-     * @param newStatus
-     */
-    public void changeStatus(int newStatus) {
-        Status = newStatus;
-    }
-
     // this adds 1 to the number of games played and if it matched the restart
     // amount it restarts the ded.
     public void checkForRestart() {
@@ -1390,15 +1166,13 @@ public final class MWDedHost extends GameHost implements IClient {
             }
             restartDed();
         }
-
         lastResetCheck = System.currentTimeMillis();
     }
 
     public void clearSavedGames() {
-
         long daysInSeconds = ((long) savedGamesMaxDays) * 24 * 60 * 60 * 1000;
-
         File saveFiles = new File("./savegames/");
+
         if (!saveFiles.exists()) {
             return;
         }
@@ -1418,7 +1192,6 @@ public final class MWDedHost extends GameHost implements IClient {
     }
 
     public String getParanoidAutoSave() {
-
         File tempFile = new File("./savegames/");
         FilenameFilter filter = new AutoSaveFilter();
         File[] fileList = tempFile.listFiles(filter);
@@ -1431,62 +1204,6 @@ public final class MWDedHost extends GameHost implements IClient {
             }
         }
         return saveFile;
-    }
-
-
-
-    public void retrieveOpData(String type, String data) {
-
-        StringTokenizer st = new StringTokenizer(data, "#");
-
-        String opName = st.nextToken();
-
-        File opFile = new File("./data/operations/" + type);
-
-        if (!opFile.exists()) {
-            opFile.mkdirs();
-        }
-
-        opFile = new File("./data/operations/" + type + "/" + opName + ".txt");
-        try {
-            FileOutputStream out = new FileOutputStream(opFile);
-            PrintStream p = new PrintStream(out);
-            while (st.hasMoreTokens()) {
-                p.println(st.nextToken().replaceAll("\\(pound\\)", "#"));
-            }
-            p.close();
-            out.close();
-        } catch (Exception ex) {
-            LOGGER.error("Exception: ", ex);
-        }
-
-    }
-
-    public void retrieveMul(String data) {
-
-        StringTokenizer st = new StringTokenizer(data, "#");
-
-        String mulName = st.nextToken();
-
-        File mulFile = new File("./data/armies/");
-
-        if (!mulFile.exists()) {
-            mulFile.mkdirs();
-        }
-
-        mulFile = new File("./data/armies/" + mulName);
-        try {
-            FileOutputStream out = new FileOutputStream(mulFile);
-            PrintStream p = new PrintStream(out);
-            while (st.hasMoreTokens()) {
-                p.println(st.nextToken().replaceAll("\\(pound\\)", "#"));
-            }
-            p.close();
-            out.close();
-        } catch (Exception ex) {
-            LOGGER.error("Exception: ", ex);
-        }
-
     }
 
     public boolean isDedicated() {
@@ -1559,13 +1276,11 @@ public final class MWDedHost extends GameHost implements IClient {
     }// end PurgeAutoSaves
 
     public void errorMessage(String message) {
-        // TODO Auto-generated method stub
-
+        LOGGER.error(message);
     }
 
     public void systemMessage(String message) {
-        // TODO Auto-generated method stub
-
+        LOGGER.error(message);
     }
 
     public void getServerConfigData() {
@@ -1599,12 +1314,12 @@ public final class MWDedHost extends GameHost implements IClient {
             String memory = Config.getParam("DEDMEMORY");
             Runtime runTime = Runtime.getRuntime();
             String[] call =
-                { "java", "-Xmx" + memory + "m", "-jar", "MekWarsDed.jar" };
+                { "java", "-Xmx" + memory + "m", "-jar", "MekWarsDedicatedHost.jar" };
             runTime.exec(call);
             System.exit(0);
 
         } catch (Exception ex) {
-            LOGGER.error("Unable to find MekWarsDed.jar");
+            LOGGER.error("Unable to find MekWarsDedicatedHost.jar");
         }
     }
 
@@ -1624,245 +1339,30 @@ public final class MWDedHost extends GameHost implements IClient {
         System.exit(0);// restart the ded
     }
 
-    protected void sendServerGameUpdate() {
-        // Report the mech stat
-
-        // Only send data for units currently on the board.
-        // any units removed from play will have already sent thier final
-        // update.
-        Iterator<Entity> en = ((Game)myServer.getGame()).getEntities();
-        while (en.hasNext()) {
-            Entity ent = en.next();
-            if (ent.getOwner().getName().startsWith("War Bot")
-                    || (!(ent instanceof MechWarrior)
-                            && !UnitUtils.hasArmorDamage(ent)
-                            && !UnitUtils.hasISDamage(ent)
-                            && !UnitUtils.hasCriticalDamage(ent)
-                            && !UnitUtils.hasLowAmmo(ent) && !UnitUtils
-                                .hasEmptyAmmo(ent))) {
-                continue;
-            }
-            if ((ent instanceof Mech) && (ent.getInternal(Mech.LOC_CT) <= 0)) {
-                serverSend("IPU|"
-                        + SerializeEntity.serializeEntity(ent, true, true,
-                                isUsingAdvanceRepairs()));
-            } else {
-                serverSend("IPU|"
-                        + SerializeEntity.serializeEntity(ent, true, false,
-                                isUsingAdvanceRepairs()));
-            }
-        }
-    }
-
-    public static StringBuilder prepareReport(GameInterface myGame, boolean usingAdvancedRepairs, Buildings buildingTemplate) {
-        StringBuilder result = new StringBuilder();
-        String name = "";
-        // Parse the real playername from the Modified In game one..
-        String winnerName = "";
-        if (myGame.hasWinner()) {
-
-            int numberOfWinners = 0;
-            // Multiple Winners
-            List<String> winners = myGame.getWinners();
-            
-            //TODO: Winners is sometimes coming up empty.  Let's see why
-            LOGGER.error("Finding winners:");
-            LOGGER.error(winners.toString());
-            
-            for (String winner: winners){
-                StringTokenizer st = new StringTokenizer(winner, "~");
-                name = "";
-                while (st.hasMoreElements()) {
-                    name = st.nextToken().trim();
-                }
-                // some of the players set themselves as a team of 1.
-                // This keeps that from happening.
-                if (numberOfWinners > 0) {
-                    winnerName += "*";
-                }
-                numberOfWinners++;
-
-                winnerName += name;
-            }
-            if (winnerName.endsWith("*")) {
-                winnerName = winnerName.substring(0, winnerName.length() - 1);
-            }
-            winnerName += "#";
-        }
-
-        else {
-            winnerName = "DRAW#";
-        }
-
-        result.append(winnerName);
-
-        // Report the mech stat
-        Enumeration<Entity> en = myGame.getDevastatedEntities();
-        while (en.hasMoreElements()) {
-            Entity ent = en.nextElement();
-            if (ent.getOwner().getName().startsWith("War Bot")) {
-                continue;
-            }
-            result.append(SerializeEntity.serializeEntity(ent, true, false, usingAdvancedRepairs));
-            result.append("#");
-        }
-        en = myGame.getGraveyardEntities();
-        while (en.hasMoreElements()) {
-            Entity ent = en.nextElement();
-            if (ent.getOwner().getName().startsWith("War Bot")) {
-                continue;
-            }
-            result.append(SerializeEntity.serializeEntity(ent, true, false, usingAdvancedRepairs));
-            result.append("#");
-
-        }
-        Iterator<Entity> en2 = myGame.getEntities();
-        while (en2.hasNext()) {
-            Entity ent = en2.next();
-            if (ent.getOwner().getName().startsWith("War Bot")) {
-                continue;
-            }
-            result.append(SerializeEntity.serializeEntity(ent, true, false, usingAdvancedRepairs));
-            result.append("#");
-        }
-        en = myGame.getRetreatedEntities();
-        while (en.hasMoreElements()) {
-            Entity ent = en.nextElement();
-            if (ent.getOwner().getName().startsWith("War Bot")) {
-                continue;
-            }
-            result.append(SerializeEntity.serializeEntity(ent, true, false, usingAdvancedRepairs));
-            result.append("#");
-        }
-
-        if (buildingTemplate != null) {
-            result.append("BL*" + buildingTemplate);
-        }
-        LOGGER.info("CR|" + result);
-        return result;
-    }
-
     protected void sendGameReport() {
         if (myServer == null) {
             return;
         }
         
-        //GameReporter.prepareReport(myGame, usingAdvancedRepairs, buildingTemplate)
-
-        StringBuilder result = prepareReport(new GameWrapper(((Game)myServer.getGame())), isUsingAdvanceRepairs(), buildingTemplate);
+        StringBuilder result = GameReport.prepareReport(new GameWrapper(((Game)myServer.getGame())), isUsingAdvanceRepairs(), buildingTemplate);
         serverSend("CR|" + result.toString());
         
-/*        StringBuilder result = new StringBuilder();
-        String name = "";
-        // Parse the real playername from the Modified In game one..
-        String winnerName = "";
-        if (((Game)myServer.getGame()).getVictoryTeam() != Player.TEAM_NONE) {
-
-            int numberOfWinners = 0;
-            // Multiple Winners
-            Enumeration<Player> en = ((Game)myServer.getGame()).getPlayers();
-            while (en.hasMoreElements()) {
-                Player p = en.nextElement();
-                if (p.getTeam() == ((Game)myServer.getGame()).getVictoryTeam()) {
-                    StringTokenizer st = new StringTokenizer(p.getName().trim(), "~");
-                    name = "";
-                    while (st.hasMoreElements()) {
-                        name = st.nextToken().trim();
-                    }
-                    // some of the players set themselves as a team of 1.
-                    // This keeps that from happening.
-                    if (numberOfWinners > 0) {
-                        winnerName += "*";
-                    }
-                    numberOfWinners++;
-
-                    winnerName += name;
-                }
-            }
-            if (winnerName.endsWith("*")) {
-                winnerName = winnerName.substring(0, winnerName.length() - 1);
-            }
-            winnerName += "#";
-        }
-
-        // Only one winner
-        else {
-            if (((Game)myServer.getGame()).getVictoryPlayerId() == Player.PLAYER_NONE) {
-                winnerName = "DRAW#";
-            } else {
-                winnerName = ((Game)myServer.getGame()).getPlayer(((Game)myServer.getGame()).getVictoryPlayerId()).getName();
-                StringTokenizer st = new StringTokenizer(winnerName, "~");
-                name = "";
-                while (st.hasMoreElements()) {
-                    name = st.nextToken().trim();
-                }
-                winnerName = name + "#";
-            }
-        }
-
-        result.append(winnerName);
-
-        // Report the mech stat
-        Enumeration<Entity> en = ((Game)myServer.getGame()).getDevastatedEntities();
-        while (en.hasMoreElements()) {
-            Entity ent = en.nextElement();
-            if (ent.getOwner().getName().startsWith("War Bot")) {
-                continue;
-            }
-            result.append(SerializeEntity.serializeEntity(ent, true, false, isUsingAdvanceRepairs()));
-            result.append("#");
-        }
-        en = ((Game)myServer.getGame()).getGraveyardEntities();
-        while (en.hasMoreElements()) {
-            Entity ent = en.nextElement();
-            if (ent.getOwner().getName().startsWith("War Bot")) {
-                continue;
-            }
-            result.append(SerializeEntity.serializeEntity(ent, true, false, isUsingAdvanceRepairs()));
-            result.append("#");
-
-        }
-        en = ((Game)myServer.getGame()).getEntities();
-        while (en.hasMoreElements()) {
-            Entity ent = en.nextElement();
-            if (ent.getOwner().getName().startsWith("War Bot")) {
-                continue;
-            }
-            result.append(SerializeEntity.serializeEntity(ent, true, false, isUsingAdvanceRepairs()));
-            result.append("#");
-        }
-        en = ((Game)myServer.getGame()).getRetreatedEntities();
-        while (en.hasMoreElements()) {
-            Entity ent = en.nextElement();
-            if (ent.getOwner().getName().startsWith("War Bot")) {
-                continue;
-            }
-            result.append(SerializeEntity.serializeEntity(ent, true, false, isUsingAdvanceRepairs()));
-            result.append("#");
-        }
-
-        if (getBuildingTemplate() != null) {
-            result.append("BL*" + getBuildingsLeft());
-        }
-        LOGGER.info("CR|" + result);
-
-        // send the autoreport
-        serverSend("CR|" + result.toString());*/
-
         // we may assume that a server which reports a game is no longer
         // "Running"
         serverSend("SHS|" + myUsername + "|Open");
 
-        // myServer.resetGame();
-
-        if (isDedicated()) {
-            checkForRestart();
-        }
+        checkForRestart();
     }
 
     @Override
     public void gameClientFeedbackRequest(GameCFREvent arg0) {
         // TODO Auto-generated method stub
         
+    }
+
+    // Cannot load savegames
+    @Override
+    public void loadSavegame() {
+        throw new UnsupportedOperationException("Dedicated server is unable to load savegames");
     }
 }

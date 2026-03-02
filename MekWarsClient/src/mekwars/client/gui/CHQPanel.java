@@ -260,7 +260,7 @@ public class CHQPanel extends JPanel {
         if (result == JOptionPane.NO_OPTION)
               return;        //Baruk Khazad! 20151204 - end block 1
         // only remove all if he's logged in, not fighting/active/logout/discon
-        if (mwclient.getMyStatus() != MWClient.STATUS_RESERVE) {
+        if (mwclient.getStatus() != MWClient.STATUS_RESERVE) {
             return;
         }
 
@@ -609,7 +609,7 @@ public class CHQPanel extends JPanel {
                 if (currArmy == null) {
 
                     // if the unit is from an army, could remove. show minus.
-                    if ((startArmy != null) && (mwclient.getMyStatus() == MWClient.STATUS_RESERVE)) {
+                    if ((startArmy != null) && (mwclient.getStatus() == MWClient.STATUS_RESERVE)) {
                         tblMeks.setCursor(removeCursor);
                     } else if (startArmy != null) {
                         tblMeks.setCursor(notAllowedCursor);
@@ -625,7 +625,7 @@ public class CHQPanel extends JPanel {
                     // from hangar to an army
                     if (startArmy == null) {
 
-                        if (mwclient.getMyStatus() != MWClient.STATUS_RESERVE) {
+                        if (mwclient.getStatus() != MWClient.STATUS_RESERVE) {
                             tblMeks.setCursor(notAllowedCursor);
                         } else if (Player.getAmountOfTimesUnitExistsInArmies(dragUnit.getId()) >= Integer.parseInt(mwclient.getServerConfigs("UnitsInMultipleArmiesAmount"))) {
                             tblMeks.setCursor(maxCursor);
@@ -641,7 +641,7 @@ public class CHQPanel extends JPanel {
                     // within the same army, change positions
                     else if (currArmy.getID() == startArmy.getID()) {
 
-                        if ((currUnit != null) && (dragUnit.getId() != currUnit.getId()) && (mwclient.getMyStatus() != MWClient.STATUS_FIGHTING)) {
+                        if ((currUnit != null) && (dragUnit.getId() != currUnit.getId()) && (mwclient.getStatus() != MWClient.STATUS_FIGHTING)) {
                             tblMeks.setCursor(positionCursor);
                         } else {
                             tblMeks.setCursor(notAllowedCursor);
@@ -775,7 +775,7 @@ public class CHQPanel extends JPanel {
                             menuItem.setActionCommand("AO|" + lid);
                             menuItem.addActionListener(this);
                             boolean canCheckFromReserve = Boolean.parseBoolean(mwclient.getServerConfigs("ProbeInReserve"));
-                            if ((mwclient.getMyStatus() != MWClient.STATUS_ACTIVE) && !canCheckFromReserve) {
+                            if ((mwclient.getStatus() != MWClient.STATUS_ACTIVE) && !canCheckFromReserve) {
                                 menuItem.setEnabled(false);
                             }
                             popup.add(menuItem);
@@ -3112,6 +3112,7 @@ public class CHQPanel extends JPanel {
             // else
             CArmy army = getArmyAt(row);
             StringBuilder result = new StringBuilder(cm.getModelName());
+            // TODO: When registering as a new player the player's house is null for a second.
             String skillSet = cm.getPilot().getSkillString(false, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getBasePilotSkill(cm.getType()));
             StringTokenizer skills = new StringTokenizer(skillSet, ",");
             while (skills.hasMoreElements()) {

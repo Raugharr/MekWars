@@ -24,12 +24,9 @@ public class CommPCmd extends CProtCommand
 		StringTokenizer ST = new StringTokenizer(input, delimiter);
 		if (check(ST.nextToken()) && ST.hasMoreTokens()) {
 			input = TransportCodec.unescape(ST.nextToken());
-			if (!client.isDedicated()) {client.doParseDataInput(input);}
-			else {client.parseDedDataInput(input);}
+			client.doParseDataInput(input);
 			return true;
 		}
-		
-		//else
 		return false; 
 	}
 

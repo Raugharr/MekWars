@@ -91,16 +91,14 @@ tasks.named('installDist') {
 distributions {
     main {
         contents {
+            from stageFiles
             from jar
-
             // execute build with -PexcludeData to skip data copy
 			if (!project.hasProperty('excludeData')) {
 				from (project.sourceSets.main.runtimeClasspath.files
 						.findAll { it.name.endsWith(".jar") }) {
 					into lib
 				}
-
-				from stageFiles
 				from "${mmDir}/megamek/build/libs/MegaMek.jar"
 				from "${mmDir}/megamek/build/files"
             }

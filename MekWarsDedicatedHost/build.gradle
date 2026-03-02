@@ -55,11 +55,32 @@ jar {
     }
 }
 
-task stageFiles(type: Copy) {
-    file(fileStagingDir).mkdirs()
-    File batFile = new File("${fileStagingDir}/${project.tasks.getByName("jar").archiveBaseName.get()}.bat")
-    batFile.text = "start /min java ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()}"
+task mekWarsBat(type: Copy) {
+    if(!file(fileStagingDir).exists()) {
+        file(fileStagingDir).mkdirs()
+    }
+
+    def jarTask = tasks.named('jar').get()
+    def jvmArgs = (project.application.applicationDefaultJvmArgs ?: []).join(' ')
+    def jarName = jarTask.archiveFileName.get()    // MekWars.jar
+    def baseName = jarTask.archiveBaseName.get()   // MekWars
+
+    File batFile = new File(fileStagingDir, "${baseName}.bat")
+    batFile.text = "start /min javaw ${project.application.applicationDefaultJvmArgs.join(' ')} ${jar.archiveFileName.get()} -jar \"%~dp0MekWars.jar\" %*"
     from batFile
+}
+
+task stageFiles(type: Copy) {
+    description = 'Stages files that are to be copied into the distribution.'
+    dependsOn gradle.includedBuild('megamek').task(':megamek:stageFiles')
+
+	from projectDir
+
+	include "data/**"
+	include "docs/**"
+	include "mconf/**"
+	include "userdata/**"
+
     into fileStagingDir
 }
 
@@ -67,13 +88,19 @@ distributions {
     main {
         contents {
             from stageFiles
-            from project(':MekWarsClient').jar
-            from jar
             from "${mmDir}/megamek/build/libs/MegaMek.jar"
+            from "${mmDir}/megamek/build/files"
+            from jar
+            from project(':MekWarsClient').jar
+            copy {
+                from  mekWarsBat
+                into "."
+            }
             from (project.sourceSets.main.runtimeClasspath.files
                     .findAll { it.name.endsWith(".jar") }) {
                 into "${lib}"
             }
+            from "${mmDir}/megamek/build/files/mechfiles"
             duplicatesStrategy = 'exclude'
         }
     }
