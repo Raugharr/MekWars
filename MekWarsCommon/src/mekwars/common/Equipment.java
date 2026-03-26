@@ -21,21 +21,12 @@ package mekwars.common;
  */
 public class Equipment {
 
-	private String equipmentName = "";
 	private String equipmentInternalName = "";
 	private double minCost = 0;
 	private double maxCost = 0;
 	private int minProduction = 0;
 	private int maxProduction = 0;
 	private boolean updated = false;
-	
-	public void setEquipmentName(String name) {
-		this.equipmentName = name;
-	}
-	
-	public String getEquipmentName() {
-		return this.equipmentName;
-	}
 	
 	public void setEquipmentInternalName(String name) {
 		this.equipmentInternalName = name;
