@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -57,10 +57,13 @@ public class CampaignData implements TerrainProvider {
     private NamedEntityStore<Terrain> terrains = new NamedEntityStore<>();
     private NamedEntityStore<AdvancedTerrain> advancedTerrains = new NamedEntityStore<>();
 
-    private Hashtable<String, String> ServerBannedAmmo = new Hashtable<>();
+    private HashMap<String, String> ServerBannedAmmo = new HashMap<>();
     private Vector<Integer> bannedTargetingSystems = new Vector<>();
-    private Hashtable<String, Integer> commands = new Hashtable<>();
+    private HashMap<String, Integer> commands = new HashMap<>();
     private TreeMap<String, String> planetOpFlags = new TreeMap<>();
+
+    private HashMap<String, AmmoType.Munitions> munitionsByName;
+    private HashMap<AmmoType.Munitions, String> munitionsByNumber;
 
     private Properties serverConfigs = new Properties();
 
@@ -300,13 +303,19 @@ public class CampaignData implements TerrainProvider {
      */
     public CampaignData() {
         cd = this;
+        this.munitionsByName = createMunitions();
+        this.munitionsByNumber = new HashMap<>();
+
+        for (Map.Entry<String, AmmoType.Munitions> entry : munitionsByName.entrySet()) {
+            munitionsByNumber.put(entry.getValue(), entry.getKey());
+        }
     }
 
     /**
      * Generate the campaign data from an binary stream.
      */
     public CampaignData(BinReader in) throws IOException {
-        cd = this;
+        this();
         int size = in.readInt("terrains.size");
         for (int i = 0; i < size; ++i) {
             Terrain pe = new Terrain();
@@ -387,15 +396,135 @@ public class CampaignData implements TerrainProvider {
      * 
      *         this returns a hashtable of all current MM munitions 06/10/05
      *         using the Name of the munition as the key
-     * @return Hashtable
+     * @return HashMap
      */
-    public Hashtable<String, AmmoType.Munitions> getMunitionsByName() {
-        Hashtable<String, AmmoType.Munitions> munitions = new Hashtable<String, AmmoType.Munitions>();
+    public HashMap<String, AmmoType.Munitions> getMunitionsByName() {
+        return munitionsByName;
+    }
+
+    /**
+     * @author Torren (Jason Tighe)
+     * 
+     *         this returns a hashtable of all current MM munitions 06/10/05
+     *         using the Number of the munition as the key
+     * @return HashMap
+     */
+    public HashMap<AmmoType.Munitions, String> getMunitionsByNumber() {
+        return munitionsByNumber;
+    }
+
+    public void setServerBannedAmmo(HashMap<String, String> ban) {
+        ServerBannedAmmo = ban;
+    }
+
+    public HashMap<String, String> getServerBannedAmmo() {
+        return ServerBannedAmmo;
+    }
+
+    public void setBannedTargetingSystems(Vector<Integer> ban) {
+        bannedTargetingSystems = ban;
+    }
+
+    public Vector<Integer> getBannedTargetingSystems() {
+        return bannedTargetingSystems;
+    }
+
+    /**
+     * extracts data from the BinReader and places it into the client side hash
+     * table.
+     * 
+     * @param in
+     * @param userLevel
+     */
+    public void importAccessLevels(BinReader in) {
+        HashMap<String, Integer> commandTemp = getCommandTable();
+
+        try {
+            int size = in.readInt("CommandSize");
+            for (int pos = 0; pos < size; pos++) {
+                String commandName = in.readLine("CommandName");
+                int accessLevel = in.readInt("AccessLevel");
+                commandTemp.put(commandName, accessLevel);
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Unable to import acccess levels", ex);
+        } // in is empty move on.
+        setCommandTable(commandTemp);
+    }
+
+    public void setCommandTable(HashMap<String, Integer> commands) {
+        this.commands = commands;
+    }
+
+    public HashMap<String, Integer> getCommandTable() {
+        return commands;
+    }
+
+    public int getAccessLevel(String command) {
+        int level = 200;
+
+        if (getCommandTable().get(command.toUpperCase()) != null) {
+            level = getCommandTable().get(command.toUpperCase()).intValue();
+        }
+
+        return level;
+    }
+
+    public TreeMap<String, String> getPlanetOpFlags() {
+        return planetOpFlags;
+    }
+
+    public Properties getServerConfigs() {
+        return serverConfigs;
+    }
+
+    public void setServerConfigs(Properties configs) {
+        serverConfigs = configs;
+    }
+
+    public boolean targetSystemIsBanned(int id) {
+        if (bannedTargetingSystems.contains(id)) {
+            return true;
+        }
+        return false;
+    }
+    
+    public House getHouseFromPartialString(String houseString) {
+        // store matches so we can tell player if there's more than one
+        int numMatches = 0;
+        House theMatch = null;
+
+        for (House currH : getAllHouses()) {
+            House shouse = (House) currH;
+            // exact match
+            if (shouse.getName().equals(houseString)) {
+                return shouse;
+            }
+
+            // store all matches
+            if (shouse.getName().startsWith(houseString)) {
+                theMatch = shouse;
+                numMatches++;
+            }
+        }
+
+        // only one match! send it back.
+        return theMatch;
+    }
+
+    /**
+     * Note: This should eventually be swapped out for using some MegaMek native method that probably
+     * exists.
+     *
+     * @return HashMap<String, AmmoType.Munitions>
+     */
+    private HashMap<String, AmmoType.Munitions> createMunitions() {
+        HashMap<String, AmmoType.Munitions> munitions = new HashMap<String, AmmoType.Munitions>();
 
         munitions.put("Standard", AmmoType.Munitions.M_STANDARD);
 
         // AC Munition Types
-        munitions.put("LBX Cluster", AmmoType.Munitions.M_CLUSTER);
+        munitions.put("Cluster", AmmoType.Munitions.M_CLUSTER);
         munitions.put("AC Armor Piercing", AmmoType.Munitions.M_ARMOR_PIERCING);
         munitions.put("AC Flechette", AmmoType.Munitions.M_FLECHETTE);
         munitions.put("AC Incendiary", AmmoType.Munitions.M_INCENDIARY_AC);
@@ -455,179 +584,5 @@ public class CampaignData implements TerrainProvider {
         munitions.put("Arrow IV Smoke", AmmoType.Munitions.M_SMOKE);
         munitions.put("Arrow IV Davy Crockett", AmmoType.Munitions.M_DAVY_CROCKETT_M);
         return munitions;
-    }
-
-    /**
-     * @author Torren (Jason Tighe)
-     * 
-     *         this returns a hashtable of all current MM munitions 06/10/05
-     *         using the Number of the munition as the key
-     * @return Hashtable
-     */
-    public Hashtable<AmmoType.Munitions, String> getMunitionsByNumber() {
-        Hashtable<AmmoType.Munitions, String> munitions = new Hashtable<AmmoType.Munitions, String>();
-
-        munitions.put(AmmoType.Munitions.M_STANDARD, "Standard");
-
-        // AC Munition Types
-        munitions.put(AmmoType.Munitions.M_CLUSTER, "LBX Cluster");
-        munitions.put(AmmoType.Munitions.M_ARMOR_PIERCING, "AC Armor Piercing");
-        munitions.put(AmmoType.Munitions.M_FLECHETTE, "AC Flechette");
-        munitions.put(AmmoType.Munitions.M_INCENDIARY_AC, "AC Incendiary");
-        munitions.put(AmmoType.Munitions.M_PRECISION, "AC Precision");
-        munitions.put(AmmoType.Munitions.M_TRACER, "AC Tracer");
-
-        // ATM Munition Types
-        munitions.put(AmmoType.Munitions.M_EXTENDED_RANGE, "ATM Extended Range");
-        munitions.put(AmmoType.Munitions.M_HIGH_EXPLOSIVE, "ATM High Explosive");
-
-        // LRM & SRM Munition Types
-        munitions.put(AmmoType.Munitions.M_FRAGMENTATION, "LRM/SRM Fragmentation");
-        munitions.put(AmmoType.Munitions.M_LISTEN_KILL, "LRM/SRM Listen Kill");
-        munitions.put(AmmoType.Munitions.M_ANTI_TSM, "LRM/SRM Anti-TSM");
-        munitions.put(AmmoType.Munitions.M_NARC_CAPABLE, "LRM/SRM Narc");
-        munitions.put(AmmoType.Munitions.M_ARTEMIS_CAPABLE, "LRM/SRM Artemis");
-        munitions.put(AmmoType.Munitions.M_HEAT_SEEKING, "LRM/SRM Heat-Seeking");
-        munitions.put(AmmoType.Munitions.M_TANDEM_CHARGE, "LRM/SRM Tandem-Charge");
-        munitions.put(AmmoType.Munitions.M_DEAD_FIRE, "LRM/SRM Dead-Fire");
-
-        // LRM Munition Types
-        // Incendiary is special though...
-        munitions.put(AmmoType.Munitions.M_INCENDIARY_LRM, "LRM Incendiary");
-        munitions.put(AmmoType.Munitions.M_FLARE, "LRM Flare");
-        munitions.put(AmmoType.Munitions.M_SEMIGUIDED, "LRM SemiGuided");
-        munitions.put(AmmoType.Munitions.M_SWARM, "LRM Swarm");
-        munitions.put(AmmoType.Munitions.M_SWARM_I, "LRM Swarm I");
-        munitions.put(AmmoType.Munitions.M_THUNDER, "LRM Thunder");
-        munitions.put(AmmoType.Munitions.M_THUNDER_AUGMENTED, "LRM Thunder Augmented");
-        munitions.put(AmmoType.Munitions.M_THUNDER_INFERNO, "LRM Thunder Inferno");
-        munitions.put(AmmoType.Munitions.M_THUNDER_VIBRABOMB, "LRM Thunder VibraBomb");
-        munitions.put(AmmoType.Munitions.M_THUNDER_ACTIVE, "LRM Thunder Active");
-        munitions.put(AmmoType.Munitions.M_FOLLOW_THE_LEADER, "LRM Follow The Leader");
-        munitions.put(AmmoType.Munitions.M_MULTI_PURPOSE, "Multi Purpose");
-
-        // SRM Munition Types
-        munitions.put(AmmoType.Munitions.M_INFERNO, "SRM Inferno");
-        munitions.put(AmmoType.Munitions.M_AX_HEAD, "SRM Acid");
-
-        // Torps
-        munitions.put(AmmoType.Munitions.M_TORPEDO, "LRT/SRT");
-
-        // iNarc Munition Types
-        munitions.put(AmmoType.Munitions.M_EXPLOSIVE, "iNarc Explosive");
-        munitions.put(AmmoType.Munitions.M_ECM, "iNarc ECM");
-        munitions.put(AmmoType.Munitions.M_HAYWIRE, "iNarc HayWire");
-        munitions.put(AmmoType.Munitions.M_NEMESIS, "iNarc Nemesis");
-
-        // Narc Munition Types
-        munitions.put(AmmoType.Munitions.M_NARC_EX, "Narc Explosive");
-
-        // Arrow IV Munition Types
-        munitions.put(AmmoType.Munitions.M_HOMING, "Arrow IV Homing");
-        munitions.put(AmmoType.Munitions.M_FASCAM, "Arrow IV FASCAM");
-        munitions.put(AmmoType.Munitions.M_INFERNO_IV, "Arrow IV Inferno");
-        munitions.put(AmmoType.Munitions.M_VIBRABOMB_IV, "Arrow IV VibraBomb");
-        munitions.put(AmmoType.Munitions.M_SMOKE, "Arrow IV Smoke");
-        munitions.put(AmmoType.Munitions.M_DAVY_CROCKETT_M, "Arrow IV Davy Crockett");
-        return munitions;
-    }
-
-    public void setServerBannedAmmo(Hashtable<String, String> ban) {
-        ServerBannedAmmo = ban;
-    }
-
-    public Hashtable<String, String> getServerBannedAmmo() {
-        return ServerBannedAmmo;
-    }
-
-    public void setBannedTargetingSystems(Vector<Integer> ban) {
-        bannedTargetingSystems = ban;
-    }
-
-    public Vector<Integer> getBannedTargetingSystems() {
-        return bannedTargetingSystems;
-    }
-
-    /**
-     * extracts data from the BinReader and places it into the client side hash
-     * table.
-     * 
-     * @param in
-     * @param userLevel
-     */
-    public void importAccessLevels(BinReader in) {
-        Hashtable<String, Integer> commandTemp = getCommandTable();
-
-        try {
-            int size = in.readInt("CommandSize");
-            for (int pos = 0; pos < size; pos++) {
-                String commandName = in.readLine("CommandName");
-                int accessLevel = in.readInt("AccessLevel");
-                commandTemp.put(commandName, accessLevel);
-            }
-        } catch (Exception ex) {
-            LOGGER.error("Unable to import acccess levels", ex);
-        } // in is empty move on.
-        setCommandTable(commandTemp);
-    }
-
-    public void setCommandTable(Hashtable<String, Integer> commands) {
-        this.commands = commands;
-    }
-
-    public Hashtable<String, Integer> getCommandTable() {
-        return commands;
-    }
-
-    public int getAccessLevel(String command) {
-        int level = 200;
-
-        if (getCommandTable().get(command.toUpperCase()) != null) {
-            level = getCommandTable().get(command.toUpperCase()).intValue();
-        }
-
-        return level;
-    }
-
-    public TreeMap<String, String> getPlanetOpFlags() {
-        return planetOpFlags;
-    }
-
-    public Properties getServerConfigs() {
-        return serverConfigs;
-    }
-
-    public void setServerConfigs(Properties configs) {
-        serverConfigs = configs;
-    }
-
-    public boolean targetSystemIsBanned(int id) {
-        if (bannedTargetingSystems.contains(id)) {
-            return true;
-        }
-        return false;
-    }
-    
-    public House getHouseFromPartialString(String houseString) {
-        // store matches so we can tell player if there's more than one
-        int numMatches = 0;
-        House theMatch = null;
-
-        for (House currH : getAllHouses()) {
-            House shouse = (House) currH;
-            // exact match
-            if (shouse.getName().equals(houseString)) {
-                return shouse;
-            }
-
-            // store all matches
-            if (shouse.getName().startsWith(houseString)) {
-                theMatch = shouse;
-                numMatches++;
-            }
-        }
-
-        // only one match! send it back.
-        return theMatch;
     }
 }
