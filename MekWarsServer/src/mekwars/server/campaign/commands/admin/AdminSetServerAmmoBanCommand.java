@@ -17,11 +17,14 @@
 package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
+
 import megamek.common.AmmoType;
-import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.common.entities.BannedAmmo;
 import mekwars.server.MWServ;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
+import mekwars.server.io.FileSystem;
 
 public class AdminSetServerAmmoBanCommand implements Command {
     int accessLevel = IAuthenticator.ADMIN;
@@ -54,20 +57,21 @@ public class AdminSetServerAmmoBanCommand implements Command {
             CampaignMain.cm.toUser("Invalid syntax. Try: adminsetserveradmmoban#munitionnumber", username, true);
         }
 
-        if (CampaignMain.cm.getServerBannedAmmo().get(ammoName) != null) {
-            CampaignMain.cm.getServerBannedAmmo().remove(ammoName);
-            CampaignMain.cm.getData().setServerBannedAmmo(CampaignMain.cm.getServerBannedAmmo());
-            ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(AmmoType.Munitions.values()[Integer.parseInt(ammoName)]);
-            CampaignMain.cm.toUser("Server-wide ban on " + ammoName + " lifted.", username, true);
-            CampaignMain.cm.doSendModMail("NOTE", username + " lifted the server-wide ban on " + ammoName + ".");
-        } else {
-            CampaignMain.cm.getServerBannedAmmo().put(ammoName, "banned");
-            CampaignMain.cm.getData().setServerBannedAmmo(CampaignMain.cm.getServerBannedAmmo());
-            ammoName = CampaignMain.cm.getData().getMunitionsByNumber().get(AmmoType.Munitions.values()[Integer.parseInt(ammoName)]);
-            CampaignMain.cm.toUser(ammoName + " banned server-wide.", username, true);
-            CampaignMain.cm.doSendModMail("NOTE", username + " banned " + ammoName + " server-wide.");
-        }
+        AmmoType.Munitions munition = BannedAmmo.getMunitionByNumber(Integer.parseInt(ammoName));
+        BannedAmmo bannedAmmo = CampaignMain.cm.getData().getBannedAmmoStore().get(munition, null);
 
-        CampaignMain.cm.saveBannedAmmo();
+        if (bannedAmmo != null) {
+            CampaignMain.cm.getData().getBannedAmmoStore().remove(munition, null);
+            CampaignMain.cm.toUser("Server-wide ban on " + bannedAmmo.getName() + " lifted.", username, true);
+            CampaignMain.cm.doSendModMail("NOTE", username + " lifted the server-wide ban on " + bannedAmmo.getName() + ".");
+        } else {
+            bannedAmmo = CampaignMain.cm.getData().getBannedAmmoStore().add(munition, null);
+            CampaignMain.cm.toUser(bannedAmmo.getName() + " banned server-wide.", username, true);
+            CampaignMain.cm.doSendModMail("NOTE", username + " banned " + bannedAmmo.getName() + " server-wide.");
+        }
+        FileSystem.getInstance().getBanAmmoFile().save(
+            System.currentTimeMillis(),
+            CampaignMain.cm.getData()
+        );
     }
 }

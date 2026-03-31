@@ -149,7 +149,7 @@ public class SetUnitAmmoCommand implements Command {
         // for ammo
         double ammoCharge = CampaignMain.cm.getAmmoCost(at.getInternalName());
 
-        if ((CampaignMain.cm.getData().getServerBannedAmmo().get(munitionType) != null) || (faction.getBannedAmmo().get(munitionType) != null) || ((ammoCharge < 0) && !usingCrits)) {
+        if (CampaignMain.cm.getData().getBannedAmmoStore().isBanned(at.getMunitionType(), faction) || ((ammoCharge < 0) && !usingCrits)) {
             CampaignMain.cm.toUser("AM:<font color=green>Quartermaster Command regretfully informs you that " + at.getName() + " is out of stock.</font>", Username, true);
             return;
         }

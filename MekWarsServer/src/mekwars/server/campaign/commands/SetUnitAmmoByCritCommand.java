@@ -112,13 +112,11 @@ public class SetUnitAmmoByCritCommand implements Command {
             CampaignMain.cm.toUser("AM:Ammo dumped. BV Recalculated", Username, true);
             return;
         }
-
-        EnumSet<Munitions> munitionType = ammoType.getMunitionType();
         // dont make players confirm the command on a server which doesnt charge
         // for ammo
         double ammoCharge = CampaignMain.cm.getAmmoCost(currAmmo.getInternalName());
 
-        if ((CampaignMain.cm.getData().getServerBannedAmmo().get(munitionType) != null) || (faction.getBannedAmmo().get(munitionType) != null) || ((ammoCharge < 0) && !usingCrits)) {
+        if (CampaignMain.cm.getData().getBannedAmmoStore().isBanned(ammoType.getMunitionType(), faction) || ((ammoCharge < 0) && !usingCrits)) {
             CampaignMain.cm.toUser("AM:<font color=green>Quartermaster Command regretfully informs you that " + ammoType.getName() + " is out of stock.</font>", Username, true);
             return;
         }

@@ -167,7 +167,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
      *            - SHouse unit is joining
      */
     public static void checkAmmoForUnit(SUnit u, SHouse h) {
-
         Entity en = u.getEntity();
         int year = CampaignMain.cm.getIntegerConfig("CampaignYear");
 
@@ -175,7 +174,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
 
         for (Mounted mAmmo : en.getAmmo()) {
             AmmoType ammoType = (AmmoType) mAmmo.getType();
-            EnumSet<Munitions> munition = ammoType.getMunitionType();
 
             if (ammoType.getAmmoType() == AmmoType.T_ATM) {
                 continue;
@@ -198,28 +196,28 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                 continue;
             }
 
-            if (CampaignMain.cm.getData().getServerBannedAmmo().containsKey(munition) || h.getBannedAmmo().containsKey(munition)) {
+            for (Munitions munition : ammoType.getMunitionType()) {
+                if (CampaignMain.cm.getData().getBannedAmmoStore().isBanned(munition, h)) {
+                    Vector<AmmoType> types = AmmoType.getMunitionsFor(ammoType.getAmmoType());
+                    Enumeration<AmmoType> allTypes = types.elements();
 
-                Vector<AmmoType> types = AmmoType.getMunitionsFor(ammoType.getAmmoType());
-                Enumeration<AmmoType> allTypes = types.elements();
+                    boolean defaultFound = false;
+                    while (allTypes.hasMoreElements() && !defaultFound) {
+                        AmmoType currType = allTypes.nextElement();
 
-                boolean defaultFound = false;
-                while (allTypes.hasMoreElements() && !defaultFound) {
-                    AmmoType currType = allTypes.nextElement();
-
-                    if ((currType.getTechLevel(year) <= en.getTechLevel()) && (currType.getMunitionType().contains(AmmoType.Munitions.M_STANDARD)) && (currType.getRackSize() == ammoType.getRackSize())) {
-                        mAmmo.changeAmmoType(currType);
-                        if (mAmmo.byShot()) {
-                            mAmmo.setShotsLeft(mAmmo.getOriginalShots());
-                        } else {
-                            mAmmo.setShotsLeft(ammoType.getShots());
+                        if ((currType.getTechLevel(year) <= en.getTechLevel()) && (currType.getMunitionType().contains(AmmoType.Munitions.M_STANDARD)) && (currType.getRackSize() == ammoType.getRackSize())) {
+                            mAmmo.changeAmmoType(currType);
+                            if (mAmmo.byShot()) {
+                                mAmmo.setShotsLeft(mAmmo.getOriginalShots());
+                            } else {
+                                mAmmo.setShotsLeft(ammoType.getShots());
+                            }
+                            defaultFound = true;
+                            wasChanged = true;
                         }
-                        defaultFound = true;
-                        wasChanged = true;
                     }
-                } // end while
-            } // end if(is banned)
-
+                }
+            }
         }
         if (wasChanged) {
             u.setEntity(en);
@@ -645,10 +643,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                         // loaded --Torren.
                         continue;
                     }
-                    EnumSet<Munitions> munition = ammoType.getMunitionType();
 
-                    // check banned ammo
-                    if (CampaignMain.cm.getData().getServerBannedAmmo().get(munition) != null) {
+                    if (CampaignMain.cm.getData().getBannedAmmoStore().isBanned(ammoType.getMunitionType(), null)) {
                         continue;
                     }
 

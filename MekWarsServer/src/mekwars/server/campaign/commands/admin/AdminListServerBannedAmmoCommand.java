@@ -16,12 +16,12 @@
 
 package mekwars.server.campaign.commands.admin;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
-import megamek.common.AmmoType.Munitions;
-import mekwars.server.MWChatServer.auth.IAuthenticator;
+
+import mekwars.common.entities.BannedAmmo;
 import mekwars.server.MWServ;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
@@ -49,16 +49,14 @@ public class AdminListServerBannedAmmoCommand implements Command {
             return;
         }
 
-        if (CampaignMain.cm.getServerBannedAmmo().size() <= 0) {
+        List<BannedAmmo> serverBannedAmmo = CampaignMain.cm.getData().getBannedAmmoStore().getByHouse(null);
+
+        if (serverBannedAmmo.isEmpty()) {
             CampaignMain.cm.toUser("The server is not currently banning any ammo.", username, true);
         } else {
-            TreeSet<String> ammoBan = new TreeSet<String>(CampaignMain.cm.getServerBannedAmmo().keySet());
-            HashMap<Munitions, String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
-            Munitions[] munitionValues = Munitions.values();
-            
-            for (String ammoName : ammoBan) {
-                CampaignMain.cm.toUser(munitions.get(munitionValues[Integer.parseInt(ammoName)]), username, true);
-            }
+            for (BannedAmmo bannedAmmo : serverBannedAmmo) {
+                CampaignMain.cm.toUser(bannedAmmo.getName(), username, true);
+            } 
         }
     } //end process
 }

@@ -17,12 +17,10 @@
 package mekwars.server.campaign.commands.admin;
 
 
-import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
 
-import megamek.common.AmmoType;
-import megamek.common.AmmoType.Munitions;
+import mekwars.common.entities.BannedAmmo;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -46,7 +44,6 @@ public class AdminListHouseBannedAmmoCommand implements Command {
     }
 
     public void process(StringTokenizer command, String username) {
-
         //access level check
         int userLevel = MWServ.getInstance().getUserLevel(username);
         if (userLevel < getExecutionLevel()) {
@@ -62,22 +59,14 @@ public class AdminListHouseBannedAmmoCommand implements Command {
             return;
         }
 
-        SHouse h = CampaignMain.cm.getHouseFromPartialString(faction, username);
+        SHouse house = CampaignMain.cm.getHouseFromPartialString(faction, username);
 
-        if (h == null || h.getBannedAmmo().size() <= 0) {
-            CampaignMain.cm.toUser("That faction is not currently banning any ammo.", username, true);
+        List<BannedAmmo> houseBannedAmmo = CampaignMain.cm.getData().getBannedAmmoStore().getByHouse(house);
+
+        if (houseBannedAmmo.isEmpty()) {
+            CampaignMain.cm.toUser(faction + " is not currently banning any ammo.", username, true);
         } else {
-            CampaignMain.cm.toUser("Banned ammo for Faction " + h.getName(), username, true);
-            Enumeration<String> ammoBan = h.getBannedAmmo().keys();
-            HashMap<Munitions, String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
-            Munitions[] munitionValues = Munitions.values();
-            
-            while (ammoBan.hasMoreElements()) {
-                String ammoName = ammoBan.nextElement();
-                int ammoType = Integer.parseInt(ammoName);
-
-                CampaignMain.cm.toUser(munitions.get(munitionValues[ammoType]), username, true);
-            }
+            houseBannedAmmo.forEach(each -> CampaignMain.cm.toUser(each.getName(), username, true));
         }
     } //end process
 }

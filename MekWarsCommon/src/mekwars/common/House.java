@@ -64,7 +64,6 @@ public class House implements Entity {
 
     private boolean conquerable = true;
 
-    private Hashtable<String, String> BannedAmmo = new Hashtable<String, String>();
     private int techLevel = TechConstants.T_ALLOWED_ALL;
     private boolean allowDefectionsFrom = true;
     private boolean allowDefectionsTo = true;
@@ -321,11 +320,6 @@ public class House implements Entity {
             for (int weight = 0; weight < 4; weight++)
                 out.println(this.getHouseUnitFluMod(type, weight), "fluMod" + type + weight);
 
-        out.println(this.getBannedAmmo().size(), "factionbannedammosize");
-        for (String munition : this.getBannedAmmo().keySet()) {
-            out.println(munition, "munition");
-        }
-
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
             out.println(basePilotSkills.elementAt(pos), "factionBasePilotSkill");
         }
@@ -397,10 +391,6 @@ public class House implements Entity {
             }
         }
 
-        int size = in.readInt("factionbannedammosize");
-        for (; size > 0; size--)
-            BannedAmmo.put(in.readLine("munition"), "Banned");
-
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
             basePilotSkills.set(pos, in.readLine("factionBasePilotSkill"));
         }
@@ -418,7 +408,7 @@ public class House implements Entity {
             this.tags.add(tag); 
         }
 
-        size = in.readInt("subfactionsize");
+        int size = in.readInt("subfactionsize");
 
         this.subFactionList.clear();
         for (; size > 0; size--) {
@@ -448,76 +438,6 @@ public class House implements Entity {
     public void setId(int id) {
         this.id = id;
     }
-
-    /**
-     * @see common.persistence.MMNetSerializable#binOut(common.persistence.TreeWriter)
-     * 
-     * public void binOut(TreeWriter out) {
-     * 
-     * out.write(id.intValue(), "id"); out.write(name, "name"); out.write(logo,
-     * "logo"); out.write(baseGunner, "baseGunner"); out.write(basePilot,
-     * "basePilot"); out.write(factionColor, "factionColor");
-     * 
-     * out.write(factionPlayerColors,"factionPlayerColor");
-     * 
-     * out.write(abbreviation, "abbreviation"); out.write(conquerable,
-     * "conquerable");
-     * 
-     * for ( int type = 0; type < 5; type++ ) for ( int weight = 0; weight < 4;
-     * weight++)
-     * out.write(this.getHouseUnitComponentMod(type,weight),"componentMod"+type+weight);
-     * for ( int type = 0; type < 5; type++ ) for ( int weight = 0; weight < 4;
-     * weight++)
-     * out.write(this.getHouseUnitPriceMod(type,weight),"priceMod"+type+weight);
-     * for ( int type = 0; type < 5; type++ ) for ( int weight = 0; weight < 4;
-     * weight++)
-     * out.write(this.getHouseUnitFluMod(type,weight),"fluMod"+type+weight);
-     * 
-     * out.write(this.getBannedAmmo().size(),"factionbannedammosize"); for
-     * (String banned : this.getBannedAmmo().keySet())
-     * out.write(banned,"munition");
-     * 
-     * for( int pos = 0; pos < Unit.MAXBUILD; pos++ ){
-     * out.write(basePilotSkills.elementAt(pos),"factionBasePilotSkill"); }
-     *  }
-     * 
-     * /**
-     * @see common.persistence.MMNetSerializable#binIn(common.persistence.TreeReader)
-     * 
-     * public void binIn(TreeReader in, CampaignData dataProvider)throws
-     * IOException {
-     * 
-     * for( int pos = 0; pos < Unit.MAXBUILD; pos++ ){ baseGunner.add(4);
-     * basePilot.add(5); basePilotSkills.add(" "); }
-     * 
-     * id = new Integer(in.readInt("id")); name =
-     * HTML.br2cr(in.readString("name")); logo =
-     * HTML.br2cr(in.readString("logo"));
-     * setBaseGunner(in.readInt("baseGunner"));
-     * setBasePilot(in.readInt("basePilot")); factionColor =
-     * in.readString("factionColor");
-     * 
-     * factionPlayerColors = in.readString("factionPlayerColor");
-     * 
-     * abbreviation = in.readString("abbreviation"); conquerable =
-     * in.readBoolean("conquerable");
-     * 
-     * for ( int type = 0; type < 5; type++ ) for ( int weight = 0; weight < 4;
-     * weight++)
-     * this.setHouseUnitComponentMod(type,weight,in.readInt("componentMod"+type+weight));
-     * for ( int type = 0; type < 5; type++ ) for ( int weight = 0; weight < 4;
-     * weight++)
-     * this.setHouseUnitPriceMod(type,weight,in.readInt("priceMod"+type+weight));
-     * for ( int type = 0; type < 5; type++ ) for ( int weight = 0; weight < 4;
-     * weight++)
-     * this.setHouseUnitFluMod(type,weight,in.readInt("fluMod"+type+weight));
-     * 
-     * int size = in.readInt("factionbannedammosize"); for( ; size > 0; size--)
-     * BannedAmmo.put(in.readString("munition"),"Banned");
-     * 
-     * for( int pos = 0; pos < Unit.MAXBUILD; pos++ ){
-     * basePilotSkills.set(pos,in.readString("factionBasePilotSkill")); } }
-     */
 
     /**
      * @get the unit price mod for a faction
@@ -570,14 +490,6 @@ public class House implements Entity {
 
     public String getHousePlayerColor() {
         return this.factionPlayerColors;
-    }
-
-    // public void setBannedAmmo(Hashtable<String,String> ban){
-    // BannedAmmo = ban;
-    // }
-
-    public Hashtable<String, String> getBannedAmmo() {
-        return BannedAmmo;
     }
 
     public void setTechLevel(int level) {
@@ -728,5 +640,9 @@ public class House implements Entity {
 
     public boolean isClan() {
         return is(FactionTag.CLAN);
+    }
+
+    public boolean equals(House house) {
+        return (house != null) && (getId() == house.getId());
     }
 }

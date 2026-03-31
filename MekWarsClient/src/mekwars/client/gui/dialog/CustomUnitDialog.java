@@ -36,9 +36,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Vector;
-import java.util.EnumSet;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -144,7 +142,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
         this.unit = unit;
         usingCrits = Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsRepair"));
 
-        if(entity instanceof Aero) {
+        if (entity instanceof Aero) {
             unitIsAero = true;
         }
 
@@ -152,7 +150,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
         setTitle("Customize Unit");
 
         // refresh all ammo data
-        loadAmmo();
+        mwclient.loadBannedAmmo();
 
         /*
          * Dialog Layout.
@@ -320,7 +318,6 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
          * Loop through all ammo?
          */
         for (Mounted m : entity.getAmmo()) {
-
             AmmoType at = (AmmoType) m.getType();
             
             Vector<AmmoType> vTypes = new Vector<AmmoType>(1, 1);
@@ -357,33 +354,14 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 
                 //boolean bTechMatch = TechConstants.isLegal(entity.getTechLevel(), atCheck.getTechLevel(year), true);// (entity.getTechLevel()
                 
-//                LOGGER.debug("Checking " + atCheck.getInternalName());
-//                LOGGER.debug("BtechMatch: " + bTechMatch);
-//                LOGGER.debug("Year: " + year);
-//                LOGGER.debug("Legal Level: " + legalLevel);
-//                LOGGER.debug("Ammo Tech Level: " + atCheck.getTechLevel(year));
-//                LOGGER.debug("Game Tech Level: " + mmClient.getGame().getOptions().stringOption("techlevel"));
-               
-                // ==
-                // atCheck.getTechLevel());
-                EnumSet<Munitions> munition = atCheck.getMunitionType();
                 House faction = mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse());
 
-                // LOGGER.error("Ammo: "+atCheck.getInternalName()+" MType: "+atCheck.getMunitionType());
-                // check banned ammo
-                if (mwclient.getData().getServerBannedAmmo().containsKey(munition) || faction.getBannedAmmo().containsKey(munition) || ((mwclient.getAmmoCost(atCheck.getInternalName()) < 0) && !usingCrits)) {
-                    //if(mwclient.getData().getServerBannedAmmo().containsKey(munition))
-                        //LOGGER.debug("Banned at the server level");
-                    //if(faction.getBannedAmmo().containsKey(munition))
-                        //LOGGER.debug("Banned at the Faction level");
-                    //LOGGER.debug("Ammo cost: " + mwclient.getAmmoCost(atCheck.getInternalName()));
+                if (mwclient.getData().getBannedAmmoStore().isBanned(atCheck.getMunitionType(), faction) || ((mwclient.getAmmoCost(atCheck.getInternalName()) < 0) && !usingCrits)) {
                     continue;
                 }
 
                 if (usingCrits && (mwclient.getPlayer().getPartsCache().getPartsCritCount(atCheck.getInternalName()) < 1) && !ammoAlreadyLoaded(atCheck) && (// !mwclient.getPlayer().getAutoReorder()
-                        // &&
                         mwclient.getBlackMarketEquipmentList().get(atCheck.getInternalName()) == null)) {
-                    //LOGGER.debug("Player out of ammo.");
                     continue;
                 }
 
@@ -393,13 +371,10 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 // need to show up in this display.
                 if (!bTechMatch && ((entity.getTechLevel() == TechConstants.T_IS_ADVANCED) || (entity.getTechLevel() == TechConstants.T_IS_EXPERIMENTAL)) && (atCheck.getTechLevel(year) <= TechConstants.T_IS_TW_NON_BOX)) {
                     bTechMatch = true;
-                    //LOGGER.debug("bTechMatch now true, because all L2 units can use L1 ammo");
                 }
 
                 // if is_eq_limits is unchecked allow L1 units to use L2
                 // munitions
-//                LOGGER.debug("Entity Tech Level: " + entity.getTechLevel());
-//                LOGGER.debug("Ammo tech level: " + atCheck.getTechLevel(year));
 //                if (!entity.isClan() && entity.getTechLevel() == TechConstants.T_INTRO_BOXSET && (atCheck.getTechLevel(year) == TechConstants.T_IS_TW_NON_BOX || atCheck.getTechLevel(year) == TechConstants.T_IS_ADVANCED)) {
 //                    bTechMatch = true;
 //                    LOGGER.debug("bTechMatch is true, because I said so");
@@ -928,12 +903,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
         setVisible(false);
     }
 
-    private void loadAmmo() {
-        mwclient.loadBannedAmmo();
-    }
-
     private boolean ammoAlreadyLoaded(AmmoType ammo) {
-
         for (Mounted mounted : entity.getAmmo()) {
             AmmoType currAmmo = (AmmoType) mounted.getType();
 

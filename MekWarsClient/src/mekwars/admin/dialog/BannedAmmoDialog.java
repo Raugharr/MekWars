@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -17,12 +17,21 @@
 
 package mekwars.admin.dialog;
 
+import megamek.common.AmmoType;
+
+import mekwars.client.MWClient;
+import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.common.House;
+import mekwars.common.entities.BannedAmmo;
+import mekwars.common.util.SpringLayoutHelper;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.TreeSet;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -33,71 +42,61 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 
-import mekwars.client.MWClient;
-import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.common.House;
-import mekwars.common.util.SpringLayoutHelper;
-
-import megamek.common.AmmoType.Munitions;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-public final class BannedAmmoDialog implements ActionListener{
+public final class BannedAmmoDialog implements ActionListener {
     private static final Logger LOGGER = LogManager.getLogger(BannedAmmoDialog.class);
 
-	//store the client backlink for other things to use
-	private MWClient mwclient = null; 
-	private House house = null;
-    
-	private final static String okayCommand = "Add";
-	private final static String cancelCommand = "Close";
+    // store the client backlink for other things to use
+    private MWClient mwclient = null;
+    private House house = null;
 
-	private String windowName = "Server Banned Ammo Editor";	
+    private static final String okayCommand = "Add";
+    private static final String cancelCommand = "Close";
+
+    private String windowName = "Server Banned Ammo Editor";
     private ArrayList<JCheckBox> cBoxArrayList = new ArrayList<JCheckBox>();
-    
-	//BUTTONS
-	private final JButton okayButton = new JButton("Save");
-	private final JButton cancelButton = new JButton("Close");	
-	
-	//STOCK DIALOUG AND PANE
-	private JDialog dialog;
-	private JOptionPane pane;
-	
-	JTabbedPane ConfigPane = new JTabbedPane();
-	
-	public BannedAmmoDialog(MWClient c, House house) {
-		
-		//save the client
-		this.mwclient = c;
-        this.house = house;
-        
-		//stored values.
 
-		//Set the tooltips and actions for dialouge buttons
-		okayButton.setActionCommand(okayCommand);
-		cancelButton.setActionCommand(cancelCommand);
-		
-		okayButton.addActionListener(this);
-		cancelButton.addActionListener(this);
-		okayButton.setToolTipText("Save");
+    // BUTTONS
+    private final JButton okayButton = new JButton("Save");
+    private final JButton cancelButton = new JButton("Close");
+
+    // STOCK DIALOUG AND PANE
+    private JDialog dialog;
+    private JOptionPane pane;
+
+    JTabbedPane ConfigPane = new JTabbedPane();
+
+    public BannedAmmoDialog(MWClient c, House house) {
+
+        // save the client
+        this.mwclient = c;
+        this.house = house;
+
+        // stored values.
+
+        // Set the tooltips and actions for dialouge buttons
+        okayButton.setActionCommand(okayCommand);
+        cancelButton.setActionCommand(cancelCommand);
+
+        okayButton.addActionListener(this);
+        cancelButton.addActionListener(this);
+        okayButton.setToolTipText("Save");
         cancelButton.setToolTipText("Exit without saving changes");
-		
-		
-		//CREATE THE PANELS
-		JPanel banPanel = new JPanel();//player name, etc
-		
-		/*
-		 * Format the Reward Points panel. Spring layout.
-		 */
-		banPanel.setLayout(new BoxLayout(banPanel,BoxLayout.Y_AXIS));
-		
-		JPanel ammoPanel = new JPanel(new SpringLayout());
-		
-        loadBannedAmmo();
-        
-        TreeSet<String> munitions = new TreeSet<String>(mwclient.getData().getMunitionsByName().keySet());
-        for ( String munitionName : munitions){
-            //String munitionName = munitionNames.nextElement();
+
+        // CREATE THE PANELS
+        JPanel banPanel = new JPanel(); // player name, etc
+
+        /*
+         * Format the Reward Points panel. Spring layout.
+         */
+        banPanel.setLayout(new BoxLayout(banPanel, BoxLayout.Y_AXIS));
+
+        JPanel ammoPanel = new JPanel(new SpringLayout());
+
+        mwclient.loadBannedAmmo();
+
+        Set<String> munitions = BannedAmmo.getAllMunitions();
+        for (String munitionName : munitions) {
+            // String munitionName = munitionNames.nextElement();
             JCheckBox cBox = new JCheckBox();
             cBox.setText(munitionName);
             cBox.setSelected(checkAmmoBan(munitionName));
@@ -105,94 +104,76 @@ public final class BannedAmmoDialog implements ActionListener{
             cBoxArrayList.add(cBox);
         }
 
-        SpringLayoutHelper.setupSpringGrid(ammoPanel,2);
+        SpringLayoutHelper.setupSpringGrid(ammoPanel, 2);
 
         banPanel.add(ammoPanel);
-        
+
         // Set the user's options
-		Object[] options = { okayButton, cancelButton };
-		
-		// Create the pane containing the buttons
-		pane = new JOptionPane(banPanel,JOptionPane.PLAIN_MESSAGE,JOptionPane.DEFAULT_OPTION, null, options, null);
-		
-        if ( house != null  )
-            windowName = this.house.getName() +" Banned Ammo Dialog";
-		// Create the main dialog and set the default button
-		dialog = pane.createDialog(ammoPanel, windowName);
-		dialog.getRootPane().setDefaultButton(cancelButton);
+        Object[] options = {okayButton, cancelButton};
 
+        // Create the pane containing the buttons
+        pane =
+                new JOptionPane(
+                        banPanel,
+                        JOptionPane.PLAIN_MESSAGE,
+                        JOptionPane.DEFAULT_OPTION,
+                        null,
+                        options,
+                        null);
 
-		//Show the dialog and get the user's input
-		dialog.setModal(true);
-		dialog.pack();
-		dialog.setVisible(true);
-		
-	}
+        if (house != null) windowName = this.house.getName() + " Banned Ammo Dialog";
+        // Create the main dialog and set the default button
+        dialog = pane.createDialog(ammoPanel, windowName);
+        dialog.getRootPane().setDefaultButton(cancelButton);
 
-	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand();
-        HashMap<String, Munitions> munitionTypes = mwclient.getData().getMunitionsByName();
-        
-        if (command.equals(okayCommand)) {
-            if (house == null) {
-                HashMap<String,String> bannedAmmo = mwclient.getData().getServerBannedAmmo();
-                for (JCheckBox tempBox : cBoxArrayList) {
-                    Munitions ammo = munitionTypes.get(tempBox.getText());
-                    
-                    //Check box has been selected and should be updated to the server
-                    if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo)
-                        || !tempBox.isSelected() && bannedAmmo.containsKey(ammo)) {
-                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetserverammoban#"
-                        + munitionTypes.get(tempBox.getText()).ordinal());
-                    }
-                }
-			} else {
-                Hashtable<String, String> bannedAmmo = house.getBannedAmmo();
-                for (JCheckBox tempBox : cBoxArrayList) {
-                    Munitions ammo = munitionTypes.get(tempBox.getText());
-                    
-                    //Check box has been selected and should be updated to the server
-                    //Checkbox has been unselected and should be updated to the server
-                    if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo)
-                            || !tempBox.isSelected() && bannedAmmo.containsKey(ammo)) {
-                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethouseammoban#"
-                                +house.getName()+"#"+ munitionTypes.get(tempBox.getText()).ordinal());
-                    }
-                    
-                }
-            }
-            dialog.dispose();
-            return;
-        }
-        else if (command.equals(cancelCommand)) {
-            dialog.dispose();
-		}
-
-	}
-	
-    public void loadBannedAmmo() {
-        mwclient.loadBannedAmmo();
+        // Show the dialog and get the user's input
+        dialog.setModal(true);
+        dialog.pack();
+        dialog.setVisible(true);
     }
-    
-	/*
-	 * @return false if the ammo is banned by the player's house or the server, otherwise true.
-	 */
-    public boolean checkAmmoBan(String ammo){
-        if (house == null) {
-            try {
-                Munitions munition = mwclient.getData().getMunitionsByName().get(ammo);
-                return mwclient.getData().getServerBannedAmmo().containsKey(String.valueOf(munition.ordinal()));
-            } catch (Exception ex) {
-                LOGGER.error("Unable to find ammo " + ammo);
-                return false;
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+
+        if (command.equals(okayCommand)) {
+            for (JCheckBox tempBox : cBoxArrayList) {
+                AmmoType.Munitions munitionType = BannedAmmo.getMunitionByName(tempBox.getText());
+                BannedAmmo bannedAmmo =
+                        mwclient.getData().getBannedAmmoStore().get(munitionType, house);
+
+                if (tempBox.isSelected() != (bannedAmmo != null)) {
+                    if (house == null) {
+                        mwclient.sendChat(
+                                GameHost.CAMPAIGN_PREFIX
+                                        + "c adminsetserverammoban#"
+                                        + munitionType.ordinal());
+                    } else {
+                        mwclient.sendChat(
+                                GameHost.CAMPAIGN_PREFIX
+                                        + "c adminsethouseammoban#"
+                                        + house.getName()
+                                        + "#"
+                                        + munitionType.ordinal());
+                    }
+                }
             }
+            dialog.dispose();
+        } else if (command.equals(cancelCommand)) {
+            dialog.dispose();
         }
+    }
+
+    /**
+     * @return false if the ammo is banned by the player's house or the server, otherwise true.
+     */
+    public boolean checkAmmoBan(String ammo) {
         try {
-            Munitions munition = mwclient.getData().getMunitionsByName().get(ammo);
-            return house.getBannedAmmo().containsKey(String.valueOf(munition.ordinal()));
+            AmmoType.Munitions munitionType = BannedAmmo.getMunitionByName(ammo);
+            return mwclient.getData().getBannedAmmoStore().get(munitionType, house) != null;
         } catch (Exception ex) {
             LOGGER.error("Unable to find ammo " + ammo);
             return false;
         }
     }
-}//end BannedAmmoDialog.java
+} // end BannedAmmoDialog.java
