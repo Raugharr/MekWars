@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,44 +16,49 @@
 
 package mekwars.server.campaign.commands.admin;
 
-
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-
 import megamek.common.AmmoType.Munitions;
-import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
 
 public class AdminListServerBannedAmmoCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		if ( CampaignMain.cm.getServerBannedAmmo().size() <= 0 )
-			CampaignMain.cm.toUser("The server is not currently banning any ammo.",Username,true);
-		else {
-			TreeSet<String> ammoBan = new TreeSet<String>(CampaignMain.cm.getServerBannedAmmo().keySet());
-			Hashtable<Munitions, String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
-			for (String ammoName : ammoBan) {
-               // LOGGER.error("Munition: "+ammoName);
-				CampaignMain.cm.toUser(munitions.get(Long.parseLong(ammoName)),Username,true);
-			}
-		}
-		
-	}//end process
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String username) {
+        //access level check
+        int userLevel = MWServ.getInstance().getUserLevel(username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", username, true);
+            return;
+        }
+
+        if (CampaignMain.cm.getServerBannedAmmo().size() <= 0) {
+            CampaignMain.cm.toUser("The server is not currently banning any ammo.", username, true);
+        } else {
+            TreeSet<String> ammoBan = new TreeSet<String>(CampaignMain.cm.getServerBannedAmmo().keySet());
+            HashMap<Munitions, String> munitions = CampaignMain.cm.getData().getMunitionsByNumber();
+            Munitions[] munitionValues = Munitions.values();
+            
+            for (String ammoName : ammoBan) {
+                CampaignMain.cm.toUser(munitions.get(munitionValues[Integer.parseInt(ammoName)]), username, true);
+            }
+        }
+    } //end process
 }

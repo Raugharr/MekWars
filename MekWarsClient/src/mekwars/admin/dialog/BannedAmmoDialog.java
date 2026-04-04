@@ -20,6 +20,7 @@ package mekwars.admin.dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.TreeSet;
 
@@ -130,22 +131,20 @@ public final class BannedAmmoDialog implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-        Hashtable<String, Munitions> munitionTypes = mwclient.getData().getMunitionsByName();
+        HashMap<String, Munitions> munitionTypes = mwclient.getData().getMunitionsByName();
         
         if (command.equals(okayCommand)) {
             if (house == null) {
-                Hashtable<String,String> bannedAmmo = mwclient.getData().getServerBannedAmmo();
+                HashMap<String,String> bannedAmmo = mwclient.getData().getServerBannedAmmo();
                 for (JCheckBox tempBox : cBoxArrayList) {
                     Munitions ammo = munitionTypes.get(tempBox.getText());
                     
                     //Check box has been selected and should be updated to the server
-                    if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo))
+                    if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo)
+                        || !tempBox.isSelected() && bannedAmmo.containsKey(ammo)) {
                         mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetserverammoban#"
-                        + munitionTypes.get(tempBox.getText()));
-                    //Checkbox has been unselected and should be updated to the server
-                    else if (!tempBox.isSelected() && bannedAmmo.containsKey(ammo))
-                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetserverammoban#"
-                                + munitionTypes.get(tempBox.getText()));
+                        + munitionTypes.get(tempBox.getText()).ordinal());
+                    }
                 }
 			} else {
                 Hashtable<String, String> bannedAmmo = house.getBannedAmmo();
@@ -153,13 +152,12 @@ public final class BannedAmmoDialog implements ActionListener{
                     Munitions ammo = munitionTypes.get(tempBox.getText());
                     
                     //Check box has been selected and should be updated to the server
-                    if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo))
-                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethouseammoban#"
-                                +house.getName()+"#"+ munitionTypes.get(tempBox.getText()));
                     //Checkbox has been unselected and should be updated to the server
-                    else if (!tempBox.isSelected() && bannedAmmo.containsKey(ammo))
+                    if (tempBox.isSelected() && !bannedAmmo.containsKey(ammo)
+                            || !tempBox.isSelected() && bannedAmmo.containsKey(ammo)) {
                         mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethouseammoban#"
-                                +house.getName()+"#"+ munitionTypes.get(tempBox.getText()));
+                                +house.getName()+"#"+ munitionTypes.get(tempBox.getText()).ordinal());
+                    }
                     
                 }
             }
@@ -172,8 +170,8 @@ public final class BannedAmmoDialog implements ActionListener{
 
 	}
 	
-    public void loadBannedAmmo(){
-            mwclient.loadBannedAmmo();
+    public void loadBannedAmmo() {
+        mwclient.loadBannedAmmo();
     }
     
 	/*
@@ -183,9 +181,7 @@ public final class BannedAmmoDialog implements ActionListener{
         if (house == null) {
             try {
                 Munitions munition = mwclient.getData().getMunitionsByName().get(ammo);
-                if (!mwclient.getData().getServerBannedAmmo().containsKey(munition)) {
-					return false;
-				}
+                return mwclient.getData().getServerBannedAmmo().containsKey(String.valueOf(munition.ordinal()));
             } catch (Exception ex) {
                 LOGGER.error("Unable to find ammo " + ammo);
                 return false;
@@ -193,14 +189,10 @@ public final class BannedAmmoDialog implements ActionListener{
         }
         try {
             Munitions munition = mwclient.getData().getMunitionsByName().get(ammo);
-            if (!house.getBannedAmmo().containsKey(munition)) {
-				return false;
-			}
+            return house.getBannedAmmo().containsKey(String.valueOf(munition.ordinal()));
         } catch (Exception ex) {
             LOGGER.error("Unable to find ammo " + ammo);
             return false;
         }
-		return true;
     }
-	
 }//end BannedAmmoDialog.java

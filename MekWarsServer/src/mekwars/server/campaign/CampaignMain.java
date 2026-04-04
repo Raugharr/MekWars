@@ -2281,7 +2281,7 @@ public final class CampaignMain implements Serializable {
         return Commands;
     }
 
-    public Hashtable<String, String> getServerBannedAmmo() {
+    public HashMap<String, String> getServerBannedAmmo() {
         return cm.getData().getServerBannedAmmo();
     }
 
