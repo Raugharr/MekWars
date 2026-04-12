@@ -25,9 +25,9 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.campaign.pilot.SPilot;
-import mekwars.server.campaign.pilot.SPilotSkills;
-import mekwars.server.campaign.pilot.skills.SPilotSkill;
-import mekwars.server.campaign.pilot.skills.TraitSkill;
+import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.campaign.pilot.skills.PilotSkillStore;
+import mekwars.common.campaign.pilot.skills.TraitSkill;
 
 // syntanx /c createunit#filename#flavortext#gunnery#pilot#skill1,skill2,skill3
 public class CreatePilotCommand implements Command {
@@ -83,20 +83,18 @@ public class CreatePilotCommand implements Command {
         }
 
 		SPilot pilot = null;
-	    pilot = new SPilot(SPilot.getRandomPilotName(CampaignMain.cm.getR()),Integer.parseInt(gunnery),Integer.parseInt(piloting));
-		
-        pilot.setCurrentFaction("Common");
+	    pilot = new SPilot(target.getMyHouse(), SPilot.getRandomPilotName(CampaignMain.cm.getR()), Integer.parseInt(gunnery), Integer.parseInt(piloting));
 		if (command.hasMoreTokens()){
 			String skillTokens = command.nextToken();
 			StringTokenizer skillList = new StringTokenizer(skillTokens,",");
 			
 			while (skillList.hasMoreTokens()){
 				String skill = skillList.nextToken();
-				SPilotSkill pSkill = null; 
+				PilotSkill pSkill = null; 
 				if ( skill.equalsIgnoreCase("random") )
-					pSkill = SPilotSkills.getRandomSkill(pilot, type );
+					pSkill = PilotSkillStore.getRandomSkill(pilot, type );
 				else					
-					pSkill = SPilotSkills.getPilotSkill(skill);
+					pSkill = PilotSkillStore.getPilotSkill(skill);
 				
 				if ( pSkill != null ){
                     if ( pSkill instanceof TraitSkill){

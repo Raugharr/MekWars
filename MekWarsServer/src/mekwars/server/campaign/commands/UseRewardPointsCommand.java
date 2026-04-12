@@ -258,7 +258,7 @@ public class UseRewardPointsCommand implements Command {
 			try {
 				//Lets get us a pilot and a unit
 				if ( Boolean.parseBoolean(house.getConfig("AllowPersonalPilotQueues")) && ( unitType == Unit.MEK || unitType == Unit.PROTOMEK) )
-					newPilot = new SPilot("Vacant",99,99);
+					newPilot = new SPilot(null, "Vacant", 99, 99);
 				else
 					newPilot = player.getMyHouse().getNewPilot(unitType);
 
@@ -271,8 +271,7 @@ public class UseRewardPointsCommand implements Command {
 				player.addRewardPoints(-unitTotalRewardPointCost);
 			} catch (Exception ex){
 				CampaignMain.cm.toUser("AM:An error has occured while trying to create your requested unit. Please contact an admin. Faction: "+factionstring +" Type: "+unitType+" Class: "+unitWeight,Username,true);
-				LOGGER.error("Exception: ", ex);
-				LOGGER.error("Error creating unit in "+this.getClass().getName());
+				LOGGER.error("Error creating unit ", ex);
 			}
             break;
 
@@ -406,9 +405,9 @@ public class UseRewardPointsCommand implements Command {
 
 		Filename = BuildTable.getUnitFilename(faction,unitSize,type_id,BuildTable.REWARD);//build from rewards dir.
 
-		if ( Filename.toLowerCase().endsWith(".mul") ){
-			units.addAll(SUnit.createMULUnits(Filename,producer));
-		}else{
+		if (Filename.toLowerCase().endsWith(".mul")) {
+			units.addAll(SUnit.createMULUnits(house, Filename, producer));
+		} else {
 			SUnit cm = new SUnit(producer,Filename,weightClass);
 			cm.setPilot(pilot);
 			units.add(cm);

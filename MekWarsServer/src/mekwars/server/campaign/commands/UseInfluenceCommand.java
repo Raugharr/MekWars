@@ -255,10 +255,11 @@ public class UseInfluenceCommand implements Command {
 
 			try {
 				//Lets get us a pilot and a unit
-				if ( Boolean.parseBoolean(house.getConfig("AllowPersonalPilotQueues")) && ( unitType == Unit.MEK || unitType == Unit.PROTOMEK) )
-					newPilot = new SPilot("Vacant",99,99);
-				else
+				if (Boolean.parseBoolean(house.getConfig("AllowPersonalPilotQueues")) && ( unitType == Unit.MEK || unitType == Unit.PROTOMEK)) {
+					newPilot = new SPilot(null, "Vacant", 99, 99);
+                } else {
 					newPilot = player.getMyHouse().getNewPilot(unitType);
+                }
 
 				newUnits.addAll(getUnitProduced(unitType,unitWeight,newPilot,factionstring,player.getMyHouse()));
 
@@ -269,7 +270,7 @@ public class UseInfluenceCommand implements Command {
 				player.addRewardPoints(-unitTotalRewardPointCost);
 			} catch (Exception ex){
 				CampaignMain.cm.toUser("AM:An error has occured while trying to create your requested unit. Please contact an admin. Faction: "+factionstring +" Type: "+unitType+" Class: "+unitWeight,Username,true);
-				LOGGER.error("Error creating unit in "+this.getClass().getName());
+				LOGGER.error("Error creating unit ", ex);
 			}
             break;
 
@@ -391,7 +392,6 @@ public class UseInfluenceCommand implements Command {
 	 * @return the Mek Produced
 	 */
 	private Vector<SUnit> getUnitProduced(int type_id, int weightClass, SPilot pilot, String faction, SHouse house) {
-
 		SUnitFactory factory = new SUnitFactory();
 		String unitSize = Unit.getWeightClassDesc(weightClass);
 		factory.setFounder(faction);
@@ -406,9 +406,9 @@ public class UseInfluenceCommand implements Command {
 
 		Filename = BuildTable.getUnitFilename(faction,unitSize,type_id,BuildTable.REWARD);//build from rewards dir.
 
-		if ( Filename.toLowerCase().endsWith(".mul") ){
-			units.addAll(SUnit.createMULUnits(Filename,producer));
-		}else{
+		if (Filename.toLowerCase().endsWith(".mul")) {
+			units.addAll(SUnit.createMULUnits(house, Filename, producer));
+		} else {
 			SUnit cm = new SUnit(producer,Filename,weightClass);
 			cm.setPilot(pilot);
 			units.add(cm);

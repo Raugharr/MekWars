@@ -22,12 +22,11 @@ import mekwars.server.campaign.SArmy;       //Baruk Khazad! 20150929
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
-import mekwars.server.campaign.pilot.SPilotSkills;
-import mekwars.server.campaign.pilot.skills.AstechSkill;
-import mekwars.server.campaign.pilot.skills.EdgeSkill;
-import mekwars.server.campaign.pilot.skills.SPilotSkill;
-import mekwars.server.campaign.pilot.skills.TraitSkill;
-import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
+import mekwars.common.campaign.pilot.skills.AstechSkill;
+import mekwars.common.campaign.pilot.skills.EdgeSkill;
+import mekwars.common.campaign.pilot.skills.PilotSkillStore;
+import mekwars.common.campaign.pilot.skills.TraitSkill;
+import mekwars.common.campaign.pilot.skills.WeaponSpecialistSkill;
 
 public class  PromotePilotCommand  implements Command {
     int accessLevel = 0;
@@ -60,7 +59,7 @@ public class  PromotePilotCommand  implements Command {
         String skill;
         int cost = 0;
         SPilot pilot;
-        SPilotSkill ps = null;
+        PilotSkill ps = null;
 
         if (!player.getMyHouse().getBooleanConfig("PlayersCanBuyPilotUpgrades")) {
             return;
@@ -161,13 +160,13 @@ public class  PromotePilotCommand  implements Command {
             cost *= 10 - totalSkill;
 
         } else {
-            ps = SPilotSkills.getPilotSkill(skill);
+            ps = PilotSkillStore.getPilotSkill(skill);
 
             skill = ps.getName();
             if (pilot.getSkills().has(ps.getId()) && pilot.getSkills().getPilotSkill(ps.getId()).getLevel() >= 0) {
                 if (ps.getId() == PilotSkill.AstechSkillID) {
 
-                    ps = (SPilotSkill) pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID);
+                    ps = pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID);
                     if (ps.getLevel() >= 2) {
                         CampaignMain.cm.toUser("AM:You cannot raise your pilots AstechSkill any higher!", Username);
                         return;
@@ -176,7 +175,7 @@ public class  PromotePilotCommand  implements Command {
                     cost = player.getMyHouse().getIntegerConfig("chancefor" + ps.getAbbreviation() + "for" + Unit.getTypeClassDesc(unit.getType()));
                     cost *= ps.getLevel() + 2;
                 } else if (ps.getId() == PilotSkill.EdgeSkillID) {
-                    ps = (SPilotSkill) pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID);
+                    ps = pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID);
                     if (ps.getLevel() >= player.getMyHouse().getIntegerConfig("MaxEdgeChanges")) {
                         CampaignMain.cm.toUser("AM:You cannot raise your pilots Edge any higher!", Username);
                         return;

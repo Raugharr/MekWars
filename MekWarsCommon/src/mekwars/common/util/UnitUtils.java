@@ -2631,19 +2631,19 @@ public class UnitUtils {
         // Hits defaults to 0 so no reason to keep checking over and over again.
         pilot.setHits(mek.getPilot().getHits(), 0);
 
-        Iterator<MegaMekPilotOption> iter = mek.getPilot().getMegamekOptions().iterator();
-        while (iter.hasNext()) {
-            MegaMekPilotOption po = iter.next();
+        for (MegaMekPilotOption po : mek.getPilot().getMegamekOptions()) {
             if (po.getMmname().equals("weapon_specialist")) {
                 pilot.getOptions().getOption(po.getMmname()).setValue(mek.getPilot().getWeapon());
             } else if (po.getMmname().equals("edge")) {
-                pilot.getOptions()
-                    .getOption(po.getMmname())
-                    .setValue(
-                            mek.getPilot()
-                            .getSkills()
-                            .getPilotSkill(PilotSkill.EdgeSkillID)
-                            .getLevel());
+                PilotSkill edgeSkill = mek.getPilot()
+                    .getSkills()
+                    .getPilotSkill(PilotSkill.EdgeSkillID);
+
+                if (edgeSkill != null) {
+                    pilot.getOptions()
+                        .getOption(po.getMmname())
+                        .setValue(edgeSkill.getLevel());
+                }
                 pilot.getOptions()
                     .getOption("edge_when_headhit")
                     .setValue(mek.getPilot().getHeadHit());

@@ -1,8 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
- * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
- * Original author Helge Richter (McWizard)
+ * MekWars - Copyright (C) 2008
+ *
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -14,19 +12,20 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-
-/*
- * Created on 18.04.2004
- *
- */
 package mekwars.common.campaign.pilot.skills;
 
+import mekwars.common.MegaMekPilotOption;
+import mekwars.common.campaign.pilot.Pilot;
 
-/**
- * @author Helge Richter
- *
- */
-public interface IPilotSkill {
-	public String getName();
-	public int getLevel();
+public class BufferedVDNI extends PilotSkill {
+    public BufferedVDNI(int id) {
+        super(id, "Buffered VDNI", "BVDNI");
+        setDescription("MD Buffered VDNI");
+    }
+
+    @Override
+    public void modifyPilot(Pilot p) {
+        p.addMegamekOption(new MegaMekPilotOption("bvdni", true));
+        // p.setBvMod(p.getBVMod() + 0.01);
+    }
 }

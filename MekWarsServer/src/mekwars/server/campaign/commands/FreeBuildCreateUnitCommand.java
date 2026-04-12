@@ -111,8 +111,7 @@ public class FreeBuildCreateUnitCommand implements Command {
 
 	}
 
-	private void initVars(String Username)
-	{
+	private void initVars(String Username) {
 		username = Username;
 		userlvl = MWServ.getInstance().getUserLevel(username);
 		player = CampaignMain.cm.getPlayer(username);
@@ -137,8 +136,7 @@ public class FreeBuildCreateUnitCommand implements Command {
 	/**
 	 *  make sure that this command can be run with current server settings and user access levels
 	 */
-    private Boolean accessChecks()
-    {
+    private Boolean accessChecks() {
     	if(userlvl < getExecutionLevel())
     	{
     		CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userlvl + ". Required: " + accessLevel + ".",username,true);
@@ -176,19 +174,14 @@ public class FreeBuildCreateUnitCommand implements Command {
     	return true;
     }
 
-	private SUnit readCommandReturnSUnit(StringTokenizer command)
-	{
-
+	private SUnit readCommandReturnSUnit(StringTokenizer command) {
 		String filename;
 		String FlavorText = "Built by " + player.getName();
 		String skillTokens = null;
 
-		try
-		{
+		try {
 			filename = command.nextToken();
-		}
-		catch(Exception ex)
-		{
+        } catch(Exception ex) {
 			CampaignMain.cm.toUser(syntax, username);
 			return null;
 		}
@@ -199,7 +192,7 @@ public class FreeBuildCreateUnitCommand implements Command {
 			weight = Integer.parseInt(command.nextToken());
 
 		//Note that if you look at the create method of SUnit, it appears you dont really need to pass the weight...
-		SUnit tempUnit = SUnit.create(filename, FlavorText, house.getBaseGunner(), house.getBasePilot(), weight, skillTokens);
+		SUnit tempUnit = SUnit.create(player.getMyHouse(), filename, FlavorText, house.getBaseGunner(), house.getBasePilot(), weight, skillTokens);
         //This will create a pilot based on faction settings defined by server operator
 		SPilot tempPilot = house.getNewPilot(tempUnit.getType());
         tempUnit.setPilot(tempPilot);
@@ -207,23 +200,17 @@ public class FreeBuildCreateUnitCommand implements Command {
         return tempUnit;
 	}
 
-	private Boolean playerUnitLimitChecks()
-	{
-		if(!player.hasRoomForUnit(unit.getType(), unit.getWeightClass()))
-		{
+	private Boolean playerUnitLimitChecks() {
+		if(!player.hasRoomForUnit(unit.getType(), unit.getWeightClass())) {
 			CampaignMain.cm.toUser("AM:You have reached the limit for this type of unit at this weight class.",username,true);
 			return false;
 		}
 
-		if(SUnit.getHangarSpaceRequired(unit, house) > player.getFreeBays())
-		{
-			if( !house.getName().equalsIgnoreCase(newbieHouseName))
-			{
+		if(SUnit.getHangarSpaceRequired(unit, house) > player.getFreeBays()) {
+			if (!house.getName().equalsIgnoreCase(newbieHouseName)) {
 				CampaignMain.cm.toUser("AM:You do not have enough free bays to create this unit.",username,true);
 				return false;
-			}
-			else
-			{
+            } else {
 				CampaignMain.cm.toUser("AM:You do not have enough free bays to create this unit. You can delete an existing unit by right clicking on it and choosing transactions -> delete to make some room.",username,true);
 				return false;
 			}
@@ -232,10 +219,8 @@ public class FreeBuildCreateUnitCommand implements Command {
 		if (!allowDupes) {
 			List<SUnit> playersUnits = player.getUnits();
 			
-			for(SUnit aUnit : playersUnits)
-			{
-				if(aUnit.getVerboseModelName().equalsIgnoreCase(unit.getVerboseModelName()))
-				{
+			for (SUnit aUnit : playersUnits) {
+				if (aUnit.getVerboseModelName().equalsIgnoreCase(unit.getVerboseModelName())) {
 					CampaignMain.cm.toUser("AM:Freebuild duplicates are not allowed on this server! Please choose a different variant or unit.",username,true);
 					return false;
 				}
@@ -246,16 +231,13 @@ public class FreeBuildCreateUnitCommand implements Command {
 			List<SUnit> playersUnits = player.getUnits();
 			int unitCount = 0;
 			
-			for(SUnit aUnit : playersUnits)
-			{
-				if(aUnit.getVerboseModelName().equalsIgnoreCase(unit.getVerboseModelName()))
-				{
+			for (SUnit aUnit : playersUnits) {
+				if (aUnit.getVerboseModelName().equalsIgnoreCase(unit.getVerboseModelName())) {
 					unitCount++;
 				}
 			}
 			
-			if(unitCount != 0)
-			{
+			if (unitCount != 0) {
 				return checkDupeLimits(unitCount);
 			}
 		}
@@ -263,8 +245,7 @@ public class FreeBuildCreateUnitCommand implements Command {
 		return true;
 	}
 
-	private Boolean checkDupeLimits(int unitCount) 
-	{
+	private Boolean checkDupeLimits(int unitCount) {
 		switch(unit.getType())
 		{
 		case 0:
@@ -330,8 +311,7 @@ public class FreeBuildCreateUnitCommand implements Command {
 	 * 	Get a collection of all houses in game and covert it to a list
      *  Need to set the list of houses before calling checkiflegal method
 	 */
-	private void initHouseList()
-	{
+	private void initHouseList() {
 		houseList.clear();
         Iterator<House> i = CampaignMain.cm.getData().getAllHouses().iterator();
 
@@ -441,9 +421,7 @@ public class FreeBuildCreateUnitCommand implements Command {
 	/**
 	 * @Return a Boolean as true if the SUnit is found in available build tables
 	 */
-	private Boolean CheckIfLegal(String buildTableName, SUnit unitToCheck) throws IOException
-	{
-
+	private Boolean CheckIfLegal(String buildTableName, SUnit unitToCheck) throws IOException {
 		Boolean result = false;
 
         buildTableName += "_" + SUnit.getWeightClassDesc(unitToCheck.getWeightClass());
@@ -451,8 +429,7 @@ public class FreeBuildCreateUnitCommand implements Command {
         //debug
         //CampaignMain.cm.toUser("DEBUG: Unit Type is... " + SUnit.getTypeClassDesc(unitToCheck.getType()), p.getName(), true);
 
-		if(unitToCheck.getType() != 0)
-        {
+		if(unitToCheck.getType() != 0) {
         	buildTableName += SUnit.getTypeClassDesc(unitToCheck.getType());
         }
 
@@ -556,32 +533,25 @@ public class FreeBuildCreateUnitCommand implements Command {
             	}
             }
         }
-
 		//debug
         //CampaignMain.cm.toUser("DEBUG: result = " + result + " BT = " + buildTableName + " Unit = " + unitToCheck.getUnitFilename(), p.getName() ,true);
 
         return result;
-
-
 	}//end checkiflegal
 
 	/**
 	 *  makes sure that infinite newbie faction free build can co-exist with limited post defection freebuild
 	 */
-	private void calcRemainingFreeMeks()
-	{
-
+	private void calcRemainingFreeMeks() {
 		//user is not in newbie faction, a limit is set and it applies only to post defection unit creation
-		if( limitOnlyPostDefection && !house.getName().equalsIgnoreCase(newbieHouseName) && freeBuildLimit > 0)
-		{
+		if (limitOnlyPostDefection && !house.getName().equalsIgnoreCase(newbieHouseName) && freeBuildLimit > 0) {
 			player.addMekToken(1);
 			int remaining = freeBuildLimit - player.getMekToken();
 			CampaignMain.cm.toUser(remaining + " free units remain.",username,true);
 		}
 
 		//user is in newbie faction, a limit is set and it applies to newbie faction only
-		if( !limitOnlyPostDefection && house.getName().equalsIgnoreCase(newbieHouseName) && freeBuildLimit > 0)
-		{
+		if (!limitOnlyPostDefection && house.getName().equalsIgnoreCase(newbieHouseName) && freeBuildLimit > 0) {
 			player.addMekToken(1);
 			int remaining = freeBuildLimit - player.getMekToken();
 			CampaignMain.cm.toUser(remaining + " free units remain.",username,true);

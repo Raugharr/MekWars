@@ -189,7 +189,7 @@ public class  RetirePilotCommand  implements Command {
 			//otherwise add a new pilot from the faction queue.
 			boolean allowPPQs = Boolean.parseBoolean(CampaignMain.cm.getConfig("AllowPersonalPilotQueues"));
 			if (allowPPQs && m.isSinglePilotUnit()) {
-				SPilot pilot = new SPilot("Vacant",99,99);
+				SPilot pilot = new SPilot(null, "Vacant", 99, 99);
 			    m.setPilot(pilot);
 			}
 			

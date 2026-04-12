@@ -14,42 +14,47 @@
  * for more details.
  */
 
-package mekwars.server.campaign.pilot.skills;
+/*
+ * Created on 18.04.2004
+ *
+ */
+package mekwars.common.campaign.pilot.skills;
 
 import mekwars.common.MegaMekPilotOption;
+import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
 
 /**
  * @author Helge Richter
  */
-public class ClanPilotTrainingSkill extends SPilotSkill {
-
-    public ClanPilotTrainingSkill() {
-        // TODO: replace with ReflectionProvider
+public class DodgeManeuverSkill extends PilotSkill {
+    public DodgeManeuverSkill(int id) {
+        super(id, "Dodge Maneuver", "DM");
+        setDescription(
+                "Enables the unit to make a dodge maneuver instead of a physical attack. This"
+                        + " maneuver adds +2 to the BTH to physical attacks against the unit.");
     }
 
-    public ClanPilotTrainingSkill(int id) {
-        super(id, "Clan Pilot Training", "CPT");
-        setDescription("Pilot has a +1 penalty for physical attacks, because clans do not train for dishonourable combat.");
+    public DodgeManeuverSkill() {
+        // TODO: replace with ReflectionProvider
     }
 
     @Override
     public void modifyPilot(Pilot p) {
-        // super.addToPilot(p);
-        p.addMegamekOption(new MegaMekPilotOption("clan_pilot_training", true));
-        p.setBvMod(p.getBVMod() + 0.01);
+        p.addMegamekOption(new MegaMekPilotOption("dodge_maneuver", true));
+        // p.setBvMod(p.getBVMod() + 0.01);
     }
 
     @Override
     public int getChance(int unitType, Pilot p) {
-        return 0;
+        if (unitType != Unit.MEK) {
+            return 0;
+        }
+        return super.getChance(unitType, p);
     }
 
     @Override
-    public int getBVMod(Entity unit) {
-
-        return 0;
+    public String getBVModConfig() {
+        return "DodgeManeuverBaseBVMod";
     }
-
 }

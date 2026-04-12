@@ -1,6 +1,6 @@
 /*
  * MekWars - Copyright (C) 2025
- * 
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -17,13 +17,13 @@
 
 package mekwars.common.io;
 
+import mekwars.common.io.file.BanAmmoFile;
+
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.ConcurrentHashMap;
-
-import mekwars.common.io.file.BanAmmoFile;
 
 public abstract class AbstractFileSystem {
     public static final String FILE_NAME_CAMPAIGN_CONFIG = "campaignconfig.txt";
@@ -32,10 +32,11 @@ public abstract class AbstractFileSystem {
     public static final String FILE_NAME_OP_LIST = "OpList.txt";
 
     protected static final String DIRECTORY_NAME_DATA = "data/";
-    protected static final Path DIRECTORY_DATA = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_DATA);
+    protected static final Path DIRECTORY_DATA =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_DATA);
 
-    private ConcurrentHashMap<String, FileChecksum> checksumHash = new ConcurrentHashMap<String, FileChecksum>();
+    private ConcurrentHashMap<String, FileChecksum> checksumHash =
+            new ConcurrentHashMap<String, FileChecksum>();
 
     /**
      * Creates all directories needed by the FileSystem.
@@ -67,6 +68,18 @@ public abstract class AbstractFileSystem {
     }
 
     /**
+     * Returns the path of a faction's traitnames
+     *
+     * @return The path of a faction's traitnames
+     */
+    public Path getFactionTraitNamesPath(String faction) {
+        String traitPath =
+                getConfigDir().toString() + "/" + faction.toLowerCase() + "traitnames.txt";
+
+        return FileSystems.getDefault().getPath(traitPath);
+    }
+
+    /**
      * Returns the path to the bantargeting.dat file.
      *
      * @return The path to the bantargeting.dat file.
@@ -90,7 +103,8 @@ public abstract class AbstractFileSystem {
      * @return The path to the campaignconfig.txt file.
      */
     public Path getCampaignConfig() {
-        return FileSystems.getDefault().getPath(getConfigDir().toString(), FILE_NAME_CAMPAIGN_CONFIG);
+        return FileSystems.getDefault()
+                .getPath(getConfigDir().toString(), FILE_NAME_CAMPAIGN_CONFIG);
     }
 
     /**

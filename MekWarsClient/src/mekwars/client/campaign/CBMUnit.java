@@ -20,6 +20,7 @@ package mekwars.client.campaign;
 import java.util.StringTokenizer;
 
 import mekwars.common.Unit;
+import mekwars.common.House;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.TokenReader;
 import megamek.client.generator.RandomGenderGenerator;
@@ -34,8 +35,6 @@ import megamek.common.CrewType;
  * bandwidth. Instead, we build temporary CUnit and store it w/i the BMUnit.
  */
 public class CBMUnit {
-
-	//IVARS
 	private boolean soldByPlayer = false;
 	private String modelName = "";
 	private String fileName = "";
@@ -50,7 +49,6 @@ public class CBMUnit {
 
 	CUnit embeddedUnit = null;
 
-	//CONSTRUCTOR
 	/**
 	 * Constructor which takes a data string from the server. This
 	 * String is generated in Market2's getAutoMarketStatus() method.
@@ -89,10 +87,12 @@ public class CBMUnit {
 		if (!hidden) {
 			int factionGunnery = campaign.getPlayer().getMyHouse().getBaseGunner();
 			int factionPiloting = campaign.getPlayer().getMyHouse().getBasePilot();
+            House owner = campaign.getPlayer().getMyHouse();
+
 			if ((embeddedUnit.getType() == Unit.MEK) || (embeddedUnit.getType() == Unit.VEHICLE)) {
-                embeddedUnit.setPilot(new Pilot("BM Unit",factionGunnery,factionPiloting));
+                embeddedUnit.setPilot(new Pilot(owner, "BM Unit", factionGunnery, factionPiloting));
             } else {
-                embeddedUnit.setPilot(new Pilot("BM Unit",factionGunnery,5));
+                embeddedUnit.setPilot(new Pilot(owner, "BM Unit", factionGunnery, 5));
             }
 
 			/*

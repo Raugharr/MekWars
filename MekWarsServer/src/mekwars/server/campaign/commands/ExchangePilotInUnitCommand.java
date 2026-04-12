@@ -114,7 +114,7 @@ public class ExchangePilotInUnitCommand implements Command {
 				}
 				
 				else {
-					p2 = new SPilot("Vacant",99,99);
+					p2 = new SPilot(null, "Vacant", 99, 99);
 					m.setPilot(p2);
 				}
 				

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,46 +16,46 @@
 
 package mekwars.server.dataProvider.commands;
 
-import java.util.Date;
-import java.util.Vector;
-
 import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.common.util.BinWriter;
 import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SHouse;
 import mekwars.server.dataProvider.ServerCommand;
+import mekwars.common.io.file.FactionTraitFile;
+import mekwars.common.entities.FactionTrait;
+
+import java.util.Date;
 
 /**
- * Retrieve all planet information (if the data cache is lost at client side)
- * 
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class ServerTrait implements ServerCommand {
-
     /**
-     * @see server.dataProvider.ServerCommand#execute(java.util.Date,
-     *      java.io.PrintWriter, common.CampaignData)
+     * @see server.dataProvider.ServerCommand#execute(java.util.Date, java.io.PrintWriter,
+     *     common.CampaignData)
      */
-    public void execute(Date timestamp, BinWriter out, CampaignData data)
-            throws Exception {
+    public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
         String factionName = "common";
-        Vector<String> traits = CampaignMain.cm.getFactionTraits(factionName);
-        out.println(factionName,"TraitLine");
-        out.println(traits.size(),"TraitLine");
-        for ( int i = 0; i < traits.size(); i++){
-            out.println(traits.elementAt(i),"TraitLine");
+        FactionTraitFile factionTraitFile = CampaignMain.cm.getFactionTraitFileByHouse(factionName);
+        StringBuilder builder = new StringBuilder();
+
+        out.println(factionName, "TraitLine");
+        out.println(factionTraitFile.getFactionTraits().size(), "TraitLine");
+            for (FactionTrait factionTrait : factionTraitFile.getFactionTraits()) {
+                factionTrait.serialize(builder);
+                out.println(builder.toString(), "TraitLine");
+                builder.setLength(0);
         }
-        
-        
-        for ( House f : CampaignMain.cm.getData().getAllHouses()){
-            SHouse faction = (SHouse) f;
-            factionName = faction.getName().toLowerCase();
-            traits = CampaignMain.cm.getFactionTraits(factionName);
-            out.println(factionName,"TraitLine");
-            out.println(traits.size(),"TraitLine");
-            for ( int i = 0; i < traits.size(); i++){
-                out.println(traits.elementAt(i),"TraitLine");
+
+        for (House house : CampaignMain.cm.getData().getAllHouses()) {
+            factionTraitFile = CampaignMain.cm.getFactionTraitFileByHouse(house.getName());
+
+            out.println(factionName, "TraitLine");
+            out.println(factionTraitFile.getFactionTraits().size(), "TraitLine");
+            for (FactionTrait factionTrait : factionTraitFile.getFactionTraits()) {
+                factionTrait.serialize(builder);
+                out.println(builder.toString(), "TraitLine");
+                builder.setLength(0);
             }
         }
     }

@@ -196,7 +196,7 @@ public class PL extends Command {
 
             unit.setUnitFilename(filename);
             unit.createEntity();
-            unit.setPilot(new Pilot("Jeeves", 4, 5));
+            unit.setPilot(new Pilot(player.getMyHouse(), "Jeeves", 4, 5));
             UnitUtils.applyBattleDamage(unit.getEntity(), damage, true);
             new AdvancedRepairDialog(mwclient, unit, unit.getEntity(), false);
         } else if (cmd.equals("CPPC")) {

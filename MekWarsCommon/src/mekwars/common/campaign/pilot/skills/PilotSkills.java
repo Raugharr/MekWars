@@ -35,8 +35,9 @@ public class PilotSkills {
      * Return whether a pilot obtains a specific skill or not.
      */
     public boolean has(PilotSkill p) {
-        if (p == null)
+        if (p == null) {
             return false;
+        }
         return skills.contains(p);
     }
     
@@ -88,15 +89,15 @@ public class PilotSkills {
     	return skills;
     }
     
-    public PilotSkill getPilotSkill(int skillid){
-        
+    public PilotSkill getPilotSkill(int skillId){
     	PilotSkill pSkill;
         Iterator<PilotSkill> skills = this.getSkillIterator();
         
-        while (skills.hasNext()){
+        while (skills.hasNext()) {
             pSkill = (PilotSkill)skills.next();
-            if ( pSkill.getId() == skillid )
+            if (pSkill.getId() == skillId) {
                 return pSkill;
+            }
         }
         return null;
     }
@@ -114,8 +115,6 @@ public class PilotSkills {
     	while (i.hasNext()){
     		PilotSkill skill = ((PilotSkill)i.next());
     		result += skill.getName();
-    		/*if ( skill.getName().equals("Weapon Specialist"))
-    		    result += " "+((WeaponSpecialistSkill)skill).getWeapon();*/
     		if (skill.getLevel() > 1)
     			result += " " + skill.getLevel();
     		if (i.hasNext()) {

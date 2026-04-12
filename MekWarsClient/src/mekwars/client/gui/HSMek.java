@@ -45,7 +45,6 @@ public class HSMek {
     CUnit embeddedUnit;//bury a CUnit in HSMek, a la BMUnit
 
     public HSMek(MWClient mwclient, StringTokenizer tokenizer) {
-
         MekFile = TokenReader.readString(tokenizer);
         unitID =  TokenReader.readInt(tokenizer);
 
@@ -69,15 +68,15 @@ public class HSMek {
         if (embeddedUnit.getType() != Unit.PROTOMEK) {
             if (embeddedUnit.getType() == Unit.INFANTRY) {
                 if (((Infantry)embeddedUnit.getEntity()).canMakeAntiMekAttacks() ) {
-                    embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, factionPiloting));
+                    embeddedUnit.setPilot(new Pilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, factionPiloting));
                 } else {
-                    embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, 5));
+                    embeddedUnit.setPilot(new Pilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, 5));
                 }
             } else {
-                embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, factionPiloting));
+                embeddedUnit.setPilot(new Pilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, factionPiloting));
             }
         } else {
-            embeddedUnit.setPilot(new Pilot("BM Unit", factionGunnery, 5));
+            embeddedUnit.setPilot(new Pilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, 5));
         }
 
         /*

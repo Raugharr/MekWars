@@ -23,6 +23,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import mekwars.common.CampaignData;
+import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.util.UnitUtils;
 import mekwars.server.campaign.BuildTable;
@@ -525,7 +526,7 @@ public class Market2 {
 							}
 							
 							// vacate the unit
-							unitForSale.setPilot(new SPilot("Vacant", 99, 99));
+							unitForSale.setPilot(new SPilot(null, "Vacant", 99, 99));
 						}
 						
 						else {// no PPQs, or not a PPQ-using unit type
@@ -603,12 +604,16 @@ public class Market2 {
 			String unitFilename = BuildTable.getUnitFilename(factionName, Unit.getWeightClassDesc(weightClass), Unit.MEK, BuildTable.RARE);//rare units onto BM
 			Vector<SUnit> rareUnits = new Vector<SUnit>(1,1);
 			
-			if ( unitFilename.toLowerCase().trim().endsWith(".mul")){
-				rareUnits.addAll(SUnit.createMULUnits(unitFilename,unitFluff));
-			}else
+			if (unitFilename.toLowerCase().trim().endsWith(".mul")) {
+                String newbieHouseName = CampaignData.cd.getCampaignOptions().getConfig("NewbieHouseName");
+                House house = CampaignData.cd.getHouseByName(newbieHouseName);
+
+				rareUnits.addAll(SUnit.createMULUnits(house, unitFilename,unitFluff));
+			} else {
 				rareUnits.add(new SUnit(unitFluff, unitFilename, weightClass));
+            }
 			// build the new unit
-			for ( SUnit rareUnit : rareUnits){ 
+			for (SUnit rareUnit : rareUnits) {
 				
 				/*
 				 * Have the newbie-house sell the unit. Although this can lead to

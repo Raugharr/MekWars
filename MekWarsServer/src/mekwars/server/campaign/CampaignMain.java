@@ -32,16 +32,12 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 import megamek.client.Client;
-import megamek.common.CriticalSlot;
-import megamek.common.Entity;
-import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
 import megamek.common.options.IOption;
@@ -55,6 +51,7 @@ import mekwars.common.Terrain;
 import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.campaign.operations.Operation;
+import mekwars.common.io.file.FactionTraitFile;
 import mekwars.common.flags.PlayerFlags;
 import mekwars.common.util.MekwarsFileReader;
 import mekwars.common.util.UnitUtils;
@@ -138,7 +135,6 @@ import mekwars.server.campaign.operations.OperationManager;
 import mekwars.server.campaign.operations.ShortOperation;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 import mekwars.server.campaign.operations.newopmanager.NewOperationManager;
-import mekwars.server.campaign.pilot.SPilotSkills;
 import mekwars.server.campaign.util.ChatRoom;
 import mekwars.server.campaign.util.ChristmasHandler;
 import mekwars.server.campaign.util.HouseRankingHelpContainer;
@@ -225,7 +221,6 @@ public final class CampaignMain implements Serializable {
 
         market = new Market2();
         partsmarket = new PartsMarket();
-        SPilotSkills.initializePilotSkills();
 
         xstream = new SMMNetXStream();
 
@@ -2233,16 +2228,6 @@ public final class CampaignMain implements Serializable {
         return (CampaignMain.cm.getBooleanConfig("UseNonFactionUnitsIncreasedTechs") && !CampaignMain.cm.isUsingAdvanceRepair());
     }
 
-    /*
-     * Checks to see if the campaign is using advanced repairs and starts up the
-     * thread if it is null
-     */
-    public boolean isUsingAdvanceRepair() {
-        boolean isUsing = cm.getBooleanConfig("UseAdvanceRepair") || cm.getBooleanConfig("UseSimpleRepair");
-
-        return isUsing;
-    }
-
     public Random getR() {
         return r;
     }
@@ -2577,62 +2562,62 @@ public final class CampaignMain implements Serializable {
         return count;
     }
 
-    /**
-     * Use to load a factions trait file.
-     *
-     * @author Torren (Jason Tighe)
-     * @param faction
-     * @return
-     */
-    public Vector<String> getFactionTraits(String faction) {
-        Vector<String> traits = new Vector<String>(1, 1);
-        File traitNames = new File("./data/pilotnames/" + faction.toLowerCase() + "traitnames.txt");
+    // /**
+    //  * Use to load a factions trait file.
+    //  *
+    //  * @author Torren (Jason Tighe)
+    //  * @param faction
+    //  * @return
+    //  */
+    // public Vector<String> getFactionTraits(String faction) {
+    //     Vector<String> traits = new Vector<String>(1, 1);
+    //     File traitNames = new File("./data/pilotnames/" + faction.toLowerCase() + "traitnames.txt");
 
-        if (!traitNames.exists()) {
-            traitNames = new File("./data/pilotnames/commontraitnames.txt");
-        }
+    //     if (!traitNames.exists()) {
+    //         traitNames = new File("./data/pilotnames/commontraitnames.txt");
+    //     }
 
-        try {
+    //     try {
 
-            MekwarsFileReader dis = new MekwarsFileReader(traitNames);
-            while (dis.ready()) {
-                traits.addElement(dis.readLine());
-            }
-            dis.close();
-        } catch (FileNotFoundException nf) {
-            LOGGER.error("File Not Found: " + traitNames);
-        } catch (Exception ex) {
-            LOGGER.error("Error loading Faction Traits: " + faction);
-            LOGGER.error("Exception: ", ex);
-        }
+    //         MekwarsFileReader dis = new MekwarsFileReader(traitNames);
+    //         while (dis.ready()) {
+    //             traits.addElement(dis.readLine());
+    //         }
+    //         dis.close();
+    //     } catch (FileNotFoundException nf) {
+    //         LOGGER.error("File Not Found: " + traitNames);
+    //     } catch (Exception ex) {
+    //         LOGGER.error("Error loading Faction Traits: " + faction);
+    //         LOGGER.error("Exception: ", ex);
+    //     }
 
-        traits.trimToSize();
-        return traits;
-    }
+    //     traits.trimToSize();
+    //     return traits;
+    // }
 
-    public void saveFactionTraits(String faction, Vector<String> traits) {
-        File traitFile = new File("./data/pilotnames/" + faction.toLowerCase() + "traitnames.txt");
+    // public void saveFactionTraits(String faction, Vector<String> traits) {
+    //     File traitFile = new File("./data/pilotnames/" + faction.toLowerCase() + "traitnames.txt");
 
-        try {
+    //     try {
 
-            if (!traitFile.exists()) {
-                traitFile.createNewFile();
-            }
+    //         if (!traitFile.exists()) {
+    //             traitFile.createNewFile();
+    //         }
 
-            FileOutputStream fos = new FileOutputStream(traitFile);
-            PrintStream p = new PrintStream(fos);
+    //         FileOutputStream fos = new FileOutputStream(traitFile);
+    //         PrintStream p = new PrintStream(fos);
 
-            for (String tempTrait : traits) {
-                p.println(tempTrait);
-            }
+    //         for (String tempTrait : traits) {
+    //             p.println(tempTrait);
+    //         }
 
-            p.close();
-            fos.close();
+    //         p.close();
+    //         fos.close();
 
-        } catch (Exception ex) {
-            LOGGER.error("Error while saving trait file for faction: {}", faction, ex);
-        }
-    }
+    //     } catch (Exception ex) {
+    //         LOGGER.error("Error while saving trait file for faction: {}", faction, ex);
+    //     }
+    // }
 
     public void setOmniVariantMods(Hashtable<String, String> table) {
         omniVariantMods = table;
@@ -3376,5 +3361,30 @@ public final class CampaignMain implements Serializable {
 
     public HtmlSanitizer getHtmlSanitizer() {
         return htmlSanitizer;
+    }
+
+    @Deprecated(since = "9.0.0", forRemoval = false)
+    public boolean isUsingAdvanceRepair() {
+        return CampaignData.cd.isUsingAdvanceRepair();
+    }
+
+    public FactionTraitFile getFactionTraitFileByHouse(String houseName) {
+        FactionTraitFile file = CampaignData.cd.getFactionTraitFileByHouse(houseName);
+
+        if (file != null) {
+            return file;
+        }
+
+        Path path = FileSystem.getInstance().getFactionTraitNamesPath(houseName);
+        file = new FactionTraitFile(path, houseName);
+        try {
+            if (Files.exists(path)) {
+                file.load();
+            }
+        } catch (IOException exception) {
+            LOGGER.error("Unable to load FactionTraitFile", exception);
+        }
+        CampaignData.cd.addFactionTraitFile(file);
+        return file;
     }
 }

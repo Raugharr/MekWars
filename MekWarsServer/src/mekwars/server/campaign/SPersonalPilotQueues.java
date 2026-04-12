@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import mekwars.common.Unit;
+import mekwars.common.Player;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.PersonalPilotQueues;
 import mekwars.common.util.TokenReader;
