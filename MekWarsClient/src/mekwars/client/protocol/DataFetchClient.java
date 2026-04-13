@@ -17,9 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.JOptionPane;
-
+import megamek.Version;
 import mekwars.client.MWClient;
 import mekwars.client.gui.CMainFrame;
 import mekwars.client.io.FileSystem;
@@ -28,9 +27,9 @@ import mekwars.common.Equipment;
 import mekwars.common.House;
 import mekwars.common.Influences;
 import mekwars.common.Planet;
+import mekwars.common.io.file.BanAmmoFile;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
-import megamek.Version;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,7 +42,7 @@ import org.apache.logging.log4j.Logger;
 public class DataFetchClient {
     private static final Logger LOGGER = LogManager.getLogger(DataFetchClient.class);
 
-	private String hostAddr;
+    private String hostAddr;
     private String cacheDir;
     private CampaignData data;
     private Map<Integer, Influences> changesSinceLastRefresh;
@@ -235,16 +234,15 @@ public class DataFetchClient {
      *
      */
     public void getBannedAmmoData(MWClient mwclient) throws IOException {
-
         boolean timestampMatch = false;
-        File localban = FileSystem.getInstance().getBanAmmo().toFile();
-        if (localban.exists()) {
+        BanAmmoFile banAmmoFile = FileSystem.getInstance().getBanAmmoFile();
+        if (banAmmoFile.getPath().toFile().exists()) {
 
             // get the local timetamp
             String localListTimestamp = "";
 
             try {
-                FileInputStream in = new FileInputStream(localban);
+                FileInputStream in = new FileInputStream(banAmmoFile.getPath().toFile());
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 localListTimestamp = br.readLine();
                 br.close();
@@ -264,33 +262,21 @@ public class DataFetchClient {
         }
 
         // clear the hash so we can add all the new stuff --Torren
-        mwclient.clearBanAmmo();
+        data.getBannedAmmoStore().clear();
         if (!timestampMatch) {
             BinReader in = openConnection("BannedAmmo");
             String timestamp = "-1";
             try {
-                timestamp = in.readLine("BannedAmmo");// TIMESTAMP
+                timestamp = in.readLine("BannedAmmo"); // TIMESTAMP
                 while (true) {
-                    mwclient.loadBanAmmo(in.readLine("BannedAmmo"));
+                    banAmmoFile.loadLine(in.readLine("BannedAmmo"), mwclient.getData());
                 }
-            } catch (Exception ex) {
-            }// Bin empty
-            mwclient.saveBannedAmmo(timestamp);
-        } else {// load from the banned file.
-            try {
-                FileInputStream fis = new FileInputStream(FileSystem.getInstance().getBanAmmo().toString());
-                BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
-                while (dis.ready()) {
-                    String line = dis.readLine();
-                    mwclient.loadBanAmmo(line);
-                }
-                dis.close();
-                fis.close();
             } catch (Exception ex) {
                 LOGGER.error("Exception: ", ex);
-            }
+            } // Bin empty
+            banAmmoFile.save(Long.parseLong(timestamp), mwclient.getData());
         }
-
+        FileSystem.getInstance().getBanAmmoFile().load(mwclient.getData());
     }
 
     /**

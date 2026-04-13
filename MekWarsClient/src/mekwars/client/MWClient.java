@@ -856,7 +856,6 @@ public final class MWClient extends GameHost implements IClient {
     public void processIncoming(String incoming) {
         IProtCommand pcommand = null;
 
-        // LOGGER.info("INCOMING: " + incoming);
         if (incoming.startsWith(IClient.PROTOCOL_PREFIX)) {
             incoming = incoming.substring(IClient.PROTOCOL_PREFIX.length());
             StringTokenizer ST = new StringTokenizer(incoming,
@@ -1313,18 +1312,6 @@ public final class MWClient extends GameHost implements IClient {
                 dataFetcher.store();
                 LOGGER.info("cache data loaded");
                 // Lets start the repair thread
-                if (Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair"))) {
-                    RMT = new RepairManagmentThread(
-                            Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
-                            this);
-                    RMT.start();
-                }
-                if (Boolean.parseBoolean(getServerConfigs("UsePartsRepair"))) {
-                    SMT = new SalvageManagmentThread(
-                            Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
-                            this);
-                    SMT.start();
-                }
             } catch (Throwable e) {
 
                 if (!(e instanceof FileNotFoundException)) {
@@ -1370,6 +1357,18 @@ public final class MWClient extends GameHost implements IClient {
 
             try {
                 dataFetcher.getServerConfigData(this);
+                if (Boolean.parseBoolean(getServerConfigs("UseAdvanceRepair"))) {
+                    RMT = new RepairManagmentThread(
+                            Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
+                            this);
+                    RMT.start();
+                }
+                if (Boolean.parseBoolean(getServerConfigs("UsePartsRepair"))) {
+                    SMT = new SalvageManagmentThread(
+                            Long.parseLong(getServerConfigs("TimeForEachRepairPoint")) * 1000,
+                            this);
+                    SMT.start();
+                }
             } catch (Exception ex) {
                 LOGGER.error("Unable to fetch Server configs.");
                 LOGGER.catching(ex);
@@ -1600,14 +1599,6 @@ public final class MWClient extends GameHost implements IClient {
         return saveFile;
     }
 
-    public void clearBanAmmo() {
-        getData().getServerBannedAmmo().clear();
-
-        for (House faction : getData().getAllHouses()) {
-            faction.getBannedAmmo().clear();
-        }
-    }
-
     public void clearBanTargeting() {
         getData().getBannedTargetingSystems().clear();
     }
@@ -1633,73 +1624,6 @@ public final class MWClient extends GameHost implements IClient {
             p.close();
             out.close();
         } catch (Exception ex) {
-        }
-    }
-
-    public void loadBanAmmo(String line) {
-
-        try {
-            StringTokenizer st = new StringTokenizer(line, "#");
-            String HouseName = (String) st.nextElement();
-            House faction = null;
-            if (!HouseName.equalsIgnoreCase("server")) {
-                faction = getData().getHouseByName(HouseName);
-                while (st.hasMoreTokens()) {
-                    faction.getBannedAmmo().put(st.nextToken(), "Banned");
-                }
-            } else {
-                while (st.hasMoreElements()) {
-                    getData().getServerBannedAmmo().put(st.nextToken(),
-                            "Banned");
-                }
-            }
-        } catch (Exception ex) {
-        }// make it compatible with people that had the old format,without
-         // the timestamp on the first line, the first time and now dont.
-    }
-
-    public void saveBannedAmmo(String timestamp) {
-        // Save banned ammo
-        try {
-
-            // output streams
-            OutputStream out = Files.newOutputStream(FileSystem.getInstance().getBanAmmo());
-            PrintStream p = new PrintStream(out);
-
-            // timestamp
-            p.println(timestamp);
-
-            // server-wide bans
-            p.print("server#");
-            for (String currBan : data.getServerBannedAmmo().keySet()) {
-                p.print(currBan);
-                p.print("#");
-            }
-
-            p.println();// newline
-
-            // faction-only bans
-            for (House h : data.getAllHouses()) {
-
-                if (h.getBannedAmmo().size() < 1) {
-                    continue;
-                }
-
-                p.print(h.getName() + "#");
-                for (String currBan : h.getBannedAmmo().keySet()) {
-                    p.print(currBan);
-                    p.print("#");
-                }
-
-                p.println();
-            }
-
-            // close streams
-            p.close();
-            out.close();
-
-        } catch (Exception ex) {
-            // TODO: Log error?
         }
     }
 

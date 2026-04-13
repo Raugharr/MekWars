@@ -34,6 +34,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import javax.swing.BoxLayout;
@@ -76,6 +79,7 @@ import mekwars.client.gui.dialog.buildtableviewer.BuildTableViewer;
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.entities.BannedAmmo;
 import mekwars.common.util.StringUtils;
 import mekwars.client.gui.dialog.InfluencePointsDialog;
 import mekwars.client.gui.dialog.RewardPointsDialog;
@@ -2797,27 +2801,23 @@ public class CMainFrame extends JFrame {
 
         result.append("</table><br>");
 
-        if (mwclient.getData().getServerBannedAmmo().size() > 0) {
-            result.append("<b><i>Server Banned ammo</b></i><br>");
-            for (String key : mwclient.getData().getServerBannedAmmo().keySet()) {
-                result.append(mwclient.getData().getMunitionsByNumber().get(Long.parseLong(key)) + "<br>");
+        Map<Optional<House>, List<BannedAmmo>> bannedAmmoByHouse =
+            mwclient.getData().getBannedAmmoStore().groupByHouse();
+
+        for (Map.Entry<Optional<House>, List<BannedAmmo>> entry : bannedAmmoByHouse.entrySet()) {
+            Optional<House> house = entry.getKey();
+
+            if (house.isEmpty()) {
+                result.append("<b><i>Server Banned ammo</b></i><br>");
+            } else {
+                result.append("<b><i>House Banned Ammo</b></i><br>");
+            }
+
+            for (BannedAmmo bannedAmmo : entry.getValue()) {
+                result.append(bannedAmmo.getName() + "<br>");
             }
         }
 
-        House faction = mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse());
-        if (faction.getBannedAmmo().size() > 0) {
-            result.append("<b><i>House Banned Ammo</b></i><br>");
-            for (String key : faction.getBannedAmmo().keySet()) {
-                result.append(mwclient.getData().getMunitionsByNumber().get(Long.parseLong(key)) + "<br>");
-            }
-        }
-
-        /*
-         * for ( Object prop : System.getProperties().keySet()){
-         * result.append(prop.toString()); result.append(" = ");
-         * result.append(System.getProperty(prop.toString()));
-         * result.append("<br>"); }
-         */
         /*
          * use process incoming, instead of adding directly to misc, so that
          * output is directly to main if misc in main is enabled or players has

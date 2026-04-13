@@ -12,19 +12,6 @@
 package mekwars.server.campaign;
 
 import com.thoughtworks.xstream.XStream;
-import mekwars.common.AdvancedTerrain;
-import mekwars.common.CampaignData;
-import mekwars.common.Continent;
-import mekwars.common.Equipment;
-import mekwars.common.House;
-import mekwars.common.Influences;
-import mekwars.common.Planet;
-import mekwars.common.Terrain;
-import mekwars.common.campaign.operations.Operation;
-import mekwars.common.flags.PlayerFlags;
-import mekwars.common.util.MekwarsFileReader;
-import mekwars.common.util.UnitUtils;
-import mekwars.server.common.util.SMMNetXStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +26,6 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -52,7 +38,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
-import megamek.MegaMek;
 import megamek.client.Client;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -60,6 +45,18 @@ import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
 import megamek.common.options.IOption;
+import mekwars.common.AdvancedTerrain;
+import mekwars.common.CampaignData;
+import mekwars.common.Equipment;
+import mekwars.common.House;
+import mekwars.common.Influences;
+import mekwars.common.Planet;
+import mekwars.common.Terrain;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.flags.PlayerFlags;
+import mekwars.common.io.file.BanAmmoFile;
+import mekwars.common.util.MekwarsFileReader;
+import mekwars.common.util.UnitUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.commands.*;
 import mekwars.server.campaign.commands.admin.*;
@@ -132,7 +129,6 @@ import mekwars.server.campaign.commands.mod.UpdateServerUnitsCacheCommand;
 import mekwars.server.campaign.commands.mod.ViewPlayerPartsCommand;
 import mekwars.server.campaign.commands.mod.ViewPlayerPersonalPilotQueueCommand;
 import mekwars.server.campaign.commands.mod.ViewPlayerUnitCommand;
-import mekwars.server.campaign.CampaignOptions;
 import mekwars.server.campaign.market2.Market2;
 import mekwars.server.campaign.market2.PartsMarket;
 import mekwars.server.campaign.mercenaries.ContractInfo;
@@ -151,10 +147,10 @@ import mekwars.server.campaign.util.WhoToHTML;
 import mekwars.server.campaign.util.scheduler.MWScheduler;
 import mekwars.server.campaign.util.scheduler.TickJob;
 import mekwars.server.campaign.votes.VoteManager;
+import mekwars.server.common.util.SMMNetXStream;
 import mekwars.server.io.FileSystem;
-import mekwars.server.util.MWPasswd;
 import mekwars.server.util.HtmlSanitizer;
-import mekwars.server.util.discord.DiscordMessageHandler;
+import mekwars.server.util.MWPasswd;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -255,15 +251,7 @@ public final class CampaignMain implements Serializable {
         loadFactionData();
         loadPlanetData();
 
-        try {
-            for (String line : Files.readAllLines(FileSystem.getInstance().getBanAmmo())) {
-                loadBanAmmo(line);
-            }
-        } catch (FileNotFoundException fne) {
-            LOGGER.info("No banned ammo data found.");
-        } catch (Exception ex) {
-            LOGGER.error("Problems reading banned ammo data.");
-        }
+        FileSystem.getInstance().getBanAmmoFile().load(data);
 
         // misc loads.
         cm.loadOmniVariantMods();
@@ -2281,10 +2269,6 @@ public final class CampaignMain implements Serializable {
         return Commands;
     }
 
-    public HashMap<String, String> getServerBannedAmmo() {
-        return cm.getData().getServerBannedAmmo();
-    }
-
     public double getAmmoCost(String ammo) {
         if (blackMarketEquipmentCostTable.containsKey(ammo) && blackMarketEquipmentCostTable.get(ammo).getMinCost() > 0) {
             return blackMarketEquipmentCostTable.get(ammo).getMinCost();
@@ -2481,27 +2465,6 @@ public final class CampaignMain implements Serializable {
         }
     }
 
-    public void loadBanAmmo(String line) {
-
-        try {
-            StringTokenizer st = new StringTokenizer(line, "#");
-            String HouseName = (String) st.nextElement();
-            SHouse faction = null;
-            if (!HouseName.equalsIgnoreCase("server")) {
-                faction = CampaignMain.cm.getHouseFromPartialString(HouseName, null);
-                while (st.hasMoreTokens()) {
-                    faction.getBannedAmmo().put(st.nextToken(), "Banned");
-                }
-            } else {
-                while (st.hasMoreElements()) {
-                    CampaignMain.cm.getServerBannedAmmo().put(st.nextToken(), "Banned");
-                }
-            }
-        } catch (Exception ex) {
-        }// make it compatible with people that had the old format,without
-        // the timestamp on the first line, the first time and now dont.
-    }
-
     public void loadBannedTargetSystems() {
         File tsFile = new File("./campaign/bantarget.dat");
         if(!tsFile.exists()) {
@@ -2519,7 +2482,7 @@ public final class CampaignMain implements Serializable {
             getData().setBannedTargetingSystems(bans);
             dis.close();
         } catch (IOException e) {
-                        e.printStackTrace();
+            LOGGER.error("Exception: ", e);
         }
     }
 
@@ -3338,47 +3301,6 @@ public final class CampaignMain implements Serializable {
         }
 
         return (int) cost;
-    }
-
-    public void saveBannedAmmo() {
-
-        // Save banned ammo
-        try {
-            FileOutputStream out = new FileOutputStream("./campaign/banammo.dat");
-            PrintStream p = new PrintStream(out);
-
-            // server banned ammo
-            p.println(System.currentTimeMillis());
-            p.print("server#");
-            for (String ammo : CampaignMain.cm.getServerBannedAmmo().keySet()) {
-                p.print(ammo);
-                p.print("#");
-            }
-            p.println();
-
-            // faction banned ammo
-            for (House currH : data.getAllHouses()) {
-
-                SHouse h = (SHouse) currH;
-                if (h.getBannedAmmo().size() < 1) {
-                    continue;
-                }
-
-                p.print(h.getName() + "#");
-                for (String ammo : h.getBannedAmmo().keySet()) {
-                    p.print(ammo);
-                    p.print("#");
-                }
-                p.println();
-
-            }
-            p.close();
-            out.close();
-
-        } catch (Exception ex) {
-            LOGGER.error("Error saving banned ammo.");
-            LOGGER.error("Exception: ", ex);
-        }
     }
 
     public void saveBannedTargetSystems() {

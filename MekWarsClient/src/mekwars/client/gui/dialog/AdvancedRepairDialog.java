@@ -384,11 +384,10 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                                                                                                                     // ==
                                                                                                                     // atCheck.getTechLevel());
 
-                            EnumSet<Munitions> munition = atCheck.getMunitionType();
                             House faction = mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse());
 
                             // check banned ammo
-                            if (mwclient.getData().getServerBannedAmmo().containsKey(munition) || faction.getBannedAmmo().containsKey(munition)) {
+                            if (mwclient.getData().getBannedAmmoStore().isBanned(atCheck.getMunitionType(), faction)) {
                                 continue;
                             }
 

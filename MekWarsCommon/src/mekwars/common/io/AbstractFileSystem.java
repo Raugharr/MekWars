@@ -23,6 +23,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.ConcurrentHashMap;
 
+import mekwars.common.io.file.BanAmmoFile;
+
 public abstract class AbstractFileSystem {
     public static final String FILE_NAME_CAMPAIGN_CONFIG = "campaignconfig.txt";
     public static final String FILE_NAME_BAN_AMMO = "banammo.dat";
@@ -51,8 +53,17 @@ public abstract class AbstractFileSystem {
      *
      * @return The path to the banammo.dat file.
      */
-    public Path getBanAmmo() {
+    public Path getBanAmmoPath() {
         return FileSystems.getDefault().getPath(getConfigDir().toString(), FILE_NAME_BAN_AMMO);
+    }
+
+    /**
+     * Returns am instance of BanAmmoFile.
+     *
+     * @return An instance of BanAmmoFile.
+     */
+    public BanAmmoFile getBanAmmoFile() {
+        return new BanAmmoFile(getBanAmmoPath());
     }
 
     /**
@@ -104,7 +115,7 @@ public abstract class AbstractFileSystem {
     public Path[] getConfigFiles() {
         Path[] configFiles = new Path[3];
 
-        configFiles[0] = getBanAmmo();
+        configFiles[0] = getBanAmmoPath();
         configFiles[1] = getOpList();
         configFiles[2] = getCampaignConfig();
         return configFiles;

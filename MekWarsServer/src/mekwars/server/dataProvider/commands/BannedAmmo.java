@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,6 +16,11 @@
 
 package mekwars.server.dataProvider.commands;
 
+import mekwars.common.CampaignData;
+import mekwars.common.util.BinWriter;
+import mekwars.server.dataProvider.ServerCommand;
+import mekwars.server.io.FileSystem;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,43 +29,39 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Date;
 
-import mekwars.common.CampaignData;
-import mekwars.common.util.BinWriter;
-import mekwars.server.dataProvider.ServerCommand;
-
 /**
  * Retrieve all planet information (if the data cache is lost at client side)
- * 
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class BannedAmmo implements ServerCommand {
 
     /**
-     * @see server.dataProvider.ServerCommand#execute(java.util.Date,
-     *      java.io.PrintWriter, common.CampaignData)
+     * @see server.dataProvider.ServerCommand#execute(java.util.Date, java.io.PrintWriter,
+     *     common.CampaignData)
      */
-    public void execute(Date timestamp, BinWriter out, CampaignData data)
-            throws Exception {
-    		FileInputStream configFile; 
-    	    try{
-    	    	configFile = new FileInputStream("./campaign/banammo.dat");
-    	    }catch (FileNotFoundException FNFE){
-    			FileOutputStream ban = new FileOutputStream("./campaign/banammo.dat");
-    			PrintStream p = new PrintStream(ban);
-    			
-    			//server banned ammo
-    			p.println(System.currentTimeMillis());
-    			p.println("server#");
-    			ban.close();
-    			p.close();
-    			configFile = new FileInputStream("./campaign/banammo.dat");
-    	    }
-            BufferedReader config = new BufferedReader(new InputStreamReader(configFile));
-            
-            while (config.ready()) {
-                out.println(config.readLine(),"BannedAmmo");
-            }
-            config.close();
-            configFile.close();
+    public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
+        FileInputStream configFile;
+        String banAmmoPath = FileSystem.getInstance().getBanAmmoPath().toFile().toString();
+        try {
+            configFile = new FileInputStream(banAmmoPath);
+        } catch (FileNotFoundException FNFE) {
+            FileOutputStream ban = new FileOutputStream(banAmmoPath);
+            PrintStream p = new PrintStream(ban);
+
+            // server banned ammo
+            p.println(System.currentTimeMillis());
+            p.println("server#");
+            ban.close();
+            p.close();
+            configFile = new FileInputStream(banAmmoPath);
         }
+        BufferedReader config = new BufferedReader(new InputStreamReader(configFile));
+
+        while (config.ready()) {
+            out.println(config.readLine(), "BannedAmmo");
+        }
+        config.close();
+        configFile.close();
+    }
 }

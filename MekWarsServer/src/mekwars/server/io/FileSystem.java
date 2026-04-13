@@ -17,7 +17,6 @@
 
 package mekwars.server.io;
 
-import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import mekwars.common.io.AbstractFileSystem;
@@ -157,7 +156,8 @@ public class FileSystem extends AbstractFileSystem {
         );
     }
 
-    public Path getBanAmmo() {
+    @Override
+    public Path getBanAmmoPath() {
         return FileSystems.getDefault().getPath(getCampaignDir().toString(), FILE_NAME_BAN_AMMO);
     }
 
