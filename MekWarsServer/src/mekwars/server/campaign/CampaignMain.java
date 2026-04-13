@@ -52,9 +52,9 @@ import mekwars.common.House;
 import mekwars.common.Influences;
 import mekwars.common.Planet;
 import mekwars.common.Terrain;
+import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.flags.PlayerFlags;
-import mekwars.common.io.file.BanAmmoFile;
 import mekwars.common.util.MekwarsFileReader;
 import mekwars.common.util.UnitUtils;
 import mekwars.server.MWServ;
@@ -158,7 +158,6 @@ public final class CampaignMain implements Serializable {
     private static final Logger LOGGER = LogManager.getLogger(CampaignMain.class);
 
     private static final long serialVersionUID = -8671163467590633378L;
-    public static final String DEFAULT_CONFIG_PATH = "data/campaignconfig.txt";
 
     /**
      * I realized, that almost every class needs access to the current global
@@ -172,9 +171,8 @@ public final class CampaignMain implements Serializable {
      */
     public static CampaignMain cm;
 
-    private CampaignOptions campaignOptions;
     private Client megaMekClient = new Client("MWServer", "None", 0);
-    private CampaignData data = new CampaignData();
+    private CampaignData data;
     private Hashtable<String, Command> Commands = new Hashtable<String, Command>();
     private Hashtable<String, MechStatistics> MechStats = new Hashtable<String, MechStatistics>();
     private Hashtable<String, String> omniVariantMods = new Hashtable<String, String>();
@@ -208,16 +206,14 @@ public final class CampaignMain implements Serializable {
     private SMMNetXStream xstream;
 
     public CampaignMain() {
-        this(DEFAULT_CONFIG_PATH);
-    }
-
-    // CONSTRUCTOR
-    public CampaignMain(String configFilename) {
         cm = this;
+        CampaignOptions campaignOptions =
+            new CampaignOptions(FileSystem.getInstance().getCampaignConfig().toString());
 
-        campaignOptions = new CampaignOptions(configFilename);
+        data = new CampaignData(campaignOptions);
+
         if (!getConfig("AllowedMegaMekVersion").equals("-1")) {
-            getCampaignOptions().getConfig().setProperty("AllowedMegaMekVersion", megamek.MMConstants.VERSION.toString());
+            data.getCampaignOptions().setProperty("AllowedMegaMekVersion", megamek.MMConstants.VERSION.toString());
         }
 
         /*
@@ -420,8 +416,9 @@ public final class CampaignMain implements Serializable {
         return false;
     }
 
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public CampaignOptions getCampaignOptions() {
-        return campaignOptions;
+        return data.getCampaignOptions();
     }
 
     @Deprecated(since = "9.0.0", forRemoval = false)

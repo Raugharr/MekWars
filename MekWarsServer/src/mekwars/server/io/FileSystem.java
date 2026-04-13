@@ -94,6 +94,11 @@ public class FileSystem extends AbstractFileSystem {
     protected static final Path DIRECTORY_CAMPAIGN_BACKUP = FileSystems.getDefault()
         .getPath(DIRECTORY_NAME_CAMPAIGN_BACKUP);
 
+    protected Path campaignConfigPath = FileSystems.getDefault().getPath(
+            getConfigDir().toString(),
+            FILE_NAME_CAMPAIGN_CONFIG
+        );
+
 
     private static final Path[] DIRECTORIES = new Path[] {
         DIRECTORY_OPERATIONS,
@@ -148,12 +153,13 @@ public class FileSystem extends AbstractFileSystem {
         return DIRECTORY_OPERATIONS_LONG;
     }
 
+    public void setCampaignConfig(String path) {
+        FileSystems.getDefault().getPath(path);
+    }
+
     @Override
     public Path getCampaignConfig() {
-        return FileSystems.getDefault().getPath(
-            getConfigDir().toString(),
-            FILE_NAME_CAMPAIGN_CONFIG
-        );
+        return campaignConfigPath;
     }
 
     @Override

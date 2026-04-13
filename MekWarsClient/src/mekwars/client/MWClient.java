@@ -1525,11 +1525,13 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public String getServerConfigs(String key) {
-        if (CampaignData.cd.getServerConfigs().getProperty(key) == null) {
+        String property = CampaignData.cd.getCampaignOptions().getConfig(key);
+
+        if ("-1".equals(property)) {
             LOGGER.error("You're missing the config variable: {} in serverconfig!", key);
             return "-1";
         }
-        return CampaignData.cd.getServerConfigs().getProperty(key).trim();
+        return property.trim();
     }
 
     //@Salient ... ugh... how can i get to the damn house configs
@@ -1541,8 +1543,9 @@ public final class MWClient extends GameHost implements IClient {
 //        return CampaignData.cd.getServerConfigs().getProperty(key).trim();
 //    }
 
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public Properties getServerConfigs() {
-        return CampaignData.cd.getServerConfigs();
+        return CampaignData.cd.getCampaignOptions().getProperties();
     }
 
     public boolean isLeader() {

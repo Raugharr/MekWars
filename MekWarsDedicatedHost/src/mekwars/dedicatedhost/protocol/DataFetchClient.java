@@ -1,6 +1,8 @@
 package mekwars.dedicatedhost.protocol;
 
+import mekwars.common.campaign.CampaignOptions;
 import mekwars.client.gui.CMainFrame;
+import mekwars.client.io.FileSystem;
 import mekwars.common.CampaignData;
 import mekwars.common.Influences;
 import mekwars.common.util.BinReader;
@@ -452,7 +454,9 @@ public class DataFetchClient {
      */
     public CampaignData getAllData() throws IOException {
         BinReader in = openConnection("All");
-        CampaignData data = new CampaignData(in);
+        CampaignOptions campaignOptions =
+            new CampaignOptions(FileSystem.getInstance().getCampaignConfig().toString());
+        CampaignData data = new CampaignData(campaignOptions, in);
         //in.close();
         this.data = data;
 
@@ -466,7 +470,9 @@ public class DataFetchClient {
      */
     public CampaignData getCacheData(String cachePath) throws IOException {
         BinReader in = new BinReader(new FileReader(cachePath + "/data.dat"));
-        CampaignData data = new CampaignData(in);
+        CampaignOptions campaignOptions =
+            new CampaignOptions(FileSystem.getInstance().getCampaignConfig().toString());
+        CampaignData data = new CampaignData(campaignOptions, in);
         in.close();
         this.data = data;
         store();

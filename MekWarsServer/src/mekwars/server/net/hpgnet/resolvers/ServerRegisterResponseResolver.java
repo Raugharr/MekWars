@@ -17,6 +17,7 @@
 package mekwars.server.net.hpgnet.resolvers;
 
 import java.util.Properties;
+import mekwars.common.CampaignData;
 import mekwars.common.net.AbstractPacket;
 import mekwars.common.net.AbstractResolver;
 import mekwars.common.net.Connection;
@@ -42,7 +43,7 @@ public class ServerRegisterResponseResolver extends AbstractResolver<ServerRegis
 
         logger.info("setting HpgId to: '{}'", message.getUid());
         getHandler().setHpgId(message.getUid());
-        Properties config = MWServ.getInstance().getCampaign().getCampaignOptions().getConfig();
+        Properties config = CampaignData.cd.getCampaignOptions().getProperties();
         config.setProperty("TrackerUUID", getHandler().getHpgId().toString());
         MWServ.getInstance().saveConfigs();
     }
