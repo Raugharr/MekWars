@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -283,9 +283,9 @@ public class UserActivityInfluenceJob implements Job, MWRepeatingJob, JobIdentif
 			}
 		}
 
-        Vector<SUnit> units = p.getUnits();
+        List<SUnit> units = p.getUnits();
         int unitId = rand.nextInt(units.size());// random
-        SUnit unitForMessages = units.elementAt(unitId);
+        SUnit unitForMessages = units.get(unitId);
         String fluMessageWithPilotName = fluMessage.replaceAll("PILOT", unitForMessages.getPilot().getName());
         String fluMessageWithModelName = fluMessageWithPilotName.replaceAll("UNIT", unitForMessages.getModelName());
         String fluMessageWithPlayerName = fluMessageWithModelName.replaceAll("PLAYER", p.getName());

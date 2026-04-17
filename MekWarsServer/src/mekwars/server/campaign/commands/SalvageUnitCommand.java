@@ -119,7 +119,7 @@ public class SalvageUnitCommand implements Command {
             int numberOfTechs = 1;
 
             if (techType < UnitUtils.TECH_PILOT) {
-                numberOfTechs = player.getAvailableTechs().elementAt(techType);
+                numberOfTechs = player.getAvailableTechs().get(techType);
             }
 
             if ((techType == UnitUtils.TECH_PILOT) && (unit.getPilot() != null) && (unit.getLastCombatPilot() != unit.getPilot().getPilotId())) {

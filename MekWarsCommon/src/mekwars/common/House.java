@@ -28,17 +28,20 @@ import mekwars.common.util.HTMLConverter;
 import mekwars.common.universe.FactionTag;
 import java.io.IOException;
 import java.util.EnumSet;
-import java.util.Hashtable;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import megamek.common.TechConstants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Helge Richter
  * 
  */
 public class House implements Entity {
+    private static final Logger LOGGER = LogManager.getLogger(House.class);
+    
     public static final int RED_VALUE = 0;
     public static final int GREEN_VALUE = 1;
     public static final int BLUE_VALUE = 2;
@@ -69,11 +72,8 @@ public class House implements Entity {
     private boolean allowDefectionsTo = true;
 
     private ConcurrentHashMap<String, SubFaction> subFactionList = new ConcurrentHashMap<String, SubFaction>();
-
-    public float usedMekBayMultiplier;
-
     public ConcurrentHashMap<String, Integer> supportedUnits = new ConcurrentHashMap<String, Integer>();
-
+    public float usedMekBayMultiplier;
     private boolean nonFactionUnitsCostMore = false;
     // NOTE: Once MekWars uses MegaMek version 50.04 this should use megamek.common.universe.FactionTag.
     private Set<FactionTag> tags = EnumSet.noneOf(FactionTag.class);

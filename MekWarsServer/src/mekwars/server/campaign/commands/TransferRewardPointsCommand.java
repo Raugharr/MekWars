@@ -96,8 +96,8 @@ public class TransferRewardPointsCommand implements Command {
 	}
 		
 		//do the transfer
-		player.addReward(-amount);
-		targetplayer.addReward(amount);
+		player.addRewardPoints(-amount);
+		targetplayer.addRewardPoints(amount);
 		CampaignMain.cm.toUser("AM:You've transferred " + amount + " " + CampaignMain.cm.getConfig("RPLongName") + " to " + targetplayer.getName(), Username, true);
 		CampaignMain.cm.toUser("AM:"+player.getName() + " sends you " + amount + " " + CampaignMain.cm.getConfig("RPLongName") + ".", targetPlayer, true);
 

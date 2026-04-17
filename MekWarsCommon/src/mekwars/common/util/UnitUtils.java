@@ -2073,9 +2073,7 @@ public class UnitUtils {
     }
 
     public static int getNumberOfDamagedCrits(Entity unit, int slot, int loc, boolean armor) {
-
         if (armor) {
-
             if (slot == UnitUtils.LOC_INTERNAL_ARMOR) {
                 return unit.getOInternal(loc) - unit.getInternal(loc);
             }

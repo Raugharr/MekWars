@@ -132,7 +132,7 @@ public class OpsChickenThread extends Thread {
 
         // add % hits to the totals
         if (rpPercent > 0)
-            totalRPLoss = (int) (pdefender.getReward() * rpPercent);
+            totalRPLoss = (int) (pdefender.getRewardPoints() * rpPercent);
         if (expPercent > 0)
             totalEXPLoss = (int) (pdefender.getExperience() * expPercent);
         if (fluPrecent > 0)
@@ -152,7 +152,7 @@ public class OpsChickenThread extends Thread {
 
         // check totals against the player's amounts and
         // correct to max if the total is too high.
-        totalRPLoss = Math.min(totalRPLoss, pdefender.getReward());
+        totalRPLoss = Math.min(totalRPLoss, pdefender.getRewardPoints());
         totalEXPLoss = Math.min(totalEXPLoss, pdefender.getExperience());
         totalFluLoss = Math.min(totalFluLoss, pdefender.getInfluence());
         totalMoneyLoss = Math.min(totalMoneyLoss, pdefender.getMoney());
@@ -169,7 +169,7 @@ public class OpsChickenThread extends Thread {
                 toPlayer += " (-" + totalRPLoss + " " + CampaignMain.cm.getConfig("RPShortName");
             else
                 toPlayer += ", -" + totalRPLoss + " " + CampaignMain.cm.getConfig("RPShortName");
-            pdefender.addReward(-totalRPLoss);
+            pdefender.addRewardPoints(-totalRPLoss);
             hasLoss = true;
         }
         if (totalEXPLoss > 0) {

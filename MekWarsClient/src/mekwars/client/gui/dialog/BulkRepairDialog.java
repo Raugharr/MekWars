@@ -221,7 +221,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
                     sb.append("#" + ((JSpinner) rollBox.getComponent(type)).getValue().toString());
                 }
                 if (unitRepairType == BulkRepairDialog.UNIT_TYPE_ALL) {
-                    for (CUnit repairUnit : mwclient.getPlayer().getHangar()) {
+                    for (CUnit repairUnit : mwclient.getPlayer().getUnits()) {
                         if (((repairUnit.getType() == Unit.MEK) || (repairUnit.getType() == Unit.VEHICLE)) && (UnitUtils.hasArmorDamage(unit) || UnitUtils.hasCriticalDamage(unit) || UnitUtils.hasISDamage(unit))) {
                             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c simplerepair#" + repairUnit.getId() + sb.toString());
                         }
@@ -240,7 +240,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
             } else {
 
                 if (unitRepairType == BulkRepairDialog.UNIT_TYPE_ALL) {
-                    for (CUnit repairUnit : mwclient.getPlayer().getHangar()) {
+                    for (CUnit repairUnit : mwclient.getPlayer().getUnits()) {
                         unit = repairUnit.getEntity();
 
                         if (((repairUnit.getType() == Unit.MEK) || (repairUnit.getType() == Unit.VEHICLE)) && (UnitUtils.hasArmorDamage(unit) || UnitUtils.hasCriticalDamage(unit) || UnitUtils.hasISDamage(unit)) ){

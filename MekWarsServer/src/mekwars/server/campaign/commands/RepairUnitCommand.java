@@ -109,7 +109,7 @@ public class RepairUnitCommand implements Command {
             if (MWServ.getInstance().getRTT().isBeingRepaired(unitID, location, slot, armor)) {
                 CampaignMain.cm.toUser(
                         "FSM|That section is already being repaired wait for the work to finish"
-                            + " before starting again.",
+                                + " before starting again.",
                         username,
                         false);
                 return;
@@ -133,12 +133,12 @@ public class RepairUnitCommand implements Command {
                 return;
             }
 
-            if (techType == UnitUtils.TECH_REWARD_POINTS && cost > player.getReward()) {
+            if (techType == UnitUtils.TECH_REWARD_POINTS && cost > player.getRewardPoints()) {
                 CampaignMain.cm.toUser(
                         "FSM|You do not have enough "
                                 + CampaignMain.cm.getConfig("RPLongName")
                                 + " to repair this location.",
-                        username,
+                        Username,
                         false);
                 return;
             }
@@ -155,7 +155,7 @@ public class RepairUnitCommand implements Command {
             int numberOfTechs = 1;
 
             if (techType < UnitUtils.TECH_PILOT) {
-                numberOfTechs = player.getAvailableTechs().elementAt(techType);
+                numberOfTechs = player.getAvailableTechs().get(techType);
             }
 
             if (techType == UnitUtils.TECH_PILOT
@@ -341,18 +341,18 @@ public class RepairUnitCommand implements Command {
             if (MWServ.getInstance().getRTT().getState() == Thread.State.TERMINATED) {
                 CampaignMain.cm.toUser(
                         "FSM|Sorry your repair order could not be processed, and the repair thread"
-                            + " terminated. Staff was notified.",
+                                + " terminated. Staff was notified.",
                         username,
                         false);
                 LOGGER.error(
                         "NOTE: Repair Thread terminated! Use the restartrepairthread command to"
-                            + " restart. If all else fails, reboot.");
+                                + " restart. If all else fails, reboot.");
                 return;
             }
             if (techType == UnitUtils.TECH_PILOT) unit.setPilotIsRepairing(true);
             // charge them for the repair now.
             if (techType == UnitUtils.TECH_REWARD_POINTS) {
-                player.addReward(-cost);
+                player.addRewardPoints(-cost);
             } else {
                 player.addMoney(-cost);
                 unit.addRepairCost(cost);

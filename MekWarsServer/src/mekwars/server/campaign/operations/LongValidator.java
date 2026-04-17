@@ -126,7 +126,7 @@ public class LongValidator {
 			failList.add(LFAILS_PLAYERMONEY);
 		if (reqPlayerFlu > p.getInfluence())
 			failList.add(LFAILS_PLAYERFLU);
-		if (reqPlayerRP > p.getReward())
+		if (reqPlayerRP > p.getRewardPoints())
 			failList.add(LFAILS_PLAYERREWARD);
 		if (reqPlayerXP > p.getExperience())
 			failList.add(LFAILS_PLAYEREXP);

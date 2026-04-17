@@ -1246,3 +1246,4 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         setCost();
     }
 }// end AdvancedRepairDialog.java
+

@@ -84,7 +84,7 @@ public class UnitSelectionDialog extends JDialog implements ActionListener {
 		comboLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
 		
 		//populate the combo box
-		possibleUnits.setModel(new DefaultComboBoxModel(mwclient.getPlayer().getHangar()) {
+		possibleUnits.setModel(new DefaultComboBoxModel(mwclient.getPlayer().getUnits().toArray()) {
 			/**
              * 
              */

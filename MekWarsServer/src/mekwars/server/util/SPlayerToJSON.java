@@ -33,7 +33,7 @@ public class SPlayerToJSON {
     	intJson("experience",player.getExperience());
     	intJson("money",player.getMoney());
     	intJson("influence",player.getInfluence());
-    	intJson("rewardPoints",player.getReward());
+    	intJson("rewardPoints",player.getRewardPoints());
     	endJson();
     	   	
 		File pathCheck = new File("data/discord/players");

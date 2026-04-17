@@ -21,7 +21,6 @@
 import mekwars.client.campaign.CUnit;
 
  public class CUnitComparator implements Comparator<Object> {
-
  	//NOTE: This order must match order of
  	//sort options in CPLayer.sortHangar()'s
  	//"choices" array.
@@ -43,13 +42,12 @@ import mekwars.client.campaign.CUnit;
  		this.sortOrder = sortOrder;
  	}
  	
+    @Override
  	public int compare(Object obj1, Object obj2) {
- 		
  		CUnit unit1 = (CUnit)obj1;
  		CUnit unit2 = (CUnit)obj2;
  		
  		switch (sortOrder) {
- 		
  			case HQSORT_NAME : //the name
 				return unit1.getUnitFilename().compareTo(unit2.getUnitFilename());
  		
@@ -102,5 +100,4 @@ import mekwars.client.campaign.CUnit;
  				return 0;
  		}//end switch
  	}//end compare()
-
 }

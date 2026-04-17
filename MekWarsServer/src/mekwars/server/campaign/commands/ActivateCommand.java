@@ -13,8 +13,8 @@
 package mekwars.server.campaign.commands;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
@@ -303,8 +303,7 @@ public class  ActivateCommand  implements Command {
      * 
      * Separate method, instead of inline in process(), so this can be moved into SPlayer easily if other code needs to do engine checks.
      */
-    private boolean armiesContainEnginedUnit(Vector<SArmy> armies) {
-
+    private boolean armiesContainEnginedUnit(List<SArmy> armies) {
         // loop though all units in all armies
         for (SArmy army : armies) {
             Iterator<Unit> units = army.getUnits().iterator();
@@ -325,8 +324,7 @@ public class  ActivateCommand  implements Command {
      * 
      * Separate method, instead of inline in process(), so this can be moved into SPlayer easily if other code needs to do leglessness (sp?) checks.
      */
-    private boolean armiesContainLeggedUnit(Vector<SArmy> armies) {
-
+    private boolean armiesContainLeggedUnit(List<SArmy> armies) {
         // loop though all units in all armies
         for (SArmy army : armies) {
             Iterator<Unit> units = army.getUnits().iterator();
@@ -370,8 +368,7 @@ public class  ActivateCommand  implements Command {
      * 
      * Separate method, instead of inline in process(), so this can be moved into SPlayer easily if other code needs to do damaged unit checks.
      */
-    private boolean armiesDamagedUnits(Vector<SArmy> armies) {
-
+    private boolean armiesDamagedUnits(List<SArmy> armies) {
         // loop though all units in all armies
         for (SArmy army : armies) {
             Iterator<Unit> units = army.getUnits().iterator();
@@ -396,8 +393,7 @@ public class  ActivateCommand  implements Command {
      * This checks all the units in the army to see if they have partial ammo bins.
      * 
      */
-    private boolean armiesPartialAmmoBinUnits(Vector<SArmy> armies) {
-
+    private boolean armiesPartialAmmoBinUnits(List<SArmy> armies) {
         // loop though all units in all armies
         for (SArmy army : armies) {
             Iterator<Unit> units = army.getUnits().iterator();
@@ -419,7 +415,7 @@ public class  ActivateCommand  implements Command {
      * see if any units in armies are locked, if so return true.
      * 
      */
-    private boolean hasLockedUnitsInArmies(Vector<SArmy> armies) 
+    private boolean hasLockedUnitsInArmies(List<SArmy> armies) 
     {
         for (SArmy army : armies) 
         {
@@ -436,7 +432,7 @@ public class  ActivateCommand  implements Command {
         return false;
     }
 
-    private boolean hasCommanderlessUnits(Vector<SArmy> armies) {
+    private boolean hasCommanderlessUnits(List<SArmy> armies) {
         // start Baruk Khazad!  20151108a 
         Boolean result = false;  
         for (SArmy army : armies) {
@@ -448,10 +444,8 @@ public class  ActivateCommand  implements Command {
         // end Baruk Khazad!  20151108a 
     }
 
-    private int hasIllegalOpArmies(SPlayer player, Vector<SArmy> armies) {
-
+    private int hasIllegalOpArmies(SPlayer player, List<SArmy> armies) {
         for (SArmy army : armies) {
-
             boolean canAttack = false;
             boolean canDefend = false;
 
@@ -477,10 +471,8 @@ public class  ActivateCommand  implements Command {
         return -1;
     }
 
-    private int hasNoAttackOptions(SPlayer player, Vector<SArmy> armies) {
-
+    private int hasNoAttackOptions(SPlayer player, List<SArmy> armies) {
         for (SArmy army : armies) {
-
             boolean canAttack = false;
             boolean requireAttackCapable = CampaignMain.cm.getBooleanConfig("RequireAttackCapableArmiesForActivation");
 

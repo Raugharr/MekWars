@@ -170,7 +170,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
 
             repodComboBox = new JComboBox(repodOptions.toArray());
             repodOptions.clear();
-            Iterator<CUnit> units = c.getPlayer().getHangar().iterator();
+            Iterator<CUnit> units = c.getPlayer().getUnits().iterator();
             while (units.hasNext()){
                 CUnit unit = units.next();
                 if ( !unit.isOmni() )
@@ -182,7 +182,7 @@ public final class RewardPointsDialog implements ActionListener, KeyListener{
         if (Boolean.parseBoolean(mwclient.getServerConfigs("AllowRepairsForRewards"))){
             names.add(repairCommand);
             TreeSet<String> damagedUnits = new TreeSet<String>();
-            for ( CUnit unit: mwclient.getPlayer().getHangar() ){
+            for ( CUnit unit: mwclient.getPlayer().getUnits() ){
                 if ( UnitUtils.hasArmorDamage(unit.getEntity()) || UnitUtils.hasCriticalDamage(unit.getEntity()) )
                     damagedUnits.add("#"+unit.getId()+" "+unit.getModelName());
             }

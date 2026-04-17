@@ -1001,8 +1001,8 @@ public final class MWClient extends GameHost implements IClient {
     public void startHost(boolean dedicated, boolean deploy,
             boolean loadSavegame) {
 
-        ArrayList<Unit> meks;
-        ArrayList<CUnit> autoArmy;
+        List<Unit> meks;
+        List<CUnit> autoArmy;
         
         try {
             super.startHost(dedicated, deploy, loadSavegame);
@@ -1075,8 +1075,8 @@ public final class MWClient extends GameHost implements IClient {
     }
 
     public void startClient(String hostName, boolean deploy) {
-        ArrayList<Unit> meks = new ArrayList<Unit>();
-        ArrayList<CUnit> autoArmy = new ArrayList<CUnit>();
+        List<Unit> meks = new ArrayList<Unit>();
+        List<CUnit> autoArmy = new ArrayList<CUnit>();
 
         // If a row is selected
         if ((servers.size() > 0) && (hostName != null)

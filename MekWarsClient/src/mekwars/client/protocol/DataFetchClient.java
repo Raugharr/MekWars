@@ -351,7 +351,7 @@ public class DataFetchClient {
         BinReader binreader = openConnection("ServerVersion");
         Version serverVersion = new Version(binreader.readLine("ServerVersion"));
 
-        LOGGER.error("Client Version: {} Server Version: {}", clientVersion, serverVersion);
+        LOGGER.info("Client Version: {} Server Version: {}", clientVersion, serverVersion);
         mustUpdate = !serverVersion.is(clientVersion);
 
         // If the versions dont match then the client has to update anyways

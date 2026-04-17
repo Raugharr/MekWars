@@ -24,6 +24,7 @@ import mekwars.client.GUIClient;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
+import mekwars.common.CampaignData;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
@@ -84,7 +85,7 @@ public class PL extends Command {
         } else if (cmd.equals("RU")) {
             player.removeUnit(TokenReader.readInt(st));
         } else if (cmd.equals("SE")) {
-            player.setExp(TokenReader.readInt(st));
+            player.setExperience(TokenReader.readInt(st));
         } else if (cmd.equals("SM")) {
             player.setMoney(TokenReader.readInt(st));
         } else if (cmd.equals("UMT")) {

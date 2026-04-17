@@ -126,9 +126,7 @@ public class ExchangePilotInUnitCommand implements Command {
                 //CampaignMain.cm.toUser("PL|PPQ|"+p.getPersonalPilotQueue().toString(true),Username,false);
 				CampaignMain.cm.toUser("PL|UU|"+m.getId()+"|"+m.toString(true),Username,false);
 				
-				Enumeration<SArmy> f = p.getArmies().elements();
-				while (f.hasMoreElements()) {
-					SArmy currArmy = f.nextElement();
+                for (SArmy currArmy : p.getArmies()) {
 					if (currArmy.getUnit(m.getId()) != null) {
 						currArmy.setBV(0);//not null so recalc BV of the army
 						CampaignMain.cm.toUser("PL|SAD|"+currArmy.toString(true,"%"),Username,false);

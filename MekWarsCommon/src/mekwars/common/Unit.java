@@ -84,7 +84,6 @@ public class Unit {
     private int maintainanceLevel = 100;//@urgru 8/2/04
     private int unitC3Level = 0; //@Torren 12/13/04 0=None 1=Slave 2=Master 3=Independent
 
-    public int[] test = new int[4];
     public int simpleRepairCost = 0;
     private int currentRepairCost = 0;
     private int lifeTimeRepairCost = 0;

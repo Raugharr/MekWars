@@ -102,24 +102,24 @@ public class UseRewardPointsCommand implements Command {
 				return;
 			}
 
-			if ( rewardPoints > player.getReward() )
+			if ( rewardPoints > player.getRewardPoints() )
 			{
-				if ( player.getReward() == 1)
+				if ( player.getRewardPoints() == 1)
 					CampaignMain.cm.toUser("AM:You only have 1 " + CampaignMain.cm.getConfig("RPShortName") + ". Try again later.",Username,true);
 				else
-					CampaignMain.cm.toUser("AM:You only have " + player.getReward() + " " + CampaignMain.cm.getConfig("RPShortName") + " . Try again later.",Username,true);
+					CampaignMain.cm.toUser("AM:You only have " + player.getRewardPoints() + " " + CampaignMain.cm.getConfig("RPShortName") + " . Try again later.",Username,true);
 				return;
 			}
             if ( CampaignMain.cm.isUsingAdvanceRepair() ){
                 int typeOfTechToBuy = rewardPoints;
                 int techCost = Integer.parseInt(house.getConfig("RewardPointsFor"+UnitUtils.techDescription(typeOfTechToBuy)));
 
-                if ( player.getReward() < techCost ){
+                if ( player.getRewardPoints() < techCost ){
                     CampaignMain.cm.toUser("AM:You do not have enough " + CampaignMain.cm.getConfig("RPLongName") + " to buy this tech. You need "+techCost,Username,true);
                     return;
                 }
 
-                player.addReward(-techCost);
+                player.addRewardPoints(-techCost);
                 player.addTotalTechs(typeOfTechToBuy,1);
                 player.addAvailableTechs(typeOfTechToBuy,1);
                 if (techCost > 1)
@@ -135,7 +135,7 @@ public class UseRewardPointsCommand implements Command {
     			if (rewardPoints > 1)
     				rewards = "s";
     			CampaignMain.cm.toUser("AM:You hired " + numOfTechBought + " tech" + techs + " for " + rewardPoints + " " + CampaignMain.cm.getConfig("RPLongName") + rewards +".",Username,true);
-    			player.addReward(-rewardPoints);
+    			player.addRewardPoints(-rewardPoints);
     			player.addTechnicians(numOfTechBought);
             }
 			break;
@@ -153,12 +153,12 @@ public class UseRewardPointsCommand implements Command {
 				return;
 			}
 
-			if (rewardPoints > player.getReward()) {
+			if (rewardPoints > player.getRewardPoints()) {
 
-				if (player.getReward() == 0)
+				if (player.getRewardPoints() == 0)
 					CampaignMain.cm.toUser("AM:You don't have any " + CampaignMain.cm.getConfig("RPLongName") + ". Purchase fails.",Username,true);
 				else {
-					String toSend = "AM:You only have " + player.getReward() + CampaignMain.cm.getConfig("RPLongName") + StringUtils.addAnS(player.getReward()) + ". Try again.";
+					String toSend = "AM:You only have " + player.getRewardPoints() + CampaignMain.cm.getConfig("RPLongName") + StringUtils.addAnS(player.getRewardPoints()) + ". Try again.";
 					CampaignMain.cm.toUser(toSend,Username,true);
 				}
 
@@ -169,7 +169,7 @@ public class UseRewardPointsCommand implements Command {
 			amountOfInfluenceBought *= rewardPoints;
 			CampaignMain.cm.toUser("AM:You've bought " + CampaignMain.cm.moneyOrFluMessage(false,true,amountOfInfluenceBought)+" for " + rewardPoints + " "+ CampaignMain.cm.getConfig("RPLongName") + StringUtils.addAnS(rewardPoints) + ".",Username,true);
 
-			player.addReward(-rewardPoints);
+			player.addRewardPoints(-rewardPoints);
 			player.addInfluence(amountOfInfluenceBought);
 			break;
 
@@ -178,7 +178,7 @@ public class UseRewardPointsCommand implements Command {
 				CampaignMain.cm.toUser("AM:Sorry but you are not allowed to buy units with " + CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
 				return;
 			}
-			int rewardPointsAvailable = player.getReward();
+			int rewardPointsAvailable = player.getRewardPoints();
 			int unitTotalRewardPointCost = 0;
 			String typestring = command.nextToken();
 			String weightstring = command.nextToken();
@@ -268,7 +268,7 @@ public class UseRewardPointsCommand implements Command {
 					player.addUnit(newUnit, true);
 					CampaignMain.cm.toUser("AM:You've bought a " + newUnit.getModelName() + " for " +unitTotalRewardPointCost + " " + CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
 				}
-				player.addReward(-unitTotalRewardPointCost);
+				player.addRewardPoints(-unitTotalRewardPointCost);
 			} catch (Exception ex){
 				CampaignMain.cm.toUser("AM:An error has occured while trying to create your requested unit. Please contact an admin. Faction: "+factionstring +" Type: "+unitType+" Class: "+unitWeight,Username,true);
 				LOGGER.error("Exception: ", ex);
@@ -279,7 +279,7 @@ public class UseRewardPointsCommand implements Command {
         case 3://repairs
             rewardPoints = Integer.parseInt(house.getConfig("RewardPointsForRepair"));
 
-            if ( rewardPoints > player.getReward() ){
+            if ( rewardPoints > player.getRewardPoints() ){
                 CampaignMain.cm.toUser("AM:You need more " + CampaignMain.cm.getConfig("RPLongName") + " to repair this unit (requires " + rewardPoints + " RP)", Username, true);
                 return;
             }
@@ -343,7 +343,7 @@ public class UseRewardPointsCommand implements Command {
 
             CampaignMain.cm.toUser("AM:Unit #" + unitID + " "+unit.getModelName()+" is now fully repaired.", Username, true);
             CampaignMain.cm.toUser("PL|UU|"+unit.getId()+"|"+unit.toString(true),Username,false);
-            player.addReward(-rewardPoints);
+            player.addRewardPoints(-rewardPoints);
             player.checkAndUpdateArmies(unit);
             player.setSave();
             break;
@@ -362,12 +362,12 @@ public class UseRewardPointsCommand implements Command {
 				return;
 			}
 
-			if (rewardPoints > player.getReward()) {
+			if (rewardPoints > player.getRewardPoints()) {
 
-				if (player.getReward() == 0)
+				if (player.getRewardPoints() == 0)
 					CampaignMain.cm.toUser("AM:You don't have any " + CampaignMain.cm.getConfig("RPLongName") + ". Purchase fails.",Username,true);
 				else {
-					String toSend = "AM:You only have " + player.getReward() + CampaignMain.cm.getConfig("RPLongName") + StringUtils.addAnS(player.getReward()) + ". Try again.";
+					String toSend = "AM:You only have " + player.getRewardPoints() + CampaignMain.cm.getConfig("RPLongName") + StringUtils.addAnS(player.getRewardPoints()) + ". Try again.";
 					CampaignMain.cm.toUser(toSend,Username,true);
 				}
 
@@ -378,7 +378,7 @@ public class UseRewardPointsCommand implements Command {
 			amountOfCBillsBought *= rewardPoints;
 			CampaignMain.cm.toUser("AM:You've bought " + CampaignMain.cm.moneyOrFluMessage(true,false,amountOfCBillsBought)+" for " + rewardPoints + " "+ CampaignMain.cm.getConfig("RPLongName") + ".",Username,true);
 
-			player.addReward(-rewardPoints);
+			player.addRewardPoints(-rewardPoints);
 			player.addMoney(amountOfCBillsBought);
 			break;
 		}

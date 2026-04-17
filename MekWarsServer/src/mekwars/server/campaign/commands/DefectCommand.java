@@ -201,7 +201,7 @@ public class  DefectCommand  implements Command {
             int oldExp = p.getExperience();
             int oldMoney = p.getMoney();
             int oldFlu = p.getInfluence();
-            int oldRP = p.getReward();
+            int oldRP = p.getRewardPoints();
 
             int newExp = 0;
             int newMoney = 0;
@@ -477,7 +477,7 @@ public class  DefectCommand  implements Command {
                     p.addMoney(-mnyLoss);// pos number for string setup.
                     // negate to reduce.
                     p.setInfluence(newFlu);
-                    p.setReward(newRP);
+                    p.setRewardPoints(newRP);
 
                     // have string show those losses
                     toReturn += "You've lost " + penString;

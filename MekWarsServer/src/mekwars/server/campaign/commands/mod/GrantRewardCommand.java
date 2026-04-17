@@ -42,7 +42,7 @@ public class GrantRewardCommand implements Command {
 		SPlayer p = CampaignMain.cm.getPlayer(command.nextToken());
 		int amount = Integer.parseInt(command.nextToken());
 		if (p != null) {
-			p.setReward(p.getReward() + amount);
+			p.setRewardPoints(p.getRewardPoints() + amount);
 			
 			String toRecipient = "AM:"+Username + " granted you " + amount + " " + CampaignMain.cm.getConfig("RPLongName");
 			if (amount > 0)

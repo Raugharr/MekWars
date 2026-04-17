@@ -25,7 +25,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import mekwars.common.CampaignData;
 import mekwars.common.Player;
@@ -66,7 +65,7 @@ import org.apache.logging.log4j.Logger;
  * - Moved slice flu generation to a Quartz task
  */
 
-public final class SPlayer extends Player implements Comparable<Object>, IBuyer, ISeller {
+public final class SPlayer extends Player<SUnit> implements Comparable<Object>, IBuyer, ISeller {
     private static final Logger LOGGER = LogManager.getLogger(SPlayer.class);
 
     // STATIC VARIABLES
@@ -86,10 +85,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private String myLogo = "";
     private String lastISP = "";
 
-    private int money = 0;
     private int experience = 0;
-    private int influence = 0; //@salient - changed from 50 to 0, starting flu can be set in SO faction.
-    private int rewardPoints = 0; // number of rewards a player has. //@salient changed name to rewardPoints
+    private int money = 0;
     private int xpTillReward = 0; // counter until next RP injection triggered by XP gains, see XPRollOverCap in server options
     private int xpTillFlu = 0; // @ Salient , same as above. counter until next flu injection triggered by XP gains.
     private int groupAllowance = 0;
@@ -97,14 +94,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private int baysOwned = 0;
     private int currentTechPayment = -1;// num Cbills owed to techs after game
 
-    private double rating = 1600;
-
     private long lastOnline = 0;
 
-    private Vector<SUnit> units = new Vector<SUnit>(1, 1);
-    private Vector<SArmy> armies = new Vector<SArmy>(1, 1);
-    private Vector<Integer> totalTechs = new Vector<Integer>(4, 1);
-    private Vector<Integer> availableTechs = new Vector<Integer>(4, 1);
+    private List<SArmy> armies = new ArrayList<>();
+    private List<Integer> totalTechs = new ArrayList<>();
+    private List<Integer> availableTechs = new ArrayList<>();
 
     private SPersonalPilotQueues personalPilotQueue = new SPersonalPilotQueues();
     private ExclusionList exclusionList = new ExclusionList();
@@ -134,13 +128,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private Version clientVersion; // version gets sent by the player and
     // set
 
-    private SHouse myHouse;
     private MWPasswdRecord password = null;
 
     private UnitComponents unitParts = new UnitComponents();
 
-    private int DBId = 0;
-    private int forumID = 0;
     private boolean userValidated = false;
 
     boolean isLoading = false; // Player was getting saved multiple times
@@ -149,7 +140,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     // issues.
 
     private String subFaction = "";
-
     private long lastPromoted = 0;
 
     public volatile int leechCount = 0;
@@ -161,7 +151,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * places - CampaignMain's load method and the EnrollCommand.
      */
     public SPlayer() {
-
         // if using advanced repair, populate tech vectors and generate info
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
             for (int x = 0; x < 4; x++) {
@@ -169,8 +158,18 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 getTotalTechs().add(0);
             }
         }
-        myHouse = CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"));
+        setMyHouse(CampaignData.cd.getHouseByName(CampaignData.cd.getCampaignOptions().getConfig("NewbieHouseName")));
+    }
 
+    /* TODO: This is unwanted but necessary. We need to cast here because we get compile errors for
+     * two reasons
+     * 1. CampaignData.cm.getHouse returns a House but is used by both the client and server so it
+     *   cannot be modified.
+     * 2. SHouse has a legacy getHouseConfig method that points to
+     *   CampaignData.cm.getCampaignOptions()
+     */
+    public SHouse getMyHouse() {
+        return (SHouse) super.getMyHouse();
     }
 
     /**
@@ -216,7 +215,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @return the rounded rating
      */
     public double getRatingRounded() {
-        BigDecimal bd = new BigDecimal(rating);
+        BigDecimal bd = new BigDecimal(getRating());
         bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
         return bd.doubleValue();
     }
@@ -257,9 +256,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * Add a unit to the player. Pass-though to addUnit(SUnit,boolean,boolean).
      * This version should be called in almost all situations.
      */
-    public void addUnit(SUnit m, boolean isNew) 
-    {
-			this.addUnit(m, isNew, true);
+    public void addUnit(SUnit m, boolean isNew) {
+        this.addUnit(m, isNew, true);
     }
 
     /**
@@ -269,7 +267,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * bandwidth is saved by doing a single PS| at the end of a series of adds.
      */
     public String addUnit(SUnit m, boolean isNew, boolean sendUpdates) {
-
         if (isNew) {
             long immunityTime = Long.parseLong(getMyHouse().getConfig("ImmunityTime")) * 1000;
             m.setPassesMaintainanceUntil(System.currentTimeMillis() + immunityTime * 2);
@@ -289,12 +286,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         }
 
         // strip illegal ammo
-        SUnit.checkAmmoForUnit(m, myHouse);
+        SUnit.checkAmmoForUnit(m, getMyHouse());
         
         m.setPosId(getFreeID());
-        synchronized(units) 
-        {   
-        	units.add(m);
+        synchronized(getUnits()) {
+            addUnit(m);
         }
 
         /*
@@ -330,13 +326,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @return the desired unit, or null.
      */
     public SUnit getUnit(int id) {
-
-        for (SUnit currU : units) {
+        for (SUnit currU : getUnits()) {
             if (currU.getId() == id) {
                 return currU;
             }
         }
-
         return null;
     }
 
@@ -365,11 +359,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public void removeUnit(int unitid, boolean sendArmyUpdate) {
         SUnit Mech = null;
-        synchronized (units) {
-        	for (int i = 0; i < units.size(); i++) {
-        		Mech = units.elementAt(i);
+        synchronized (getUnits()) {
+        	for (int i = 0; i < getUnits().size(); i++) {
+        		Mech = getUnits().get(i);
         		if (Mech.getId() == unitid) {
-        			units.removeElementAt(i);
+        			getUnits().remove(i);
         		}
             }
         }
@@ -399,7 +393,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @return number of free bays/techs
      */
     public int getFreeBays() {
-
         int free = getTotalMekBays();
         int totalProtos = 0;
         boolean advanceRep = CampaignMain.cm.isUsingAdvanceRepair();
@@ -412,7 +405,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
          * determines exactly how many techs are needed for any ProtoMek
          * grouping.  Christmas gifts are excluded from cost.
          */
-        for (SUnit currU : units) {
+        for (SUnit currU : getUnits()) {
 
             if (((currU.getStatus() == Unit.STATUS_OK) || (currU.getStatus() == Unit.STATUS_FORSALE)) && (!currU.isChristmasUnit())) {
                 if (CampaignMain.cm.isUsingIncreasedTechs()) {
@@ -461,8 +454,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public int getTotalMekBays() {// return bay/support number
         int numBays = 0;// amount to return
 
-        boolean usesXP = Boolean.parseBoolean(getMyHouse().getConfig("UseExperience"));
-        boolean usesTechs = Boolean.parseBoolean(getMyHouse().getConfig("UseTechnicians"));
+        boolean usesXP = getMyHouse().getBooleanConfig("UseExperience");
+        boolean usesTechs = getMyHouse().getBooleanConfig("UseTechnicians");
         boolean usesAdvanceRepairs = CampaignMain.cm.isUsingAdvanceRepair();
 
         if (usesAdvanceRepairs) {
@@ -471,7 +464,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         // include the basic bays. flat amount for mercs/SOL, warehouse # for
         // GreatHouses
-        int BASE_BAYS = myHouse.getBaysProvided();
+        int BASE_BAYS = getMyHouse().getBaysProvided();
         numBays += BASE_BAYS;
 
         /*
@@ -481,8 +474,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
          * dropping fresh-from-SOL players to an unacceptably low # of bays.
          * Don't give these to mercenaries.
          */
-        if (!myHouse.isMercHouse()) {
-            int minBays = Integer.parseInt(getMyHouse().getConfig("MinimumHouseBays"));
+        if (!getMyHouse().isMercHouse()) {
+            int minBays = getMyHouse().getIntegerConfig("MinimumHouseBays");
             if (numBays < minBays) {
                 numBays = minBays;
             }
@@ -490,10 +483,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         // then add the bays from XP, if the config says to...
         if (usesXP) {
-            int experienceForBay = Integer.parseInt(getMyHouse().getConfig("ExperienceForBay"));
+            int experienceForBay = getMyHouse().getIntegerConfig("ExperienceForBay");
             // check for stupid settings to avoid division by 0
             if (experienceForBay != 0) {
-                int maxBaysFromXP = Integer.parseInt(getMyHouse().getConfig("MaxBaysFromEXP"));
+                int maxBaysFromXP = getMyHouse().getIntegerConfig("MaxBaysFromEXP");
                 int expBays = (experience / experienceForBay);
                 if (expBays > maxBaysFromXP) {
                     expBays = maxBaysFromXP;
@@ -516,100 +509,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         return numBays;
     }// end TotalMechBays()
-
-    /**
-     * This method does all the math to figure out how much the retainer fee,
-     * maintenance cost, whathaveyou is for the current number of technicians.
-     * The number itself is useful in some cases (let people know what they will
-     * have to pay after hiring a new tech, for example), and thus separated
-     * from the actual payment. For now, we have only one payment calculation
-     * mechanism -- additive costing, whereby each tech costs as much as the
-     * last, plus a constant kicker. A cap to this cost can be configured;
-     * however, it must be a multiple of the per-tech additive (eg, if the
-     * additive is .04, 1.20 would be a valid cap, but 1.30 wouldn't).
-     *
-     * @urgru 7/26/04
-     */
-    private void doPayTechniciansMath() {
-
-        int techs = getTechnicians();
-
-        // don't even waste time on 0 cases. Just return.
-        if (techs <= 0) {
-            setCurrentTechPayment(0);
-            return;
-        }
-
-        // starts as a double, gets cast back to an int for return.
-        float amountToPay = 0;
-
-        // load config variables needed to do the math ...
-        float additive = Float.parseFloat(getMyHouse().getConfig("AdditivePerTech"));
-        float ceiling = Float.parseFloat(getMyHouse().getConfig("AdditiveCostCeiling"));
-
-        /*
-         * divide the ceiling by the addiive. techs past this number are all
-         * charged at the ceiling rate. Example: (With 1.20 and .04, the result
-         * is 30. Every additional tech (31, 32, etc.) is paid at the ceiling
-         * wage.
-         */
-        int techCeiling = (int) (ceiling / additive);
-        if (techs > techCeiling) {
-            int techsPastCeiling = techs - techCeiling;
-            amountToPay += ceiling * techsPastCeiling;
-        }// end if(some techs are paid @ ceiling price)
-
-        /*
-         * Add up the number of times the non-ceiling techs were incremented,
-         * then figure out their total cost. In cases where the ceiling is
-         * passed, the flat fee techs are handled above, so only techs up to
-         * that ceiling need to have the additive math done. If the ceiling isnt
-         * reached, just use the number of techToPay from the param.
-         */
-        int techsUsingAdditive = 0;
-        if (techs > techCeiling) {
-            techsUsingAdditive = techCeiling;
-        } else {
-            techsUsingAdditive = techs;
-        }
-
-        /*
-         * Faster to just to a for loop to determine the number of times the
-         * additive was made (1 + 2 + 3 + 4, and so on) with ints, and THEN
-         * multiply by the double additive than do alot of floating point math
-         * by for-in through and multiplying by the additive each time.
-         */
-        int totalAdditions = 0;
-        for (int i = 1; i <= techsUsingAdditive; i++) {
-            totalAdditions += i;
-        }
-
-        // now figure out the final amount to pay ...
-        amountToPay += totalAdditions * additive;
-
-        // Add penalty if the player is over a sliding limit
-
-        for(int type_id = Unit.MEK; type_id < Unit.MAXBUILD; type_id ++) {
-            for (int weightclass = Unit.LIGHT; weightclass <= Unit.ASSAULT; weightclass++) {
-                if (hasHangarPenalty(type_id, weightclass)) {
-                    int costPenalty = calculateHangarPenalty(type_id, weightclass);
-                    amountToPay += costPenalty;
-                }
-            }
-        }
-        /*
-         * now return the amount in INT form since we don't support fractional
-         * money. also, set the currentTechPayment, to avoid doing this math
-         * again if possible.
-         */
-        int toSet = Math.round(amountToPay);
-        if (toSet < 0) {
-            toSet = 0;
-        }// don't pay players to add techs.
-
-        setCurrentTechPayment(toSet);
-
-    }// end doPayTechnicians(arbitrary number)
 
     /**
      * Should be called only after an attempt to pay techs comes up short. At
@@ -727,8 +626,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         // filter out units which are already unmaintained, for_sale or
         // destroyed
-        Vector<SUnit> okUnitsData = new Vector<SUnit>(1, 1);
-        for (SUnit currU : units) {
+        ArrayList<SUnit> okUnitsData = new ArrayList<>();
+        for (SUnit currU : getUnits()) {
             if (currU.getStatus() == Unit.STATUS_OK) {
                 okUnitsData.add(currU);
             }
@@ -744,7 +643,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             int rnd = CampaignMain.cm.getRandomNumber(okUnitsData.size());// generate
             // a
             // RND
-            SUnit unit = okUnitsData.elementAt(rnd);// get unit @ rnd location
+            SUnit unit = okUnitsData.get(rnd);// get unit @ rnd location
             unit.setUnmaintainedStatus();// make it unmaintained
             numUnmaintained++;
             CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), name, false);
@@ -769,7 +668,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * off BM nulls.
      */
     public void doMaintainance() {
-
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
             return;
         }
@@ -777,7 +675,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         int decrease = Integer.parseInt(getMyHouse().getConfig("MaintainanceDecrease"));
 
         ArrayList<SUnit> unitsToDestroy = new ArrayList<SUnit>();
-        for (SUnit currUnit : units) {// loops through all units
+        for (SUnit currUnit : getUnits()) {// loops through all units
 
             // if the unit is maintained, boost its level
             if (currUnit.getStatus() == Unit.STATUS_OK) {
@@ -796,14 +694,14 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 // unmaintained and failed scrap check. blow 'er up.
                 else {
 
-                    if (myHouse.isNewbieHouse()) {
+                    if (getMyHouse().isNewbieHouse()) {
                         CampaignMain.cm.toUser("Your " + currUnit.getModelName() + " is badly maintained and failed a survival roll. In a normal faction, " + "failing these rolls <b>destroys</b> the unit. In the training faction you simply get this warning. Take heed.", name, true);
                         return;
                     }// break out if trying to scrap a SOL mech
 
                     // if scrapping costs bills, subtract the appropriate
                     // amount.
-                    int mechscrapprice = Math.round(myHouse.getPriceForUnit(currUnit.getWeightclass(), currUnit.getType()) * Float.parseFloat(getMyHouse().getConfig("ScrapCostMultiplier")));
+                    int mechscrapprice = Math.round(getMyHouse().getPriceForUnit(currUnit.getWeightclass(), currUnit.getType()) * Float.parseFloat(getMyHouse().getConfig("ScrapCostMultiplier")));
                     if (getMoney() < mechscrapprice) {
                         mechscrapprice = getMoney();
                     }
@@ -822,7 +720,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                     toSend += CampaignMain.cm.moneyOrFluMessage(false, false, -flutolose, true) + ").";
                     CampaignMain.cm.toUser(toSend, name, true);
 
-                    myHouse.addDispossessedPilot(currUnit, false);
+                    getMyHouse().addDispossessedPilot(currUnit, false);
                     unitsToDestroy.add(currUnit);// actually removing now
                     // would cause conc mod
                     // error
@@ -851,7 +749,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public boolean hasUnmaintainedUnit() {
 
-        for (SUnit currU : units) {
+        for (SUnit currU : getUnits()) {
             if (currU.getStatus() == Unit.STATUS_UNMAINTAINED) {
                 return true;
             }
@@ -912,8 +810,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             // all done. remove the player from the active hash and put him in
             // reserve
-            myHouse.getActivePlayers().remove(lowerName);
-            myHouse.getReservePlayers().put(lowerName, this);
+            getMyHouse().getActivePlayers().remove(lowerName);
+            getMyHouse().getReservePlayers().put(lowerName, this);
 
             // NOTE: Deactivation does NOT call IThread.removeImmunity(). This
             // lets SOL reset units.
@@ -938,8 +836,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             olh.sendInfoToOpponents("is headed to the front lines. You may attack it with ");
 
             // make the hash switch
-            myHouse.getReservePlayers().remove(lowerName);
-            myHouse.getActivePlayers().put(lowerName, this);
+            getMyHouse().getReservePlayers().remove(lowerName);
+            getMyHouse().getActivePlayers().put(lowerName, this);
         }
     }
 
@@ -969,8 +867,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              * remove the player (if present) from the active list, then add him
              * to the fighting hashtable.
              */
-            myHouse.getActivePlayers().remove(lowerName);
-            myHouse.getFightingPlayers().put(lowerName, this);
+            getMyHouse().getActivePlayers().remove(lowerName);
+            getMyHouse().getFightingPlayers().put(lowerName, this);
 
             // send status update to the user
             CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, name, false);
@@ -990,8 +888,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         // de-fight from AFR. Move to reserve.
         else if (toReserve) {
             activeSince = 0;
-            myHouse.getFightingPlayers().remove(lowerName);
-            myHouse.getReservePlayers().put(lowerName, this);
+            getMyHouse().getFightingPlayers().remove(lowerName);
+            getMyHouse().getReservePlayers().put(lowerName, this);
             // Unschedule his activity jobs
             UserActivityComponentsJob.stop(getName());
             UserActivityInfluenceJob.stop(getName());
@@ -1003,8 +901,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
              * remove the player (if present) from the active list, then add him
              * to the fighting hashtable.
              */
-            myHouse.getFightingPlayers().remove(lowerName);
-            myHouse.getActivePlayers().put(lowerName, this);
+            getMyHouse().getFightingPlayers().remove(lowerName);
+            getMyHouse().getActivePlayers().put(lowerName, this);
 
             /*
              * If player was STATUS_FIGHTING and is being moved back into
@@ -1041,11 +939,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         // attempt to remove from both reserve AND active, just in case
         String lowerName = name.toLowerCase();
-        myHouse.getReservePlayers().remove(lowerName);
-        myHouse.getActivePlayers().remove(lowerName);
+        getMyHouse().getReservePlayers().remove(lowerName);
+        getMyHouse().getActivePlayers().remove(lowerName);
 
         // put the player in the fighting list and update status
-        myHouse.getFightingPlayers().put(lowerName, this);
+        getMyHouse().getFightingPlayers().put(lowerName, this);
         CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, name, false);
     }
 
@@ -1068,11 +966,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @author urgru 10/27/04
      */
     public double getWeightedArmyNumber() {
-
         // only get the weight if it hasnt been calculated already.
         if (weightedArmyNumber <= 0) {
 
-            Vector<SArmy> orderedArmies = new Vector<SArmy>(1, 1);
+            ArrayList<SArmy> orderedArmies = new ArrayList<>();
 
             LOGGER.debug("Start getWeightedArmyNumber for " + getName());
             int MinCount = getMyHouse().getIntegerConfig("MinCountForTick");
@@ -1082,7 +979,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             double MaxPercentDiff = 0.0;
 
             for (SArmy currentArmy : getArmies()) {
-
                 // only count armies within the defined Min/Max range
                 int forceBV = currentArmy.getOperationsBV(null);
                 if (forceBV <= MinCount) {
@@ -1129,11 +1025,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 if (orderedArmies.size() == 0) {
                     orderedArmies.add(currentArmy);
                 } else {// size > 0
-                    Enumeration<SArmy> f = orderedArmies.elements();
+                    Iterator<SArmy> f = orderedArmies.iterator();
                     int forceNumber = 0;// number of current army
                     boolean forceSorted = false;
-                    while (f.hasMoreElements() && !forceSorted) {
-                        if (currentArmy.getOperationsBV(null) < (f.nextElement()).getOperationsBV(null)) {
+
+                    while (f.hasNext() && !forceSorted) {
+                        if (currentArmy.getOperationsBV(null) < (f.next()).getOperationsBV(null)) {
                             orderedArmies.add(forceNumber, currentArmy);
                             forceSorted = true;
                         } else {
@@ -1164,9 +1061,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             weightedArmyNumber *= weightMod;
 
             if (weightedArmyNumber > 0) {
-
-                Enumeration<SArmy> e = orderedArmies.elements();
-                SArmy currentArmy = e.nextElement();// get first army
+                Iterator<SArmy> e = orderedArmies.iterator();
+                SArmy currentArmy = e.next();// get first army
                 int currentBV = currentArmy.getOperationsBV(null);
 
                 // holder for whichever is greater - flat diff or percent
@@ -1194,10 +1090,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                  */
                 SArmy nextArmy = null;// for use in loop
                 int nextBV = 0;// for use in loop
-                while (e.hasMoreElements()) {// loop through remaining forces
-
+                while (e.hasNext()) {// loop through remaining forces
                     // get the next army, and its BV
-                    nextArmy = e.nextElement();
+                    nextArmy = e.next();
                     nextBV = nextArmy.getOperationsBV(null);
 
                     /*
@@ -1279,13 +1174,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     public void reset(String confirm) {
-
         if (!confirm.equals("CONFIRM")) {
             return;
         }
 
         armies.clear();
-        units.clear();
+        clearUnits();
         money = 0;
         exclusionList.getAdminExcludes().clear();
         exclusionList.getPlayerExcludes().clear();
@@ -1295,13 +1189,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         totalTechs.clear();
         technicians = 0;
         fluffText = " ";
-        rewardPoints = 0;
+        setRewardPoints(0);
         groupAllowance = 0;
-        influence = 0;
-        myHouse = CampaignMain.cm.getHouseFromPartialString(getMyHouse().getConfig("NewbieHouseName"), null);
+        setInfluence(0);
+        setMyHouse(CampaignData.cd.getHouseByName(getMyHouse().getConfig("NewbieHouseName")));
         myLogo = " ";
         personalPilotQueue.flushQueue();
-        rating = 1600;
         xpTillReward = 0;
         xpTillFlu = 0;
         setMekToken(0);
@@ -1316,13 +1209,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * there is no need for a public SPlayer.setMoney() method.
      */
     public void addMoney(int i) {
-
         // holder, amount to store.
         int moneyToSet = money + i;
 
         // don't let SOL exceed cap, or anyone have negative cash
-        int maxNewbieCbills = Integer.parseInt(getMyHouse().getConfig("MaxSOLCBills"));
-        if (myHouse.isNewbieHouse() && (moneyToSet > maxNewbieCbills)) {
+        int maxNewbieCbills = getMyHouse().getIntegerConfig("MaxSOLCBills");
+        if (getMyHouse().isNewbieHouse() && (moneyToSet > maxNewbieCbills)) {
             moneyToSet = maxNewbieCbills;
         }
         if (moneyToSet < 0) {
@@ -1347,16 +1239,13 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @ Salient for free build, mek tokens iterate up to the server limit. Updates CPlayer.
      */
     public void addMekToken(int i) {
-
         int tokenToSet = this.getMekToken() + i;
         this.setMekToken(tokenToSet);
         CampaignMain.cm.toUser("PL|UMT|" + tokenToSet, name, false); //UMT: Update Mek Token on cplayer
         setSave();
-
     }
 
     public void setPassword(MWPasswdRecord pass) {
-
         if (pass == null) {
             try {
                 throw new Exception();
@@ -1381,13 +1270,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     /**
-     * Simple method that returns a player's faction.
-     */
-    public SHouse getMyHouse() {
-        return myHouse;
-    }
-
-    /**
      * Method which determines which house a player is actually fighting for.
      * Used to display contracting house, instead of real faction, for
      * mercenaries.
@@ -1401,7 +1283,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * Enroll commands.
      */
     public void setMyHouse(SHouse h) {
-        myHouse = h;
+        super.setMyHouse(h);
         setSave();
     }
 
@@ -1411,21 +1293,20 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * STATUS_FIGHTING.
      */
     public int getDutyStatus() {
-
         String lowerName = name.toLowerCase();
 
         // Fighting
-        if (myHouse.getFightingPlayers().containsKey(lowerName)) {
+        if (getMyHouse().getFightingPlayers().containsKey(lowerName)) {
             return SPlayer.STATUS_FIGHTING;
         }
 
         // Active
-        if (myHouse.getActivePlayers().containsKey(lowerName)) {
+        if (getMyHouse().getActivePlayers().containsKey(lowerName)) {
             return STATUS_ACTIVE;
         }
 
         // Logged into house
-        if (myHouse.getReservePlayers().containsKey(lowerName)) {
+        if (getMyHouse().getReservePlayers().containsKey(lowerName)) {
             return SPlayer.STATUS_RESERVE;
         }
 
@@ -1465,8 +1346,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      *            which send status on its own after granting new units.
      */
     public void stripOfAllUnits(boolean sendStatus) {
-        units = new Vector<SUnit>(1, 1);
-        armies = new Vector<SArmy>(1, 1);
+        clearUnits();
+        armies.clear();
 
         if (sendStatus) {
             CampaignMain.cm.toUser("PS|" + this.toString(true), name, false);
@@ -1487,7 +1368,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      *            - true if added from a mod/admin command
      */
     public void addExperience(int i, boolean modAdded) {
-
         // change xp
         experience += i;
 
@@ -1497,8 +1377,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         }
 
         // check SOL cap
-        if (myHouse.isNewbieHouse() && (experience > Integer.parseInt(getMyHouse().getConfig("MaxSOLExp")))) {
-            experience = Integer.parseInt(getMyHouse().getConfig("MaxSOLExp"));
+        if (getMyHouse().isNewbieHouse() && (experience > getMyHouse().getIntegerConfig("MaxSOLExp"))) {
+            experience = getMyHouse().getIntegerConfig("MaxSOLExp");
         }
 
         // update client & all userlists
@@ -1506,7 +1386,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         CampaignMain.cm.doSendToAllOnlinePlayers("PI|EX|" + name + "|" + experience, false);
 
         // update corresponding small player.
-        SmallPlayer smallp = myHouse.getSmallPlayers().get(name.toLowerCase());
+        SmallPlayer smallp = getMyHouse().getSmallPlayers().get(name.toLowerCase());
         if (smallp != null) {
             smallp.setExperience(experience);
         }
@@ -1517,20 +1397,19 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         // check reward, if not mod added. never reduce rollover counter.
         if (!modAdded && (i > 0)) {
-
             int currentXP = xpTillReward + i;
-            int rollOver = (Integer.parseInt(getMyHouse().getConfig("XPRollOverCap")));
+            int rollOver = getMyHouse().getIntegerConfig("XPRollOverCap");
 
             // if XP is over rollover point, reduce until below again
             if ((currentXP >= rollOver) && (rollOver > 0)) {
-
                 int rpToAdd = 0;
+
                 while (currentXP >= rollOver) {
                     currentXP -= rollOver;
                     rpToAdd++;
                 }
 
-                addReward(rpToAdd);
+                addRewardPoints(rpToAdd);
 
                 // reset the counter
                 setXpTillReward(currentXP);
@@ -1539,26 +1418,21 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 String toSend = "You earned " + rpToAdd + " experience " + CampaignMain.cm.getConfig("RPShortName");
                 toSend += "[<a href=\"MWUSERP\">Use " + CampaignMain.cm.getConfig("RPShortName") + "</a>]";
                 CampaignMain.cm.toUser(toSend, name, true);
-
             } else {
                 setXpTillReward(currentXP);
             }
         }
 
         //@salient
-        if (!modAdded && (i > 0))
-        {
-
+        if (!modAdded && (i > 0)) {
             int currentXP = xpTillFlu + i;
-            int rollOver = (Integer.parseInt(getMyHouse().getConfig("FluXPRollOverCap")));
+            int rollOver = getMyHouse().getIntegerConfig("FluXPRollOverCap");
 
             // if XP is over rollover point, reduce until below again
-            if ((currentXP >= rollOver) && (rollOver > 0))
-            {
-
+            if ((currentXP >= rollOver) && (rollOver > 0)) {
                 int fluToAdd = 0;
-                while (currentXP >= rollOver)
-                {
+
+                while (currentXP >= rollOver) {
                     currentXP -= rollOver;
                     fluToAdd++;
                 }
@@ -1571,13 +1445,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 String toSend = "You earned " + fluToAdd + CampaignMain.cm.getConfig("FluShortName") + " by gaining xp!";
                 CampaignMain.cm.toUser(toSend, name, true);
 
-            }
-            else
-            {
+            } else {
                 setXpTillFlu(currentXP);
             }
         }
-
         setSave();
     }
 
@@ -1599,40 +1470,34 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public int getHangarBV() {
         int bv = 0;
-        for (SUnit currU : units) {
+        for (SUnit currU : getUnits()) {
             bv += currU.getBVForMatch();
         }
         return bv;
     }
 
     //@salient - do the same as above but also some other BV calcs.
-    public int getHangarBVforMC()
-    {
+    public int getHangarBVforMC() {
         int bv = 0;
         boolean removeLockedBV = getMyHouse().getBooleanConfig("LockedUnits_RemoveBV");
         boolean ignoreAeroBV = getMyHouse().getBooleanConfig("IgnoreAeroBV");
 
-        for (SUnit currU : units)
-        {
-            if(removeLockedBV) // do not add BV of units that are locked.
-            {
-            	if(currU.isLocked() == false) //if unit is locked, ignore it
-            	{
+        for (SUnit currU : getUnits()) {
+            if(removeLockedBV) { // do not add BV of units that are locked. 
+            	if(currU.isLocked() == false) { //if unit is locked, ignore it
             		if(ignoreAeroBV && currU.getType() == 5) // ignore aero units
             			continue;
             		else
             			bv += currU.getBVForMatch();
             	}
             }
-            else // add up all unit bv
-            {
+            else { // add up all unit bv
         		if(ignoreAeroBV && currU.getType() == 5) // ignore aero units
         			continue;
         		else
         			bv += currU.getBVForMatch();
             }
         }
-
         return bv;
     }
 
@@ -1647,8 +1512,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         boolean found = false;
         while (!found) {
             found = true;
-            for (int i = 0; i < units.size(); i++) {
-                if (units.get(i).getPosId() == id) {
+            for (int i = 0; i < getUnits().size(); i++) {
+                if (getUnits().get(i).getPosId() == id) {
                     found = false;
                     id++;
                 }
@@ -1663,7 +1528,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         while (!free) {
             free = true;
             for (int j = 0; j < getArmies().size(); j++) {
-                if (getArmies().elementAt(j).getID() == i) {
+                if (getArmies().get(j).getID() == i) {
                     free = false;
                     i++;
                 }
@@ -1682,8 +1547,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public boolean mayAcquireWelfareUnits() {
 
         if ((getHangarBV() < getMyHouse().getIntegerConfig("WelfareTotalUnitBVCeiling"))
-        && (getMoney() < getMyHouse().getIntegerConfig("WelfareCeiling")))
-        {
+        && (getMoney() < getMyHouse().getIntegerConfig("WelfareCeiling"))) {
             return true;
         }
 
@@ -1697,25 +1561,21 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @return if enabled, this method will initiate the Restock Phase (currency injection)
      * 		   if hangar is below a certain threshold. This occurs AFTER a match.
      */
-    public void checkHangarRestockMC()
-    {
+    public void checkHangarRestockMC() {
     	boolean enabledMC = getMyHouse().getBooleanConfig("Enable_MiniCampaign");
     	boolean lockUnits = getMyHouse().getBooleanConfig("LockUnits");
 
     	//adding this in before method exit, since i want to be able to allow
     	//unit locking while mini campaign is disabled yes locked units is not
     	int lockedLimit = getMyHouse().getIntegerConfig("UnlockUnits_Percentage");
-    	if ( !enabledMC && lockUnits && lockedLimit != -1)
-    	{
-    		if (percentLockedUnitsMC() >= lockedLimit)
-    		{
+    	if ( !enabledMC && lockUnits && lockedLimit != -1) {
+    		if (percentLockedUnitsMC() >= lockedLimit) {
     			unlockAllUnitsMC();
     			setSave();
     		}
     	}
 
-    	if(!enabledMC)
-    	{
+    	if(!enabledMC) {
     		toSelf("AM: Mini Campaigns are disabled on the server!");
     		return;
     	}
@@ -1740,16 +1600,14 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	int restockMT = getMyHouse().getIntegerConfig("RestockMT_Injection");
 
     	//check if we should restock
-    	if( minBVLimit != -1 && getHangarBVforMC() < minBVLimit )
-    	{
+    	if( minBVLimit != -1 && getHangarBVforMC() < minBVLimit ) {
     		restock = true;
     		minBVRestock = true;
 
             LOGGER.info("{} has gone under BV limit and a restock should occur", getName());
     	}
 
-    	if( percentBVLimit != -1 && getHangarBVforMC() < getBVResetPointMC() )
-    	{
+    	if( percentBVLimit != -1 && getHangarBVforMC() < getBVResetPointMC() ) {
     		restock = true;
     		percentRestock = true;
     		setBVTracker(0); //return this to default zero. on activation, it will be set to new value.
@@ -1757,67 +1615,58 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             LOGGER.info("{} has gone under % BV limit and a restock should occur", getName());
     	}
 
-    	if( minUnitLimit != -1 && getUnitCountMC() < minUnitLimit )
-    	{
+    	if( minUnitLimit != -1 && getUnitCountMC() < minUnitLimit ) {
     		restock = true;
     		unitRestock = true;
 
     		LOGGER.info(getName() + " has gone under Unit limit and a restock should occur");
     	}
 
-    	if( !restock && !minBVRestock && minBVLimit != -1)
-    	{
+    	if( !restock && !minBVRestock && minBVLimit != -1) {
     		toSelf("AM: Your hangar is at "+ getHangarBVforMC() + "BV. When you drop below "
     				+ minBVLimit + "BV your mini campaign will restart");
     	}
 
-    	if ( !restock && !percentRestock && percentBVLimit != -1)
-    	{
+    	if ( !restock && !percentRestock && percentBVLimit != -1) {
     		toSelf("AM: Your hangar is at "+ getHangarBVforMC() + "BV. When you drop below "
     				+ getBVResetPointMC() + "BV your mini campaign will restart");
     	}
 
-    	if ( !restock && !unitRestock && minUnitLimit != -1)
-    	{
+    	if ( !restock && !unitRestock && minUnitLimit != -1) {
     		toSelf("AM: Your hangar is at "+ getUnitCountMC() + "Units. When you drop below "
     				+ minUnitLimit + "Units your mini campaign will restart");
     	}
 
     	//if too many of the players units are locked to continue, unlock all units
-    	if ( !restock && lockUnits && lockedLimit != -1) //do only if feature enabled
-    		if (percentLockedUnitsMC() >= lockedLimit)
-    		{
+    	if ( !restock && lockUnits && lockedLimit != -1) { //do only if feature enabled
+    		if (percentLockedUnitsMC() >= lockedLimit) {
     			unlockAllUnitsMC(); // sets save now
     			//setSave();
     		}
+        }
 
-    	if( !restock )
-    	{
+    	if( !restock ) {
     		setSave(); // needed since shortresolver handles unit locking
     					// though i have to imagine it also saves in shortresolver somewhere...
     		return;
     	}
 
-    	if( restock ) //the way it's set up, may not need to clear currency since it should be clear already.
-    	{
-        	if( restockRP != -1 )
-        	{
-        		addReward(-getReward()); //clear before reset
-        		addReward(restockRP);
-        		toSelf("AM: You have received " + getReward() + " " + CampaignMain.cm.getConfig("RPLongName")
+    	if( restock ) { //the way it's set up, may not need to clear currency since it should be clear already.
+        	if( restockRP != -1 ) {
+        		addRewardPoints(-getRewardPoints()); //clear before reset
+        		addRewardPoints(restockRP);
+        		toSelf("AM: You have received " + getRewardPoints() + " " + CampaignMain.cm.getConfig("RPLongName")
         			+ ". Restock your forces before continuing.");
         	}
 
-        	if( restockFLU != -1 )
-        	{
+        	if( restockFLU != -1 ) {
         		addInfluence(-getInfluence()); //clear before reset
         		addInfluence(restockFLU);
         		toSelf("AM: You have received " + getInfluence() + " " + CampaignMain.cm.getConfig("FluLongName")
         			+ ". Restock your forces before continuing.");
         	}
 
-        	if( restockMT != -1 )
-        	{
+        	if( restockMT != -1 ) {
         		addMekToken(-getMekToken()); // clear
         		addMekToken(getMekTokenLimit());//have to go to limit to clear to 0, counts up
         		addMekToken(-restockMT); //subtract since it counts up
@@ -1825,8 +1674,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         			+ " free mek tokens. Restock your forces before continuing.");
         	}
 
-        	if( restockCB != -1 )
-        	{
+        	if( restockCB != -1 ) {
         		addMoney(-getMoney()); // clear
         		addMoney(restockCB);
         		toSelf("AM: You have received " + getMoney() + " " + CampaignMain.cm.getConfig("MoneyLongName")
@@ -1846,10 +1694,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @author Salient
      * @return checks if a player can go active for the next cycle in his/her mini campaign
      */
-    public boolean canActivateForMiniCampaign()
-    {
-    	if(!getMyHouse().getBooleanConfig("Enable_MiniCampaign"))
-    	{
+    public boolean canActivateForMiniCampaign() {
+    	if(!getMyHouse().getBooleanConfig("Enable_MiniCampaign")) {
     		toSelf("AM: Mini Campaigns are disabled on the server!");
     		return false;
     	}
@@ -1879,60 +1725,50 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     	//boolean canActivate = true;
 
     	//check if hangar BV has increased (maybe via salvage? or trades?), if so update to new value.
-        if ( percentBVLimit != -1  && getHangarBVforMC() > getBVTracker() )
-        {
+        if (percentBVLimit != -1  && getHangarBVforMC() > getBVTracker()) {
         	setBVTracker(getHangarBVforMC());
         	LOGGER.info(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
         }
         
-        if(isPhaseRestockMC())
-        {       	
-        	if ( minBVLimit != -1  && getHangarBVforMC() < minBVLimit )
-        	{
+        if(isPhaseRestockMC()) {
+        	if (minBVLimit != -1  && getHangarBVforMC() < minBVLimit) {
         		toSelf("AM: To go active you must raise your hangar BV! You have " + getHangarBVforMC()
         		+ " and need at least " + minBVLimit + " to go active!");
         		return false;
         	}
         	
-        	if ( minUnitLimit != -1  && getUnitCountMC() < minUnitLimit )
-        	{
+        	if (minUnitLimit != -1  && getUnitCountMC() < minUnitLimit) {
         		toSelf("AM: To go active you must raise your hangar Unit Count! You have " + getUnitCountMC()
         		+ " and need at least " + minUnitLimit + " to go active!");
         		return false;
         	}
         	
-        	if( restockCB != -1 && leewayCB > 0f && getMoney() > leewayCB )
-        	{
+        	if (restockCB != -1 && leewayCB > 0f && getMoney() > leewayCB) {
         		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("money", false) + " to go active!" );
         		return false;
         	}
         	
-        	if( restockRP != -1 && leewayRP > 0f && getReward() > leewayRP )
-        	{
+        	if (restockRP != -1 && leewayRP > 0f && getRewardPoints() > leewayRP) {
         		toSelf("AM: You have too many " + CampaignMain.cm.getCurrencyName("rp", false) + " to go active!" );
         		return false;
         	}
         	
-        	if( restockFLU != -1 && leewayFLU > 0f && getInfluence() > leewayFLU )
-        	{
+        	if (restockFLU != -1 && leewayFLU > 0f && getInfluence() > leewayFLU) {
         		toSelf("AM: You have too much " + CampaignMain.cm.getCurrencyName("flu", false) + " to go active!" );
         		return false;
         	}
         	
-        	if( restockMT != -1 && leewayMT > 0f && getRemainingMekTokens() > leewayMT )
-        	{
+        	if (restockMT != -1 && leewayMT > 0f && getRemainingMekTokens() > leewayMT) {
         		toSelf("AM: You must use up more of your free meks to go active!" );
         		return false;
         	}
         	
-        	if ( requireUnitsAtOrOverLimit && isPhaseRestockMC() && isAtOrOverUnitLimits() == false )
-        	{
+        	if (requireUnitsAtOrOverLimit && isPhaseRestockMC() && isAtOrOverUnitLimits() == false) {
         		toSelf("AM: You must reach or exceed the limit for each unit type/weight before "
         				+ "restarting your mini campaign!");
         		return false;
         	}
-        	else if ( requireUnitsAtLimit && isPhaseRestockMC() && isAtUnitLimits() == false )
-        	{
+        	else if (requireUnitsAtLimit && isPhaseRestockMC() && isAtUnitLimits() == false) {
         		toSelf("AM: You must reach the limit for each unit type/weight before restarting your "
         				+ "mini campaign!");
         		return false;
@@ -1941,12 +1777,10 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         	//At this point we assume that the player can activate and leave restock state.
 			removeInjectedCurrencyMC(restockCB, restockRP, restockFLU, restockMT);
 
-			if ( percentBVLimit != -1 )
-			{
+			if (percentBVLimit != -1) {
 				setBVTracker(getHangarBVforMC());// set new hangar BV for tracking
 				LOGGER.info(getName() + "'s BV reset point set to " + getBVResetPointMC() + " BV");
 			}
-			
     		setPhaseActiveMC();
     		setSave();
         }
@@ -1956,26 +1790,22 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     //@salient will be used here and in a command.
-    public void reportStatusMC()
-    {
+    public void reportStatusMC() {
     	int minBVLimit = getMyHouse().getIntegerConfig("MinBV_HangarRestock");
     	int percentBVLimit = getMyHouse().getIntegerConfig("Percent_HangarRestock");
     	int minUnitLimit = getMinUnitResetMC();
 
-		if ( percentBVLimit != -1 )
-		{
+		if (percentBVLimit != -1) {
 			toSelf("AM: Current Hangar BV: " + getHangarBVforMC());
 			toSelf("AM: Next mini campaign cycle will begin when your hangar BV falls below " + getBVResetPointMC());
 		}
 
-		if ( minUnitLimit != -1 )
-		{
+		if (minUnitLimit != -1) {
 			toSelf("AM: Current Unit Count: " + getUnitCountMC());
 			toSelf("AM: Next mini campaign cycle will if your Unit Count falls below " + minUnitLimit);
 		}
 
-        if ( minBVLimit != -1 )
-        {
+        if (minBVLimit != -1) {
 			toSelf("AM: Current Hangar BV: " + getHangarBVforMC());
 			toSelf("AM: Next mini campaign cycle will begin when your hangar BV falls below " + minBVLimit);
         }
@@ -1984,15 +1814,13 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
 
     // -- MC DATA SAVE/LOAD --
-    private String saveStatusMC()
-    {
+    private String saveStatusMC() {
     	SerializedMessage result = new SerializedMessage("&");
     	result.append(phaseMC);
     	return result.toString();
     }
 
-    private void loadStatusMC(String data)
-    {
+    private void loadStatusMC(String data) {
     	StringTokenizer st = new StringTokenizer(data, "&");
     	if(st.hasMoreTokens())
     		phaseMC = TokenReader.readString(st);
@@ -2000,8 +1828,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		LOGGER.error("loadStatusMC failed! no token available for phaseMC");
     }
 
-    private boolean isPhaseRestockMC()
-    {
+    private boolean isPhaseRestockMC() {
     	if(phaseMC.equalsIgnoreCase(RESTOCK_MC))
     		return true;
     	else
@@ -2012,20 +1839,17 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     private void setPhaseRestockMC() {	phaseMC = RESTOCK_MC;	}
 
     //@salient - made a new command called RG (refresh gui) not really sure it works tbh..
-    public void refreshGUI()
-    {
+    public void refreshGUI() {
     	CampaignMain.cm.toUser("RG|" + " ", name, false);
     }
 
     //@salient
-    public void unlockAllUnitsMC()
-    {
-
-    	if(!getMyHouse().getBooleanConfig("LockUnits"))
+    public void unlockAllUnitsMC() {
+    	if(!getMyHouse().getBooleanConfig("LockUnits")) {
     		return;
+        }
 
-    	for (SUnit aUnit : getUnits())
-    	{
+    	for (SUnit aUnit : getUnits()) {
     		aUnit.setLocked(false);
     	}
 
@@ -2062,8 +1886,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @author Salient
      * 			adds rewards to player at end of mini campaign cycle
      */
-    private void addRewardsMC()
-    {        
+    private void addRewardsMC() {
         int rewardBays = this.getMyHouse().getIntegerConfig("MC_Reward_BAYS");
         int rewardTechs = this.getMyHouse().getIntegerConfig("MC_Reward_TECHS");
         int rewardXP = this.getMyHouse().getIntegerConfig("MC_Reward_XP");
@@ -2075,20 +1898,17 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         this.addBays(rewardBays);
         this.addTechnicians(rewardTechs);
         this.addExperience(rewardXP, false);
-        this.addReward(rewardRP);
+        this.addRewardPoints(rewardRP);
         this.addInfluence(rewardFLU);
         this.addMoney(rewardCB);
         this.addMekToken(-rewardMT); // counts up to limit
-    	
     }
 
     //@salient - returns the percent of players units that are locked.
-    public int percentLockedUnitsMC()
-    {
+    public int percentLockedUnitsMC() {
     	int numLocked = 0;
 
-    	for (SUnit aUnit : getUnits())
-    	{
+    	for (SUnit aUnit : getUnits()) {
     		if(aUnit.isLocked())
     			numLocked++;
     	}
@@ -2100,58 +1920,48 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     //@salient
-    private void removeInjectedCurrencyMC(int restockCB, int restockRP, int restockFLU, int restockMT)
-    {
-    	if(hasMoney() && restockCB != -1)
-    	{
+    private void removeInjectedCurrencyMC(int restockCB, int restockRP, int restockFLU, int restockMT) {
+    	if(hasMoney() && restockCB != -1) {
     		addMoney(-getMoney());
     	}
 
-    	if(hasRP() && restockRP != -1)
-    	{
-    		addReward(-getReward());
+    	if(hasRP() && restockRP != -1) {
+    		addRewardPoints(-getRewardPoints());
     	}
 
-    	if(hasFlu() && restockFLU != -1)
-    	{
+    	if(hasFlu() && restockFLU != -1) {
     		addInfluence(-getInfluence());
     	}
 
-    	if(hasMT() && restockMT != -1)
-    	{
+    	if(hasMT() && restockMT != -1) {
     		addMekToken(-getMekToken()); // clear
     		addMekToken(getMekTokenLimit());//have to go to limit to clear to 0, counts up
     	}
     }
 
     //@salient - using a percentage set by SO, this returns the BV at which point the mini campaign will end
-    private int getBVResetPointMC()
-    {
+    private int getBVResetPointMC() {
     	float percent = getMyHouse().getIntegerConfig("Percent_HangarRestock") / 100.0f;
     	int resetPt = (int) (getBVTracker() * percent);
     	return resetPt;
     }
 
     //@salient - using a value set by SO, this returns the Unit count at which point the mini campaign will end
-    private int getMinUnitResetMC()
-    {
+    private int getMinUnitResetMC() {
     	int resetPt = getMyHouse().getIntegerConfig("Unit_HangarRestock");
     	return resetPt;
     }
 
     // -- DISCORD BOT DATA SAVE/LOAD --
-    private String saveDiscordInfo()
-    {
+    private String saveDiscordInfo() {
     	SerializedMessage result = new SerializedMessage("&");
     	result.append(discordID);
     	return result.toString();
     }
 
-    private void loadDiscordInfo(String data)
-    {
+    private void loadDiscordInfo(String data) {
 		StringTokenizer st = new StringTokenizer(data, "&");
-		if(st.hasMoreTokens())
-		{
+		if(st.hasMoreTokens()) {
 			discordID = TokenReader.readString(st);
 		}
 		else
@@ -2160,28 +1970,25 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
 
     //@salient
-    public void removeCurrency()
-    {
+    public void removeCurrency() {
     	addMoney(-getMoney());
     	addInfluence(-getInfluence());
-    	addReward(-getReward());
+    	addRewardPoints(-getRewardPoints());
 
 		addMekToken(-getMekToken()); // clear
 		addMekToken(getMekTokenLimit());//have to go to limit to clear to 0, counts up
     }
 
     //@salient
-    public boolean hasCurrency()
-    {
-    	if( getMoney() != 0 || getInfluence() != 0 || getReward() != 0 || getRemainingMekTokens() != 0 )
+    public boolean hasCurrency() {
+    	if( getMoney() != 0 || getInfluence() != 0 || getRewardPoints() != 0 || getRemainingMekTokens() != 0 )
     		return true;
     	else
     		return false;
     }
 
     //@salient
-    public boolean hasMoney()
-    {
+    public boolean hasMoney() {
     	if( getMoney() != 0 )
     		return true;
     	else
@@ -2189,8 +1996,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     //@salient
-    public boolean hasFlu()
-    {
+    public boolean hasFlu() {
     	if( getInfluence() != 0 )
     		return true;
     	else
@@ -2198,17 +2004,15 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     //@salient
-    public boolean hasRP()
-    {
-    	if( getReward() != 0 )
+    public boolean hasRP() {
+    	if( getRewardPoints() != 0 )
     		return true;
     	else
     		return false;
     }
 
     //@salient
-    public boolean hasMT()
-    {
+    public boolean hasMT() {
     	if( getRemainingMekTokens() != 0 )
     		return true;
     	else
@@ -2216,29 +2020,17 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     //@salient
-    public int getRemainingMekTokens()
-    {
+    public int getRemainingMekTokens() {
     	int limit = getMyHouse().getIntegerConfig("FreeBuild_Limit");
 
     	return limit - getMekToken(); //mek tokens count up to limit
     }
 
     //@salient
-    public int getMekTokenLimit()
-    {
+    public int getMekTokenLimit() {
     	int limit = Integer.parseInt(getMyHouse().getConfig("FreeBuild_Limit"));
 
     	return limit; //mek tokens count up to limit
-    }
-
-    /**
-     * A method to add a specified amount of influence
-     *
-     * @param i
-     *            - amount of influence to add
-     */
-    public void addInfluence(int i) {
-        setInfluence(getInfluence() + i);
     }
 
     /**
@@ -2246,7 +2038,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     @Override
     public int getCurrentTechPayment() {
-
         // recalculate if -1
         if (currentTechPayment < 0) {
             doPayTechniciansMath();
@@ -2277,20 +2068,17 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         return technicians;
     }
 
-    public Vector<Integer> getTotalTechs() {
+    public List<Integer> getTotalTechs() {
         return totalTechs;
     }
 
-    public Vector<Integer> getAvailableTechs() {
+    public List<Integer> getAvailableTechs() {
         return availableTechs;
     }
 
     public String totalTechsToString() {
         StringBuilder result = new StringBuilder();
 
-        // Make sure that we keep it as size 4. Had some early issues with rouge
-        // vectors.
-        getTotalTechs().setSize(4);
         for (Integer tech : getTotalTechs()) {
             result.append(tech + "%");
         }
@@ -2301,9 +2089,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public String availableTechsToString() {
         StringBuilder result = new StringBuilder();
 
-        // Make sure that we keep it as size 4. Had some early issues with rouge
-        // vectors.
-        getAvailableTechs().setSize(4);
         for (Integer tech : getAvailableTechs()) {
             result.append(tech + "%");
         }
@@ -2312,12 +2097,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     public void addAvailableTechs(int type, int number) {
-
         if (type > UnitUtils.TECH_ELITE) {
             return;
         }
 
-        int techs = getAvailableTechs().elementAt(type);
+        int techs = getAvailableTechs().get(type);
 
         techs += number;
 
@@ -2330,7 +2114,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     public void setAvailableTechs(int type, int number) {
-
         if (type > UnitUtils.TECH_ELITE) {
             return;
         }
@@ -2344,12 +2127,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     public void addTotalTechs(int type, int number) {
-
         if (type > UnitUtils.TECH_ELITE) {
             return;
         }
 
-        int techs = getTotalTechs().elementAt(type);
+        int techs = getTotalTechs().get(type);
         techs += number;
         synchronized (totalTechs) {
         	getTotalTechs().set(type, techs);
@@ -2401,7 +2183,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     public void setBaysOwned(int bays) {
-
         int maxBays = 0;
 
         if (getMyHouse() != null) {
@@ -2435,28 +2216,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     @Override
     public void setTechnicians(int t) {
-
-        int maxTechs = 0;
-
-        // dont allow negative techs. always set negatives back to 0.
-        if (t < 0) {
-            t = 0;
-        }
-
-        if (getMyHouse() != null) {
-            maxTechs = Integer.parseInt(getMyHouse().getConfig("MaxTechsToHire"));
-        } else {
-            maxTechs = CampaignMain.cm.getIntegerConfig("MaxTechsToHire");
-        }
-
-        if (maxTechs != -1) {
-            technicians = Math.min(maxTechs, t);
-        } else {
-            technicians = t;
-        }
-
-        // clear the tech payment any time a new number of techs is set
-        setCurrentTechPayment(-1);
+        super.setTechnicians(t);
         CampaignMain.cm.toUser("PL|ST|" + t, name, false);
         CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), name, false);
         CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), name, false);
@@ -2492,7 +2252,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     public void setName(String s) {
-
         if (s == null) {
             throw new NullPointerException();
         }
@@ -2506,10 +2265,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
     
     //@salient
-    public void setDiscordID(String _discordID)
-    {
-        if ( _discordID == null || _discordID == "" )
-        {
+    public void setDiscordID(String _discordID) {
+        if ( _discordID == null || _discordID == "" ) {
         	toSelf("AM:You must enter a discord ID to set!");
             return;
         }
@@ -2547,22 +2304,19 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 //    }
 
     public SArmy getArmy(int id) {
-
         for (SArmy currA : armies) {
             if (currA.getID() == id) {
                 return currA;
             }
         }
-
         return null;
     }
 
-    public Vector<SArmy> getArmies() {
+    public List<SArmy> getArmies() {
         return armies;
     }
 
     public void removeArmy(int armyID) {
-
         Iterator<SArmy> i = armies.iterator();
         while (i.hasNext()) {
             SArmy currA = i.next();
@@ -2574,36 +2328,23 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         CampaignMain.cm.toUser("PL|RA|" + armyID, name, false);
     }
 
-    public void setArmies(Vector<SArmy> v) {
+    public void setArmies(ArrayList<SArmy> v) {
         armies = v;
         setSave();
     }
 
-    public Vector<SUnit> getUnits() {
-        return units;
-    }
-
-    //@salient
-    public int getUnitCount() {
-        return units.size();
-    }
-
     //@salient - includes SO check to count only unlocked units LockedUnits_DecrementUnitCount
-    private int getUnitCountMC()
-    {
-    	if(getMyHouse().getBooleanConfig("LockedUnits_DecrementUnitCount"))
-    	{
+    private int getUnitCountMC() {
+    	if(getMyHouse().getBooleanConfig("LockedUnits_DecrementUnitCount")) {
 	    	int count = 0;
-	    	for(SUnit aUnit : units)
-	    	{
+	    	for(SUnit aUnit : getUnits()) {
 	    		if(aUnit.isLocked() == false)
 	    			count++;
 	    	}
 	    	return count;
     	}
-    	else
-    	{
-    		return units.size();
+    	else {
+    		return getUnits().size();
     	}
     }
 
@@ -2653,12 +2394,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public void setLastOnline(long l) {
         lastOnline = l;
         SmallPlayer smallp = null;
-        if (myHouse.getSmallPlayers().containsKey(name.toLowerCase())) {
+        if (getMyHouse().getSmallPlayers().containsKey(name.toLowerCase())) {
             // update the corresponding small player.
-            smallp = myHouse.getSmallPlayers().get(name.toLowerCase());
+            smallp = getMyHouse().getSmallPlayers().get(name.toLowerCase());
         } else {
             smallp = new SmallPlayer(getExperience(), lastOnline, getRating(), getName(), getFluffText(), getMyHouse());
-            myHouse.getSmallPlayers().put(name.toLowerCase(), smallp);
+            getMyHouse().getSmallPlayers().put(name.toLowerCase(), smallp);
         }
 
         smallp.setLastOnline(lastOnline);
@@ -2672,16 +2413,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         attackRestrictionUntil = l;
     }
 
-    public double getRating() {
-        return rating;
-    }
-
     public void setRating(double d) {
-        rating = d;
+        super.setRating(d);
 
         // update the corresponding small player.
-        SmallPlayer smallp = myHouse.getSmallPlayers().get(name.toLowerCase());
-        smallp.setRating(rating);
+        SmallPlayer smallp = getMyHouse().getSmallPlayers().get(name.toLowerCase());
+        smallp.setRating(getRating());
 
         // if sharing ratings, send to clients
         if (!Boolean.parseBoolean(getMyHouse().getConfig("HideELO"))) {
@@ -2704,7 +2441,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         fluffText = s;
 
         // update the corresponding small player.
-        SmallPlayer smallp = myHouse.getSmallPlayers().get(name.toLowerCase());
+        SmallPlayer smallp = getMyHouse().getSmallPlayers().get(name.toLowerCase());
         smallp.setFluffText(fluffText);
 
         setSave();
@@ -2727,9 +2464,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
     public int getAmountOfTimesUnitExistsInArmies(int unitID) {
         int result = 0;
-        Vector<SArmy> v = getArmies();
+        List<SArmy> v = getArmies();
         for (int i = 0; i < v.size(); i++) {
-            SArmy a = v.elementAt(i);
+            SArmy a = v.get(i);
             if (a.getUnit(unitID) != null) {
                 result++;
             }
@@ -2747,40 +2484,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         }
     }// end checkAndUpdateArmies
 
-    // INFLUENCE SET/ADD/GET METHODS @urgru 1/30/03
-    /**
-     * A method which returns a players influence
-     *
-     * @return int - influence amount
-     */
-    public int getInfluence() {
-        return influence;
-    }
-
-    /**
-     * A method which directly sets the amount of influence a player has
-     *
-     * @param i
-     *            - value to give influence
-     */
-    public void setInfluence(int i) {
-        influence = i;
-        if (influence > Integer.parseInt(getMyHouse().getConfig("InfluenceCeiling"))) {
-            influence = (Integer.parseInt(getMyHouse().getConfig("InfluenceCeiling")));// set
-            // to
-            // ceiling
-            // if
-            // above
-        }
-
-        if (influence < 0) {
-            influence = 0; // Set to 0 if below
-        }
-
-        CampaignMain.cm.toUser("PL|SI|" + influence, name, false);
-        setSave();
-    }
-
     public int getGroupAllowance() {
         return groupAllowance;
     }
@@ -2789,28 +2492,17 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         groupAllowance = i;
     }
 
-    // get current amount of reward points a player has
-    public int getReward() {
-        return rewardPoints;
-    }
-
     // set the current amount of reward points a player has.
-    public void setReward(int i) {
-        rewardPoints = i;
-        if (rewardPoints > (Integer.parseInt(getMyHouse().getConfig("XPRewardCap")))) {
-            rewardPoints = (Integer.parseInt(getMyHouse().getConfig("XPRewardCap")));
-        }
-
-        if (rewardPoints < 0) {
-            rewardPoints = 0;
-        }
-
+    public void setRewardPoints(int rewardPoints) {
+        super.setRewardPoints(rewardPoints);
         CampaignMain.cm.toUser("PL|SRP|" + rewardPoints, name, false);
         setSave();
     }
 
-    public void addReward(int toAdd) {
-        setReward(getReward() + toAdd);
+    public void setInfluence(int influence) {
+        super.setInfluence(influence);
+        CampaignMain.cm.toUser("PL|SI|" + getInfluence(), name, false);
+        setSave();
     }
 
     // sets counter to next RP injection triggered by XP gains.
@@ -3000,7 +2692,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             }// end for type
         }
 
-        for (SUnit unit : units) {
+        for (SUnit unit : getUnits()) {
             Pilot pilot = unit.getPilot();
 
             if (pilot.getHits() <= 0) {
@@ -3045,7 +2737,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 }// end for weight
             }// end for type
         } else {
-            for (SUnit unit : units) {
+            for (SUnit unit : getUnits()) {
                 Pilot pilot = unit.getPilot();
 
                 if (pilot.getHits() <= 0) {
@@ -3076,7 +2768,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public String getReadableStatus(boolean adminStatus) {
         DecimalFormat myFormatter = new DecimalFormat("####.##");
-        StringBuilder s = new StringBuilder("<br><b>Status for: " + getColoredName() + " (" + myHouse.getColoredName());
+        StringBuilder s = new StringBuilder("<br><b>Status for: " + getColoredName() + " (" + getMyHouse().getColoredName());
 
         if (getSubFactionName().trim().length() > 0) {
             s.append("::");
@@ -3101,12 +2793,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             }
         }
 
-        s.append("  " + CampaignMain.cm.moneyOrFluMessage(true, false, getMoney()) + " //  " + CampaignMain.cm.moneyOrFluMessage(false, false, influence) + " // " + experience + " Experience<br>");
+        s.append("  " + CampaignMain.cm.moneyOrFluMessage(true, false, getMoney()) + " //  " + CampaignMain.cm.moneyOrFluMessage(false, false, getInfluence()) + " // " + experience + " Experience<br>");
 
         // advanced repair
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
-            s.append("Technicians (Green/Reg/Vet/Elite): " + getTotalTechs().elementAt(UnitUtils.TECH_GREEN) + "/" + getTotalTechs().elementAt(UnitUtils.TECH_REG) + "/" + getTotalTechs().elementAt(UnitUtils.TECH_VET) + "/" + getTotalTechs().elementAt(UnitUtils.TECH_ELITE) + "<br>");
-            s.append("Idle Techs (Green/Reg/Vet/Elite):  " + getAvailableTechs().elementAt(UnitUtils.TECH_GREEN) + "/" + getAvailableTechs().elementAt(UnitUtils.TECH_REG) + "/" + getAvailableTechs().elementAt(UnitUtils.TECH_VET) + "/" + getAvailableTechs().elementAt(UnitUtils.TECH_ELITE) + "<br>");
+            s.append("Technicians (Green/Reg/Vet/Elite): " + getTotalTechs().get(UnitUtils.TECH_GREEN) + "/" + getTotalTechs().get(UnitUtils.TECH_REG) + "/" + getTotalTechs().get(UnitUtils.TECH_VET) + "/" + getTotalTechs().get(UnitUtils.TECH_ELITE) + "<br>");
+            s.append("Idle Techs (Green/Reg/Vet/Elite):  " + getAvailableTechs().get(UnitUtils.TECH_GREEN) + "/" + getAvailableTechs().get(UnitUtils.TECH_REG) + "/" + getAvailableTechs().get(UnitUtils.TECH_VET) + "/" + getAvailableTechs().get(UnitUtils.TECH_ELITE) + "<br>");
             s.append("Bays: " + getFreeBays() + "/" + getTotalMekBays() + "<br>");
             s.append("Leased Bays: " + getBaysOwned() + " (Cost: " + CampaignMain.cm.moneyOrFluMessage(true, false, getCurrentTechPayment()) + "/Game)<br>");
         }
@@ -3133,11 +2825,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             s.append("Rating: " + myFormatter.format(getRating()) + "<br>");
         }
         if (Boolean.parseBoolean(getMyHouse().getConfig("ShowReward"))) {
-            s.append("Current " + CampaignMain.cm.getConfig("RPLongName") + ": " + getReward() + " (Maximum  of " + Integer.parseInt(getMyHouse().getConfig("XPRewardCap")) + ")<br>");
+            s.append("Current " + CampaignMain.cm.getConfig("RPLongName") + ": " + getRewardPoints() + " (Maximum  of " + Integer.parseInt(getMyHouse().getConfig("XPRewardCap")) + ")<br>");
         }
 
         // if merc show their status.
-        if (myHouse.isMercHouse()) {
+        if (getMyHouse().isMercHouse()) {
             s.append("<br>" + getReadableMercStatus());
         }
 
@@ -3190,7 +2882,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         }
 
         s.append("<br><b>Contents of Hangar:</b><br>");
-        for (SUnit currU : units) {
+        for (SUnit currU : getUnits()) {
 
             if (currU.getStatus() == Unit.STATUS_FORSALE) {
                 continue;
@@ -3205,8 +2897,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         // Get info for units the player is selling on Market2
         StringBuilder saleUnits = new StringBuilder();
-        for (SUnit currU : units) {
-
+        for (SUnit currU : getUnits()) {
             if (currU.getStatus() != Unit.STATUS_FORSALE) {
                 continue;
             }
@@ -3242,12 +2933,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      */
     public String getReadableMercStatus() {
         String s = "";
-        if (myHouse.isMercHouse()) {// if a merc
+        if (getMyHouse().isMercHouse()) {// if a merc
             s = "Mercenary information for " + getName() + ": <br>";// list name
-            s += "Currently fighting for: " + (((MercHouse) myHouse).getHouseFightingFor(this)).getName() + "<br>";// list
+            s += "Currently fighting for: " + (((MercHouse) getMyHouse()).getHouseFightingFor(this)).getName() + "<br>";// list
             // employing
             // faction
-            ContractInfo contract = (((MercHouse) myHouse).getContractInfo(this));
+            ContractInfo contract = (((MercHouse) getMyHouse()).getContractInfo(this));
             if (contract != null) {
                 s += contract.getInfo(this);
             } else {
@@ -3271,18 +2962,18 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         result.append(name);
         result.append(money);
         result.append(experience);
-        result.append(units.size());
-        if (units.size() > 0) {
-            synchronized (units) {
-                for (SUnit currU : units) {
-                    currU.getPilot().setCurrentFaction(myHouse.getName());
+        result.append(getUnits().size());
+        if (getUnits().size() > 0) {
+            synchronized (getUnits()) {
+                for (SUnit currU : getUnits()) {
+                    currU.getPilot().setCurrentFaction(getMyHouse().getName());
                     result.append(currU.toString(toClient));
                 }
             }
         }
         result.append(armies.size());
         for (int i = 0; i < armies.size(); i++) {
-            result.append(armies.elementAt(i).toString(toClient, "%"));
+            result.append(armies.get(i).toString(toClient, "%"));
         }
         if (!toClient) {
             if (getMyHouse() != null) {
@@ -3303,9 +2994,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 result.append(getRatingRounded());
             }
         } else {
-            result.append(rating);
+            result.append(getRating());
         }
-        result.append(influence);
+        result.append(getInfluence());
         if (!toClient) {
             result.append(fluffText + " ");
             /*
@@ -3326,7 +3017,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             result.append(technicians);// used when saving to houses.dat
         }
         // above is used when sending to client bad hack but needed for now
-        result.append(rewardPoints); // saving current reward points
+        result.append(getRewardPoints()); // saving current reward points
         /*
          * In older code, player's price modifier (mezzo) was saved here. This
          * feature has been eliminated, and the spaces can be reclaimed. @urgru
@@ -3339,11 +3030,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
         result.append(getMekToken());
 
-        result.append(myHouse.getName() + " ");
+        result.append(getMyHouse().getName() + " ");
         if (toClient) {
             result.append(getHouseFightingFor().getName() + " ");
             if (getMyLogo().length() == 0) {
-                result.append(myHouse.getLogo() + " ");
+                result.append(getMyHouse().getLogo() + " ");
             } else {
                 result.append(getMyLogo() + " ");
             }
@@ -3364,7 +3055,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 result.append(technicians);
             }
             if (getMyLogo().trim().length() == 0) {
-                result.append(myHouse.getLogo() + " ");
+                result.append(getMyHouse().getLogo() + " ");
             } else {
                 result.append(getMyLogo() + " ");
             }
@@ -3443,12 +3134,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 
             int numofarmies = 0;
             int numofUnits = TokenReader.readInt(ST);
-            units = new Vector<SUnit>(1, 1);
+            clearUnits();
 
             for (int i = 0; i < numofUnits; i++) {
                 SUnit m = new SUnit();
                 m.fromString((String) ST.nextElement());
-                units.add(m);
+                addUnit(m);
                 CampaignMain.cm.toUser("PL|HD|" + m.toString(true), name, false);
             }
 
@@ -3472,8 +3163,8 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             TokenReader.readString(ST);// Number of Bays
             TokenReader.readString(ST);// Number of Free Bays
 
-            rating = TokenReader.readDouble(ST);
-            influence = TokenReader.readInt(ST);
+            super.setRating(TokenReader.readDouble(ST));
+            super.setInfluence(TokenReader.readInt(ST));
 
             fluffText = TokenReader.readString(ST).trim();
 
@@ -3495,17 +3186,17 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 technicians = (mt != -1) ? Math.min(te, mt) : te;
             }
 
-            rewardPoints = TokenReader.readInt(ST);
+            setRewardPoints(TokenReader.readInt(ST));
 
             //@salient reclaimed token for mini campaign data
             loadStatusMC(TokenReader.readString(ST));
 
             setMekToken(TokenReader.readInt(ST));
 
-            myHouse = CampaignMain.cm.getHouseFromPartialString(TokenReader.readString(ST));
+            setMyHouse(CampaignData.cd.getHouseByName(TokenReader.readString(ST)));
 
-            if (myHouse == null) {
-                myHouse = CampaignMain.cm.getHouseFromPartialString(CampaignMain.cm.getConfig("NewbieHouseName"));
+            if (getMyHouse() == null) {
+                setMyHouse(CampaignData.cd.getHouseByName(CampaignData.cd.getCampaignOptions().getConfig("NewbieHouseName")));
             }
 
             setXpTillReward(TokenReader.readInt(ST));
@@ -3557,7 +3248,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             // this will allow them to
             // Still Load.
             try {
-
                 setLastAttackFromReserve(TokenReader.readLong(ST));
                 setGroupAllowance(TokenReader.readInt(ST));
                 setLastISP(TokenReader.readString(ST));
@@ -3637,12 +3327,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             /*
              * Check all units for bad ammo or illegal/mis-set vacant pilots.
              * This was being done at the same time as the units are unstrung,
-             * but caused a null b/c fixAmmo() uses .myHouse(), which is null at
+             * but caused a null b/c fixAmmo() uses .getMyHouse()(), which is null at
              * that point in the unstring. If the units are changed as a result
              * of the checks, a PL|UU is sent, as well as a PL|SAD for each army
              * that includes the unit.
              */
-            for (SUnit currU : units) {
+            for (SUnit currU : getUnits()) {
                 fixPilot(currU);
             }
         } catch (Exception ex) {
@@ -3659,7 +3349,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      * @param unit
      */
     private void fixPilot(SUnit unit) {
-
         if (!unit.hasVacantPilot()) {
             return;
         }
@@ -3685,7 +3374,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
                 // operations
             }
         }
-
     }
 
     public UnitComponents getUnitParts() {
@@ -3716,7 +3404,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             getUnitParts().add(part, amount);
         }
         CampaignMain.cm.toUser("PL|UPPC|" + part + "#" + amount, getName(), false);
-
     }
 
     public SArmy getLockedArmy() {
@@ -3728,23 +3415,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         }
 
         return null;
-    }
-
-    public int getDBId() {
-        return DBId;
-    }
-
-    public void setDBId(int id) {
-        DBId = id;
-        personalPilotQueue.setOwnerID(id);
-    }
-
-    public void setForumID(int id) {
-        forumID = id;
-    }
-
-    public int getForumID() {
-        return forumID;
     }
 
     @Override
@@ -3762,7 +3432,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     public SubFaction getSubFaction() {
-
         SubFaction sub = getMyHouse().getSubFactionList().get(subFaction);
 
         if (sub == null) {
@@ -3792,13 +3461,11 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     public boolean canBePromoted() {
-
         if (getMyHouse().getSubFactionList().size() < 1) {
             return false;
         }
 
         int days = getMyHouse().getIntegerConfig("daysbetweenpromotions");
-
         long day = 1000 * 60 * 60 * 24;
 
         try {
@@ -3813,37 +3480,28 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             LOGGER.error("Exception: ", ex);
             return false;
         }
-
         return true;
-
     }
 
     public void checkForPromotion() {
-
-    	if(CampaignMain.cm.getBooleanConfig("Disable_Promote_Subfaction")) //@salient
-    	{
+    	if(CampaignMain.cm.getBooleanConfig("Disable_Promote_Subfaction")) { //@salient
     		return;
     	}
 
         if (!canBePromoted()) {
             return;
         }
-
         int currentAccessLevel = getSubFactionAccess();
 
         for (SubFaction subFaction : getMyHouse().getSubFactionList().values()) {
-
             if ((currentAccessLevel < Integer.parseInt(subFaction.getConfig("AccessLevel"))) && (getRating() >= Integer.parseInt(subFaction.getConfig("MinELO"))) && (getExperience() >= Integer.parseInt(subFaction.getConfig("MinExp")))) {
                 CampaignMain.cm.toUser("You are eligible for a promotion to subFaction " + subFaction.getConfig("Name") + ". <a href=\"MEKWARS/c RequestSubFactionPromotion#" + subFaction.getConfig("Name") + "\">Click here to request promotion.</a>", getName());
             }
-
         }
     }
 
     public void checkForDemotion() {
-
-    	if(CampaignMain.cm.getBooleanConfig("Disable_Demote_Subfaction")) //@salient
-    	{
+    	if(CampaignMain.cm.getBooleanConfig("Disable_Demote_Subfaction")) { //@salient
     		return;
     	}
 
@@ -3983,45 +3641,9 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             // Unlimited
             return true;
         }
-
         int inHangar = countUnits(uType, uWeightClass);
 
-        if (inHangar < limit) {
-            return true;
-        }
-
-        if ((inHangar >= limit)  && Boolean.parseBoolean(getMyHouse().getConfig("UseSlidingHangarLimits")) ) {
-        	return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * A method to count the units of a given type and weight in a player's
-     * hangar
-     *
-     * @param uType
-     * @param uWeightClass
-     * @return number of units
-     */
-    public int countUnits(int uType, int uWeightClass) {
-        if ((uType < 0) || (uType > Unit.AERO)) {
-            LOGGER.error("Invalid uType in SPlayer.countUnits: " + uType);
-            return 0;
-        }
-        if ((uWeightClass < 0) || (uWeightClass > Unit.ASSAULT)) {
-            LOGGER.error("Invalid uWeightClass in SPlayer.countUnits: " + uWeightClass);
-            return 0;
-        }
-        // Actually count them now
-        int count = 0;
-        for (SUnit u : units) {
-            if (!u.isChristmasUnit() && (u.getType() == uType) && (u.getWeightclass() == uWeightClass)) {
-                count++;
-            }
-        }
-        return count;
+        return (inHangar < limit) || ((inHangar >= limit) && Boolean.parseBoolean(getMyHouse().getConfig("UseSlidingHangarLimits")));
     }
 
     /**
@@ -4048,30 +3670,22 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      *
      * @return true if at all limits, false otherwise
      */
-    public boolean isAtUnitLimits()
-    {
+    public boolean isAtUnitLimits() {
     	boolean result = false;
-
     	boolean dontCountAero = CampaignMain.cm.getBooleanConfig("IgnoreAeroUnitLimit");
-
     	int uType = Unit.AERO;
 
-    	if (dontCountAero)
+    	if (dontCountAero) {
     		uType = Unit.BATTLEARMOR;
+        }
 
-        for (int t = Unit.MEK; t <= uType; t++)
-        {
-            for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++)
-            {
+        for (int t = Unit.MEK; t <= uType; t++) {
+            for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++) {
                 int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(t, w);
                 int inHangar = countUnits(t, w);
 
-                if(limit != -1)
-                {
-                	if (inHangar == limit)
-                		result = true;
-                	else
-                		return false;
+                if(limit != -1) {
+                    return inHangar == limit;
                 }
             }
         }
@@ -4084,30 +3698,22 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
      *
      * @return true if at or over all limits, false otherwise
      */
-    public boolean isAtOrOverUnitLimits()
-    {
+    public boolean isAtOrOverUnitLimits() {
     	boolean result = false;
-
-    	boolean dontCountAero = CampaignMain.cm.getBooleanConfig("IgnoreAeroUnitLimit");
-
+    	boolean dontCountAero = CampaignData.cd.getCampaignOptions().getBooleanConfig("IgnoreAeroUnitLimit");
     	int uType = Unit.AERO;
 
-    	if (dontCountAero)
+    	if (dontCountAero) {
     		uType = Unit.BATTLEARMOR;
+        }
 
-        for (int t = Unit.MEK; t <= uType; t++)
-        {
-            for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++)
-            {
+        for (int t = Unit.MEK; t <= uType; t++) {
+            for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++) {
                 int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(t, w);
                 int inHangar = countUnits(t, w);
 
-                if(limit != -1)
-                {
-                	if (inHangar >= limit)
-                		result = true;
-                	else
-                		return false;
+                if(limit != -1) {
+                    return inHangar >= limit;
                 }
             }
         }
@@ -4144,35 +3750,6 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     }
 
     /**
-     * A method to determine if the player is over the unit limit
-     * and the server is configured to use sliding hangar cost
-     * increases
-     *
-     *
-     */
-    public boolean hasHangarPenalty(int uType, int uWeight) {
-    	// Always false if we're not using the sliding limits
-    	if (!Boolean.parseBoolean(getMyHouse().getConfig("UseSlidingHangarLimits"))) {
-    		return false;
-    	}
-
-        int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(uType, uWeight);
-
-    	// Always false if the particular limit is not checked
-    	if (limit < 0) {
-    		return false;
-    	}
-
-    	int numUnits = countUnits(uType, uWeight);
-    	// False if we're below the limit
-    	if (limit >= numUnits) {
-    		return false;
-    	}
-
-    	return true;
-    }
-
-    /**
      * Calculates and returns the string to be sent to the client to
      * set both the maintenance penalty and the purchase price penalty
      * for each unit type and weight.
@@ -4196,7 +3773,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public int calculateHangarPenaltyForNextPurchase(int type, int weight) {
     	int penalty = 0;
 
-        int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(type, weight);
+		int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(type, weight);
 		int numUnits = countUnits(type, weight) + 1;
 
 		if ((limit == -1) || (numUnits <= limit)) {
@@ -4206,47 +3783,12 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 		int penaltyUnits = numUnits - limit;
 
 		penalty = (int)(Math.pow(penaltyUnits, Double.parseDouble(getMyHouse().getConfig("SlidingHangarLimitModifier"))));
-
-
     	return penalty;
     }
 
-	public int calculateHangarPenalty(int type_id, int weightclass) {
-		if(!hasHangarPenalty(type_id, weightclass)) {
-			return 0;
-		}
-		int penalty = 0;
-
-        int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(type_id, weightclass);
-		int numUnits = countUnits(type_id, weightclass);
-
-		if (numUnits <= limit) {
-			return 0;
-		}
-
-		int penaltyUnits = numUnits - limit;
-
-		penalty = (int)(Math.pow(penaltyUnits, Double.parseDouble(getMyHouse().getConfig("SlidingHangarLimitModifier"))));
-
-		return penalty;
-	}
-
-	public int calculateTotalHangarPenalty() {
-		int penalty = 0;
-		for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
-			for (int weight = Unit.LIGHT; weight <= Unit.ASSAULT; weight++) {
-				penalty += calculateHangarPenalty(type, weight);
-			}
-		}
-		return penalty;
-	}
-
 	//@salient
-	public boolean hasUnusedMekTokens()
-	{
-
-		if( getMekToken() < Integer.parseInt(getMyHouse().getConfig("FreeBuild_Limit")) )
-		{
+	public boolean hasUnusedMekTokens() {
+		if (getMekToken() < Integer.parseInt(getMyHouse().getConfig("FreeBuild_Limit"))) {
 			return true;
 		}
 
@@ -4254,8 +3796,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 	}
 
 	//@salient send msg to self
-	public void toSelf(String msg)
-	{
+	public void toSelf(String msg) {
 		CampaignMain.cm.toUser(msg, getName(), true);
 	}
-}// end SPlayer()
+}

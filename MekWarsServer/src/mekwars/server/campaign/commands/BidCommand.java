@@ -32,21 +32,21 @@ public class  BidCommand  implements Command {
 	public void setExecutionLevel(int i) {accessLevel = i;}
 	public String getSyntax() { return syntax;}
 	
-	public void process(StringTokenizer command,String Username) {
+	public void process(StringTokenizer command,String username) {
 		
 		//access check
 		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
+			int userLevel = MWServ.getInstance().getUserLevel(username);
 			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
+				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",username,true);
 				return;
 			}
 		}
 
 		//load the SPlayer
-		SPlayer p = CampaignMain.cm.getPlayer(Username);
+		SPlayer p = CampaignMain.cm.getPlayer(username);
 		if (p == null) {
-			CampaignMain.cm.toUser("AM:Null SPlayer while bidding. Report immediately!",Username,true);
+			CampaignMain.cm.toUser("AM:Null SPlayer while bidding. Report immediately!",username,true);
 			return;
 		}
 		
@@ -57,27 +57,27 @@ public class  BidCommand  implements Command {
 			auctionID = Integer.parseInt(command.nextToken());
 			bidAmount = Integer.parseInt(command.nextToken());
 		} catch (Exception e) {
-			CampaignMain.cm.toUser("AM:Improper format. Try: /c bid#AuctionID#Amount",Username,true);
+			CampaignMain.cm.toUser("AM:Improper format. Try: /c bid#AuctionID#Amount",username,true);
 			return;
 		}
 		
 		//players whose factions don't have market buying access cannot bid
 		if (!p.getMyHouse().mayBuyFromBM()) {
-			CampaignMain.cm.toUser("AM:You are not allowed to buy units from the market. Your faction forbids it!", Username, true);
+			CampaignMain.cm.toUser("AM:You are not allowed to buy units from the market. Your faction forbids it!", username, true);
 			return;
 		}
 		
 		// check xp
 		int minBMEXP = CampaignMain.cm.getIntegerConfig("MinEXPforBMBuying");
 		if (p.getExperience() < minBMEXP) {
-			CampaignMain.cm.toUser("AM:You are not allowed to buy units from the Market. Required Experience: " + minBMEXP + ".", Username, true);
+			CampaignMain.cm.toUser("AM:You are not allowed to buy units from the Market. Required Experience: " + minBMEXP + ".", username, true);
 			return;
 		}
 		
 		//check the auction ID
 		MarketListing auction = CampaignMain.cm.getMarket().getListingByID(auctionID);
 		if (auction == null) {
-			CampaignMain.cm.toUser("AM:There is no auction with ID#" + auctionID + ".",Username,true);
+			CampaignMain.cm.toUser("AM:There is no auction with ID#" + auctionID + ".",username,true);
 			return;
 		}
 		
@@ -86,10 +86,10 @@ public class  BidCommand  implements Command {
 		if (bidAmount < minBid) {
 			if (!CampaignMain.cm.getBooleanConfig("HiddenBMUnits")) {
 				CampaignMain.cm.toUser("AM:Minimum bid for the " + auction.getListedModelName()
-					+ " is " + CampaignMain.cm.moneyOrFluMessage(true,false,minBid) + ". Nice try.",Username,true);
+					+ " is " + CampaignMain.cm.moneyOrFluMessage(true,false,minBid) + ". Nice try.",username,true);
 			} else {
 				CampaignMain.cm.toUser("AM:Minimum bid for the " + auction.getListedHiddenModelName()
-						+ " is " + CampaignMain.cm.moneyOrFluMessage(true,false,minBid) + ". Nice try.",Username,true);
+						+ " is " + CampaignMain.cm.moneyOrFluMessage(true,false,minBid) + ". Nice try.",username,true);
 			}
 			return;
 		}
@@ -97,35 +97,34 @@ public class  BidCommand  implements Command {
 		//check the player's flu
 		int bidFluCost = CampaignMain.cm.getIntegerConfig("BMBidFlu");
 		if (p.getInfluence() < bidFluCost) {
-			CampaignMain.cm.toUser("AM:You need " +CampaignMain.cm.moneyOrFluMessage(false,true,bidFluCost)+" to place a bid.", Username, true);
+			CampaignMain.cm.toUser("AM:You need " +CampaignMain.cm.moneyOrFluMessage(false,true,bidFluCost)+" to place a bid.", username, true);
 			return;
 		}
 		
 		// Check that the house is allowed to bid on this type of unit
 		int uType = auction.getUnitType();
 		int uWeight = auction.getUnitWeight();
-        boolean canBuy = CampaignData.cd.getCampaignOptions().canBuyFromBM(uType, uWeight);
-//		boolean canBuy = p.getMyHouse().canBuyFromBM(uType, uWeight);
+		boolean canBuy = CampaignData.cd.getCampaignOptions().canBuyFromBM(uType, uWeight);
 		if (!canBuy) {
 			CampaignMain.cm.toUser("AM:Your faction is not allowed to purchase " + 
 					Unit.getWeightClassDesc(uWeight) + " " + 
-					Unit.getTypeClassDesc(uType) + " from the Black Market.", Username, true);
+					Unit.getTypeClassDesc(uType) + " from the Black Market.", username, true);
 			return;
 		}
 		
 		/*
 		 * All checks cleared. Decrease the player's influence and add his bid.
 		 */
-		auction.placeBid(Username, bidAmount);
+		auction.placeBid(username, bidAmount);
 		p.addInfluence(-bidFluCost);
 		
 		CampaignMain.cm.toUser("AM:You bid "+CampaignMain.cm.moneyOrFluMessage(true,false,bidAmount)+" for the "
 				+ (CampaignMain.cm.getBooleanConfig("HiddenBMUnits") ? auction.getListedHiddenModelName() : auction.getListedModelName()) 
 				+ " (-" + CampaignMain.cm.moneyOrFluMessage(false,true,bidFluCost)
-				+").", Username, true);
+				+").", username, true);
 		
 		//send BM|CU to bidder
-		CampaignMain.cm.toUser("BM|CU|" + auction.toString(auctionID,p),Username,false);
+		CampaignMain.cm.toUser("BM|CU|" + auction.toString(auctionID,p),username,false);
 		
 	}//end process(string)
 }

@@ -229,9 +229,8 @@ public class FreeBuildCreateUnitCommand implements Command {
 			}
 		}
 		
-		if(!allowDupes)
-		{
-			Vector<SUnit> playersUnits = player.getUnits();
+		if (!allowDupes) {
+			List<SUnit> playersUnits = player.getUnits();
 			
 			for(SUnit aUnit : playersUnits)
 			{
@@ -243,9 +242,8 @@ public class FreeBuildCreateUnitCommand implements Command {
 			}			
 		}
 		
-		if(useDupeLimits)
-		{
-			Vector<SUnit> playersUnits = player.getUnits();
+		if (useDupeLimits) {
+			List<SUnit> playersUnits = player.getUnits();
 			int unitCount = 0;
 			
 			for(SUnit aUnit : playersUnits)

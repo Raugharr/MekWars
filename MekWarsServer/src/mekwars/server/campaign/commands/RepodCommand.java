@@ -470,11 +470,11 @@ public class RepodCommand implements Command {
 
             }// - end Repod costing
         } else {
-            if (p.getReward() < rpCost) {
+            if (p.getRewardPoints() < rpCost) {
                 CampaignMain.cm.toUser("AM:You do not have enough " + CampaignMain.cm.getConfig("RPLongName") + " to repod this unit!", Username, true);
                 return;
             }
-            p.addReward(-rpCost);
+            p.addRewardPoints(-rpCost);
         }
 
         cm.setPilot((SPilot) m.getPilot());
