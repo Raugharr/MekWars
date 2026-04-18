@@ -1,6 +1,6 @@
 /*
  * MekWars - Copyright (C) 2025
- * 
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,31 +17,31 @@
 package mekwars.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.Position;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(value = MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 class CampaignDataTest {
-    @Mock
-    private Position position;
+    @Mock private Position position;
 
-    @Mock
-    private Influences influence;
+    @Mock private Influences influence;
+    
+    @Mock private CampaignOptions campaignOptions;
 
-    private CampaignData data = new CampaignData();
+    private CampaignData data = new CampaignData(campaignOptions);
 
     @Test
     public void testAddPlanet() {
         Planet testPlanet = new Planet("TestPlanet1", position, influence);
-        
+
         assertEquals(EntityStore.UNSET_ID, testPlanet.getId());
         data.addPlanet(testPlanet);
         assertEquals(1, testPlanet.getId());
@@ -50,7 +50,7 @@ class CampaignDataTest {
     @Test
     public void testAddHouse() {
         House testHouse = new House();
-        
+
         assertEquals(EntityStore.UNSET_ID, testHouse.getId());
         data.addHouse(testHouse);
         assertEquals(1, testHouse.getId());

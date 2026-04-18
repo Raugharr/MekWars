@@ -30,6 +30,7 @@ import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import mekwars.common.CampaignData;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
@@ -260,7 +261,7 @@ public class ChristmasHandler {
 			return;
 		}
 		isChristmasSeason = true;
-		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("Christmas_ManuallyStarted", "true");
+		CampaignData.cd.getCampaignOptions().setProperty("Christmas_ManuallyStarted", "true");
 	}
 	
 	/**
@@ -268,7 +269,7 @@ public class ChristmasHandler {
 	 */
 	public void endChristmas() {
 		isChristmasSeason = false;
-		CampaignMain.cm.getCampaignOptions().getConfig().setProperty("Christmas_ManuallyStarted", "false");
+		CampaignData.cd.getCampaignOptions().setProperty("Christmas_ManuallyStarted", "false");
 		
 		// Clear the gift recipients so they are not penalized next Christmas season
 		File file = new File(giftRecipientsFile);

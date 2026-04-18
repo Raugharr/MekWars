@@ -16,6 +16,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 
+import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
@@ -41,17 +42,17 @@ public class AdminLockCampaignCommand implements Command {
         return syntax;
     }
 
-    public void process(StringTokenizer command, String Username) {
+    public void process(StringTokenizer command, String username) {
 
         // access level check
-        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        int userLevel = MWServ.getInstance().getUserLevel(username);
         if (userLevel < getExecutionLevel()) {
-            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+            CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", username, true);
             return;
         }
 
-        if (Boolean.parseBoolean(CampaignMain.cm.getConfig("CampaignLock")) == true) {
-            CampaignMain.cm.toUser("Campaign is already locked.", Username, true);
+        if (CampaignData.cd.getCampaignOptions().getBooleanConfig("CampaignLock") == true) {
+            CampaignMain.cm.toUser("Campaign is already locked.", username, true);
             return;
         }
 
@@ -60,19 +61,19 @@ public class AdminLockCampaignCommand implements Command {
             SHouse h = (SHouse) house;
             for (SPlayer p : h.getActivePlayers().values()) {
                 p.setActive(false);
-                CampaignMain.cm.toUser("AM:" + Username + " locked the campaign. You were deactivated.", p.getName(), true);
-                CampaignMain.cm.sendPlayerStatusUpdate(p, !Boolean.parseBoolean(CampaignMain.cm.getConfig("HideActiveStatus")));
+                CampaignMain.cm.toUser("AM:" + username + " locked the campaign. You were deactivated.", p.getName(), true);
+                CampaignMain.cm.sendPlayerStatusUpdate(p, !CampaignData.cd.getCampaignOptions().getBooleanConfig("HideActiveStatus"));
             }// end while (act members remain)
 
         }// end while(factions remain)
 
         // set the lock property, so no new players can activate
-        CampaignMain.cm.getCampaignOptions().getConfig().setProperty("CampaignLock", "true");
+        CampaignData.cd.getCampaignOptions().setProperty("CampaignLock", "true");
 
         // tell the admin he has locked the campaign
-        CampaignMain.cm.doSendToAllOnlinePlayers("AM:" + Username + " locked the campaign!", true);
-        CampaignMain.cm.toUser("AM:You locked the campaign. Players can no longer activate, and all active players were deactivated. Use 'adminunlockcampaign' to release the activity lock.", Username, true);
-        CampaignMain.cm.doSendModMail("NOTE", Username + " locked the campaign.");
+        CampaignMain.cm.doSendToAllOnlinePlayers("AM:" + username + " locked the campaign!", true);
+        CampaignMain.cm.toUser("AM:You locked the campaign. Players can no longer activate, and all active players were deactivated. Use 'adminunlockcampaign' to release the activity lock.", username, true);
+        CampaignMain.cm.doSendModMail("NOTE", username + " locked the campaign.");
 
     }// end Process()
 

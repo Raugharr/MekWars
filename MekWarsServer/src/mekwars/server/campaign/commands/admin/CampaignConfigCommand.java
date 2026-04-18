@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,40 +16,63 @@
 
 package mekwars.server.campaign.commands.admin;
 
-import java.io.FileInputStream;
-import java.util.StringTokenizer;
-import mekwars.server.MWServ;
+import mekwars.common.CampaignData;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.FileInputStream;
+import java.util.StringTokenizer;
 
 public class CampaignConfigCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger(CampaignConfigCommand.class);
 
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		try {//Try to read the config file
-			CampaignMain.cm.getCampaignOptions().getConfig().load(new FileInputStream(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG")));
-		} catch (Exception ex) {
-			LOGGER.error("Exception: ", ex);
-			CampaignMain.cm.toUser("Failed to read campaign config.",Username,true);
-		}	
-		CampaignMain.cm.toUser("Campaign config reread!",Username,true);
-		
-	}
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    username,
+                    true);
+            return;
+        }
+
+        try { // Try to read the config file
+            CampaignData.cd
+                    .getCampaignOptions()
+                    .getProperties()
+                    .load(
+                            new FileInputStream(
+                                    MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG")));
+        } catch (Exception ex) {
+            LOGGER.error("Exception: ", ex);
+            CampaignMain.cm.toUser("Failed to read campaign config.", username, true);
+        }
+        CampaignMain.cm.toUser("Campaign config reread!", username, true);
+    }
 }

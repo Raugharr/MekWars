@@ -30,7 +30,7 @@ public class CampaignMainTest {
         assertTrue(Files.exists(Path.of("campaign")), "campaign/ should exist");
         assertTrue(Files.exists(Path.of("campaign","players")), "campaign/players/ should exist");
         assertTrue(Files.exists(Path.of("data","campaignconfig.txt")), "data/campaignconfig.txt should exist");
-        new CampaignMain("data/campaignconfig.txt");
+        new CampaignMain();
     }
 
 }

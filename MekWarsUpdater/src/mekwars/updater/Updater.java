@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,7 +17,10 @@
 package mekwars.updater;
 
 import megamek.Version;
+
 import mekwars.server.campaign.CampaignMain;
+import mekwars.server.io.FileSystem;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -32,7 +35,6 @@ public class Updater {
     private static final Logger logger = LogManager.getLogger(Updater.class);
 
     public static void main(String[] args) {
-
         Options options = new Options();
         Option versionCommand = new Option("v", "version", true, "Version to migrate from");
         versionCommand.setRequired(true);
@@ -40,7 +42,8 @@ public class Updater {
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         CommandLine cmd = null;
-        new CampaignMain("./data/campaignconfig.txt");
+        FileSystem.getInstance().setCampaignConfig("./data/campaignconfig.txt");
+        new CampaignMain();
 
         try {
             cmd = parser.parse(options, args);
@@ -53,7 +56,7 @@ public class Updater {
 
         Version version = new Version(cmd.getOptionValue("version"));
         VersionUpdaterPicker updatePicker = new VersionUpdaterPicker();
-        
+
         if (!updatePicker.migrate(version)) {
             System.out.println("Invalid version. Unable to upgrade");
             System.exit(0);

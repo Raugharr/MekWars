@@ -10,7 +10,7 @@
  * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  */
 
-package mekwars.server.campaign;
+package mekwars.common.campaign;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,20 +24,14 @@ import org.apache.logging.log4j.Logger;
 public class CampaignOptions {
     private static final Logger LOGGER = LogManager.getLogger(CampaignOptions.class);
 
-    private DefaultServerOptions defaultOptions;
+    private DefaultCampaignOptions defaultOptions;
     private Properties config = new Properties();
 
-    public static String CAMPAIGN_CONFIG = "./data/campaignconfig.txt";
-
-    public CampaignOptions() {
-        this(CAMPAIGN_CONFIG);
-    }
-
     public CampaignOptions(String configFile) {
-        defaultOptions = new DefaultServerOptions();
+        defaultOptions = new DefaultCampaignOptions();
         defaultOptions.createDefaults();
         try {
-            config.putAll(defaultOptions.getServerDefaults()); // load all of the defaults
+            config.putAll(defaultOptions.getDefaults()); // load all of the defaults
             config.load(new FileInputStream(configFile));
 
             // Right here, we're going to try to prune old cruft from the configs
@@ -46,8 +40,8 @@ public class CampaignOptions {
             // MMNet, and probably other servers are, as well.
             ArrayList<String> keysToRemove = new ArrayList<String>();
             for (Object key : config.keySet()) {
-                if (!defaultOptions.getServerDefaults().keySet().contains(key) && !((String)key).endsWith("RewardPointMultiplier")) {
-                    LOGGER.error("Key " + (String)key + " does not exist in DefaultServerConfig.  Pruning from configs.");
+                if (!defaultOptions.getDefaults().keySet().contains(key) && !((String)key).endsWith("RewardPointMultiplier")) {
+                    LOGGER.error("Key " + (String)key + " does not exist in DefaultServerConfig. Pruning from configs.");
                     keysToRemove.add((String) key);
                 }
             }
@@ -115,16 +109,20 @@ public class CampaignOptions {
 
     public String getConfig(String key) {
         if (config.getProperty(key) == null) {
-            if (defaultOptions.getServerDefaults().getProperty(key) == null) {
+            if (defaultOptions.getDefaults().getProperty(key) == null) {
                 LOGGER.error("You're missing the config variable: " + key + " in campaignconfig!");
                 return "-1";
             }
-            return defaultOptions.getServerDefaults().getProperty(key).trim();
+            return defaultOptions.getDefaults().getProperty(key).trim();
         }
         return config.getProperty(key).trim();
     }
 
-    public Properties getConfig() {
+    public void setProperty(String name, String value) {
+        config.setProperty(name, value);
+    }
+
+    public Properties getProperties() {
         return config;
     }
 
@@ -141,7 +139,7 @@ public class CampaignOptions {
         }
     }
 
-    public DefaultServerOptions getDefaultOptions() {
+    public DefaultCampaignOptions getDefaultOptions() {
         return defaultOptions;
     }
 }

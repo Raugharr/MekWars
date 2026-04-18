@@ -16,7 +16,7 @@
 
 package mekwars.common;
 
-import megamek.common.AmmoType;
+import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.persistence.BannedAmmoStore;
 import mekwars.common.persistence.NamedEntityStore;
 import mekwars.common.util.BinReader;
@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -62,7 +61,7 @@ public class CampaignData implements TerrainProvider {
     private TreeMap<String, String> planetOpFlags = new TreeMap<>();
 
     private BannedAmmoStore bannedAmmoStore = new BannedAmmoStore();
-    private Properties serverConfigs = new Properties();
+    private CampaignOptions campaignOptions;
 
     public BannedAmmoStore getBannedAmmoStore() {
         return bannedAmmoStore;
@@ -280,13 +279,14 @@ public class CampaignData implements TerrainProvider {
     }
 
     /** Create empty campaign data. */
-    public CampaignData() {
+    public CampaignData(CampaignOptions campaignOptions) {
         cd = this;
+        this.campaignOptions = campaignOptions;
     }
 
     /** Generate the campaign data from an binary stream. */
-    public CampaignData(BinReader in) throws IOException {
-        this();
+    public CampaignData(CampaignOptions campaignOptions, BinReader in) throws IOException {
+        this(campaignOptions);
         int size = in.readInt("terrains.size");
         for (int i = 0; i < size; ++i) {
             Terrain pe = new Terrain();
@@ -414,12 +414,8 @@ public class CampaignData implements TerrainProvider {
         return planetOpFlags;
     }
 
-    public Properties getServerConfigs() {
-        return serverConfigs;
-    }
-
-    public void setServerConfigs(Properties configs) {
-        serverConfigs = configs;
+    public CampaignOptions getCampaignOptions() {
+        return campaignOptions;
     }
 
     public boolean targetSystemIsBanned(int id) {

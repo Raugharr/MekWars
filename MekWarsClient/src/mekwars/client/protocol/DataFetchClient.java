@@ -27,6 +27,7 @@ import mekwars.common.Equipment;
 import mekwars.common.House;
 import mekwars.common.Influences;
 import mekwars.common.Planet;
+import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.io.file.BanAmmoFile;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
@@ -527,7 +528,9 @@ public class DataFetchClient {
      */
     public CampaignData getAllData() throws IOException {
         BinReader in = openConnection("All");
-        CampaignData data = new CampaignData(in);
+        CampaignOptions campaignOptions =
+            new CampaignOptions(FileSystem.getInstance().getCampaignConfig().toString());
+        CampaignData data = new CampaignData(campaignOptions, in);
         // in.close();
         getAccessLevels(data);
         this.data = data;
@@ -542,7 +545,9 @@ public class DataFetchClient {
      */
     public CampaignData getCacheData(String cachePath) throws IOException {
         BinReader in = new BinReader(new FileReader(cachePath + "/data.dat"));
-        CampaignData data = new CampaignData(in);
+        CampaignOptions campaignOptions =
+            new CampaignOptions(FileSystem.getInstance().getCampaignConfig().toString());
+        CampaignData data = new CampaignData(campaignOptions, in);
         in.close();
         this.data = data;
         store();

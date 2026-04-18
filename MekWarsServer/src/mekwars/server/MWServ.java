@@ -42,7 +42,9 @@ import java.util.Vector;
 import megamek.Version;
 import megamek.common.EquipmentType;
 import megamek.common.MechSummaryCache;
+import mekwars.common.CampaignData;
 import mekwars.common.MMGame;
+import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.comm.Command;
 import mekwars.common.comm.ServerCommand;
 import mekwars.common.log.LogMarkerHolder;
@@ -50,8 +52,6 @@ import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.CampaignOptions;
-import mekwars.server.campaign.DefaultServerOptions;
 import mekwars.server.campaign.ImmunityThread;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SliceThread;
@@ -184,8 +184,9 @@ public class MWServ {
         mails = checkAndCreateConfig("./data/mails.txt");
         LOGGER.info("Mail file loaded.");
 
+        FileSystem.getInstance().setCampaignConfig(getConfigParam("CAMPAIGNCONFIG"));
         LOGGER.info("Creating new campaign environment...");
-        campaign = new CampaignMain(getConfigParam("CAMPAIGNCONFIG"));
+        campaign = new CampaignMain();
         campaign.start();
         LOGGER.info("Environment created.");
 
@@ -1220,8 +1221,7 @@ public class MWServ {
     }
     
     public void saveConfigs() {
-        DefaultServerOptions dso = new DefaultServerOptions();
-        dso.createConfig();
+        CampaignData.cd.getCampaignOptions().getDefaultOptions().createConfig(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG"));
     }
 
     synchronized public void addToNewsFeed(String s) {
