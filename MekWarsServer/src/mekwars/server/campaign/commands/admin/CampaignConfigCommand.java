@@ -25,7 +25,6 @@ import mekwars.server.campaign.commands.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.util.StringTokenizer;
 
 public class CampaignConfigCommand implements Command {
@@ -63,12 +62,7 @@ public class CampaignConfigCommand implements Command {
         }
 
         try { // Try to read the config file
-            CampaignData.cd
-                    .getCampaignOptions()
-                    .getProperties()
-                    .load(
-                            new FileInputStream(
-                                    MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG")));
+            CampaignData.cd.getCampaignOptions().load();
         } catch (Exception ex) {
             LOGGER.error("Exception: ", ex);
             CampaignMain.cm.toUser("Failed to read campaign config.", username, true);

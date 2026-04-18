@@ -88,8 +88,8 @@ public class ForceUpdateCommand implements Command {
 
         if (updateKey.equalsIgnoreCase("Clear") || updateKey.equalsIgnoreCase("-1")) updateKey = "";
 
-        CampaignMain.cm.getCampaignOptions().setProperty("ForceUpdateKey", updateKey);
-        CampaignData.cd.getCampaignOptions().getDefaultOptions().createConfig(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG"));
+        CampaignData.cd.getCampaignOptions().setProperty("ForceUpdateKey", updateKey);
+        CampaignData.cd.getCampaignOptions().save();
 
         CampaignMain.cm.doSendModMail("NOTE", username + " set the Force Update Key");
         CampaignMain.cm.toUser(

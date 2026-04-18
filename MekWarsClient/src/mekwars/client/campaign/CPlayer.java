@@ -17,6 +17,7 @@
 
 package mekwars.client.campaign;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -27,9 +28,10 @@ import java.util.Vector;
 import mekwars.client.MWClient;
 import mekwars.client.GUIClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
-import mekwars.client.gui.CPlayerPanel;
+import mekwars.client.io.FileSystem;
 import mekwars.client.util.CArmyComparator;
 import mekwars.client.util.CUnitComparator;
+import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.common.Player;
 import mekwars.common.SubFaction;
@@ -216,7 +218,7 @@ public class CPlayer extends Player {
         doPayTechniciansMath();
         RewardPoints = TokenReader.readInt(ST);
         String string = TokenReader.readString(ST);
-           setMekToken(Integer.parseInt(string));
+        setMekToken(Integer.parseInt(string));
         House = TokenReader.readString(ST);
         setHouseFightingFor(TokenReader.readString(ST));
         setLogo(TokenReader.readString(ST));
@@ -294,8 +296,8 @@ public class CPlayer extends Player {
             if (i.next().getID() == lanceID) {
                 i.remove();
                 mwclient.getGUIClient().getMainFrame().updateAttackMenu();// removing an army
-                // needs to reset
-                // menu
+                                                                          // needs to reset
+                                                                          // menu
                 return (true);
             }
         }
@@ -618,35 +620,35 @@ public class CPlayer extends Player {
         }
         return null;
     }
-    
+
     //@salient- compare client quirks with server
-    // lol while this works, realized the way i'm doing things makes this check meaningless... 
+    // lol while this works, realized the way i'm doing things makes this check meaningless...
     // what needs to be checked is the hosts xmls, not the client quirks
     // which are already set by the server anyway....
-//    public String getAllQuirkInfoForActivation()
-//    {
-//        StringJoiner quirksList = new StringJoiner("*");
-//        List<Integer> idList = new ArrayList<Integer>();
-//        
-//        for (CArmy currA : Armies) 
-//        {
-//            for (Unit currU : currA.getUnits())
-//            {
-//                CUnit currCU = (CUnit) currU;
-//                if(currCU.hasQuirks())
-//                {
-//                    int ID = currCU.getId();
-//                    if(idList.contains(ID)) //skip dupes
-//                        continue;
-//                    idList.add(ID);
-//                    quirksList.add(String.valueOf(ID));
-//                    quirksList.add(currCU.getQuirksList());                    
-//                }
-//            }
-//        }
-//        LOGGER.debug(quirksList.toString());
-//        return quirksList.toString();
-//    }
+    //    public String getAllQuirkInfoForActivation()
+    //    {
+    //        StringJoiner quirksList = new StringJoiner("*");
+    //        List<Integer> idList = new ArrayList<Integer>();
+    //
+    //        for (CArmy currA : Armies)
+    //        {
+    //            for (Unit currU : currA.getUnits())
+    //            {
+    //                CUnit currCU = (CUnit) currU;
+    //                if(currCU.hasQuirks())
+    //                {
+    //                    int ID = currCU.getId();
+    //                    if(idList.contains(ID)) //skip dupes
+    //                        continue;
+    //                    idList.add(ID);
+    //                    quirksList.add(String.valueOf(ID));
+    //                    quirksList.add(currCU.getQuirksList());
+    //                }
+    //            }
+    //        }
+    //        LOGGER.debug(quirksList.toString());
+    //        return quirksList.toString();
+    //    }
 
     public int getAmountOfTimesUnitExistsInArmies(int unitID) {
         int result = 0;
@@ -1040,7 +1042,7 @@ public class CPlayer extends Player {
         // Choices [note - this array must be duplicated in CHQPanel's
         // maybeShowPopup()]
         String[] choices =
-            { "Name", "Battle Value", "Gunnery Skill", "ID Number", "MP (Jumping)", "MP (Walking)", "Pilot Kills", "Unit Type", "Weight (Class)", "Weight (Tons)", "No Sort" };
+        { "Name", "Battle Value", "Gunnery Skill", "ID Number", "MP (Jumping)", "MP (Walking)", "Pilot Kills", "Unit Type", "Weight (Class)", "Weight (Tons)", "No Sort" };
 
         // determine which sort will dominate
         int primarySort = CUnitComparator.HQSORT_NONE;
@@ -1124,7 +1126,7 @@ public class CPlayer extends Player {
         // Choices [note - this array must be duplicated in CHQPanel's
         // maybeShowPopup()]
         String[] choices =
-            { "Name", "Battle Value", "ID Number", "Max Tonnage", "Avg Walk MP", "Avg Jump MP", "Number Of Units", "No Sort" };
+        { "Name", "Battle Value", "ID Number", "Max Tonnage", "Avg Walk MP", "Avg Jump MP", "Number Of Units", "No Sort" };
 
         // determine which sort will dominate
         int primarySort = CArmyComparator.ARMYSORT_NONE;
@@ -1312,15 +1314,24 @@ public class CPlayer extends Player {
     }
 
     public void setFactionConfigs(String data) {
+        /**
+         * FIXME: This is a hack. Currently the house config files only exist on the server and are
+         * then appended to the campaignconfig.txt above. In order to make the server and client
+         * both use the House's config file we create a dummy config below that will have no
+         * parameters and pass through to the campaignconfig.txt. Later this hack will be removed
+         * when house config files exist properly on the client side.
+         */
+        if (CampaignData.cd.getHouseOptions(getMyHouse().getName()) == null) {
+            Path configPath = FileSystem.getInstance().getFactionConfigPath(getMyHouse().getName());
 
+            CampaignData.cd.loadHouseOptions(configPath, getMyHouse());
+        }
         if (data.startsWith("DONE#DONE")) {
             mwclient.setWaiting(false);
             return;
         }
 
         StringTokenizer ST = new StringTokenizer(data, DELIMITER);
-        // mwclient.getServerConfigs().clear();
-        // mwclient.getServerConfigData();
         while (ST.hasMoreTokens()) {
             String key = TokenReader.readString(ST);
             String value = TokenReader.readString(ST);

@@ -94,6 +94,16 @@ public abstract class AbstractFileSystem {
     }
 
     /**
+     * Returns the path to a faction's config file.
+     *
+     * @return The path to a faction's config file.
+     */
+    public Path getFactionConfigPath(String faction) {
+        return FileSystems.getDefault()
+                .getPath(getDataDir().toString(), faction.toLowerCase() + "_configs.dat");
+    }
+
+    /**
      * Returns The path to the directory that contains all shared configurations.
      *
      * @return The path to the directory that contains all shared configurations.

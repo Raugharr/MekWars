@@ -1,6 +1,6 @@
 /*
  * MekWars - Copyright (C) 2025
- * 
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -17,101 +17,100 @@
 
 package mekwars.server.io;
 
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import mekwars.common.io.AbstractFileSystem;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+
 public class FileSystem extends AbstractFileSystem {
-    protected static final Path DIRECTORY_OPERATIONS_PLANETS = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_DATA, "planets.xml");
+    protected static final Path DIRECTORY_OPERATIONS_PLANETS =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_DATA, "planets.xml");
 
-    protected static final Path DIRECTORY_DATA_TERRAIN = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_DATA, "terrain.xml");
+    protected static final Path DIRECTORY_DATA_TERRAIN =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_DATA, "terrain.xml");
 
-    protected static final Path DIRECTORY_DATA_ADVANCED_TERRAIN = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_DATA, "advancedTerrain.xml");
+    protected static final Path DIRECTORY_DATA_ADVANCED_TERRAIN =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_DATA, "advancedTerrain.xml");
 
-    protected static final Path DIRECTORY_DATA_SUPPORT_UNITS = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_DATA, "supportunits.txt");
+    protected static final Path DIRECTORY_DATA_SUPPORT_UNITS =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_DATA, "supportunits.txt");
 
     private static final String DIRECTORY_NAME_OPERATIONS = DIRECTORY_NAME_DATA + "operations/";
-    private static final Path DIRECTORY_OPERATIONS = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_OPERATIONS);
+    private static final Path DIRECTORY_OPERATIONS =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_OPERATIONS);
 
-    protected static final String DIRECTORY_NAME_OPERATIONS_SHORT = DIRECTORY_NAME_OPERATIONS
-        + "short/";
+    protected static final String DIRECTORY_NAME_OPERATIONS_SHORT =
+            DIRECTORY_NAME_OPERATIONS + "short/";
 
-    protected static final Path DIRECTORY_OPERATIONS_SHORT = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_OPERATIONS_SHORT);
+    protected static final Path DIRECTORY_OPERATIONS_SHORT =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_OPERATIONS_SHORT);
 
-    protected static final String DIRECTORY_NAME_OPERATIONS_LONG = DIRECTORY_NAME_OPERATIONS
-        + "long/";
+    protected static final String DIRECTORY_NAME_OPERATIONS_LONG =
+            DIRECTORY_NAME_OPERATIONS + "long/";
 
-    protected static final Path DIRECTORY_OPERATIONS_LONG = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_OPERATIONS_LONG);
+    protected static final Path DIRECTORY_OPERATIONS_LONG =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_OPERATIONS_LONG);
 
-    protected static final String DIRECTORY_NAME_OPERATIONS_MODIFIERS = DIRECTORY_NAME_OPERATIONS
-        + "modifiers/";
+    protected static final String DIRECTORY_NAME_OPERATIONS_MODIFIERS =
+            DIRECTORY_NAME_OPERATIONS + "modifiers/";
 
-    protected static final Path DIRECTORY_OPERATIONS_MODIFIERS = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_OPERATIONS_MODIFIERS);
+    protected static final Path DIRECTORY_OPERATIONS_MODIFIERS =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_OPERATIONS_MODIFIERS);
 
     protected static final String DIRECTORY_NAME_CAMPAIGN = "campaign/";
 
-    protected static final Path DIRECTORY_CAMPAIGN = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_CAMPAIGN);
+    protected static final Path DIRECTORY_CAMPAIGN =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_CAMPAIGN);
 
-    protected static final Path DIRECTORY_CAMPAIGN_MECH_STAT = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_CAMPAIGN, "mechstat.dat");
+    protected static final Path DIRECTORY_CAMPAIGN_MECH_STAT =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_CAMPAIGN, "mechstat.dat");
 
-    protected static final String DIRECTORY_NAME_CAMPAIGN_PLAYERS = DIRECTORY_NAME_CAMPAIGN
-        + "players/";
+    protected static final String DIRECTORY_NAME_CAMPAIGN_PLAYERS =
+            DIRECTORY_NAME_CAMPAIGN + "players/";
 
-    protected static final Path DIRECTORY_CAMPAIGN_PLAYERS = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_CAMPAIGN_PLAYERS);
+    protected static final Path DIRECTORY_CAMPAIGN_PLAYERS =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_CAMPAIGN_PLAYERS);
 
-    protected static final String DIRECTORY_NAME_CAMPAIGN_PLANETS = DIRECTORY_NAME_CAMPAIGN
-        + "planets/";
+    protected static final String DIRECTORY_NAME_CAMPAIGN_PLANETS =
+            DIRECTORY_NAME_CAMPAIGN + "planets/";
 
-    protected static final Path DIRECTORY_CAMPAIGN_PLANETS = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_CAMPAIGN_PLANETS);
+    protected static final Path DIRECTORY_CAMPAIGN_PLANETS =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_CAMPAIGN_PLANETS);
 
-    protected static final String DIRECTORY_NAME_CAMPAIGN_FACTIONS = DIRECTORY_NAME_CAMPAIGN
-        + "factions/";
+    protected static final String DIRECTORY_NAME_CAMPAIGN_FACTIONS =
+            DIRECTORY_NAME_CAMPAIGN + "factions/";
 
-    protected static final Path DIRECTORY_CAMPAIGN_FACTIONS = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_CAMPAIGN_FACTIONS);
+    protected static final Path DIRECTORY_CAMPAIGN_FACTIONS =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_CAMPAIGN_FACTIONS);
 
-    protected static final String DIRECTORY_NAME_CAMPAIGN_COST_MODIFIERS = DIRECTORY_NAME_CAMPAIGN
-        + "costmodifiers/";
+    protected static final String DIRECTORY_NAME_CAMPAIGN_COST_MODIFIERS =
+            DIRECTORY_NAME_CAMPAIGN + "costmodifiers/";
 
-    protected static final Path DIRECTORY_CAMPAIGN_COST_MODIFIERS = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_CAMPAIGN_COST_MODIFIERS);
+    protected static final Path DIRECTORY_CAMPAIGN_COST_MODIFIERS =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_CAMPAIGN_COST_MODIFIERS);
 
-    protected static final String DIRECTORY_NAME_CAMPAIGN_BACKUP = DIRECTORY_NAME_CAMPAIGN
-        + "backup/";
+    protected static final String DIRECTORY_NAME_CAMPAIGN_BACKUP =
+            DIRECTORY_NAME_CAMPAIGN + "backup/";
 
-    protected static final Path DIRECTORY_CAMPAIGN_BACKUP = FileSystems.getDefault()
-        .getPath(DIRECTORY_NAME_CAMPAIGN_BACKUP);
+    protected static final Path DIRECTORY_CAMPAIGN_BACKUP =
+            FileSystems.getDefault().getPath(DIRECTORY_NAME_CAMPAIGN_BACKUP);
 
-    protected Path campaignConfigPath = FileSystems.getDefault().getPath(
-            getConfigDir().toString(),
-            FILE_NAME_CAMPAIGN_CONFIG
-        );
+    protected Path campaignConfigPath =
+            FileSystems.getDefault().getPath(getConfigDir().toString(), FILE_NAME_CAMPAIGN_CONFIG);
 
-
-    private static final Path[] DIRECTORIES = new Path[] {
-        DIRECTORY_OPERATIONS,
-        DIRECTORY_OPERATIONS_SHORT,
-        DIRECTORY_OPERATIONS_LONG,
-        DIRECTORY_OPERATIONS_MODIFIERS,
-        DIRECTORY_CAMPAIGN,
-        DIRECTORY_CAMPAIGN_PLAYERS,
-        DIRECTORY_CAMPAIGN_PLANETS,
-        DIRECTORY_CAMPAIGN_FACTIONS,
-        DIRECTORY_CAMPAIGN_COST_MODIFIERS,
-        DIRECTORY_CAMPAIGN_BACKUP
-    };
+    private static final Path[] DIRECTORIES =
+            new Path[] {
+                DIRECTORY_OPERATIONS,
+                DIRECTORY_OPERATIONS_SHORT,
+                DIRECTORY_OPERATIONS_LONG,
+                DIRECTORY_OPERATIONS_MODIFIERS,
+                DIRECTORY_CAMPAIGN,
+                DIRECTORY_CAMPAIGN_PLAYERS,
+                DIRECTORY_CAMPAIGN_PLANETS,
+                DIRECTORY_CAMPAIGN_FACTIONS,
+                DIRECTORY_CAMPAIGN_COST_MODIFIERS,
+                DIRECTORY_CAMPAIGN_BACKUP
+            };
 
     private static class LazyHolder {
         private static final FileSystem INSTANCE = new FileSystem();
@@ -154,7 +153,7 @@ public class FileSystem extends AbstractFileSystem {
     }
 
     public void setCampaignConfig(String path) {
-        FileSystems.getDefault().getPath(path);
+        campaignConfigPath = FileSystems.getDefault().getPath(path);
     }
 
     @Override

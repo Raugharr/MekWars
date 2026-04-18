@@ -1489,22 +1489,6 @@ public class DefaultCampaignOptions {
         defaults.setProperty("UseNewOpManager", "false");
     }
 
-    /**
-     * @author jtighe Saves the current server configs to the configfile.
-     */
-    public void createConfig(String filename) {
-        try {
-            CampaignData.cd
-                    .getCampaignOptions()
-                    .saveConfigureFile(
-                            CampaignData.cd.getCampaignOptions().getProperties(), filename);
-        } catch (Exception ex) {
-            LOGGER.error("Unable to save config file.");
-            LOGGER.error("Exception: ", ex);
-            LOGGER.error(ex.getMessage());
-        }
-    }
-
     public Properties getDefaults() {
         return defaults;
     }

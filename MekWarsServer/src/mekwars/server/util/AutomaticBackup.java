@@ -127,8 +127,7 @@ public class AutomaticBackup extends Thread {
                 .setProperty("LastAutomatedBackup", Long.toString(time));
         CampaignData.cd
                 .getCampaignOptions()
-                .getDefaultOptions()
-                .createConfig(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG"));
+                .save();
         CampaignMain.cm.setArchiving(false);
         LOGGER.info("Archiving Ended.");
     }

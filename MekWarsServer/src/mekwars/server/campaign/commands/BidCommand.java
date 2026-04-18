@@ -18,6 +18,7 @@ package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import mekwars.common.CampaignData;
 import mekwars.common.Unit;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -103,7 +104,7 @@ public class  BidCommand  implements Command {
 		// Check that the house is allowed to bid on this type of unit
 		int uType = auction.getUnitType();
 		int uWeight = auction.getUnitWeight();
-		boolean canBuy = CampaignMain.cm.getHouseForPlayer(p.getName()).canBuyFromBM(uType, uWeight);
+        boolean canBuy = CampaignData.cd.getCampaignOptions().canBuyFromBM(uType, uWeight);
 //		boolean canBuy = p.getMyHouse().canBuyFromBM(uType, uWeight);
 		if (!canBuy) {
 			CampaignMain.cm.toUser("AM:Your faction is not allowed to purchase " + 
