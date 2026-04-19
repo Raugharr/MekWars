@@ -20,13 +20,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.EnumSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import megamek.common.AmmoType;
 import megamek.common.AmmoType.Munitions;
 import megamek.common.BattleArmor;
@@ -225,29 +225,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     }
 
     /**
-     * Method which determines whether or not a given unit may be sold on the
-     * black market. Any "false" return prevents house listings as well as
-     * player sales.
-     */
-    public static boolean mayBeSoldOnMarket(SUnit u) {
-        if ((u.getType() == Unit.BATTLEARMOR) && !CampaignMain.cm.getBooleanConfig("BAMayBeSoldOnBM")) {
-            return false;
-        } else if ((u.getType() == Unit.PROTOMEK) && !CampaignMain.cm.getBooleanConfig("ProtosMayBeSoldOnBM")) {
-            return false;
-        } else if ((u.getType() == Unit.AERO) && !CampaignMain.cm.getBooleanConfig("AerosMayBeSoldOnBM")) {
-            return false;
-        } else if ((u.getType() == Unit.INFANTRY) && !CampaignMain.cm.getBooleanConfig("InfantryMayBeSoldOnBM")) {
-            return false;
-        } else if ((u.getType() == Unit.VEHICLE) && !CampaignMain.cm.getBooleanConfig("VehsMayBeSoldOnBM")) {
-            return false;
-        } else if (((u.getType() == Unit.MEK) || (u.getType() == Unit.QUAD)) && !CampaignMain.cm.getBooleanConfig("MeksMayBeSoldOnBM")) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Return the number of techs/bays required for a unit of given size/type.
      */
     public static int getHangarSpaceRequired(int typeid, int weightclass, int baymod, String model, SHouse faction) {
@@ -343,97 +320,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     /*
      * AR-related statics.
      */
-    public static double getArmorCost(Entity unit, int location) {
-        double cost = 0.0;
-
-        if (CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
-            return 0;
-        }
-
-        String armorCost = "CostPoint" + UnitUtils.getArmorShortName(unit, location);
-        cost = CampaignMain.cm.getDoubleConfig(armorCost);
-
-        return cost;
-    }
-
-    public static double getStructureCost(Entity unit) {
-        double cost = 0.0;
-
-        if (CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
-            return 0;
-        }
-
-        String armorCost = "CostPoint" + UnitUtils.getInternalShortName(unit) + "IS";
-        cost = CampaignMain.cm.getDoubleConfig(armorCost);
-
-        return cost;
-    }
-
-    public static double getCritCost(Entity unit, CriticalSlot crit) {
-
-        double cost = 0.0;
-        if (CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
-            return 0;
-        }
-
-        if (crit == null) {
-            return 0;
-        }
-
-        if (crit.isBreached() && !crit.isDamaged()) {
-            return 0;
-        }
-
-        // else
-        if (UnitUtils.isEngineCrit(crit)) {
-            cost = CampaignMain.cm.getDoubleConfig("EngineCritRepairCost");
-        } else if (crit.getType() == CriticalSlot.TYPE_SYSTEM) {
-            if (crit.isMissing()) {
-                cost = CampaignMain.cm.getDoubleConfig("SystemCritReplaceCost");
-            } else {
-                cost = CampaignMain.cm.getDoubleConfig("SystemCritRepairCost");
-            }
-        } else {
-            Mounted mounted = crit.getMount();
-
-            if (mounted.getType() instanceof WeaponType) {
-                WeaponType weapon = (WeaponType) mounted.getType();
-                if (weapon.hasFlag(WeaponType.F_ENERGY)) {
-                    if (crit.isMissing()) {
-                        cost = CampaignMain.cm.getDoubleConfig("EnergyWeaponCritReplaceCost");
-                    } else {
-                        cost = CampaignMain.cm.getDoubleConfig("EnergyWeaponCritRepairCost");
-                    }
-                } else if (weapon.hasFlag(WeaponType.F_BALLISTIC)) {
-                    if (crit.isMissing()) {
-                        cost = CampaignMain.cm.getDoubleConfig("BallisticCritReplaceCost");
-                    } else {
-                        cost = CampaignMain.cm.getDoubleConfig("BallisticCritRepairCost");
-                    }
-                } else if (weapon.hasFlag(WeaponType.F_MISSILE)) {
-                    if (crit.isMissing()) {
-                        cost = CampaignMain.cm.getDoubleConfig("MissileCritReplaceCost");
-                    } else {
-                        cost = CampaignMain.cm.getDoubleConfig("MissileCritRepairCost");
-                    }
-                } else // use the misc eq costs.
-                if (crit.isMissing()) {
-                    cost = CampaignMain.cm.getDoubleConfig("EquipmentCritReplaceCost");
-                } else {
-                    cost = CampaignMain.cm.getDoubleConfig("EquipmentCritRepairCost");
-                }
-            } else // use the misc eq costs.
-            if (crit.isMissing()) {
-                cost = CampaignMain.cm.getDoubleConfig("EquipmentCritReplaceCost");
-            } else {
-                cost = CampaignMain.cm.getDoubleConfig("EquipmentCritRepairCost");
-            }
-        }
-
-        cost = Math.max(cost, 1);
-        return cost;
-    }
-
     // METHODS
     /**
      * @return the Serialized Version of this entity
@@ -1206,12 +1092,12 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         super.setWeightclass(i);
     }
 
-    public static Vector<SUnit> createMULUnits(String filename) {
+    public static List<SUnit> createMULUnits(String filename) {
         return SUnit.createMULUnits(filename, "autoassigned unit");
     }
 
-    public static Vector<SUnit> createMULUnits(String filename, String fluff) {
-        Vector<SUnit> mulUnits = new Vector<SUnit>(1, 1);
+    public static List<SUnit> createMULUnits(String filename, String fluff) {
+        ArrayList<SUnit> mulUnits = new ArrayList<>();
 
         Vector<Entity> loadedUnits = null;
         File entityFile = new File("data/armies/" + filename);

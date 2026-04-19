@@ -29,6 +29,7 @@ import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.Tank;
+import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
@@ -84,7 +85,7 @@ public class SalvageUnitCommand implements Command {
             Entity entity = unit.getEntity();
             String salvageMessage = "";
             int tabLocation = location;
-            int cost = CampaignMain.cm.getRepairCost(entity, location, slot, techType, armor, 0, true);
+            int cost = UnitRepairCostCalculator.getRepairCost(entity, location, slot, techType, armor, 0, true);
 
             if ((unit.getType() != Unit.MEK) && (unit.getType() != Unit.VEHICLE)) {
                 CampaignMain.cm.toUser("AM:Sorry you can only salvage components from meks and vehicles.", Username);

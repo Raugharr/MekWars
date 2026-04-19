@@ -46,6 +46,7 @@ import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.TechConstants;
+import mekwars.common.util.UnitUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.campaign.data.TimeUpdateHouse;
@@ -1055,7 +1056,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                     }
 
                     int bmPercent = Integer.parseInt(this.getConfig("ChanceToSendUnitToBM"));
-                    if (maySellOnBM() && CampaignMain.cm.getRandomNumber(101) < bmPercent && SUnit.mayBeSoldOnMarket(randUnit)) {
+                    if (maySellOnBM() && CampaignMain.cm.getRandomNumber(101) < bmPercent && UnitUtils.mayBeSoldOnMarket(randUnit)) {
 
                         // Use standard factory pricing for the unit, and
                         // configured ticks.

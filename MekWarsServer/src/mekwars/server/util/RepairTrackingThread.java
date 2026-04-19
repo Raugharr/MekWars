@@ -36,6 +36,7 @@ import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Mounted;
+import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
@@ -54,12 +55,10 @@ public class RepairTrackingThread extends Thread{
     private Vector<Repair> repairList = new Vector<Repair>(1,1);
     private long repairtime = 0;
 
-
     public RepairTrackingThread(long Time) {
         super("Repair Tracking Thread");
         repairtime = Time;
     }
-
 
     @Override
     public synchronized void run (){
@@ -72,7 +71,6 @@ public class RepairTrackingThread extends Thread{
         }catch(Exception ex){
             LOGGER.error("Error while trying to sleep in RepairTrackingThread", ex);
         }
-
     }
 
     public void checkRepairs(){
@@ -817,7 +815,7 @@ class Repair{
                         techType = UnitUtils.TECH_PILOT;
                     }
 
-                    int cost = CampaignMain.cm.getRepairCost(unit,location,slot,techType,armor,techWorkMod,salvage);
+                    int cost = UnitRepairCostCalculator.getRepairCost(unit, location, slot, techType, armor, techWorkMod, salvage);
                     if ( player.getAutoReorder() && (player.getPartsAmount(critName) < damagedCrits) ) {
                         String newCommand = critName+"#"+damagedCrits;
                         CampaignMain.cm.getServerCommands().get("BUYPARTS").process(new StringTokenizer(newCommand,"#"), Username);

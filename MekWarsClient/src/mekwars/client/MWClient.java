@@ -99,6 +99,7 @@ import mekwars.common.Planet;
 import mekwars.common.PlanetEnvironment;
 import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
+import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.common.util.GameReport;
 import mekwars.common.util.ThreadManager;
 import mekwars.common.util.TokenReader;
@@ -1747,19 +1748,19 @@ public final class MWClient extends GameHost implements IClient {
                     || (critLocation == Mech.LOC_RT)) {
                 if (unit.getArmor(critLocation, false) != unit.getOArmor(
                         critLocation, false)) {
-                    cost += CUnit.getArmorCost(unit, this, critLocation)
+                    cost += UnitRepairCostCalculator.getArmorCost(unit, critLocation)
                             * (unit.getOArmor(critLocation, false) - unit
                                     .getArmor(critLocation, false));
                 }
                 if (unit.getArmor(critLocation, true) != unit.getOArmor(
                         critLocation, true)) {
-                    cost += CUnit.getArmorCost(unit, this, critLocation)
+                    cost += UnitRepairCostCalculator.getArmorCost(unit, critLocation)
                             * (unit.getOArmor(critLocation, false) - unit
                                     .getArmor(critLocation, false));
                 }
                 if (unit.getInternal(critLocation) != unit
                         .getOInternal(critLocation)) {
-                    cost += CUnit.getStructureCost(unit, this)
+                    cost += UnitRepairCostCalculator.getStructureCost(unit)
                             * (unit.getOInternal(critLocation) - unit
                                     .getInternal(critLocation));
                 }
@@ -1767,13 +1768,13 @@ public final class MWClient extends GameHost implements IClient {
             else {
                 if (unit.getArmor(critLocation, false) != unit.getOArmor(
                         critLocation, false)) {
-                    cost += CUnit.getArmorCost(unit, this, critLocation)
+                    cost += UnitRepairCostCalculator.getArmorCost(unit, critLocation)
                             * (unit.getOArmor(critLocation, false) - unit
                                     .getArmor(critLocation, false));
                 }
                 if (unit.getInternal(critLocation) != unit
                         .getOInternal(critLocation)) {
-                    cost += CUnit.getStructureCost(unit, this)
+                    cost += UnitRepairCostCalculator.getStructureCost(unit)
                             * (unit.getOInternal(critLocation) - unit
                                     .getInternal(critLocation));
                 }
@@ -1801,7 +1802,7 @@ public final class MWClient extends GameHost implements IClient {
                 } else if (cs.getType() == CriticalSlot.TYPE_SYSTEM) {
                     systemCrits++;
                 } else {
-                    cost += CUnit.getCritCost(unit, this, cs);
+                    cost += UnitRepairCostCalculator.getCritCost(unit, cs);
                 }
             }// end slot for
         }// end location for

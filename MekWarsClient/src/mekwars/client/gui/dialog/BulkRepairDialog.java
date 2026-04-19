@@ -44,6 +44,7 @@ import mekwars.client.MWClient;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.Unit;
+import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.util.SpringLayoutHelper;
@@ -240,7 +241,6 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
 
                 if (unitRepairType == BulkRepairDialog.UNIT_TYPE_ALL) {
                     for (CUnit repairUnit : mwclient.getPlayer().getHangar()) {
-
                         unit = repairUnit.getEntity();
 
                         if (((repairUnit.getType() == Unit.MEK) || (repairUnit.getType() == Unit.VEHICLE)) && (UnitUtils.hasArmorDamage(unit) || UnitUtils.hasCriticalDamage(unit) || UnitUtils.hasISDamage(unit)) ){
@@ -429,7 +429,6 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
     }
 
     public void setRepair() {
-
         int tech = 0;
         int roll = 0;
 
@@ -530,7 +529,6 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
      *
      */
     public void setCost(int repairType) {
-
         if (repairType == ARMOR) {
             setArmorCost();
             return;
@@ -864,7 +862,6 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
     }
 
     private void setArmorCost() {
-
         int techType = ((JComboBox<?>) techBox.getComponent(ARMOR)).getSelectedIndex();
         int baseRoll = Integer.parseInt(((JSpinner) rollBox.getComponent(ARMOR)).getValue().toString());
         double pointsToRepair = 0;
@@ -914,7 +911,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
 
                 if (unit.hasRearArmor(location)) {
                     pointsToRepair += unit.getOArmor(location, true) - unit.getArmor(location, true);
-                    armorCost = CUnit.getArmorCost(unit, mwclient, location);
+                    armorCost = UnitRepairCostCalculator.getArmorCost(unit, location);
                     cost += armorCost * pointsToRepair;
                     cost += techCost * Math.abs(techWorkMod);
                     cost += techCost;
@@ -928,7 +925,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         // that it covers the chances of failures. not the greatest but better
         // then nothing.
         if (!isSalvage()) {
-            cost *= payOutIncreaseBasedOnRoll(baseRoll);
+            cost *= UnitRepairCostCalculator.payOutIncreaseBasedOnRoll(baseRoll);
         }
         cost = Math.max(0, cost);
 
@@ -936,11 +933,10 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
     }
 
     private void setInternalCost() {
-
         int techType = ((JComboBox<?>) techBox.getComponent(INTERNAL)).getSelectedIndex();
         int baseRoll = Integer.parseInt(((JSpinner) rollBox.getComponent(INTERNAL)).getValue().toString());
         double pointsToRepair = 0;
-        double armorCost = CUnit.getStructureCost(unit, mwclient);
+        double armorCost = UnitRepairCostCalculator.getStructureCost(unit);
         double techCost = 0;
         double techWorkMod = 0;
         double cost = 0;
@@ -983,7 +979,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         // that it covers the chances of failures. not the greatest but better
         // then nothing.
         if (!isSalvage()) {
-            cost *= payOutIncreaseBasedOnRoll(baseRoll);
+            cost *= UnitRepairCostCalculator.payOutIncreaseBasedOnRoll(baseRoll);
         }
         cost = Math.max(0, cost);
 
@@ -991,7 +987,6 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
     }
 
     private void setSystemCost() {
-
         int techType = ((JComboBox<?>) techBox.getComponent(SYSTEMS)).getSelectedIndex();
         int baseRoll = Integer.parseInt(((JSpinner) rollBox.getComponent(SYSTEMS)).getValue().toString());
         double pointsToRepair = 0;
@@ -1038,7 +1033,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
                         techWorkMod = UnitUtils.getTechRoll(unit, location, slot, techType, true, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getTechLevel()) - baseRoll;
                     }
 
-                    critCost = CUnit.getCritCost(unit, mwclient, cs);
+                    critCost = UnitRepairCostCalculator.getCritCost(unit, cs);
                     techWorkMod = Math.max(techWorkMod, 0);
                     pointsToRepair = UnitUtils.getNumberOfCrits(unit, cs);
                     critCost += techCost;
@@ -1058,7 +1053,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         // that it covers the chances of failures. not the greatest but better
         // then nothing.
         if (!isSalvage()) {
-            cost *= payOutIncreaseBasedOnRoll(baseRoll);
+            cost *= UnitRepairCostCalculator.payOutIncreaseBasedOnRoll(baseRoll);
         }
         cost = Math.max(0, cost);
 
@@ -1066,7 +1061,6 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
     }
 
     private void setWeaponCost() {
-
         int techType = ((JComboBox<?>) techBox.getComponent(WEAPONS)).getSelectedIndex();
         int baseRoll = Integer.parseInt(((JSpinner) rollBox.getComponent(WEAPONS)).getValue().toString());
         double pointsToRepair = 0;
@@ -1120,7 +1114,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
                                 techWorkMod = UnitUtils.getTechRoll(unit, location, slot, techType, true, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getTechLevel()) - baseRoll;
                             }
 
-                            critCost = CUnit.getCritCost(unit, mwclient, cs);
+                            critCost = UnitRepairCostCalculator.getCritCost(unit, cs);
                             techWorkMod = Math.max(techWorkMod, 0);
                             pointsToRepair = UnitUtils.getNumberOfCrits(unit, cs);
                             critCost += techCost;
@@ -1140,7 +1134,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         // that it covers the chances of failures. not the greatest but better
         // then nothing.
         if (!isSalvage()) {
-            cost *= payOutIncreaseBasedOnRoll(baseRoll);
+            cost *= UnitRepairCostCalculator.payOutIncreaseBasedOnRoll(baseRoll);
         }
         cost = Math.max(0, cost);
 
@@ -1202,7 +1196,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
                             techWorkMod = UnitUtils.getTechRoll(unit, location, slot, techType, true, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getTechLevel()) - baseRoll;
                         }
 
-                        critCost = CUnit.getCritCost(unit, mwclient, cs);
+                        critCost = UnitRepairCostCalculator.getCritCost(unit, cs);
                         techWorkMod = Math.max(techWorkMod, 0);
                         pointsToRepair = UnitUtils.getNumberOfCrits(unit, cs);
                         critCost += techCost;
@@ -1221,7 +1215,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         // that it covers the chances of failures. not the greatest but better
         // then nothing.
         if (!isSalvage()) {
-            cost *= payOutIncreaseBasedOnRoll(baseRoll);
+            cost *= UnitRepairCostCalculator.payOutIncreaseBasedOnRoll(baseRoll);
         }
         cost = Math.max(0, cost);
 
@@ -1289,7 +1283,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
             techWorkMod = UnitUtils.getTechRoll(unit, location, slot, techType, true, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getTechLevel()) - baseRoll;
         }
 
-        critCost = CUnit.getCritCost(unit, mwclient, cs);
+        critCost = UnitRepairCostCalculator.getCritCost(unit, cs);
         techWorkMod = Math.max(techWorkMod, 0);
         pointsToRepair = UnitUtils.getNumberOfCrits(unit, cs);
         // System.err.println("critCost: "+critCost+" techWorkMod:
@@ -1304,7 +1298,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
         // Base on what they assigned as the base roll we increase the payout so
         // that it covers the chances of failures. not the greatest but better
         // then nothing.
-        cost *= payOutIncreaseBasedOnRoll(baseRoll);
+        cost *= UnitRepairCostCalculator.payOutIncreaseBasedOnRoll(baseRoll);
         cost = Math.max(0, cost);
         // System.err.println("Cost 2: "+cost);
         if (!found) {
@@ -1315,16 +1309,6 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
             setWorkHours(ENGINES, UnitUtils.LOC_CT, 0, false, true);
         }
         ((JLabel) costBox.getComponent(ENGINES)).setText(Integer.toString((int) cost));
-    }
-
-    private double payOutIncreaseBasedOnRoll(int roll) {
-        if (roll <= 2) {
-            return 1.0;
-        } else if (roll > 12) {
-            return 36.0;
-        }
-        final double[] payout = { 1.0, 1.0, 1.0, 1.03, 1.09, 1.20, 1.38, 1.72, 2.40, 3.60, 5.92, 12.0, 36.0 };
-        return payout[roll];
     }
 
     private void setWorkHours(int type, int critLocation, int critSlot, boolean armor, boolean clear) {
@@ -1350,7 +1334,7 @@ public class BulkRepairDialog extends JFrame implements ActionListener, KeyListe
             baseLine *= 2;
         }
 
-        baseLine = (int) (baseLine * payOutIncreaseBasedOnRoll(baseRoll));
+        baseLine = (int) (baseLine * UnitRepairCostCalculator.payOutIncreaseBasedOnRoll(baseRoll));
 
         JLabel textField = (JLabel) timeBox.getComponent(type);
         if (!clear) {
