@@ -350,27 +350,20 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     }
 
     /**
-     * Remove the Unit with ID unitid from the player. Ops are checked by
+     * Remove the Unit with ID unitId from the player. Ops are checked by
      * discrete commands (ie - SellUnit), unchecked by large blocks of code
      * which force a check on their own (ie - ShortResolver).
      *
-     * @param unitid
+     * @param unitId
      *            the ID of the unit to remove
      */
-    public void removeUnit(int unitid, boolean sendArmyUpdate) {
+    public void removeUnit(int unitId, boolean sendArmyUpdate) {
         SUnit Mech = null;
-        synchronized (getUnits()) {
-        	for (int i = 0; i < getUnits().size(); i++) {
-        		Mech = getUnits().get(i);
-        		if (Mech.getId() == unitid) {
-        			getUnits().remove(i);
-        		}
-            }
-        }
 
+        super.removeUnit(unitId);
         for (SArmy currA : getArmies()) {
-            if (currA.getUnitPosition(unitid) > -1) {
-                currA.removeUnit(unitid);
+            if (currA.getUnitPosition(unitId) > -1) {
+                currA.removeUnit(unitId);
                 if (sendArmyUpdate) {
                     CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), name, false);
                     CampaignMain.cm.getOpsManager().checkOperations(currA, true);// update
@@ -380,7 +373,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             }
         }// end for(all armies)
 
-        CampaignMain.cm.toUser("PL|RU|" + unitid, name, false);
+        CampaignMain.cm.toUser("PL|RU|" + unitId, name, false);
         CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), name, false);
         CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), name, false);
         setSave();// save on remove (adminstrip, etc)
