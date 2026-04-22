@@ -16,16 +16,18 @@
 
 package mekwars.server.campaign.commands.admin;
 
+// import java.util.Hashtable;
 import mekwars.common.AdvancedTerrain;
 import mekwars.common.Continent;
+// import mekwars.common.Terrain;
+import mekwars.common.PlanetEnvironments;
+// import mekwars.common.PlanetEnvironment;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class SetAdvancedPlanetTerrainCommand implements Command {
@@ -70,26 +72,19 @@ public class SetAdvancedPlanetTerrainCommand implements Command {
         int aid = Integer.parseInt(command.nextToken());
         //		int conid = 0;
 
-        AdvancedTerrain advancedTerrain = CampaignMain.cm.getData().getAdvancedTerrain(aid);
-        List<Continent> originalContinents = planet.getContinents();
-        List<Continent> changedContinents = new ArrayList<Continent>();
+        AdvancedTerrain AT = CampaignMain.cm.getData().getAdvancedTerrain(aid);
+        PlanetEnvironments originalPe = planet.getEnvironments();
+        PlanetEnvironments changedPe = new PlanetEnvironments();
 
-        for (int x = 0; x < originalContinents.size(); x++) {
-            if (originalContinents.get(x).getEnvironment().getId() == id) {
-                changedContinents.add(
-                        new Continent(
-                                originalContinents.get(x).getSize(),
-                                originalContinents.get(x).getEnvironment(),
-                                advancedTerrain));
+        for (Continent continent : originalPe.getContinents()) {
+            if (continent.getEnvironment().getId() == id) {
+                changedPe.add(new Continent(continent.getSize(), continent.getEnvironment(), AT));
             } else {
-                changedContinents.add(originalContinents.get(x));
+                changedPe.add(continent);
             }
         }
 
-        planet.removeAllContinents();
-        for (Continent continent : changedContinents) {
-            planet.addContinent(continent);
-        }
+        planet.setEnvironments(changedPe);
         planet.updated();
 
         CampaignMain.cm.toUser(

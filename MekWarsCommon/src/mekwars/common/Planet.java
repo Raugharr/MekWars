@@ -20,31 +20,44 @@
  */
 package mekwars.common;
 
-import mekwars.common.entities.Entity;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+
+import mekwars.common.entities.MWEntity;
 import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.Position;
 
-import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.Map;
 
 /**
  * @author Helge Richter
  */
-public class Planet implements Comparable<Object>, MutableSerializable, Entity {
+@Entity(name = "planet")
+public class Planet implements Comparable<Object>, MWEntity {
     // VARIABLES
     /**
      * Unique id of this planet. Mutable field (although it will not change, it has to be
      * transfered)
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id = EntityStore.UNSET_ID;
 
     /** name of the planet. Should be unique among planets too. */
@@ -54,15 +67,17 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
      * position of this planet in the inner spehre map. Ranges from about -700 to 700 in both
      * directions.
      */
-    private Position position; // distance calculates faster, also fewer casts
+    @Embedded private Position position; // distance calculates faster, also fewer casts
 
     /**
      * The unit factories on this planet. Type is UnitFactory Mutable field (has to be transfered)
      */
+    @OneToMany
+    @JoinColumn(name = "planet_id")
     private List<UnitFactory> unitFactories = new ArrayList<UnitFactory>();
 
-    /** The continents/environments on this planet. */
-    private List<Continent> continents = new ArrayList<Continent>();
+    /** The environment modifiers for the planet. */
+    @OneToOne private PlanetEnvironments environments = new PlanetEnvironments();
 
     /** A human readable description of the planet. */
     private String description = "";
@@ -74,16 +89,10 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     private boolean conquerable = true;
 
     /** How much components are produced through this planet. */
-    private int compProduction = 0;
+    private int componentProduction = 0;
 
     /** The influence each faction has on this planet. Mutable field (has to be transfered) */
-    private Influences influence;
-
-    /** Map and board sizes are now stored as diminsions for static map usage Torren */
-    private Dimension MapSize = new Dimension(1, 1); // default megamek map
-
-    // size
-    private Dimension BoardSize = new Dimension(16, 17); // default megamek board
+    @Embedded private Influences influence;
 
     // size
 
@@ -97,7 +106,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
      * Min Planet ownership to allow a faction to use the planets resources defaults to -1 so that
      * the server wide on is used.
      */
-    private int minPlanetOwnerShip = -1;
+    private int minPlanetOwnership = -1;
 
     /** Boolean that states if a planet is a homeworld or not */
     private boolean homeWorld = false;
@@ -108,7 +117,11 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     /*
      * This allows SO's to set flags for planets and to be used in ops.
      */
-    private TreeMap<String, String> planetFlags = new TreeMap<String, String>();
+    @ElementCollection
+    @CollectionTable(name = "planet_flags", joinColumns = @JoinColumn(name = "planet_id"))
+    @MapKeyColumn(name = "flag_key")
+    @Column(name = "flag_value")
+    private Map<String, String> planetFlags = new HashMap<String, String>();
 
     /*
      * Max Planet Points. this Allows SO's to set the conquer points of a planet
@@ -152,17 +165,17 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     }
 
     /**
-     * @return Returns the compProduction.
+     * @return Returns the componentProduction.
      */
     public int getCompProduction() {
-        return compProduction;
+        return componentProduction;
     }
 
     /**
-     * @param compProduction The compProduction to set.
+     * @param componentProduction The componentProduction to set.
      */
-    public void setCompProduction(int compProduction) {
-        this.compProduction = compProduction;
+    public void setCompProduction(int componentProduction) {
+        this.componentProduction = componentProduction;
     }
 
     /**
@@ -170,8 +183,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
      * @return the id of the current owner of the planet
      */
     public Integer getPlanetOwner() {
-        Integer ownerid = getInfluence().getOwner();
-        return ownerid;
+        return getInfluence().getOwner();
     }
 
     /**
@@ -181,6 +193,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
      */
     public boolean isOwner(int factionid) {
         Integer ownerID = getPlanetOwner();
+
         if (ownerID == null) {
             return false;
         }
@@ -260,7 +273,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     /**
      * @param Factories The Factories to set.
      */
-    public void setUnitFactories(ArrayList<UnitFactory> unitFactories) {
+    public void setUnitFactories(List<UnitFactory> unitFactories) {
         this.unitFactories = unitFactories;
     }
 
@@ -385,19 +398,20 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         return getId() < p.getId() ? -1 : (getId() == p.getId() ? 0 : 1);
     }
 
-    /** Encode all mutable fields into the stream. Use as few bits as possible. */
-    public void encodeMutableFields(BinWriter out, CampaignData dataProvider) throws IOException {
-        out.println(getId(), "id");
-        getInfluence().encodeMutableFields(out, dataProvider);
-        binOut(out);
-    }
+    // /** Encode all mutable fields into the stream. Use as few bits as possible. */
+    // public void encodeMutableFields(BinWriter out, CampaignData dataProvider) throws IOException
+    // {
+    //     out.println(getId(), "id");
+    //     getInfluence().encodeMutableFields(out, dataProvider);
+    //     binOut(out);
+    // }
 
-    /** Decode all mutable fields from the stream. */
-    public void decodeMutableFields(BinReader in, CampaignData dataProvider) throws IOException {
-        setId(in.readInt("id"));
-        getInfluence().decodeMutableFields(in, dataProvider);
-        binIn(in, dataProvider);
-    }
+    // /** Decode all mutable fields from the stream. */
+    // public void decodeMutableFields(BinReader in, CampaignData dataProvider) throws IOException {
+    //     setId(in.readInt("id"));
+    //     getInfluence().decodeMutableFields(in, dataProvider);
+    //     binIn(in, dataProvider);
+    // }
 
     /** Write itself into the stream. */
     public void binOut(BinWriter out) throws IOException {
@@ -418,7 +432,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         out.println(getDescription(), "description");
         out.println(getBaysProvided(), "baysProvided");
         out.println(isConquerable(), "conquerable");
-        out.println(getCompProduction(), "compProduction");
+        out.println(getCompProduction(), "componentProduction");
         getInfluence().binOut(out);
         out.println(getMinPlanetOwnerShip(), "minplanetownership");
         out.println(isHomeWorld(), "homeworld");
@@ -456,13 +470,13 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         setDescription(in.readLine("description"));
         setBaysProvided(in.readInt("baysProvided"));
         setConquerable(in.readBoolean("conquerable"));
-        setCompProduction(in.readInt("compProduction"));
+        setCompProduction(in.readInt("componentProduction"));
         setInfluence(new Influences());
         getInfluence().binIn(in);
         setMinPlanetOwnerShip(in.readInt("minplanetownership"));
         setHomeWorld(in.readBoolean("homeworld"));
         setOriginalOwner(in.readLine("originalowner"));
-        TreeMap<String, String> map = new TreeMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
         size = in.readInt("PlanetFlags.size");
         for (int i = 0; i < size; ++i) {
             String key;
@@ -617,6 +631,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     /**
      * @return Returns the id.
      */
+    @Id
     public int getId() {
         return id;
     }
@@ -747,37 +762,19 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     }
 
     public int getFactoryCount() {
-
-        // int count = 0;
         return getUnitFactories().size();
-        /*
-         * for (Iterator i = getUnitFactories().iterator(); i.hasNext();) {
-         * count++; i.next(); } return count;
-         */
-    }
-
-    public Dimension getMapSize() {
-        return MapSize;
-    }
-
-    public void setMapSize(Dimension map) {
-        MapSize = map;
-    }
-
-    public Dimension getBoardSize() {
-        return BoardSize;
-    }
-
-    public void setBoardSize(Dimension board) {
-        BoardSize = board;
     }
 
     public int getMinPlanetOwnerShip() {
-        return minPlanetOwnerShip;
+        if (minPlanetOwnership < 0)
+            minPlanetOwnership =
+                    CampaignData.cd.getCampaignOptions().getIntegerConfig("MinPlanetOwnerShip");
+
+        return minPlanetOwnership;
     }
 
     public void setMinPlanetOwnerShip(int ownership) {
-        minPlanetOwnerShip = ownership;
+        minPlanetOwnership = ownership;
     }
 
     public void setHomeWorld(boolean homeworld) {
@@ -796,11 +793,11 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         return originalOwner;
     }
 
-    public TreeMap<String, String> getPlanetFlags() {
+    public Map<String, String> getPlanetFlags() {
         return planetFlags;
     }
 
-    public void setPlanetFlags(TreeMap<String, String> flags) {
+    public void setPlanetFlags(Map<String, String> flags) {
         planetFlags = flags;
     }
 
@@ -810,5 +807,55 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
 
     public void setConquestPoints(int points) {
         maxConquestPoints = Math.max(1, points);
+    }
+
+    public String getShortDescription(boolean withTerrain) {
+        StringBuilder result = new StringBuilder(getName());
+
+        if (withTerrain) {
+            Continent p = getEnvironments().getBiggestEnvironment();
+            Terrain pe = p.getEnvironment();
+            AdvancedTerrain ape = p.getAdvancedTerrain();
+            if (pe != null && pe.getEnvironments().size() > 0) {
+                result.append(" " + pe.getEnvironments().get(0).toImageDescription());
+                result.append(" " + pe.getEnvironments().get(0).getName());
+            }
+            if (ape != null) result.append(" " + ape.WeatherForcast());
+
+            if (this.getUnitFactories().size() > 0) {
+                for (int i = 0; i < this.getUnitFactories().size(); i++) {
+                    UnitFactory MF = (this.getUnitFactories().get(i));
+                    result.append(MF.getIcons());
+                }
+            }
+            if (pe != null && getEnvironments().getTotalEnivronmentPropabilities() > 0)
+                result.append(
+                        " ("
+                                + Math.round(
+                                        (double) p.getSize()
+                                                * 100
+                                                / getEnvironments()
+                                                        .getTotalEnivronmentPropabilities())
+                                + "% correct)");
+            else result.append(" (100% correct)");
+        }
+        return result.toString();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        Planet planet = null;
+
+        try {
+            planet = (Planet) object;
+        } catch (ClassCastException e) {
+            return false;
+        }
+
+        if (planet == null) {
+            return false;
+        }
+
+        return planet.getId() == this.getId();
     }
 }

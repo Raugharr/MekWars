@@ -18,6 +18,7 @@ package mekwars.server.campaign.commands.leader;
 import megamek.common.TechConstants;
 
 import mekwars.common.UnitFactory;
+import mekwars.common.util.HibernateUtil;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.BuildTable;
@@ -35,6 +36,7 @@ import java.util.List;
 
 public class PurchaseFactoryCommand implements Command {
 
+public class PurchaseFactoryCommand implements Command {
     // Starting out at mod level this can be lowered as needed
     int accessLevel = IAuthenticator.MODERATOR;
 
@@ -101,7 +103,7 @@ public class PurchaseFactoryCommand implements Command {
         if (type == SUnit.BATTLEARMOR && house.getTechLevel() < TechConstants.T_IS_TW_ALL) {
             CampaignMain.cm.toUser(
                     "Your factions tech level is not high enough to purchase Battle Armor"
-                        + " factories",
+                            + " factories",
                     username);
             return;
         }
@@ -189,7 +191,7 @@ public class PurchaseFactoryCommand implements Command {
         player.addMoney((int) -cost);
         player.addInfluence((int) -flu);
 
-        SUnitFactory fac =
+        SUnitFactory factory =
                 new SUnitFactory(
                         name,
                         planet,
@@ -200,9 +202,7 @@ public class PurchaseFactoryCommand implements Command {
                         buildType,
                         BuildTable.STANDARD,
                         0);
-        List<UnitFactory> uf = planet.getUnitFactories();
-        uf.add(fac);
-        fac.setPlanet(planet);
+        HibernateUtil.getInstance().inTransaction(session -> session.persist(factory));
         planet.setOwner(null, house, true);
 
         house.updated();

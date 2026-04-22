@@ -17,80 +17,47 @@
 
 package mekwars.common.util;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class Position {
-	public double x, y;
+    public double x;
+    public double y;
 
-	private Integer id;
-    private String color;
+    public Position() { }
 
-	public Position(double xpos, double ypos){
-		x = xpos;
-		y = ypos;
-	}
+    public Position(double xpos, double ypos) {
+        x = xpos;
+        y = ypos;
+    }
 
-    /**
-     *
-     * @return
-     */
-    public String getColor() {
-        return color;
+    public double getX() {
+        return x;
     }
 
     /**
-     *
-     * @param color
+     * @param x The x to set.
      */
-    public void setColor(String color) {
+    public void setX(double x) {
+        this.x = x;
+    }
 
-        if (color.startsWith("#")) {
-            this.color = color;
-        } else {
-            this.color = "#" + color;
-        }
-
+    public double getY() {
+        return y;
     }
 
     /**
-     * @return Integer
+     * @param y The y to set.
      */
-	public Integer getId() {
-		return id;
-	}
+    public void setY(double y) {
+        this.y = y;
+    }
 
-	/**
-	 * @param id The id to set.
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public double distanceSq(double xpos, double ypos) {
+        return Math.sqrt(Math.pow(x - xpos, 2) + Math.pow(y - ypos, 2));
+    }
 
-	public double getX() {
-		return x;
-	}
-
-	/**
-	 * @param x The x to set.
-	 */
-	public void setX(double x) {
-		this.x = x;
-	}
-
-	public double getY() {
-		return y;
-	}
-
-	/**
-	 * @param y The y to set.
-	 */
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	public double distanceSq(double xpos, double ypos){
-		return Math.sqrt(Math.pow(x - xpos,2) + Math.pow(y - ypos,2));
-	}
-
-	public double distanceSq(Position p){
-		return distanceSq(p.x, p.y);
-	}
+    public double distanceSq(Position p) {
+        return distanceSq(p.x, p.y);
+    }
 }

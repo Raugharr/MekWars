@@ -22,6 +22,7 @@ import mekwars.common.persistence.BannedAmmoStore;
 import mekwars.common.persistence.NamedEntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
+import mekwars.common.util.HibernateUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -128,6 +129,16 @@ public class CampaignData implements TerrainProvider {
     /** Remove all planets. */
     public void clearPlanets() {
         planets.clear();
+    }
+
+    public void savePlanets() {
+        HibernateUtil.getInstance()
+                .inTransaction(
+                        session -> {
+                            for (Planet planet : getAllPlanets()) {
+                                session.persist(planet);
+                            }
+                        });
     }
 
     /**

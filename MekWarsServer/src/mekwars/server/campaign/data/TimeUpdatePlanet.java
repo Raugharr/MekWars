@@ -16,19 +16,20 @@
 
 package mekwars.server.campaign.data;
 
+import jakarta.persistence.MappedSuperclass;
+
 import java.util.Date;
 
 import mekwars.common.Influences;
 import mekwars.common.Planet;
 import mekwars.common.util.Position;
 
-
-
 /**
  * Adds the ability to trace the last change time to a planet.
  * 
  * @author Imi (immanuel.scholz@gmx.de)
  */
+@MappedSuperclass
 public class TimeUpdatePlanet extends Planet {
 
     public TimeUpdatePlanet(String name, Position position, Influences flu) {

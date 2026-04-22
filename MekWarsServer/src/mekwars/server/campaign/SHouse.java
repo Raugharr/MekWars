@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import mekwars.common.BMEquipment;
@@ -1370,14 +1371,10 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
     public Vector<SUnitFactory> getPossibleFactoryForProduction(int type, int weight, boolean ignoreRefresh) {
         Vector<SUnitFactory> possible = new Vector<SUnitFactory>(1, 1);
-        Iterator<SPlanet> e = Planets.values().iterator();
-        while (e.hasNext()) {
-            SPlanet p = e.next();
-            Vector<SUnitFactory> v = p.getFactoriesOfWeighclass(weight);
-            for (int i = 0; i < v.size(); i++) {
-                SUnitFactory MF = v.elementAt(i);
-                if (MF.canProduce(type) && (ignoreRefresh || MF.getTicksUntilRefresh() < 1)) {
-                    possible.add(MF);
+        for (SPlanet planet : Planets.values()) {
+            for (SUnitFactory factory : planet.getFactoriesOfWeightClass(weight)) {
+                if (factory.canProduce(type) && (ignoreRefresh || factory.getTicksUntilRefresh() < 1)) {
+                    possible.add(factory);
                 }
             }
         }
@@ -2353,7 +2350,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
                 result.append(currFactory.getName() + internalDelim);
                 result.append(currFactory.getTicksUntilRefresh() + internalDelim);
                 result.append(currFactory.getAccessLevel() + internalDelim);
-                result.append(currFactory.getID() + internalDelim);
+                result.append(currFactory.getId() + internalDelim);
                 result.append(cmdDelim);
             }
         }
@@ -2686,8 +2683,8 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
     private void modifyUnitSupport(SPlanet p, boolean addProduction) {
         if (p.getFactoryCount() > 0) {
-            for (int weightclass = Unit.LIGHT; weightclass <= Unit.ASSAULT; weightclass++) {
-                for (SUnitFactory uf : p.getFactoriesOfWeighclass(weightclass)) {
+            for (int weightClass = Unit.LIGHT; weightClass <= Unit.ASSAULT; weightClass++) {
+                for (SUnitFactory uf : p.getFactoriesOfWeightClass(weightClass)) {
                     String typeString = uf.getTypeString();
                     String dirName = "./campaign/factions/support/" + uf.getFounder() + "_" + uf.getSize() + "_";
                     dirName = dirName.toLowerCase();

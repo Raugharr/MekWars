@@ -1,0 +1,8 @@
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">org.hibernate.community.dialect.SQLiteDialect</property>
+		<property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
+		<property name="hibernate.connection.url">jdbc:sqlite:MekWars.sqlite</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+	</session-factory>
+</hibernate-configuration>

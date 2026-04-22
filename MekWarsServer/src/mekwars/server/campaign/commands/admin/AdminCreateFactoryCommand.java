@@ -51,10 +51,9 @@ public class AdminCreateFactoryCommand implements Command {
         return syntax;
     }
 
-    public void process(StringTokenizer command, String Username) {
-
+    public void process(StringTokenizer command, String username) {
         // access level check
-        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        int userLevel = MWServ.getInstance().getUserLevel(username);
         if (userLevel < getExecutionLevel()) {
             CampaignMain.cm.toUser(
                     "AM:Insufficient access level for command. Level: "
@@ -62,11 +61,11 @@ public class AdminCreateFactoryCommand implements Command {
                             + ". Required: "
                             + accessLevel
                             + ".",
-                    Username,
+                    username,
                     true);
             return;
         }
-        SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), Username);
+        SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), username);
         String name = command.nextToken();
         String size = command.nextToken();
         String faction = command.nextToken();
@@ -78,28 +77,25 @@ public class AdminCreateFactoryCommand implements Command {
         if (command.hasMoreElements()) buildTableFolder = command.nextToken();
         if (command.hasMoreElements()) accessLevel = Integer.parseInt(command.nextToken());
 
-        SUnitFactory fac =
+        SUnitFactory factory =
                 new SUnitFactory(
                         name, planet, size, faction, 0, 100, type, buildTableFolder, accessLevel);
 
-        fac.setID(UUID.randomUUID().toString());
+        HibernateUtil.getInstance().inTransaction(session -> session.persist(factory));
 
-        List<UnitFactory> uf = planet.getUnitFactories();
-        uf.add(fac);
-        fac.setPlanet(planet);
         if (planet.getOwner() != null) {
             planet.getOwner().removePlanet(planet);
             planet.getOwner().addPlanet(planet);
         }
         planet.updated();
 
-        CampaignMain.cm.toUser("Factory created!", Username, true);
+        CampaignMain.cm.toUser("Factory created!", username, true);
 
         CampaignMain.cm.doSendModMail(
                 "NOTE",
-                Username
+                username
                         + " has created factory "
-                        + fac.getName()
+                        + factory.getName()
                         + " on planet "
                         + planet.getName());
     }

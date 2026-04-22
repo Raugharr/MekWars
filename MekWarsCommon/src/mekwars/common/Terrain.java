@@ -15,8 +15,14 @@
 
 package mekwars.common;
 
-import mekwars.common.entities.Entity;
-import mekwars.common.persistence.EntityStore;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+
+import mekwars.common.entities.MWEntity;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 
@@ -29,11 +35,17 @@ import java.util.StringTokenizer;
  * A Terrain Base Terrain container for all environments. Each environment can be a different theme
  * to allow for different times of year.
  */
-public final class Terrain implements Entity {
-    // id
-    private int id = EntityStore.UNSET_ID;
+@Entity
+public final class Terrain implements MWEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private String name = "None";
-    private List<PlanetEnvironment> environments = new ArrayList<PlanetEnvironment>();
+
+    @OneToMany
+    @JoinColumn(name = "terrain_id")
+    private List<PlanetEnvironment> environments = new ArrayList<>();
 
     /** For Serialisation. */
     public Terrain() {}
@@ -102,9 +114,6 @@ public final class Terrain implements Entity {
      */
     public void setId(int id) {
         this.id = id;
-        for (PlanetEnvironment pe : environments) {
-            pe.setId(id);
-        }
     }
 
     /**

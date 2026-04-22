@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BannedAmmo implements Entity {
+public class BannedAmmo implements MWEntity {
     private static HashMap<String, AmmoType.Munitions> MUNITIONS_BY_NAME = createMunitionsByName();
     private static HashMap<AmmoType.Munitions, String> MUNITIONS_BY_NUMBER =
             createMunitionsByNumber();

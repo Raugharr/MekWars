@@ -347,9 +347,7 @@ public final class CampaignMain implements Serializable {
      * Saves the current campaign state to a file system.
      */
     public void toFile() {
-
         try {
-
             // wait for the backup to finsh before you start saving files.
             while (cm.isArchiving()) {
                 Thread.sleep(125);
@@ -1269,11 +1267,9 @@ public final class CampaignMain implements Serializable {
         Commands.put("ADMINSETHOUSEFLUFILE", new AdminSetHouseFluFileCommand());
         Commands.put("ADMINSETHOUSEPLAYERCOLOR", new AdminSetHousePlayerColorCommand());
         Commands.put("ADMINSETHOUSETECHLEVEL", new AdminSetHouseTechLevelCommand());
-        Commands.put("ADMINSETPLANETBOARDSIZE", new AdminSetPlanetBoardSizeCommand());
         Commands.put("ADMINSETPLANETGRAVITY", new AdminSetPlanetGravityCommand());
         Commands.put("ADMINSETPLANETOPFLAGS", new AdminSetPlanetOpFlagsCommand());
         Commands.put("ADMINSETPLANETORIGINALOWNER", new AdminSetPlanetOriginalOwnerCommand());
-        Commands.put("ADMINSETPLANETMAPSIZE", new AdminSetPlanetMapSizeCommand());
         Commands.put("ADMINSETPLANETTEMPERATURE", new AdminSetPlanetTemperatureCommand());
         Commands.put("ADMINSETPLANETVACUUM", new AdminSetPlanetVacuumCommand());
         Commands.put("ADMINSETHOUSEAMMOBAN", new AdminSetHouseAmmoBanCommand());
@@ -1849,8 +1845,6 @@ public final class CampaignMain implements Serializable {
     public synchronized void slice(int sliceID) {
 
         // write log header
-        LOGGER.info("Slice #" + sliceID + " Started");
-        LOGGER.info("Slice #" + sliceID + " Started");
         LOGGER.info("Slice #" + sliceID + " Started: " + System.currentTimeMillis());
 
         WhoToHTML who = new WhoToHTML(CampaignMain.cm.getConfig("HTMLWhoPath"));
@@ -1963,8 +1957,6 @@ public final class CampaignMain implements Serializable {
     public synchronized void tick(boolean real, int tickid) {
 
         // add header to log
-        LOGGER.info("Tick #" + tickid + " Started");
-        LOGGER.info("Tick #" + tickid + " Started");
         LOGGER.info("Tick #" + tickid + " Started");
 
         // log the number of games underway
@@ -2391,20 +2383,6 @@ public final class CampaignMain implements Serializable {
         // write out log footer
         d = new Date(System.currentTimeMillis());
         LOGGER.info(d + ": Player save cycle completed.");
-        LOGGER.info(d + ": Player saves finished.");
-
-        /*
-         * Everyone in the save pile has been saved. This is nice, but not the
-         * end of the line. Now we need to purge the savePlayers hash. Loop
-         * through and remove everyone we can (some players are not removable
-         * b/c of ongoing repairs). If the player is removable AND logged out,
-         * we can null his player and save some memory space @ next gc().
-         * Iterator<SPlayer> i = savePlayers.values().iterator(); while
-         * (i.hasNext()) { SPlayer p = i.next(); if (p.isRemoveable()) {
-         * i.remove(); if (p.getDutyStatus() == SPlayer.STATUS_LOGGEDOUT) p =
-         * null; } }
-         */
-
     }
 
     /**
@@ -2431,7 +2409,6 @@ public final class CampaignMain implements Serializable {
      * commands This is used so the players have a Pfile created right away
      */
     public void forceSavePlayer(SPlayer p) {
-
         savePlayerFile(p);
     }
 
@@ -2443,7 +2420,6 @@ public final class CampaignMain implements Serializable {
      * @author nmorris 1/13/06
      */
     private void savePlayerFile(SPlayer p) {
-
         try {
             String fileName = p.getName().toLowerCase();
             FileOutputStream pout = new FileOutputStream("./campaign/players/" + fileName.toLowerCase() + ".dat");
@@ -3259,40 +3235,41 @@ public final class CampaignMain implements Serializable {
     // Save Planets
     public void savePlanetData() {
         savePlanetOpFlags();
-        File planetFile = new File("./campaign/planets");
-        if (!planetFile.exists()) {
-            planetFile.mkdir();
-        }
-        synchronized (data.getAllPlanets()) {
+        CampaignData.cd.savePlanets();
+        // File planetFile = new File("./campaign/planets");
+        // if (!planetFile.exists()) {
+        //     planetFile.mkdir();
+        // }
+        // synchronized (data.getAllPlanets()) {
 
-            for (Planet currP : data.getAllPlanets()) {
-                SPlanet p = (SPlanet) currP;
-                String saveName = p.getName().toLowerCase().trim() + ".dat";
-                String backupName = p.getName().toLowerCase().trim() + ".bak";
-                try {
-                    File planet = new File("./campaign/planets/" + saveName);
+        //     for (Planet currP : data.getAllPlanets()) {
+        //         SPlanet p = (SPlanet) currP;
+        //         String saveName = p.getName().toLowerCase().trim() + ".dat";
+        //         String backupName = p.getName().toLowerCase().trim() + ".bak";
+        //         try {
+        //             File planet = new File("./campaign/planets/" + saveName);
 
-                    if (planet.exists()) {
+        //             if (planet.exists()) {
 
-                        File backupFile = new File("./campaign/planets/" + backupName);
-                        if (backupFile.exists()) {
-                            backupFile.delete();
-                        }
+        //                 File backupFile = new File("./campaign/planets/" + backupName);
+        //                 if (backupFile.exists()) {
+        //                     backupFile.delete();
+        //                 }
 
-                        planet.renameTo(backupFile);
-                    }
+        //                 planet.renameTo(backupFile);
+        //             }
 
-                    FileOutputStream out = new FileOutputStream("./campaign/planets/" + saveName);
-                    PrintStream ps = new PrintStream(out);
-                    ps.println(p.toString());
-                    ps.close();
-                    out.close();
-                } catch (Exception ex) {
-                    LOGGER.error("Unable to save planet: " + saveName);
-                    LOGGER.error("Exception: ", ex);
-                }
-            }
-        }
+        //             FileOutputStream out = new FileOutputStream("./campaign/planets/" + saveName);
+        //             PrintStream ps = new PrintStream(out);
+        //             ps.println(p.toString());
+        //             ps.close();
+        //             out.close();
+        //         } catch (Exception ex) {
+        //             LOGGER.error("Unable to save planet: " + saveName);
+        //             LOGGER.error("Exception: ", ex);
+        //         }
+        //     }
+        // }
     }
 
     public void saveMegaMekGameOptions(StringTokenizer gameOptions) {
