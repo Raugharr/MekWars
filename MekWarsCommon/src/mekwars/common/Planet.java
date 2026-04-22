@@ -20,31 +20,62 @@
  */
 package mekwars.common;
 
-import mekwars.common.entities.Entity;
-import mekwars.common.persistence.EntityStore;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.OneToMany;
+
+import mekwars.common.entities.MWEntity;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.Position;
 
-import java.awt.Dimension;
+import org.hibernate.StatelessSession;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
+import org.hibernate.annotations.FetchProfileOverride;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.processing.CheckHQL;
+import org.hibernate.query.MutationQuery;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.TreeMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * @author Helge Richter
  */
-public class Planet implements Comparable<Object>, MutableSerializable, Entity {
+@CheckHQL
+@NamedQuery(name = "Planet.findByName", query = "FROM Planet WHERE name = :name")
+@NamedQuery(name = "Planet.findLikeName", query = "FROM Planet WHERE LOWER(name) LIKE LOWER(:name)")
+@FetchProfile(name = "EagerPlanet")
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Planet implements Comparable<Object>, MWEntity {
     /**
      * Unique id of this planet. Mutable field (although it will not change, it has to be
      * transfered)
      */
-    private int id = EntityStore.UNSET_ID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     /** name of the planet. Should be unique among planets too. */
     private String name;
@@ -53,15 +84,15 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
      * position of this planet in the inner spehre map. Ranges from about -700 to 700 in both
      * directions.
      */
-    private Position position; // distance calculates faster, also fewer casts
+    @Embedded private Position position; // distance calculates faster, also fewer casts
 
     /**
      * The unit factories on this planet. Type is UnitFactory Mutable field (has to be transfered)
      */
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "planet_id")
+    @FetchProfileOverride(profile = Planet_.PROFILE_EAGER_PLANET, mode = FetchMode.JOIN)
     private List<UnitFactory> unitFactories = new ArrayList<UnitFactory>();
-
-    /** The continents/environments on this planet. */
-    private List<Continent> continents = new ArrayList<Continent>();
 
     /** A human readable description of the planet. */
     private String description = "";
@@ -73,22 +104,14 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     private boolean conquerable = true;
 
     /** How much components are produced through this planet. */
-    private int compProduction = 0;
+    private int componentProduction = 0;
 
     /** The influence each faction has on this planet. Mutable field (has to be transfered) */
-    private Influences influence;
-
-    /** Map and board sizes are now stored as diminsions for static map usage Torren */
-    private Dimension MapSize = new Dimension(1, 1); // default megamek map
-
-    // size
-    private Dimension BoardSize = new Dimension(16, 17); // default megamek board
+    @Embedded private Influences influence;
 
     // size
 
-    /**
-     * House that has the most influence on this planet.
-     */
+    /** House that has the most influence on this planet. */
     private House owner = null;
 
     /**
@@ -101,10 +124,10 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
      * Min Planet ownership to allow a faction to use the planets resources defaults to -1 so that
      * the server wide on is used.
      */
-    private int minPlanetOwnerShip = -1;
+    private int minPlanetOwnership = -1;
 
     /** Boolean that states if a planet is a homeworld or not */
-    private boolean homeWorld = false;
+    private boolean homeworld = false;
 
     /* Original Owner of the planet */
     private String originalOwner = "";
@@ -112,13 +135,22 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     /*
      * This allows SO's to set flags for planets and to be used in ops.
      */
-    private TreeMap<String, String> planetFlags = new TreeMap<String, String>();
+    @ElementCollection
+    @CollectionTable(name = "planet_flag", joinColumns = @JoinColumn(name = "planet_id"))
+    @MapKeyColumn(name = "name")
+    @Column(name = "value")
+    @FetchProfileOverride(profile = Planet_.PROFILE_EAGER_PLANET, mode = FetchMode.JOIN)
+    private Map<String, String> planetFlags = new HashMap<String, String>();
 
     /*
      * Max Planet Points. this Allows SO's to set the conquer points of a planet
      * That way some planets are harder to conquer then others.
      */
-    private int maxConquestPoints = 100;
+    private int conquestPoints = 100;
+
+    @OneToMany(mappedBy = "planet", cascade = CascadeType.ALL)
+    @FetchProfileOverride(profile = Planet_.PROFILE_EAGER_PLANET, mode = FetchMode.JOIN)
+    private List<Continent> continents = new ArrayList<>();
 
     // CONSTRUCTORS
     public Planet(String name, Position position, Influences influence) {
@@ -156,17 +188,17 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     }
 
     /**
-     * @return Returns the compProduction.
+     * @return Returns the componentProduction.
      */
-    public int getCompProduction() {
-        return compProduction;
+    public int getComponentProduction() {
+        return componentProduction;
     }
 
     /**
-     * @param compProduction The compProduction to set.
+     * @param componentProduction The componentProduction to set.
      */
-    public void setCompProduction(int compProduction) {
-        this.compProduction = compProduction;
+    public void setComponentProduction(int componentProduction) {
+        this.componentProduction = componentProduction;
     }
 
     /**
@@ -174,8 +206,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
      * @return the id of the current owner of the planet
      */
     public Integer getPlanetOwner() {
-        Integer ownerid = getInfluence().getOwner();
-        return ownerid;
+        return getInfluence().getOwner();
     }
 
     /**
@@ -185,6 +216,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
      */
     public boolean isOwner(int factionid) {
         Integer ownerID = getPlanetOwner();
+
         if (ownerID == null) {
             return false;
         }
@@ -261,11 +293,9 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         return unitFactories;
     }
 
-    /**
-     * @param Factories The Factories to set.
-     */
-    public void setUnitFactories(ArrayList<UnitFactory> unitFactories) {
-        this.unitFactories = unitFactories;
+    public void addUnitFactory(UnitFactory unitFactory) {
+        // unitFactory.setPlanet(this);
+        unitFactories.add(unitFactory);
     }
 
     /**
@@ -290,6 +320,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
      * @param continent The continent to add
      */
     public synchronized void addContinent(Continent continent) {
+        continent.setPlanet(this);
         continents.add(continent);
     }
 
@@ -350,7 +381,7 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
             }
             continentProbability -= continent.getSize();
         }
-        return new Continent(0, null, null);
+        return null;
     }
 
     /**
@@ -389,43 +420,30 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         return getId() < p.getId() ? -1 : (getId() == p.getId() ? 0 : 1);
     }
 
-    /** Encode all mutable fields into the stream. Use as few bits as possible. */
-    public void encodeMutableFields(BinWriter out, CampaignData dataProvider) throws IOException {
-        out.println(getId(), "id");
-        getInfluence().encodeMutableFields(out, dataProvider);
-        binOut(out);
-    }
-
-    /** Decode all mutable fields from the stream. */
-    public void decodeMutableFields(BinReader in, CampaignData dataProvider) throws IOException {
-        setId(in.readInt("id"));
-        getInfluence().decodeMutableFields(in, dataProvider);
-        binIn(in, dataProvider);
-    }
-
     /** Write itself into the stream. */
     public void binOut(BinWriter out) throws IOException {
         out.println(getId(), "id");
         out.println(getName(), "name");
-        out.println(getPosition().x, "x");
-        out.println(getPosition().y, "y");
+        out.println(getPosition().getX(), "x");
+        out.println(getPosition().getY(), "y");
         out.println(getUnitFactories().size(), "unitFactories.size");
         for (UnitFactory i : getUnitFactories()) {
             i.binOut(out);
         }
         out.println(continents.size(), "terrain.size");
-        for (Continent C : continents) {
-            out.println(C.getSize(), "size");
-            out.println(C.getEnvironment().getId(), "id");
-            out.println(C.getAdvancedTerrain().getId(), "aid");
+        for (Continent continent : continents) {
+            out.println(continent.getId(), "continent_id");
+            out.println(continent.getSize(), "size");
+            out.println(continent.getEnvironment().getId(), "id");
+            out.println(continent.getAdvancedTerrain().getId(), "aid");
         }
         out.println(getDescription(), "description");
         out.println(getBaysProvided(), "baysProvided");
         out.println(isConquerable(), "conquerable");
-        out.println(getCompProduction(), "compProduction");
+        out.println(getComponentProduction(), "componentProduction");
         getInfluence().binOut(out);
-        out.println(getMinPlanetOwnerShip(), "minplanetownership");
-        out.println(isHomeWorld(), "homeworld");
+        out.println(getMinPlanetOwnership(), "minplanetownership");
+        out.println(isHomeworld(), "homeworld");
         out.println(getOriginalOwner(), "originalowner");
         out.println(getPlanetFlags().size(), "PlanetFlags.size");
         for (String key : getPlanetFlags().keySet()) {
@@ -440,33 +458,37 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         setName(in.readLine("name"));
         setPosition(new Position(in.readDouble("x"), in.readDouble("y")));
         int size = in.readInt("unitFactories.size");
-        setUnitFactories(new ArrayList<UnitFactory>(size));
+        unitFactories = new ArrayList<>(size);
         for (int i = 0; i < size; ++i) {
-            UnitFactory uf = new UnitFactory();
-            uf.binIn(in);
-            getUnitFactories().add(uf);
+            UnitFactory unitFactory = new UnitFactory();
+
+            unitFactory.binIn(in);
+            addUnitFactory(unitFactory);
         }
         continents = new ArrayList<Continent>();
         int terrainSize = in.readInt("terrain.size");
         for (int i = 0; i < terrainSize; ++i) {
+            int continentId = in.readInt("continent_id");
             int percent = in.readInt("size");
             int id = in.readInt("id");
             int aid = in.readInt("aid");
             Terrain T = data.getTerrain(id);
             AdvancedTerrain AT = data.getAdvancedTerrain(aid);
-            Continent C = new Continent(percent, T, AT);
-            addContinent(C);
+            Continent continent = new Continent(this, percent, T, AT);
+
+            continent.setId(continentId);
+            addContinent(continent);
         }
         setDescription(in.readLine("description"));
         setBaysProvided(in.readInt("baysProvided"));
         setConquerable(in.readBoolean("conquerable"));
-        setCompProduction(in.readInt("compProduction"));
+        setComponentProduction(in.readInt("componentProduction"));
         setInfluence(new Influences());
         getInfluence().binIn(in);
-        setMinPlanetOwnerShip(in.readInt("minplanetownership"));
-        setHomeWorld(in.readBoolean("homeworld"));
+        setMinPlanetOwnership(in.readInt("minplanetownership"));
+        setHomeworld(in.readBoolean("homeworld"));
         setOriginalOwner(in.readLine("originalowner"));
-        TreeMap<String, String> map = new TreeMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
         size = in.readInt("PlanetFlags.size");
         for (int i = 0; i < size; ++i) {
             String key;
@@ -488,18 +510,20 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         // result.append("</b> ("+ getDescription() + ")<br><br>");
         result.append(
                 "<b>Location:</b> "
-                        + (int) getPosition().x
+                        + (int) getPosition().getX()
                         + " x "
-                        + (int) getPosition().y
+                        + (int) getPosition().getY()
                         + " y<br>"
                         + Math.round(getPosition().distanceSq(0.0, 0.0))
                         + " Lightyears from the galaxy center <br><br>");
 
         result.append("<b>Industry:</b><br>");
         // factories
-        if (getCompProduction() > 0) {
+        if (getComponentProduction() > 0) {
             result.append(
-                    "Heavy industry allows an export of " + getCompProduction() + " parts.<br>");
+                    "Heavy industry allows an export of "
+                            + getComponentProduction()
+                            + " parts.<br>");
         }
         if (getBaysProvided() > 0) {
             result.append(
@@ -640,18 +664,20 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         // result.append("</b> ("+ getDescription() + ")<br><br>");
         result.append(
                 "<b>Location:</b> "
-                        + (int) getPosition().x
+                        + (int) getPosition().getX()
                         + " x "
-                        + (int) getPosition().y
+                        + (int) getPosition().getY()
                         + " y<br>"
                         + Math.round(getPosition().distanceSq(0.0, 0.0))
                         + " Lightyears from the galaxy center <br><br>");
 
         result.append("<b>Industry:</b><br>");
         // factories
-        if (getCompProduction() > 0) {
+        if (getComponentProduction() > 0) {
             result.append(
-                    "Heavy industry allows an export of " + getCompProduction() + " parts.<br>");
+                    "Heavy industry allows an export of "
+                            + getComponentProduction()
+                            + " parts.<br>");
         }
         if (getBaysProvided() > 0) {
             result.append(
@@ -751,45 +777,28 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     }
 
     public int getFactoryCount() {
-
-        // int count = 0;
         return getUnitFactories().size();
-        /*
-         * for (Iterator i = getUnitFactories().iterator(); i.hasNext();) {
-         * count++; i.next(); } return count;
-         */
     }
 
-    public Dimension getMapSize() {
-        return MapSize;
+    public int getMinPlanetOwnership() {
+        if (minPlanetOwnership < 0) {
+            minPlanetOwnership =
+                    CampaignData.cd.getCampaignOptions().getIntegerConfig("MinPlanetOwnerShip");
+        }
+
+        return minPlanetOwnership;
     }
 
-    public void setMapSize(Dimension map) {
-        MapSize = map;
+    public void setMinPlanetOwnership(int ownership) {
+        minPlanetOwnership = ownership;
     }
 
-    public Dimension getBoardSize() {
-        return BoardSize;
+    public void setHomeworld(boolean homeworld) {
+        this.homeworld = homeworld;
     }
 
-    public void setBoardSize(Dimension board) {
-        BoardSize = board;
-    }
-
-    public int getMinPlanetOwnerShip() {
-        return minPlanetOwnerShip;
-    }
-
-    public void setMinPlanetOwnerShip(int ownership) {
-        minPlanetOwnerShip = ownership;
-    }
-
-    public void setHomeWorld(boolean homeworld) {
-        homeWorld = homeworld;
-    }
-
-    public boolean isHomeWorld() {
-        return homeWorld;
+    public boolean isHomeworld() {
+        return homeworld;
     }
 
     public void setOriginalOwner(String owner) {
@@ -800,54 +809,105 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
         return originalOwner;
     }
 
-    public TreeMap<String, String> getPlanetFlags() {
+    public Map<String, String> getPlanetFlags() {
         return planetFlags;
     }
 
-    public void setPlanetFlags(TreeMap<String, String> flags) {
+    public void setPlanetFlags(Map<String, String> flags) {
         planetFlags = flags;
     }
 
     public int getConquestPoints() {
-        return maxConquestPoints;
+        return conquestPoints;
     }
 
     public void setConquestPoints(int points) {
-        maxConquestPoints = Math.max(1, points);
+        conquestPoints = Math.max(1, points);
     }
 
-    public House checkOwner() {
-        if (getInfluence() == null) {
-            return null;
+    public String getShortDescription() {
+        StringBuilder result = new StringBuilder(getName());
+        Continent biggestContinent = getBiggestContinent();
+        Terrain terrain = null;
+        AdvancedTerrain advancedTerrain = null;
+
+        if (biggestContinent != null) {
+            terrain = biggestContinent.getEnvironment();
+            advancedTerrain = biggestContinent.getAdvancedTerrain();
         }
 
-        Integer houseId = this.getInfluence().getOwner();
-
-        if (houseId == null) {
-            return null;
+        if (terrain != null && terrain.getEnvironments().size() > 0) {
+            result.append(" " + terrain.getEnvironments().get(0).toImageDescription());
+            result.append(" " + terrain.getEnvironments().get(0).getName());
+        }
+        if (advancedTerrain != null) {
+            result.append(" " + advancedTerrain.WeatherForcast());
         }
 
-        House house = CampaignData.cd.getHouse(houseId);
-
-        if (this.getInfluence().getInfluence(houseId) < this.getMinPlanetOwnerShip()) {
-            return null;
+        if (this.getUnitFactories().size() > 0) {
+            for (int i = 0; i < this.getUnitFactories().size(); i++) {
+                UnitFactory unitFactory = this.getUnitFactories().get(i);
+                result.append(unitFactory.getIcons());
+            }
         }
-        return house;
+        if (terrain != null && getTotalEnvironmentProbabilities() > 0) {
+            result.append(
+                    " ("
+                            + Math.round(
+                                    (double) biggestContinent.getSize()
+                                            * 100
+                                            / getTotalEnvironmentProbabilities())
+                            + "% correct)");
+        } else {
+            result.append(" (100% correct)");
+        }
+        return result.toString();
     }
 
-    public House getOwner() {
-        /*
-         * Null owner is possible, but should be uncommon. Check the owner again to make sure the this is true before returning.
-         */
-        if (owner == null) {
-            checkOwner();
-        }
-        return owner;
+    /** Return the environment with the most probability to occour. */
+    public Continent getBiggestEnvironment() {
+        return continents.stream().max(Comparator.comparingInt(Continent::getSize)).orElse(null);
     }
 
-    public void setOwner(House newOwner) {
-        if (newOwner != null) {
-            owner = newOwner;
+    @Override
+    public boolean equals(Object object) {
+        Planet planet = null;
+
+        try {
+            planet = (Planet) object;
+        } catch (ClassCastException e) {
+            return false;
         }
+
+        return planet != null && planet.getId() == this.getId();
+    }
+
+    public void sync(StatelessSession session) {
+        Integer prevBatchSize = session.getJdbcBatchSize();
+
+        session.setJdbcBatchSize(0);
+        session.upsert(this);
+
+        for (Continent continent : getContinents()) {
+            session.upsert(continent);
+        }
+
+        for (UnitFactory unitFactory : getUnitFactories()) {
+            session.upsert(unitFactory);
+        }
+        MutationQuery influenceQuery =
+                session.createNativeMutationQuery(
+                        "INSERT INTO planet_influence (influence, planet_id, house_id) "
+                                + "VALUES (:influence, :planet_id, :house_id) "
+                                + "ON CONFLICT(planet_id, house_id) DO UPDATE SET "
+                                + "influence = excluded.influence");
+        for (Map.Entry<Integer, Integer> entry : getInfluence().entrySet()) {
+            influenceQuery
+                    .setParameter("influence", entry.getValue())
+                    .setParameter("planet_id", getId())
+                    .setParameter("house_id", entry.getKey())
+                    .executeUpdate();
+        }
+        session.setJdbcBatchSize(prevBatchSize);
     }
 }

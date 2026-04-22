@@ -16,8 +16,24 @@
 
 package mekwars.server.campaign;
 
-import megamek.common.Entity;
-import megamek.common.TechConstants;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Random;
+import java.util.StringTokenizer;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import mekwars.common.BMEquipment;
 import mekwars.common.CampaignData;
@@ -30,6 +46,8 @@ import mekwars.common.util.StringUtils;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
+import megamek.common.Entity;
+import megamek.common.TechConstants;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.campaign.data.TimeUpdateHouse;
@@ -1517,17 +1535,12 @@ public class SHouse extends TimeUpdateHouse
         return i.intValue();
     }
 
-    public List<SUnitFactory> getPossibleFactoryForProduction(
-            int type, int weight, boolean ignoreRefresh) {
-        List<SUnitFactory> possible = new ArrayList<>();
-        Iterator<SPlanet> e = planets.values().iterator();
-        while (e.hasNext()) {
-            SPlanet p = e.next();
-            List<SUnitFactory> v = p.getFactoriesOfWeighclass(weight);
-            for (int i = 0; i < v.size(); i++) {
-                SUnitFactory MF = v.get(i);
-                if (MF.canProduce(type) && (ignoreRefresh || MF.getTicksUntilRefresh() < 1)) {
-                    possible.add(MF);
+    public Vector<SUnitFactory> getPossibleFactoryForProduction(int type, int weight, boolean ignoreRefresh) {
+        Vector<SUnitFactory> possible = new Vector<SUnitFactory>(1, 1);
+        for (SPlanet planet : Planets.values()) {
+            for (SUnitFactory factory : planet.getFactoriesOfWeightClass(weight)) {
+                if (factory.canProduce(type) && (ignoreRefresh || factory.getTicksUntilRefresh() < 1)) {
+                    possible.add(factory);
                 }
             }
         }
@@ -1980,7 +1993,7 @@ public class SHouse extends TimeUpdateHouse
         if (getPlanets().get(p.getName()) == null) {
             getPlanets().put(p.getName(), p);
             setBaysProvided(getBaysProvided() + p.getBaysProvided());
-            setComponentProduction(getComponentProduction() + p.getCompProduction());
+            setComponentProduction(getComponentProduction() + p.getComponentProduction());
 
             // Add unit production here
             if (CampaignMain.cm.isUsingIncreasedTechs() && p.getFactoryCount() > 0) {
@@ -1993,7 +2006,7 @@ public class SHouse extends TimeUpdateHouse
         if (getPlanets().get(p.getName()) != null) {
             getPlanets().remove(p.getName());
             setBaysProvided(getBaysProvided() - p.getBaysProvided());
-            setComponentProduction(getComponentProduction() - p.getCompProduction());
+            setComponentProduction(getComponentProduction() - p.getComponentProduction());
 
             // Remove unit production here
             if (CampaignMain.cm.isUsingIncreasedTechs() && p.getFactoryCount() > 0) {
@@ -2411,7 +2424,7 @@ public class SHouse extends TimeUpdateHouse
                 result.append(currFactory.getName() + internalDelim);
                 result.append(currFactory.getTicksUntilRefresh() + internalDelim);
                 result.append(currFactory.getAccessLevel() + internalDelim);
-                result.append(currFactory.getID() + internalDelim);
+                result.append(currFactory.getId() + internalDelim);
                 result.append(cmdDelim);
             }
         }
@@ -2732,8 +2745,8 @@ public class SHouse extends TimeUpdateHouse
 
     private void modifyUnitSupport(SPlanet p, boolean addProduction) {
         if (p.getFactoryCount() > 0) {
-            for (int weightclass = Unit.LIGHT; weightclass <= Unit.ASSAULT; weightclass++) {
-                for (SUnitFactory uf : p.getFactoriesOfWeighclass(weightclass)) {
+            for (int weightClass = Unit.LIGHT; weightClass <= Unit.ASSAULT; weightClass++) {
+                for (SUnitFactory uf : p.getFactoriesOfWeightClass(weightClass)) {
                     String typeString = uf.getTypeString();
                     String dirName =
                             "./campaign/factions/support/"

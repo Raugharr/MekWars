@@ -16,7 +16,7 @@
 
 package mekwars.common.entities;
 
-public interface Entity {
+public interface MWEntity {
     int getId();
 
     void setId(int id);

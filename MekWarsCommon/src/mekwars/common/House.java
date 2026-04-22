@@ -20,12 +20,15 @@
  */
 package mekwars.common;
 
-import mekwars.common.entities.Entity;
+import megamek.common.TechConstants;
+
+import mekwars.common.entities.MWEntity;
 import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.HTMLConverter;
 import mekwars.common.universe.FactionTag;
+
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Set;
@@ -39,9 +42,7 @@ import org.apache.logging.log4j.Logger;
  * @author Helge Richter
  * 
  */
-public class House implements Entity {
-    private static final Logger LOGGER = LogManager.getLogger(House.class);
-    
+public class House implements MWEntity {
     public static final int RED_VALUE = 0;
     public static final int GREEN_VALUE = 1;
     public static final int BLUE_VALUE = 2;
@@ -54,8 +55,6 @@ public class House implements Entity {
     private Vector<Integer> baseGunner = new Vector<Integer>(Unit.MAXBUILD, 1);
     private Vector<Integer> basePilot = new Vector<Integer>(Unit.MAXBUILD, 1);
     private Vector<String> basePilotSkills = new Vector<String>(Unit.MAXBUILD, 1);
-
-    // private int factionPlayerColors[] = new int[3]; // [red,green,blue]
 
     private int factionUnitPriceMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
     private int factionUnitFluMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]

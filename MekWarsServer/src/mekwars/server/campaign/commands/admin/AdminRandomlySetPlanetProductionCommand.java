@@ -76,14 +76,14 @@ public class AdminRandomlySetPlanetProductionCommand implements Command {
             // cast to planet
             SPlanet p = (SPlanet) currP;
 
-            if (p.getCompProduction() > 0 && max > 0)
+            if (p.getComponentProduction() > 0 && max > 0)
                 continue;
 
             int production = CampaignMain.cm.getRandomNumber(max);
 
             production = Math.max(production, min);
             // change production
-            p.setCompProduction(production);
+            p.setComponentProduction(production);
 
             // set updated flag so players' maps refresh
             p.updated();
@@ -95,7 +95,7 @@ public class AdminRandomlySetPlanetProductionCommand implements Command {
                 h.setComponentProduction(0);
                 int productionAmount = 0; 
                 for ( SPlanet planet : h.getPlanets().values() ) {
-                    productionAmount = planet.getCompProduction();
+                    productionAmount = planet.getComponentProduction();
                 }
                 h.setComponentProduction(productionAmount);
             }

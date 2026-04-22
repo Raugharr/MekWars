@@ -269,8 +269,8 @@ public class XMLPlanetDataParser implements XMLResponder {
             for (int i = 0; i < unitFactories.size(); i++) {
                 SUnitFactory MF = (SUnitFactory) unitFactories.get(i);
                 MF.setPlanet(p);
+                p.addUnitFactory(MF);
             }
-            p.setUnitFactories(unitFactories);
             for (Continent continent : continents) {
                 p.addContinent(continent);
             }
@@ -280,8 +280,6 @@ public class XMLPlanetDataParser implements XMLResponder {
             // This has to be called last since the Bays provided are added to
             // the faction then for instance
             p.setConquerable(conquerable);
-            p.setMapSize(new Dimension(xmap, ymap));
-            p.setBoardSize(new Dimension(xboard, yboard));
             /*
              * for ( Integer id: AdvTerrTreeMap.keySet() ){
              * p.getAdvancedTerrain().put(id,AdvTerrTreeMap.get(id)); }
@@ -292,7 +290,7 @@ public class XMLPlanetDataParser implements XMLResponder {
                 p.setOriginalOwner(OriginalOwner);
             }
             p.setPlanetFlags(OpFlags);
-            p.setHomeWorld(isHomeWorld);
+            p.setHomeworld(isHomeWorld);
 
             planets.add(p);
 

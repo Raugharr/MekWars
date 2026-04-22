@@ -52,7 +52,7 @@ public class SPlanetConverterTest {
                 xcoord,
                 ycoord     
             );
-        planet.setHomeWorld(isHomeworld);
+        planet.setHomeworld(isHomeworld);
         planet.setOriginalOwner(originalOwner);
         planet.setPlanetFlags(operationFlags);
 

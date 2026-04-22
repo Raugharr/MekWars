@@ -24,11 +24,12 @@
 
 package mekwars.server.campaign;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
+
 import java.io.File;
-import java.io.Serializable;
 import java.util.Random;
 import java.util.StringTokenizer;
-import java.util.UUID;
 import java.util.Vector;
 
 import mekwars.common.Unit;
@@ -38,16 +39,16 @@ import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.util.SerializedMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.annotations.NamedQuery;
 
-
-public class SUnitFactory extends UnitFactory implements Serializable {
+@Entity
+@NamedQuery(name = "SUnitFactory.findByName", query = "FROM SUnitFactory WHERE name = :name")
+public class SUnitFactory extends UnitFactory {
     private static final Logger LOGGER = LogManager.getLogger(SUnitFactory.class);
 
-    private static final long serialVersionUID = 1735176578439214960L;
-    // VARIABLES
+    @Transient
     private SPlanet planet;
     
-    // CONSTRUCTORS
     public SUnitFactory() {
         // empty
     }
@@ -55,6 +56,9 @@ public class SUnitFactory extends UnitFactory implements Serializable {
     public SUnitFactory(String name, SPlanet planet, String size, String faction, int ticksUntilRefresh, int refreshSpeed, int type, String buildTableFolder, int accessLevel) {
 		super(name, size, faction, ticksUntilRefresh, refreshSpeed, type, buildTableFolder, accessLevel);
         setPlanet(planet);
+        if (planet != null) {
+            planet.getUnitFactories().add(this);
+        }
     }
 
     // STRING SAVE METHODS
@@ -83,7 +87,7 @@ public class SUnitFactory extends UnitFactory implements Serializable {
         result.append(getType());
         result.append(isLocked());
         result.append(getAccessLevel());
-        result.append(getID());
+        result.append(getId());
         return result.toString();
     }
 
@@ -112,43 +116,14 @@ public class SUnitFactory extends UnitFactory implements Serializable {
         setLock(TokenReader.readBoolean(ST));
         setAccessLevel(TokenReader.readInt(ST));
         if(ST.hasMoreTokens()) {
-        	setID(TokenReader.readString(ST));
+        	setId(TokenReader.readInt(ST));
         } else {
-        	setID(UUID.randomUUID().toString());
+        	// setID(UUID.randomUUID().toString());
         }
         setPlanet(p);
     }
 
     // METHODS
-    public String getIcons() {
-        // TODO: Add more icons to make this unambiguous
-        String sizeid = "";
-        String result = "";
-        int size = getWeightClass();
-        if (size == Unit.LIGHT)
-            sizeid += "l";
-        else if (size == Unit.MEDIUM)
-            sizeid += "m";
-        else if (size == Unit.HEAVY)
-            sizeid += "h";
-        else if (size == Unit.ASSAULT)
-            sizeid += "a";
-        if (canProduce(Unit.MEK))
-            sizeid += "m";
-        else if (canProduce(Unit.VEHICLE))
-            sizeid += "v";
-        else if (canProduce(Unit.INFANTRY))
-            sizeid += "li";// override size w/ light
-        else if (canProduce(Unit.BATTLEARMOR))
-            sizeid += "b";
-        else if (canProduce(Unit.PROTOMEK))
-            sizeid += "p";
-        else if (canProduce(Unit.AERO))
-            sizeid += "ae";
-
-        result += "<img src=\"data/images/" + sizeid + ".gif\">";
-        return result;
-    }
 
     /**
      * Have the factory build a unit. This should be called only as the result

@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.Position;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +35,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Random;
 
-@ExtendWith(value = MockitoExtension.class)
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Unit tests for Planet business logic, specifically testing the getPlanetOwner method which
+ * determines which house has the highest influence on a planet.
+ */
+@ExtendWith(MockitoExtension.class)
 class PlanetTest {
     @Mock private Position position;
 
@@ -46,7 +53,7 @@ class PlanetTest {
     public void testId() {
         Planet testPlanet = new Planet("TestPlanet1", position, influence);
 
-        assertEquals(EntityStore.UNSET_ID, testPlanet.getId());
+        assertEquals(0, testPlanet.getId());
     }
 
     @Nested
@@ -96,12 +103,12 @@ class PlanetTest {
         public void testAddContinent() {
             Planet planet = new Planet("TestPlanet", position, influence);
 
-            continents[0].setID(10);
+            continents[0].setId(10);
             planet.addContinent(continents[0]);
 
             assertEquals(1, planet.getContinents().size());
             assertTrue(planet.hasContinents());
-            assertEquals(continents[0].getID(), planet.getContinents().get(0).getID());
+            assertEquals(continents[0].getId(), planet.getContinents().get(0).getId());
         }
 
         @Test

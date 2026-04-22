@@ -17,29 +17,28 @@
 
 package mekwars.common.util;
 
-public class Position {
-	public double x, y;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 
-	private Integer id;
+@Embeddable
+public class Position {
+    public double x;
+    public double y;
+
+    @Transient
     private String color;
 
-	public Position(double xpos, double ypos){
-		x = xpos;
-		y = ypos;
-	}
+    public Position() {}
 
-    /**
-     *
-     * @return
-     */
+    public Position(double xpos, double ypos) {
+        x = xpos;
+        y = ypos;
+    }
+
     public String getColor() {
         return color;
     }
 
-    /**
-     *
-     * @param color
-     */
     public void setColor(String color) {
 
         if (color.startsWith("#")) {
@@ -47,50 +46,35 @@ public class Position {
         } else {
             this.color = "#" + color;
         }
+    }
 
+    public double getX() {
+        return x;
     }
 
     /**
-     * @return Integer
+     * @param x The x to set.
      */
-	public Integer getId() {
-		return id;
-	}
+    public void setX(double x) {
+        this.x = x;
+    }
 
-	/**
-	 * @param id The id to set.
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public double getY() {
+        return y;
+    }
 
-	public double getX() {
-		return x;
-	}
+    /**
+     * @param y The y to set.
+     */
+    public void setY(double y) {
+        this.y = y;
+    }
 
-	/**
-	 * @param x The x to set.
-	 */
-	public void setX(double x) {
-		this.x = x;
-	}
+    public double distanceSq(double xpos, double ypos) {
+        return Math.sqrt(Math.pow(x - xpos, 2) + Math.pow(y - ypos, 2));
+    }
 
-	public double getY() {
-		return y;
-	}
-
-	/**
-	 * @param y The y to set.
-	 */
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	public double distanceSq(double xpos, double ypos){
-		return Math.sqrt(Math.pow(x - xpos,2) + Math.pow(y - ypos,2));
-	}
-
-	public double distanceSq(Position p){
-		return distanceSq(p.x, p.y);
-	}
+    public double distanceSq(Position p) {
+        return distanceSq(p.x, p.y);
+    }
 }

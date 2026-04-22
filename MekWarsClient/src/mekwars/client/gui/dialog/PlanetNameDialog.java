@@ -156,9 +156,9 @@ public class PlanetNameDialog extends JDialog implements ActionListener {
 				else if (facInfo.equals("only") && tp.getFactoryCount() < 1)
 					continue;
 				
-                if ( tp.isHomeWorld() && homeInfo.equals("none"))
+                if ( tp.isHomeworld() && homeInfo.equals("none"))
                     continue;
-                else if ( !tp.isHomeWorld() && homeInfo.equals("only") )
+                else if ( !tp.isHomeworld() && homeInfo.equals("only") )
                     continue;
                 
                 //save our player's house ID, since we'll be using it frequently.

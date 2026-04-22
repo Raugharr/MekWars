@@ -22,9 +22,13 @@ import mekwars.common.persistence.BannedAmmoStore;
 import mekwars.common.persistence.NamedEntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
+import mekwars.common.util.HibernateUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.StatelessSession;
+import org.hibernate.Transaction;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,9 +58,6 @@ public class CampaignData implements TerrainProvider {
     public static CampaignData cd;
 
     private NamedEntityStore<House> factions = new NamedEntityStore<>();
-    private NamedEntityStore<Planet> planets = new NamedEntityStore<>();
-    private NamedEntityStore<Terrain> terrains = new NamedEntityStore<>();
-    private NamedEntityStore<AdvancedTerrain> advancedTerrains = new NamedEntityStore<>();
 
     private Vector<Integer> bannedTargetingSystems = new Vector<>();
     private HashMap<String, Integer> commands = new HashMap<>();
@@ -65,6 +66,58 @@ public class CampaignData implements TerrainProvider {
 
     private BannedAmmoStore bannedAmmoStore = new BannedAmmoStore();
     private CampaignOptions campaignOptions;
+
+    /** Create empty campaign data. */
+    public CampaignData(CampaignOptions campaignOptions) {
+        cd = this;
+        this.campaignOptions = campaignOptions;
+    }
+
+    /** Generate the campaign data from an binary stream. */
+    public CampaignData(CampaignOptions campaignOptions, BinReader in) throws IOException {
+        this(campaignOptions);
+        StatelessSession session = HibernateUtil.getInstance().openStatelessSession();
+        Transaction transaction = session.beginTransaction();
+
+        try {
+            int size = in.readInt("terrains.size");
+            for (int i = 0; i < size; ++i) {
+                Terrain pe = new Terrain();
+                pe.binIn(in, this);
+                for (PlanetEnvironment environment : pe.getEnvironments()) {
+                    session.upsert(environment);
+                }
+                session.upsert(pe);
+            }
+            int advSize = in.readInt("advTerrains.size");
+            for (int i = 0; i < advSize; ++i) {
+                AdvancedTerrain pe = new AdvancedTerrain();
+                pe.binIn(in);
+                session.upsert(pe);
+            }
+            transaction.commit();
+
+        transaction = session.beginTransaction()
+            size = in.readInt("factions.size");
+            for (int i = 0; i < size; ++i) {
+                addHouse(new House(in));
+            }
+
+            size = in.readInt("planets.size");
+            for (int i = 0; i < size; ++i) {
+                Planet planet = new Planet(in, this);
+
+                planet.sync(session);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            session.close();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
 
     public BannedAmmoStore getBannedAmmoStore() {
         return bannedAmmoStore;
@@ -77,7 +130,16 @@ public class CampaignData implements TerrainProvider {
      * @return The requested Planet. This is usually a subclass of Planet.
      */
     public Planet getPlanet(int id) {
-        return planets.get(id);
+        return HibernateUtil.fromTransaction(
+                session -> {
+                    session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
+                    return session.createQuery(
+                                    "SELECT p FROM Planet p LEFT JOIN FETCH p.influence WHERE p.id"
+                                            + " = :id",
+                                    Planet.class)
+                            .setParameter("id", id)
+                            .uniqueResult();
+                });
     }
 
     /**
@@ -85,7 +147,16 @@ public class CampaignData implements TerrainProvider {
      * (if you have the choice).
      */
     public Planet getPlanetByName(String name) {
-        return planets.getByName(name);
+        return HibernateUtil.fromTransaction(
+                session -> {
+                    session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
+                    return session.createQuery(
+                                    "SELECT p FROM Planet p LEFT JOIN FETCH p.influence WHERE"
+                                            + " p.name = :name",
+                                    Planet.class)
+                            .setParameter("name", name)
+                            .uniqueResult();
+                });
     }
 
     /**
@@ -100,9 +171,16 @@ public class CampaignData implements TerrainProvider {
         return null;
     }
 
-    /** Retrieves all planets. */
+    // /** Retrieves all planets. */
     public Collection<Planet> getAllPlanets() {
-        return planets.values();
+        return HibernateUtil.fromTransaction(
+                session -> {
+                    session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
+                    return session.createQuery(
+                                    "SELECT p FROM Planet p LEFT JOIN FETCH p.influence",
+                                    Planet.class)
+                            .getResultList();
+                });
     }
 
     /**
@@ -113,7 +191,7 @@ public class CampaignData implements TerrainProvider {
      * @see You should use XStream to initialize CampaignData
      */
     public void addPlanet(Planet planet) {
-        planets.put(planet);
+        HibernateUtil.inTransaction(session -> session.persist(planet));
     }
 
     /**
@@ -122,12 +200,22 @@ public class CampaignData implements TerrainProvider {
      * @param id The id of the blown up planet.
      */
     public void removePlanet(int id) {
-        planets.remove(id);
+        HibernateUtil.inTransaction(session -> session.delete(session.find(Planet.class, id)));
     }
 
     /** Remove all planets. */
     public void clearPlanets() {
-        planets.clear();
+        HibernateUtil.inTransaction(
+                session -> session.createQuery("DELETE FROM Planet").executeUpdate());
+    }
+
+    public void savePlanets() {
+        // HibernateUtil.inTransaction(
+        //         session -> {
+        //             for (Planet planet : getAllPlanets()) {
+        //                 session.persist(planet);
+        //             }
+        //         });
     }
 
     /**
@@ -136,8 +224,8 @@ public class CampaignData implements TerrainProvider {
      * @param id The id of the House.
      * @return The requested faction.
      */
-    public House getHouse(int ID) {
-        return factions.get(ID);
+    public House getHouse(int Id) {
+        return factions.get(Id);
     }
 
     /** Retrieves all factions. */
@@ -152,6 +240,7 @@ public class CampaignData implements TerrainProvider {
      * @param planet The faction to hold. @TODO You should use XStream to initialize CampaignData
      */
     public void addHouse(House faction) {
+        // HibernateUtil.inTransaction(session -> session.persist(faction));
         factions.put(faction);
     }
 
@@ -247,13 +336,28 @@ public class CampaignData implements TerrainProvider {
      * @see CampaignData.binOut()
      */
     public void binTerrainsOut(BinWriter out) throws IOException {
-        out.println(terrains.size(), "terrains.size");
-        for (Terrain pe : terrains.values()) {
-            pe.binOut(out);
-        }
-        out.println(advancedTerrains.size(), "advTerrains.size");
-        for (AdvancedTerrain pe : advancedTerrains.values()) {
-            pe.binOut(out);
+        Session session = HibernateUtil.getInstance().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        try {
+            Collection<AdvancedTerrain> advancedTerrainList =
+                    session.createQuery("FROM AdvancedTerrain", AdvancedTerrain.class)
+                            .getResultList();
+            Collection<Terrain> terrainList =
+                    session.createQuery("FROM Terrain", Terrain.class).getResultList();
+
+            out.println(terrainList.size(), "terrains.size");
+            for (Terrain pe : terrainList) {
+                pe.binOut(out);
+            }
+            out.println(advancedTerrainList.size(), "advTerrains.size");
+            for (AdvancedTerrain pe : advancedTerrainList) {
+                pe.binOut(out);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw e;
         }
     }
 
@@ -263,9 +367,20 @@ public class CampaignData implements TerrainProvider {
      * @see CampaignData.binOut()
      */
     public void binPlanetsOut(BinWriter out) throws IOException {
-        out.println(planets.size(), "planets.size");
-        for (Planet p : planets.values()) {
-            p.binOut(out);
+        Session session = HibernateUtil.getInstance().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        try {
+            Collection<Planet> planetList =
+                    session.createQuery("FROM Planet", Planet.class).getResultList();
+            out.println(planetList.size(), "planets.size");
+            for (Planet p : planetList) {
+                p.binOut(out);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw e;
         }
     }
 
@@ -281,62 +396,34 @@ public class CampaignData implements TerrainProvider {
         }
     }
 
-    /** Create empty campaign data. */
-    public CampaignData(CampaignOptions campaignOptions) {
-        cd = this;
-        this.campaignOptions = campaignOptions;
-    }
-
-    /** Generate the campaign data from an binary stream. */
-    public CampaignData(CampaignOptions campaignOptions, BinReader in) throws IOException {
-        this(campaignOptions);
-        int size = in.readInt("terrains.size");
-        for (int i = 0; i < size; ++i) {
-            Terrain pe = new Terrain();
-            pe.binIn(in, this);
-            addTerrain(pe);
-        }
-        int Advsize = in.readInt("advTerrains.size");
-        for (int i = 0; i < Advsize; ++i) {
-            AdvancedTerrain pe = new AdvancedTerrain();
-            pe.binIn(in);
-            addAdvancedTerrain(pe);
-        }
-
-        size = in.readInt("factions.size");
-        for (int i = 0; i < size; ++i) {
-            addHouse(new House(in));
-        }
-
-        size = in.readInt("planets.size");
-        for (int i = 0; i < size; ++i) {
-            addPlanet(new Planet(in, this));
-        }
-    }
-
     /**
      * @see common.TerrainProvider#getTerrain(int)
      */
     public Terrain getTerrain(int id) {
-        return terrains.get(id);
+        return HibernateUtil.fromTransaction(session -> session.find(Terrain.class, id));
     }
 
     /**
      * @see common.TerrainProvider#getAllTerrains()
      */
     public Collection<Terrain> getAllTerrains() {
-        return terrains.values();
+        return HibernateUtil.fromTransaction(
+                session -> session.createQuery("FROM Terrain", Terrain.class).getResultList());
     }
 
     /**
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
     public void addTerrain(Terrain terrain) {
-        terrains.put(terrain);
+        HibernateUtil.inTransaction(session -> session.persist(terrain));
     }
 
     public Terrain getTerrainByName(String name) {
-        return terrains.getByName(name);
+        return HibernateUtil.fromTransaction(
+                session ->
+                        session.createQuery("FROM Terrain WHERE name = :name", Terrain.class)
+                                .setParameter("name", name)
+                                .uniqueResult());
     }
 
     /*adding the advanced terrain to the campaign data*/
@@ -344,25 +431,34 @@ public class CampaignData implements TerrainProvider {
      * @see common.TerrainProvider#getAdvancedTerrain(int)
      */
     public AdvancedTerrain getAdvancedTerrain(int id) {
-        return advancedTerrains.get(id);
+        return HibernateUtil.fromTransaction(session -> session.find(AdvancedTerrain.class, id));
     }
 
     /**
      * @see common.TerrainProvider#getAllTerrains()
      */
     public Collection<AdvancedTerrain> getAllAdvancedTerrains() {
-        return advancedTerrains.values();
+        return HibernateUtil.fromTransaction(
+                session ->
+                        session.createQuery("FROM AdvancedTerrain", AdvancedTerrain.class)
+                                .getResultList());
     }
 
     /**
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
-    public void addAdvancedTerrain(AdvancedTerrain newAdvTerrain) {
-        advancedTerrains.put(newAdvTerrain);
+    public void addAdvancedTerrain(AdvancedTerrain advancedTerrain) {
+        HibernateUtil.inTransaction(session -> session.persist(advancedTerrain));
     }
 
     public AdvancedTerrain getAdvancedTerrainByName(String name) {
-        return advancedTerrains.getByName(name);
+        return HibernateUtil.fromTransaction(
+                session ->
+                        session.createQuery(
+                                        "FROM AdvancedTerrain WHERE name = :name",
+                                        AdvancedTerrain.class)
+                                .setParameter("name", name)
+                                .uniqueResult());
     }
 
     public void setBannedTargetingSystems(Vector<Integer> ban) {
@@ -422,10 +518,7 @@ public class CampaignData implements TerrainProvider {
     }
 
     public boolean targetSystemIsBanned(int id) {
-        if (bannedTargetingSystems.contains(id)) {
-            return true;
-        }
-        return false;
+        return bannedTargetingSystems.contains(id);
     }
 
     public House getHouseFromPartialString(String houseString) {
