@@ -28,7 +28,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
-import java.util.EnumSet;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -55,6 +54,7 @@ import mekwars.client.MWClient;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.common.House;
+import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.util.SpringLayoutHelper;
@@ -1035,7 +1035,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         } else {
             if (critSlot == UnitUtils.LOC_FRONT_ARMOR) {
                 armor = true;
-                double cost = CUnit.getArmorCost(unit, mwclient, critSlot);
+                double cost = UnitRepairCostCalculator.getArmorCost(unit, critSlot);
                 if (unit.getArmor(critLocation) > unit.getOArmor(critLocation)) {
                     // remove the repairing armor so we can get the real cost.
                     UnitUtils.removeArmorRepair(unit, UnitUtils.LOC_FRONT_ARMOR, critLocation);
@@ -1054,7 +1054,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
             } else if (critSlot == UnitUtils.LOC_REAR_ARMOR) {
                 armor = true;
                 // tell the repair command its using rear external armor
-                double cost = CUnit.getArmorCost(unit, mwclient, critSlot);
+                double cost = UnitRepairCostCalculator.getArmorCost(unit, critSlot);
                 if (unit.getArmor(critLocation, true) > unit.getOArmor(critLocation, true)) {
                     // remove the repairing armor so we can get the real cost.
                     UnitUtils.removeArmorRepair(unit, UnitUtils.LOC_REAR_ARMOR, critLocation);
@@ -1072,7 +1072,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 critSlot = UnitUtils.LOC_REAR_ARMOR;
             } else if (critSlot == UnitUtils.LOC_INTERNAL_ARMOR) {
                 armor = true;
-                double cost = CUnit.getStructureCost(unit, mwclient);
+                double cost = UnitRepairCostCalculator.getStructureCost(unit);
                 if (unit.getInternal(critLocation) > unit.getOInternal(critLocation)) {
                     // remove the repairing armor so we can get the real cost.
                     UnitUtils.removeArmorRepair(unit, UnitUtils.LOC_INTERNAL_ARMOR, critLocation);
@@ -1098,7 +1098,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
                 } else {
                     totalCrits = UnitUtils.getNumberOfDamagedCrits(unit, critSlot, critLocation, armor);
                 }
-                cost = CUnit.getCritCost(unit, mwclient, cs);
+                cost = UnitRepairCostCalculator.getCritCost(unit, cs);
                 totalCost = (int) (totalCrits * cost);
                 totalCost += (int) (totalCrits * techCost);
                 totalCost += techCost;
@@ -1212,8 +1212,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         workHoursField.setModel(workHoursModel);
     }
 
+    @Override
     public void stateChanged(ChangeEvent arg0) {
-
         int value = Integer.parseInt(workHoursModel.getValue().toString());
         int roll = 0;
 

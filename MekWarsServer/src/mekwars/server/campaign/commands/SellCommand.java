@@ -128,7 +128,7 @@ public class SellCommand implements Command {
 		}
 		
 		//some types/weights of units may not be sold. ask the unit if it's eligible.
-		if(!SUnit.mayBeSoldOnMarket(unitToSell)) {
+		if(!UnitUtils.mayBeSoldOnMarket(unitToSell)) {
 			CampaignMain.cm.toUser("AM:The " + unitToSell.getModelName() + " may not be sold on the Market.", Username, true);
 			return;
 		}

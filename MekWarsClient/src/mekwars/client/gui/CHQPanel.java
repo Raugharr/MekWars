@@ -16,13 +16,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,7 +29,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.RGBImageFilter;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -72,15 +69,14 @@ import mekwars.client.gui.dialog.BulkRepairDialog;
 import mekwars.client.gui.dialog.CustomUnitDialog;
 import mekwars.client.gui.dialog.PromotePilotDialog;
 import mekwars.client.gui.dialog.SolFreeBuildDialog;
-import mekwars.client.gui.icons.StatusIconsTable;
 import mekwars.client.gui.utilities.MWTableCellRenderer;
 import mekwars.common.Army;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
+import mekwars.common.util.UnitUtils;
 import mekwars.common.util.SpringLayoutHelper;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.TokenReader;
-import mekwars.common.util.UnitUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 /**
@@ -1845,19 +1841,7 @@ public class CHQPanel extends JPanel {
                         if (cm.isChristmasUnit() && !Boolean.parseBoolean(mwclient.getServerConfigs("Christmas_AllowBM"))) {
                             canSellUnit = false;
                         }
-                        if ((cm.getType() == Unit.MEK) && !Boolean.parseBoolean(mwclient.getServerConfigs("MeksMayBeSoldOnBM"))) {
-                            canSellUnit = false;
-                        } else if ((cm.getType() == Unit.VEHICLE) && !Boolean.parseBoolean(mwclient.getServerConfigs("VehsMayBeSoldOnBM"))) {
-                            canSellUnit = false;
-                        } else if ((cm.getType() == Unit.BATTLEARMOR) && !Boolean.parseBoolean(mwclient.getServerConfigs("BAMayBeSoldOnBM"))) {
-                            canSellUnit = false;
-                        } else if ((cm.getType() == Unit.AERO) && !Boolean.parseBoolean(mwclient.getServerConfigs("AerosMayBeSoldOnBM"))) {
-                            canSellUnit = false;
-                        } else if ((cm.getType() == Unit.PROTOMEK) && !Boolean.parseBoolean(mwclient.getServerConfigs("ProtosMayBeSoldOnBM"))) {
-                            canSellUnit = false;
-                        } else if ((cm.getType() == Unit.INFANTRY) && !Boolean.parseBoolean(mwclient.getServerConfigs("InfantryMayBeSoldOnBM"))) {
-                            canSellUnit = false;
-                        } else if (Boolean.parseBoolean(mwclient.getServerConfigs("BMNoClan")) && cm.getEntity().isClan()) {
+                        if (!UnitUtils.mayBeSoldOnMarket(cm)) {
                             canSellUnit = false;
                         }
 

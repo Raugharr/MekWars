@@ -41,6 +41,7 @@ import mekwars.client.gui.WholeNumberField;
 import mekwars.common.Unit;
 import mekwars.common.util.SpringLayoutHelper;
 import megamek.common.Infantry;
+import mekwars.common.util.UnitUtils;
 import mekwars.client.common.campaign.clientutils.GameHost;
 
 /*
@@ -51,10 +52,6 @@ import mekwars.client.common.campaign.clientutils.GameHost;
  */
 
 public class SellUnitDialog extends JDialog implements ActionListener { 
-    
-    /**
-     * 
-     */
     private static final long serialVersionUID = 7292249744702852873L;
     //IVARS
     private MWClient mwclient;
@@ -93,30 +90,9 @@ public class SellUnitDialog extends JDialog implements ActionListener {
             
             toSell = new Vector<CUnit>(1,1);
             for(CUnit currU : mwclient.getPlayer().getHangar()) {
-                
-                if(currU.getType() == Unit.MEK && !Boolean.parseBoolean(mwclient.getServerConfigs("MeksMayBeSoldOnBM")))
-                    continue;
-                
-                else if (currU.getType() == Unit.VEHICLE && !Boolean.parseBoolean(mwclient.getServerConfigs("VehsMayBeSoldOnBM")))
-                    continue;
-                
-                else if (currU.getType() == Unit.BATTLEARMOR && !Boolean.parseBoolean(mwclient.getServerConfigs("BAMayBeSoldOnBM")))
-                    continue;
-                
-                else if (currU.getType() == Unit.PROTOMEK && !Boolean.parseBoolean(mwclient.getServerConfigs("ProtosMayBeSoldOnBM")))
-                    continue;
-                
-                else if (currU.getType() == Unit.INFANTRY && !Boolean.parseBoolean(mwclient.getServerConfigs("InfantryMayBeSoldOnBM")))
-                    continue;
-                
-                if (currU.getStatus() == Unit.STATUS_FORSALE)
-                    continue;
-                
-                if (Boolean.parseBoolean(mwclient.getServerConfigs("BMNoClan")) && currU.getEntity().isClan())
-                    continue;
-                
-                //unit wasnt rejected, so add it to the sales list
-                toSell.add(currU);
+                if (UnitUtils.mayBeSoldOnMarket(currU)) {
+                    toSell.add(currU);
+                }
             }
         }
         

@@ -31,6 +31,7 @@ import megamek.common.Entity;
 import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.WeaponType;
+import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
@@ -86,7 +87,7 @@ public class SimpleRepairCommand implements Command {
             if ( pilot.getSkills().has(PilotSkill.AstechSkillID) )
                 ATLevel = pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID).getLevel();
             
-            int cost = CampaignMain.cm.getTotalRepairCosts(unit.getEntity(),techs,rolls,ATLevel,player.getMyHouse());
+            int cost = UnitRepairCostCalculator.getTotalRepairCosts(unit.getEntity(),techs,rolls,ATLevel,player.getMyHouse());
             int time = 0; 
             
             if ( player.isUnitInLockedArmy(unitID) ){

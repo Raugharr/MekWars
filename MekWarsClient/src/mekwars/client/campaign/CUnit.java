@@ -36,7 +36,6 @@ import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
 import megamek.common.AmmoType;
-import megamek.common.CrewType;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.Infantry;
@@ -44,7 +43,6 @@ import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.OffBoardDirection;
 import megamek.common.WeaponType;
-import megamek.common.enums.Gender;
 import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
@@ -702,34 +700,6 @@ public class CUnit extends Unit {
         return result;
     }
 
-    public static double getArmorCost(Entity unit, MWClient client, int location) {
-        double cost = 0.0;
-
-        if (Boolean.parseBoolean(client.getServerConfigs("UsePartsRepair"))) {
-            return 0;
-        }
-
-        String armorCost = "CostPoint"
-                + UnitUtils.getArmorShortName(unit, location);
-        cost = Double.parseDouble(client.getServerConfigs(armorCost));
-
-        return cost;
-    }
-
-    public static double getStructureCost(Entity unit, MWClient client) {
-        double cost = 0.0;
-
-        if (Boolean.parseBoolean(client.getServerConfigs("UsePartsRepair"))) {
-            return 0;
-        }
-
-        String armorCost = "CostPoint" + UnitUtils.getInternalShortName(unit)
-                + "IS";
-        cost = Double.parseDouble(client.getServerConfigs(armorCost));
-
-        return cost;
-    }
-
     public void setAntiAir(boolean aa) {
         Quirks quirks = unitEntity.getQuirks();
         quirks.getOption("anti_air").setValue(aa);
@@ -747,88 +717,7 @@ public class CUnit extends Unit {
         }
     }
 
-    public static double getCritCost(Entity unit, MWClient client,
-            CriticalSlot crit) {
-        double cost = 0.0;
-
-        if (Boolean.parseBoolean(client.getServerConfigs("UsePartsRepair"))) {
-            return 0;
-        }
-
-        if (crit == null) {
-            return 0;
-        }
-
-        if (crit.isBreached() && !crit.isDamaged()) {
-            return 0;
-        }
-        // else
-        if (UnitUtils.isEngineCrit(crit)) {
-            cost = Double.parseDouble(client
-                    .getServerConfigs("EngineCritRepairCost"));
-        } else if (crit.getType() == CriticalSlot.TYPE_SYSTEM) {
-            if (crit.isMissing()) {
-                cost = Double.parseDouble(client
-                        .getServerConfigs("SystemCritReplaceCost"));
-            } else {
-                cost = Double.parseDouble(client
-                        .getServerConfigs("SystemCritRepairCost"));
-            }
-        } else {
-            Mounted mounted = crit.getMount();
-
-            if (mounted.getType() instanceof WeaponType) {
-                WeaponType weapon = (WeaponType) mounted.getType();
-                if (weapon.hasFlag(WeaponType.F_ENERGY)) {
-                    if (crit.isMissing()) {
-                        cost = Double
-                                .parseDouble(client
-                                        .getServerConfigs("EnergyWeaponCritReplaceCost"));
-                    } else {
-                        cost = Double
-                                .parseDouble(client
-                                        .getServerConfigs("EnergyWeaponCritRepairCost"));
-                    }
-                } else if (weapon.hasFlag(WeaponType.F_BALLISTIC)) {
-                    if (crit.isMissing()) {
-                        cost = Double.parseDouble(client
-                                .getServerConfigs("BallisticCritReplaceCost"));
-                    } else {
-                        cost = Double.parseDouble(client
-                                .getServerConfigs("BallisticCritRepairCost"));
-                    }
-                } else if (weapon.hasFlag(WeaponType.F_MISSILE)) {
-                    if (crit.isMissing()) {
-                        cost = Double.parseDouble(client
-                                .getServerConfigs("MissileCritReplaceCost"));
-                    } else {
-                        cost = Double.parseDouble(client
-                                .getServerConfigs("MissileCritRepairCost"));
-                    }
-                } else // use the misc eq costs.
-                if (crit.isMissing()) {
-                    cost = Double.parseDouble(client
-                            .getServerConfigs("EquipmentCritReplaceCost"));
-                } else {
-                    cost = Double.parseDouble(client
-                            .getServerConfigs("EquipmentCritRepairCost"));
-                }
-            } else // use the misc eq costs.
-            if (crit.isMissing()) {
-                cost = Double.parseDouble(client
-                        .getServerConfigs("EquipmentCritReplaceCost"));
-            } else {
-                cost = Double.parseDouble(client
-                        .getServerConfigs("EquipmentCritRepairCost"));
-            }
-        }
-
-        cost = Math.max(cost, 1);
-        return cost;
-    }
-
     public String getTargetSystemTypeDesc() {
-        // TODO Auto-generated method stub
         return targetSystem.getCurrentTypeName();
     }
 
