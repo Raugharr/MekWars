@@ -208,7 +208,7 @@ public final class CampaignMain implements Serializable {
     public CampaignMain() {
         cm = this;
         CampaignOptions campaignOptions =
-            new CampaignOptions(FileSystem.getInstance().getCampaignConfig().toString());
+            new CampaignOptions(FileSystem.getInstance().getCampaignConfig());
 
         data = new CampaignData(campaignOptions);
 
@@ -247,7 +247,15 @@ public final class CampaignMain implements Serializable {
         loadFactionData();
         loadPlanetData();
 
-        FileSystem.getInstance().getBanAmmoFile().load(data);
+        if (Files.exists(FileSystem.getInstance().getBanAmmoPath())) {
+            FileSystem.getInstance().getBanAmmoFile().load(data);
+        }
+
+        for (House house : data.getAllHouses()) {
+            Path configPath = FileSystem.getInstance().getFactionConfigPath(house.getName());
+
+            CampaignData.cd.loadHouseOptions(configPath, house);
+        }
 
         // misc loads.
         cm.loadOmniVariantMods();
@@ -2869,11 +2877,6 @@ public final class CampaignMain implements Serializable {
     public boolean isArchiving() {
         return isArchiving;
     }
-
-    @Deprecated(since = "9.0.0", forRemoval = false)
-    public void saveConfigureFile(Properties config, String fileName) {
-        getCampaignOptions().saveConfigureFile(config, fileName);
-    } // end saveConfigureFile
 
     public UnitCosts getUnitCostLists() {
         return cm.unitCostLists;

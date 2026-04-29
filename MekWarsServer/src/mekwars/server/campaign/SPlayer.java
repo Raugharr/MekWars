@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import mekwars.common.CampaignData;
 import mekwars.common.Player;
 import mekwars.common.SubFaction;
 import mekwars.common.Unit;
@@ -3976,7 +3977,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
             LOGGER.error("Invalid uWeightClass in SPlayer.hasRoomForUnit: " + uWeightClass);
             return false;
         }
-        int limit = CampaignMain.cm.getHouseFromPartialString(getMyHouse().getName()).getUnitLimit(uType, uWeightClass);
+        int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(uType, uWeightClass);
 
         if (limit < 0) {
             // Unlimited
@@ -4031,7 +4032,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public boolean isOverAnyUnitLimits() {
         for (int t = Unit.MEK; t <= Unit.AERO; t++) {
             for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++) {
-                int limit = getMyHouse().getUnitLimit(t, w);
+                int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(t, w);
                 int inHangar = countUnits(t, w);
                 if ((limit != -1) && (inHangar > limit)) {
                     return true;
@@ -4062,7 +4063,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         {
             for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++)
             {
-                int limit = getMyHouse().getUnitLimit(t, w);
+                int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(t, w);
                 int inHangar = countUnits(t, w);
 
                 if(limit != -1)
@@ -4098,7 +4099,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
         {
             for (int w = Unit.LIGHT; w <= Unit.ASSAULT; w++)
             {
-                int limit = getMyHouse().getUnitLimit(t, w);
+                int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(t, w);
                 int inHangar = countUnits(t, w);
 
                 if(limit != -1)
@@ -4125,7 +4126,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		return false;
     	}
 
-    	int limit = CampaignMain.cm.getHouseFromPartialString(getMyHouse().getName()).getUnitLimit(uType, uWeight);
+    	int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(uType, uWeight);
 
     	// Always false if the particular limit is not checked
     	if (limit < 0) {
@@ -4155,7 +4156,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     		return false;
     	}
 
-    	int limit = CampaignMain.cm.getHouseFromPartialString(getMyHouse().getName()).getUnitLimit(uType, uWeight);
+        int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(uType, uWeight);
 
     	// Always false if the particular limit is not checked
     	if (limit < 0) {
@@ -4195,7 +4196,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
     public int calculateHangarPenaltyForNextPurchase(int type, int weight) {
     	int penalty = 0;
 
-		int limit = CampaignMain.cm.getHouseFromPartialString(getMyHouse().getName()).getUnitLimit(type, weight);
+        int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(type, weight);
 		int numUnits = countUnits(type, weight) + 1;
 
 		if ((limit == -1) || (numUnits <= limit)) {
@@ -4216,7 +4217,7 @@ public final class SPlayer extends Player implements Comparable<Object>, IBuyer,
 		}
 		int penalty = 0;
 
-		int limit = CampaignMain.cm.getHouseFromPartialString(getMyHouse().getName()).getUnitLimit(type_id, weightclass);
+        int limit = CampaignData.cd.getCampaignOptions().getUnitLimit(type_id, weightclass);
 		int numUnits = countUnits(type_id, weightclass);
 
 		if (numUnits <= limit) {

@@ -20,10 +20,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -32,7 +30,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Properties;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -102,16 +99,12 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
     private PilotQueues pilotQueues = new PilotQueues(getBaseGunnerVect(), getBasePilotVect(), getBasePilotSkillVect());
 
     private boolean inHouseAttacks = false;
-    private Properties config = new Properties();
 
     private Vector<String> leaders = new Vector<String>(1, 1);
     private int techResearchPoints = 0;
     private UnitComponents unitParts = new UnitComponents();
     private Hashtable<String, ComponentToCritsConverter> componentConverter = new Hashtable<String, ComponentToCritsConverter>();
 
-    private int[][] unitLimits = new int[6][4];
-    private boolean[][] bmLimits = new boolean[6][4];
-    
     private double activityPP = 0.0;
     
     @Override
@@ -689,9 +682,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
              * this.getPilotQueues().setBasePiloting(this.getBasePilot());
              */
 
-            loadConfigFile();
             setUsedMekBayMultiplier(Float.parseFloat(getConfig("UsedPurchaseCostMulti")));
-
             return s;
         } catch (Exception ex) {
             LOGGER.error("Exception: ", ex);
@@ -2646,169 +2637,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
 
     }
 
-    public Properties getConfig() {
-        return config;
-    }
-
-    public boolean getBooleanConfig(String key) {
-        try {
-            return Boolean.parseBoolean(this.getConfig(key));
-        } catch (Exception ex) {
-            return false;
-        }
-    }
-
-    public int getIntegerConfig(String key) {
-        try {
-            return Integer.parseInt(this.getConfig(key));
-        } catch (Exception ex) {
-            return -1;
-        }
-    }
-
-    public double getDoubleConfig(String key) {
-        try {
-            return Double.parseDouble(this.getConfig(key));
-        } catch (Exception ex) {
-            return -1;
-        }
-    }
-
-    public float getFloatConfig(String key) {
-        try {
-            return Float.parseFloat(this.getConfig(key));
-        } catch (Exception ex) {
-            return -1;
-        }
-    }
-
-    public float getLongConfig(String key) {
-        try {
-            return Long.parseLong(this.getConfig(key));
-        } catch (Exception ex) {
-            return -1;
-        }
-    }
-
-    public String getConfig(String key) {
-
-        if (config == null || config.getProperty(key) == null) {
-            return CampaignMain.cm.getConfig(key);
-        }
-        return config.getProperty(key).trim();
-    }
-
-    public void saveConfigFile() {
-
-        if (config == null) {
-            return;
-        }
-
-        if (config.size() < 1) {
-            config = null;
-            return;
-        }
-
-        String fileName = "./data/" + getName().toLowerCase() + "_configs.dat";
-        try {
-            config.setProperty("TIMESTAMP", Long.toString((System.currentTimeMillis())));
-            PrintStream ps = new PrintStream(new FileOutputStream(fileName));
-            config.store(ps, "Faction Config");
-            ps.close();
-        } catch (FileNotFoundException fe) {
-            LOGGER.error(fileName + " not found");
-        } catch (Exception ex) {
-            LOGGER.error("Exception: ", ex);
-        }
-
-    }
-
-    public void loadConfigFile() {
-
-        File configFile = new File("./data/" + getName().toLowerCase() + "_configs.dat");
-
-        if (!configFile.exists()) {
-            populateUnitLimits();
-            populateBMLimits();
-            return;
-        }
-
-        try {
-            config = new Properties();
-            config.load(new FileInputStream(configFile));
-            populateUnitLimits();
-        } catch (Exception ex) {
-            LOGGER.error("Exception: ", ex);
-        }
-        populateUnitLimits();
-        populateBMLimits();
-    }
-
-    /**
-     * A method to fill the unitLimits array
-     */
-    public void populateUnitLimits() {
-        unitLimits[Unit.MEK][Unit.LIGHT] = getIntegerConfig("MaxHangarLightMek");
-        unitLimits[Unit.MEK][Unit.MEDIUM] = getIntegerConfig("MaxHangarMediumMek");
-        unitLimits[Unit.MEK][Unit.HEAVY] = getIntegerConfig("MaxHangarHeavyMek");
-        unitLimits[Unit.MEK][Unit.ASSAULT] = getIntegerConfig("MaxHangarAssaultMek");
-
-        unitLimits[Unit.VEHICLE][Unit.LIGHT] = getIntegerConfig("MaxHangarLightVehicle");
-        unitLimits[Unit.VEHICLE][Unit.MEDIUM] = getIntegerConfig("MaxHangarMediumVehicle");
-        unitLimits[Unit.VEHICLE][Unit.HEAVY] = getIntegerConfig("MaxHangarHeavyVehicle");
-        unitLimits[Unit.VEHICLE][Unit.ASSAULT] = getIntegerConfig("MaxHangarAssaultVehicle");
-
-        unitLimits[Unit.INFANTRY][Unit.LIGHT] = getIntegerConfig("MaxHangarLightInfantry");
-        unitLimits[Unit.INFANTRY][Unit.MEDIUM] = getIntegerConfig("MaxHangarMediumInfantry");
-        unitLimits[Unit.INFANTRY][Unit.HEAVY] = getIntegerConfig("MaxHangarHeavyInfantry");
-        unitLimits[Unit.INFANTRY][Unit.ASSAULT] = getIntegerConfig("MaxHangarAssaultInfantry");
-
-        unitLimits[Unit.BATTLEARMOR][Unit.LIGHT] = getIntegerConfig("MaxHangarLightBattleArmor");
-        unitLimits[Unit.BATTLEARMOR][Unit.MEDIUM] = getIntegerConfig("MaxHangarMediumBattleArmor");
-        unitLimits[Unit.BATTLEARMOR][Unit.HEAVY] = getIntegerConfig("MaxHangarHeavyBattleArmor");
-        unitLimits[Unit.BATTLEARMOR][Unit.ASSAULT] = getIntegerConfig("MaxHangarAssaultBattleArmor");
-
-        unitLimits[Unit.PROTOMEK][Unit.LIGHT] = getIntegerConfig("MaxHangarLightProtoMek");
-        unitLimits[Unit.PROTOMEK][Unit.MEDIUM] = getIntegerConfig("MaxHangarMediumProtoMek");
-        unitLimits[Unit.PROTOMEK][Unit.HEAVY] = getIntegerConfig("MaxHangarHeavyProtoMek");
-        unitLimits[Unit.PROTOMEK][Unit.ASSAULT] = getIntegerConfig("MaxHangarAssaultProtoMek");
-
-        unitLimits[Unit.AERO][Unit.LIGHT] = getIntegerConfig("MaxHangarLightAero");
-        unitLimits[Unit.AERO][Unit.MEDIUM] = getIntegerConfig("MaxHangarMediumAero");
-        unitLimits[Unit.AERO][Unit.HEAVY] = getIntegerConfig("MaxHangarHeavyAero");
-        unitLimits[Unit.AERO][Unit.ASSAULT] = getIntegerConfig("MaxHangarAssaultAero");
-    }
-
-    /**
-     * A method that returns the hangar limit for a given weight/type of unit
-     * 
-     * @param unitType
-     * @param unitWeightClass
-     * @return -1 if it is unlimited or a malformed request, the limit otherwise
-     */
-    public int getUnitLimit(int unitType, int unitWeightClass) {
-        if (unitType < 0 || unitType > Unit.AERO) {
-            LOGGER.error("Request for invalid unitType in SHouse.getUnitLimit: " + unitType);
-            return -1;
-        }
-        if (unitWeightClass < 0 || unitWeightClass > Unit.ASSAULT) {
-            LOGGER.error("Request for invalid unitWeightClass in SHouse.getUnitLimit: " + unitWeightClass);
-            return -1;
-        }
-        return unitLimits[unitType][unitWeightClass];
-    }
-
-        
-    public boolean canBuyFromBM(int unitType, int unitWeight) {
-        return bmLimits[unitType][unitWeight];
-    }
-    
-    public void setCanBuyFromBM(int unitType, int unitWeight, boolean canBuy) {
-        bmLimits[unitType][unitWeight] = canBuy;
-    }
-
     public void sendMessageToHouseLeaders(String msg) {
-
         if (leaders.size() < 1) {
             return;
         }
@@ -3172,38 +3001,34 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         }
 
     }
-    
-    public void populateBMLimits() {
-        bmLimits[Unit.MEK][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightMeks");
-        bmLimits[Unit.MEK][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumMeks");
-        bmLimits[Unit.MEK][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyMeks");
-        bmLimits[Unit.MEK][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultMeks");
 
-        bmLimits[Unit.VEHICLE][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightVehicles");
-        bmLimits[Unit.VEHICLE][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumVehicles");
-        bmLimits[Unit.VEHICLE][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyVehicles");
-        bmLimits[Unit.VEHICLE][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultVehicles");
-
-        bmLimits[Unit.INFANTRY][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightInfantry");
-        bmLimits[Unit.INFANTRY][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumInfantry");
-        bmLimits[Unit.INFANTRY][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyInfantry");
-        bmLimits[Unit.INFANTRY][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultInfantry");
-
-        bmLimits[Unit.BATTLEARMOR][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightBA");
-        bmLimits[Unit.BATTLEARMOR][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumBA");
-        bmLimits[Unit.BATTLEARMOR][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyBA");
-        bmLimits[Unit.BATTLEARMOR][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultBA");
-
-        bmLimits[Unit.PROTOMEK][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightProtomeks");
-        bmLimits[Unit.PROTOMEK][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumProtomeks");
-        bmLimits[Unit.PROTOMEK][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyProtomeks");
-        bmLimits[Unit.PROTOMEK][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultProtomeks");
-
-        bmLimits[Unit.AERO][Unit.LIGHT] = getBooleanConfig("CanBuyBMLightAero");
-        bmLimits[Unit.AERO][Unit.MEDIUM] = getBooleanConfig("CanBuyBMMediumAero");
-        bmLimits[Unit.AERO][Unit.HEAVY] = getBooleanConfig("CanBuyBMHeavyAero");
-        bmLimits[Unit.AERO][Unit.ASSAULT] = getBooleanConfig("CanBuyBMAssaultAero");
-
+    @Deprecated(since = "9.0.0", forRemoval = false) 
+    public String getConfig(String key) {
+        return getHouseOptions().getConfig(key);
     }
-    
+
+    @Deprecated(since = "9.0.0", forRemoval = false) 
+    public boolean getBooleanConfig(String key) {
+        return getHouseOptions().getBooleanConfig(key);
+    }
+
+    @Deprecated(since = "9.0.0", forRemoval = false) 
+    public int getIntegerConfig(String key) {
+        return getHouseOptions().getIntegerConfig(key);
+    }
+
+    @Deprecated(since = "9.0.0", forRemoval = false) 
+    public double getDoubleConfig(String key) {
+        return getHouseOptions().getDoubleConfig(key);
+    }
+
+    @Deprecated(since = "9.0.0", forRemoval = false) 
+    public float getFloatConfig(String key) {
+        return getHouseOptions().getFloatConfig(key);
+    }
+
+    @Deprecated(since = "9.0.0", forRemoval = false) 
+    public long getLongConfig(String key) {
+        return getHouseOptions().getLongConfig(key);
+    }
 }// end SHouse.java

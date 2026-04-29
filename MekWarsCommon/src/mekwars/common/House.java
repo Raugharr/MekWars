@@ -645,4 +645,12 @@ public class House implements Entity {
     public boolean equals(House house) {
         return (house != null) && (getId() == house.getId());
     }
+
+    /**
+     * FIXME: On the client side there is no faction config. If the faction has any configurations
+     * they will be placed ontop of any existing configuration in the CampaignOptions.
+     */
+    public MekWarsConfig getHouseOptions() {
+        return CampaignData.cd.getHouseOptions(getName());
+    }
 }

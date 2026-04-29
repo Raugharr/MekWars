@@ -1220,8 +1220,9 @@ public class MWServ {
         return banaccounts;
     }
     
+    @Deprecated(since = "9.0.0", forRemoval = false)
     public void saveConfigs() {
-        CampaignData.cd.getCampaignOptions().getDefaultOptions().createConfig(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG"));
+        CampaignData.cd.getCampaignOptions().save();
     }
 
     synchronized public void addToNewsFeed(String s) {

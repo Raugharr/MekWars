@@ -17,6 +17,7 @@
 package mekwars.common;
 
 import mekwars.common.campaign.CampaignOptions;
+import mekwars.common.campaign.HouseOptions;
 import mekwars.common.persistence.BannedAmmoStore;
 import mekwars.common.persistence.NamedEntityStore;
 import mekwars.common.util.BinReader;
@@ -27,10 +28,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Properties;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -58,6 +60,7 @@ public class CampaignData implements TerrainProvider {
 
     private Vector<Integer> bannedTargetingSystems = new Vector<>();
     private HashMap<String, Integer> commands = new HashMap<>();
+    private Map<String, HouseOptions> houseOptionsMap = new HashMap<>();
     private TreeMap<String, String> planetOpFlags = new TreeMap<>();
 
     private BannedAmmoStore bannedAmmoStore = new BannedAmmoStore();
@@ -446,5 +449,26 @@ public class CampaignData implements TerrainProvider {
 
         // only one match! send it back.
         return theMatch;
+    }
+
+    /**
+     * Returns the HouseOptions for the given House.
+     *
+     * @return The {@link HouseOptions} for the given {@link House}
+     */
+    public HouseOptions getHouseOptions(String house) {
+        return houseOptionsMap.get(house);
+    }
+
+    /**
+     * @param path The path of the file to load from
+     * @param house The house to store the config for
+     */
+    public void loadHouseOptions(Path path, House house) {
+        if (houseOptionsMap.get(house.getName()) != null) {
+            return;
+        }
+
+        houseOptionsMap.put(house.getName(), new HouseOptions(path));
     }
 }

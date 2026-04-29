@@ -529,7 +529,7 @@ public class DataFetchClient {
     public CampaignData getAllData() throws IOException {
         BinReader in = openConnection("All");
         CampaignOptions campaignOptions =
-            new CampaignOptions(FileSystem.getInstance().getCampaignConfig().toString());
+            new CampaignOptions(FileSystem.getInstance().getCampaignConfig());
         CampaignData data = new CampaignData(campaignOptions, in);
         // in.close();
         getAccessLevels(data);
@@ -546,7 +546,7 @@ public class DataFetchClient {
     public CampaignData getCacheData(String cachePath) throws IOException {
         BinReader in = new BinReader(new FileReader(cachePath + "/data.dat"));
         CampaignOptions campaignOptions =
-            new CampaignOptions(FileSystem.getInstance().getCampaignConfig().toString());
+            new CampaignOptions(FileSystem.getInstance().getCampaignConfig());
         CampaignData data = new CampaignData(campaignOptions, in);
         in.close();
         this.data = data;

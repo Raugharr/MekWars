@@ -59,7 +59,7 @@ public class AdminSaveServerConfigsCommand implements Command {
             return;
         }
 
-        CampaignData.cd.getCampaignOptions().getDefaultOptions().createConfig(MWServ.getInstance().getConfigParam("CAMPAIGNCONFIG"));
+        CampaignData.cd.getCampaignOptions().save();
         CampaignMain.cm.toUser("AM:Status saved!", Username, true);
         CampaignMain.cm.doSendModMail("NOTE", Username + " has saved the server configs");
     } // end process
