@@ -20,6 +20,7 @@ package mekwars.server.campaign;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -97,8 +98,6 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     private long lastOnline = 0;
 
     private List<SArmy> armies = new ArrayList<>();
-    private List<Integer> totalTechs = new ArrayList<>();
-    private List<Integer> availableTechs = new ArrayList<>();
 
     private SPersonalPilotQueues personalPilotQueue = new SPersonalPilotQueues();
     private ExclusionList exclusionList = new ExclusionList();
@@ -151,13 +150,6 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
      * places - CampaignMain's load method and the EnrollCommand.
      */
     public SPlayer() {
-        // if using advanced repair, populate tech vectors and generate info
-        if (CampaignMain.cm.isUsingAdvanceRepair()) {
-            for (int x = 0; x < 4; x++) {
-                getAvailableTechs().add(0);
-                getTotalTechs().add(0);
-            }
-        }
         setMyHouse(CampaignData.cd.getHouseByName(CampaignData.cd.getCampaignOptions().getConfig("NewbieHouseName")));
     }
 
@@ -1178,8 +1170,8 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         exclusionList.getPlayerExcludes().clear();
         experience = 0;
         baysOwned = 0;
-        availableTechs.clear();
-        totalTechs.clear();
+        availableTechs = new int[UnitUtils.TECH_TYPES];
+        totalTechs = new int[UnitUtils.TECH_TYPES];
         technicians = 0;
         fluffText = " ";
         setRewardPoints(0);
@@ -2061,14 +2053,6 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         return technicians;
     }
 
-    public List<Integer> getTotalTechs() {
-        return totalTechs;
-    }
-
-    public List<Integer> getAvailableTechs() {
-        return availableTechs;
-    }
-
     public String totalTechsToString() {
         StringBuilder result = new StringBuilder();
 
@@ -2090,29 +2074,16 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     }
 
     public void addAvailableTechs(int type, int number) {
-        if (type > UnitUtils.TECH_ELITE) {
-            return;
-        }
-
-        int techs = getAvailableTechs().get(type);
-
-        techs += number;
-
-        synchronized(availableTechs) {
-        	getAvailableTechs().set(type, techs);
-        }
-
-        CampaignMain.cm.toUser("PL|UAT|" + availableTechsToString(), name, false);
-
+        setAvailableTechs(type, getTotalTech(type) + number);
     }
 
     public void setAvailableTechs(int type, int number) {
-        if (type > UnitUtils.TECH_ELITE) {
+        if (type < 0 || type >= UnitUtils.TECH_TYPES) {
             return;
         }
 
         synchronized (availableTechs) {
-        	getAvailableTechs().set(type, number);
+            availableTechs[type] = number;
         }
 
         CampaignMain.cm.toUser("PL|UAT|" + availableTechsToString(), name, false);
@@ -2120,26 +2091,16 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     }
 
     public void addTotalTechs(int type, int number) {
-        if (type > UnitUtils.TECH_ELITE) {
-            return;
-        }
-
-        int techs = getTotalTechs().get(type);
-        techs += number;
-        synchronized (totalTechs) {
-        	getTotalTechs().set(type, techs);
-        }
-
-        CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), name, false);
+        setTotalTechs(type, getTotalTech(type) + number);
     }
 
     public void setTotalTechs(int type, int number) {
-        if (type > UnitUtils.TECH_ELITE) {
+        if (type < 0 || type >= UnitUtils.TECH_TYPES) {
             return;
         }
 
         synchronized(totalTechs) {
-        	getTotalTechs().set(type, number);
+            totalTechs[type] = number;
         }
         CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), name, false);
     }
@@ -2153,8 +2114,8 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 techType++;
             }
         } catch (Exception ex) {
+            LOGGER.error("Unable to update available techs", ex);
         }
-
     }
 
     public void updateTotalTechs(String data) {
@@ -2167,8 +2128,8 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 techType++;
             }
         } catch (Exception ex) {
+            LOGGER.error("Unable to update total techs", ex);
         }
-
     }
 
     public int getBaysOwned() {
@@ -2790,8 +2751,8 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
 
         // advanced repair
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
-            s.append("Technicians (Green/Reg/Vet/Elite): " + getTotalTechs().get(UnitUtils.TECH_GREEN) + "/" + getTotalTechs().get(UnitUtils.TECH_REG) + "/" + getTotalTechs().get(UnitUtils.TECH_VET) + "/" + getTotalTechs().get(UnitUtils.TECH_ELITE) + "<br>");
-            s.append("Idle Techs (Green/Reg/Vet/Elite):  " + getAvailableTechs().get(UnitUtils.TECH_GREEN) + "/" + getAvailableTechs().get(UnitUtils.TECH_REG) + "/" + getAvailableTechs().get(UnitUtils.TECH_VET) + "/" + getAvailableTechs().get(UnitUtils.TECH_ELITE) + "<br>");
+            s.append("Technicians (Green/Reg/Vet/Elite): " + getTotalTech(UnitUtils.TECH_GREEN) + "/" + getTotalTech(UnitUtils.TECH_REG) + "/" + getTotalTech(UnitUtils.TECH_VET) + "/" + getTotalTech(UnitUtils.TECH_ELITE) + "<br>");
+            s.append("Idle Techs (Green/Reg/Vet/Elite):  " + getAvailableTech(UnitUtils.TECH_GREEN) + "/" + getAvailableTech(UnitUtils.TECH_REG) + "/" + getAvailableTech(UnitUtils.TECH_VET) + "/" + getAvailableTech(UnitUtils.TECH_ELITE) + "<br>");
             s.append("Bays: " + getFreeBays() + "/" + getTotalMekBays() + "<br>");
             s.append("Leased Bays: " + getBaysOwned() + " (Cost: " + CampaignMain.cm.moneyOrFluMessage(true, false, getCurrentTechPayment()) + "/Game)<br>");
         }
@@ -3096,15 +3057,11 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
      *            name stuck on the end.
      */
     public void fromString(String s) {
-
         if (s == null) {
             throw new NullPointerException("SPlayer fromString(s) is null");
         }
 
-        // print the player into the info log. only for Debug
-        // LOGGER.info("CSPlayer: " + s);
         isLoading = true;
-
         try {
             armies.clear();
 
@@ -3169,7 +3126,8 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 int regTechs = greenTechs / 5;
                 greenTechs -= regTechs;
                 updateAvailableTechs(greenTechs + "%" + regTechs + "%0%0%");
-                getTotalTechs().addAll(getAvailableTechs());
+                
+                totalTechs = Arrays.copyOf(availableTechs, totalTechs.length);
                 // give them some bays
                 setBaysOwned(greenTechs + regTechs);
             } else {

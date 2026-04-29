@@ -22,11 +22,13 @@
 package mekwars.common;
 
 import mekwars.common.flags.PlayerFlags;
+import mekwars.common.util.UnitUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -38,7 +40,8 @@ public class Player<T extends Unit> {
 
     private List<T> units = new ArrayList<>();
     private House myHouse = null;
-    private int influence = 0; //@salient - changed from 50 to 0, starting flu can be set in SO faction.
+    // @salient - changed from 50 to 0, starting flu can be set in SO faction.
+    private int influence = 0;
     private int technicians = 0; // @urgru 7/17/04
     private int currentTechPayment = -1; // num Cbills owed to techs after games
     private int teamNumber = -1;
@@ -46,12 +49,19 @@ public class Player<T extends Unit> {
     private double rating = INITIAL_RATING;
     private boolean isInvisible = false; // Evil command for Big brother err admins.
     private boolean autoReorderParts = false;
+    protected int totalTechs[] = new int[UnitUtils.TECH_TYPES];
+    protected int availableTechs[] = new int[UnitUtils.TECH_TYPES];
     protected PlayerFlags flags = new PlayerFlags();
     // This is only going to be set for staff
     protected PlayerFlags defaultPlayerFlags = new PlayerFlags();
     // A counter for how many meks a player is allowed to create in freebuild
     protected int mekToken = 0;
     protected int bvTracker = 0; // used to track hangar BV in mini campaigns
+
+    public Player() {
+        Arrays.fill(totalTechs, 0);
+        Arrays.fill(availableTechs, 0);
+    }
 
     public void setMyHouse(House house) {
         this.myHouse = house;
@@ -72,6 +82,36 @@ public class Player<T extends Unit> {
             }
         }
         return null;
+    }
+
+    public void setTotalTechs(int slot, int techs) {
+        if (slot < 0 || slot >= UnitUtils.TECH_TYPES) {
+            return;
+        }
+        totalTechs[slot] = techs;
+    }
+
+    public void setAvailableTechs(int slot, int techs) {
+        if (slot < 0 || slot >= UnitUtils.TECH_TYPES) {
+            return;
+        }
+        availableTechs[slot] = techs;
+    }
+
+    public int getTotalTech(int slot) {
+        return totalTechs[slot];
+    }
+
+    public int[] getTotalTechs() {
+        return totalTechs;
+    }
+
+    public int getAvailableTech(int slot) {
+        return availableTechs[slot];
+    }
+
+    public int[] getAvailableTechs() {
+        return availableTechs;
     }
 
     public List<T> getUnits() {
@@ -117,20 +157,20 @@ public class Player<T extends Unit> {
     }
 
     public void setInfluence(int influence) {
-        int influenceCeiling = CampaignData.cd.getCampaignOptions().getIntegerConfig("InfluenceCeiling");
+        int influenceCeiling =
+                CampaignData.cd.getCampaignOptions().getIntegerConfig("InfluenceCeiling");
 
         if (influenceCeiling != -1) {
             this.influence = Math.max(0, Math.min(influenceCeiling, influence));
         } else {
-            this.influence = Math.max(0,  influence);
+            this.influence = Math.max(0, influence);
         }
     }
 
     /**
      * A method to add a specified amount of influence
      *
-     * @param i
-     *            - amount of influence to add
+     * @param i - amount of influence to add
      */
     public void addInfluence(int influence) {
         setInfluence(getInfluence() + influence);
@@ -208,7 +248,6 @@ public class Player<T extends Unit> {
     public void addTechnicians(int technicians) {
         this.setTechnicians(this.technicians + technicians);
     }
-
 
     public double getRating() {
         return rating;
@@ -467,7 +506,7 @@ public class Player<T extends Unit> {
         if (additive <= 0) {
             LOGGER.error(
                     "Unable to calculate technicians pay, AdditivePerTech must be above 0, but is"
-                        + " {}",
+                            + " {}",
                     additive);
             setCurrentTechPayment(0);
             return;
@@ -476,7 +515,7 @@ public class Player<T extends Unit> {
         if (ceiling <= 0) {
             LOGGER.error(
                     "Unable to calculate technicians pay, AdditiveCostCeiling must be above 0, but"
-                        + " is {}",
+                            + " is {}",
                     ceiling);
             setCurrentTechPayment(0);
             return;

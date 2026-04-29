@@ -225,7 +225,7 @@ public class CPlayerPanel extends JScrollPane {
             //when the client first loads it doesn't have data in the vectors.
             try{
                 lblMekbay.setText(PP_BAYS + " " + player.getFreeBays()+"/"+player.getBays()+ " (" +mwclient.moneyOrFluMessage(true,true,player.getCurrentTechPayment())+")");
-                lblTechs.setText(PP_IDLETECHS  + " " + player.getAvailableTechs().get(UnitUtils.TECH_GREEN) + "/" + player.getAvailableTechs().get(UnitUtils.TECH_REG) + "/" + player.getAvailableTechs().get(UnitUtils.TECH_VET) + "/" + player.getAvailableTechs().get(UnitUtils.TECH_ELITE));
+                lblTechs.setText(PP_IDLETECHS  + " " + player.getAvailableTech(UnitUtils.TECH_GREEN) + "/" + player.getAvailableTech(UnitUtils.TECH_REG) + "/" + player.getAvailableTech(UnitUtils.TECH_VET) + "/" + player.getAvailableTech(UnitUtils.TECH_ELITE));
             }
             catch(Exception ex){}
         }

@@ -152,13 +152,13 @@ public class SalvageManagmentThread extends Thread{
                     continue;
                 
                 //No techs for this type what so ever! buy more!
-                if ( pos != UnitUtils.TECH_PILOT && client.getPlayer().getTotalTechs().get(pos) <= 0 ){
+                if ( pos != UnitUtils.TECH_PILOT && client.getPlayer().getTotalTech(pos) <= 0 ){
                     client.systemMessage("You have pending work orders for "+UnitUtils.techDescription(pos)+" techs, but have none on your pay roll.");
                     continue;
                 }
     
                 if ( pos != UnitUtils.TECH_PILOT )
-                    availableTechs = client.getPlayer().getAvailableTechs().get(pos);
+                    availableTechs = client.getPlayer().getAvailableTech(pos);
                 
                 //all techs are busy keep it moving.
                 if ( availableTechs <= 0 ){

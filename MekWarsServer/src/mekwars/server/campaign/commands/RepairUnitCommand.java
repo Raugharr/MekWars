@@ -138,7 +138,7 @@ public class RepairUnitCommand implements Command {
                         "FSM|You do not have enough "
                                 + CampaignMain.cm.getConfig("RPLongName")
                                 + " to repair this location.",
-                        Username,
+                        username,
                         false);
                 return;
             }
@@ -153,9 +153,9 @@ public class RepairUnitCommand implements Command {
             }
 
             int numberOfTechs = 1;
-
-            if (techType < UnitUtils.TECH_PILOT) {
-                numberOfTechs = player.getAvailableTechs().get(techType);
+            
+            if (techType < UnitUtils.TECH_TYPES) {
+                numberOfTechs = player.getAvailableTech(techType);
             }
 
             if (techType == UnitUtils.TECH_PILOT

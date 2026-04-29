@@ -49,7 +49,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class CPlayer extends Player<CUnit> {
     private static final Logger LOGGER = LogManager.getLogger(CPlayer.class);
-    private static final int TECH_TYPES = UnitUtils.TECH_ELITE + 1;
 
     public static final String DELIMITER = "#"; // delimiter for player strings
 
@@ -74,8 +73,6 @@ public class CPlayer extends Player<CUnit> {
     private CPersonalPilotQueues personalPilotQueue;
 
     private House houseFightingFor = null;
-    private List<Integer> totalTechs = new ArrayList<Integer>(TECH_TYPES);
-    private List<Integer> availableTechs = new ArrayList<Integer>(TECH_TYPES);
 
     private int repairLocation = 0;
     private int repairTechType = 0;
@@ -101,10 +98,6 @@ public class CPlayer extends Player<CUnit> {
         personalPilotQueue = new CPersonalPilotQueues();
         adminExcludes = new ArrayList<String>();
         playerExcludes = new ArrayList<String>();
-        for (int x = 0; x < 4; x++) {
-            availableTechs.add(0);
-            totalTechs.add(0);
-        }
     }
 
     public boolean decodeCommand(String command) {
@@ -121,11 +114,11 @@ public class CPlayer extends Player<CUnit> {
 
         if (element.equals("DA")) {// is a PI|DA
             if (!setData(command)) {
-                return (false);
+                return false;
             }
-            return (true);
+            return true;
         }
-        return (false);
+        return false;
     }
 
     /**
@@ -1068,17 +1061,6 @@ public class CPlayer extends Player<CUnit> {
         }
     }
 
-    public void setTotalTechs(int slot, int techs) {
-        if (techs < 0 || techs >= TECH_TYPES) {
-            return;
-        }
-        totalTechs.set(slot, techs);
-    }
-
-    public List<Integer> getTotalTechs() {
-        return totalTechs;
-    }
-
     public void updateAvailableTechs(String data) {
         StringTokenizer techs = new StringTokenizer(data, "%");
         int slot = 0;
@@ -1087,17 +1069,6 @@ public class CPlayer extends Player<CUnit> {
             setAvailableTechs(slot, TokenReader.readInt(techs));
             slot++;
         }
-    }
-
-    public void setAvailableTechs(int slot, int techs) {
-        if (techs < 0 || techs >= TECH_TYPES) {
-            return;
-        }
-        availableTechs.set(slot, techs);
-    }
-
-    public List<Integer> getAvailableTechs() {
-        return availableTechs;
     }
 
     public void setRepairLocation(int loc) {

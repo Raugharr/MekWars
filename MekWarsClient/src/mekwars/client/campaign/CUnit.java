@@ -255,7 +255,6 @@ public class CUnit extends Unit {
 
         getC3Type(unitEntity);
 
-        unitEntity.setArmor(2, 0);
         return (true);
     }
     

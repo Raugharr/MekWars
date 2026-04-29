@@ -131,8 +131,8 @@ public class  FireTechsCommand  implements Command {
         if ( command.hasMoreElements())
             techType = Integer.parseInt(command.nextToken());
         
-        int totalTechsToFire = player.getTotalTechs().get(techType);
-        int availableTechsToFire = player.getAvailableTechs().get(techType);
+        int totalTechsToFire = player.getTotalTech(techType);
+        int availableTechsToFire = player.getAvailableTech(techType);
         
         if ( totalTechsToFire < numberOfTechs ){
             CampaignMain.cm.toUser("AM:You do not have enough "+UnitUtils.techDescription(techType)+" techs to fire! You only have "+totalTechsToFire+".",Username,true);

@@ -95,6 +95,7 @@ public class UnitUtils {
     public static final int TECH_REG = 1;
     public static final int TECH_VET = 2;
     public static final int TECH_ELITE = 3;
+    public static final int TECH_TYPES = TECH_ELITE + 1;
     public static final int TECH_PILOT = 4;
     public static final int TECH_REWARD_POINTS = 5;
 
@@ -2084,6 +2085,9 @@ public class UnitUtils {
         }
         CriticalSlot cs = unit.getCritical(loc, slot);
 
+        if (cs == null) {
+            return 0;
+        }
         if (UnitUtils.isEngineCrit(cs)) {
             return UnitUtils.getNumberOfDamagedEngineCrits(unit);
         }
@@ -2139,7 +2143,6 @@ public class UnitUtils {
             }
             return damagedCrits;
         }
-
         return UnitUtils.getNumberOfDamagedSystemCriticals(unit, cs);
     }
 
