@@ -114,10 +114,10 @@ public class UnitPositionCommand implements Command {
 				a.addUnit(u, newposition);
 			
 			//now, send an update command to the client
-			CampaignMain.cm.toUser("PL|RPU|"+a.getID()+"#"+u.getId()+"#"+newposition,Username,false);
+			CampaignMain.cm.toUser("PL|RPU|"+a.getId()+"#"+u.getId()+"#"+newposition,Username,false);
 			
 			//and send the user some nice chat
-			CampaignMain.cm.toUser("AM:Army #"+ a.getID() + "'s order was changed. The " + u.getModelName() + "  is now Unit " + (newposition + 1) + "." ,Username,true);
+			CampaignMain.cm.toUser("AM:Army #"+ a.getId() + "'s order was changed. The " + u.getModelName() + "  is now Unit " + (newposition + 1) + "." ,Username,true);
 			
 			//this doesnt trigger any of the add/remove save flags, but
 			//if would still be nice to record. So set the player's save state.

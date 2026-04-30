@@ -249,7 +249,7 @@ public class ShortOperation implements Comparable<Object> {
         // add to gamelog
         String toLog = "Attack: #" + shortID + "/" + initiator.getName() + "/" + opName + "/" + target.getName() + ".<br> - Potential Defenders: ";
         for (SArmy currA : possibleDefenders) {
-            toLog += currA.getName() + "/" + currA.getID() + " ";
+            toLog += currA.getName() + "/" + currA.getId() + " ";
         }
         LOGGER.info(LogMarkerHolder.GAME_MARKER, toLog);
 
@@ -277,14 +277,14 @@ public class ShortOperation implements Comparable<Object> {
     public void addAttacker(SPlayer p, SArmy a, String modName) {
         Operation o = CampaignMain.cm.getOpsManager().getOperation(opName);
 
-        attackers.put(p.getName().toLowerCase(), a.getID());
-        reporter.addAttacker(p.getName(), a.getID());
+        attackers.put(p.getName().toLowerCase(), a.getId());
+        reporter.addAttacker(p.getName(), a.getId());
         if (!modName.equals("")) {
             playerModifyingOps.put(p.getName().toLowerCase(), modName);
         }
 
         // also, lock the participating army and update the client GUI
-        p.lockArmy(a.getID());
+        p.lockArmy(a.getId());
 
         // increase the unit and BV counts
         startingBV += a.getOperationsBV(null);
@@ -366,14 +366,14 @@ public class ShortOperation implements Comparable<Object> {
      */
     public void addDefender(SPlayer p, SArmy a, String modName) {
         Operation o = CampaignMain.cm.getOpsManager().getOperation(opName);
-        defenders.put(p.getName().toLowerCase(), a.getID());
-        reporter.addDefender(p.getName(), a.getID());
+        defenders.put(p.getName().toLowerCase(), a.getId());
+        reporter.addDefender(p.getName(), a.getId());
         if (!modName.equals("")) {
             playerModifyingOps.put(p.getName().toLowerCase(), modName);
         }
 
         // also, lock the participating army and update the client GUI
-        p.lockArmy(a.getID());
+        p.lockArmy(a.getId());
 
         // increase the unit and BV counts
         startingBV += a.getOperationsBV(null);
@@ -1328,11 +1328,9 @@ public class ShortOperation implements Comparable<Object> {
                 for (String currN : defenders.keySet()) {
                     SPlayer currP = CampaignMain.cm.getPlayer(currN);
                     SArmy currA = currP.getArmy(defenders.get(currN));
-                    Enumeration<Unit> units = currA.getUnits().elements();
-                    while (units.hasMoreElements()) {
-                        SUnit u = (SUnit) units.nextElement();
-                        if (UnitUtils.isRepairing(u.getEntity())) {
-                            MWServ.getInstance().getRTT().stopAllRepairJobs(u.getId(), currP);
+                    for (SUnit unit : currA.getUnits()) {
+                        if (UnitUtils.isRepairing(unit.getEntity())) {
+                            MWServ.getInstance().getRTT().stopAllRepairJobs(unit.getId(), currP);
                         }
                     }
                 }
@@ -1341,11 +1339,9 @@ public class ShortOperation implements Comparable<Object> {
                 for (String currN : attackers.keySet()) {
                     SPlayer currP = CampaignMain.cm.getPlayer(currN);
                     SArmy currA = currP.getArmy(attackers.get(currN));
-                    Enumeration<Unit> units = currA.getUnits().elements();
-                    while (units.hasMoreElements()) {
-                        SUnit u = (SUnit) units.nextElement();
-                        if (UnitUtils.isRepairing(u.getEntity())) {
-                            MWServ.getInstance().getRTT().stopAllRepairJobs(u.getId(), currP);
+                    for (SUnit unit : currA.getUnits()) {
+                        if (UnitUtils.isRepairing(unit.getEntity())) {
+                            MWServ.getInstance().getRTT().stopAllRepairJobs(unit.getId(), currP);
                         }
                     }
                 }
@@ -1360,12 +1356,10 @@ public class ShortOperation implements Comparable<Object> {
             for (String currN : defenders.keySet()) {
                 SPlayer currP = CampaignMain.cm.getPlayer(currN);
                 SArmy currA = currP.getArmy(defenders.get(currN));
-                Enumeration<Unit> units = currA.getUnits().elements();
                 defenderArmyCount += currA.getRawForceSize();
 
-                while (units.hasMoreElements()) {
-                    SUnit u = (SUnit) units.nextElement();
-                    totalWeight += SUnit.getMapSizeModification(u);
+                for (SUnit unit : currA.getUnits()) {
+                    totalWeight += SUnit.getMapSizeModification(unit);
                 }
             }
 
@@ -1375,10 +1369,8 @@ public class ShortOperation implements Comparable<Object> {
                 SArmy currA = currP.getArmy(attackers.get(currN));
                 attackerArmyCount += currA.getRawForceSize();
 
-                Enumeration<Unit> units = currA.getUnits().elements();
-                while (units.hasMoreElements()) {
-                    SUnit u = (SUnit) units.nextElement();
-                    totalWeight += SUnit.getMapSizeModification(u);
+                for (SUnit unit : currA.getUnits()) {
+                    totalWeight += SUnit.getMapSizeModification(unit);
                 }
             }
 
@@ -1928,7 +1920,7 @@ public class ShortOperation implements Comparable<Object> {
         // look at every army in the potential defender list
         for (SArmy currArmy : pdlist) {
 
-            SPlayer currPlayer = CampaignMain.cm.getPlayer(currArmy.getPlayerName());
+            SPlayer currPlayer = CampaignMain.cm.getPlayer(currArmy.getOwner().getName());
             String playername = currPlayer.getName().toLowerCase();
 
             /*

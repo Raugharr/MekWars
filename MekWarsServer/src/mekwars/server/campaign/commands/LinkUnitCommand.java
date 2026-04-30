@@ -17,6 +17,7 @@
 package mekwars.server.campaign.commands;
 
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import mekwars.common.Unit;
@@ -76,18 +77,16 @@ public class  LinkUnitCommand  implements Command {
           return;
       }
 
-      if ( slaveUnit.hasBeenC3LinkedTo(a) && masterid == -1) {
-          Enumeration<Integer> c3Key = a.getC3Network().keys();
-          Enumeration<Integer> c3Unit = a.getC3Network().elements();
-          
-          while ( c3Key.hasMoreElements()){
-              Integer keyId = c3Key.nextElement();
-              Integer unitId = c3Unit.nextElement();
+      if (slaveUnit.hasBeenC3LinkedTo(a) && masterid == -1) {
+          for (Map.Entry<Integer, Integer> entrySet : a.getC3Network().entrySet()) {
+              Integer keyId = entrySet.getKey();
+              Integer unitId = entrySet.getValue();
               
-              if ( slaveUnit.getId() == unitId.intValue())
+              if (slaveUnit.getId() == unitId.intValue()) {
                   a.getC3Network().remove(keyId);
+              }
           }
-          a.setRawForceSize(0);
+          a.setRawForceSize(-1);
           a.setBV(0);
           String toReturn = "AM:Unit #"+ slaveid + " was removed from its C3 network. New BV: " + a.getBV();
           
@@ -99,7 +98,7 @@ public class  LinkUnitCommand  implements Command {
       
       else if (masterid == -1) {
           a.getC3Network().remove(slaveid);
-          a.setRawForceSize(0);
+          a.setRawForceSize(-1);
           a.setBV(0);
           
           String toReturn = "AM:Unit #"+ slaveid + " was removed from its C3 network. New BV: " + a.getBV();
@@ -119,7 +118,7 @@ public class  LinkUnitCommand  implements Command {
       
       linkid = slaveUnit.linkToC3Network(a,masterUnit);
       if ( linkid == masterUnit.getId() ) {
-          a.setRawForceSize(0);
+          a.setRawForceSize(-1);
           a.setBV(0);
           
           String toReturn = "AM:Unit #"+ slaveUnit.getId() + " is now linked to Unit #"+masterUnit.getId()+". New BV: " + a.getBV();

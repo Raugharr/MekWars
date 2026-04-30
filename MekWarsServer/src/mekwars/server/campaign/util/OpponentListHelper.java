@@ -138,7 +138,7 @@ public class OpponentListHelper {
 				for (SArmy searchArmy : searchPlayer.getArmies()) {
 					for (SArmy enemyArmy : currPlayer.getArmies()) {
 						if (!searchArmy.isDisabled())  {
-							attackLoop: for ( String attack : searchArmy.getLegalOperations().keySet() ){
+							attackLoop: for (String attack : searchArmy.getLegalOperations()){
 								Operation o = manager.getOperation(attack);
 
 								//continue to next operation if this is our faction and attacks aren't allowed
@@ -178,7 +178,7 @@ public class OpponentListHelper {
 				//do insertion sort on the armies, by ID. inefficient.
 				possDefLoop: for (SArmy currArmy : possDefendArmies) {
 				
-					/*first insertion is automatic. otherwise NPE @ toStore.get(0).getID() below.
+					/*first insertion is automatic. otherwise NPE @ toStore.get(0).getId() below.
 					if (toStore.size() == 0) {
 						toStore.add(currArmy);
 						continue possDefLoop;
@@ -187,7 +187,7 @@ public class OpponentListHelper {
 					for (int j = 0; j < toStore.size(); j++) {
 						
 						//if the army's ID is less than the currently stored ID @ an index, insert there
-						if (currArmy.getID() < toStore.get(j).getID()) {
+						if (currArmy.getId() < toStore.get(j).getId()) {
 							toStore.add(j, currArmy);
 							continue possDefLoop;
 						}
@@ -220,13 +220,11 @@ public class OpponentListHelper {
 		for (SArmy currArmy : searchPlayer.getArmies()) {
 
 			//remove curr army from all opparmies which link it.
-			Enumeration<SArmy> j = currArmy.getOpponents().elements();
-			while (j.hasMoreElements()) {
-				SArmy oppArmy = j.nextElement();
+            for (SArmy oppArmy : currArmy.getOpponents()) {
 				oppArmy.removeOpponent(currArmy);
 
 				//add to the 
-				String currName = oppArmy.getPlayerName().toLowerCase();
+				String currName = oppArmy.getOwner().getName().toLowerCase();
 				if (potentialOpponents.get(currName) == null)
 					potentialOpponents.put(currName, new ArrayList<SArmy>());
 			}
@@ -278,7 +276,7 @@ public class OpponentListHelper {
 					output.append("Armies ");
 					Iterator<SArmy> i = currOppArmies.iterator();
 					while (i.hasNext()) {
-						output.append(i.next().getID());
+						output.append(i.next().getId());
 						if (i.hasNext()) {output.append(", ");}
 					}
 					//try to remove the last instance of ", "
@@ -291,7 +289,7 @@ public class OpponentListHelper {
 					
 				} else { // we can assume size == 1
 					SArmy currArmy = currOppArmies.get(0);
-					output.append("Army " + currArmy.getID());
+					output.append("Army " + currArmy.getId());
 				}
 			}
 

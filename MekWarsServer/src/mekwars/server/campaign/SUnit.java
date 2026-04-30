@@ -77,17 +77,14 @@ import org.apache.logging.log4j.Logger;
 public final class SUnit extends Unit implements Comparable<SUnit> {
     private static final Logger LOGGER = LogManager.getLogger(SUnit.class);
 
-    // VARIABLES
     private Integer BV = 0;
     private Integer scrappableFor = -1;
 
     private long passesMaintainanceUntil = 0;
     private boolean pilotIsRepairing = false;
 
-    private Entity unitEntity = null;
     private int lastCombatPilot = -1;
 
-    // CONSTRUCTOR
     /**
      * For Serialization.
      */
@@ -897,7 +894,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     }
 
     public int getBV() {
-
         int toReturn = 0;
 
         if (BV <= 0) {
@@ -921,20 +917,14 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     /**
      * @return the megamek.common.entity this Unit represents
      */
+    @Override
     public Entity getEntity() {
-
-        // alreayd loaded. return.
-        if (unitEntity != null) {
-            return unitEntity;
+        if (super.getEntity() != null) {
+            return super.getEntity();
         }
 
-        // need to load. do so.
-        unitEntity = SUnit.loadMech(getUnitFilename());
-        return unitEntity;
-    }
-
-    public void setEntity(Entity unitEntity) {
-        this.unitEntity = unitEntity;
+        setEntity(SUnit.loadMech(getUnitFilename()));
+        return super.getEntity();
     }
 
     public static Entity loadMech(String filename) {
@@ -1020,41 +1010,10 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                 // Simply means no omniveh list present. Ignore.
             }
         }
-
         return isOmni;
     }
 
-    public boolean hasTAG() {
-        return getEntity().hasTAG();
-    }
-
-    public boolean hasHoming() {
-        for (Mounted ammo : getEntity().getAmmo()) {
-            if (((AmmoType) ammo.getType()).getMunitionType().contains(AmmoType.Munitions.M_HOMING)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean hasSemiGuided() {
-        for (Mounted ammo : getEntity().getAmmo()) {
-            // LOGGER.error("ammo type:
-            // "+((AmmoType)ammo.getType()).getMunitionType());
-            if (((AmmoType) ammo.getType()).getMunitionType().contains(AmmoType.Munitions.M_SEMIGUIDED)) {
-                return true;
-            }
-        }
-        return false;
-
-    }
-
-    public int getBaseBV() {
-        return getEntity().calculateBattleValue(false, true);
-    }
-
     public int getPilotSkillBV() {
-
         int skillBV = 0;
         Iterator<PilotSkill> pilotSkills = getPilot().getSkills().getSkillIterator();
 

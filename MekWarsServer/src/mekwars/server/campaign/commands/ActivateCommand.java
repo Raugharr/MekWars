@@ -140,7 +140,7 @@ public class  ActivateCommand  implements Command {
             }
 
             if (currA.hasPilotWithTooManySkills()) {
-                CampaignMain.cm.toUser("AM:Army #" + currA.getID() + " has a pilot with too many pilot skills, you may not go active.", Username, true);
+                CampaignMain.cm.toUser("AM:Army #" + currA.getId() + " has a pilot with too many pilot skills, you may not go active.", Username, true);
                 return;
             }
 
@@ -306,7 +306,7 @@ public class  ActivateCommand  implements Command {
     private boolean armiesContainEnginedUnit(List<SArmy> armies) {
         // loop though all units in all armies
         for (SArmy army : armies) {
-            Iterator<Unit> units = army.getUnits().iterator();
+            Iterator<SUnit> units = army.getUnits().iterator();
             while (units.hasNext()) {
                 SUnit unit = (SUnit) units.next();
                 if (UnitUtils.isCored(unit.getEntity())) {
@@ -327,7 +327,7 @@ public class  ActivateCommand  implements Command {
     private boolean armiesContainLeggedUnit(List<SArmy> armies) {
         // loop though all units in all armies
         for (SArmy army : armies) {
-            Iterator<Unit> units = army.getUnits().iterator();
+            Iterator<SUnit> units = army.getUnits().iterator();
             while (units.hasNext()) {
 
                 // check RL/LL on a standard mek
@@ -371,7 +371,7 @@ public class  ActivateCommand  implements Command {
     private boolean armiesDamagedUnits(List<SArmy> armies) {
         // loop though all units in all armies
         for (SArmy army : armies) {
-            Iterator<Unit> units = army.getUnits().iterator();
+            Iterator<SUnit> units = army.getUnits().iterator();
             while (units.hasNext()) {
 
                 // check RL/LL on a standard mek
@@ -396,7 +396,7 @@ public class  ActivateCommand  implements Command {
     private boolean armiesPartialAmmoBinUnits(List<SArmy> armies) {
         // loop though all units in all armies
         for (SArmy army : armies) {
-            Iterator<Unit> units = army.getUnits().iterator();
+            Iterator<SUnit> units = army.getUnits().iterator();
             while (units.hasNext()) {
 
                 SUnit unit = (SUnit) units.next();
@@ -419,7 +419,7 @@ public class  ActivateCommand  implements Command {
     {
         for (SArmy army : armies) 
         {
-            Iterator<Unit> units = army.getUnits().iterator();
+            Iterator<SUnit> units = army.getUnits().iterator();
             while (units.hasNext()) 
             {
                 SUnit unit = (SUnit) units.next();
@@ -464,7 +464,7 @@ public class  ActivateCommand  implements Command {
             }
 
             if (!canAttack && !canDefend && !army.isDisabled()) {
-                return army.getID();
+                return army.getId();
             }
         }
 
@@ -482,7 +482,7 @@ public class  ActivateCommand  implements Command {
             }
 
             if(!canAttack && !army.isDisabled() && requireAttackCapable) {
-            	return army.getID();
+            	return army.getId();
             }
         }
 

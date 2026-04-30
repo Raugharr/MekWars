@@ -499,7 +499,7 @@ public class OpsChickenThread extends Thread {
         int numberOfTeams = Math.max(2, Math.min(8, o.getIntValue("NumberOfTeams")));
 
         for (SArmy currArmy : parmies) {
-            int aID = currArmy.getID();
+            int aID = currArmy.getId();
             int aBV = currArmy.getOperationsBV(null);
             int aUnits = currArmy.getAmountOfUnits();
 
@@ -533,7 +533,7 @@ public class OpsChickenThread extends Thread {
         }
         for (SArmy currArmy : parmies) {
 
-            int aID = currArmy.getID();
+            int aID = currArmy.getId();
             defendingArmyList.append("|" + aID);
         }
 

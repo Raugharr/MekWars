@@ -20,23 +20,32 @@
  */
 package mekwars.common;
 
-import java.util.Hashtable;
+import megamek.common.Entity;
+
+import mekwars.common.campaign.CampaignOptions;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A virtual army which can contain any combination of units
- * 
+ *
  * @author Helge Richter
- * 
  */
-public class Army {
+public class Army<T extends Unit> {
+    private static final Logger LOGGER = LogManager.getLogger(Army.class);
 
-    // STATIC VARIABLES
     public static final int NO_LIMIT = -1;
 
-    // VARIABLES
-    private Vector<Unit> units = new Vector<Unit>(1, 1);
+    private List<T> units = new ArrayList<>();
     private String name = " ";
 
     private int upperLimiter = NO_LIMIT;
@@ -52,16 +61,19 @@ public class Army {
 
     private float opForceSize = NO_LIMIT;
 
-    private Hashtable<Integer, Integer> c3Network = new Hashtable<Integer, Integer>();
+    private Map<Integer, Integer> c3Network = new HashMap<Integer, Integer>();
 
-    private Vector<Integer> commanders = new Vector<Integer>(1, 1);
+    private List<Integer> commanders = new ArrayList<Integer>(1);
+    private float rawForceSize = -1;
+    private Set<String> legalOperations = new TreeSet<>();
+    private Player owner;
 
-    // CONSTRUCTORS
-    public Army() {
-        // no content
+    public Army() {}
+
+    public Army(Player owner) {
+        this.owner = owner;
     }
 
-    // METHODS
     public int getAmountOfUnits() {
         return units.size();
     }
@@ -102,8 +114,7 @@ public class Army {
     }
 
     /**
-     * @param locked
-     *            The locked to set.
+     * @param locked The locked to set.
      */
     public void setLocked(boolean b) {
         locked = b;
@@ -122,8 +133,7 @@ public class Army {
     }
 
     /**
-     * @param bv
-     *            The bV to set.
+     * @param bv The bV to set.
      */
     public void setBV(int i) {
         bv = i;
@@ -137,8 +147,7 @@ public class Army {
     }
 
     /**
-     * @param lowerLimit
-     *            The lowerLimit to set.
+     * @param lowerLimit The lowerLimit to set.
      */
     public void setLowerLimiter(int lowerLimit) {
         lowerLimiter = lowerLimit;
@@ -152,51 +161,50 @@ public class Army {
     }
 
     /**
-     * @param name
-     *            The name to set.
+     * @param name The name to set.
      */
     public void setName(String s) {
         name = s.trim();
     }
 
-    /**
-     * Add a unit to a specific position.
-     * 
-     * @param unit
-     * @param Position
-     */
-    public void addUnit(Unit unit, int Position) {
-        units.add(Position, unit);
+    public void addUnit(T unit, int position) {
+        units.add(position, unit);
     }
 
-    /**
-     * add units to the army vector.
-     * 
-     * @param unit
-     */
-    public void addUnit(Unit unit) {
+    public void addUnit(T unit) {
         units.add(unit);
     }
 
     /**
      * @return Returns the units.
      */
-    public Vector<Unit> getUnits() {
+    public List<T> getUnits() {
         return units;
     }
 
+    public int getUnitPosition(int id) {
+        int index = 0;
+
+        for (T unit : units) {
+            if (unit.getId() == id) {
+                return index;
+            }
+            ++index;
+        }
+        return -1;
+    }
+
     /**
-     * This will pull The number of unit types this army holds i.e. type =
-     * Unit.MEK all meks will be counted.
-     * 
-     * @param type
-     *            The unit type to check against. MEK VEHICLE
+     * This will pull The number of unit types this army holds i.e. type = Unit.MEK all meks will be
+     * counted.
+     *
+     * @param type The unit type to check against. MEK VEHICLE
      * @return number of unit type that exist in this army
      */
     public int getNumberOfUnitTypes(int type) {
         int count = 0;
 
-        for (Unit unit : getUnits()) {
+        for (T unit : getUnits()) {
             if (unit.getType() == type) {
                 count++;
             }
@@ -204,45 +212,41 @@ public class Army {
 
         return count;
     }
-    
+
     /**
-     * This will pull The number of unit types this army holds i.e. type =
-     * Unit.MEK all meks will be counted.
-     *  
-     * @param type
-     * 	The unit type to check against.
-     * @param countSupport
-     *  Whether or not to count Support Units.
+     * This will pull The number of unit types this army holds i.e. type = Unit.MEK all meks will be
+     * counted.
+     *
+     * @param type The unit type to check against.
+     * @param countSupport Whether or not to count Support Units.
      * @return
      */
-    
     public int getNumberOfUnitTypes(int type, boolean countSupport) {
         int count = 0;
 
-        for (Unit unit : getUnits()) {
+        for (T unit : getUnits()) {
             if (unit.getType() == type) {
-            	if (!unit.isSupportUnit() || (unit.isSupportUnit() && countSupport) ) {
-                count++;
-            	}
+                if (!unit.isSupportUnit() || (unit.isSupportUnit() && countSupport)) {
+                    count++;
+                }
             }
         }
-        return count;    	
+        return count;
     }
-    
+
     /**
      * This method will return the total number of support units in the army
-     * 
-     * @return
-     * 	Total number of support units in the army
+     *
+     * @return Total number of support units in the army
      */
     public int getTotalSupportUnits() {
-    	int count = 0;
-    	for (Unit unit : getUnits()) {
-    		if (unit.isSupportUnit()) {
-    			count++;
-    		}
-    	}
-    	return count;
+        int count = 0;
+        for (T unit : getUnits()) {
+            if (unit.isSupportUnit()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -253,8 +257,7 @@ public class Army {
     }
 
     /**
-     * @param upperLimit
-     *            The upperLimit to set.
+     * @param upperLimit The upperLimit to set.
      */
     public void setUpperLimiter(int upperLimit) {
         upperLimiter = upperLimit;
@@ -263,13 +266,17 @@ public class Army {
     /**
      * @return Returns the iD.
      */
-    public int getID() {
+    public int getId() {
         return id;
     }
 
-    public Unit getUnit(int unitId) {
+    public Player getOwner() {
+        return owner;
+    }
 
-        for (Unit currU : getUnits()) {
+    public T getUnit(int unitId) {
+
+        for (T currU : getUnits()) {
             if (currU.getId() == unitId) {
                 return currU;
             }
@@ -279,16 +286,15 @@ public class Army {
     }
 
     /**
-     * @param id
-     *            The iD to set.
+     * @param id The iD to set.
      */
-    public void setID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
     public String toString(boolean toClient, String delimiter) {
         StringBuilder result = new StringBuilder();
-        result.append(getID());
+        result.append(getId());
         result.append(delimiter);
         if (toClient) {
             result.append(getBV());
@@ -308,7 +314,7 @@ public class Army {
         result.append(delimiter);
         result.append(getUnits().size());
         result.append(delimiter);
-        for (Unit unit : getUnits()) {
+        for (T unit : getUnits()) {
             result.append(unit.getId());
             result.append(delimiter);
         }
@@ -340,22 +346,21 @@ public class Army {
     /**
      * @return Returns the C3Networks.
      */
-    public Hashtable<Integer, Integer> getC3Network() {
+    public Map<Integer, Integer> getC3Network() {
         return c3Network;
     }
 
     /**
-     * @param c3Network
-     *            The C3Networks to set.
+     * @param c3Network The C3Networks to set.
      */
-    public void setC3Network(Hashtable<Integer, Integer> network) {
+    public void setC3Network(Map<Integer, Integer> network) {
         c3Network = network;
     }
 
-    public void removeUnitFromC3Network(int unitID) {
+    public void removeUnitFromC3Network(int unitId) {
 
-        if (getC3Network().get(unitID) != null) {
-            getC3Network().remove(unitID);
+        if (getC3Network().get(unitId) != null) {
+            getC3Network().remove(unitId);
             return;
         }
 
@@ -363,22 +368,20 @@ public class Army {
         while (i.hasNext()) {
             Integer slave = i.next();
             Integer master = getC3Network().get(slave);
-            if (master.intValue() == unitID) {
+            if (master.intValue() == unitId) {
                 i.remove();
             }
         }
-
     }
 
     /**
      * Finds out if unitOne and unitTwo are in the ame c3 Network
-     * 
+     *
      * @param unitOne
      * @param unitTwo
      * @return
      */
     public boolean isSameC3Network(int unitOne, int unitTwo) {
-
         if (getC3Network().containsKey(unitOne) && getC3Network().get(unitOne) == unitTwo) {
             return true;
         }
@@ -397,29 +400,6 @@ public class Army {
         return false;
     }
 
-    /**
-     * Return the number of C3 networks in this army.
-     * 
-     * @return
-     */
-    public int getNumberOfNetworks() {
-        int count = 0;
-
-        for (int uid : c3Network.values()) {
-
-            try {
-                Unit master = getUnit(uid);
-                if (!c3Network.containsKey(uid) && master.hasBeenC3LinkedTo(this)) {
-                    count++;
-                }
-            } catch (Exception ex) {
-            }
-
-        }
-
-        return Math.max(1, count);
-    }
-
     public float getOpForceSize() {
         return opForceSize;
     }
@@ -428,12 +408,11 @@ public class Army {
         opForceSize = force;
     }
 
-    public Vector<Integer> getCommanders() {
+    public List<Integer> getCommanders() {
         return commanders;
     }
 
     public boolean isCommander(int id) {
-
         if (commanders.contains(id)) {
             return true;
         }
@@ -442,8 +421,7 @@ public class Army {
     }
 
     public void removeCommander(int id) {
-        commanders.removeElement(id);
-        commanders.trimToSize();
+        commanders.remove(id);
     }
 
     public void addCommander(int id) {
@@ -451,7 +429,190 @@ public class Army {
             return;
         }
         commanders.add(id);
-        commanders.trimToSize();
     }
 
+    /**
+     * @return The raw force size (Force Mod Rule)
+     */
+    public float getRawForceSize() {
+        // dont recalculate if it isnt necessary
+        if (rawForceSize != -1) {
+            return rawForceSize;
+        }
+        CampaignOptions campaignOptions = CampaignData.cd.getCampaignOptions();
+
+        // no break, generate a raw force size
+        for (T u : this.getUnits()) {
+            if (u.getType() == Unit.INFANTRY) {
+                rawForceSize += campaignOptions.getFloatConfig("InfantryOperationsBVMod");
+            } else if (u.getType() == Unit.VEHICLE) {
+                rawForceSize += campaignOptions.getFloatConfig("VehicleOperationsBVMod");
+            } else if (u.getType() == Unit.BATTLEARMOR) {
+                rawForceSize += campaignOptions.getFloatConfig("BAOperationsBVMod");
+            } else if (u.getType() == Unit.AERO) {
+                rawForceSize += campaignOptions.getFloatConfig("AeroOperationsBVMod");
+            } else if (u.getType() == Unit.PROTOMEK) {
+                rawForceSize += campaignOptions.getFloatConfig("ProtoOperationsBVMod");
+            } else {
+                // all other allowed types have a 1.0 weight
+                rawForceSize += campaignOptions.getFloatConfig("MekOperationsBVMod");
+            }
+        }
+        return rawForceSize;
+    }
+
+    /**
+     * @param rfs - the forcesize to set (Operations Rule)
+     */
+    public void setRawForceSize(float rfs) {
+        rawForceSize = rfs;
+    }
+
+    /**
+     * Method that returns an army's legal operations. Used throughout the client to build GUI
+     * elements.
+     */
+    public Set<String> getLegalOperations() {
+        return legalOperations;
+    }
+
+    public boolean addLegalOperation(String operation) {
+        return legalOperations.add(operation);
+    }
+
+    public boolean removeLegalOperation(String operation) {
+        return legalOperations.remove(operation);
+    }
+
+    /**
+     * This method is used to port saved legal ops info to a newly added CArmy, if an army with the
+     * same ID previously existed. This allows the server to send updates (lost 1 type, etc) instead
+     * of resending all of an army's ops whenever data is resent to the client.
+     *
+     * <p>Should only be used on the client side, see CPlayer.setArmyData() for usage details.
+     */
+    public void setLegalOperations(Set<String> ts) {
+        legalOperations = ts;
+    }
+
+    public double forceSizeModifier(double opposingForceSize) {
+        double myForceSize = 0;
+
+        this.setRawForceSize(-1);
+        myForceSize = this.getRawForceSize();
+
+        if (myForceSize > opposingForceSize) {
+            return ((opposingForceSize / myForceSize) + (myForceSize / opposingForceSize)) - 1;
+        }
+        return 1.0;
+    }
+
+    /**
+     * @author Torren 2/23/2007 New Tech Manual rules on force Size. This returns the new <code>BV
+     *     </code> of the <code>this</code> army which is considerd the larger force
+     */
+    public int getOperationsBV(Army opposingForce) {
+        // if not using the operations rules, return a normal BV.
+        boolean usingOpRules =
+                CampaignData.cd.getCampaignOptions().getBooleanConfig("UseOperationsRule");
+        if (!usingOpRules) {
+            return getBV();
+        }
+
+        if (opposingForce == null) {
+            return getBV();
+        }
+        return (int) Math.round(getBV() * forceSizeModifier(opposingForce.getOpForceSize()));
+    }
+
+    public boolean hasTAGAndHomingCombo() {
+        boolean hasTAG = false;
+        boolean hasHoming = false;
+
+        for (T unit : getUnits()) {
+            hasTAG |= unit.hasTAG();
+            hasHoming |= unit.hasHoming();
+
+            if (hasTAG && hasHoming) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasTAGAndSemiGuidedCombo() {
+        boolean hasTAG = false;
+        boolean hasSemiGuided = false;
+
+        for (T unit : getUnits()) {
+            hasTAG |= unit.hasTAG();
+            hasSemiGuided |= unit.hasSemiGuided();
+
+            if (hasTAG && hasSemiGuided) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Used by Operations to determine how many mines to assign to attacker/defender, in lieu of BV.
+     */
+    public double getTotalTonnage() {
+        return getUnits().stream().map(T::getEntity).mapToDouble(Entity::getWeight).sum();
+    }
+
+    public double getAverageWalk() {
+        return getUnits().stream()
+                .map(T::getEntity)
+                .mapToInt(Entity::getWalkMP)
+                .average()
+                .orElse(0.0);
+    }
+
+    public double getAverageJump() {
+        return getUnits().stream()
+                .map(T::getEntity)
+                .mapToInt(Entity::getJumpMP)
+                .average()
+                .orElse(0.0);
+    }
+
+    public int getAmountOfUnitsWithoutInfantry() {
+        return (int) getUnits().stream().filter(unit -> unit.getType() != Unit.INFANTRY).count();
+    }
+
+    /** Override object's .equals(). */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if(!(object instanceof Army)) {
+            return false;
+        }
+
+        Army army = (Army) object;
+        if (army == null) {
+            return false;
+        }
+
+        if (army.getId() != getId()) {
+            return false;
+        }
+
+        Player owner = getOwner();
+        Player otherOwner = army.getOwner();
+
+        if (owner == null && otherOwner == null) {
+            return true;
+        }
+
+        if (owner == null || otherOwner == null) {
+            return false;
+        }
+
+        return owner.getName().equals(otherOwner.getName());
+    }
 }

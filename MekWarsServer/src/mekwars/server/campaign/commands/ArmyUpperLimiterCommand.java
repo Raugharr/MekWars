@@ -84,7 +84,7 @@ public class  ArmyUpperLimiterCommand  implements Command {
 						else	
 							CampaignMain.cm.toUser("AM:Army #" + armyid + "'s upper limit set to " + limit + ".",Username,true);
 						
-						CampaignMain.cm.toUser("PL|SAB|"+army.getID()+"#"+army.getLowerLimiter()+"#"+ army.getUpperLimiter(),Username,false);
+						CampaignMain.cm.toUser("PL|SAB|"+army.getId()+"#"+army.getLowerLimiter()+"#"+ army.getUpperLimiter(),Username,false);
 					}
 				}
 			}

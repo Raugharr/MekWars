@@ -123,17 +123,17 @@ public class CPlayer extends Player<CUnit> {
         newArmy.fromString(data, this, "%", mwclient);
 
         // Save the old army's legal operations.
-        CArmy oldArmy = getArmy(newArmy.getID());
+        CArmy oldArmy = getArmy(newArmy.getId());
         if (oldArmy != null) {
             newArmy.setLegalOperations(oldArmy.getLegalOperations());
         }
 
         // swap the armies
-        removeArmy(newArmy.getID());
-        if (armies.size() < newArmy.getID()) {
+        removeArmy(newArmy.getId());
+        if (armies.size() < newArmy.getId()) {
             armies.add(newArmy);
         } else {
-            armies.add(newArmy.getID(), newArmy);
+            armies.add(newArmy.getId(), newArmy);
         }
     }
 
@@ -268,7 +268,7 @@ public class CPlayer extends Player<CUnit> {
     public boolean removeArmy(int lanceID) {
 
         for (Iterator<CArmy> i = armies.iterator(); i.hasNext();) {
-            if (i.next().getID() == lanceID) {
+            if (i.next().getId() == lanceID) {
                 i.remove();
                 mwclient.getGUIClient().getMainFrame().updateAttackMenu();// removing an army
                                                                           // needs to reset
@@ -363,7 +363,7 @@ public class CPlayer extends Player<CUnit> {
 
         while (newID == -1) {
             for (int i = 0; i < armies.size(); i++) {
-                if ((armies.get(i)).getID() == possibleNewID) {
+                if ((armies.get(i)).getId() == possibleNewID) {
                     newID = i;
                 }
             }
@@ -489,7 +489,7 @@ public class CPlayer extends Player<CUnit> {
 
     public CArmy getArmy(int id) {
         for (CArmy currA : armies) {
-            if (currA.getID() == id) {
+            if (currA.getId() == id) {
                 return currA;
             }
         }
@@ -539,7 +539,7 @@ public class CPlayer extends Player<CUnit> {
         StringBuilder result = new StringBuilder();
         for (CArmy currA : armies) {
             if (currA.getUnit(unitID) != null) {
-                result.append(currA.getID() + " ");
+                result.append(currA.getId() + " ");
             }
         }
         return result.toString();
@@ -587,20 +587,22 @@ public class CPlayer extends Player<CUnit> {
         StringTokenizer ST = new StringTokenizer(data, DELIMITER);
         if (ST.hasMoreTokens()) {
             int army = TokenReader.readInt(ST);
-            int unitid = TokenReader.readInt(ST);
+            int unitId = TokenReader.readInt(ST);
             int bv = TokenReader.readInt(ST);
 
-            Iterator<Unit> i = getArmy(army).getUnits().iterator();
-            while (i.hasNext()) {
-                if (i.next().getId() == unitid) {
-                    i.remove();
-                    getArmy(army).removeCommander(unitid); //Baruk Khazad!  20151108c it is safe to removeCommander regardless of whether isCommander or not
+            Iterator<CUnit> iterator = getArmy(army).getUnits().iterator();
+            while (iterator.hasNext()) {
+                CUnit unit = iterator.next();
+
+                if (unit.getId() == unitId) {
+                    iterator.remove();
+                    getArmy(army).removeCommander(unitId); //Baruk Khazad!  20151108c it is safe to removeCommander regardless of whether isCommander or not
                     break;
                 }
             }
 
             getArmy(army).setBV(bv);
-            getArmy(army).getC3Network().remove(unitid);
+            getArmy(army).getC3Network().remove(unitId);
         }
         mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
     }
@@ -658,10 +660,12 @@ public class CPlayer extends Player<CUnit> {
         CArmy a = getArmy(army);
 
         // remove the unit
-        Iterator<Unit> i = a.getUnits().iterator();
-        while (i.hasNext()) {
-            if (i.next().getId() == unitid) {
-                i.remove();
+        Iterator<CUnit> iterator = a.getUnits().iterator();
+        while (iterator.hasNext()) {
+            CUnit unit = iterator.next();
+
+            if (unit.getId() == unitid) {
+                iterator.remove();
                 break;
             }
         }

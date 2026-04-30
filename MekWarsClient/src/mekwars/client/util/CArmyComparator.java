@@ -59,23 +59,23 @@ import mekwars.client.campaign.CArmy;
  				return army1BV.compareTo(army2BV);
  				
  			case ARMYSORT_ID : //the unique unit ID
- 				Integer army1ID = army1.getID();
- 				Integer army2ID = army2.getID();
+ 				Integer army1ID = army1.getId();
+ 				Integer army2ID = army2.getId();
  				return army1ID.compareTo(army2ID);	
 
  			case ARMYSORT_TONNAGE: //Total tonnage of the army
- 				Float army1Ton = army1.getTotalTonnage();
- 				Float army2Ton = army2.getTotalTonnage();
+ 				Double army1Ton = army1.getTotalTonnage();
+ 				Double army2Ton = army2.getTotalTonnage();
  				return army1Ton.compareTo(army2Ton);
 
  			case ARMYSORT_AVGMPWALK : //average walk MP for the army
- 				Integer army1MP = army1.getAverageWalk();
- 				Integer army2MP = army2.getAverageWalk();
+ 				Double army1MP = army1.getAverageWalk();
+ 				Double army2MP = army2.getAverageWalk();
  				return army1MP.compareTo(army2MP);	
 
  			case ARMYSORT_AVGMPJUMP : //average jump mp of the army
- 				Integer army1JP = army1.getAverageJump();
- 				Integer army2JP = army2.getAverageJump();
+ 				Double army1JP = army1.getAverageJump();
+ 				Double army2JP = army2.getAverageJump();
  				return army1JP.compareTo(army2JP);	
 
  			case ARMYSORT_UNITS:
@@ -85,7 +85,6 @@ import mekwars.client.campaign.CArmy;
  				
  			default :
  				return 0;
- 		}//end switch
- 	}//end compare()
-
+ 		}
+ 	}
 }

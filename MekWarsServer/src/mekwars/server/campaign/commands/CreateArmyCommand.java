@@ -63,7 +63,7 @@ public class  CreateArmyCommand  implements Command {
 		while (!free) {
 			free = true;
 			for (int j = 0; j < p.getArmies().size(); j++) {
-				if (p.getArmies().get(j).getID() == i) {
+				if (p.getArmies().get(j).getId() == i) {
 					free = false;
 					i++;
 				}
@@ -71,7 +71,7 @@ public class  CreateArmyCommand  implements Command {
 		}
 		
 		//make the new army, and set misc. data
-		SArmy newArmy = new SArmy(i, p.getName());
+		SArmy newArmy = new SArmy(i, p);
 		
 		//check for all standard illegal name chars
 		if (command.hasMoreElements()) {
@@ -135,15 +135,15 @@ public class  CreateArmyCommand  implements Command {
 		newArmy.setLowerLimiter(CampaignMain.cm.getIntegerConfig("DefaultLowerLimit"));
 		
 		//add the army to the player's list
-		if ( p.getArmies().size() < newArmy.getID() )
+		if ( p.getArmies().size() < newArmy.getId() )
 			p.getArmies().add(newArmy);
 		else
-			p.getArmies().add(newArmy.getID(),newArmy);
+			p.getArmies().add(newArmy.getId(),newArmy);
 
 		
 		//send relevant data to client
 		CampaignMain.cm.toUser("PL|SAD|"+p.getArmy(i).toString(true,"%"),Username,false);
-		CampaignMain.cm.toUser("AM:Created a new Army (#" + p.getArmy(i).getID() + ")." ,Username,true);
+		CampaignMain.cm.toUser("AM:Created a new Army (#" + p.getArmy(i).getId() + ")." ,Username,true);
 	
 	}//end process()
 }//end CreateArmyCommand

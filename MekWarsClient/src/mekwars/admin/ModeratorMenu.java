@@ -351,7 +351,7 @@ public class ModeratorMenu extends JMenu {
 
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String name = playerDialog.getPlayerName();
+        String name = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if ((name == null) || (name.length() == 0)) {
@@ -368,7 +368,7 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModCheckVersion_actionPerformed(ActionEvent e) {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String name = playerDialog.getPlayerName();
+        String name = playerDialog.getOwner().getName();
         playerDialog.dispose();
         if ((name == null) || (name.length() == 0)) {
             return;
@@ -386,7 +386,7 @@ public class ModeratorMenu extends JMenu {
         if (player == null) {
             PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
-            name = playerDialog.getPlayerName();
+            name = playerDialog.getOwner().getName();
             playerDialog.dispose();
         } else {
             name = player;
@@ -409,7 +409,7 @@ public class ModeratorMenu extends JMenu {
         if (player == null) {
             PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
-            name = playerDialog.getPlayerName();
+            name = playerDialog.getOwner().getName();
             playerDialog.dispose();
         } else {
             name = player;
@@ -431,7 +431,7 @@ public class ModeratorMenu extends JMenu {
         if (player == null) {
             PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
-            name = playerDialog.getPlayerName();
+            name = playerDialog.getOwner().getName();
             playerDialog.dispose();
         } else {
             name = player;
@@ -453,7 +453,7 @@ public class ModeratorMenu extends JMenu {
         if (player == null) {
             PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
-            name = playerDialog.getPlayerName();
+            name = playerDialog.getOwner().getName();
             playerDialog.dispose();
         } else {
             name = player;
@@ -490,7 +490,7 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModDeactivate_actionPerformed(ActionEvent e) {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose Player to Deactivate", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String name = playerDialog.getPlayerName();
+        String name = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if ((name == null) || (name.length() == 0)) {
@@ -510,7 +510,7 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModNoPlay_actionPerformed(ActionEvent e) {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String name = playerDialog.getPlayerName();
+        String name = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if ((name == null) || (name.length() == 0)) {
@@ -534,7 +534,7 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModSetElo_actionPerformed(ActionEvent e) {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String name = playerDialog.getPlayerName();
+        String name = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if ((name == null) || (name.length() == 0)) {
@@ -552,7 +552,7 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModSetPricemod_actionPerformed(ActionEvent e) {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String name = playerDialog.getPlayerName();
+        String name = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if ((name == null) || (name.length() == 0)) {
@@ -570,7 +570,7 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModTerminateContract_actionPerformed(ActionEvent e) {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String name = playerDialog.getPlayerName();
+        String name = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if ((name == null) || (name.length() == 0)) {
@@ -583,7 +583,7 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModTouch_actionPerformed(ActionEvent e) {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String name = playerDialog.getPlayerName();
+        String name = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if ((name == null) || (name.length() == 0)) {
@@ -596,7 +596,7 @@ public class ModeratorMenu extends JMenu {
     public void jMenuModUnlockLances_actionPerformed(ActionEvent e) {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String name = playerDialog.getPlayerName();
+        String name = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if ((name == null) || (name.length() == 0)) {

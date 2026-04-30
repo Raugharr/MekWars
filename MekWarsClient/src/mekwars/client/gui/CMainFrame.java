@@ -1514,7 +1514,7 @@ public class CMainFrame extends JFrame {
     public void jMenuMercStatus_actionPerformed() {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Which Merc do you want info on?", PlayerNameDialog.MERCS_ONLY);
         playerDialog.setVisible(true);
-        String Merc = playerDialog.getPlayerName();
+        String Merc = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if (Merc == null) {
@@ -1585,7 +1585,7 @@ public class CMainFrame extends JFrame {
         if ((name == null) || name.trim().equals("")) {
             PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
             pnd.setVisible(true);
-            targetPlayer = pnd.getPlayerName();
+            targetPlayer = pnd.getOwner().getName();
             pnd.dispose();
         } else {
             targetPlayer = name;
@@ -1613,7 +1613,7 @@ public class CMainFrame extends JFrame {
         {
             PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
             pnd.setVisible(true);
-            targetPlayer = pnd.getPlayerName();
+            targetPlayer = pnd.getOwner().getName();
             pnd.dispose();
         } else {
             targetPlayer = name;
@@ -1642,7 +1642,7 @@ public class CMainFrame extends JFrame {
         {
             PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
             pnd.setVisible(true);
-            targetPlayer = pnd.getPlayerName();
+            targetPlayer = pnd.getOwner().getName();
             pnd.dispose();
         } else {
             targetPlayer = name;
@@ -1670,7 +1670,7 @@ public class CMainFrame extends JFrame {
         if ((name == null) || name.trim().equals("")) {
             PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
             pnd.setVisible(true);
-            targetPlayer = pnd.getPlayerName();
+            targetPlayer = pnd.getOwner().getName();
             pnd.dispose();
         } else {
             targetPlayer = name;
@@ -1865,7 +1865,7 @@ public class CMainFrame extends JFrame {
         if ((name == null) || name.trim().equals("")) {
             PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Transfer Recipient", PlayerNameDialog.FACTION_ONLY);
             pnd.setVisible(true);
-            targetPlayer = pnd.getPlayerName();
+            targetPlayer = pnd.getOwner().getName();
             pnd.dispose();
         } else {
             targetPlayer = name;
@@ -2027,7 +2027,7 @@ public class CMainFrame extends JFrame {
         if ((name == null) || name.trim().equals("")) {
             PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Buyer", PlayerNameDialog.ANY_PLAYER);
             pnd.setVisible(true);
-            buyer = pnd.getPlayerName();
+            buyer = pnd.getOwner().getName();
             pnd.dispose();
         } else {
             buyer = name;
@@ -2063,7 +2063,7 @@ public class CMainFrame extends JFrame {
         String Duration;
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Which Merc do you want to offer a contract?", PlayerNameDialog.MERCS_ONLY);
         playerDialog.setVisible(true);
-        String Merc = playerDialog.getPlayerName();
+        String Merc = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if (Merc == null) {
@@ -2381,7 +2381,7 @@ public class CMainFrame extends JFrame {
 
         PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Promote", menuType);
         pnd.setVisible(true);
-        targetPlayer = pnd.getPlayerName();
+        targetPlayer = pnd.getOwner().getName();
         pnd.dispose();
 
         if (targetPlayer == null) {
@@ -2408,7 +2408,7 @@ public class CMainFrame extends JFrame {
 
         PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Demote Player", menuType);
         pnd.setVisible(true);
-        targetPlayer = pnd.getPlayerName();
+        targetPlayer = pnd.getOwner().getName();
         pnd.dispose();
 
         if (targetPlayer == null) {
@@ -2435,7 +2435,7 @@ public class CMainFrame extends JFrame {
 
         PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Fluff Player", menuType);
         pnd.setVisible(true);
-        targetPlayer = pnd.getPlayerName();
+        targetPlayer = pnd.getOwner().getName();
         pnd.dispose();
 
         if (targetPlayer == null) {
@@ -2458,7 +2458,7 @@ public class CMainFrame extends JFrame {
 
         PlayerNameDialog pnd = new PlayerNameDialog(mwclient, "Mute Player", menuType);
         pnd.setVisible(true);
-        targetPlayer = pnd.getPlayerName();
+        targetPlayer = pnd.getOwner().getName();
         pnd.dispose();
 
         if (targetPlayer == null) {
@@ -3048,7 +3048,7 @@ public class CMainFrame extends JFrame {
     public void createArmyFromMul(String data) {
         PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Choose a Player.", PlayerNameDialog.ANY_PLAYER);
         playerDialog.setVisible(true);
-        String player = playerDialog.getPlayerName();
+        String player = playerDialog.getOwner().getName();
         playerDialog.dispose();
 
         if (player == null) {

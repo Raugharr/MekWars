@@ -1,5 +1,4 @@
 /*
- * MekWars - Copyright (C) 2004
  *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megamek)
  * Original author Helge Richter (McWizard)
@@ -18,7 +17,6 @@ package mekwars.client.campaign;
 
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
-import megamek.common.Entity;
 import megamek.common.Infantry;
 import megamek.common.Mech;
 import megamek.common.Mounted;
@@ -31,6 +29,7 @@ import mekwars.client.MWClient;
 import mekwars.common.House;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
+import mekwars.common.CampaignData;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.campaign.targetsystems.TargetSystem;
@@ -54,8 +53,6 @@ import java.util.StringTokenizer;
 public class CUnit extends Unit {
     private static final Logger LOGGER = LogManager.getLogger(CUnit.class);
 
-    protected Entity unitEntity;
-
     private int BV;
     private int scrappableFor = 0; // value if scrapped
     private boolean pilotIsRepairing = false;
@@ -73,7 +70,6 @@ public class CUnit extends Unit {
     }
 
     private void init() {
-        unitEntity = null;
         BV = 0;
         setStatus(STATUS_OK);
         setProducer("unknown origin");
@@ -111,11 +107,11 @@ public class CUnit extends Unit {
         int skillAmount = TokenReader.readInt(STR);
         for (int i = 0; i < skillAmount; i++) {
             PilotSkill skill =
-                    new PilotSkill(
-                            TokenReader.readInt(STR),
-                            TokenReader.readString(STR),
-                            TokenReader.readInt(STR),
-                            TokenReader.readString(STR));
+                new PilotSkill(
+                        TokenReader.readInt(STR),
+                        TokenReader.readString(STR),
+                        TokenReader.readInt(STR),
+                        TokenReader.readString(STR));
 
             if (skill.getName().equals("Weapon Specialist")) {
                 p.setWeapon(TokenReader.readString(STR));
@@ -141,9 +137,9 @@ public class CUnit extends Unit {
         int mmoptionsamount = TokenReader.readInt(ST);
         for (int i = 0; i < mmoptionsamount; i++) {
             MegaMekPilotOption mo =
-                    new MegaMekPilotOption(
-                            TokenReader.readString(ST),
-                            Boolean.parseBoolean(TokenReader.readString(ST)));
+                new MegaMekPilotOption(
+                        TokenReader.readString(ST),
+                        Boolean.parseBoolean(TokenReader.readString(ST)));
             p.addMegamekOption(mo);
         }
 
@@ -241,9 +237,11 @@ public class CUnit extends Unit {
         setChristmasUnit(TokenReader.readBoolean(ST));
 
         // @salient Quirks - set unit quirks, or drop data if quirks have been turned off
-        if (ST.hasMoreTokens() && Boolean.parseBoolean(mwclient.getServerConfigs("EnableQuirks")))
+        if (ST.hasMoreTokens() && CampaignData.cd.getCampaignOptions().getBooleanConfig("EnableQuirks")) {
             setUnitQuirks(TokenReader.readString(ST));
-        else if (ST.hasMoreTokens()) TokenReader.readString(ST);
+        } else if (ST.hasMoreTokens()) {
+            TokenReader.readString(ST);
+        }
 
         unitEntity.setExternalId(getId());
 
@@ -298,9 +296,9 @@ public class CUnit extends Unit {
                     if (option != null && option.booleanValue()) {
                         quirksList.add(option.getName());
                     }
-                }
+                        }
             }
-        }
+                }
         return quirksList.toString();
     }
 
@@ -317,9 +315,9 @@ public class CUnit extends Unit {
                     if (option != null && option.booleanValue()) {
                         return true;
                     }
-                }
+                        }
             }
-        }
+                }
         return false;
     }
 
@@ -337,8 +335,8 @@ public class CUnit extends Unit {
         createEntity(); // make the entity
         if (distance > 0) {
             unitEntity.setOffBoard(distance, edge); // move
-            // it
-            // offboard
+                                                    // it
+                                                    // offboard
         }
     }
 
@@ -348,21 +346,21 @@ public class CUnit extends Unit {
     public String getSmallDescription() {
         if ((getType() == Unit.MEK) || (getType() == Unit.VEHICLE) || (getType() == Unit.AERO)) {
             return getModelName()
-                    + " ["
-                    + getPilot().getGunnery()
-                    + "/"
-                    + getPilot().getPiloting()
-                    + "]";
+                + " ["
+                + getPilot().getGunnery()
+                + "/"
+                + getPilot().getPiloting()
+                + "]";
         }
 
         if ((getType() == Unit.INFANTRY) || (getType() == Unit.BATTLEARMOR)) {
             if (((Infantry) unitEntity).canMakeAntiMekAttacks()) {
                 return getModelName()
-                        + " ["
-                        + getPilot().getGunnery()
-                        + "/"
-                        + getPilot().getPiloting()
-                        + "]";
+                    + " ["
+                    + getPilot().getGunnery()
+                    + "/"
+                    + getPilot().getPiloting()
+                    + "]";
             }
             return getModelName() + " [" + getPilot().getGunnery() + "]";
         }
@@ -374,35 +372,35 @@ public class CUnit extends Unit {
 
         if ((getType() == Unit.MEK) && !unitEntity.isOmni()) {
             tinfo =
-                    "<html><body>#"
-                            + getId()
-                            + " "
-                            + unitEntity.getChassis()
-                            + ", "
-                            + getModelName();
+                "<html><body>#"
+                + getId()
+                + " "
+                + unitEntity.getChassis()
+                + ", "
+                + getModelName();
         } else {
             tinfo = "<html><body>#" + getId() + " " + getModelName();
         }
 
         if ((getType() == Unit.MEK) || (getType() == Unit.VEHICLE) || (getType() == Unit.AERO)) {
             tinfo +=
-                    " ("
-                            + getPilot().getName()
-                            + ", "
-                            + getPilot().getGunnery()
-                            + "/"
-                            + getPilot().getPiloting()
-                            + ") <br>";
+                " ("
+                + getPilot().getName()
+                + ", "
+                + getPilot().getGunnery()
+                + "/"
+                + getPilot().getPiloting()
+                + ") <br>";
         } else if ((getType() == Unit.BATTLEARMOR) || (getType() == Unit.INFANTRY)) {
             if (((Infantry) unitEntity).canMakeAntiMekAttacks()) {
                 tinfo +=
-                        " ("
-                                + getPilot().getName()
-                                + ", "
-                                + getPilot().getGunnery()
-                                + "/"
-                                + getPilot().getPiloting()
-                                + ") <br>";
+                    " ("
+                    + getPilot().getName()
+                    + ", "
+                    + getPilot().getGunnery()
+                    + "/"
+                    + getPilot().getPiloting()
+                    + ") <br>";
             } else {
                 tinfo += " (" + getPilot().getName() + ", " + getPilot().getGunnery() + ") <br>";
             }
@@ -416,24 +414,24 @@ public class CUnit extends Unit {
 
         tinfo += "BV: ";
 
-        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseBaseBVForMatching"))) {
+        if (CampaignData.cd.getCampaignOptions().getBooleanConfig("UseBaseBVForMatching")) {
             tinfo += getBaseBV();
         } else {
             tinfo += BV;
         }
 
-        // if (Boolean.parseBoolean(mwclient.getServerConfigs("RIGHTHERE")))
+        // if (CampaignData.cd.getCampaignOptions().getBooleanConfig("RIGHTHERE")))
         if (Boolean.parseBoolean(mwclient.getConfigParam("ShowUnitBaseBV"))) {
             if (getBV() != getBaseBV()) {
                 tinfo += " (" + getBaseBV() + ")";
             }
         }
         tinfo +=
-                " // Exp: "
-                        + getPilot().getExperience()
-                        + " // Kills: "
-                        + getPilot().getKills()
-                        + "<br> ";
+            " // Exp: "
+            + getPilot().getExperience()
+            + " // Kills: "
+            + getPilot().getKills()
+            + "<br> ";
 
         if (getPilot().getSkills().size() > 0) {
             tinfo += "Skills: ";
@@ -443,12 +441,12 @@ public class CUnit extends Unit {
              * (it.hasNext()) tinfo += ", "; }
              */
             tinfo +=
-                    getPilot()
-                            .getSkillString(
-                                    false,
-                                    mwclient.getData()
-                                            .getHouseByName(mwclient.getPlayer().getHouse())
-                                            .getBasePilotSkill(getType()));
+                getPilot()
+                .getSkillString(
+                        false,
+                        mwclient.getData()
+                        .getHouseByName(mwclient.getPlayer().getHouse())
+                        .getBasePilotSkill(getType()));
             tinfo += "<br>";
         }
 
@@ -463,7 +461,7 @@ public class CUnit extends Unit {
         String capacity = getEntity().getUnusedString();
 
         if ((capacity != null) && (capacity.trim().length() > 0)) {
-            if (Boolean.parseBoolean(mwclient.getServerConfigs("UseFullCapacityDescription"))) {
+            if (CampaignData.cd.getCampaignOptions().getBooleanConfig("UseFullCapacityDescription")) {
                 if (capacity.endsWith("<br>")) {
                     capacity = capacity.substring(0, capacity.length() - 4);
                 }
@@ -475,29 +473,29 @@ public class CUnit extends Unit {
                 }
             } else if (capacity.startsWith("Troops")) {
                 capacity = capacity.substring(9); // strip "Troops - " from
-                // string
+                                                  // string
                 tinfo += "Cargo: " + capacity + "<br>";
             }
         }
 
         if (getLifeTimeRepairCost() > 0) {
             tinfo +=
-                    "Repair Costs: "
-                            + getCurrentRepairCost()
-                            + "/"
-                            + getLifeTimeRepairCost()
-                            + "<br>";
+                "Repair Costs: "
+                + getCurrentRepairCost()
+                + "/"
+                + getLifeTimeRepairCost()
+                + "<br>";
         }
         tinfo += getProducer();
 
         if ((scrappableFor > 0)
-                && !Boolean.parseBoolean(mwclient.getServerConfigs("UseAdvanceRepair"))
-                && !Boolean.parseBoolean(mwclient.getServerConfigs("UseSimpleRepair"))) {
+                && !CampaignData.cd.getCampaignOptions().getBooleanConfig("UseAdvanceRepair")
+                && !CampaignData.cd.getCampaignOptions().getBooleanConfig("UseSimpleRepair")) {
             tinfo +=
-                    "<br><br><b>Scrap Value: "
-                            + mwclient.moneyOrFluMessage(true, false, scrappableFor)
-                            + "</b>";
-        }
+                "<br><br><b>Scrap Value: "
+                + mwclient.moneyOrFluMessage(true, false, scrappableFor)
+                + "</b>";
+                }
 
         tinfo += "</body></html>";
         return (tinfo);
@@ -530,19 +528,11 @@ public class CUnit extends Unit {
         return BV;
     }
 
-    public int getBaseBV() {
-        return getEntity().calculateBattleValue(false, true);
-    }
-
     public int getBVForMatch() {
-        if (Boolean.parseBoolean(mwclient.getServerConfigs("UseBaseBVForMatching"))) {
+        if (CampaignData.cd.getCampaignOptions().getBooleanConfig("UseBaseBVForMatching")) {
             return getBaseBV();
         }
         return getBV();
-    }
-
-    public Entity getEntity() {
-        return unitEntity;
     }
 
     /** Tries to set UnitEntity from the global MekFileName */
@@ -613,13 +603,13 @@ public class CUnit extends Unit {
         int result = Integer.MAX_VALUE;
         try {
             String classtype =
-                    Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "Price";
+                Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "Price";
 
             if (type_id == Unit.MEK) {
                 result =
-                        Integer.parseInt(
-                                mwclient.getServerConfigs(
-                                        Unit.getWeightClassDesc(weightclass) + "Price"));
+                    Integer.parseInt(
+                            mwclient.getServerConfigs(
+                                Unit.getWeightClassDesc(weightclass) + "Price"));
             } else {
                 result = Integer.parseInt(mwclient.getServerConfigs(classtype));
             }
@@ -635,7 +625,40 @@ public class CUnit extends Unit {
             LOGGER.error("Exception: ", ex);
         }
         return result;
-    }
+            }
+
+    /**
+     * A method which returns the PP COST of a unit. Meks and Vehicles are segregated by
+     * weightclass. Infantry are flat priced accross
+     *
+     * @return int - # if IP it takes to buy a mech of the given units weight class
+     */
+    public static int getInfluenceForUnit(
+            MWClient mwclient, int weightclass, int type_id, House producer) {
+
+        int result = Integer.MAX_VALUE;
+        String classtype =
+            Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "Inf";
+
+        if (type_id == Unit.MEK) {
+            result =
+                Integer.parseInt(
+                        mwclient.getServerConfigs(
+                            Unit.getWeightClassDesc(weightclass) + "Inf"));
+        } else {
+            result = Integer.parseInt(mwclient.getServerConfigs(classtype));
+        }
+
+        // modify the result by the faction price modifier
+        result += producer.getHouseUnitFluMod(type_id, weightclass);
+
+        // dont allow negative pricing
+        if (result < 0) {
+            result = 0;
+        }
+
+        return result;
+            }
 
     /**
      * A method which returns the PP COST of a unit. Meks and Vehicles are segregated by
@@ -649,12 +672,12 @@ public class CUnit extends Unit {
 
         int result = Integer.MAX_VALUE;
         String classtype =
-                Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "PP";
+            Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "PP";
 
         if (type_id == Unit.MEK) {
             result =
-                    Integer.parseInt(
-                            mwclient.getServerConfigs(Unit.getWeightClassDesc(weightclass) + "PP"));
+                Integer.parseInt(
+                        mwclient.getServerConfigs(Unit.getWeightClassDesc(weightclass) + "PP"));
         } else {
             result = Integer.parseInt(mwclient.getServerConfigs(classtype));
         }
@@ -668,7 +691,7 @@ public class CUnit extends Unit {
         }
 
         return result;
-    }
+            }
 
     public void setAntiAir(boolean aa) {
         Quirks quirks = unitEntity.getQuirks();
