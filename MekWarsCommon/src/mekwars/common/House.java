@@ -653,4 +653,25 @@ public class House implements Entity {
     public MekWarsConfig getHouseOptions() {
         return CampaignData.cd.getHouseOptions(getName());
     }
+
+    /**
+     * A method which returns the influence cost of a specified campaign mech.
+     * 
+     * @return int - # of PP it takes to buy a mech of the given units weight
+     *         class
+     */
+    public int getInfluenceForUnit(int weightclass, int type_id) {
+        int result = Integer.MAX_VALUE;
+        String classtype = Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "Inf";
+
+        if (type_id == Unit.MEK) {
+            result = getHouseOptions().getIntegerConfig(Unit.getWeightClassDesc(weightclass) + "Inf");
+        } else {
+            result = getHouseOptions().getIntegerConfig(classtype);
+        }
+
+        // modify the result by the faction price modifier
+        result += getHouseUnitFluMod(type_id, weightclass);
+        return Math.max(result, 0);
+    }
 }

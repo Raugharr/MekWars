@@ -1834,33 +1834,6 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         return result;
     }// end getPriceForUnit()
 
-    /**
-     * A method which returns the influence cost of a specified campaign mech.
-     * 
-     * @return int - # of PP it takes to buy a mech of the given units weight
-     *         class
-     */
-    public int getInfluenceForUnit(int weightclass, int type_id) {
-        int result = Integer.MAX_VALUE;
-        String classtype = Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "Inf";
-
-        if (type_id == Unit.MEK) {
-            result = Integer.parseInt(this.getConfig(Unit.getWeightClassDesc(weightclass) + "Inf"));
-        } else {
-            result = Integer.parseInt(this.getConfig(classtype));
-        }
-
-        // modify the result by the faction price modifier
-        result += getHouseUnitFluMod(type_id, weightclass);
-
-        // dont allow negative pricing
-        if (result < 0) {
-            result = 0;
-        }
-
-        return result;
-    }
-
     private int getBMPriceForUnit(int weight, int type) {
         int price = getPriceForUnit(weight, type);
         double multiplier = CampaignMain.cm.getDoubleConfig("BMPriceMultiplier_" + Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type));
