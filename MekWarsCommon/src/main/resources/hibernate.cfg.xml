@@ -4,7 +4,6 @@
 		<property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
 		<property name="hibernate.connection.url">jdbc:sqlite:MekWars.sqlite</property>
 		<property name="hibernate.hbm2ddl.auto">none</property>
-		<property name="hibernate.transaction.jta.platform">org.hibernate.service.jta.platform.spi.JtaPlatform</property>
 		<property name="current_session_context_class">thread</property>
 		<property name="hibernate.physical_naming_strategy">
 			    org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy

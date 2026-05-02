@@ -31,13 +31,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 
 import mekwars.common.entities.MWEntity;
-import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.Position;
@@ -825,31 +823,35 @@ public class Planet implements Comparable<Object>, MWEntity {
         StringBuilder result = new StringBuilder(getName());
 
         if (withTerrain) {
-            Continent p = getEnvironments().getBiggestEnvironment();
-            Terrain pe = p.getEnvironment();
-            AdvancedTerrain ape = p.getAdvancedTerrain();
-            if (pe != null && pe.getEnvironments().size() > 0) {
-                result.append(" " + pe.getEnvironments().get(0).toImageDescription());
-                result.append(" " + pe.getEnvironments().get(0).getName());
-            }
-            if (ape != null) result.append(" " + ape.WeatherForcast());
+            Continent continent = getEnvironments().getBiggestEnvironment();
+            if (continent != null) {
+                Terrain pe = continent.getEnvironment();
+                AdvancedTerrain ape = continent.getAdvancedTerrain();
+                if (pe != null && pe.getEnvironments().size() > 0) {
+                    result.append(" " + pe.getEnvironments().get(0).toImageDescription());
+                    result.append(" " + pe.getEnvironments().get(0).getName());
+                }
+                if (ape != null) result.append(" " + ape.WeatherForcast());
 
-            if (this.getUnitFactories().size() > 0) {
-                for (int i = 0; i < this.getUnitFactories().size(); i++) {
-                    UnitFactory MF = (this.getUnitFactories().get(i));
-                    result.append(MF.getIcons());
+                if (this.getUnitFactories().size() > 0) {
+                    for (int i = 0; i < this.getUnitFactories().size(); i++) {
+                        UnitFactory MF = (this.getUnitFactories().get(i));
+                        result.append(MF.getIcons());
+                    }
+                }
+                if (pe != null && getEnvironments().getTotalEnivronmentPropabilities() > 0) {
+                    result.append(
+                            " ("
+                                    + Math.round(
+                                            (double) continent.getSize()
+                                                    * 100
+                                                    / getEnvironments()
+                                                            .getTotalEnivronmentPropabilities())
+                                    + "% correct)");
+                } else {
+                    result.append(" (100% correct)");
                 }
             }
-            if (pe != null && getEnvironments().getTotalEnivronmentPropabilities() > 0)
-                result.append(
-                        " ("
-                                + Math.round(
-                                        (double) p.getSize()
-                                                * 100
-                                                / getEnvironments()
-                                                        .getTotalEnivronmentPropabilities())
-                                + "% correct)");
-            else result.append(" (100% correct)");
         }
         return result.toString();
     }

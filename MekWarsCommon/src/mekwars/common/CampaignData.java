@@ -380,7 +380,11 @@ public class CampaignData implements TerrainProvider {
     }
 
     public AdvancedTerrain getAdvancedTerrainByName(String name) {
-        return advancedTerrains.getByName(name);
+        return HibernateUtil.fromTransaction(
+                session ->
+                        session.createQuery("FROM AdvancedTerrain t WHERE t.name = :name", AdvancedTerrain.class)
+                                .setParameter("name", name)
+                                .uniqueResult());
     }
 
     public void setBannedTargetingSystems(Vector<Integer> ban) {

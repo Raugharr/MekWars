@@ -91,9 +91,11 @@ public class PlanetEnvironments {
 
     /** Return the environment with the most probability to occour. */
     public Continent getBiggestEnvironment() {
-        Continent result = new Continent(0, new Terrain(), new AdvancedTerrain());
-        for (Continent p : continents) {
-            if (p.getSize() > result.getSize()) result = p;
+        Continent result = null;
+        for (Continent continent : continents) {
+            if (result == null || continent.getSize() > result.getSize()) {
+                result = continent;
+            }
         }
         return result;
     }

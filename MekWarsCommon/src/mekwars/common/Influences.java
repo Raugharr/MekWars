@@ -197,7 +197,6 @@ public class Influences implements MutableSerializable {
 
     /** Returns the present factions. */
     @Transient
-    @ElementCollection
     public Set<House> getHouses() {
         Set<House> result = new HashSet<House>();
 

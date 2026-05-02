@@ -34,11 +34,11 @@ import jakarta.persistence.Transient;
  */
 @Entity
 public class Continent {
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "terrain_id")
     private Terrain environment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "advanced_terrain_id")
     private AdvancedTerrain advancedTerrain;
 
@@ -79,8 +79,8 @@ public class Continent {
         Continent continent = (Continent) object;
 
         if (continent.getSize() != getSize()) return false;
-        if (continent.getEnvironment().equals(getEnvironment())) return false;
-        if (continent.getAdvancedTerrain().equals(getAdvancedTerrain())) return false;
+        if (!continent.getEnvironment().equals(getEnvironment())) return false;
+        if (!continent.getAdvancedTerrain().equals(getAdvancedTerrain())) return false;
         return true;
     }
 
