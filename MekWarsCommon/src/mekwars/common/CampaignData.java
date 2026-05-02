@@ -114,6 +114,7 @@ public class CampaignData implements TerrainProvider {
      * @see You should use XStream to initialize CampaignData
      */
     public void addPlanet(Planet planet) {
+        HibernateUtil.inTransaction(session -> session.merge(planet));
         planets.put(planet);
     }
 
@@ -132,13 +133,12 @@ public class CampaignData implements TerrainProvider {
     }
 
     public void savePlanets() {
-        HibernateUtil.getInstance()
-                .inTransaction(
-                        session -> {
-                            for (Planet planet : getAllPlanets()) {
-                                session.persist(planet);
-                            }
-                        });
+        // HibernateUtil.inTransaction(
+        //         session -> {
+        //             for (Planet planet : getAllPlanets()) {
+        //                 session.merge(planet);
+        //             }
+        //         });
     }
 
     /**
@@ -163,6 +163,7 @@ public class CampaignData implements TerrainProvider {
      * @param planet The faction to hold. @TODO You should use XStream to initialize CampaignData
      */
     public void addHouse(House faction) {
+        // HibernateUtil.inTransaction(session -> session.persist(faction));
         factions.put(faction);
     }
 
@@ -344,10 +345,15 @@ public class CampaignData implements TerrainProvider {
      */
     public void addTerrain(Terrain terrain) {
         terrains.put(terrain);
+        HibernateUtil.inTransaction(session -> session.merge(terrain));
     }
 
     public Terrain getTerrainByName(String name) {
-        return terrains.getByName(name);
+        return HibernateUtil.fromTransaction(
+                session ->
+                        session.createQuery("FROM Terrain t WHERE t.name = :name", Terrain.class)
+                                .setParameter("name", name)
+                                .uniqueResult());
     }
 
     /*adding the advanced terrain to the campaign data*/
@@ -368,8 +374,9 @@ public class CampaignData implements TerrainProvider {
     /**
      * @see common.TerrainProvider#addTerrain(common.PlanetEnvironment)
      */
-    public void addAdvancedTerrain(AdvancedTerrain newAdvTerrain) {
-        advancedTerrains.put(newAdvTerrain);
+    public void addAdvancedTerrain(AdvancedTerrain advancedTerrain) {
+        advancedTerrains.put(advancedTerrain);
+        HibernateUtil.inTransaction(session -> session.merge(advancedTerrain));
     }
 
     public AdvancedTerrain getAdvancedTerrainByName(String name) {

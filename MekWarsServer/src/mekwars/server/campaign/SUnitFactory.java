@@ -28,7 +28,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -43,7 +42,7 @@ import org.apache.logging.log4j.Logger;
 
 
 @Entity
-public class SUnitFactory extends UnitFactory implements Serializable {
+public class SUnitFactory extends UnitFactory {
     private static final Logger LOGGER = LogManager.getLogger(SUnitFactory.class);
 
     @Transient

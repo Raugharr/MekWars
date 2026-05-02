@@ -54,7 +54,7 @@ public class SetPlanetMinOwnerShipCommand implements Command {
 			return;
 		}
 		
-		p.setMinPlanetOwnerShip(ownership);
+		p.setMinPlanetOwnership(ownership);
 		p.updated();
 
 		CampaignMain.cm.toUser("You set " + p.getName() + "'s min owner ship to "+ownership,Username,true);

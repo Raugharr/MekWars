@@ -25,6 +25,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.util.BinReader;
@@ -449,12 +450,14 @@ public class UnitFactory implements Serializable {
         if (buildTableFolder.equals("standard")) buildTableFolder = "";
     }
 
+    @Transient
     public String getBuildTableFolder() {
         return (buildTableFolder.trim().length() < 1)
                 ? "standard"
                 : "standard" + File.separatorChar + buildTableFolder.trim();
     }
 
+    @Transient
     public String getIcons() {
         // TODO: Add more icons to make this unambiguous
         String sizeid = "";

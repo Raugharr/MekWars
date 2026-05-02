@@ -33,7 +33,6 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import mekwars.common.BMEquipment;
@@ -47,7 +46,6 @@ import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 import megamek.common.Entity;
 import megamek.common.TechConstants;
-import mekwars.common.util.UnitUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.campaign.data.TimeUpdateHouse;
@@ -1940,7 +1938,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         if (getPlanets().get(p.getName()) == null) {
             getPlanets().put(p.getName(), p);
             setBaysProvided(getBaysProvided() + p.getBaysProvided());
-            setComponentProduction(getComponentProduction() + p.getCompProduction());
+            setComponentProduction(getComponentProduction() + p.getComponentProduction());
 
             // Add unit production here
             if (CampaignMain.cm.isUsingIncreasedTechs() && p.getFactoryCount() > 0) {
@@ -1953,7 +1951,7 @@ public class SHouse extends TimeUpdateHouse implements Comparable<Object>, ISell
         if (getPlanets().get(p.getName()) != null) {
             getPlanets().remove(p.getName());
             setBaysProvided(getBaysProvided() - p.getBaysProvided());
-            setComponentProduction(getComponentProduction() - p.getCompProduction());
+            setComponentProduction(getComponentProduction() - p.getComponentProduction());
 
             // Remove unit production here
             if (CampaignMain.cm.isUsingIncreasedTechs() && p.getFactoryCount() > 0) {

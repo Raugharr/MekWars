@@ -20,27 +20,30 @@
  */
 package mekwars.common;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 
 /**
  * @author Helge Richter
  */
 @Entity
 public class Continent {
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "terrain_id")
     private Terrain environment;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "advanced_terrain_id")
-    private AdvancedTerrain advTerrain;
+    private AdvancedTerrain advancedTerrain;
 
-    private int size = 1;
+    // TODO: This seems to be unused.
+    @Transient private int size = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +52,7 @@ public class Continent {
     public Continent(int size, Terrain env, AdvancedTerrain advTerr) {
         this.size = size;
         environment = env;
-        advTerrain = advTerr;
+        advancedTerrain = advTerr;
     }
 
     public Continent() {
@@ -71,12 +74,13 @@ public class Continent {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Continent)) return false;
-        Continent cont = (Continent) o;
-        if (cont.getSize() != getSize()) return false;
-        if (cont.getEnvironment().equals(getEnvironment())) return false;
-        if (cont.getAdvancedTerrain().equals(getAdvancedTerrain())) return false;
+    public boolean equals(Object object) {
+        if (!(object instanceof Continent)) return false;
+        Continent continent = (Continent) object;
+
+        if (continent.getSize() != getSize()) return false;
+        if (continent.getEnvironment().equals(getEnvironment())) return false;
+        if (continent.getAdvancedTerrain().equals(getAdvancedTerrain())) return false;
         return true;
     }
 
@@ -91,7 +95,7 @@ public class Continent {
      * @return Returns the envID.
      */
     public AdvancedTerrain getAdvancedTerrain() {
-        return advTerrain;
+        return advancedTerrain;
     }
 
     /**

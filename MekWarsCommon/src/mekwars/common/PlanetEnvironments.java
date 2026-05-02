@@ -16,6 +16,7 @@
 
 package mekwars.common;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,7 +47,7 @@ public class PlanetEnvironments {
     private int id;
 
     /** The list of all continents. Type=Continent */
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "planet_id")
     private List<Continent> continents = new ArrayList<>();
 

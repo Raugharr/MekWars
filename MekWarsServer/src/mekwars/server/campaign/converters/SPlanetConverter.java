@@ -63,7 +63,7 @@ public class SPlanetConverter implements Converter {
         writer.endNode();
 
         writer.startNode("componentProduction");
-        writer.setValue(Integer.toString(planet.getCompProduction()));
+        writer.setValue(Integer.toString(planet.getComponentProduction()));
         writer.endNode();
 
         writer.startNode("influence");
@@ -77,7 +77,7 @@ public class SPlanetConverter implements Converter {
         }
 
         writer.startNode("isHomeworld");
-        writer.setValue(Boolean.toString(planet.isHomeWorld()));
+        writer.setValue(Boolean.toString(planet.isHomeworld()));
         writer.endNode();
 
         writer.startNode("originalOwner");
@@ -157,7 +157,7 @@ public class SPlanetConverter implements Converter {
         for (UnitFactory unitFactory : unitFactoryList) {
             ((SUnitFactory) unitFactory).setPlanet(planet);
         }
-        planet.setHomeWorld(isHomeworld);
+        planet.setHomeworld(isHomeworld);
         if (originalOwnerString == null) {
             Integer owner = influences.getOwner();
 

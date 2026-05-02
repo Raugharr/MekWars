@@ -18,8 +18,13 @@
 package mekwars.common.util;
 
 import org.flywaydb.core.Flyway;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class HibernateUtil {
     private static SessionFactory instance;
@@ -45,6 +50,33 @@ public class HibernateUtil {
 
         flyway.migrate();
         instance = configuration.buildSessionFactory();
+    }
+
+    public static <T> T fromTransaction(Function<Session, T> function) {
+        Session session = getInstance().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        try {
+            T result = function.apply(session);
+            transaction.commit();
+            return result;
+        } catch (Exception e) {
+            transaction.rollback();
+            throw e;
+        }
+    }
+
+    public static void inTransaction(Consumer<Session> consumer) {
+        Session session = getInstance().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        try {
+            consumer.accept(session);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw e;
+        }
     }
 
     public static SessionFactory getInstance() {

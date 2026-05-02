@@ -18,6 +18,7 @@
 package mekwars.common;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -124,7 +125,11 @@ public final class PlanetEnvironment {
     // Buildings
     private int minBuildings = 0;
     private int maxBuildings = 0;
+
+    @Column(name = "min_cf")
     private int minCF = 0;
+
+    @Column(name = "max_cf")
     private int maxCF = 0;
     private int minFloors = 0;
     private int maxFloors = 0;
@@ -534,6 +539,7 @@ public final class PlanetEnvironment {
         return result;
     }
 
+    @Override
     public String toString() {
         String result = "PE$";
         result += name + "$";

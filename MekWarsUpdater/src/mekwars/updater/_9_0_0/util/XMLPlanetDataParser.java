@@ -290,7 +290,7 @@ public class XMLPlanetDataParser implements XMLResponder {
                 p.setOriginalOwner(OriginalOwner);
             }
             p.setPlanetFlags(OpFlags);
-            p.setHomeWorld(isHomeWorld);
+            p.setHomeworld(isHomeWorld);
 
             planets.add(p);
 

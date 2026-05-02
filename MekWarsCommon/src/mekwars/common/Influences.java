@@ -93,6 +93,7 @@ public class Influences implements MutableSerializable {
     }
 
     /** Return the faction with the most influence. */
+    @Transient
     public Integer getOwner() {
         try {
             TreeSet<House> sset =
@@ -265,6 +266,7 @@ public class Influences implements MutableSerializable {
      *
      * @return True, if it is a hotZone Planet.
      */
+    @Transient
     public boolean isHotZone() {
         int maxflu = 0;
         int secondmaxflu = 0;

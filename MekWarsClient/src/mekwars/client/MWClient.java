@@ -1729,11 +1729,11 @@ public final class MWClient extends GameHost implements IClient {
 
     public int getMinPlanetOwnerShip(Planet p) {
 
-        if (p.getMinPlanetOwnerShip() == -1) {
+        if (p.getMinPlanetOwnership() == -1) {
             return Integer.parseInt(getServerConfigs("MinPlanetOwnerShip"));
         }
 
-        return p.getMinPlanetOwnerShip();
+        return p.getMinPlanetOwnership();
     }
 
     public int getTotalRepairCosts(Entity unit) {

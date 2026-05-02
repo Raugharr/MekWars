@@ -17,6 +17,7 @@
 package mekwars.server.campaign.data;
 
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 
 import java.util.Date;
 
@@ -43,50 +44,27 @@ public class TimeUpdatePlanet extends Planet {
     /**
      * The time at which this data was changed last.
      */
-    private Date timestamp;
+    private Date updatedAt;
 
     /**
      * @return Returns the timestamp which this data was last changed.
      */
+    @Transient
     public Date getLastChanged() {
-        return timestamp;
+        return updatedAt;
     }
     
     /**
      * Mark the data as updated.
      */
     public void updated() {
-        timestamp = new Date();
+        updatedAt = new Date();
     }
     
 	/**
 	 * @param timestamp The timestamp to set.
 	 */
 	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+		this.updatedAt = timestamp;
 	}
-	
-    /**
-     * Writing itself into a stream
-     *
-    @Override
-	public void binOut(TreeWriter out) {
-        super.binOut(out);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        out.write(sdf.format(getLastChanged()),"lastChanged");
-    }
-
-    /**
-     * Reading itself from a stream
-     *
-    @Override
-	public void binIn(TreeReader in, CampaignData data) throws IOException {
-        super.binIn(in, data);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        try {
-			timestamp = sdf.parse(in.readString("lastChanged"));
-		} catch (ParseException e) {
-			throw new IOException("corrupted date format");
-		}
-    }*/
 }

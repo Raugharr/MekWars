@@ -20,7 +20,7 @@
  */
 package mekwars.common;
 
-import jakarta.persistence.Transient;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -31,8 +31,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 
 import mekwars.common.entities.MWEntity;
 import mekwars.common.persistence.EntityStore;
@@ -50,16 +52,15 @@ import java.util.Map;
 /**
  * @author Helge Richter
  */
-@Entity(name = "planet")
+@Entity
 public class Planet implements Comparable<Object>, MWEntity {
-    // VARIABLES
     /**
      * Unique id of this planet. Mutable field (although it will not change, it has to be
      * transfered)
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id = EntityStore.UNSET_ID;
+    private int id;
 
     /** name of the planet. Should be unique among planets too. */
     private String name;
@@ -73,13 +74,13 @@ public class Planet implements Comparable<Object>, MWEntity {
     /**
      * The unit factories on this planet. Type is UnitFactory Mutable field (has to be transfered)
      */
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "planet_id")
     private List<UnitFactory> unitFactories = new ArrayList<UnitFactory>();
 
     /** The environment modifiers for the planet. */
-    // @OneToOne
-    // @JoinColumn(name = "planet_environments_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "planet_environments_id")
     private PlanetEnvironments environments = new PlanetEnvironments();
 
     /** A human readable description of the planet. */
@@ -112,7 +113,7 @@ public class Planet implements Comparable<Object>, MWEntity {
     private int minPlanetOwnership = -1;
 
     /** Boolean that states if a planet is a homeworld or not */
-    private boolean homeWorld = false;
+    private boolean homeworld = false;
 
     /* Original Owner of the planet */
     private String originalOwner = "";
@@ -120,13 +121,17 @@ public class Planet implements Comparable<Object>, MWEntity {
     /*
      * This allows SO's to set flags for planets and to be used in ops.
      */
+    @ElementCollection
+    @CollectionTable(name = "planet_flag", joinColumns = @JoinColumn(name = "planet_id"))
+    @MapKeyColumn(name = "name")
+    @Column(name = "value")
     private Map<String, String> planetFlags = new HashMap<String, String>();
 
     /*
      * Max Planet Points. this Allows SO's to set the conquer points of a planet
      * That way some planets are harder to conquer then others.
      */
-    private int maxConquestPoints = 100;
+    private int conquestPoints = 100;
 
     // CONSTRUCTORS
     public Planet(String name, Position position, Influences influence) {
@@ -166,14 +171,14 @@ public class Planet implements Comparable<Object>, MWEntity {
     /**
      * @return Returns the componentProduction.
      */
-    public int getCompProduction() {
+    public int getComponentProduction() {
         return componentProduction;
     }
 
     /**
      * @param componentProduction The componentProduction to set.
      */
-    public void setCompProduction(int componentProduction) {
+    public void setComponentProduction(int componentProduction) {
         this.componentProduction = componentProduction;
     }
 
@@ -181,6 +186,7 @@ public class Planet implements Comparable<Object>, MWEntity {
      * @author Torren (Jason Tighe)
      * @return the id of the current owner of the planet
      */
+    @Transient
     public Integer getPlanetOwner() {
         return getInfluence().getOwner();
     }
@@ -237,6 +243,7 @@ public class Planet implements Comparable<Object>, MWEntity {
     /**
      * @return sting w/ link and name
      */
+    @Transient
     public String getNameAsLink() {
         return "<a href=\"JUMPTOPLANET" + name + "#\">" + name + "</a>";
     }
@@ -433,10 +440,10 @@ public class Planet implements Comparable<Object>, MWEntity {
         out.println(getDescription(), "description");
         out.println(getBaysProvided(), "baysProvided");
         out.println(isConquerable(), "conquerable");
-        out.println(getCompProduction(), "componentProduction");
+        out.println(getComponentProduction(), "componentProduction");
         getInfluence().binOut(out);
-        out.println(getMinPlanetOwnerShip(), "minplanetownership");
-        out.println(isHomeWorld(), "homeworld");
+        out.println(getMinPlanetOwnership(), "minplanetownership");
+        out.println(isHomeworld(), "homeworld");
         out.println(getOriginalOwner(), "originalowner");
         out.println(getPlanetFlags().size(), "PlanetFlags.size");
         for (String key : getPlanetFlags().keySet()) {
@@ -471,11 +478,11 @@ public class Planet implements Comparable<Object>, MWEntity {
         setDescription(in.readLine("description"));
         setBaysProvided(in.readInt("baysProvided"));
         setConquerable(in.readBoolean("conquerable"));
-        setCompProduction(in.readInt("componentProduction"));
+        setComponentProduction(in.readInt("componentProduction"));
         setInfluence(new Influences());
         getInfluence().binIn(in);
-        setMinPlanetOwnerShip(in.readInt("minplanetownership"));
-        setHomeWorld(in.readBoolean("homeworld"));
+        setMinPlanetOwnership(in.readInt("minplanetownership"));
+        setHomeworld(in.readBoolean("homeworld"));
         setOriginalOwner(in.readLine("originalowner"));
         Map<String, String> map = new HashMap<String, String>();
         size = in.readInt("PlanetFlags.size");
@@ -508,9 +515,11 @@ public class Planet implements Comparable<Object>, MWEntity {
 
         result.append("<b>Industry:</b><br>");
         // factories
-        if (getCompProduction() > 0) {
+        if (getComponentProduction() > 0) {
             result.append(
-                    "Heavy industry allows an export of " + getCompProduction() + " parts.<br>");
+                    "Heavy industry allows an export of "
+                            + getComponentProduction()
+                            + " parts.<br>");
         }
         if (getBaysProvided() > 0) {
             result.append(
@@ -632,7 +641,6 @@ public class Planet implements Comparable<Object>, MWEntity {
     /**
      * @return Returns the id.
      */
-    @Id
     public int getId() {
         return id;
     }
@@ -661,9 +669,11 @@ public class Planet implements Comparable<Object>, MWEntity {
 
         result.append("<b>Industry:</b><br>");
         // factories
-        if (getCompProduction() > 0) {
+        if (getComponentProduction() > 0) {
             result.append(
-                    "Heavy industry allows an export of " + getCompProduction() + " parts.<br>");
+                    "Heavy industry allows an export of "
+                            + getComponentProduction()
+                            + " parts.<br>");
         }
         if (getBaysProvided() > 0) {
             result.append(
@@ -762,11 +772,12 @@ public class Planet implements Comparable<Object>, MWEntity {
         return result;
     }
 
+    @Transient
     public int getFactoryCount() {
         return getUnitFactories().size();
     }
 
-    public int getMinPlanetOwnerShip() {
+    public int getMinPlanetOwnership() {
         if (minPlanetOwnership < 0)
             minPlanetOwnership =
                     CampaignData.cd.getCampaignOptions().getIntegerConfig("MinPlanetOwnerShip");
@@ -774,16 +785,16 @@ public class Planet implements Comparable<Object>, MWEntity {
         return minPlanetOwnership;
     }
 
-    public void setMinPlanetOwnerShip(int ownership) {
+    public void setMinPlanetOwnership(int ownership) {
         minPlanetOwnership = ownership;
     }
 
-    public void setHomeWorld(boolean homeworld) {
-        homeWorld = homeworld;
+    public void setHomeworld(boolean homeworld) {
+        this.homeworld = homeworld;
     }
 
-    public boolean isHomeWorld() {
-        return homeWorld;
+    public boolean isHomeworld() {
+        return homeworld;
     }
 
     public void setOriginalOwner(String owner) {
@@ -794,10 +805,6 @@ public class Planet implements Comparable<Object>, MWEntity {
         return originalOwner;
     }
 
-    @ElementCollection
-    @CollectionTable(name = "planet_flags", joinColumns = @JoinColumn(name = "planet_id"))
-    @MapKeyColumn(name = "flag_key")
-    @Column(name = "flag_value")
     public Map<String, String> getPlanetFlags() {
         return planetFlags;
     }
@@ -807,11 +814,11 @@ public class Planet implements Comparable<Object>, MWEntity {
     }
 
     public int getConquestPoints() {
-        return maxConquestPoints;
+        return conquestPoints;
     }
 
     public void setConquestPoints(int points) {
-        maxConquestPoints = Math.max(1, points);
+        conquestPoints = Math.max(1, points);
     }
 
     public String getShortDescription(boolean withTerrain) {

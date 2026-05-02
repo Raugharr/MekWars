@@ -17,12 +17,14 @@
 
 package mekwars.common;
 
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 import megamek.common.planetaryconditions.Atmosphere;
 import megamek.common.planetaryconditions.EMI;
@@ -33,7 +35,6 @@ import megamek.common.planetaryconditions.Wind;
 import megamek.common.planetaryconditions.WindDirection;
 
 import mekwars.common.entities.MWEntity;
-import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.TokenReader;
@@ -55,10 +56,10 @@ public class AdvancedTerrain implements MWEntity {
 
     private String name = "none";
 
-    // NOTE: These fields are unused and kept to keep the xml file consistent
-    private int blizzardChance = 0;
-    private int blowingSandChance = 0;
-    private int highWindChance = 0;
+    // NOTE: These fields are unused and kept only to keep the XML parser happy.
+    @Transient private int blizzardChance = 0;
+    @Transient private int blowingSandChance = 0;
+    @Transient private int highWindChance = 0;
 
     private int lowTemp = 25;
     private int highTemp = 25;
@@ -92,7 +93,11 @@ public class AdvancedTerrain implements MWEntity {
     private int moderateWindChance = 0;
     private int strongWindChance = 0;
     private int stormWindChance = 0;
+
+    @Column(name = "tornado_f13_wind_chance")
     private int tornadoF13WindChance = 0;
+
+    @Column(name = "tornado_f4_wind_chance")
     private int tornadoF4WindChance = 0;
 
     private int lightFogChance = 0;
