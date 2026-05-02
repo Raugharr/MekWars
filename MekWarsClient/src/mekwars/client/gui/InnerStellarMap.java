@@ -721,7 +721,7 @@ public class InnerStellarMap extends JComponent implements MouseListener, MouseM
                 g.drawString(Integer.toString(p.getBaysProvided()), x - 8, y);
             }
 
-            if (p.isHomeWorld()) {
+            if (p.isHomeworld()) {
                 ImageIcon homeicon = iconCache.get("data/images/homeworld.gif");
                 homeicon.paintIcon(this, g, x, y);
             }

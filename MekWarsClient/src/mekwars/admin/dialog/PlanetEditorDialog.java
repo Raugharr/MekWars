@@ -26,7 +26,6 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.Arrays;
 
@@ -453,7 +452,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         panel1.add(planetYPosition);
 
         isHomeWorldCB.setText("HomeWorld");
-        isHomeWorldCB.setSelected(selectedPlanet.isHomeWorld());
+        isHomeWorldCB.setSelected(selectedPlanet.isHomeworld());
         panel1.add(isHomeWorldCB);
 
         isConquerable.setText("Conquerable");
@@ -463,7 +462,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
 
         JPanel panel2 = new JPanel();
         panel2.add(new JLabel("MinOwnerShip:", JLabel.TRAILING));
-        minPlanetOwnerShip.setText(Integer.toString(selectedPlanet.getMinPlanetOwnerShip()));
+        minPlanetOwnerShip.setText(Integer.toString(selectedPlanet.getMinPlanetOwnership()));
         panel2.add(minPlanetOwnerShip);
         minPlanetOwnerShip.setPreferredSize(textFieldSize);
         minPlanetOwnerShip.setMaximumSize(textFieldSize);
@@ -569,7 +568,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
 
         panel1.add(new JLabel("Production:", JLabel.TRAILING));
 
-        planetComps.setText(Integer.toString(selectedPlanet.getCompProduction()));
+        planetComps.setText(Integer.toString(selectedPlanet.getComponentProduction()));
         planetComps.setName("CompProduction");
         planetComps.addActionListener(this);
         planetComps.setPreferredSize(textFieldSize);
@@ -756,7 +755,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         planetYPosition.setToolTipText("Planets Y Coord");
 
         isHomeWorldCB.setText("HomeWorld");
-        isHomeWorldCB.setSelected(selectedPlanet.isHomeWorld());
+        isHomeWorldCB.setSelected(selectedPlanet.isHomeworld());
 
         isConquerable.setText("Conquerable");
         isConquerable.setSelected(selectedPlanet.isConquerable());
@@ -784,7 +783,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         planetOwnersList.setActionCommand(planetOwnersListCommand);
         planetOwnersList.setSelectedIndex(0);
 
-        minPlanetOwnerShip.setText(Integer.toString(selectedPlanet.getMinPlanetOwnerShip()));
+        minPlanetOwnerShip.setText(Integer.toString(selectedPlanet.getMinPlanetOwnership()));
         planetConquerPoints.setText(Integer.toString(selectedPlanet.getConquestPoints()));
 
         ownerNames.removeAllItems();
@@ -798,7 +797,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         planetBays.setName("BaysProvided");
         planetBays.addActionListener(this);
 
-        planetComps.setText(Integer.toString(selectedPlanet.getCompProduction()));
+        planetComps.setText(Integer.toString(selectedPlanet.getComponentProduction()));
         planetComps.setName("CompProduction");
         planetComps.addActionListener(this);
 
@@ -1148,13 +1147,13 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         if (!houseNames.getSelectedItem().toString().equals(selectedPlanet.getOriginalOwner())) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c AdminSetPlanetOriginalOwner#" + planetName + "#" + houseNames.getSelectedItem().toString());
         }
-        if (!minPlanetOwnerShip.getText().equals(Integer.toString(selectedPlanet.getMinPlanetOwnerShip()))) {
+        if (!minPlanetOwnerShip.getText().equals(Integer.toString(selectedPlanet.getMinPlanetOwnership()))) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c SetPlanetMinOwnerShip#" + planetName + "#" + minPlanetOwnerShip.getText());
         }
         if (!planetConquerPoints.getText().equals(Integer.toString(selectedPlanet.getConquestPoints()))) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c SetPlanetConquerPoints#" + planetName + "#" + planetConquerPoints.getText());
         }
-        if (isHomeWorldCB.isSelected() != selectedPlanet.isHomeWorld()) {
+        if (isHomeWorldCB.isSelected() != selectedPlanet.isHomeworld()) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c Adminsethomeworld#" + planetName + "#" + isHomeWorldCB.isSelected());
         }
 
@@ -1165,7 +1164,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         if (!planetBays.getText().equals(Integer.toString(selectedPlanet.getBaysProvided()))) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c Setplanetwarehouse#" + planetName + "#" + planetBays.getText());
         }
-        if (!planetComps.getText().equals(Integer.toString(selectedPlanet.getCompProduction()))) {
+        if (!planetComps.getText().equals(Integer.toString(selectedPlanet.getComponentProduction()))) {
             mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c Setplanetcompproduction#" + planetName + "#" + planetComps.getText());
         }
 

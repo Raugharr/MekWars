@@ -18,17 +18,34 @@
 package mekwars.common.util;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 
 @Embeddable
 public class Position {
     public double x;
     public double y;
 
-    public Position() { }
+    @Transient
+    private String color;
+
+    public Position() {}
 
     public Position(double xpos, double ypos) {
         x = xpos;
         y = ypos;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+
+        if (color.startsWith("#")) {
+            this.color = color;
+        } else {
+            this.color = "#" + color;
+        }
     }
 
     public double getX() {

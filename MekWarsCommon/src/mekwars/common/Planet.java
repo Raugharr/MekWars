@@ -425,8 +425,8 @@ public class Planet implements Comparable<Object>, MWEntity {
     public void binOut(BinWriter out) throws IOException {
         out.println(getId(), "id");
         out.println(getName(), "name");
-        out.println(getPosition().x, "x");
-        out.println(getPosition().y, "y");
+        out.println(getPosition().getX(), "x");
+        out.println(getPosition().getY(), "y");
         out.println(getUnitFactories().size(), "unitFactories.size");
         for (UnitFactory i : getUnitFactories()) {
             i.binOut(out);
@@ -506,9 +506,9 @@ public class Planet implements Comparable<Object>, MWEntity {
         // result.append("</b> ("+ getDescription() + ")<br><br>");
         result.append(
                 "<b>Location:</b> "
-                        + (int) getPosition().x
+                        + (int) getPosition().getX()
                         + " x "
-                        + (int) getPosition().y
+                        + (int) getPosition().getY()
                         + " y<br>"
                         + Math.round(getPosition().distanceSq(0.0, 0.0))
                         + " Lightyears from the galaxy center <br><br>");
@@ -660,9 +660,9 @@ public class Planet implements Comparable<Object>, MWEntity {
         // result.append("</b> ("+ getDescription() + ")<br><br>");
         result.append(
                 "<b>Location:</b> "
-                        + (int) getPosition().x
+                        + (int) getPosition().getX()
                         + " x "
-                        + (int) getPosition().y
+                        + (int) getPosition().getY()
                         + " y<br>"
                         + Math.round(getPosition().distanceSq(0.0, 0.0))
                         + " Lightyears from the galaxy center <br><br>");

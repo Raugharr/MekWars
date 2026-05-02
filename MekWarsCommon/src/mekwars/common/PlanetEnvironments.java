@@ -51,10 +51,6 @@ public class PlanetEnvironments {
     @JoinColumn(name = "planet_id")
     private List<Continent> continents = new ArrayList<>();
 
-    public int getSize() {
-        return id;
-    }
-
     /** Returns the number of terrains in this set. */
     public int size() {
         return continents.size();
