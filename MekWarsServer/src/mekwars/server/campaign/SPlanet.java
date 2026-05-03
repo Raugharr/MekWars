@@ -272,26 +272,6 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         return (SUnitFactory) getUnitFactories().get(CampaignMain.cm.getRandomNumber(getUnitFactories().size()));
     }
 
-    public SUnitFactory getBestUnitFactory() {
-        if (getUnitFactories().size() == 0)
-            return null;
-        SUnitFactory result = null;
-        for (int i = 0; i < getUnitFactories().size(); i++) {
-            SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
-            if (result == null)
-                result = MF;
-            else {
-                if (MF.getWeightclass() > result.getWeightclass()) {
-                    result = MF;
-                } else if (MF.getWeightclass() == result.getWeightclass()) {
-                    if (MF.getBestTypeProducable() < result.getBestTypeProducable())
-                        result = MF;
-                }
-            }
-        }
-        return result;
-    }
-
     public Vector<SUnitFactory> getFactoriesByName(String s) {
         Vector<SUnitFactory> result = new Vector<SUnitFactory>(getUnitFactories().size(), 1);
         for (int i = 0; i < getUnitFactories().size(); i++) {

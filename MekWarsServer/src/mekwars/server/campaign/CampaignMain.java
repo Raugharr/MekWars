@@ -1946,8 +1946,6 @@ public final class CampaignMain implements Serializable {
         }
 
         // write log header
-        LOGGER.info("Slice #" + sliceID + " Finished");
-        LOGGER.info("Slice #" + sliceID + " Finished");
         LOGGER.info("Slice #" + sliceID + " Finished: " + System.currentTimeMillis());
 
     } // end the slice...
@@ -1963,8 +1961,6 @@ public final class CampaignMain implements Serializable {
     public synchronized void tick(boolean real, int tickid) {
 
         // add header to log
-        LOGGER.info("Tick #" + tickid + " Started");
-        LOGGER.info("Tick #" + tickid + " Started");
         LOGGER.info("Tick #" + tickid + " Started");
 
         // log the number of games underway
