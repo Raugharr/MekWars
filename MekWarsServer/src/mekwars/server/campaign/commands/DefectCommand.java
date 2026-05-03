@@ -576,8 +576,8 @@ public class  DefectCommand  implements Command {
             MWServ.getInstance().addToNewsFeed("Player Defection", "Player News", Username + " defected from " + oldHouse.getName() + " to " + HouseName);
             MWServ.getInstance().postToDiscord(Username + " defected from " + oldHouse.getName() + " to " + HouseName);
 
-            if ( p.getMyLogo().trim().equals(oldHouse.getLogo().trim()) ){
-                p.setMyLogo(newHouse.getLogo().trim());
+            if ( p.getLogo().trim().equals(oldHouse.getLogo().trim()) ){
+                p.setLogo(newHouse.getLogo().trim());
             }
             
             // for now, move defecting players back to standard-user access.

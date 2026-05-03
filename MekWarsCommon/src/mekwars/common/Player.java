@@ -39,13 +39,18 @@ public class Player<T extends Unit> {
     private static final double INITIAL_RATING = 1600;
 
     private List<T> units = new ArrayList<>();
+    private String name = "";
+    private String logo = "";
     private House myHouse = null;
+    private int money = 0;
+    private int experience = 0;
     // @salient - changed from 50 to 0, starting flu can be set in SO faction.
     private int influence = 0;
     private int technicians = 0; // @urgru 7/17/04
     private int currentTechPayment = -1; // num Cbills owed to techs after games
     private int teamNumber = -1;
     private int rewardPoints = 0;
+
     private double rating = INITIAL_RATING;
     private boolean isInvisible = false; // Evil command for Big brother err admins.
     private boolean autoReorderParts = false;
@@ -63,12 +68,52 @@ public class Player<T extends Unit> {
         Arrays.fill(availableTechs, 0);
     }
 
+    public House getMyHouse() {
+        return myHouse;
+    }
+
     public void setMyHouse(House house) {
         this.myHouse = house;
     }
 
-    public House getMyHouse() {
-        return myHouse;
+    public String getLogoTag() {
+        return "<img height=\"140\" width=\"130\" src =\"" + logo + "\">";
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+
+    public void setLogo(String logo) {
+        logo = logo;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        this.name = name;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int tmoney) {
+        money = tmoney;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+    }
+
+    public int getExperience() {
+        return experience;
     }
 
     public boolean isClan() {

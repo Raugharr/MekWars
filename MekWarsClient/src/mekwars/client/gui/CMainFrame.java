@@ -1846,7 +1846,7 @@ public class CMainFrame extends JFrame {
 
     public void jMenuCommanderLogo_actionPerformed() {
         String LogoURL;
-        LogoURL = JOptionPane.showInputDialog(getContentPane(), "URL? (i.e. http://www.mysite.com/mypic.jpg)", mwclient.getPlayer().getMyLogo());
+        LogoURL = JOptionPane.showInputDialog(getContentPane(), "URL? (i.e. http://www.mysite.com/mypic.jpg)", mwclient.getPlayer().getLogo());
         if (LogoURL == null) {
             return;
         }

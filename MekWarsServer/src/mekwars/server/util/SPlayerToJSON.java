@@ -23,7 +23,7 @@ public class SPlayerToJSON {
     public static void writeToFile(SPlayer player)
     {
     	startJson();
-    	stringJson("myLogo",player.getMyLogo());
+    	stringJson("myLogo",player.getLogo());
     	stringJson("name",player.getName());
     	stringJson("discordID",player.getDiscordID());
     	stringJson("house",player.getMyHouse().getName());

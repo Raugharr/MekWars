@@ -81,19 +81,13 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     private static final String ACTIVE_MC = "activemc"; //@salient for minicampaigns
 
     // DATA VARIABLES (SAVED. Most have gets and sets.)
-    private String name = "";
     private String fluffText = "";
-    private String myLogo = "";
     private String lastISP = "";
 
-    private int experience = 0;
-    private int money = 0;
     private int xpTillReward = 0; // counter until next RP injection triggered by XP gains, see XPRollOverCap in server options
     private int xpTillFlu = 0; // @ Salient , same as above. counter until next flu injection triggered by XP gains.
     private int groupAllowance = 0;
-    private int technicians = 0;// @urgru 7/17/04
     private int baysOwned = 0;
-    private int currentTechPayment = -1;// num Cbills owed to techs after game
 
     private long lastOnline = 0;
 
@@ -192,7 +186,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             return false;
         }
 
-        if (p.getName().equals(name)) {
+        if (p.getName().equals(getName())) {
             return true;
         }
 
@@ -222,22 +216,22 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     public boolean mayUse(int weightClass) {
         //@Salient adding this in for Gunny
         if (weightClass == Unit.LIGHT) {
-            if (Integer.parseInt(getMyHouse().getConfig("MinEXPforLight")) > experience) {
+            if (Integer.parseInt(getMyHouse().getConfig("MinEXPforLight")) > getExperience()) {
                 return false;
             }
         }
         if (weightClass == Unit.MEDIUM) {
-            if (Integer.parseInt(getMyHouse().getConfig("MinEXPforMedium")) > experience) {
+            if (Integer.parseInt(getMyHouse().getConfig("MinEXPforMedium")) > getExperience()) {
                 return false;
             }
         }
         if (weightClass == Unit.HEAVY) {
-            if (Integer.parseInt(getMyHouse().getConfig("MinEXPforHeavy")) > experience) {
+            if (Integer.parseInt(getMyHouse().getConfig("MinEXPforHeavy")) > getExperience()) {
                 return false;
             }
         }
         if (weightClass == Unit.ASSAULT) {
-            if (Integer.parseInt(getMyHouse().getConfig("MinEXPforAssault")) > experience) {
+            if (Integer.parseInt(getMyHouse().getConfig("MinEXPforAssault")) > getExperience()) {
                 return false;
             }
         }
@@ -292,17 +286,17 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
          * above), along with total and free bay/tech info.
          */
         if (sendUpdates) {
-            CampaignMain.cm.toUser("PL|HD|" + m.toString(true), name, false);
-            CampaignMain.cm.toUser("PL|SUS|" + m.getId() + "#" + m.getStatus(), name, false);
-            CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), name, false);
-            CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), name, false);
+            CampaignMain.cm.toUser("PL|HD|" + m.toString(true), getName(), false);
+            CampaignMain.cm.toUser("PL|SUS|" + m.getId() + "#" + m.getStatus(), getName(), false);
+            CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), getName(), false);
+            CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), getName(), false);
         }
 
         // make sure to save the player, with his fancy new unit ...
         setSave();
 
         String penaltyString = buildHangarPenaltyString();
-        CampaignMain.cm.toUser("PL|SHP|" + penaltyString, name, false);
+        CampaignMain.cm.toUser("PL|SHP|" + penaltyString, getName(), false);
 
         //LOGGER.debug("Checking Anti-Air");
         //m.isAntiAir();
@@ -337,7 +331,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     public String removeUnit(SUnit unitToRemove, boolean sendHouseStatusUpdate) {
         this.removeUnit(unitToRemove.getId(), true);
         String penaltyString = buildHangarPenaltyString();
-        CampaignMain.cm.toUser("PL|SHP|" + penaltyString, name, false);
+        CampaignMain.cm.toUser("PL|SHP|" + penaltyString, getName(), false);
         return "";// dummy stirng returned for IBuyer
     }
 
@@ -357,7 +351,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             if (currA.getUnitPosition(unitId) > -1) {
                 currA.removeUnit(unitId);
                 if (sendArmyUpdate) {
-                    CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), name, false);
+                    CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), getName(), false);
                     CampaignMain.cm.getOpsManager().checkOperations(currA, true);// update
                     // legal
                     // ops
@@ -365,9 +359,9 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             }
         }// end for(all armies)
 
-        CampaignMain.cm.toUser("PL|RU|" + unitId, name, false);
-        CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), name, false);
-        CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), name, false);
+        CampaignMain.cm.toUser("PL|RU|" + unitId, getName(), false);
+        CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), getName(), false);
+        CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), getName(), false);
         setSave();// save on remove (adminstrip, etc)
     }
 
@@ -472,7 +466,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             // check for stupid settings to avoid division by 0
             if (experienceForBay != 0) {
                 int maxBaysFromXP = getMyHouse().getIntegerConfig("MaxBaysFromEXP");
-                int expBays = (experience / experienceForBay);
+                int expBays = (getExperience() / experienceForBay);
                 if (expBays > maxBaysFromXP) {
                     expBays = maxBaysFromXP;
                 }
@@ -579,7 +573,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             int xpToDecrease = Integer.parseInt(getMyHouse().getConfig("XPForDecrease"));
             int minTechCost = Integer.parseInt(getMyHouse().getConfig("MinimumTechCost"));
 
-            int numDecreases = (int) Math.floor(experience / xpToDecrease);
+            int numDecreases = (int) Math.floor(getExperience() / xpToDecrease);
             techCost -= numDecreases;
 
             if (techCost < minTechCost) {
@@ -631,7 +625,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             SUnit unit = okUnitsData.get(rnd);// get unit @ rnd location
             unit.setUnmaintainedStatus();// make it unmaintained
             numUnmaintained++;
-            CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), name, false);
+            CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), getName(), false);
             okUnitsData.remove(rnd);// and remove it from the vector
 
         }// end while(no free bays)
@@ -680,7 +674,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 else {
 
                     if (getMyHouse().isNewbieHouse()) {
-                        CampaignMain.cm.toUser("Your " + currUnit.getModelName() + " is badly maintained and failed a survival roll. In a normal faction, " + "failing these rolls <b>destroys</b> the unit. In the training faction you simply get this warning. Take heed.", name, true);
+                        CampaignMain.cm.toUser("Your " + currUnit.getModelName() + " is badly maintained and failed a survival roll. In a normal faction, " + "failing these rolls <b>destroys</b> the unit. In the training faction you simply get this warning. Take heed.", getName(), true);
                         return;
                     }// break out if trying to scrap a SOL mech
 
@@ -703,7 +697,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                         toSend += CampaignMain.cm.moneyOrFluMessage(true, false, -mechscrapprice, true) + ", ";
                     }
                     toSend += CampaignMain.cm.moneyOrFluMessage(false, false, -flutolose, true) + ").";
-                    CampaignMain.cm.toUser(toSend, name, true);
+                    CampaignMain.cm.toUser(toSend, getName(), true);
 
                     getMyHouse().addDispossessedPilot(currUnit, false);
                     unitsToDestroy.add(currUnit);// actually removing now
@@ -753,8 +747,8 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
      */
     public void setActive(boolean newStatus) {
 
-        // lower case the name only once
-        String lowerName = name.toLowerCase();
+        // lower case the getName() only once
+        String lowerName = getName().toLowerCase();
 
         // de-activating
         if (!newStatus) {
@@ -782,7 +776,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
              * thread to hit the leach ceiling turn off any other attacks
              * against the player.
              */
-            CampaignMain.cm.getOpsManager().removePlayerFromAllPossibleDefenderLists(name, true);
+            CampaignMain.cm.getOpsManager().removePlayerFromAllPossibleDefenderLists(getName(), true);
 
             /*
              * Remove the player from all attacker lists. It is presumed that a
@@ -843,7 +837,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     public void setFighting(boolean newStatus, boolean toReserve) {
 
         // lower case the name only once
-        String lowerName = name.toLowerCase();
+        String lowerName = getName().toLowerCase();
 
         // switch to fighting
         if (newStatus) {
@@ -856,7 +850,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             getMyHouse().getFightingPlayers().put(lowerName, this);
 
             // send status update to the user
-            CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, name, false);
+            CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, getName(), false);
 
             /*
              * Player is being moved to busy status. This means he is no longer
@@ -923,13 +917,13 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         activeSince = System.currentTimeMillis();
 
         // attempt to remove from both reserve AND active, just in case
-        String lowerName = name.toLowerCase();
+        String lowerName = getName().toLowerCase();
         getMyHouse().getReservePlayers().remove(lowerName);
         getMyHouse().getActivePlayers().remove(lowerName);
 
         // put the player in the fighting list and update status
         getMyHouse().getFightingPlayers().put(lowerName, this);
-        CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, name, false);
+        CampaignMain.cm.toUser("CS|" + +SPlayer.STATUS_FIGHTING, getName(), false);
     }
 
     /**
@@ -1165,20 +1159,20 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
 
         armies.clear();
         clearUnits();
-        money = 0;
+        setMoney(0);
         exclusionList.getAdminExcludes().clear();
         exclusionList.getPlayerExcludes().clear();
-        experience = 0;
+        setExperience(0);
         baysOwned = 0;
         availableTechs = new int[UnitUtils.TECH_TYPES];
         totalTechs = new int[UnitUtils.TECH_TYPES];
-        technicians = 0;
+        setTechnicians(0);
         fluffText = " ";
         setRewardPoints(0);
         groupAllowance = 0;
         setInfluence(0);
         setMyHouse(CampaignData.cd.getHouseByName(getMyHouse().getConfig("NewbieHouseName")));
-        myLogo = " ";
+        setLogo(" ");
         personalPilotQueue.flushQueue();
         xpTillReward = 0;
         xpTillFlu = 0;
@@ -1195,7 +1189,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
      */
     public void addMoney(int i) {
         // holder, amount to store.
-        int moneyToSet = money + i;
+        int moneyToSet = getMoney() + i;
 
         // don't let SOL exceed cap, or anyone have negative cash
         int maxNewbieCbills = getMyHouse().getIntegerConfig("MaxSOLCBills");
@@ -1207,17 +1201,9 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         }
 
         // change the value and send an update
-        money = moneyToSet;
-        CampaignMain.cm.toUser("PL|SM|" + money, name, false);
+        setMoney(moneyToSet);
+        CampaignMain.cm.toUser("PL|SM|" + getMoney(), getName(), false);
         setSave();
-    }
-
-    /**
-     * Get the amount of money the player currently has on hand. Required for
-     * IBuyer.
-     */
-    public int getMoney() {
-        return money;
     }
 
     /**
@@ -1226,7 +1212,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     public void addMekToken(int i) {
         int tokenToSet = this.getMekToken() + i;
         this.setMekToken(tokenToSet);
-        CampaignMain.cm.toUser("PL|UMT|" + tokenToSet, name, false); //UMT: Update Mek Token on cplayer
+        CampaignMain.cm.toUser("PL|UMT|" + tokenToSet, getName(), false); //UMT: Update Mek Token on cplayer
         setSave();
     }
 
@@ -1278,7 +1264,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
      * STATUS_FIGHTING.
      */
     public int getDutyStatus() {
-        String lowerName = name.toLowerCase();
+        String lowerName = getName().toLowerCase();
 
         // Fighting
         if (getMyHouse().getFightingPlayers().containsKey(lowerName)) {
@@ -1313,7 +1299,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         int xpForVote = Integer.parseInt(getMyHouse().getConfig("XPForAdditionalVote"));
         int maxVotes = Integer.parseInt(getMyHouse().getConfig("MaximumVotes"));
 
-        voteTotal += (int) Math.floor(experience / xpForVote);
+        voteTotal += (int) Math.floor(getExperience() / xpForVote);
         if (voteTotal > maxVotes) {
             voteTotal = maxVotes;
         }
@@ -1335,11 +1321,11 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         armies.clear();
 
         if (sendStatus) {
-            CampaignMain.cm.toUser("PS|" + this.toString(true), name, false);
+            CampaignMain.cm.toUser("PS|" + this.toString(true), getName(), false);
         }
 
         setSave();
-        CampaignMain.cm.toUser("PL|SHP|" + buildHangarPenaltyString(), name, false);
+        CampaignMain.cm.toUser("PL|SHP|" + buildHangarPenaltyString(), getName(), false);
     }
 
     // EXPERIENCE SET/ADD/GET Methods
@@ -1354,31 +1340,31 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
      */
     public void addExperience(int i, boolean modAdded) {
         // change xp
-        experience += i;
+        setExperience(getExperience() + i);
 
         // check floor
-        if (experience < 0) {
-            experience = 0;
+        if (getExperience() < 0) {
+            setExperience(0);
         }
 
         // check SOL cap
-        if (getMyHouse().isNewbieHouse() && (experience > getMyHouse().getIntegerConfig("MaxSOLExp"))) {
-            experience = getMyHouse().getIntegerConfig("MaxSOLExp");
+        if (getMyHouse().isNewbieHouse() && (getExperience() > getMyHouse().getIntegerConfig("MaxSOLExp"))) {
+            setExperience(getMyHouse().getIntegerConfig("MaxSOLExp"));
         }
 
         // update client & all userlists
-        CampaignMain.cm.toUser("PL|SE|" + experience, name, false);
-        CampaignMain.cm.doSendToAllOnlinePlayers("PI|EX|" + name + "|" + experience, false);
+        CampaignMain.cm.toUser("PL|SE|" + getExperience(), getName(), false);
+        CampaignMain.cm.doSendToAllOnlinePlayers("PI|EX|" + getName() + "|" + getExperience(), false);
 
         // update corresponding small player.
-        SmallPlayer smallp = getMyHouse().getSmallPlayers().get(name.toLowerCase());
+        SmallPlayer smallp = getMyHouse().getSmallPlayers().get(getName().toLowerCase());
         if (smallp != null) {
-            smallp.setExperience(experience);
+            smallp.setExperience(getExperience());
         }
 
         // check and send mek bay numbers
-        CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), name, false);
-        CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), name, false);
+        CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), getName(), false);
+        CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), getName(), false);
 
         // check reward, if not mod added. never reduce rollover counter.
         if (!modAdded && (i > 0)) {
@@ -1402,7 +1388,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 // set up and send upe rp link
                 String toSend = "You earned " + rpToAdd + " experience " + CampaignMain.cm.getConfig("RPShortName");
                 toSend += "[<a href=\"MWUSERP\">Use " + CampaignMain.cm.getConfig("RPShortName") + "</a>]";
-                CampaignMain.cm.toUser(toSend, name, true);
+                CampaignMain.cm.toUser(toSend, getName(), true);
             } else {
                 setXpTillReward(currentXP);
             }
@@ -1428,17 +1414,13 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 setXpTillFlu(currentXP);
 
                 String toSend = "You earned " + fluToAdd + CampaignMain.cm.getConfig("FluShortName") + " by gaining xp!";
-                CampaignMain.cm.toUser(toSend, name, true);
+                CampaignMain.cm.toUser(toSend, getName(), true);
 
             } else {
                 setXpTillFlu(currentXP);
             }
         }
         setSave();
-    }
-
-    public int getExperience() {
-        return experience;
     }
 
     // SPECIAL USE METHODS (PRIVATE OR PUBLIC&STATIC)
@@ -1825,7 +1807,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
 
     //@salient - made a new command called RG (refresh gui) not really sure it works tbh..
     public void refreshGUI() {
-    	CampaignMain.cm.toUser("RG|" + " ", name, false);
+    	CampaignMain.cm.toUser("RG|" + " ", getName(), false);
     }
 
     //@salient
@@ -1838,9 +1820,9 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     		aUnit.setLocked(false);
     	}
 
-        CampaignMain.cm.toUser("PS|" + this.toString(true), name, false);
+        CampaignMain.cm.toUser("PS|" + this.toString(true), getName(), false);
         setSave();
-        CampaignMain.cm.toUser("PL|SHP|" + buildHangarPenaltyString(), name, false);
+        CampaignMain.cm.toUser("PL|SHP|" + buildHangarPenaltyString(), getName(), false);
 
     	//refreshGUI();
     	toSelf("AM: Units have been unlocked!");
@@ -2024,20 +2006,16 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     @Override
     public int getCurrentTechPayment() {
         // recalculate if -1
-        if (currentTechPayment < 0) {
+        if (super.getCurrentTechPayment() < 0) {
             doPayTechniciansMath();
         }
 
-        return currentTechPayment;
+        return super.getCurrentTechPayment();
     }
 
-    /**
-     * @param i
-     *            - post-game payment to set, in Cbills
-     */
     @Override
-    public void setCurrentTechPayment(int i) {
-        currentTechPayment = i;
+    public void setCurrentTechPayment(int techPayment) {
+        super.setCurrentTechPayment(techPayment);
         setSave();
     }
 
@@ -2049,8 +2027,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
             return getBaysOwned();
         }
-        // else
-        return technicians;
+        return super.getTechnicians();
     }
 
     public String totalTechsToString() {
@@ -2086,7 +2063,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             availableTechs[type] = number;
         }
 
-        CampaignMain.cm.toUser("PL|UAT|" + availableTechsToString(), name, false);
+        CampaignMain.cm.toUser("PL|UAT|" + availableTechsToString(), getName(), false);
 
     }
 
@@ -2102,7 +2079,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         synchronized(totalTechs) {
             totalTechs[type] = number;
         }
-        CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), name, false);
+        CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), getName(), false);
     }
 
     public void updateAvailableTechs(String data) {
@@ -2171,9 +2148,9 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     @Override
     public void setTechnicians(int t) {
         super.setTechnicians(t);
-        CampaignMain.cm.toUser("PL|ST|" + t, name, false);
-        CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), name, false);
-        CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), name, false);
+        CampaignMain.cm.toUser("PL|ST|" + t, getName(), false);
+        CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), getName(), false);
+        CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), getName(), false);
         setSave();
     }
 
@@ -2192,24 +2169,16 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         }
     }
 
-    // NAME GET/SET METHODS
-    public String getName() {
-        return name;
-    }
-
     public String getColoredName() {
-        return "<font color=\"" + getHouseFightingFor().getHouseColor() + "\">" + name + "</font>";
+        return "<font color=\"" + getHouseFightingFor().getHouseColor() + "\">" + getName() + "</font>";
     }
 
     public String getColoredNameBold() { //@salient
-        return "<font color=\"" + getHouseFightingFor().getHouseColor() + "\"><b>" + name + "</b></font>";
+        return "<font color=\"" + getHouseFightingFor().getHouseColor() + "\"><b>" + getName() + "</b></font>";
     }
 
-    public void setName(String s) {
-        if (s == null) {
-            throw new NullPointerException();
-        }
-        name = s;
+    public void setName(String name) {
+        super.setName(name);
         setSave();
     }
     
@@ -2279,7 +2248,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 break;
             }
         }
-        CampaignMain.cm.toUser("PL|RA|" + armyID, name, false);
+        CampaignMain.cm.toUser("PL|RA|" + armyID, getName(), false);
     }
 
     public void setArmies(ArrayList<SArmy> v) {
@@ -2310,7 +2279,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         } else if (getRating() < p.getRating()) {
             return -1;
         }
-        return p.getName().compareTo(name);
+        return p.getName().compareTo(getName());
     }
 
     public int getScrapsThisTick() {
@@ -2348,12 +2317,12 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     public void setLastOnline(long l) {
         lastOnline = l;
         SmallPlayer smallp = null;
-        if (getMyHouse().getSmallPlayers().containsKey(name.toLowerCase())) {
+        if (getMyHouse().getSmallPlayers().containsKey(getName().toLowerCase())) {
             // update the corresponding small player.
-            smallp = getMyHouse().getSmallPlayers().get(name.toLowerCase());
+            smallp = getMyHouse().getSmallPlayers().get(getName().toLowerCase());
         } else {
             smallp = new SmallPlayer(getExperience(), lastOnline, getRating(), getName(), getFluffText(), getMyHouse());
-            getMyHouse().getSmallPlayers().put(name.toLowerCase(), smallp);
+            getMyHouse().getSmallPlayers().put(getName().toLowerCase(), smallp);
         }
 
         smallp.setLastOnline(lastOnline);
@@ -2371,14 +2340,14 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         super.setRating(d);
 
         // update the corresponding small player.
-        SmallPlayer smallp = getMyHouse().getSmallPlayers().get(name.toLowerCase());
+        SmallPlayer smallp = getMyHouse().getSmallPlayers().get(getName().toLowerCase());
         smallp.setRating(getRating());
 
         // if sharing ratings, send to clients
         if (!Boolean.parseBoolean(getMyHouse().getConfig("HideELO"))) {
             double rounded = getRatingRounded();
-            CampaignMain.cm.toUser("PL|SR|" + rounded, name, false);
-            CampaignMain.cm.doSendToAllOnlinePlayers("PI|RA|" + name + "|" + rounded, false);
+            CampaignMain.cm.toUser("PL|SR|" + rounded, getName(), false);
+            CampaignMain.cm.doSendToAllOnlinePlayers("PI|RA|" + getName() + "|" + rounded, false);
         }
 
         setSave();
@@ -2395,7 +2364,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         fluffText = s;
 
         // update the corresponding small player.
-        SmallPlayer smallp = getMyHouse().getSmallPlayers().get(name.toLowerCase());
+        SmallPlayer smallp = getMyHouse().getSmallPlayers().get(getName().toLowerCase());
         smallp.setFluffText(fluffText);
 
         setSave();
@@ -2433,7 +2402,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         for (SArmy army : armies) {
             if (army.isUnitInArmy(unit)) {
                 army.setBV(0);
-                CampaignMain.cm.toUser("PL|SABV|" + army.getID() + "#" + army.getBV(), name, false);
+                CampaignMain.cm.toUser("PL|SABV|" + army.getID() + "#" + army.getBV(), getName(), false);
             }
         }
     }// end checkAndUpdateArmies
@@ -2449,13 +2418,13 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     // set the current amount of reward points a player has.
     public void setRewardPoints(int rewardPoints) {
         super.setRewardPoints(rewardPoints);
-        CampaignMain.cm.toUser("PL|SRP|" + rewardPoints, name, false);
+        CampaignMain.cm.toUser("PL|SRP|" + rewardPoints, getName(), false);
         setSave();
     }
 
     public void setInfluence(int influence) {
         super.setInfluence(influence);
-        CampaignMain.cm.toUser("PL|SI|" + getInfluence(), name, false);
+        CampaignMain.cm.toUser("PL|SI|" + getInfluence(), getName(), false);
         setSave();
     }
 
@@ -2477,14 +2446,6 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
 
     public int getXpTillFlu() {
         return xpTillFlu;
-    }
-
-    public void setMyLogo(String s) {
-        myLogo = s;
-    }
-
-    public String getMyLogo() {
-        return myLogo;
     }
 
     public void setPlayerSellingto(String selling) {
@@ -2747,7 +2708,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             }
         }
 
-        s.append("  " + CampaignMain.cm.moneyOrFluMessage(true, false, getMoney()) + " //  " + CampaignMain.cm.moneyOrFluMessage(false, false, getInfluence()) + " // " + experience + " Experience<br>");
+        s.append("  " + CampaignMain.cm.moneyOrFluMessage(true, false, getMoney()) + " //  " + CampaignMain.cm.moneyOrFluMessage(false, false, getInfluence()) + " // " + getExperience() + " Experience<br>");
 
         // advanced repair
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
@@ -2913,9 +2874,9 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     public String toString(boolean toClient) {
     	SerializedMessage result = new SerializedMessage("~");
         result.append("CP");
-        result.append(name);
-        result.append(money);
-        result.append(experience);
+        result.append(getName());
+        result.append(getMoney());
+        result.append(getExperience());
         result.append(getUnits().size());
         if (getUnits().size() > 0) {
             synchronized (getUnits()) {
@@ -2968,7 +2929,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         if (CampaignMain.cm.isUsingAdvanceRepair()) {
             result.append(getBaysOwned());
         } else {
-            result.append(technicians);// used when saving to houses.dat
+            result.append(getTechnicians());// used when saving to houses.dat
         }
         // above is used when sending to client bad hack but needed for now
         result.append(getRewardPoints()); // saving current reward points
@@ -2987,10 +2948,10 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         result.append(getMyHouse().getName() + " ");
         if (toClient) {
             result.append(getHouseFightingFor().getName() + " ");
-            if (getMyLogo().length() == 0) {
+            if (getLogo().length() == 0) {
                 result.append(getMyHouse().getLogo() + " ");
             } else {
-                result.append(getMyLogo() + " ");
+                result.append(getLogo() + " ");
             }
         } else {
             result.append(xpTillReward);
@@ -3006,12 +2967,12 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             } else {
                 result.append(" ");
                 result.append(" ");
-                result.append(technicians);
+                result.append(getTechnicians());
             }
-            if (getMyLogo().trim().length() == 0) {
+            if (getLogo().trim().length() == 0) {
                 result.append(getMyHouse().getLogo() + " ");
             } else {
-                result.append(getMyLogo() + " ");
+                result.append(getLogo() + " ");
             }
             result.append(getLastAttackFromReserve());
             result.append(getGroupAllowance());
@@ -3077,10 +3038,10 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
              *
              * @urgru 4.2.05
              */
-            exclusionList.setOwnerName(name);
+            exclusionList.setOwnerName(getName());
 
-            money = TokenReader.readInt(ST);
-            experience = TokenReader.readInt(ST);
+            setMoney(TokenReader.readInt(ST));
+            setExperience(TokenReader.readInt(ST));
 
             int numofarmies = 0;
             int numofUnits = TokenReader.readInt(ST);
@@ -3090,19 +3051,19 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 SUnit m = new SUnit();
                 m.fromString((String) ST.nextElement());
                 addUnit(m);
-                CampaignMain.cm.toUser("PL|HD|" + m.toString(true), name, false);
+                CampaignMain.cm.toUser("PL|HD|" + m.toString(true), getName(), false);
             }
 
             numofarmies = (Integer.parseInt((String) ST.nextElement()));
             for (int i = 0; i < numofarmies; i++) {
-                SArmy a = new SArmy(name);
+                SArmy a = new SArmy(getName());
                 a.fromString((String) ST.nextElement(), "%", this);
                 if (armies.size() < a.getID()) {
                     armies.add(a);
                 } else {
                     armies.add(a.getID(), a);
                 }
-                CampaignMain.cm.toUser("PL|SAD|" + a.toString(true, "%"), name, false);
+                CampaignMain.cm.toUser("PL|SAD|" + a.toString(true, "%"), getName(), false);
             }
 
             setMyHouse(CampaignMain.cm.getHouseFromPartialString(TokenReader.readString(ST), null));
@@ -3134,7 +3095,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 // technicians = TokenReader.readInt(ST);
                 int te = TokenReader.readInt(ST);
                 int mt = CampaignMain.cm.getIntegerConfig("MaxTechsToHire");
-                technicians = (mt != -1) ? Math.min(te, mt) : te;
+                setTechnicians((mt != -1) ? Math.min(te, mt) : te);
             }
 
             setRewardPoints(TokenReader.readInt(ST));
@@ -3177,8 +3138,8 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                         // allow servers to go back and forth using Bays as
                         // techs since bays are what techs are.
                         {
-                            if (technicians <= 0) {
-                                technicians = TokenReader.readInt(ST);
+                            if (getTechnicians() <= 0) {
+                                 setTechnicians(TokenReader.readInt(ST));
                             } else {
                                 TokenReader.readString(ST);
                             }
@@ -3190,7 +3151,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 }
             }// get rid of the 2 blanks
 
-            myLogo = TokenReader.readString(ST);
+            setLogo(TokenReader.readString(ST));
 
             // Stupid error with player logo if its blank it doesn't save
             // anything
@@ -3213,7 +3174,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 long time = TokenReader.readLong(ST);
 
                 if (passwd.trim().length() > 2) {
-                    setPassword(new MWPasswdRecord(name, access, passwd, time, ""));
+                    setPassword(new MWPasswdRecord(getName(), access, passwd, time, ""));
                 }
             } catch (Exception ex) {
                 // Issue with password loading just stop now.
@@ -3254,13 +3215,13 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 password.setAccess(IAuthenticator.GUEST);
             }
 
-            CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), name, false);
-            CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), name, false);
+            CampaignMain.cm.toUser("PL|SB|" + getTotalMekBays(), getName(), false);
+            CampaignMain.cm.toUser("PL|SF|" + getFreeBays(), getName(), false);
             if (CampaignMain.cm.isUsingAdvanceRepair()) {
 
                 if (!this.hasRepairingUnits()) {
-                    CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), name, false);
-                    CampaignMain.cm.toUser("PL|UAT|" + totalTechsToString(), name, false);
+                    CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), getName(), false);
+                    CampaignMain.cm.toUser("PL|UAT|" + totalTechsToString(), getName(), false);
                     updateAvailableTechs(totalTechsToString());// make
                     // sure
                     // techs
@@ -3268,8 +3229,8 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                     // in
                     // synch
                 } else {
-                    CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), name, false);
-                    CampaignMain.cm.toUser("PL|UAT|" + availableTechsToString(), name, false);
+                    CampaignMain.cm.toUser("PL|UTT|" + totalTechsToString(), getName(), false);
+                    CampaignMain.cm.toUser("PL|UAT|" + availableTechsToString(), getName(), false);
                 }
             }
 
@@ -3313,13 +3274,13 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         unit.setPilot(pilot);
 
         // send an update to the player
-        CampaignMain.cm.toUser("PL|UU|" + unit.getId() + " |" + unit.toString(true), name, false);
+        CampaignMain.cm.toUser("PL|UU|" + unit.getId() + " |" + unit.toString(true), getName(), false);
 
         // correct the BV of any army which contains the unit
         for (SArmy currA : armies) {
             if (currA.getUnit(unit.getId()) != null) {
                 currA.setBV(0);
-                CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), name, false);
+                CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), getName(), false);
                 CampaignMain.cm.getOpsManager().checkOperations(currA, true);// update
                 // legal
                 // operations
@@ -3502,7 +3463,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         }
 
         if (((elo > getRating()) || (exp > getExperience()))  && !CampaignMain.cm.getBooleanConfig("disableDemotionNotification") && !CampaignMain.cm.getBooleanConfig("autoPromoteSubFaction") ) {
-            StringBuilder message = new StringBuilder(name);
+            StringBuilder message = new StringBuilder(getName());
             message.append(" no longer meets the eligbility requirements for subfaction ");
             message.append(getSubFactionName());
             message.append(". He is eligible for the following:<br>");

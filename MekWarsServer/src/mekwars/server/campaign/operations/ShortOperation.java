@@ -1599,8 +1599,8 @@ public class ShortOperation implements Comparable<Object> {
         SPlayer firstDefPlayer = CampaignMain.cm.getPlayer(firstDefendName);
 
         // Players logo stores House logo as default if they don't have one.
-        String attackLogo = "<img height=\"150\" width=\"150\" src =\"" + firstAttPlayer.getMyLogo() + "\">";
-        String defendLogo = "<img height=\"150\" width=\"150\" src =\"" + firstDefPlayer.getMyLogo() + "\">";
+        String attackLogo = "<img height=\"150\" width=\"150\" src =\"" + firstAttPlayer.getLogo() + "\">";
+        String defendLogo = "<img height=\"150\" width=\"150\" src =\"" + firstDefPlayer.getLogo() + "\">";
 
         // save the logo string ...
         String logos = attackLogo + " vs " + defendLogo + "<br>";

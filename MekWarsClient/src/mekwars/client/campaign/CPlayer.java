@@ -53,12 +53,8 @@ public class CPlayer extends Player<CUnit> {
     public static final String DELIMITER = "#"; // delimiter for player strings
 
     private MWClient mwclient;
-    private String name;
     private String House;
-    private String myLogo = "";
 
-    private int experience;
-    private int money;
     private int bays;
     private int freeBays = 0;
     private int hangarPenalty;
@@ -87,9 +83,6 @@ public class CPlayer extends Player<CUnit> {
 
     public CPlayer(MWClient client) {
         mwclient = client;
-        name = "";
-        experience = 0;
-        money = 0;
         bays = 0;
         House = "";
         armies = new ArrayList<>();
@@ -170,9 +163,9 @@ public class CPlayer extends Player<CUnit> {
         armies.clear();
         clearUnits();
 
-        name = TokenReader.readString(ST);
+        setName(TokenReader.readString(ST));
 
-        money = TokenReader.readInt(ST);
+        setMoney(TokenReader.readInt(ST));
         setExperience(TokenReader.readInt(ST));
 
         Hangarcount = TokenReader.readInt(ST);
@@ -293,14 +286,6 @@ public class CPlayer extends Player<CUnit> {
         return armies;
     }
 
-    public void setExperience(int experience) {
-        this.experience = experience;
-    }
-
-    public void setMoney(int tmoney) {
-        money = tmoney;
-    }
-
     public void setBays(int tbays) {
         bays = tbays;
     }
@@ -351,30 +336,6 @@ public class CPlayer extends Player<CUnit> {
 
     public House getHouseFightingFor() {
         return houseFightingFor;
-    }
-
-    public void setLogo(String logo) {
-        myLogo = logo;
-    }
-
-    public String getLogo() {
-        return "<img height=\"140\" width=\"130\" src =\"" + myLogo + "\">";
-    }
-
-    public String getMyLogo() {
-        return myLogo;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getExperience() {
-        return experience;
-    }
-
-    public int getMoney() {
-        return money;
     }
 
     public int getBays() {

@@ -199,7 +199,7 @@ public class CPlayerPanel extends JScrollPane {
                 lblLogo.setBackground(mwclient.getGUIClient().getMainFrame().getBackground());
                 lblLogo.getDocument().remove(0,lblLogo.getDocument().getLength());
                 ((HTMLEditorKit) lblLogo.getEditorKit()).read(
-                    new StringReader(mwclient.getPlayer().getLogo()), lblLogo.getDocument(),0);
+                    new StringReader(mwclient.getPlayer().getLogoTag()), lblLogo.getDocument(),0);
                 lblLogo.setCaretPosition(lblLogo.getDocument().getLength());
             }catch(Exception ex){
                 LOGGER.error("Exception: ", ex);
