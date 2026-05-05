@@ -44,7 +44,7 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-@Entity(name = "planet")
+@Entity
 public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparable<Object> {
     private static final Logger LOGGER = LogManager.getLogger(SPlanet.class);
 
@@ -246,14 +246,14 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         // super(CampaignMain.cm.getData().getUnusedPlanetID(),"", new
         // Position(0,0), null);
         super();
-        setTimestamp(new Date(0));
+        setTimestamp(new Date());
         setOriginalOwner(CampaignMain.cm.getConfig("NewbieHouseName"));
     }
 
     public SPlanet(String name, Influences flu, int compProd, double xcoord, double ycoord) {
         super(name, new Position(xcoord, ycoord), flu);
         setComponentProduction(compProd);
-        setTimestamp(new Date(0));
+        setTimestamp(new Date());
         setOriginalOwner(CampaignMain.cm.getConfig("NewbieHouseName"));
     }
 

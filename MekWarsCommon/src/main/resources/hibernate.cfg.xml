@@ -8,6 +8,7 @@
 		<property name="hibernate.physical_naming_strategy">
 			    org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 		</property>
+		<property name="hibernate.jdbc.batch_size">10</property>
 
 
 		<property name="hibernate.hikari.minimumIdle">5</property>

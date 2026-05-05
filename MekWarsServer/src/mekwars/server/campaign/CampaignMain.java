@@ -18,6 +18,7 @@ import megamek.common.Mounted;
 import megamek.common.WeaponType;
 import megamek.common.options.IOption;
 
+import mekwars.common.util.HibernateUtil;
 import mekwars.common.AdvancedTerrain;
 import mekwars.common.CampaignData;
 import mekwars.common.Equipment;
@@ -1738,14 +1739,14 @@ public final class CampaignMain implements Serializable {
         data.addHouse(s);
     }
 
-    public void addPlanet(SPlanet p) {
-        if (p.getOriginalOwner().isEmpty()) {
-            if (p.getOwner() == null) {
-                p.setOriginalOwner(cm.getConfig("NewbieHouseName"));
+    public void addPlanet(SPlanet planet) {
+        if (planet.getOriginalOwner().isEmpty()) {
+            if (planet.getOwner() == null) {
+                planet.setOriginalOwner(cm.getConfig("NewbieHouseName"));
             }
-            p.setOriginalOwner(p.getOwner().getName());
+            planet.setOriginalOwner(planet.getOwner().getName());
         }
-        data.addPlanet(p);
+        HibernateUtil.inTransaction(session -> session.persist(planet));
     }
 
     public synchronized void userRoll(String text, String Username) {
@@ -3268,26 +3269,30 @@ public final class CampaignMain implements Serializable {
                 SPlanet[] planets = (SPlanet[]) getXStream().fromXML(planetsFile);
 
                 for (SPlanet planet : planets) {
-                    addPlanet(planet);
-                    for (House house : planet.getInfluence().getHouses()) {
-                        SHouse shouse = (SHouse) house;
-                        if (shouse == null) {
-                            LOGGER.error(
-                                    "Null faction found while loading Planets.xml. Planet: {}",
-                                    planet.getName());
-                            continue;
-                        }
+                    HibernateUtil.getInstance().inTransaction(session -> {
+                        LOGGER.info("Adding planet {}", planet);
+                        addPlanet(planet);
+                        for (House house : planet.getInfluence().getHouses()) {
+                            SHouse shouse = (SHouse) house;
+                            if (shouse == null) {
+                                LOGGER.error(
+                                        "Null faction found while loading Planets.xml. Planet: {}",
+                                        planet.getName());
+                                continue;
+                            }
 
-                        if (planet.getInfluence().getOwner() != null
-                                && shouse.getId() == planet.getInfluence().getOwner().intValue()) {
-                            shouse.addPlanet(planet);
-                        }
+                            if (planet.getInfluence().getOwner() != null
+                                    && shouse.getId() == planet.getInfluence().getOwner().intValue()) {
+                                shouse.addPlanet(planet);
+                            }
 
-                        int initialHouseRanking =
-                                shouse.getInitialHouseRanking()
-                                        + planet.getInfluence().getInfluence(shouse.getId());
-                        shouse.setInitialHouseRanking(initialHouseRanking);
-                    }
+                            int initialHouseRanking =
+                                    shouse.getInitialHouseRanking()
+                                            + planet.getInfluence().getInfluence(shouse.getId());
+                            shouse.setInitialHouseRanking(initialHouseRanking);
+                        }
+                        session.flush();
+                    });
                 }
             } catch (Exception ex) {
                 LOGGER.error("Error while reading Planet Data", ex);
@@ -3298,7 +3303,6 @@ public final class CampaignMain implements Serializable {
         // dir and files exist. read them.
         File[] planetFileList = planetFile.listFiles(filter);
         for (File planet : planetFileList) {
-
             try {
                 MekwarsFileReader dis = new MekwarsFileReader(planet);
                 String line = dis.readLine();

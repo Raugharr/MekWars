@@ -17,8 +17,8 @@
 
 package mekwars.common;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,7 +38,6 @@ import java.util.StringTokenizer;
  */
 @Entity
 public final class PlanetEnvironment {
-    // id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -131,6 +130,7 @@ public final class PlanetEnvironment {
 
     @Column(name = "max_cf")
     private int maxCF = 0;
+
     private int minFloors = 0;
     private int maxFloors = 0;
     private int cityDensity = 50;
@@ -208,7 +208,7 @@ public final class PlanetEnvironment {
         roadProbability = Integer.parseInt(ST.nextToken());
         riverProbability = Integer.parseInt(ST.nextToken());
         algorithm = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens()) id = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) setId(Integer.parseInt(ST.nextToken()));
         if (ST.hasMoreTokens()) swampMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens()) swampMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens()) swampMinHexes = Integer.parseInt(ST.nextToken());
@@ -309,7 +309,7 @@ public final class PlanetEnvironment {
         roadProbability = Integer.parseInt(ST.nextToken());
         riverProbability = Integer.parseInt(ST.nextToken());
         algorithm = Integer.parseInt(ST.nextToken());
-        if (ST.hasMoreTokens()) id = Integer.parseInt(ST.nextToken());
+        if (ST.hasMoreTokens()) setId(Integer.parseInt(ST.nextToken()));
         if (ST.hasMoreTokens()) swampMinSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens()) swampMaxSpots = Integer.parseInt(ST.nextToken());
         if (ST.hasMoreTokens()) swampMinHexes = Integer.parseInt(ST.nextToken());
@@ -570,7 +570,7 @@ public final class PlanetEnvironment {
         result += roadProbability + "$";
         result += riverProbability + "$";
         result += algorithm + "$";
-        result += id + "$";
+        result += getId() + "$";
         result += swampMinSpots + "$";
         result += swampMaxSpots + "$";
         result += swampMinHexes + "$";
@@ -681,7 +681,7 @@ public final class PlanetEnvironment {
         result += roadProbability + "$";
         result += riverProbability + "$";
         result += algorithm + "$";
-        result += id + "$";
+        result += getId() + "$";
         result += swampMinSpots + "$";
         result += swampMaxSpots + "$";
         result += swampMinHexes + "$";
@@ -1329,7 +1329,7 @@ public final class PlanetEnvironment {
 
     /** Writes as binary stream */
     public void binOut(BinWriter out) throws IOException {
-        out.println(id, "id");
+        out.println(getId(), "id");
         out.println(name, "name");
         out.println(craterProbability, "craterProbability");
         out.println(craterMinimum, "craterMinimum");
@@ -1423,7 +1423,7 @@ public final class PlanetEnvironment {
 
     /** Read from a binary stream */
     public void binIn(BinReader in, CampaignData data) throws IOException {
-        id = in.readInt("id");
+        setId(in.readInt("id"));
         name = in.readLine("name");
         craterProbability = in.readInt("craterProbability");
         craterMinimum = in.readInt("craterMinimum");

@@ -55,7 +55,6 @@ public class CampaignData implements TerrainProvider {
     public static CampaignData cd;
 
     private NamedEntityStore<House> factions = new NamedEntityStore<>();
-    private NamedEntityStore<Planet> planets = new NamedEntityStore<>();
     private NamedEntityStore<Terrain> terrains = new NamedEntityStore<>();
     private NamedEntityStore<AdvancedTerrain> advancedTerrains = new NamedEntityStore<>();
 
@@ -78,7 +77,7 @@ public class CampaignData implements TerrainProvider {
      * @return The requested Planet. This is usually a subclass of Planet.
      */
     public Planet getPlanet(int id) {
-        return planets.get(id);
+        return HibernateUtil.fromTransaction(session -> session.find(Planet.class, id));
     }
 
     /**
@@ -86,7 +85,11 @@ public class CampaignData implements TerrainProvider {
      * (if you have the choice).
      */
     public Planet getPlanetByName(String name) {
-        return planets.getByName(name);
+        return HibernateUtil.fromTransaction(
+                session ->
+                        session.createQuery("FROM Planet WHERE name = :name", Planet.class)
+                                .setParameter("name", name)
+                                .uniqueResult());
     }
 
     /**
@@ -101,9 +104,9 @@ public class CampaignData implements TerrainProvider {
         return null;
     }
 
-    /** Retrieves all planets. */
+    // /** Retrieves all planets. */
     public Collection<Planet> getAllPlanets() {
-        return planets.values();
+        return HibernateUtil.fromTransaction(session -> session.createQuery("FROM Planet", Planet.class).getResultList());
     }
 
     /**
@@ -114,8 +117,7 @@ public class CampaignData implements TerrainProvider {
      * @see You should use XStream to initialize CampaignData
      */
     public void addPlanet(Planet planet) {
-        HibernateUtil.inTransaction(session -> session.merge(planet));
-        planets.put(planet);
+        HibernateUtil.inTransaction(session -> session.persist(planet));
     }
 
     /**
@@ -124,19 +126,20 @@ public class CampaignData implements TerrainProvider {
      * @param id The id of the blown up planet.
      */
     public void removePlanet(int id) {
-        planets.remove(id);
+        HibernateUtil.inTransaction(session -> session.detach(session.find(Planet.class, id)));
     }
 
     /** Remove all planets. */
     public void clearPlanets() {
-        planets.clear();
+        HibernateUtil.inTransaction(
+                session -> session.createQuery("DELETE FROM Planet").executeUpdate());
     }
 
     public void savePlanets() {
         // HibernateUtil.inTransaction(
         //         session -> {
         //             for (Planet planet : getAllPlanets()) {
-        //                 session.merge(planet);
+        //                 session.persist(planet);
         //             }
         //         });
     }
@@ -147,8 +150,8 @@ public class CampaignData implements TerrainProvider {
      * @param id The id of the House.
      * @return The requested faction.
      */
-    public House getHouse(int ID) {
-        return factions.get(ID);
+    public House getHouse(int Id) {
+        return factions.get(Id);
     }
 
     /** Retrieves all factions. */
@@ -275,10 +278,10 @@ public class CampaignData implements TerrainProvider {
      * @see CampaignData.binOut()
      */
     public void binPlanetsOut(BinWriter out) throws IOException {
-        out.println(planets.size(), "planets.size");
-        for (Planet p : planets.values()) {
-            p.binOut(out);
-        }
+        // out.println(planets.size(), "planets.size");
+        // for (Planet p : planets.values()) {
+        //     p.binOut(out);
+        // }
     }
 
     /**
@@ -345,7 +348,7 @@ public class CampaignData implements TerrainProvider {
      */
     public void addTerrain(Terrain terrain) {
         terrains.put(terrain);
-        HibernateUtil.inTransaction(session -> session.merge(terrain));
+        HibernateUtil.inTransaction(session -> session.persist(terrain));
     }
 
     public Terrain getTerrainByName(String name) {
@@ -376,13 +379,15 @@ public class CampaignData implements TerrainProvider {
      */
     public void addAdvancedTerrain(AdvancedTerrain advancedTerrain) {
         advancedTerrains.put(advancedTerrain);
-        HibernateUtil.inTransaction(session -> session.merge(advancedTerrain));
+        HibernateUtil.inTransaction(session -> session.persist(advancedTerrain));
     }
 
     public AdvancedTerrain getAdvancedTerrainByName(String name) {
         return HibernateUtil.fromTransaction(
                 session ->
-                        session.createQuery("FROM AdvancedTerrain t WHERE t.name = :name", AdvancedTerrain.class)
+                        session.createQuery(
+                                        "FROM AdvancedTerrain t WHERE t.name = :name",
+                                        AdvancedTerrain.class)
                                 .setParameter("name", name)
                                 .uniqueResult());
     }

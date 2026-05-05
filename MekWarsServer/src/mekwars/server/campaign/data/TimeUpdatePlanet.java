@@ -17,7 +17,6 @@
 package mekwars.server.campaign.data;
 
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Transient;
 
 import java.util.Date;
 
@@ -49,7 +48,6 @@ public class TimeUpdatePlanet extends Planet {
     /**
      * @return Returns the timestamp which this data was last changed.
      */
-    @Transient
     public Date getLastChanged() {
         return updatedAt;
     }

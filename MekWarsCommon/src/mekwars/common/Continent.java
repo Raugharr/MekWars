@@ -34,11 +34,11 @@ import jakarta.persistence.Transient;
  */
 @Entity
 public class Continent {
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @ManyToOne
     @JoinColumn(name = "terrain_id")
     private Terrain environment;
 
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @ManyToOne 
     @JoinColumn(name = "advanced_terrain_id")
     private AdvancedTerrain advancedTerrain;
 

@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS planet (
 	y REAL NOT NULL,
 	dtype TEXT NOT NULL,
 	planet_environments_id INTEGER,
-	updated_at TEXT NOT NULL,
+	updated_at INTEGER NOT NULL,
 	-- created_at TEXT NOT NULL,
 	name TEXT NOT NULL,
 	description TEXT NOT NULL DEFAULT "",
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS planet_influence (
 	FOREIGN KEY(house_id) REFERENCES house(id)
 );
 
-CREATE UNIQUE INDEX planet_influence_planet_id_house_idindex ON planet_influence(planet_id, house_id);
+CREATE UNIQUE INDEX planet_influence_planet_id_house_id_index ON planet_influence(planet_id, house_id);
 
 CREATE TABLE IF NOT EXISTS planet_flag (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -264,27 +264,3 @@ CREATE TABLE IF NOT EXISTS unit_factory (
 );
 
 CREATE INDEX unit_factory_planet_id_index ON unit_factory(planet_id);
-
--- CREATE TABLE IF NOT EXISTS planet_environment_terrain (
--- 	id INTEGER PRIMARY KEY AUTOINCREMENT,
--- 	planet_environment_id INTEGER NOT NULL,
--- 	terrain_id INTEGER NOT NULL,
--- 	updated_at TEXT NOT NULL,
--- 	created_at TEXT NOT NULL,
--- 	FOREIGN KEY(planet_environment_id) REFERENCES planet_environment(id),
--- 	FOREIGN KEY(terrain_id) REFERENCES terrain(id)
--- );
-
--- CREATE UNIQUE INDEX planet_environment_terrain_index ON planet_environment_terrain(planet_environment_id, terrain_id);
-
--- CREATE TABLE IF NOT EXISTS advanced_terrain_terrain (
--- 	id INTEGER PRIMARY KEY AUTOINCREMENT,
--- 	advanced_terrain_id INTEGER NOT NULL,
--- 	terrain_id INTEGER NOT NULL,
--- 	updated_at TEXT NOT NULL,
--- 	created_at TEXT NOT NULL,
--- 	FOREIGN KEY(advanced_terrain_id) REFERENCES advanced_terrain(id),
--- 	FOREIGN KEY(terrain_id) REFERENCES terrain(id)
--- );
-
--- CREATE UNIQUE INDEX advaned_terrain_terrain_index ON advanced_terrain_terrain(advanced_terrain_id, terrain_id);
