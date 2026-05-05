@@ -265,7 +265,7 @@ public class OpsChickenThread extends Thread {
                 return;
 
             // return if the defender doesnt own the world
-            SHouse owner = target.getOwner();
+            SHouse owner = (SHouse) target.getOwner();
             if (owner == null || !target.getOwner().equals(defendH))
                 return;
 

@@ -763,8 +763,8 @@ public class  DefectCommand  implements Command {
         flu.put(house.getId(),planet.getConquestPoints());
         planet.getInfluence().setInfluence(flu);
         planet.setBaysProvided(CampaignMain.cm.getIntegerConfig("StartingPlanetBays"));
-        
-        planet.setOwner(null, planet.checkOwner(), true);
+
+        planet.setOwner(planet.checkOwner());
         house.setInitialHouseRanking(planet.getConquestPoints());
         
         planet.updated();

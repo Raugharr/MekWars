@@ -42,9 +42,6 @@ import org.apache.logging.log4j.Logger;
 public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparable<Object> {
     private static final Logger LOGGER = LogManager.getLogger(SPlanet.class);
 
-    private static final long serialVersionUID = -2266871107987235842L;
-    private SHouse owner = null;
-
     @Override
     public String toString() {
         SerializedMessage result = new SerializedMessage("#");
@@ -245,7 +242,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             }
         }
 
-        setOwner(null, checkOwner(), false);
+        setOwner(checkOwner());
 
         return s;
     }
@@ -396,52 +393,22 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         return result.toString();
     }
 
-    public SHouse checkOwner() {
+    public void setOwner(House newOwner) {
+        House oldOwner = getOwner();
+        SHouse snewOwner = (SHouse) newOwner;
 
-        if (getInfluence() == null) {
-            LOGGER.error("getINF == null Planet: " + getName());
-            return null;
+        if (snewOwner != null) {
+            snewOwner.removePlanet(this);
         }
 
-        SHouse h = null;
-        Integer houseID = this.getInfluence().getOwner();
-
-        if (houseID == null)
-            return null;
-
-        h = (SHouse) CampaignMain.cm.getData().getHouse(houseID);
-
-        if (this.getInfluence().getInfluence(houseID) < this.getMinPlanetOwnerShip())
-            return null;
-
-        return h;
-    }
-
-    public SHouse getOwner() {
-        /*
-         * Null owner is possible, but should be uncommon. Check the owner again to make sure the this is true before returning.
-         */
-        if (owner == null)
-            checkOwner();
-        return owner;
-    }
-
-    public void setOwner(SHouse oldOwner, SHouse newOwner, boolean sendHouseUpdates) {
-
-        if (owner != null)// this is the same as oldowner in most cases
-            owner.removePlanet(this);
-
-        if (newOwner != null) {
-            owner = newOwner;
-            owner.addPlanet(this);
+        if (snewOwner != null) {
+            super.setOwner(newOwner);
+            snewOwner.addPlanet(this);
         }
-
-        if (sendHouseUpdates)
-            this.sendHouseStatusUpdate(oldOwner, newOwner);
+        this.sendHouseStatusUpdate((SHouse) oldOwner, (SHouse) newOwner);
     }
 
     public int doGainInfluence(SHouse winner, SHouse loser, int amount, boolean adminExchange) {
-
         if (!winner.isConquerable() && !adminExchange)
             return 0;
 
@@ -453,9 +420,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             // loser.updated();
             this.updated();
 
-            SHouse oldOwner = owner;
-            SHouse newOwner = checkOwner();
-            setOwner(oldOwner, newOwner, true);
+            setOwner(checkOwner());
         }
         return infgain;
     }
@@ -464,12 +429,12 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
      * Helper method that sends updates to online players when a world changes hands.
      */
     private void sendHouseStatusUpdate(SHouse oldOwner, SHouse newOwner) {
-
         // don't do anything if there's no change is ownership
-        if (oldOwner != null && oldOwner.equals(newOwner))
+        if (oldOwner != null && oldOwner.equals(newOwner)) {
             return;
-        else if (oldOwner == null && newOwner == null)
+        } else if (oldOwner == null && newOwner == null) {
             return;
+        }
 
         // if the world has factories, build strings to send
         StringBuilder oldOwnerHSUpdates = new StringBuilder();
@@ -544,13 +509,14 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
     public String getNameAsColoredLink() {
 
         String colorString = "";
-        if (owner == null) {
+        if (getOwner() == null) {
             colorString = CampaignMain.cm.getConfig("DisputedPlanetColor");// malformed
             // gets
             // you
             // black?
-        } else
-            colorString = owner.getHouseColor();
+        } else {
+            colorString = getOwner().getHouseColor();
+        }
 
         String toReturn = "<font color=\"" + colorString + "\">" + getNameAsLink() + "</font>";
         return toReturn;
