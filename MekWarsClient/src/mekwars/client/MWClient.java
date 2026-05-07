@@ -101,6 +101,7 @@ import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.common.util.GameReport;
+import mekwars.common.util.HibernateUtil;
 import mekwars.common.util.ThreadManager;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
@@ -226,6 +227,14 @@ public final class MWClient extends GameHost implements IClient {
     public MWClient(GUIClientConfig config) {
         ProtCommands = new TreeMap<>();
         Config = config;
+        HibernateUtil.buildSessionFactory(
+                mekwars.common.PlanetEnvironment.class,
+                mekwars.common.PlanetEnvironments.class,
+                mekwars.common.Terrain.class,
+                mekwars.common.AdvancedTerrain.class,
+                mekwars.common.Continent.class,
+                mekwars.common.Planet.class,
+                mekwars.common.UnitFactory.class);
 
         try {
             RuntimeMXBean rt = ManagementFactory.getRuntimeMXBean();
@@ -1290,7 +1299,7 @@ public final class MWClient extends GameHost implements IClient {
      * @return Returns the data.
      */
     public CampaignData getData() {
-        if ((data == null)) {
+        if (data == null) {
 
             // Lets reload everything from the cache and then pull down and
             // planet changes

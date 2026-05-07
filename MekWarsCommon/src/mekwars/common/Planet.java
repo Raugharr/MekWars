@@ -23,12 +23,16 @@ package mekwars.common;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
@@ -51,6 +55,9 @@ import java.util.Map;
  * @author Helge Richter
  */
 @Entity
+@DiscriminatorColumn(name = "dtype")
+@DiscriminatorValue("Planet")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Planet implements Comparable<Object>, MWEntity {
     /**
      * Unique id of this planet. Mutable field (although it will not change, it has to be
@@ -130,6 +137,10 @@ public class Planet implements Comparable<Object>, MWEntity {
      * That way some planets are harder to conquer then others.
      */
     private int conquestPoints = 100;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "planet_id")
+    private List<Continent> continents = new ArrayList<>();
 
     // CONSTRUCTORS
     public Planet(String name, Position position, Influences influence) {
@@ -854,6 +865,36 @@ public class Planet implements Comparable<Object>, MWEntity {
             }
         }
         return result.toString();
+    }
+
+    /** Return the environment with the most probability to occour. */
+    public Continent getBiggestEnvironment() {
+        return continents.stream().max(Comparator.comparingInt(Continent::getSize)).orElse(null);
+    }
+
+    /** Return the total probability of all environments. */
+    public int getTotalEnivronmentPropabilities() {
+        return continents().stream().mapToInt(Continent::getSize).sum();
+    }
+
+    /** Returns a randomEnvironment based on the probability of each Environment. */
+    public Continent getRandomEnvironment(Random r) {
+        // use the skewer draw algorithm from Knuth.
+        int probs = getTotalEnivronmentPropabilities();
+        for (Continent pe : continents) {
+            if (r.nextInt(probs) < pe.getSize()) {
+
+                probs = pe.getEnvironment().getTotalEnvironmentProbabilities();
+                for (PlanetEnvironment env : pe.getEnvironment().getEnvironments()) {
+                    if (r.nextInt(probs) < env.getEnvironmentalProbability()) {
+                        return pe;
+                    }
+                    probs -= env.getEnvironmentalProbability();
+                }
+            }
+            probs -= pe.getSize();
+        }
+        return new Continent(0, null, null);
     }
 
     @Override

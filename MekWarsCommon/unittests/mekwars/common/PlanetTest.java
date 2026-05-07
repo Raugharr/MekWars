@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.Position;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +35,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Random;
 
-@ExtendWith(value = MockitoExtension.class)
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Unit tests for Planet business logic, specifically testing the getPlanetOwner method which
+ * determines which house has the highest influence on a planet.
+ */
+@ExtendWith(MockitoExtension.class)
 class PlanetTest {
     @Mock private Position position;
 

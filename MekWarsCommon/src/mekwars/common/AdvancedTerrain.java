@@ -217,6 +217,7 @@ public class AdvancedTerrain implements MWEntity {
     }
 
     public void binIn(BinReader in) throws IOException {
+        id = in.readInt("id");
         displayName = in.readLine("displayName");
         name = in.readLine("name");
         lowTemp = in.readInt("lowTemp");
@@ -254,6 +255,7 @@ public class AdvancedTerrain implements MWEntity {
     }
 
     public void binOut(BinWriter out) throws IOException {
+        out.println(id, "id");
         out.println(displayName, "displayName");
         out.println(name, "name");
         out.println(lowTemp, "lowTemp");

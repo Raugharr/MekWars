@@ -18,7 +18,6 @@ import megamek.common.Mounted;
 import megamek.common.WeaponType;
 import megamek.common.options.IOption;
 
-import mekwars.common.util.HibernateUtil;
 import mekwars.common.AdvancedTerrain;
 import mekwars.common.CampaignData;
 import mekwars.common.Equipment;
@@ -29,6 +28,7 @@ import mekwars.common.Terrain;
 import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.flags.PlayerFlags;
+import mekwars.common.util.HibernateUtil;
 import mekwars.common.util.MekwarsFileReader;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.commands.*;
@@ -127,6 +127,8 @@ import mekwars.server.util.MWPasswd;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -238,10 +240,27 @@ public final class CampaignMain implements Serializable {
         cm.loadTopUnitID();
 
         try {
-            loadTerrainData();
-            loadAdvancedTerrainData();
-            loadFactionData();
-            loadPlanetData();
+            long size =
+                    HibernateUtil.fromTransaction(
+                            session ->
+                                    session.createQuery("SELECT COUNT(*) FROM Terrain", Long.class)
+                                            .getSingleResult());
+
+            if (size == 0) {
+                Session session = HibernateUtil.getInstance().getCurrentSession();
+                Transaction transaction = session.beginTransaction();
+
+                try {
+                    loadTerrainData(session);
+                    loadAdvancedTerrainData(session);
+                    loadFactionData();
+                    loadPlanetData(session);
+                    transaction.commit();
+                } catch (Exception e) {
+                    transaction.rollback();
+                    throw e;
+                }
+            }
         } catch (IOException exception) {
             LOGGER.error("Unable to parse file", exception);
         }
@@ -1723,11 +1742,14 @@ public final class CampaignMain implements Serializable {
                     100);
             SPlanet newbieP = new SPlanet("Solaris VII", new Influences(solFlu), 0, -3, -2);
             if (data.getPlanetByName("Solaris VII") == null) {
-                addPlanet(newbieP);
-                CampaignMain.cm
-                        .getHouseFromPartialString(
-                                CampaignMain.cm.getConfig("NewbieHouseName"), null)
-                        .addPlanet(newbieP);
+                HibernateUtil.inTransaction(
+                        session -> {
+                            addPlanet(session, newbieP);
+                            CampaignMain.cm
+                                    .getHouseFromPartialString(
+                                            CampaignMain.cm.getConfig("NewbieHouseName"), null)
+                                    .addPlanet(newbieP);
+                        });
             }
         }
 
@@ -1739,14 +1761,14 @@ public final class CampaignMain implements Serializable {
         data.addHouse(s);
     }
 
-    public void addPlanet(SPlanet planet) {
+    public void addPlanet(Session session, SPlanet planet) {
         if (planet.getOriginalOwner().isEmpty()) {
             if (planet.getOwner() == null) {
                 planet.setOriginalOwner(cm.getConfig("NewbieHouseName"));
             }
             planet.setOriginalOwner(planet.getOwner().getName());
         }
-        HibernateUtil.inTransaction(session -> session.persist(planet));
+        session.persist(planet);
     }
 
     public synchronized void userRoll(String text, String Username) {
@@ -3021,13 +3043,13 @@ public final class CampaignMain implements Serializable {
      *
      * @throws IOException When the terrain file cannot be opened.
      */
-    public void loadTerrainData() throws IOException {
+    public void loadTerrainData(Session session) throws IOException {
         Path path = FileSystem.getInstance().getTerrain();
 
         try (InputStream inputStream = Files.newInputStream(path)) {
             Terrain[] terrainList = (Terrain[]) getXStream().fromXML(inputStream);
             for (Terrain terrain : terrainList) {
-                getData().addTerrain(terrain);
+                session.persist(terrain);
             }
         }
     }
@@ -3037,14 +3059,14 @@ public final class CampaignMain implements Serializable {
      *
      * @throws IOException When the advanced terrain file cannot be opened.
      */
-    public void loadAdvancedTerrainData() throws IOException {
+    public void loadAdvancedTerrainData(Session session) throws IOException {
         Path path = FileSystem.getInstance().getAdvancedTerrain();
 
         try (InputStream inputStream = Files.newInputStream(path)) {
             AdvancedTerrain[] advancedTerrainList =
                     (AdvancedTerrain[]) getXStream().fromXML(inputStream);
             for (AdvancedTerrain advancedTerrain : advancedTerrainList) {
-                getData().addAdvancedTerrain(advancedTerrain);
+                session.persist(advancedTerrain);
             }
         }
     }
@@ -3256,7 +3278,7 @@ public final class CampaignMain implements Serializable {
         }
     }
 
-    public void loadPlanetData() {
+    public void loadPlanetData(Session session) {
         loadPlanetOpFlags();
 
         File planetFile = new File("./campaign/planets");
@@ -3269,30 +3291,27 @@ public final class CampaignMain implements Serializable {
                 SPlanet[] planets = (SPlanet[]) getXStream().fromXML(planetsFile);
 
                 for (SPlanet planet : planets) {
-                    HibernateUtil.getInstance().inTransaction(session -> {
-                        LOGGER.info("Adding planet {}", planet);
-                        addPlanet(planet);
-                        for (House house : planet.getInfluence().getHouses()) {
-                            SHouse shouse = (SHouse) house;
-                            if (shouse == null) {
-                                LOGGER.error(
-                                        "Null faction found while loading Planets.xml. Planet: {}",
-                                        planet.getName());
-                                continue;
-                            }
-
-                            if (planet.getInfluence().getOwner() != null
-                                    && shouse.getId() == planet.getInfluence().getOwner().intValue()) {
-                                shouse.addPlanet(planet);
-                            }
-
-                            int initialHouseRanking =
-                                    shouse.getInitialHouseRanking()
-                                            + planet.getInfluence().getInfluence(shouse.getId());
-                            shouse.setInitialHouseRanking(initialHouseRanking);
+                    LOGGER.info("Adding planet {}", planet);
+                    addPlanet(session, planet);
+                    for (House house : planet.getInfluence().getHouses()) {
+                        SHouse shouse = (SHouse) house;
+                        if (shouse == null) {
+                            LOGGER.error(
+                                    "Null faction found while loading" + " Planets.xml. Planet: {}",
+                                    planet.getName());
+                            continue;
                         }
-                        session.flush();
-                    });
+
+                        if (planet.getInfluence().getOwner() != null
+                                && shouse.getId() == planet.getInfluence().getOwner().intValue()) {
+                            shouse.addPlanet(planet);
+                        }
+
+                        int initialHouseRanking =
+                                shouse.getInitialHouseRanking()
+                                        + planet.getInfluence().getInfluence(shouse.getId());
+                        shouse.setInitialHouseRanking(initialHouseRanking);
+                    }
                 }
             } catch (Exception ex) {
                 LOGGER.error("Error while reading Planet Data", ex);
@@ -3312,7 +3331,7 @@ public final class CampaignMain implements Serializable {
                 }
                 p = new SPlanet();
                 p.fromString(line, r, data);
-                addPlanet(p);
+                addPlanet(session, p);
                 dis.close();
             } catch (Exception ex) {
                 LOGGER.error("Unable to load " + planet.getName());

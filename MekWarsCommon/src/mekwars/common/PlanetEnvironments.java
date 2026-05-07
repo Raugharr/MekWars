@@ -129,25 +129,30 @@ public class PlanetEnvironments {
 
     /** Writes as binary stream */
     public void binOut(BinWriter out) {
+        out.println(id, "id");
         out.println(continents.size(), "terrain.size");
-        for (Continent C : continents) {
-            out.println(C.getSize(), "size");
-            out.println(C.getEnvironment().getId(), "id");
-            out.println(C.getAdvancedTerrain().getId(), "aid");
+        for (Continent continent : continents) {
+            out.println(continent.getSize(), "size");
+            out.println(continent.getId(), "continent_id");
+            out.println(continent.getEnvironment().getId(), "terrain_id");
+            out.println(continent.getAdvancedTerrain().getId(), "advanced_terrain_id");
         }
     }
 
     /** Read from a binary stream */
     public void binIn(BinReader in, CampaignData data) throws IOException {
+        id = in.readInt("id");
         int size = in.readInt("terrain.size");
         for (int i = 0; i < size; ++i) {
             int percent = in.readInt("size");
-            int id = in.readInt("id");
-            int aid = in.readInt("aid");
-            Terrain T = data.getTerrain(id);
-            AdvancedTerrain AT = data.getAdvancedTerrain(aid);
-            Continent C = new Continent(percent, T, AT);
-            add(C);
+            int continent_id = in.readInt("continent_id");
+            int terrainId = in.readInt("terrain_id");
+            int advancedTerrainId = in.readInt("advanced_terrain_id");
+            Terrain terrain = data.getTerrain(terrainId);
+            AdvancedTerrain advancedTerrain = data.getAdvancedTerrain(advancedTerrainId);
+            Continent continent = new Continent(percent, terrain, advancedTerrain);
+            continent.setId(continent_id);
+            add(continent);
         }
     }
 }

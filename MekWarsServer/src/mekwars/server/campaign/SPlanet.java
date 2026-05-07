@@ -15,6 +15,7 @@
 
 package mekwars.server.campaign;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
 
@@ -45,11 +46,11 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 @Entity
+@DiscriminatorValue("SPlanet")
 public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparable<Object> {
     private static final Logger LOGGER = LogManager.getLogger(SPlanet.class);
 
-    @Transient
-    private SHouse owner = null;
+    @Transient private SHouse owner = null;
 
     @Override
     public String toString() {
@@ -488,7 +489,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
     @Transient
     public UnitFactory getRandomUnitFactory() {
         if (getUnitFactories().size() == 0) return null;
-    
+
         return getUnitFactories().get(CampaignMain.cm.getRandomNumber(getUnitFactories().size()));
     }
 }

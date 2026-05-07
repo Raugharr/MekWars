@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,19 +22,21 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
 import mekwars.common.AdvancedTerrain;
 import mekwars.common.Continent;
 import mekwars.common.Terrain;
+import mekwars.common.util.HibernateUtil;
 
-import mekwars.server.campaign.CampaignMain;
+import org.hibernate.Session;
 
 public class ContinentConverter implements Converter {
     public boolean canConvert(Class clazz) {
         return clazz.equals(Continent.class);
     }
 
-    public void marshal(Object source, HierarchicalStreamWriter writer,
-            MarshallingContext context) {
+    public void marshal(
+            Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         Continent continent = (Continent) source;
 
         writer.startNode("size");
@@ -67,14 +69,26 @@ public class ContinentConverter implements Converter {
             }
             reader.moveUp();
         }
-        
-        Terrain terrain = CampaignMain.cm.getData().getTerrainByName(terrainName);
+
+        Session session = HibernateUtil.getInstance().getCurrentSession();
+        Terrain terrain =
+                session.createQuery("FROM Terrain WHERE name = :name", Terrain.class)
+                        .setParameter("name", terrainName)
+                        .uniqueResult();
         if (terrain == null) {
             throw new ConversionException("terrain '" + terrainName + "' not found");
         }
-        AdvancedTerrain advancedTerrain = CampaignMain.cm.getData().getAdvancedTerrainByName(advancedTerrainName);
+        // AdvancedTerrain advancedTerrain =
+        // CampaignMain.cm.getData().getAdvancedTerrainByName(advancedTerrainName);
+        //
+        AdvancedTerrain advancedTerrain =
+                session.createQuery(
+                                "FROM AdvancedTerrain WHERE name = :name", AdvancedTerrain.class)
+                        .setParameter("name", advancedTerrainName)
+                        .uniqueResult();
         if (advancedTerrain == null) {
-            throw new ConversionException("advancedTerrain '" + advancedTerrainName + "' not found");
+            throw new ConversionException(
+                    "advancedTerrain '" + advancedTerrainName + "' not found");
         }
         return new Continent(size, terrain, advancedTerrain);
     }

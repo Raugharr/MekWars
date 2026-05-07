@@ -6,10 +6,10 @@
 		<property name="hibernate.hbm2ddl.auto">none</property>
 		<property name="current_session_context_class">thread</property>
 		<property name="hibernate.physical_naming_strategy">
-			    org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+			org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 		</property>
 		<property name="hibernate.jdbc.batch_size">10</property>
-
+		<property name="hibernate.default_batch_fetch_size">25</property>
 
 		<property name="hibernate.hikari.minimumIdle">5</property>
 		<property name="hibernate.hikari.maximumPoolSize">20</property>

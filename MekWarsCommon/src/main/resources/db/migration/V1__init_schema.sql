@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS planet (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	x REAL NOT NULL,
 	y REAL NOT NULL,
-	dtype TEXT NOT NULL,
+	dtype TEXT NOT NULL DEFAULT "Planet",
 	planet_environments_id INTEGER,
-	updated_at INTEGER NOT NULL,
+	updated_at INTEGER, -- NOT NULL,
 	-- created_at TEXT NOT NULL,
 	name TEXT NOT NULL,
 	description TEXT NOT NULL DEFAULT "",
@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS terrain (
 
 CREATE TABLE IF NOT EXISTS continent (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	planet_id INTEGER,
+	planet_environment_id INTEGER NOT NULL,
 	terrain_id INTEGER NOT NULL,
 	advanced_terrain_id INTEGER NOT NULL,
 	-- updated_at TEXT NOT NULL,
