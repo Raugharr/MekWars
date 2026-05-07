@@ -90,10 +90,10 @@ public class  RangeCommand  implements Command {
 	
 						SHouse owner = p.getOwner();
 						if (facWorldsOnly && owner.equals(targetfaction) && p.getFactoryCount() > 0) {
-							result += "<font color=\"" + p.getOwner().getHouseColor() + "\">" +  p.getShortDescription(true) + "</font>" + "<br>";							
+							result += "<font color=\"" + p.getOwner().getHouseColor() + "\">" +  p.getShortDescription() + "</font>" + "<br>";							
 						} else {//!facworldsonly, do normal faction-specific check
 							if (owner != null)
-								result += "<font color=\"" + p.getOwner().getHouseColor() + "\">" +  p.getShortDescription(true) + "</font>" + "<br>";
+								result += "<font color=\"" + p.getOwner().getHouseColor() + "\">" +  p.getShortDescription() + "</font>" + "<br>";
 							else
 								result += p.getSmallStatus(true) + "<br>";
 						}
@@ -102,7 +102,7 @@ public class  RangeCommand  implements Command {
 						if (p.getInfluence().getInfluence(targetfaction.getId()) > 0) {
 							SHouse owner = p.getOwner();
 							if (owner != null)
-								result += "<font color=\"" + p.getOwner().getHouseColor() + "\">" + p.getShortDescription(true) + "</font>" + "<br>";
+								result += "<font color=\"" + p.getOwner().getHouseColor() + "\">" + p.getShortDescription() + "</font>" + "<br>";
 							else
 								result += p.getSmallStatus(true)  + "<br>";
 						}

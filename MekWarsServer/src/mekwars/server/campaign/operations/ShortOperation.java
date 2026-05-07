@@ -229,8 +229,8 @@ public class ShortOperation implements Comparable<Object> {
         losers = new TreeMap<String, SPlayer>();
 
         // fetch an environment to play in
-        playContinent = targetWorld.getEnvironments().getRandomEnvironment(CampaignMain.cm.getR());
-        playEnvironment = playContinent.getEnvironment().getEnvironments().firstElement();
+        playContinent = targetWorld.getRandomContinent(CampaignMain.cm.getR());
+        playEnvironment = playContinent.getEnvironment().getEnvironments().get(0);
 
 
         // initiator is always an attacker, so add

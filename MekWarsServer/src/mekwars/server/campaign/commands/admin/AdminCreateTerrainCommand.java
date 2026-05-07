@@ -54,11 +54,11 @@ public class AdminCreateTerrainCommand implements Command {
 				CampaignMain.cm.toUser("Planet not found:",Username,true);
 				return;
 			}
-			
+
 			Continent cont = new Continent(chance, CampaignMain.cm.getData().getTerrainByName(terraintype), CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainType));
-			p.getEnvironments().add(cont);
+			p.addContinent(cont);
 			p.updated();
-			
+
 			//server.MWLogger.modLog(Username + " added terrain to " + p.getName() + " (" + terraintype + ").");
 			CampaignMain.cm.toUser("Terrain added to " + p.getName() + "(" + terraintype + "-" + advTerrainType + ").",Username,true);
 			CampaignMain.cm.doSendModMail("NOTE",Username + " added terrain to planet " + p.getName() + "(" + terraintype + "-" + advTerrainType + ").");

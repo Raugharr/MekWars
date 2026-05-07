@@ -83,11 +83,11 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         }
 
         result.append(houseString.toString());
-        result.append(getEnvironments().size());
-        for (Continent t : getEnvironments().toArray()) {
+        result.append(getContinents().size());
+        for (Continent t : getContinents()) {
             result.append(t.getSize());
             result.append(t.getEnvironment().getName());
-            
+
             if(t.getAdvancedTerrain() != null)
             	if(t.getAdvancedTerrain().getName() != null)
             result.append(t.getAdvancedTerrain().getName());
@@ -194,9 +194,9 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             
             if (planetWeather == null)
             	planetWeather  = data.getAdvancedTerrain(0);
-            
-            Continent PE = new Continent(size, planetEnvironment, planetWeather);                       
-            getEnvironments().add(PE);
+
+            Continent PE = new Continent(size, planetEnvironment, planetWeather);
+            addContinent(PE);
         }
 
         setDescription(TokenReader.readString(ST));
@@ -505,30 +505,35 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
 
     }
 
-    public String getShortDescription(boolean withTerrain) {
+    public String getShortDescription() {
         StringBuilder result = new StringBuilder(getName());
-        if (withTerrain) {
-            Continent p = getEnvironments().getBiggestEnvironment();
-            Terrain pe = p.getEnvironment();
-            AdvancedTerrain ape = p.getAdvancedTerrain();
-            if (pe != null && pe.getEnvironments().size() > 0) {
-                result.append(" " + pe.getEnvironments().get(0).toImageDescription());
-                result.append(" " + pe.getEnvironments().get(0).getName());
-            }
-            if (ape != null )
-                result.append(" " + ape.WeatherForcast());
-            	
+        Continent biggestContinent = getBiggestContinent();
+        Terrain terrain = null;
+        AdvancedTerrain advancedTerrain = null;
 
-            if (this.getUnitFactories().size() > 0) {
-                for (int i = 0; i < this.getUnitFactories().size(); i++) {
-                    SUnitFactory MF = ((SUnitFactory) this.getUnitFactories().get(i));
-                    result.append(MF.getIcons());
-                }
+        if (biggestContinent != null) {
+            terrain = biggestContinent.getEnvironment();
+            advancedTerrain = biggestContinent.getAdvancedTerrain();
+        }
+
+        if (terrain != null && terrain.getEnvironments().size() > 0) {
+            result.append(" " + terrain.getEnvironments().get(0).toImageDescription());
+            result.append(" " + terrain.getEnvironments().get(0).getName());
+        }
+        if (advancedTerrain != null) {
+            result.append(" " + advancedTerrain.WeatherForcast());
+        }
+
+        if (this.getUnitFactories().size() > 0) {
+            for (int i = 0; i < this.getUnitFactories().size(); i++) {
+                SUnitFactory MF = ((SUnitFactory) this.getUnitFactories().get(i));
+                result.append(MF.getIcons());
             }
-            if (pe != null && getEnvironments().getTotalEnivronmentPropabilities() > 0)
-                result.append(" (" + Math.round((double) p.getSize() * 100 / getEnvironments().getTotalEnivronmentPropabilities()) + "% correct)");
-            else
-                result.append(" (100% correct)");
+        }
+        if (terrain != null && getTotalEnvironmentProbabilities() > 0) {
+            result.append(" (" + Math.round((double) biggestContinent.getSize() * 100 / getTotalEnvironmentProbabilities()) + "% correct)");
+        } else {
+            result.append(" (100% correct)");
         }
         return result.toString();
     }
