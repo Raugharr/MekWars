@@ -26,17 +26,15 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.ArrayList;
+import java.util.List;
 
 import mekwars.common.AdvancedTerrain;
-import mekwars.common.CampaignData;
 import mekwars.common.Continent;
 import mekwars.common.Influences;
-import mekwars.common.PlanetEnvironments;
 import mekwars.common.UnitFactory;
 import gd.xml.ParseException;
 import gd.xml.XMLParser;
 import gd.xml.XMLResponder;
-import mekwars.common.campaign.CampaignOptions;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
@@ -75,7 +73,7 @@ public class XMLPlanetDataParser implements XMLResponder {
     private String filename;
     private String prefix;
     private String Description = "";
-    private PlanetEnvironments PlanEnv = new PlanetEnvironments();
+    private List<Continent> continents = new ArrayList<>();
     private AdvancedTerrain AdvTerr = null;
     public TreeMap<Integer, AdvancedTerrain> AdvTerrTreeMap = new TreeMap<Integer, AdvancedTerrain>();
     private TreeMap<String, String> OpFlags = new TreeMap<String, String>();
@@ -251,7 +249,7 @@ public class XMLPlanetDataParser implements XMLResponder {
                     + "(" + advTerrainName +"[" + CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainName).getId() + "])");
             
             Continent cont = new Continent(terrainProb, CampaignMain.cm.getData().getTerrainByName(terrainName), CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainName));
-            PlanEnv.add(cont);
+            continents.add(cont);
             terrainProb = 0;
             terrainName = "";
             advTerrainName = "";
@@ -273,7 +271,9 @@ public class XMLPlanetDataParser implements XMLResponder {
                 MF.setPlanet(p);
             }
             p.setUnitFactories(unitFactories);
-            p.setEnvironments(PlanEnv);
+            for (Continent continent : continents) {
+                p.addContinent(continent);
+            }
             p.setDescription(Description);
             p.setBaysProvided(Warehousesize);
             LOGGER.info("Influence: " + Influence);
@@ -306,7 +306,7 @@ public class XMLPlanetDataParser implements XMLResponder {
             OpFlags.clear();
             unitFactories = new ArrayList<UnitFactory>();
             Description = "";
-            PlanEnv = new PlanetEnvironments();
+            continents = new ArrayList<Continent>();
             Warehousesize = 0;
             CompProduction = 0;
             hasAdvancedTerrain = false;

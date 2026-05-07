@@ -29,17 +29,8 @@ public class Continent {
 	private int size = 1;
 	private int id = -1;
 	
-	/*public Continent(int Size, Terrain env) {
-		this.size = Size;
-		environment = env;
-		advTerrain = new AdvancedTerrain();
-		advTerrain.setName("none");
-		advTerrain.setId(0);
-	}
-	*/
-	
-	public Continent(int Size, Terrain env, AdvancedTerrain advTerr) {
-		this.size = Size;
+	public Continent(int size, Terrain env, AdvancedTerrain advTerr) {
+		this.size = size;
 		environment = env;
 		advTerrain = advTerr;
 	}
@@ -69,12 +60,15 @@ public class Continent {
 		if (!(o instanceof Continent))
 			return false;
 		Continent cont = (Continent)o;
-		if (cont.getSize() != getSize())
+		if (cont.getSize() != getSize()) {
 			return false;
-		if (cont.getEnvironment().equals(getEnvironment()))			
+        }
+		if (!cont.getEnvironment().equals(getEnvironment())) {
 			return false;
-		if (cont.getAdvancedTerrain().equals(getAdvancedTerrain()))
+        }
+		if (!cont.getAdvancedTerrain().equals(getAdvancedTerrain())) {
 			return false;
+        }
 		return true;
 	}
 	/**
@@ -109,11 +103,4 @@ public class Continent {
 	public String getDropBoxName() {
 		return getEnvironment().getName() + "(" + getAdvancedTerrain().getName() + ") %" + getSize();        
 	}
-  /* public void binOut(TreeWriter out)
-   {
-       out.write(getEnvironment().getId(), "envID");
-       out.write(getSize(), "size");
-   }
-   public void binIn(TreeReader in, CampaignData data){
-   }*/
 }

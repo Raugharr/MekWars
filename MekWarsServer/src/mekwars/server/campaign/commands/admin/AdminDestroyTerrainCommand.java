@@ -51,10 +51,10 @@ public class AdminDestroyTerrainCommand implements Command {
 				CampaignMain.cm.toUser("Planet not found:",Username,true);
 				return;
 			}
-			
-			p.getEnvironments().remove(terrain);
+
+			p.removeContinent(terrain);
 			p.updated();
-	
+
 			//server.MWLogger.modLog(Username + " removed terrain from " + p.getName() + "(#" + placeToDelete + ").");
 			CampaignMain.cm.doSendModMail("NOTE",Username + " removed terrain from " + p.getName() + "(" + terrain + ").");
 		}
