@@ -19,9 +19,12 @@ sourceSets {
 }
 
 dependencies {
-  implementation "org.hibernate.orm:hibernate-platform:6.6.49.Final"
+  implementation 'org.hibernate.orm:hibernate-platform:6.6.49.Final'
   implementation 'org.hibernate.orm:hibernate-community-dialects:6.6.49.Final'
+  implementation 'org.hibernate.common:hibernate-commons-annotations:6.0.6.Final'
   implementation 'jakarta.transaction:jakarta.transaction-api'
+  implementation 'org.hibernate:hibernate-hikaricp:6.6.49.Final'
+  implementation 'com.zaxxer:HikariCP:7.0.2'
   implementation 'org.xerial:sqlite-jdbc:3.53.0.0'
   implementation 'org.flywaydb:flyway-core:9.22.3'
 }

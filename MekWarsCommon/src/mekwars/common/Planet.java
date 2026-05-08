@@ -20,6 +20,7 @@
  */
 package mekwars.common;
 
+import jakarta.persistence.Transient;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -77,7 +78,9 @@ public class Planet implements Comparable<Object>, MWEntity {
     private List<UnitFactory> unitFactories = new ArrayList<UnitFactory>();
 
     /** The environment modifiers for the planet. */
-    @OneToOne private PlanetEnvironments environments = new PlanetEnvironments();
+    // @OneToOne
+    // @JoinColumn(name = "planet_environments_id")
+    private PlanetEnvironments environments = new PlanetEnvironments();
 
     /** A human readable description of the planet. */
     private String description = "";
@@ -117,10 +120,6 @@ public class Planet implements Comparable<Object>, MWEntity {
     /*
      * This allows SO's to set flags for planets and to be used in ops.
      */
-    @ElementCollection
-    @CollectionTable(name = "planet_flags", joinColumns = @JoinColumn(name = "planet_id"))
-    @MapKeyColumn(name = "flag_key")
-    @Column(name = "flag_value")
     private Map<String, String> planetFlags = new HashMap<String, String>();
 
     /*
@@ -280,6 +279,8 @@ public class Planet implements Comparable<Object>, MWEntity {
     /**
      * @return Returns the continents.
      */
+    @OneToOne
+    @JoinColumn(name = "planet_environments_id")
     public List<Continent> getContinents() {
         return continents;
     }
@@ -793,6 +794,10 @@ public class Planet implements Comparable<Object>, MWEntity {
         return originalOwner;
     }
 
+    @ElementCollection
+    @CollectionTable(name = "planet_flags", joinColumns = @JoinColumn(name = "planet_id"))
+    @MapKeyColumn(name = "flag_key")
+    @Column(name = "flag_value")
     public Map<String, String> getPlanetFlags() {
         return planetFlags;
     }

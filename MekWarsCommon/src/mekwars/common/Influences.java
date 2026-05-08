@@ -22,6 +22,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.Transient;
 
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
@@ -59,10 +60,6 @@ public class Influences implements MutableSerializable {
     @CollectionTable(name = "planet_influence", joinColumns = @JoinColumn(name = "planet_id"))
     @MapKeyColumn(name = "house_id")
     @Column(name = "influence")
-    // @OneToMany
-    // @JoinColumn(name = "planet_id")
-    // @MapKeyColumn(name = "house_id")
-    // @Column(name = "influence")
     private Map<Integer, Integer> influences = new HashMap<Integer, Integer>();
 
     /**
@@ -198,8 +195,11 @@ public class Influences implements MutableSerializable {
     }
 
     /** Returns the present factions. */
+    @Transient
+    @ElementCollection
     public Set<House> getHouses() {
         Set<House> result = new HashSet<House>();
+
         for (int factionId : influences.keySet()) {
             result.add(CampaignData.cd.getHouse(factionId));
         }
