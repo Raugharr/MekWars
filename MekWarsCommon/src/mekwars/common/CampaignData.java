@@ -107,18 +107,8 @@ public class CampaignData implements TerrainProvider {
             for (int i = 0; i < size; ++i) {
                 Planet planet = new Planet(in, this);
 
-                session.upsert(planet);
-                for (Continent continent : planet.getContinents()) {
-                    session.insert(continent);
-                }
-
-                for (UnitFactory unitFactory : planet.getUnitFactories()) {
-                    session.upsert(unitFactory);
-                }
-
-                for (Influences influences : planet.getInfluence()) {
-                    session.upsert(influences);
-                }
+                planet.sync(session);
+                // session.flush();
             }
             transaction.commit();
             session.close();
@@ -140,7 +130,11 @@ public class CampaignData implements TerrainProvider {
      * @return The requested Planet. This is usually a subclass of Planet.
      */
     public Planet getPlanet(int id) {
-        return HibernateUtil.fromTransaction(session -> session.find(Planet.class, id));
+        return HibernateUtil.fromTransaction(
+                session -> {
+                    session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
+                    return session.find(Planet.class, id);
+                });
     }
 
     /**
@@ -149,10 +143,12 @@ public class CampaignData implements TerrainProvider {
      */
     public Planet getPlanetByName(String name) {
         return HibernateUtil.fromTransaction(
-                session ->
-                        session.createQuery("FROM Planet WHERE name = :name", Planet.class)
-                                .setParameter("name", name)
-                                .uniqueResult());
+                session -> {
+                    session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
+                    return session.createQuery("FROM Planet WHERE name = :name", Planet.class)
+                            .setParameter("name", name)
+                            .uniqueResult();
+                });
     }
 
     /**
@@ -170,7 +166,10 @@ public class CampaignData implements TerrainProvider {
     // /** Retrieves all planets. */
     public Collection<Planet> getAllPlanets() {
         return HibernateUtil.fromTransaction(
-                session -> session.createQuery("FROM Planet", Planet.class).getResultList());
+                session -> {
+                    session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
+                    return session.createQuery("FROM Planet", Planet.class).getResultList();
+                });
     }
 
     /**

@@ -269,8 +269,8 @@ public class XMLPlanetDataParser implements XMLResponder {
             for (int i = 0; i < unitFactories.size(); i++) {
                 SUnitFactory MF = (SUnitFactory) unitFactories.get(i);
                 MF.setPlanet(p);
+                p.addUnitFactory(MF);
             }
-            p.setUnitFactories(unitFactories);
             for (Continent continent : continents) {
                 p.addContinent(continent);
             }

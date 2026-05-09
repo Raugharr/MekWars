@@ -23,8 +23,6 @@ package mekwars.common;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -36,27 +34,38 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Transient;
 
 import mekwars.common.entities.MWEntity;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.Position;
 
+import org.hibernate.StatelessSession;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
+import org.hibernate.annotations.FetchProfileOverride;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.processing.CheckHQL;
+import org.hibernate.query.MutationQuery;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author Helge Richter
  */
+@CheckHQL
+@NamedQuery(name = "Planet.findByName", query = "FROM Planet WHERE name = :name")
+@NamedQuery(name = "Planet.findLikeName", query = "FROM Planet WHERE LOWER(name) LIKE LOWER(:name)")
+@FetchProfile(name = "EagerPlanet")
 @Entity
-@DiscriminatorColumn(name = "dtype")
-@DiscriminatorValue("Planet")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Planet implements Comparable<Object>, MWEntity {
     /**
@@ -81,6 +90,7 @@ public class Planet implements Comparable<Object>, MWEntity {
      */
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "planet_id")
+    @FetchProfileOverride(profile = Planet_.PROFILE_EAGER_PLANET, mode = FetchMode.JOIN)
     private List<UnitFactory> unitFactories = new ArrayList<UnitFactory>();
 
     /** A human readable description of the planet. */
@@ -96,7 +106,9 @@ public class Planet implements Comparable<Object>, MWEntity {
     private int componentProduction = 0;
 
     /** The influence each faction has on this planet. Mutable field (has to be transfered) */
-    @Embedded private Influences influence;
+    @FetchProfileOverride(profile = Planet_.PROFILE_EAGER_PLANET, mode = FetchMode.JOIN)
+    @Embedded
+    private Influences influence;
 
     // size
 
@@ -125,6 +137,7 @@ public class Planet implements Comparable<Object>, MWEntity {
     @CollectionTable(name = "planet_flag", joinColumns = @JoinColumn(name = "planet_id"))
     @MapKeyColumn(name = "name")
     @Column(name = "value")
+    @FetchProfileOverride(profile = Planet_.PROFILE_EAGER_PLANET, mode = FetchMode.JOIN)
     private Map<String, String> planetFlags = new HashMap<String, String>();
 
     /*
@@ -134,6 +147,7 @@ public class Planet implements Comparable<Object>, MWEntity {
     private int conquestPoints = 100;
 
     @OneToMany(mappedBy = "planet", cascade = CascadeType.ALL)
+    @FetchProfileOverride(profile = Planet_.PROFILE_EAGER_PLANET, mode = FetchMode.JOIN)
     private List<Continent> continents = new ArrayList<>();
 
     // CONSTRUCTORS
@@ -189,7 +203,6 @@ public class Planet implements Comparable<Object>, MWEntity {
      * @author Torren (Jason Tighe)
      * @return the id of the current owner of the planet
      */
-    @Transient
     public Integer getPlanetOwner() {
         return getInfluence().getOwner();
     }
@@ -246,7 +259,6 @@ public class Planet implements Comparable<Object>, MWEntity {
     /**
      * @return sting w/ link and name
      */
-    @Transient
     public String getNameAsLink() {
         return "<a href=\"JUMPTOPLANET" + name + "#\">" + name + "</a>";
     }
@@ -287,8 +299,6 @@ public class Planet implements Comparable<Object>, MWEntity {
     /**
      * @return Returns the continents.
      */
-    @OneToOne
-    @JoinColumn(name = "planet_environments_id")
     public List<Continent> getContinents() {
         return continents;
     }
@@ -449,7 +459,7 @@ public class Planet implements Comparable<Object>, MWEntity {
         unitFactories = new ArrayList<>(size);
         for (int i = 0; i < size; ++i) {
             UnitFactory unitFactory = new UnitFactory();
-            
+
             unitFactory.binIn(in);
             addUnitFactory(unitFactory);
         }
@@ -764,15 +774,15 @@ public class Planet implements Comparable<Object>, MWEntity {
         return result;
     }
 
-    @Transient
     public int getFactoryCount() {
         return getUnitFactories().size();
     }
 
     public int getMinPlanetOwnership() {
-        if (minPlanetOwnership < 0)
+        if (minPlanetOwnership < 0) {
             minPlanetOwnership =
                     CampaignData.cd.getCampaignOptions().getIntegerConfig("MinPlanetOwnerShip");
+        }
 
         return minPlanetOwnership;
     }
@@ -867,10 +877,31 @@ public class Planet implements Comparable<Object>, MWEntity {
             return false;
         }
 
-        if (planet == null) {
-            return false;
+        return planet != null && planet.getId() == this.getId();
+    }
+
+    public void sync(StatelessSession session) {
+        session.upsert(this);
+        for (Continent continent : getContinents()) {
+            session.upsert(continent);
         }
 
-        return planet.getId() == this.getId();
+        for (UnitFactory unitFactory : getUnitFactories()) {
+            session.upsert(unitFactory);
+        }
+
+        MutationQuery influenceQuery =
+                session.createNativeMutationQuery(
+                        "INSERT INTO planet_influence (influence, planet_id, house_id) "
+                                + "VALUES (:influence, :planet_id, :house_id) "
+                                + "ON CONFLICT(planet_id, house_id) DO UPDATE SET "
+                                + "influence = excluded.influence");
+        for (Map.Entry<Integer, Integer> entry : getInfluence().entrySet()) {
+            influenceQuery
+                    .setParameter("influence", entry.getValue())
+                    .setParameter("planet_id", getId())
+                    .setParameter("house_id", entry.getKey())
+                    .executeUpdate();
+        }
     }
 }

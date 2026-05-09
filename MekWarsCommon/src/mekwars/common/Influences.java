@@ -22,22 +22,21 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
-import jakarta.persistence.Transient;
 
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfileOverride;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -49,7 +48,7 @@ import java.util.TreeSet;
  * @author Imi (immanuel.scholz@gmx.de)
  */
 @Embeddable
-public class Influences implements MutableSerializable {
+public class Influences {
     private static final Logger LOGGER = LogManager.getLogger(Influences.class);
 
     /**
@@ -93,12 +92,12 @@ public class Influences implements MutableSerializable {
     }
 
     /** Return the faction with the most influence. */
-    @Transient
     public Integer getOwner() {
         try {
             TreeSet<House> sset =
                     new TreeSet<House>(
                             new Comparator<Object>() {
+                                @Override
                                 public int compare(Object o1, Object o2) {
                                     try {
                                         int i1 = -1;
@@ -128,6 +127,7 @@ public class Influences implements MutableSerializable {
             Arrays.sort(
                     factions,
                     new Comparator<Object>() {
+                        @Override
                         public int compare(Object o1, Object o2) {
                             int h1Id = -1;
                             int h2Id = -2;

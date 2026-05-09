@@ -13,12 +13,10 @@ CREATE TABLE IF NOT EXISTS planet (
 	min_planet_ownership INTEGER NOT NULL DEFAULT -1,
 	homeworld INTEGER NOT NULL DEFAULT 0,
 	original_owner TEXT NOT NULL,
-	conquest_points INTEGER NOT NULL DEFAULT 100,
-	FOREIGN KEY(planet_environments_id) REFERENCES planets_environments(id)
+	conquest_points INTEGER NOT NULL DEFAULT 100
 );
 
 CREATE UNIQUE INDEX planet_name_index ON planet(name);
-CREATE UNIQUE INDEX planet_planet_environments_id_index ON planet(planet_environments_id);
 
 CREATE TABLE IF NOT EXISTS planet_influence (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,8 +34,6 @@ CREATE UNIQUE INDEX planet_influence_planet_id_house_id_index ON planet_influenc
 
 CREATE TABLE IF NOT EXISTS planet_flag (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	-- updated_at TEXT NOT NULL,
-	-- created_at TEXT NOT NULL,
 	name TEXT NOT NULL,
 	value TEXT NOT NULL,
 	planet_id INTEGER NOT NULL,

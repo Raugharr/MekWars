@@ -27,19 +27,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
+
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
+import org.hibernate.annotations.FetchProfileOverride;
 
 /**
  * @author Helge Richter
  */
 @Entity
+@FetchProfile(name = "EagerContinent")
 public class Continent {
     @ManyToOne
     @JoinColumn(name = "terrain_id")
+    @FetchProfileOverride(profile = Continent_.PROFILE_EAGER_CONTINENT, mode = FetchMode.JOIN)
     private Terrain environment;
 
     @ManyToOne
     @JoinColumn(name = "advanced_terrain_id")
+    @FetchProfileOverride(profile = Continent_.PROFILE_EAGER_CONTINENT, mode = FetchMode.JOIN)
     private AdvancedTerrain advancedTerrain;
 
     private int size = 1;
@@ -50,6 +56,7 @@ public class Continent {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planet_id")
+    @FetchProfileOverride(profile = Continent_.PROFILE_EAGER_CONTINENT, mode = FetchMode.JOIN)
     private Planet planet;
 
     public Continent(int size, Terrain terrain, AdvancedTerrain advancedTerrain) {

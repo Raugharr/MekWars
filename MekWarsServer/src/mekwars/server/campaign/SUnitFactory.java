@@ -39,9 +39,10 @@ import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.util.SerializedMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import org.hibernate.annotations.NamedQuery;
 
 @Entity
+@NamedQuery(name = "SUnitFactory.findByName", query = "FROM SUnitFactory WHERE name = :name")
 public class SUnitFactory extends UnitFactory {
     private static final Logger LOGGER = LogManager.getLogger(SUnitFactory.class);
 
