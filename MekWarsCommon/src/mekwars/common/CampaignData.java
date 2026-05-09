@@ -108,13 +108,16 @@ public class CampaignData implements TerrainProvider {
                 Planet planet = new Planet(in, this);
 
                 session.upsert(planet);
-                session.upsert(planet.getEnvironments());
-                for (Continent continent : planet.getEnvironments().getContinents()) {
-                    session.upsert(continent);
+                for (Continent continent : planet.getContinents()) {
+                    session.insert(continent);
                 }
 
-                for (UnitFactory uf : planet.getUnitFactories()) {
-                    session.upsert(uf);
+                for (UnitFactory unitFactory : planet.getUnitFactories()) {
+                    session.upsert(unitFactory);
+                }
+
+                for (Influences influences : planet.getInfluence()) {
+                    session.upsert(influences);
                 }
             }
             transaction.commit();

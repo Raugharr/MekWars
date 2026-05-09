@@ -35,8 +35,6 @@ import java.util.StringTokenizer;
 import java.util.List;
 
 public class PurchaseFactoryCommand implements Command {
-
-public class PurchaseFactoryCommand implements Command {
     // Starting out at mod level this can be lowered as needed
     int accessLevel = IAuthenticator.MODERATOR;
 

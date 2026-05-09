@@ -1,17 +1,12 @@
-CREATE TABLE IF NOT EXISTS planet_environments (
-	id INTEGER PRIMARY KEY AUTOINCREMENT
-);
-
 CREATE TABLE IF NOT EXISTS planet (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	x REAL NOT NULL,
 	y REAL NOT NULL,
-	dtype TEXT NOT NULL DEFAULT "Planet",
-	planet_environments_id INTEGER,
+	dtype TEXT NOT NULL DEFAULT 'Planet',
 	updated_at INTEGER, -- NOT NULL,
 	-- created_at TEXT NOT NULL,
 	name TEXT NOT NULL,
-	description TEXT NOT NULL DEFAULT "",
+	description TEXT NOT NULL DEFAULT '',
 	bays_provided INTEGER NOT NULL DEFAULT 0,
 	conquerable INTEGER NOT NULL DEFAULT 1,
 	component_production INTEGER NOT NULL DEFAULT 0,
@@ -232,9 +227,10 @@ CREATE TABLE IF NOT EXISTS terrain (
 
 CREATE TABLE IF NOT EXISTS continent (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	planet_environment_id INTEGER NOT NULL,
+	planet_id INTEGER NOT NULL,
 	terrain_id INTEGER NOT NULL,
 	advanced_terrain_id INTEGER NOT NULL,
+	size INTEGER NOT NULL,
 	-- updated_at TEXT NOT NULL,
 	-- created_at TEXT NOT NULL,
 	FOREIGN KEY(planet_id) REFERENCES planet(id),
@@ -248,18 +244,17 @@ CREATE INDEX continent_advanced_terrain_id_index ON continent(advanced_terrain_i
 
 CREATE TABLE IF NOT EXISTS unit_factory (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	dtype TEXT NOT NULL,
+	dtype TEXT NOT NULL DEFAULT 'UnitFactory',
 	name TEXT NOT NULL,
 	size TEXT NOT NULL,
 	founder TEXT NOT NULL,
 	ticks_until_refresh INTEGER NOT NULL,
 	refresh_speed INTEGER NOT NULL,
 	type INTEGER NOT NULL,
-	-- factory_id TEXT NOT NULL,
 	access_level INTEGER NOT NULL,
 	build_table_folder TEXT NOT NULL,
 	factory_locked INTEGER NOT NULL,
-	planet_id INTEGER DEFAULT NULL, -- should be commented eventually NOT NULL,
+	planet_id INTEGER, -- NOT NULL,
 	FOREIGN KEY(planet_id) REFERENCES planet(id)
 );
 

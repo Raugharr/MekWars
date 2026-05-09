@@ -169,7 +169,6 @@ public class MWServ {
         LOGGER.info("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
         HibernateUtil.buildSessionFactory(
                 mekwars.common.PlanetEnvironment.class,
-                mekwars.common.PlanetEnvironments.class,
                 mekwars.common.Terrain.class,
                 mekwars.common.AdvancedTerrain.class,
                 mekwars.common.Continent.class,

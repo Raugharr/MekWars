@@ -83,11 +83,6 @@ public class Planet implements Comparable<Object>, MWEntity {
     @JoinColumn(name = "planet_id")
     private List<UnitFactory> unitFactories = new ArrayList<UnitFactory>();
 
-    /** The environment modifiers for the planet. */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "planet_environments_id")
-    private PlanetEnvironments environments = new PlanetEnvironments();
-
     /** A human readable description of the planet. */
     private String description = "";
 
@@ -138,8 +133,7 @@ public class Planet implements Comparable<Object>, MWEntity {
      */
     private int conquestPoints = 100;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "planet_id")
+    @OneToMany(mappedBy = "planet", cascade = CascadeType.ALL)
     private List<Continent> continents = new ArrayList<>();
 
     // CONSTRUCTORS
@@ -285,11 +279,9 @@ public class Planet implements Comparable<Object>, MWEntity {
         return unitFactories;
     }
 
-    /**
-     * @param Factories The Factories to set.
-     */
-    public void setUnitFactories(List<UnitFactory> unitFactories) {
-        this.unitFactories = unitFactories;
+    public void addUnitFactory(UnitFactory unitFactory) {
+        // unitFactory.setPlanet(this);
+        unitFactories.add(unitFactory);
     }
 
     /**
@@ -316,6 +308,7 @@ public class Planet implements Comparable<Object>, MWEntity {
      * @param continent The continent to add
      */
     public synchronized void addContinent(Continent continent) {
+        continent.setPlanet(this);
         continents.add(continent);
     }
 
@@ -376,7 +369,7 @@ public class Planet implements Comparable<Object>, MWEntity {
             }
             continentProbability -= continent.getSize();
         }
-        return new Continent(0, null, null);
+        return continents.get(0);
     }
 
     /**
@@ -415,21 +408,6 @@ public class Planet implements Comparable<Object>, MWEntity {
         return getId() < p.getId() ? -1 : (getId() == p.getId() ? 0 : 1);
     }
 
-    // /** Encode all mutable fields into the stream. Use as few bits as possible. */
-    // public void encodeMutableFields(BinWriter out, CampaignData dataProvider) throws IOException
-    // {
-    //     out.println(getId(), "id");
-    //     getInfluence().encodeMutableFields(out, dataProvider);
-    //     binOut(out);
-    // }
-
-    // /** Decode all mutable fields from the stream. */
-    // public void decodeMutableFields(BinReader in, CampaignData dataProvider) throws IOException {
-    //     setId(in.readInt("id"));
-    //     getInfluence().decodeMutableFields(in, dataProvider);
-    //     binIn(in, dataProvider);
-    // }
-
     /** Write itself into the stream. */
     public void binOut(BinWriter out) throws IOException {
         out.println(getId(), "id");
@@ -441,10 +419,11 @@ public class Planet implements Comparable<Object>, MWEntity {
             i.binOut(out);
         }
         out.println(continents.size(), "terrain.size");
-        for (Continent C : continents) {
-            out.println(C.getSize(), "size");
-            out.println(C.getEnvironment().getId(), "id");
-            out.println(C.getAdvancedTerrain().getId(), "aid");
+        for (Continent continent : continents) {
+            out.println(continent.getId(), "continent_id");
+            out.println(continent.getSize(), "size");
+            out.println(continent.getEnvironment().getId(), "id");
+            out.println(continent.getAdvancedTerrain().getId(), "aid");
         }
         out.println(getDescription(), "description");
         out.println(getBaysProvided(), "baysProvided");
@@ -467,22 +446,26 @@ public class Planet implements Comparable<Object>, MWEntity {
         setName(in.readLine("name"));
         setPosition(new Position(in.readDouble("x"), in.readDouble("y")));
         int size = in.readInt("unitFactories.size");
-        setUnitFactories(new ArrayList<UnitFactory>(size));
+        unitFactories = new ArrayList<>(size);
         for (int i = 0; i < size; ++i) {
-            UnitFactory uf = new UnitFactory();
-            uf.binIn(in);
-            getUnitFactories().add(uf);
+            UnitFactory unitFactory = new UnitFactory();
+            
+            unitFactory.binIn(in);
+            addUnitFactory(unitFactory);
         }
         continents = new ArrayList<Continent>();
         int terrainSize = in.readInt("terrain.size");
         for (int i = 0; i < terrainSize; ++i) {
+            int continentId = in.readInt("continent_id");
             int percent = in.readInt("size");
             int id = in.readInt("id");
             int aid = in.readInt("aid");
             Terrain T = data.getTerrain(id);
             AdvancedTerrain AT = data.getAdvancedTerrain(aid);
-            Continent C = new Continent(percent, T, AT);
-            addContinent(C);
+            Continent continent = new Continent(this, percent, T, AT);
+
+            continent.setId(continentId);
+            addContinent(continent);
         }
         setDescription(in.readLine("description"));
         setBaysProvided(in.readInt("baysProvided"));
@@ -830,39 +813,41 @@ public class Planet implements Comparable<Object>, MWEntity {
         conquestPoints = Math.max(1, points);
     }
 
-    public String getShortDescription(boolean withTerrain) {
+    public String getShortDescription() {
         StringBuilder result = new StringBuilder(getName());
+        Continent biggestContinent = getBiggestContinent();
+        Terrain terrain = null;
+        AdvancedTerrain advancedTerrain = null;
 
-        if (withTerrain) {
-            Continent continent = getEnvironments().getBiggestEnvironment();
-            if (continent != null) {
-                Terrain pe = continent.getEnvironment();
-                AdvancedTerrain ape = continent.getAdvancedTerrain();
-                if (pe != null && pe.getEnvironments().size() > 0) {
-                    result.append(" " + pe.getEnvironments().get(0).toImageDescription());
-                    result.append(" " + pe.getEnvironments().get(0).getName());
-                }
-                if (ape != null) result.append(" " + ape.WeatherForcast());
+        if (biggestContinent != null) {
+            terrain = biggestContinent.getEnvironment();
+            advancedTerrain = biggestContinent.getAdvancedTerrain();
+        }
 
-                if (this.getUnitFactories().size() > 0) {
-                    for (int i = 0; i < this.getUnitFactories().size(); i++) {
-                        UnitFactory MF = (this.getUnitFactories().get(i));
-                        result.append(MF.getIcons());
-                    }
-                }
-                if (pe != null && getEnvironments().getTotalEnivronmentPropabilities() > 0) {
-                    result.append(
-                            " ("
-                                    + Math.round(
-                                            (double) continent.getSize()
-                                                    * 100
-                                                    / getEnvironments()
-                                                            .getTotalEnivronmentPropabilities())
-                                    + "% correct)");
-                } else {
-                    result.append(" (100% correct)");
-                }
+        if (terrain != null && terrain.getEnvironments().size() > 0) {
+            result.append(" " + terrain.getEnvironments().get(0).toImageDescription());
+            result.append(" " + terrain.getEnvironments().get(0).getName());
+        }
+        if (advancedTerrain != null) {
+            result.append(" " + advancedTerrain.WeatherForcast());
+        }
+
+        if (this.getUnitFactories().size() > 0) {
+            for (int i = 0; i < this.getUnitFactories().size(); i++) {
+                UnitFactory unitFactory = this.getUnitFactories().get(i);
+                result.append(unitFactory.getIcons());
             }
+        }
+        if (terrain != null && getTotalEnvironmentProbabilities() > 0) {
+            result.append(
+                    " ("
+                            + Math.round(
+                                    (double) biggestContinent.getSize()
+                                            * 100
+                                            / getTotalEnvironmentProbabilities())
+                            + "% correct)");
+        } else {
+            result.append(" (100% correct)");
         }
         return result.toString();
     }
@@ -870,31 +855,6 @@ public class Planet implements Comparable<Object>, MWEntity {
     /** Return the environment with the most probability to occour. */
     public Continent getBiggestEnvironment() {
         return continents.stream().max(Comparator.comparingInt(Continent::getSize)).orElse(null);
-    }
-
-    /** Return the total probability of all environments. */
-    public int getTotalEnivronmentPropabilities() {
-        return continents().stream().mapToInt(Continent::getSize).sum();
-    }
-
-    /** Returns a randomEnvironment based on the probability of each Environment. */
-    public Continent getRandomEnvironment(Random r) {
-        // use the skewer draw algorithm from Knuth.
-        int probs = getTotalEnivronmentPropabilities();
-        for (Continent pe : continents) {
-            if (r.nextInt(probs) < pe.getSize()) {
-
-                probs = pe.getEnvironment().getTotalEnvironmentProbabilities();
-                for (PlanetEnvironment env : pe.getEnvironment().getEnvironments()) {
-                    if (r.nextInt(probs) < env.getEnvironmentalProbability()) {
-                        return pe;
-                    }
-                    probs -= env.getEnvironmentalProbability();
-                }
-            }
-            probs -= pe.getSize();
-        }
-        return new Continent(0, null, null);
     }
 
     @Override

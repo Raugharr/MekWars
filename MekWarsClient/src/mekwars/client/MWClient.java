@@ -229,7 +229,6 @@ public final class MWClient extends GameHost implements IClient {
         Config = config;
         HibernateUtil.buildSessionFactory(
                 mekwars.common.PlanetEnvironment.class,
-                mekwars.common.PlanetEnvironments.class,
                 mekwars.common.Terrain.class,
                 mekwars.common.AdvancedTerrain.class,
                 mekwars.common.Continent.class,

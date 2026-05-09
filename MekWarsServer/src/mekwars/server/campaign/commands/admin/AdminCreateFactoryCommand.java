@@ -20,7 +20,7 @@
  */
 package mekwars.server.campaign.commands.admin;
 
-import mekwars.common.UnitFactory;
+import mekwars.common.util.HibernateUtil;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -28,9 +28,7 @@ import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.commands.Command;
 
-import java.util.List;
 import java.util.StringTokenizer;
-import java.util.UUID;
 
 /**
  * @author Helge Richter

@@ -180,7 +180,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
             if (planetWeather == null)
             	planetWeather  = data.getAdvancedTerrain(0);
 
-            Continent PE = new Continent(size, planetEnvironment, planetWeather);
+            Continent PE = new Continent(this, size, planetEnvironment, planetWeather);
             addContinent(PE);
         }
 

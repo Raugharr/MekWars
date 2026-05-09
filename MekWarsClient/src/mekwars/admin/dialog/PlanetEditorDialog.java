@@ -644,7 +644,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
         panel1.add(new JLabel("Terrains:", JLabel.CENTER));
 
         planetTerrains = new JComboBox();
-        for (Continent terrain: selectedPlanet.getEnvironments().getContinents()) {
+        for (Continent terrain: selectedPlanet.getContinents()) {
             String displayName =  terrain.getDropBoxName();
             planetTerrains.addItem(displayName);
             ContinentMap.put(displayName, terrain);
@@ -821,7 +821,7 @@ public final class PlanetEditorDialog implements ActionListener, KeyListener {
 
         planetTerrains.removeActionListener(this);
         planetTerrains.removeAllItems();
-        for (Continent terrain : selectedPlanet.getEnvironments().getContinents()) {
+        for (Continent terrain : selectedPlanet.getContinents()) {
             String displayName = terrain.getDropBoxName();
             planetTerrains.addItem(displayName);
             ContinentMap.put(displayName, terrain);

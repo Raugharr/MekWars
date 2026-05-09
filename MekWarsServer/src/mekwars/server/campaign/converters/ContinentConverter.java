@@ -78,9 +78,6 @@ public class ContinentConverter implements Converter {
         if (terrain == null) {
             throw new ConversionException("terrain '" + terrainName + "' not found");
         }
-        // AdvancedTerrain advancedTerrain =
-        // CampaignMain.cm.getData().getAdvancedTerrainByName(advancedTerrainName);
-        //
         AdvancedTerrain advancedTerrain =
                 session.createQuery(
                                 "FROM AdvancedTerrain WHERE name = :name", AdvancedTerrain.class)

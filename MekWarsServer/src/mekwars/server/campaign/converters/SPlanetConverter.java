@@ -156,6 +156,7 @@ public class SPlanetConverter implements Converter {
                         Double.parseDouble(ycoord));
         for (UnitFactory unitFactory : unitFactoryList) {
             ((SUnitFactory) unitFactory).setPlanet(planet);
+            planet.addUnitFactory(unitFactory);
         }
         planet.setHomeworld(isHomeworld);
         if (originalOwnerString == null) {
@@ -167,7 +168,6 @@ public class SPlanetConverter implements Converter {
         for (Continent continent : continents) {
             planet.addContinent(continent);
         }
-        planet.setUnitFactories(unitFactoryList);
         planet.setOriginalOwner(originalOwnerString);
         if (planetFlags != null) {
             planet.setPlanetFlags(planetFlags);

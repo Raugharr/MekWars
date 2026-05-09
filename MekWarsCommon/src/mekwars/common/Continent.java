@@ -20,8 +20,8 @@
  */
 package mekwars.common;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,21 +38,29 @@ public class Continent {
     @JoinColumn(name = "terrain_id")
     private Terrain environment;
 
-    @ManyToOne 
+    @ManyToOne
     @JoinColumn(name = "advanced_terrain_id")
     private AdvancedTerrain advancedTerrain;
 
-    // TODO: This seems to be unused.
-    @Transient private int size = 1;
+    private int size = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    public Continent(int size, Terrain env, AdvancedTerrain advTerr) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "planet_id")
+    private Planet planet;
+
+    public Continent(int size, Terrain terrain, AdvancedTerrain advancedTerrain) {
         this.size = size;
-        environment = env;
-        advancedTerrain = advTerr;
+        this.environment = terrain;
+        this.advancedTerrain = advancedTerrain;
+    }
+
+    public Continent(Planet planet, int size, Terrain terrain, AdvancedTerrain advancedTerrain) {
+        this(size, terrain, advancedTerrain);
+        this.planet = planet;
     }
 
     public Continent() {
@@ -112,6 +120,14 @@ public class Continent {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Planet getPlanet() {
+        return planet;
+    }
+
+    public void setPlanet(Planet planet) {
+        this.planet = planet;
     }
 
     public String getDropBoxName() {
