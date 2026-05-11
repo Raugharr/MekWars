@@ -28,15 +28,15 @@ import mekwars.common.util.BinWriter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.FetchProfileOverride;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -264,7 +264,6 @@ public class Influences {
      *
      * @return True, if it is a hotZone Planet.
      */
-    @Transient
     public boolean isHotZone() {
         int maxflu = 0;
         int secondmaxflu = 0;

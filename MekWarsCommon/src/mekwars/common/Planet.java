@@ -879,7 +879,11 @@ public class Planet implements Comparable<Object>, MWEntity {
     }
 
     public void sync(StatelessSession session) {
+        Integer prevBatchSize = session.getJdbcBatchSize();
+
+        session.setJdbcBatchSize(0);
         session.upsert(this);
+
         for (Continent continent : getContinents()) {
             session.upsert(continent);
         }
@@ -887,7 +891,6 @@ public class Planet implements Comparable<Object>, MWEntity {
         for (UnitFactory unitFactory : getUnitFactories()) {
             session.upsert(unitFactory);
         }
-
         MutationQuery influenceQuery =
                 session.createNativeMutationQuery(
                         "INSERT INTO planet_influence (influence, planet_id, house_id) "
@@ -901,5 +904,6 @@ public class Planet implements Comparable<Object>, MWEntity {
                     .setParameter("house_id", entry.getKey())
                     .executeUpdate();
         }
+        session.setJdbcBatchSize(prevBatchSize);
     }
 }
