@@ -106,9 +106,7 @@ public class Planet implements Comparable<Object>, MWEntity {
     private int componentProduction = 0;
 
     /** The influence each faction has on this planet. Mutable field (has to be transfered) */
-    @FetchProfileOverride(profile = Planet_.PROFILE_EAGER_PLANET, mode = FetchMode.JOIN)
-    @Embedded
-    private Influences influence;
+    @Embedded private Influences influence;
 
     // size
 

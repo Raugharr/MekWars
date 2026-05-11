@@ -108,7 +108,6 @@ public class CampaignData implements TerrainProvider {
                 Planet planet = new Planet(in, this);
 
                 planet.sync(session);
-                // session.flush();
             }
             transaction.commit();
             session.close();
@@ -133,7 +132,12 @@ public class CampaignData implements TerrainProvider {
         return HibernateUtil.fromTransaction(
                 session -> {
                     session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
-                    return session.find(Planet.class, id);
+                    return session.createQuery(
+                                    "SELECT p FROM Planet p LEFT JOIN FETCH p.influence WHERE p.id"
+                                            + " = :id",
+                                    Planet.class)
+                            .setParameter("id", id)
+                            .uniqueResult();
                 });
     }
 
@@ -145,7 +149,10 @@ public class CampaignData implements TerrainProvider {
         return HibernateUtil.fromTransaction(
                 session -> {
                     session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
-                    return session.createQuery("FROM Planet WHERE name = :name", Planet.class)
+                    return session.createQuery(
+                                    "SELECT p FROM Planet p LEFT JOIN FETCH p.influence WHERE"
+                                            + " p.name = :name",
+                                    Planet.class)
                             .setParameter("name", name)
                             .uniqueResult();
                 });
@@ -168,7 +175,10 @@ public class CampaignData implements TerrainProvider {
         return HibernateUtil.fromTransaction(
                 session -> {
                     session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
-                    return session.createQuery("FROM Planet", Planet.class).getResultList();
+                    return session.createQuery(
+                                    "SELECT p FROM Planet p LEFT JOIN FETCH p.influence",
+                                    Planet.class)
+                            .getResultList();
                 });
     }
 

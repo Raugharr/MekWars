@@ -196,7 +196,6 @@ public class Influences {
     }
 
     /** Returns the present factions. */
-    @Transient
     public Set<House> getHouses() {
         Set<House> result = new HashSet<House>();
 
