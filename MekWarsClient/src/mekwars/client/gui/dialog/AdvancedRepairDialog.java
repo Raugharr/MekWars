@@ -27,6 +27,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
@@ -95,7 +96,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
     private int selectedSlot = -1;
     private boolean armor = false;
     private int tablocation = 0;
-    private Vector<Integer> techs = new Vector<Integer>(1, 1);
+    private int techs[] = new int[4];
     private int techType = UnitUtils.TECH_GREEN;
     private int baseLineCost = 0;
     private int techWorkMod = 0;
@@ -144,7 +145,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         mwclient = c;
         year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
         tablocation = c.getPlayer().getRepairLocation();
-        techs.addAll(c.getPlayer().getAvailableTechs());
+        techs = Arrays.copyOf(c.getPlayer().getAvailableTechs(), UnitUtils.TECH_TYPES);
         techType = c.getPlayer().getRepairTechType();
         retries = c.getPlayer().getRepairRetries();
         this.salvage = salvage;
@@ -262,8 +263,8 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
             int numberOfTechs = 1;
 
-            if (techType < UnitUtils.TECH_PILOT) {
-                numberOfTechs = mwclient.getPlayer().getAvailableTechs().get(techType);
+            if (techType < UnitUtils.TECH_TYPES) {
+                numberOfTechs = mwclient.getPlayer().getAvailableTechs()[techType];
             } else if ((techType == UnitUtils.TECH_PILOT) && playerUnit.getPilotIsReparing()) {
                 numberOfTechs = 0;
             } else if (techType == UnitUtils.TECH_REWARD_POINTS) {
@@ -918,10 +919,10 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         techPanel.removeAll();
 
         Vector<String> techString = new Vector<String>(4, 1);
-        techString.add("Green - " + techs.elementAt(UnitUtils.TECH_GREEN));
-        techString.add("Reg   - " + techs.elementAt(UnitUtils.TECH_REG));
-        techString.add("Vet   - " + techs.elementAt(UnitUtils.TECH_VET));
-        techString.add("Elite - " + techs.elementAt(UnitUtils.TECH_ELITE));
+        techString.add("Green - " + techs[UnitUtils.TECH_GREEN]);
+        techString.add("Reg   - " + techs[UnitUtils.TECH_REG]);
+        techString.add("Vet   - " + techs[UnitUtils.TECH_VET]);
+        techString.add("Elite - " + techs[UnitUtils.TECH_ELITE]);
 
         Pilot pilot = playerUnit.getPilot();
 
@@ -1246,3 +1247,4 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
         setCost();
     }
 }// end AdvancedRepairDialog.java
+

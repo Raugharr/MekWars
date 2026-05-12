@@ -1379,7 +1379,7 @@ public class ShortResolver {
                 }
 
                 tempBuilder.append(earnedRP + " " + CampaignMain.cm.getConfig("RPShortName"));
-                currP.addReward(earnedRP);
+                currP.addRewardPoints(earnedRP);
                 hasOtherGain = true;
             }
 

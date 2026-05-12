@@ -44,8 +44,8 @@ public class GrantTechsCommand implements Command {
 		int techType = Integer.parseInt(command.nextToken());
 		int amount = Integer.parseInt(command.nextToken());
 		
-		if ( amount < 0 && p.getTotalTechs().elementAt(techType) < Math.abs(amount) ) {
-		    amount = -p.getTotalTechs().elementAt(techType);
+		if ( amount < 0 && p.getTotalTech(techType) < Math.abs(amount) ) {
+		    amount = -p.getTotalTech(techType);
 		}
 		
 		p.addTotalTechs(techType, amount);

@@ -89,9 +89,9 @@ public class SellUnitDialog extends JDialog implements ActionListener {
         if (toSell == null || toSell.size() == 0) {
             
             toSell = new Vector<CUnit>(1,1);
-            for(CUnit currU : mwclient.getPlayer().getHangar()) {
-                if (UnitUtils.mayBeSoldOnMarket(currU)) {
-                    toSell.add(currU);
+            for(CUnit unit : mwclient.getPlayer().getUnits()) {
+                if (UnitUtils.mayBeSoldOnMarket(unit)) {
+                    toSell.add(unit);
                 }
             }
         }

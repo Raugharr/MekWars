@@ -44,7 +44,7 @@ public class SetMyLogoCommand implements Command {
         SPlayer player = CampaignMain.cm.getPlayer(Username);
         
         if ( !command.hasMoreTokens() ){
-            player.setMyLogo(player.getMyHouse().getLogo());
+            player.setLogo(player.getMyHouse().getLogo());
         }else{
     		String newLogo = command.nextToken();
     		if (MWPasswd.getRecord(Username) == null) {
@@ -53,12 +53,12 @@ public class SetMyLogoCommand implements Command {
     		}
             // this way for some reason doesn't work anymore so I'm moving everything to SPlayer. -- Torren
             if ( newLogo.trim().length() < 1 )
-                player.setMyLogo(player.getMyHouse().getLogo());
+                player.setLogo(player.getMyHouse().getLogo());
             else
-                player.setMyLogo(newLogo);
+                player.setLogo(newLogo);
         }
-        CampaignMain.cm.toUser("PL|SUL|"+ player.getMyLogo(),Username,false);
-		CampaignMain.cm.toUser("AM:You've set your Logo to " + player.getMyLogo(),Username,true);
-		CampaignMain.cm.toUser("AM:It'll look like this: <img height=\"150\" width=\"150\" src =\"" + player.getMyLogo() +"\">",Username,true);
+        CampaignMain.cm.toUser("PL|SUL|"+ player.getLogo(),Username,false);
+		CampaignMain.cm.toUser("AM:You've set your Logo to " + player.getLogo(),Username,true);
+		CampaignMain.cm.toUser("AM:It'll look like this: <img height=\"150\" width=\"150\" src =\"" + player.getLogo() +"\">",Username,true);
 	}
 }

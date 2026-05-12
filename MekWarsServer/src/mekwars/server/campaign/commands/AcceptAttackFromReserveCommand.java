@@ -214,7 +214,7 @@ public class  AcceptAttackFromReserveCommand  implements Command {
 			hasCost = true;
 		}
 		if (rp > 0) {
-			dp.addReward(-rp);
+			dp.addRewardPoints(-rp);
 			if(hasCost)
 				toSend += ", ";
 			else

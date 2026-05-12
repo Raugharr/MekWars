@@ -932,7 +932,7 @@ public class ShortValidator {
         if (ap.getInfluence() < o.getIntValue("AttackerCostInfluence"))
             failureReasons.add(SFAIL_ATTACK_INFLUENCE);
 
-        if (ap.getReward() < o.getIntValue("AttackerCostReward"))
+        if (ap.getRewardPoints() < o.getIntValue("AttackerCostReward"))
             failureReasons.add(SFAIL_ATTACK_REWARD);
     }
 
@@ -1432,7 +1432,7 @@ public class ShortValidator {
         if (dp.getInfluence() < o.getIntValue("DefenderCostInfluence"))
             failureReasons.add(SFAIL_DEFEND_INFLUENCE);
 
-        if (dp.getReward() < o.getIntValue("DefenderCostReward"))
+        if (dp.getRewardPoints() < o.getIntValue("DefenderCostReward"))
             failureReasons.add(SFAIL_DEFEND_REWARD);
     }
 

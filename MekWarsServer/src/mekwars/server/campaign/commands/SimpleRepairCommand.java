@@ -111,7 +111,7 @@ public class SimpleRepairCommand implements Command {
                 int numberOfTechs = 1;
                 int techType = techs.elementAt(type);
                 if ( techType < UnitUtils.TECH_PILOT ){
-                    numberOfTechs = player.getAvailableTechs().elementAt(techType);
+                    numberOfTechs = player.getAvailableTech(techType);
                 }
                 
                 if ( techType == UnitUtils.TECH_PILOT && unit.getPilot() != null

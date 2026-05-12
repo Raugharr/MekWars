@@ -58,13 +58,12 @@ public class  CreateArmyCommand  implements Command {
 		 * no army with a matching ID is found in the player's list. This
 		 * involves hideous nested loops, but works well.
 		 */
-		p.getArmies().trimToSize();
 		int i = 0;
 		boolean free = false;
 		while (!free) {
 			free = true;
 			for (int j = 0; j < p.getArmies().size(); j++) {
-				if (p.getArmies().elementAt(j).getID() == i) {
+				if (p.getArmies().get(j).getID() == i) {
 					free = false;
 					i++;
 				}

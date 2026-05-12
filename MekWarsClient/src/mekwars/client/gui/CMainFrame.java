@@ -1846,7 +1846,7 @@ public class CMainFrame extends JFrame {
 
     public void jMenuCommanderLogo_actionPerformed() {
         String LogoURL;
-        LogoURL = JOptionPane.showInputDialog(getContentPane(), "URL? (i.e. http://www.mysite.com/mypic.jpg)", mwclient.getPlayer().getMyLogo());
+        LogoURL = JOptionPane.showInputDialog(getContentPane(), "URL? (i.e. http://www.mysite.com/mypic.jpg)", mwclient.getPlayer().getLogo());
         if (LogoURL == null) {
             return;
         }
@@ -2166,13 +2166,13 @@ public class CMainFrame extends JFrame {
         }
 
         int techs = Integer.parseInt(techsToFire);
-        if (!useAdvanceRepairs && (thePlayer.getTechs() <= 0)) {
+        if (!useAdvanceRepairs && (thePlayer.getTechnicians() <= 0)) {
             mwclient.getGUIClient().addToChat("<b>You have no hired techs to fire.<b>");
             return;
         }
 
-        if (!useAdvanceRepairs && ((techs < 1) || (techs > thePlayer.getTechs()))) {
-            mwclient.getGUIClient().addToChat("<b>Try picking a number between 1 and " + thePlayer.getTechs() + "<b>");
+        if (!useAdvanceRepairs && ((techs < 1) || (techs > thePlayer.getTechnicians()))) {
+            mwclient.getGUIClient().addToChat("<b>Try picking a number between 1 and " + thePlayer.getTechnicians() + "<b>");
             return;
         }
 

@@ -364,7 +364,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
             toSend += ", " + CampaignMain.cm.moneyOrFluMessage(false, true, -flu, true);
         }
         if (rp > 0) {
-            ap.addReward(-rp);
+            ap.addRewardPoints(-rp);
             toSend += ", -" + rp + " " + CampaignMain.cm.getConfig("RPShortName");
         }
         toSend += ").";
@@ -471,7 +471,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
                 didReturn = true;
             }
             if (attrp > 0) {
-                currP.addReward(attrp);
+                currP.addRewardPoints(attrp);
                 if (!didReturn) 
                     toPlayer += " (+" + attrp + " " + CampaignMain.cm.getConfig("RPShortName");
                 else 
@@ -506,7 +506,7 @@ public class OperationManager extends AbstractOperationManager implements I_Oper
                 }
             }
             if (defrp > 0) {
-                currP.addReward(defrp);
+                currP.addRewardPoints(defrp);
                 if (!didReturn) {
                     toPlayer += "(+" + defrp + " " + CampaignMain.cm.getConfig("RPShortName");
                     didReturn = true;

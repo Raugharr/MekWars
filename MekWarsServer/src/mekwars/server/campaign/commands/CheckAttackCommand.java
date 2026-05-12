@@ -28,8 +28,7 @@ import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.operations.OperationManager;
 import mekwars.server.campaign.operations.newopmanager.I_OperationManager;
 
-public class  CheckAttackCommand  implements Command {
-
+public class CheckAttackCommand implements Command {
 	int accessLevel = 0;
 	String syntax = "";
 	public int getExecutionLevel(){return accessLevel;}
@@ -138,9 +137,7 @@ public class  CheckAttackCommand  implements Command {
 		//otherwise, loop out *all* the armies
 		else {
 			Desc = "Intelligence reports the following attack options:<br>";
-			Enumeration<SArmy> e = p.getArmies().elements();
-			while (e.hasMoreElements()) {
-				SArmy arm = e.nextElement();
+            for (SArmy arm: p.getArmies()) {
 				Desc += "<table><tr><td>";
 				if (arm != null && !arm.isDisabled()) {
 					Desc += "Army " + arm.getID() ;

@@ -514,7 +514,7 @@ class Repair{
                                     + " has graduated to "
                                     + StringUtils.aOrAn(UnitUtils.techDescription(techType + 1),true)
                                     + " tech.", Username, false);
-                        } else if ( player.getTotalTechs().elementAt(techType) > 0){
+                        } else if ( player.getTotalTech(techType) > 0){
                             // AvailableTech was already removed so just move the tech to the next level
                             player.addAvailableTechs(techType + 1, 1);
                             // Now remove the tech from its old class and move it to its new class
@@ -528,7 +528,7 @@ class Repair{
                         }
                     }
 
-                    if (retireTech && (player.getTotalTechs().elementAt(techType) > 0) ) {
+                    if (retireTech && (player.getTotalTech(techType) > 0) ) {
                         CampaignMain.cm.toUser(
                                 "FSM|<font color=#ff80ff>One of your "
                                         + UnitUtils.techDescription(techType)

@@ -101,7 +101,7 @@ public class  NoPlayCommand  implements Command {
         boolean hasEnoughRP = false;
         boolean hasEnoughInfluence = false;
         boolean hasEnoughMU = false;
-        if (p.getReward() >= removeRPCost) {
+        if (p.getRewardPoints() >= removeRPCost) {
             hasEnoughRP = true;
         }
         if (p.getMoney() >= removeMUCost) {
@@ -261,7 +261,7 @@ public class  NoPlayCommand  implements Command {
                     exList.removeExclude(false, excludeName);
                     CampaignMain.cm.toUser(excludeName + "was removed from your no-play list (-" + shortCost + ").", Username, true);
                     p.addMoney(-removeMUCost);
-                    p.addReward(-removeRPCost);
+                    p.addRewardPoints(-removeRPCost);
                     p.addInfluence(-removeFluCost);
                     CampaignMain.cm.toUser("PL|PEU|" + p.getExclusionList().playerExcludeToString("$"), Username, false);
                     p.setSave();

@@ -21,8 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Properties;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class CampaignOptions extends MekWarsConfig {
     private static final Logger LOGGER = LogManager.getLogger(CampaignOptions.class);

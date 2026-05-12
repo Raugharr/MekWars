@@ -87,7 +87,7 @@ public class  RefreshFactoryCommand  implements Command {
 
 		int rpCost = CampaignMain.cm.getIntegerConfig("RewardPointToRefreshFactory");
 		int fluCost = CampaignMain.cm.getIntegerConfig("FluToRefreshFactory");
-		int playerRP = player.getReward();
+		int playerRP = player.getRewardPoints();
 		int playerFlu = player.getInfluence();
 
 		if (playerRP < rpCost && !useFlu)
@@ -103,7 +103,7 @@ public class  RefreshFactoryCommand  implements Command {
 		}
 
 		if(!useFlu)
-			player.addReward(-rpCost);
+			player.addRewardPoints(-rpCost);
 		else
 			player.addInfluence(-fluCost);
 

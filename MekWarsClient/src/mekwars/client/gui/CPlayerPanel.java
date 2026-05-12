@@ -199,7 +199,7 @@ public class CPlayerPanel extends JScrollPane {
                 lblLogo.setBackground(mwclient.getGUIClient().getMainFrame().getBackground());
                 lblLogo.getDocument().remove(0,lblLogo.getDocument().getLength());
                 ((HTMLEditorKit) lblLogo.getEditorKit()).read(
-                    new StringReader(mwclient.getPlayer().getLogo()), lblLogo.getDocument(),0);
+                    new StringReader(mwclient.getPlayer().getLogoTag()), lblLogo.getDocument(),0);
                 lblLogo.setCaretPosition(lblLogo.getDocument().getLength());
             }catch(Exception ex){
                 LOGGER.error("Exception: ", ex);
@@ -208,7 +208,7 @@ public class CPlayerPanel extends JScrollPane {
         }//lblLogo.setIcon(mwclient.getConfig().getImage("LOGO"));}
         lblName.setText(player.getName());
         lblStatus.setText(PP_STATUS + " " + mwclient.getStatus());
-        lblExp.setText(PP_EXP + " " + player.getExp());
+        lblExp.setText(PP_EXP + " " + player.getExperience());
         DecimalFormat myFormatter = new DecimalFormat("###.##");
         String ratingStr = myFormatter.format(player.getRating());
         lblRating.setText(PP_ELO + " " + ratingStr);
@@ -224,14 +224,14 @@ public class CPlayerPanel extends JScrollPane {
         if ( mwclient.isUsingAdvanceRepairs() ){
             //when the client first loads it doesn't have data in the vectors.
             try{
-                lblMekbay.setText(PP_BAYS + " " + player.getFreeBays()+"/"+player.getBays()+ " (" +mwclient.moneyOrFluMessage(true,true,player.getTechCost())+")");
-                lblTechs.setText(PP_IDLETECHS  + " " + player.getAvailableTechs().get(UnitUtils.TECH_GREEN) + "/" + player.getAvailableTechs().get(UnitUtils.TECH_REG) + "/" + player.getAvailableTechs().get(UnitUtils.TECH_VET) + "/" + player.getAvailableTechs().get(UnitUtils.TECH_ELITE));
+                lblMekbay.setText(PP_BAYS + " " + player.getFreeBays()+"/"+player.getBays()+ " (" +mwclient.moneyOrFluMessage(true,true,player.getCurrentTechPayment())+")");
+                lblTechs.setText(PP_IDLETECHS  + " " + player.getAvailableTech(UnitUtils.TECH_GREEN) + "/" + player.getAvailableTech(UnitUtils.TECH_REG) + "/" + player.getAvailableTech(UnitUtils.TECH_VET) + "/" + player.getAvailableTech(UnitUtils.TECH_ELITE));
             }
             catch(Exception ex){}
         }
         else{
             lblMekbay.setText(PP_TECHS + " " + player.getFreeBays() + "/" + player.getBays());
-            lblTechs.setText(PP_PAIDTECHS + " " + player.getTechs() + " (" +mwclient.moneyOrFluMessage(true,true,player.getTechCost())+")");
+            lblTechs.setText(PP_PAIDTECHS + " " + player.getTechnicians() + " (" +mwclient.moneyOrFluMessage(true,true,player.getCurrentTechPayment())+")");
         }
 
         lblRewardPoints.setText(PP_REWARD + " " + player.getRewardPoints() + "/" + mwclient.getServerConfigs("XPRewardCap"));

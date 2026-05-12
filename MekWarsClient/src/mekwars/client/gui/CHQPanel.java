@@ -272,17 +272,17 @@ public class CHQPanel extends JPanel {
     }
 
     private void repairAllUnitsButtonActionPerformed(ActionEvent evt) {
-        if (mwclient.getPlayer().getHangar().size() > 0) {
-            new BulkRepairDialog(mwclient, mwclient.getPlayer().getHangar().firstElement().getId(), BulkRepairDialog.TYPE_BULK, BulkRepairDialog.UNIT_TYPE_ALL);
+        if (mwclient.getPlayer().getUnits().size() > 0) {
+            new BulkRepairDialog(mwclient, mwclient.getPlayer().getUnits().get(0).getId(), BulkRepairDialog.TYPE_BULK, BulkRepairDialog.UNIT_TYPE_ALL);
         }
     };
 
     private void reloadAllUnitsButtonActionPerformed(ActionEvent evt) {
-        if (mwclient.getPlayer().getHangar().size() > 0) {
+        if (mwclient.getPlayer().getUnits().size() > 0) {
             int result = JOptionPane.showConfirmDialog(mwclient.getGUIClient().getMainFrame(), "Are you sure you want to reload all the ammo on all your units?", "Reload all units?", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
-                for (CUnit unit : mwclient.getPlayer().getHangar()) {
+                for (CUnit unit : mwclient.getPlayer().getUnits()) {
                     if (!UnitUtils.hasAllAmmo(unit.getEntity())) {
                         mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c RELOADALLAMMO#" + unit.getId());
                     }
@@ -1189,8 +1189,8 @@ public class CHQPanel extends JPanel {
                      * CONSTRUCT the ADD menu here. It will be added to the actual format later. @urgru 12/7/04
                      */
                     JMenu addMenu = new JMenu("Add");
-                    if ((mwclient.getPlayer().getHangar().size() > 0) && !l.isLocked()) {
-                        Object[] mechArray = mwclient.getPlayer().getHangar().toArray();
+                    if ((mwclient.getPlayer().getUnits().size() > 0) && !l.isLocked()) {
+                        Object[] mechArray = mwclient.getPlayer().getUnits().toArray();
                         if (mechArray.length > 0) {
                             Vector<Vector<JMenuItem>> SubMenus = new Vector<Vector<JMenuItem>>(1, 1);
 
@@ -1420,10 +1420,10 @@ public class CHQPanel extends JPanel {
                         /*
                          * EXCHANGE. Derived from ADD. Same, but returns clicked unit to hangar.
                          */
-                        if ((mwclient.getPlayer().getHangar().size() > 0) && !l.isLocked()) {
+                        if ((mwclient.getPlayer().getUnits().size() > 0) && !l.isLocked()) {
                             JMenu jm = new JMenu("Exchange");
                             popup.add(jm);
-                            Object[] mechs = mwclient.getPlayer().getHangar().toArray();
+                            Object[] mechs = mwclient.getPlayer().getUnits().toArray();
                             if (mechs.length > 0) {
                                 Vector<Vector<JMenuItem>> SubMenus = new Vector<Vector<JMenuItem>>();
 
@@ -1998,7 +1998,7 @@ public class CHQPanel extends JPanel {
 
                     else if (Player.getFreeBays() > 0) {
                         int hangernum = (((row - MekTable.getRowsForArmies()) * (MekTable.getColumnCount() - 1)) + col) - 1;
-                        if (hangernum == mwclient.getPlayer().getHangar().size()) {// only
+                        if (hangernum == mwclient.getPlayer().getUnits().size()) {// only
                             // show
                             // in
                             // first
@@ -2892,7 +2892,7 @@ public class CHQPanel extends JPanel {
                 freebays = 0;
             }
 
-            return (int) Math.ceil((double) (freebays + Player.getHangar().size()) / (getColumnCount() - 1));
+            return (int) Math.ceil((double) (freebays + Player.getUnits().size()) / (getColumnCount() - 1));
         }
 
         public int getRowsForArmies() {
@@ -2951,8 +2951,8 @@ public class CHQPanel extends JPanel {
                     return null;
                 }
                 int hangernum = (((row - getRowsForArmies()) * (getColumnCount() - 1)) + col) - 1;
-                if ((hangernum >= 0) && (hangernum < Player.getHangar().size())) {
-                    return Player.getHangar().get(hangernum);
+                if ((hangernum >= 0) && (hangernum < Player.getUnits().size())) {
+                    return Player.getUnits().get(hangernum);
                 }
             }
             return null;
@@ -3080,7 +3080,7 @@ public class CHQPanel extends JPanel {
                 return " - ";
             } else if (cm == null) {// and in hangar row
                 int hangernum = (((row - getRowsForArmies()) * (getColumnCount() - 1)) + col) - 1;
-                if (hangernum == Player.getHangar().size()) {// only show in
+                if (hangernum == Player.getUnits().size()) {// only show in
                     // first free
                     // cell
                     if (useAdvanceRepairs) {
@@ -3327,7 +3327,7 @@ public class CHQPanel extends JPanel {
                     if (freebays < 0) {
                         freebays = 0;
                     }
-                    if (meknum > (freebays + Player.getHangar().size())) {
+                    if (meknum > (freebays + Player.getUnits().size())) {
                         c.setText("");
                     }
                 }

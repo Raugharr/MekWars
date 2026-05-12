@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -29,7 +30,6 @@ import megamek.client.bot.BotClient;
 import megamek.client.bot.princess.Princess;
 import megamek.client.generator.RandomGenderGenerator;
 import megamek.client.ui.swing.ClientGUI;
-import megamek.client.ui.swing.MegaMekGUI;
 import megamek.client.ui.swing.util.MegaMekController;
 import megamek.common.Board;
 import megamek.common.BoardDimensions;
@@ -72,8 +72,8 @@ public class ClientThread extends Thread implements CloseClientListener {
     private ClientGUI swingGui;
     private MegaMekController controller;
 
-    private ArrayList<Unit> mechs = new ArrayList<Unit>();
-    private ArrayList<CUnit> autoarmy = new ArrayList<CUnit>();// from server's
+    private List<Unit> mechs = new ArrayList<Unit>();
+    private List<CUnit> autoarmy = new ArrayList<CUnit>();// from server's
     // auto army
     CArmy army = null;
     BotClient bot = null;
@@ -86,7 +86,7 @@ public class ClientThread extends Thread implements CloseClientListener {
     final int NW = 5;
 
     // CONSTRUCTOR
-    public ClientThread(String name, String servername, String ip, int port, MWClient mwclient, ArrayList<Unit> mechs, ArrayList<CUnit> autoarmy) {
+    public ClientThread(String name, String servername, String ip, int port, MWClient mwclient, List<Unit> mechs, List<CUnit> autoarmy) {
         super(name);
         myname = name.trim();
         serverName = servername;
