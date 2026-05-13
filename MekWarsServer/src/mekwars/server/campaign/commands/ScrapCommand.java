@@ -140,8 +140,8 @@ public class  ScrapCommand  implements Command {
         	costMulti = Float.parseFloat(house.getConfig("ScrapCostMultiplier"));
 	
 		//Now that we have the multimpliers, determine how much the scarp costs (or gives)
-		int moneyToScrap = Math.round(p.getMyHouse().getPriceForUnit(m.getWeightclass(), m.getType()) * costMulti);
-		int infToScrap = (int)(p.getMyHouse().getInfluenceForUnit(m.getWeightclass(), m.getType())* costMulti);
+		int moneyToScrap = Math.round(p.getMyHouse().getPriceForUnit(m.getWeightClass(), m.getType()) * costMulti);
+		int infToScrap = (int)(p.getMyHouse().getInfluenceForUnit(m.getWeightClass(), m.getType())* costMulti);
 		
 		//Allow negative monetary costs (give money back), but don't allow scrapping to grant flu.
 		if (infToScrap < 0)
@@ -191,20 +191,20 @@ public class  ScrapCommand  implements Command {
         		&& !m.hasVacantPilot() 
         		&& m.isSinglePilotUnit() ){
             SPilot pilot = (SPilot)m.getPilot();
-            p.getPersonalPilotQueue().addPilot(m.getPilot(), m.getWeightclass());
-            CampaignMain.cm.toUser("PL|AP2PPQ|"+m.getType()+"|"+m.getWeightclass()+"|"+pilot.toFileFormat("#",true),Username,false);
+            p.getPersonalPilotQueue().addPilot(m.getPilot(), m.getWeightClass());
+            CampaignMain.cm.toUser("PL|AP2PPQ|"+m.getType()+"|"+m.getWeightClass()+"|"+pilot.toFileFormat("#",true),Username,false);
             CampaignMain.cm.toUser(pilot.getName() + " was moved to your barracks.",Username,true);
-            p.getPersonalPilotQueue().checkQueueAndWarn(p.getName(), m.getType(), m.getWeightclass());
+            p.getPersonalPilotQueue().checkQueueAndWarn(p.getName(), m.getType(), m.getWeightClass());
 
         }
         else
             p.getMyHouse().addDispossessedPilot(m, false);
 
-		CampaignMain.cm.addMechStat(m.getUnitFilename(), m.getWeightclass(), 0, 0, 1);
+		CampaignMain.cm.addMechStat(m.getUnitFilename(), m.getWeightClass(), 0, 0, 1);
 
 		//add PP to the faction for the scrapped unit. 1/4th of original components.
-		int initialPP = p.getMyHouse().getPPCost(m.getWeightclass(), m.getType());
-		p.getMyHouse().addPP(m.getWeightclass(), m.getType(), initialPP/4, true);
+		int initialPP = p.getMyHouse().getPPCost(m.getWeightClass(), m.getType());
+		p.getMyHouse().addPP(m.getWeightClass(), m.getType(), initialPP/4, true);
 	}//end process()
 
 }//end ScrapCommand

@@ -130,15 +130,15 @@ public class UnitCosts {
                 SUnit unit = new SUnit("null", entityName, Unit.LIGHT);
                 double cost = unit.getEntity().getCost(true);
 
-                double maxCost = getMaxCostValue(unit.getWeightclass(), unit.getType());
+                double maxCost = getMaxCostValue(unit.getWeightClass(), unit.getType());
                 if (cost > maxCost) {
-                    addMaxCost(unit.getWeightclass(), unit.getType(), cost);
+                    addMaxCost(unit.getWeightClass(), unit.getType(), cost);
                     continue;
                 }
 
-                double minCost = getMinCostValue(unit.getWeightclass(), unit.getType());
+                double minCost = getMinCostValue(unit.getWeightClass(), unit.getType());
                 if (minCost == 0 || cost < minCost) {
-                    addMinCost(unit.getWeightclass(), unit.getType(), cost);
+                    addMinCost(unit.getWeightClass(), unit.getType(), cost);
                 }
             }
 
@@ -162,15 +162,15 @@ public class UnitCosts {
                 SUnit unit = new SUnit("null", entityName, Unit.LIGHT);
                 double cost = unit.getEntity().getCost(true);
 
-                double maxCost = getMaxCostValue(unit.getWeightclass(), unit.getType());
+                double maxCost = getMaxCostValue(unit.getWeightClass(), unit.getType());
                 if (cost > maxCost) {
-                    addMaxCost(unit.getWeightclass(), unit.getType(), cost);
+                    addMaxCost(unit.getWeightClass(), unit.getType(), cost);
                     continue;
                 }
 
-                double minCost = getMinCostValue(unit.getWeightclass(), unit.getType());
+                double minCost = getMinCostValue(unit.getWeightClass(), unit.getType());
                 if (minCost == 0 || cost < minCost) {
-                    addMinCost(unit.getWeightclass(), unit.getType(), cost);
+                    addMinCost(unit.getWeightClass(), unit.getType(), cost);
                 }
 
             }
@@ -195,14 +195,14 @@ public class UnitCosts {
                 SUnit unit = new SUnit("null", entityName, Unit.LIGHT);
                 double cost = unit.getEntity().getCost(true);
 
-                double maxCost = getMaxCostValue(unit.getWeightclass(), unit.getType());
+                double maxCost = getMaxCostValue(unit.getWeightClass(), unit.getType());
                 if (cost > maxCost) {
-                    addMaxCost(unit.getWeightclass(), unit.getType(), cost);
+                    addMaxCost(unit.getWeightClass(), unit.getType(), cost);
                     continue;
                 }
-                double minCost = getMinCostValue(unit.getWeightclass(), unit.getType());
+                double minCost = getMinCostValue(unit.getWeightClass(), unit.getType());
                 if (minCost == 0 || cost < minCost) {
-                    addMinCost(unit.getWeightclass(), unit.getType(), cost);
+                    addMinCost(unit.getWeightClass(), unit.getType(), cost);
                 }
 
             }

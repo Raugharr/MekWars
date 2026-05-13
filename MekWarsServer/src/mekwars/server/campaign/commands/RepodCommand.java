@@ -177,7 +177,7 @@ public class RepodCommand implements Command {
                     fileName =
                             BuildTable.getFileName(
                                     faction.getName(),
-                                    Unit.getWeightClassDesc(m.getWeightclass()),
+                                    Unit.getWeightClassDesc(m.getWeightClass()),
                                     timeZone,
                                     m.getType());
                     // LOGGER.error("File: "+fileName);
@@ -190,7 +190,7 @@ public class RepodCommand implements Command {
                     fileName =
                             BuildTable.getFileName(
                                     "Common",
-                                    Unit.getWeightClassDesc(m.getWeightclass()),
+                                    Unit.getWeightClassDesc(m.getWeightClass()),
                                     timeZone,
                                     m.getType());
                     if (!tables.contains(fileName)) {
@@ -204,7 +204,7 @@ public class RepodCommand implements Command {
                 fileName =
                         BuildTable.getFileName(
                                 h.getName(),
-                                Unit.getWeightClassDesc(m.getWeightclass()),
+                                Unit.getWeightClassDesc(m.getWeightClass()),
                                 timeZone,
                                 m.getType());
                 // LOGGER.error("File: "+fileName);
@@ -216,7 +216,7 @@ public class RepodCommand implements Command {
                     fileName =
                             BuildTable.getFileName(
                                     "Common",
-                                    Unit.getWeightClassDesc(m.getWeightclass()),
+                                    Unit.getWeightClassDesc(m.getWeightClass()),
                                     timeZone,
                                     m.getType());
                     if (!tables.contains(fileName)) {
@@ -229,13 +229,13 @@ public class RepodCommand implements Command {
                 possible =
                         p.getMyHouse()
                                 .getPossibleFactoryForProduction(
-                                        m.getType(), m.getWeightclass(), false);
+                                        m.getType(), m.getWeightClass(), false);
                 for (SUnitFactory working : possible) {
 
                     String fileName =
                             BuildTable.getFileName(
                                     working.getFounder(),
-                                    Unit.getWeightClassDesc(m.getWeightclass()),
+                                    Unit.getWeightClassDesc(m.getWeightClass()),
                                     working.getBuildTableFolder(),
                                     m.getType());
 
@@ -247,7 +247,7 @@ public class RepodCommand implements Command {
                         fileName =
                                 BuildTable.getFileName(
                                         "Common",
-                                        Unit.getWeightClassDesc(m.getWeightclass()),
+                                        Unit.getWeightClassDesc(m.getWeightClass()),
                                         working.getBuildTableFolder(),
                                         m.getType());
                         if (!tables.contains(fileName)) {
@@ -343,15 +343,15 @@ public class RepodCommand implements Command {
                                             String repodMoneyCfg =
                                                     "RepodCost"
                                                             + Unit.getWeightClassDesc(
-                                                                    cm.getWeightclass());
+                                                                    cm.getWeightClass());
                                             String repodInfluCfg =
                                                     "RepodFlu"
                                                             + Unit.getWeightClassDesc(
-                                                                    cm.getWeightclass());
+                                                                    cm.getWeightClass());
                                             String repodCompCfg =
                                                     "RepodComp"
                                                             + Unit.getWeightClassDesc(
-                                                                    cm.getWeightclass());
+                                                                    cm.getWeightClass());
 
                                             int repodMoneyMod =
                                                     Integer.parseInt(h.getConfig(repodMoneyCfg));
@@ -499,11 +499,11 @@ public class RepodCommand implements Command {
                 return;
             }
 
-            String repodMoneyCfg = "RepodCost" + Unit.getWeightClassDesc(m.getWeightclass());
-            String repodInfluCfg = "RepodFlu" + Unit.getWeightClassDesc(m.getWeightclass());
-            String repodCompCfg = "RepodComp" + Unit.getWeightClassDesc(m.getWeightclass());
+            String repodMoneyCfg = "RepodCost" + Unit.getWeightClassDesc(m.getWeightClass());
+            String repodInfluCfg = "RepodFlu" + Unit.getWeightClassDesc(m.getWeightClass());
+            String repodCompCfg = "RepodComp" + Unit.getWeightClassDesc(m.getWeightClass());
             String repodRefreshCfg =
-                    "RepodRefreshTime" + Unit.getWeightClassDesc(m.getWeightclass());
+                    "RepodRefreshTime" + Unit.getWeightClassDesc(m.getWeightClass());
             int repodMoneyMod = 0, repodCompMod = 0, repodFluMod = 0;
 
             if (CampaignMain.cm.getOmniVariantMods().get(cm.getModelName()) != null) {
@@ -555,7 +555,7 @@ public class RepodCommand implements Command {
                         compCost = (compCost * repodRandomMod) / 100;
                     }
 
-                    if (h.getPP(m.getWeightclass(), m.getType()) < compCost) {
+                    if (h.getPP(m.getWeightClass(), m.getType()) < compCost) {
                         CampaignMain.cm.toUser(
                                 "AM:Your faction doesn't have enough components to repod this unit."
                                         + " You need "
@@ -577,7 +577,7 @@ public class RepodCommand implements Command {
                     hsUpdates.append(working.addRefresh(refreshTime, false));
                 }
 
-                hsUpdates.append(h.addPP(m.getWeightclass(), m.getType(), -compCost, false));
+                hsUpdates.append(h.addPP(m.getWeightClass(), m.getType(), -compCost, false));
                 if (hsUpdates.length() > 0) {
                     CampaignMain.cm.doSendToAllOnlinePlayers(
                             h, "HS|" + hsUpdates.toString(), false);
@@ -618,7 +618,7 @@ public class RepodCommand implements Command {
 
         cm.getEntity().setExternalSearchlight(entity.hasSearchlight());
         cm.getEntity().setSearchlightState(entity.isUsingSearchlight());
-        cm.setWeightclass(m.getWeightclass());
+        cm.setWeightClass(m.getWeightClass());
         cm.setType(m.getType());
         // since unit cannot be in armies, no checkOperations on remove
         p.removeUnit(unitid, false);

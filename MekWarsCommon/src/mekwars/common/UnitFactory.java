@@ -427,7 +427,7 @@ public class UnitFactory implements Serializable {
 		return result;
 	}
 	
-	public int getWeightclass() {
+	public int getWeightClass() {
 		if (getSize().equalsIgnoreCase("Light"))
 			return Unit.LIGHT;
 		else if (getSize().equalsIgnoreCase("Medium"))

@@ -143,7 +143,7 @@ public class SellCommand implements Command {
 		 * this unit (base cost + weight mod), then check amount.
 		 */
 		int sellFluCost = Integer.parseInt(house.getConfig("BMSellFlu"));
-		sellFluCost = sellFluCost + (unitToSell.getWeightclass()) * house.getIntegerConfig("BMFluSizeCost");
+		sellFluCost = sellFluCost + (unitToSell.getWeightClass()) * house.getIntegerConfig("BMFluSizeCost");
 		if(p.getInfluence() < sellFluCost) {
 			CampaignMain.cm.toUser("AM:You need " + CampaignMain.cm.moneyOrFluMessage(false,true,sellFluCost)
 					+ " to sell the " + unitToSell.getModelName() + ".", Username, true);

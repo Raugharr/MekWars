@@ -355,7 +355,7 @@ public class SHouse extends TimeUpdateHouse
                     m.fromString(TokenReader.readString(ST));
 
                     if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightclass(), m.getType());
+                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
                         int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
                         CampaignMain.cm
                                 .getMarket()
@@ -375,7 +375,7 @@ public class SHouse extends TimeUpdateHouse
                     m.fromString(TokenReader.readString(ST));
 
                     if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightclass(), m.getType());
+                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
                         int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
                         CampaignMain.cm
                                 .getMarket()
@@ -396,7 +396,7 @@ public class SHouse extends TimeUpdateHouse
                         m.fromString(TokenReader.readString(ST));
 
                         if (newbieHouse) {
-                            int priceForUnit = getPriceForUnit(m.getWeightclass(), m.getType());
+                            int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
                             int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
                             CampaignMain.cm
                                     .getMarket()
@@ -512,7 +512,7 @@ public class SHouse extends TimeUpdateHouse
                     m.fromString(TokenReader.readString(ST));
 
                     if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightclass(), m.getType());
+                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
                         int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
                         CampaignMain.cm
                                 .getMarket()
@@ -533,7 +533,7 @@ public class SHouse extends TimeUpdateHouse
                     m.fromString(TokenReader.readString(ST));
 
                     if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightclass(), m.getType());
+                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
                         int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
                         CampaignMain.cm
                                 .getMarket()
@@ -636,7 +636,7 @@ public class SHouse extends TimeUpdateHouse
                     m.fromString(TokenReader.readString(ST));
 
                     if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightclass(), m.getType());
+                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
                         int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
                         CampaignMain.cm
                                 .getMarket()
@@ -1048,7 +1048,7 @@ public class SHouse extends TimeUpdateHouse
                         // int minPrice = getPriceForUnit(i, typeId);
                         int minPrice = getBMPriceForUnit(i, typeId);
                         String saleTicksString =
-                                Unit.getWeightClassDesc(randUnit.getWeightclass()) + "SaleTicks";
+                                Unit.getWeightClassDesc(randUnit.getWeightClass()) + "SaleTicks";
                         // add 1 to the sale tick due to a quirk with the BM
                         // autoupdate.
                         // The the unit is sent to the player before the new
@@ -1167,42 +1167,14 @@ public class SHouse extends TimeUpdateHouse
                              */
                             if (!Boolean.parseBoolean(this.getConfig("UseCalculatedCosts"))) {
                                 // set the refresh miniticks
-                                if (m.getWeightclass() == Unit.LIGHT) {
-                                    hsUpdates.append(
-                                            m.addRefresh(
-                                                    (Integer.parseInt(
-                                                                            this.getConfig(
-                                                                                    "LightRefresh"))
-                                                                    * 100)
-                                                            / m.getRefreshSpeed(),
-                                                    false));
-                                } else if (m.getWeightclass() == Unit.MEDIUM) {
-                                    hsUpdates.append(
-                                            m.addRefresh(
-                                                    (Integer.parseInt(
-                                                                            this.getConfig(
-                                                                                    "MediumRefresh"))
-                                                                    * 100)
-                                                            / m.getRefreshSpeed(),
-                                                    false));
-                                } else if (m.getWeightclass() == Unit.HEAVY) {
-                                    hsUpdates.append(
-                                            m.addRefresh(
-                                                    (Integer.parseInt(
-                                                                            this.getConfig(
-                                                                                    "HeavyRefresh"))
-                                                                    * 100)
-                                                            / m.getRefreshSpeed(),
-                                                    false));
-                                } else if (m.getWeightclass() == Unit.ASSAULT) {
-                                    hsUpdates.append(
-                                            m.addRefresh(
-                                                    (Integer.parseInt(
-                                                                            this.getConfig(
-                                                                                    "AssaultRefresh"))
-                                                                    * 100)
-                                                            / m.getRefreshSpeed(),
-                                                    false));
+                                if (m.getWeightClass() == Unit.LIGHT) {
+                                    hsUpdates.append(m.addRefresh((Integer.parseInt(this.getConfig("LightRefresh")) * 100) / m.getRefreshSpeed(), false));
+                                } else if (m.getWeightClass() == Unit.MEDIUM) {
+                                    hsUpdates.append(m.addRefresh((Integer.parseInt(this.getConfig("MediumRefresh")) * 100) / m.getRefreshSpeed(), false));
+                                } else if (m.getWeightClass() == Unit.HEAVY) {
+                                    hsUpdates.append(m.addRefresh((Integer.parseInt(this.getConfig("HeavyRefresh")) * 100) / m.getRefreshSpeed(), false));
+                                } else if (m.getWeightClass() == Unit.ASSAULT) {
+                                    hsUpdates.append(m.addRefresh((Integer.parseInt(this.getConfig("AssaultRefresh")) * 100) / m.getRefreshSpeed(), false));
                                 }
                             }
 
@@ -2040,7 +2012,7 @@ public class SHouse extends TimeUpdateHouse
     public String removeUnit(SUnit unitToRemove, boolean sendUpdate) {
 
         List<SUnit> weightClass =
-                this.getHangar(unitToRemove.getType()).get(unitToRemove.getWeightclass());
+                this.getHangar(unitToRemove.getType()).get(unitToRemove.getWeightClass());
         weightClass.remove(unitToRemove);
 
         String hsUpdate = getHSUnitRemovalString(unitToRemove);
@@ -2074,10 +2046,10 @@ public class SHouse extends TimeUpdateHouse
 
         if (Boolean.parseBoolean(this.getConfig("UseOnlyOneVehicleSize"))
                 && unit.getType() == Unit.VEHICLE) {
-            unit.setWeightclass(Unit.LIGHT);
+            unit.setWeightClass(Unit.LIGHT);
         }
 
-        List<SUnit> weightClass = getHangar(unit.getType()).get(unit.getWeightclass());
+        List<SUnit> weightClass = getHangar(unit.getType()).get(unit.getWeightClass());
         if (weightClass.contains(unit)) {
             return "";
         }
@@ -2431,7 +2403,7 @@ public class SHouse extends TimeUpdateHouse
                 SUnitFactory currFactory = (SUnitFactory) currPlanet.getUnitFactories().get(i);
                 result.append("AF" + cmdDelim); // cmd header
 
-                result.append(currFactory.getWeightclass() + internalDelim);
+                result.append(currFactory.getWeightClass() + internalDelim);
                 result.append(currFactory.getType() + internalDelim);
 
                 result.append(currFactory.getFounder() + internalDelim);
@@ -2476,7 +2448,7 @@ public class SHouse extends TimeUpdateHouse
         SerializedMessage result = new SerializedMessage("$");
 
         // header info
-        result.append("AU|" + u.getWeightclass());
+        result.append("AU|" + u.getWeightClass());
         result.append(u.getType());
 
         // unit information (note: no pilot info included)
@@ -2530,7 +2502,7 @@ public class SHouse extends TimeUpdateHouse
 
         // header info
         result.append("RU|");
-        result.append(u.getWeightclass() + "$" + u.getType() + "$");
+        result.append(u.getWeightClass() + "$" + u.getType() + "$");
         result.append(u.getId());
 
         // fianlize and return

@@ -19,7 +19,6 @@ package mekwars.common;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import mekwars.common.House;
 import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.campaign.HouseOptions;
 

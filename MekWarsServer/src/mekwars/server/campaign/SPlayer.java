@@ -680,7 +680,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
 
                     // if scrapping costs bills, subtract the appropriate
                     // amount.
-                    int mechscrapprice = Math.round(getMyHouse().getPriceForUnit(currUnit.getWeightclass(), currUnit.getType()) * Float.parseFloat(getMyHouse().getConfig("ScrapCostMultiplier")));
+                    int mechscrapprice = Math.round(getMyHouse().getPriceForUnit(currUnit.getWeightClass(), currUnit.getType()) * Float.parseFloat(getMyHouse().getConfig("ScrapCostMultiplier")));
                     if (getMoney() < mechscrapprice) {
                         mechscrapprice = getMoney();
                     }

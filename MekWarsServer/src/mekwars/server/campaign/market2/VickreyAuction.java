@@ -74,7 +74,7 @@ public final class VickreyAuction implements IAuction {
             u = CampaignMain.cm.getPlayer(listing.getSellerName()).getUnit(listing.getListedUnitID());
         }
         unitType = u.getType();
-        unitWeightClass = u.getWeightclass();
+        unitWeightClass = u.getWeightClass();
         
         /*
          * Now, loop through the ordered bids until we find someone

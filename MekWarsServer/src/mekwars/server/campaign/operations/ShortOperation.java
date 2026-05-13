@@ -2866,7 +2866,7 @@ public class ShortOperation implements Comparable<Object> {
             // get a random factory
             SUnitFactory currFacility = (SUnitFactory) factoriesSearched.remove(CampaignMain.cm.getRandomNumber(factoriesSearched.size()));
 
-            int currWeight = currFacility.getWeightclass();
+            int currWeight = currFacility.getWeightClass();
 
             for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
 
@@ -2889,8 +2889,8 @@ public class ShortOperation implements Comparable<Object> {
                 }
 
                 // Check if there are enough PPs
-                int ppAvailable = losingHouse.getPP(currFacility.getWeightclass(), type);
-                int ppNeed = currFacility.getPPCost(currFacility.getWeightclass(), type);
+                int ppAvailable = losingHouse.getPP(currFacility.getWeightClass(), type);
+                int ppNeed = currFacility.getPPCost(currFacility.getWeightClass(), type);
                 if (ppNeed > ppAvailable) {
                     LOGGER.debug("Not enough PP to capture a unit.  Needed: " + ppNeed + ", available: " + ppAvailable);
                     continue;
@@ -2902,7 +2902,7 @@ public class ShortOperation implements Comparable<Object> {
                     Vector<SUnit> captured = new Vector<SUnit>(1, 1);
                     if (forced) {
                         captured.addAll(currFacility.getMechProduced(type, pilot));
-                        losingHouse.addPP(currFacility.getWeightclass(), type, -ppNeed, false);
+                        losingHouse.addPP(currFacility.getWeightClass(), type, -ppNeed, false);
                     } else {
                         SUnit capturedUnit = losingHouse.getEntity(currWeight, type);
                         if ((capturedUnit != null) && UnitUtils.canStartUp(capturedUnit.getEntity())) {

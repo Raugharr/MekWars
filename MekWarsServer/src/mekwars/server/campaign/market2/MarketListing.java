@@ -75,9 +75,9 @@ public final class MarketListing {
 		fileName = unit.getUnitFilename();
 
 		unitTypeString = Unit.getTypeClassDesc(unit.getType());
-		unitWeightString = Unit.getWeightClassDesc(unit.getWeightclass());
+		unitWeightString = Unit.getWeightClassDesc(unit.getWeightClass());
 		unitType = unit.getType();
-		unitWeight = unit.getWeightclass();
+		unitWeight = unit.getWeightClass();
 
 	}
 	

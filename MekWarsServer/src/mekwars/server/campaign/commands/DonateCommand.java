@@ -135,8 +135,8 @@ public class DonateCommand implements Command {
 		float costMulti = Float.parseFloat(house.getConfig("DonationCostMultiplier"));
 	
 		//Now that we have the multimpliers, determine how much the scarp costs (or gives)
-		int moneyToDonate = Math.round(p.getMyHouse().getPriceForUnit(m.getWeightclass(), m.getType()) * costMulti);
-		int infToDonate = (int)(p.getMyHouse().getInfluenceForUnit(m.getWeightclass(), m.getType())* costMulti);
+		int moneyToDonate = Math.round(p.getMyHouse().getPriceForUnit(m.getWeightClass(), m.getType()) * costMulti);
+		int infToDonate = (int)(p.getMyHouse().getInfluenceForUnit(m.getWeightClass(), m.getType())* costMulti);
 		
 		//Allow negative monetary costs (give money back), but don't allow donations to grant flu.
 		if (infToDonate < 0)
@@ -171,10 +171,10 @@ public class DonateCommand implements Command {
 		//Save the pilot
 		SPilot oldPilot = (SPilot)m.getPilot();
 		if (Boolean.parseBoolean(house.getConfig("AllowPersonalPilotQueues")) && !m.hasVacantPilot() && m.isSinglePilotUnit()) {
-			p.getPersonalPilotQueue().addPilot(m.getPilot(), m.getWeightclass());
-			CampaignMain.cm.toUser("PL|AP2PPQ|"+m.getType() + "|" + m.getWeightclass() + "|" + oldPilot.toFileFormat("#",true),Username,false);
+			p.getPersonalPilotQueue().addPilot(m.getPilot(), m.getWeightClass());
+			CampaignMain.cm.toUser("PL|AP2PPQ|"+m.getType() + "|" + m.getWeightClass() + "|" + oldPilot.toFileFormat("#",true),Username,false);
             CampaignMain.cm.toUser(oldPilot.getName() + " was moved to your barracks.",Username,true);
-    	    p.getPersonalPilotQueue().checkQueueAndWarn(p.getName(), m.getType(), m.getWeightclass());
+    	    p.getPersonalPilotQueue().checkQueueAndWarn(p.getName(), m.getType(), m.getWeightClass());
             //Stick a vacant pilot into the unit before sending to the house
             m.setPilot(new SPilot("Vacant",99,99));
 		} else if ( !CampaignMain.cm.getBooleanConfig("CrewsStayWithUnits")){

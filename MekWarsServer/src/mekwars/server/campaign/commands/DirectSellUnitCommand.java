@@ -125,8 +125,8 @@ public class  DirectSellUnitCommand  implements Command {
                 CampaignMain.cm.toUser(pBuyer.getName() + " has the same IP as you do. You can't send him units.", Username, true);
                 return;
             }
-        } else if (!pBuyer.hasRoomForUnit(m.getType(), m.getWeightclass())) {
-            CampaignMain.cm.toUser(pBuyer.getName() + " has no room for another " + Unit.getWeightClassDesc(m.getWeightclass()) + " " + Unit.getTypeClassDesc(m.getType()), Username, true);
+        } else if (!pBuyer.hasRoomForUnit(m.getType(), m.getWeightClass())) {
+            CampaignMain.cm.toUser(pBuyer.getName() + " has no room for another " + Unit.getWeightClassDesc(m.getWeightClass()) + " " + Unit.getTypeClassDesc(m.getType()), Username, true);
             return;
         } else if (m.getStatus() == Unit.STATUS_UNMAINTAINED) {
             CampaignMain.cm.toUser("AM:You may not sell unmaintained mechs.", Username, true);
@@ -151,7 +151,7 @@ public class  DirectSellUnitCommand  implements Command {
         }
 
         // check transfer charge configuration
-        String basePayment = "SellDirect" + Unit.getWeightClassDesc(m.getWeightclass()) + Unit.getTypeClassDesc(m.getType()) + "Price";
+        String basePayment = "SellDirect" + Unit.getWeightClassDesc(m.getWeightClass()) + Unit.getTypeClassDesc(m.getType()) + "Price";
         int transferPayment = CampaignMain.cm.getIntegerConfig(basePayment);
 
         // if the receiver pays, make sure he can afford the transfer without

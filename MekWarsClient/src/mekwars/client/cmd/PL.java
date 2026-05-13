@@ -192,7 +192,7 @@ public class PL extends Command {
             StringTokenizer data = new StringTokenizer(TokenReader.readString(st), "#");
             String filename = TokenReader.readString(data);
             String damage = TokenReader.readString(data);
-            CUnit unit = new CUnit(mwclient);
+            CUnit unit = new CUnit();
 
             unit.setUnitFilename(filename);
             unit.createEntity();

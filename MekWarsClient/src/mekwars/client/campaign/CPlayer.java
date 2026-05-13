@@ -170,7 +170,7 @@ public class CPlayer extends Player<CUnit> {
 
         Hangarcount = TokenReader.readInt(ST);
         for (i = 0; i < Hangarcount; i++) {
-            tmek = new CUnit(mwclient);
+            tmek = new CUnit();
             if (tmek.setData(TokenReader.readString(ST))) {
                 addUnit(tmek);
                 LOGGER.debug("Adding unit {} to hanger", tmek.checkModelName());
@@ -221,7 +221,7 @@ public class CPlayer extends Player<CUnit> {
      */
     public void setHangarData(String data) {
         try {
-            CUnit unit = new CUnit(mwclient);
+            CUnit unit = new CUnit();
             if (unit.setData(data)) {
                 addUnit(unit);
                 sortHangar();// sort it!
@@ -407,7 +407,7 @@ public class CPlayer extends Player<CUnit> {
             int distInBoards = Integer.parseInt(mwclient.getServerConfigs("DistanceFromMap"));
             int distInHexes = distInBoards * 17;// 17 hexes per board.
 
-            CUnit currUnit = new CUnit(mwclient);
+            CUnit currUnit = new CUnit();
 
             /*
              * This is needed to set the edge for auto arty when auto edge is
@@ -461,7 +461,7 @@ public class CPlayer extends Player<CUnit> {
                 return;
             }
 
-            CUnit currUnit = new CUnit(mwclient);
+            CUnit currUnit = new CUnit();
             currUnit.setAutoUnitData(filename, 0, OffBoardDirection.NORTH);
             autoArmy.add(currUnit);
         }// end while(tokens)

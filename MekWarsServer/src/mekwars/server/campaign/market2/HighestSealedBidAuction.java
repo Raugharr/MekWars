@@ -67,7 +67,7 @@ public final class HighestSealedBidAuction implements IAuction {
         	u = CampaignMain.cm.getPlayer(listing.getSellerName()).getUnit(listing.getListedUnitID());
         }
     	unitType = u.getType();
-    	unitWeightClass = u.getWeightclass();
+    	unitWeightClass = u.getWeightClass();
         
         
         /*

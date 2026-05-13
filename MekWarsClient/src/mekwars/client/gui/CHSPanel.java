@@ -733,11 +733,11 @@ public class CHSPanel extends JPanel {
 
                                 House foundH = mwclient.getData().getHouseByName(founder);
                                 int cbillCost =
-                                        CUnit.getPriceForUnit(mwclient, weight, type_id, foundH)
+                                        Unit.getPriceForUnit(weight, type_id, foundH)
                                                 + mwclient.getPlayer()
                                                         .getHangarPurchasePenalty(type_id, weight);
                                 int fluCost = foundH.getInfluenceForUnit(weight, type_id);
-                                int ppCost = CUnit.getPPForUnit(mwclient, weight, type_id, foundH);
+                                int ppCost = Unit.getPPForUnit(weight, type_id, foundH);
 
                                 if (!mwclient.getPlayer()
                                         .getMyHouse()
@@ -879,33 +879,11 @@ public class CHSPanel extends JPanel {
                     continue;
                 }
 
-                if ((unitsInfo.get(weight + "$" + type) != null)
-                        && (unitsInfo.get(weight + "$" + type).size() > 0)) {
-                    House foundH =
-                            mwclient.getData()
-                                    .getHouseByName(mwclient.getPlayer().getMyHouse().getName());
-                    int cbillCost =
-                            Math.round(
-                                            CUnit.getPriceForUnit(mwclient, weight, type, foundH)
-                                                    * foundH.getUsedMekBayMultiplier())
-                                    + mwclient.getPlayer().getHangarPurchasePenalty(type, weight);
-                    int fluCost =
-                            Math.round(
-                                    foundH.getInfluenceForUnit(weight, type)
-                                            * foundH.getUsedMekBayMultiplier());
-                    result.append(
-                            "<a href=\"MEKWARS/c requestdonated#"
-                                    + weight
-                                    + "#"
-                                    + type
-                                    + "\"><img border=\"0\" alt=\"Request one of the Units from"
-                                    + " this bay (Cost: "
-                                    + mwclient.moneyOrFluMessage(true, true, cbillCost, false)
-                                    + ", "
-                                    + mwclient.moneyOrFluMessage(false, true, fluCost, false)
-                                    + ")\" src=\"data/images/cart.gif\"></a> "
-                                    + Unit.getWeightClassDesc(weight)
-                                    + ": ");
+                if ((unitsInfo.get(weight + "$" + type) != null) && (unitsInfo.get(weight + "$" + type).size() > 0)) {
+                    House foundH = mwclient.getData().getHouseByName(mwclient.getPlayer().getMyHouse().getName());
+                    int cbillCost = Math.round(Unit.getPriceForUnit(weight, type, foundH) * foundH.getUsedMekBayMultiplier()) + mwclient.getPlayer().getHangarPurchasePenalty(type, weight);
+                    int fluCost = Math.round(Unit.getInfluenceForUnit(weight, type, foundH) * foundH.getUsedMekBayMultiplier());
+                    result.append("<a href=\"MEKWARS/c requestdonated#" + weight + "#" + type + "\"><img border=\"0\" alt=\"Request one of the Units from this bay (Cost: " + mwclient.moneyOrFluMessage(true, true, cbillCost, false) + ", " + mwclient.moneyOrFluMessage(false, true, fluCost, false) + ")\" src=\"data/images/cart.gif\"></a> " + Unit.getWeightClassDesc(weight) + ": ");
                     Vector<HSMek> v = unitsInfo.get(weight + "$" + type);
                     HSMek[] entities = new HSMek[v.size()];
                     for (int i = 0; i < v.size(); i++) {

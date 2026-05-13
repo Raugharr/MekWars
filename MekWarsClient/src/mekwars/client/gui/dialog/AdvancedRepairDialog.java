@@ -265,7 +265,7 @@ public class AdvancedRepairDialog extends JFrame implements ActionListener, Mous
 
             if (techType < UnitUtils.TECH_TYPES) {
                 numberOfTechs = mwclient.getPlayer().getAvailableTechs()[techType];
-            } else if ((techType == UnitUtils.TECH_PILOT) && playerUnit.getPilotIsReparing()) {
+            } else if ((techType == UnitUtils.TECH_PILOT) && playerUnit.getPilotIsRepairing()) {
                 numberOfTechs = 0;
             } else if (techType == UnitUtils.TECH_REWARD_POINTS) {
                 numberOfTechs = 1;
