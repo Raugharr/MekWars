@@ -1,7 +1,26 @@
 -- Migration: init_schema
 -- Created: Tue May 12 11:39:44 CDT 2026
 
- 	
+CREATE TABLE IF NOT EXISTS exclusion_list (
+	id INTEGER PRIMARY KEY AUTOINCREMENT
+);
+
+CREATE TABLE IF NOT EXISTS player_excludes (
+	exclusion_list_id INTEGER NOT NULL,
+	player_name TEXT NOT NULL,
+	FOREIGN KEY(exclusion_list_id) REFERENCES exclusion_list(id)
+);
+
+CREATE UNIQUE INDEX player_excludes_exclusion_list_id_index ON player_excludes(exclusion_list_id);
+
+CREATE TABLE IF NOT EXISTS admin_excludes (
+	exclusion_list_id INTEGER NOT NULL,
+	player_name TEXT NOT NULL,
+	FOREIGN KEY(exclusion_list_id) REFERENCES exclusion_list(id)
+);
+
+CREATE UNIQUE INDEX admin_excludes_eclusion_list_id_index ON admin_excludes(exclusion_list_id);
+
 ALTER TABLE player ADD COLUMN fluff_text TEXT;
 ALTER TABLE player ADD COLUMN last_isp TEXT;
 ALTER TABLE player ADD COLUMN xp_until_reward INTEGER NOT NULL;
@@ -25,3 +44,6 @@ ALTER TABLE player ADD COLUMN user_validated INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN last_promoted INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN leech_count INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN status INTEGER NOT NULL;
+ALTER TABLE player ADD COLUMN exclusion_list_id INTEGER NOT NULL REFERENCES exclusion_list(id);
+
+CREATE UNIQUE INDEX player_exclusion_list_id_index ON player(exclusion_list_id);
