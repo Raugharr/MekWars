@@ -66,7 +66,9 @@ import megamek.common.icons.Camouflage;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.server.Server;
+
 import mekwars.client.campaign.CBMUnit;
+import mekwars.client.ClientEntities;
 import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
@@ -103,6 +105,7 @@ import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.common.util.GameReport;
+import mekwars.common.util.HibernateUtil;
 import mekwars.common.util.ThreadManager;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
@@ -228,6 +231,7 @@ public final class MWClient extends GameHost implements IClient {
     public MWClient(GUIClientConfig config) {
         ProtCommands = new TreeMap<>();
         Config = config;
+        HibernateUtil.buildSessionFactory(ClientEntities.ALL);
 
         try {
             RuntimeMXBean rt = ManagementFactory.getRuntimeMXBean();
