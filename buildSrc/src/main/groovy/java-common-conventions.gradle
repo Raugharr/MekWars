@@ -35,3 +35,44 @@ test {
         showStandardStreams = true
     }
 }
+
+tasks.register("generateMigration") {
+    group = "flyway"
+    description = "Generates a new Flyway migration file with a LocalDateTime version"
+
+    doLast {
+        if (!project.hasProperty("migration_name")) {
+            throw new GradleException("Migration name is required. Please provide one using -Pmigration_name=<migration_name>")
+        }
+
+        def migrationName = project.findProperty("migration_name").trim()
+        def timestamp = LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern('yyyyMMdd_HHmmss'))
+        println migrationName
+        def filename = "V${timestamp}__${migrationName}.sql"
+
+        def migrationsDir
+        switch (project.name) {
+            case 'MekWarsServer':
+                migrationsDir =
+                    file('src/main/resources/db/migration/server')
+                break
+            case 'MekWarsClient':
+                migrationsDir =
+                    file('src/main/resources/db/migration/client')
+                break
+            case 'MekWarsCommon':
+                migrationsDir =
+                    file('src/main/resources/db/migration/common')
+                break
+            default:
+                throw new GradleException("Unknown project '${project.name}'. Expected: MekWarsServer, MekWarsClient, or MekWarsCommon.")
+            }
+
+        migrationsDir.mkdirs()
+
+        def migrationFile = new File(migrationsDir, filename)
+        migrationFile.text = "-- Migration: ${migrationName}\n-- Created: ${new Date()}\n\n"
+
+        println "Created migration: ${migrationFile.path}"
+    }
+}
