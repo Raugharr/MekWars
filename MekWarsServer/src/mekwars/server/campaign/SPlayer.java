@@ -2829,30 +2829,20 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
 
             // player no-play
             s.append("<b>No-Play List:</b> ");
-            Enumeration<String> en = exclusionList.getPlayerExcludes().elements();
-            if (en.hasMoreElements()) {
-                s.append(en.nextElement());
-            } else {
+            if (exclusionList.getPlayerExcludes().isEmpty()) {
                 s.append("empty");
-            }
-
-            while (en.hasMoreElements()) {
-                s.append(", " + en.nextElement());
+            } else {
+                s.append(String.join(", ", exclusionList.getPlayerExcludes()));
             }
             s.append("<br>");
 
             // admin no-plays
             s.append("<b>No-Play (Admin):</b> ");
-            en = exclusionList.getAdminExcludes().elements();
-            if (en.hasMoreElements()) {
-                s.append(en.nextElement());
-            } else {
+            if (exclusionList.getAdminExcludes().isEmpty()) {
                 s.append("empty");
+            } else {
+                s.append(String.join(", ", exclusionList.getAdminExcludes()));
             }
-            while (en.hasMoreElements()) {
-                s.append(", " + en.nextElement());
-            }
-
             s.append("<br><br>");
         }
 
@@ -3113,7 +3103,7 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
              *
              * @urgru 4.2.05
              */
-            exclusionList.setOwnerName(getName());
+            exclusionList.setOwner(this);
 
             setMoney(TokenReader.readInt(ST));
             setExperience(TokenReader.readInt(ST));
