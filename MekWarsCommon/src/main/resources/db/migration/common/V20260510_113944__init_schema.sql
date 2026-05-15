@@ -1,10 +1,12 @@
+-- Migration: init_schema
+-- Created: Tue May 10 11:39:44 CDT 2026
+
 CREATE TABLE IF NOT EXISTS planet (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	x REAL NOT NULL,
 	y REAL NOT NULL,
 	dtype TEXT NOT NULL DEFAULT 'Planet',
 	updated_at INTEGER, -- NOT NULL,
-	-- created_at TEXT NOT NULL,
 	name TEXT NOT NULL,
 	description TEXT NOT NULL DEFAULT '',
 	bays_provided INTEGER NOT NULL DEFAULT 0,
@@ -20,8 +22,6 @@ CREATE UNIQUE INDEX planet_name_index ON planet(name);
 
 CREATE TABLE IF NOT EXISTS planet_influence (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	-- updated_at TEXT NOT NULL,
-	-- created_at TEXT NOT NULL,
 	influence INTEGER NOT NULL,
 	planet_id INTEGER NOT NULL,
 	house_id INTEGER NOT NULL,
@@ -41,13 +41,11 @@ CREATE TABLE IF NOT EXISTS planet_flag (
 	FOREIGN KEY(planet_id) REFERENCES planet(id)
 );
 
-CREATE UNIQUE INDEX planet_flag_planet_id_index ON planet_flag(planet_id);
+CREATE INDEX planet_flag_planet_id_index ON planet_flag(planet_id);
 
 CREATE TABLE IF NOT EXISTS planet_environment (
 	id							INTEGER PRIMARY KEY AUTOINCREMENT,
 	terrain_id					INTEGER, -- This should be uncommented sometime in this PR? NOT NULL,
-	-- updated_at					TEXT	NOT NULL,
-	-- created_at					TEXT	NOT NULL,
 	name						TEXT	NOT NULL DEFAULT '',
 
 	crater_probability			INTEGER NOT NULL DEFAULT 0,
@@ -212,7 +210,7 @@ CREATE TABLE IF NOT EXISTS advanced_terrain (
 );
 
 CREATE UNIQUE INDEX planet_environment_name_index ON planet_environment(name);
-CREATE UNIQUE INDEX planet_environment_terrain_id_index ON planet_environment(terrain_id);
+CREATE INDEX planet_environment_terrain_id_index ON planet_environment(terrain_id);
 
 CREATE TABLE IF NOT EXISTS terrain (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -265,3 +263,68 @@ CREATE TABLE IF NOT EXISTS sync_log (
 );
 
 CREATE UNIQUE INDEX sync_log_entity_id_table_name_index ON sync_log(entity_id, table_name);
+CREATE TABLE IF NOT EXISTS subfaction (
+	id INTEGER PRIMARY KEY AUTOINCREMENT
+);
+
+CREATE TABLE IF NOT EXISTS player (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	dtype TEXT NOT NULL DEFAULT 'Player',
+	name TEXT NOT NULL,
+	logo TEXT NOT NULL,
+	house_id INTEGER NOT NULL,
+	money INTEGER NOT NULL,
+	experience INTEGER NOT NULL,
+	influence INTEGER NOT NULL,
+	technicians INTEGER NOT NULL,
+	current_tech_payment INTEGER NOT NULL,
+	reward_points INTEGER NOT NULL,
+	is_invisible INTEGER NOT NULL,
+	auto_reorder_parts INTEGER NOT NULL,
+	total_techs TEXT NOT NULL,
+	available_techs TEXT NOT NULL,
+	mek_tokens INTEGER NOT NULL,
+	hanger_bv INTEGER NOT NULL,
+	subfaction_id INTEGER
+);
+
+CREATE UNIQUE INDEX player_name_index ON player(name);
+
+CREATE TABLE IF NOT EXISTS army (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name TEXT NOT NULL,
+	upper_limit INTEGER NOT NULL,
+	lower_limit INTEGER NOT NULL,
+	locked INTEGER NOT NULL,
+	army_player_locked INTEGER NOT NULL,
+	army_disabled INTEGER NOT NULL,
+	op_force_size FLOAT NOT NULL,
+	raw_force_size FLOAT NULL,
+	owner_id INTEGER NOT NULL,
+
+	FOREIGN KEY(owner_id) REFERENCES player(id)
+);
+
+CREATE UNIQUE INDEX army_owner_id_index ON army(owner_id);
+
+CREATE TABLE IF NOT EXISTS unit (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	bv INTEGER NOT NULL,
+	scrappable_for INTEGER NOT NULL,
+	pilot_id INTEGER NOT NULL,
+	type INTEGER NOT NULL,
+	weight_class INTEGER NOT NULL,
+	status INTEGER NOT NULL,
+	producer INTEGER NOT NULL,
+	unit_filename INTEGER NOT NULL,
+	pos_id INTEGER NOT NULL,
+	model_name TEXT NOT NULL,
+	maintaince_level INTEGER NOT NULL,
+	unit_c3_level INTEGER NOT NULL,
+	simple_repair_cost INTEGER NOT NULL,
+	current_repair_cost INTEGER NOT NULL,
+	life_time_repair_cost INTEGER NOT NULL,
+	is_support_unit INTEGER NOT NULL,
+	christmas_unit INTEGER NOT NULL,
+	pilot_is_repairing INTEGER NOT NULL
+);
