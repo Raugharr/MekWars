@@ -1,10 +1,12 @@
+-- Migration: init_schema
+-- Created: Tue May 10 11:39:44 CDT 2026
+
 CREATE TABLE IF NOT EXISTS planet (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	x REAL NOT NULL,
 	y REAL NOT NULL,
 	dtype TEXT NOT NULL DEFAULT 'Planet',
 	updated_at INTEGER, -- NOT NULL,
-	-- created_at TEXT NOT NULL,
 	name TEXT NOT NULL,
 	description TEXT NOT NULL DEFAULT '',
 	bays_provided INTEGER NOT NULL DEFAULT 0,
@@ -20,8 +22,6 @@ CREATE UNIQUE INDEX planet_name_index ON planet(name);
 
 CREATE TABLE IF NOT EXISTS planet_influence (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	-- updated_at TEXT NOT NULL,
-	-- created_at TEXT NOT NULL,
 	influence INTEGER NOT NULL,
 	planet_id INTEGER NOT NULL,
 	house_id INTEGER NOT NULL,
@@ -41,13 +41,11 @@ CREATE TABLE IF NOT EXISTS planet_flag (
 	FOREIGN KEY(planet_id) REFERENCES planet(id)
 );
 
-CREATE UNIQUE INDEX planet_flag_planet_id_index ON planet_flag(planet_id);
+CREATE INDEX planet_flag_planet_id_index ON planet_flag(planet_id);
 
 CREATE TABLE IF NOT EXISTS planet_environment (
 	id							INTEGER PRIMARY KEY AUTOINCREMENT,
 	terrain_id					INTEGER, -- This should be uncommented sometime in this PR? NOT NULL,
-	-- updated_at					TEXT	NOT NULL,
-	-- created_at					TEXT	NOT NULL,
 	name						TEXT	NOT NULL DEFAULT '',
 
 	crater_probability			INTEGER NOT NULL DEFAULT 0,
@@ -212,7 +210,7 @@ CREATE TABLE IF NOT EXISTS advanced_terrain (
 );
 
 CREATE UNIQUE INDEX planet_environment_name_index ON planet_environment(name);
-CREATE UNIQUE INDEX planet_environment_terrain_id_index ON planet_environment(terrain_id);
+CREATE INDEX planet_environment_terrain_id_index ON planet_environment(terrain_id);
 
 CREATE TABLE IF NOT EXISTS terrain (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -255,3 +253,30 @@ CREATE TABLE IF NOT EXISTS unit_factory (
 );
 
 CREATE INDEX unit_factory_planet_id_index ON unit_factory(planet_id);
+
+CREATE TABLE IF NOT EXISTS subfaction (
+	id INTEGER PRIMARY KEY AUTOINCREMENT
+);
+
+CREATE TABLE IF NOT EXISTS player (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	dtype TEXT NOT NULL DEFAULT 'Player',
+	name TEXT NOT NULL,
+	logo TEXT NOT NULL,
+	house_id INTEGER NOT NULL,
+	money INTEGER NOT NULL,
+	experiencce INTEGER NOT NULL,
+	influence INTEGER NOT NULL,
+	technicians INTEGER NOT NULL,
+	reward_points INTEGER NOT NULL,
+	is_invisible INTEGER NOT NULL,
+	auto_reorder_parts INTEGER NOT NULL,
+	total_techs TEXT NOT NULL,
+	available_techs TEXT NOT NULL,
+	mek_tokens INTEGER NOT NULL,
+	hanger_bv INTEGER NOT NULL,
+	subfaction_id INTEGER
+);
+
+CREATE UNIQUE INDEX player_name_index ON player(name)
+-- CREATE INDEX player_subfaction_id_index ON subfaction(subfaction_id)
