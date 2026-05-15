@@ -66,6 +66,7 @@ import megamek.common.icons.Camouflage;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.server.Server;
+import mekwars.client.ClientEntities;
 import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
@@ -227,13 +228,7 @@ public final class MWClient extends GameHost implements IClient {
     public MWClient(GUIClientConfig config) {
         ProtCommands = new TreeMap<>();
         Config = config;
-        HibernateUtil.buildSessionFactory(
-                mekwars.common.PlanetEnvironment.class,
-                mekwars.common.Terrain.class,
-                mekwars.common.AdvancedTerrain.class,
-                mekwars.common.Continent.class,
-                mekwars.common.Planet.class,
-                mekwars.common.UnitFactory.class);
+        HibernateUtil.buildSessionFactory(ClientEntities.ALL);
 
         try {
             RuntimeMXBean rt = ManagementFactory.getRuntimeMXBean();

@@ -29,6 +29,7 @@ import mekwars.common.comm.Command;
 import mekwars.common.comm.ServerCommand;
 import mekwars.common.log.LogMarkerHolder;
 import mekwars.common.util.HibernateUtil;
+import mekwars.server.ServerEntities;
 import mekwars.server.MWChatServer.MWChatClient;
 import mekwars.server.MWChatServer.MWChatServer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
@@ -167,15 +168,7 @@ public class MWServ {
 
     public MWServ() {
         LOGGER.info("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
-        HibernateUtil.buildSessionFactory(
-                mekwars.common.PlanetEnvironment.class,
-                mekwars.common.Terrain.class,
-                mekwars.common.AdvancedTerrain.class,
-                mekwars.common.Continent.class,
-                mekwars.common.Planet.class,
-                mekwars.common.UnitFactory.class,
-                mekwars.server.campaign.SUnitFactory.class,
-                mekwars.server.campaign.SPlanet.class);
+        HibernateUtil.buildSessionFactory(ServerEntities.ALL);
         EquipmentType.initializeTypes();
         MechSummaryCache.getInstance();
         /*** Required to kick off the Server ***/
