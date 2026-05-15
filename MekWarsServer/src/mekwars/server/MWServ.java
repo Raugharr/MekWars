@@ -16,8 +16,43 @@
 
 package mekwars.server;
 
-//The MegaMek.NET Master Server Application
-//@Author: Helge Richter (McWizard@gmx.de)
+// The MegaMek.NET Master Server Application
+// @Author: Helge Richter (McWizard@gmx.de)
+import megamek.Version;
+import megamek.common.EquipmentType;
+import megamek.common.MechSummaryCache;
+
+import mekwars.common.CampaignData;
+import mekwars.common.MMGame;
+import mekwars.common.campaign.CampaignOptions;
+import mekwars.common.comm.Command;
+import mekwars.common.comm.ServerCommand;
+import mekwars.common.log.LogMarkerHolder;
+import mekwars.common.util.HibernateUtil;
+import mekwars.server.ServerEntities;
+import mekwars.server.MWChatServer.MWChatClient;
+import mekwars.server.MWChatServer.MWChatServer;
+import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.ImmunityThread;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SliceThread;
+import mekwars.server.campaign.operations.OperationWriter;
+import mekwars.server.campaign.util.scheduler.TickJob;
+import mekwars.server.campaign.util.scheduler.TrackerUpdateJob;
+import mekwars.server.dataProvider.Server;
+import mekwars.server.io.FileSystem;
+import mekwars.server.net.hpgnet.HPGSubscribedClient;
+import mekwars.server.util.AutomaticBackup;
+import mekwars.server.util.IpCountry;
+import mekwars.server.util.RepairTrackingThread;
+import mekwars.server.util.discord.DiscordMessageHandler;
+import mekwars.server.util.rss.Feed;
+import mekwars.server.util.rss.FeedMessage;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -163,6 +198,7 @@ public class MWServ {
 
     public MWServ() {
         LOGGER.info("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
+        HibernateUtil.buildSessionFactory(ServerEntities.ALL);
         EquipmentType.initializeTypes();
         MechSummaryCache.getInstance();
         /*** Required to kick off the Server ***/
