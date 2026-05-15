@@ -32,6 +32,7 @@ public final class ServerEntities {
                                     mekwars.server.campaign.SPlayer.class,
                                     mekwars.server.campaign.SUnitFactory.class,
                                     mekwars.server.campaign.SPlanet.class,
+                                    mekwars.server.campaign.util.ExclusionList.class,
                                     mekwars.server.campaign.SArmy.class))
                     .collect(Collectors.toList());
 }
