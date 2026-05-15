@@ -23,6 +23,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -31,16 +32,14 @@ public class HibernateUtil {
 
     private HibernateUtil() {}
 
-    public static void buildSessionFactory(Class<?>... entityClasses) {
+    public static void buildSessionFactory(List<Class<?>> entityClasses) {
         Configuration configuration = new Configuration().configure();
 
         String url = configuration.getProperty("hibernate.connection.url");
         String user = configuration.getProperty("hibernate.connection.username");
         String password = configuration.getProperty("hibernate.connection.password");
 
-        for (Class<?> entityClass : entityClasses) {
-            configuration.addAnnotatedClass(entityClass);
-        }
+        entityClasses.forEach(configuration::addAnnotatedClass);
 
         Flyway flyway =
                 Flyway.configure()
