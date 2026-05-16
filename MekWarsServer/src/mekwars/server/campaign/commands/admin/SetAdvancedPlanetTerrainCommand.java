@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,65 +16,99 @@
 
 package mekwars.server.campaign.commands.admin;
 
-//import java.util.Hashtable;
-import java.util.StringTokenizer;
-import mekwars.server.MWServ;
 import mekwars.common.AdvancedTerrain;
 import mekwars.common.Continent;
-//import mekwars.common.Terrain;
-import mekwars.common.PlanetEnvironments;
-//import mekwars.common.PlanetEnvironment;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.commands.Command;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 public class SetAdvancedPlanetTerrainCommand implements Command {
-	
-	int accessLevel = IAuthenticator.ADMIN;
-	String syntax = "Planet Name$Terrain ID$AdvTerrain ID";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
-		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-			return;
-		}
-		
-		SPlanet planet =  (SPlanet) CampaignMain.cm.getData().getPlanetByName(command.nextToken());
-		if ( planet == null ) {
-			CampaignMain.cm.toUser("Unknown Planet",Username,true);
-			return;
-		}
-		
-		int id = Integer.parseInt(command.nextToken());
-		int aid = Integer.parseInt(command.nextToken());
-//		int conid = 0;
-		 
-		AdvancedTerrain AT = CampaignMain.cm.getData().getAdvancedTerrain(aid);
-		PlanetEnvironments originalPe = planet.getEnvironments();
-		PlanetEnvironments changedPe = new PlanetEnvironments();
-		Continent[] Cont = originalPe.toArray();
-		
-		for (int x= 0; x < originalPe.size();x++) {
-			if(Cont[x].getEnvironment().getId() == id) {
-				changedPe.add(new Continent(Cont[x].getSize(),Cont[x].getEnvironment(),AT));
-			} else {
-				changedPe.add(Cont[x]);
-			}
-		}
-		
-		planet.setEnvironments(changedPe);
-		planet.updated();
-		
-		CampaignMain.cm.toUser("Advanced Terrain set for terrain: "+CampaignMain.cm.getData().getTerrain(id).getName() + "(" + AT.getName()+") on planet "+planet.getName(),Username,true);
-		//server.MWLogger.modLog(Username + " set Advanced Terrain for terrain: "+aTerrain.getDisplayName()+" on planet "+planet.getName());
-		CampaignMain.cm.doSendModMail("NOTE",Username + " has set Advanced Terrain for terrain: "+CampaignMain.cm.getData().getTerrain(id).getName() + "(" + AT.getName()+") on planet "+planet.getName());
-		
-	}
+    int accessLevel = IAuthenticator.ADMIN;
+    String syntax = "Planet Name$Terrain ID$AdvTerrain ID";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String username) {
+
+        // access level check
+        int userLevel = MWServ.getInstance().getUserLevel(username);
+        if (userLevel < getExecutionLevel()) {
+            CampaignMain.cm.toUser(
+                    "AM:Insufficient access level for command. Level: "
+                            + userLevel
+                            + ". Required: "
+                            + accessLevel
+                            + ".",
+                    username,
+                    true);
+            return;
+        }
+
+        SPlanet planet = (SPlanet) CampaignMain.cm.getData().getPlanetByName(command.nextToken());
+        if (planet == null) {
+            CampaignMain.cm.toUser("Unknown Planet", username, true);
+            return;
+        }
+
+        int id = Integer.parseInt(command.nextToken());
+        int aid = Integer.parseInt(command.nextToken());
+        //		int conid = 0;
+
+        AdvancedTerrain advancedTerrain = CampaignMain.cm.getData().getAdvancedTerrain(aid);
+        List<Continent> originalContinents = planet.getContinents();
+        List<Continent> changedContinents = new ArrayList<Continent>();
+
+        for (int x = 0; x < originalContinents.size(); x++) {
+            if (originalContinents.get(x).getEnvironment().getId() == id) {
+                changedContinents.add(
+                        new Continent(
+                                originalContinents.get(x).getSize(),
+                                originalContinents.get(x).getEnvironment(),
+                                advancedTerrain));
+            } else {
+                changedContinents.add(originalContinents.get(x));
+            }
+        }
+
+        planet.removeAllContinents();
+        for (Continent continent : changedContinents) {
+            planet.addContinent(continent);
+        }
+        planet.updated();
+
+        CampaignMain.cm.toUser(
+                "Advanced Terrain set for terrain: "
+                        + CampaignMain.cm.getData().getTerrain(id).getName()
+                        + "("
+                        + advancedTerrain.getName()
+                        + ") on planet "
+                        + planet.getName(),
+                username,
+                true);
+        CampaignMain.cm.doSendModMail(
+                "NOTE",
+                username
+                        + " has set Advanced Terrain for terrain: "
+                        + CampaignMain.cm.getData().getTerrain(id).getName()
+                        + "("
+                        + advancedTerrain.getName()
+                        + ") on planet "
+                        + planet.getName());
+    }
 }

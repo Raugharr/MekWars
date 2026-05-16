@@ -343,7 +343,7 @@ public class XMLTerrainDataParser implements XMLResponder {
             PE.setYBoardSize(yboard);
             PE.setYSize(ymap);
 
-            
+
             planetTerrain.getEnvironments().add(PE);
             // Reset Variables
             doResetEnvironmentVariables();
