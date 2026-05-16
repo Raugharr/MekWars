@@ -40,7 +40,6 @@ import java.util.TreeMap;
  * @author Helge Richter
  */
 public class Planet implements Comparable<Object>, MutableSerializable, Entity {
-    // VARIABLES
     /**
      * Unique id of this planet. Mutable field (although it will not change, it has to be
      * transfered)
@@ -86,6 +85,11 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
     private Dimension BoardSize = new Dimension(16, 17); // default megamek board
 
     // size
+
+    /**
+     * House that has the most influence on this planet.
+     */
+    private House owner = null;
 
     /**
      * Vars for temperature vaccum and gravity
@@ -810,5 +814,40 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
 
     public void setConquestPoints(int points) {
         maxConquestPoints = Math.max(1, points);
+    }
+
+    public House checkOwner() {
+        if (getInfluence() == null) {
+            return null;
+        }
+
+        Integer houseId = this.getInfluence().getOwner();
+
+        if (houseId == null) {
+            return null;
+        }
+
+        House house = CampaignData.cd.getHouse(houseId);
+
+        if (this.getInfluence().getInfluence(houseId) < this.getMinPlanetOwnerShip()) {
+            return null;
+        }
+        return house;
+    }
+
+    public House getOwner() {
+        /*
+         * Null owner is possible, but should be uncommon. Check the owner again to make sure the this is true before returning.
+         */
+        if (owner == null) {
+            checkOwner();
+        }
+        return owner;
+    }
+
+    public void setOwner(House newOwner) {
+        if (newOwner != null) {
+            owner = newOwner;
+        }
     }
 }

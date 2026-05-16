@@ -203,8 +203,8 @@ public class PurchaseFactoryCommand implements Command {
         List<UnitFactory> uf = planet.getUnitFactories();
         uf.add(fac);
         fac.setPlanet(planet);
-        planet.setOwner(null, house, true);
-
+        planet.setOwner(house);
+        
         house.updated();
         planet.updated();
 

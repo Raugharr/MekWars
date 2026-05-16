@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,9 +16,6 @@
 
 package mekwars.server.campaign.commands;
 
-import java.util.Iterator;
-import java.util.StringTokenizer;
-
 import mekwars.common.Planet;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -26,91 +23,136 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SPlayer;
 
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
-public class  RangeCommand  implements Command {
-	int accessLevel = 0;
-	String syntax = "";
-	public int getExecutionLevel(){return accessLevel;}
-	public void setExecutionLevel(int i) {accessLevel = i;}
-	public String getSyntax() { return syntax;}
-	
-	public void process(StringTokenizer command,String Username) {
-		
-		if (accessLevel != 0) {
-			int userLevel = MWServ.getInstance().getUserLevel(Username);
-			if(userLevel < getExecutionLevel()) {
-				CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
-				return;
-			}
-		}
-		
-		if (command.hasMoreElements()) {
-			int range = Integer.parseInt(command.nextToken());
-			
-			SHouse targetfaction = null;
-			if (command.hasMoreElements()) {
-				String target = command.nextToken();
-				targetfaction = CampaignMain.cm.getHouseFromPartialString(target,Username);
-				
-				//RFE 1121663 - Range Calculator and Couldn't find Name @urgru 6.5.05
-				if (targetfaction == null) {
-					CampaignMain.cm.toUser("AM:Could not find faction " + target + ". Try again?",Username,true);
-					return;
-				}
-			}
-			
-			//RFE 1076505: Range - Factories, @urgru 6.5.05
-			boolean facWorldsOnly = false;
-			if (command.hasMoreElements()) {
-				
-				try {
-					facWorldsOnly = Boolean.parseBoolean(command.nextToken());
-				} catch (Exception e) {
-					CampaignMain.cm.toUser("AM:Improper format. Try: /c range#Distance#Faction#true to return only production worlds.",Username,true);
-					return;
-				}
-			}
-			
-			SPlayer player = CampaignMain.cm.getPlayer(Username);
-			SHouse h = player.getMyHouse();
-			String result = "These planets are within " + range + " light-years ";
-			if(targetfaction != null) {
-				if (facWorldsOnly)
-					result += "and " + targetfaction.getName() + " production facilities are present ";
-				else
-					result += "and " + targetfaction.getName() + " military assets are present ";
-			}
-			
-			result += ":<br>";
-			Iterator<Planet> e = CampaignMain.cm.getData().getAllPlanets().iterator();
-			while (e.hasNext()) {
-				SPlanet p = (SPlanet)e.next();
-				if (h.getDistanceTo(p, CampaignMain.cm.getPlayer(Username)) <= range) {
-					if (targetfaction == null) {
-	
-						SHouse owner = p.getOwner();
-						if (facWorldsOnly && owner.equals(targetfaction) && p.getFactoryCount() > 0) {
-							result += "<font color=\"" + p.getOwner().getHouseColor() + "\">" +  p.getShortDescription() + "</font>" + "<br>";							
-						} else {//!facworldsonly, do normal faction-specific check
-							if (owner != null)
-								result += "<font color=\"" + p.getOwner().getHouseColor() + "\">" +  p.getShortDescription() + "</font>" + "<br>";
-							else
-								result += p.getSmallStatus(true) + "<br>";
-						}
-						
-					} else {
-						if (p.getInfluence().getInfluence(targetfaction.getId()) > 0) {
-							SHouse owner = p.getOwner();
-							if (owner != null)
-								result += "<font color=\"" + p.getOwner().getHouseColor() + "\">" + p.getShortDescription() + "</font>" + "<br>";
-							else
-								result += p.getSmallStatus(true)  + "<br>";
-						}
-					}
-				}
-			}
-			result = result.substring(0,result.length()-2);
-			CampaignMain.cm.toUser("SM|" + result,Username,false);
-		}
-	}
+public class RangeCommand implements Command {
+    int accessLevel = 0;
+    String syntax = "";
+
+    public int getExecutionLevel() {
+        return accessLevel;
+    }
+
+    public void setExecutionLevel(int i) {
+        accessLevel = i;
+    }
+
+    public String getSyntax() {
+        return syntax;
+    }
+
+    public void process(StringTokenizer command, String username) {
+
+        if (accessLevel != 0) {
+            int userLevel = MWServ.getInstance().getUserLevel(username);
+            if (userLevel < getExecutionLevel()) {
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        username,
+                        true);
+                return;
+            }
+        }
+
+        if (command.hasMoreElements()) {
+            int range = Integer.parseInt(command.nextToken());
+
+            SHouse targetfaction = null;
+            if (command.hasMoreElements()) {
+                String target = command.nextToken();
+                targetfaction = CampaignMain.cm.getHouseFromPartialString(target, username);
+
+                // RFE 1121663 - Range Calculator and Couldn't find Name @urgru 6.5.05
+                if (targetfaction == null) {
+                    CampaignMain.cm.toUser(
+                            "AM:Could not find faction " + target + ". Try again?", username, true);
+                    return;
+                }
+            }
+
+            // RFE 1076505: Range - Factories, @urgru 6.5.05
+            boolean facWorldsOnly = false;
+            if (command.hasMoreElements()) {
+
+                try {
+                    facWorldsOnly = Boolean.parseBoolean(command.nextToken());
+                } catch (Exception e) {
+                    CampaignMain.cm.toUser(
+                            "AM:Improper format. Try: /c range#Distance#Faction#true to return only"
+                                    + " production worlds.",
+                            username,
+                            true);
+                    return;
+                }
+            }
+
+            SPlayer player = CampaignMain.cm.getPlayer(username);
+            SHouse h = player.getMyHouse();
+            String result = "These planets are within " + range + " light-years ";
+            if (targetfaction != null) {
+                if (facWorldsOnly) {
+                    result +=
+                            "and "
+                                    + targetfaction.getName()
+                                    + " production facilities are present ";
+                } else {
+                    result += "and " + targetfaction.getName() + " military assets are present ";
+                }
+            }
+
+            result += ":<br>";
+            Iterator<Planet> e = CampaignMain.cm.getData().getAllPlanets().iterator();
+            while (e.hasNext()) {
+                SPlanet p = (SPlanet) e.next();
+                if (h.getDistanceTo(p, CampaignMain.cm.getPlayer(username)) <= range) {
+                    if (targetfaction == null) {
+
+                        SHouse owner = (SHouse) p.getOwner();
+                        if (facWorldsOnly
+                                && owner.equals(targetfaction)
+                                && p.getFactoryCount() > 0) {
+                            result +=
+                                    "<font color=\""
+                                            + p.getOwner().getHouseColor()
+                                            + "\">"
+                                            + p.getShortDescription()
+                                            + "</font>"
+                                            + "<br>";
+                        } else { // !facworldsonly, do normal faction-specific check
+                            if (owner != null)
+                                result +=
+                                        "<font color=\""
+                                                + p.getOwner().getHouseColor()
+                                                + "\">"
+                                                + p.getShortDescription()
+                                                + "</font>"
+                                                + "<br>";
+                            else result += p.getSmallStatus(true) + "<br>";
+                        }
+
+                    } else {
+                        if (p.getInfluence().getInfluence(targetfaction.getId()) > 0) {
+                            SHouse owner = (SHouse) p.getOwner();
+                            if (owner != null)
+                                result +=
+                                        "<font color=\""
+                                                + p.getOwner().getHouseColor()
+                                                + "\">"
+                                                + p.getShortDescription()
+                                                + "</font>"
+                                                + "<br>";
+                            else result += p.getSmallStatus(true) + "<br>";
+                        }
+                    }
+                }
+            }
+            result = result.substring(0, result.length() - 2);
+            CampaignMain.cm.toUser("SM|" + result, username, false);
+        }
+    }
 }

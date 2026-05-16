@@ -167,16 +167,18 @@ public class  HouseCommand  implements Command {
 				s += "*";
 			
 			//show % owned
-			SHouse owner = currPlanet.getOwner();
-			if (owner != null)
+			SHouse owner = (SHouse) currPlanet.getOwner();
+			if (owner != null) {
 				s += " (" + currPlanet.getInfluence().getInfluence(h.getId()) + "cp, " + owner.getColoredAbbreviation(false) + " " + currPlanet.getInfluence().getInfluence(owner.getId()) + "cp)";
-			else
+            } else {
 				s += "(" + currPlanet.getInfluence().getInfluence(h.getId()) + "cp, No Owner)";
+            }
 			
-			if (i.hasNext())
+			if (i.hasNext()) {
 				s += ", ";
-			else
+            } else {
 				s += "<br>";
+            }
 		}
 		
 		//show the games the factions' players are involved in

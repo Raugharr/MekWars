@@ -63,9 +63,8 @@ public class AdminChangePlanetOwnerCommand implements Command {
 			CampaignMain.cm.toUser("Could not find a matching faction.",Username,true);
 			return;
 		}
-		
-		//breaks passed
-		p.setOwner(p.getOwner(), h, true);//pass in old owner using p.getOwner so people get status updates 
+
+		p.setOwner(h);
 		
 		HashMap<Integer,Integer> flu = new HashMap<Integer,Integer>();
 		flu.put(h.getId(),p.getConquestPoints());

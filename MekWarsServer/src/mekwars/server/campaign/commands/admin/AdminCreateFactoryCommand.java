@@ -24,6 +24,7 @@ import mekwars.common.UnitFactory;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.commands.Command;
@@ -36,6 +37,7 @@ import java.util.UUID;
  * @author Helge Richter
  */
 public class AdminCreateFactoryCommand implements Command {
+
     int accessLevel = IAuthenticator.ADMIN;
     String syntax = "planet name#factory name#size#faction#type#subfolder#SubfactionAccessLevel";
 
@@ -51,10 +53,10 @@ public class AdminCreateFactoryCommand implements Command {
         return syntax;
     }
 
-    public void process(StringTokenizer command, String Username) {
+    public void process(StringTokenizer command, String username) {
 
         // access level check
-        int userLevel = MWServ.getInstance().getUserLevel(Username);
+        int userLevel = MWServ.getInstance().getUserLevel(username);
         if (userLevel < getExecutionLevel()) {
             CampaignMain.cm.toUser(
                     "AM:Insufficient access level for command. Level: "
@@ -62,11 +64,11 @@ public class AdminCreateFactoryCommand implements Command {
                             + ". Required: "
                             + accessLevel
                             + ".",
-                    Username,
+                    username,
                     true);
             return;
         }
-        SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), Username);
+        SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(), username);
         String name = command.nextToken();
         String size = command.nextToken();
         String faction = command.nextToken();
@@ -87,17 +89,19 @@ public class AdminCreateFactoryCommand implements Command {
         List<UnitFactory> uf = planet.getUnitFactories();
         uf.add(fac);
         fac.setPlanet(planet);
-        if (planet.getOwner() != null) {
-            planet.getOwner().removePlanet(planet);
-            planet.getOwner().addPlanet(planet);
+        SHouse owner = (SHouse) planet.getOwner();
+
+        if (owner != null) {
+            owner.removePlanet(planet);
+            owner.addPlanet(planet);
         }
         planet.updated();
 
-        CampaignMain.cm.toUser("Factory created!", Username, true);
+        CampaignMain.cm.toUser("Factory created!", username, true);
 
         CampaignMain.cm.doSendModMail(
                 "NOTE",
-                Username
+                username
                         + " has created factory "
                         + fac.getName()
                         + " on planet "

@@ -225,9 +225,10 @@ public class SUnitFactory extends UnitFactory implements Serializable {
         String hsUpdate = "CF|" + getWeightclass() + "$" + getType() + "$" + getPlanet().getName() + "$" + getName() + "$" + getTicksUntilRefresh() + "$" + getAccessLevel() + "|";
 
         if (sendHSUpdate) {
-            SHouse owner = getPlanet().getOwner();
-            if (owner != null)
+            SHouse owner = (SHouse) getPlanet().getOwner();
+            if (owner != null) {
                 CampaignMain.cm.doSendToAllOnlinePlayers(owner, "HS|" + hsUpdate, false);
+            }
         }
 
         return hsUpdate;

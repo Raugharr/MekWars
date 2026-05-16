@@ -76,7 +76,7 @@ public class AdminReturnPlanetsToOriginalOwnersCommand implements Command {
 			//get original owner
 			SHouse origOwner = CampaignMain.cm.getHouseFromPartialString(p.getOriginalOwner(), Username);
 			//change the ownership in the respective SHouses
-			p.setOwner(p.getOwner(), origOwner, true);
+			p.setOwner(origOwner);
 			
 			//change the planet's influence table
 			

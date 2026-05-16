@@ -69,7 +69,7 @@ public class AdminCreatePlanetCommand implements Command {
             CampaignMain.cm.toUser("Unable to create planet " + planet, Username, true);
             return;
         }
-		planet.setOwner(null,faction,true);
+		planet.setOwner(faction);
 		planet.setOriginalOwner(faction.getName());
         planet.updated();
         
