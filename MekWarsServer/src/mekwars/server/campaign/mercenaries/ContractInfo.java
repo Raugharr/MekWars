@@ -28,10 +28,6 @@ import mekwars.server.campaign.SPlayer;
 
 
 public class ContractInfo implements Serializable {
-
-	/**
-     * 
-     */
     private static final long serialVersionUID = 3985382192530405331L;
     //simply, obviously, named vars
 	private int _contractDuration;
@@ -41,7 +37,6 @@ public class ContractInfo implements Serializable {
 	private String _contractingHouse;
 	private String _playerName;
 	private String _offeringPlayer;
-	private int DBId = 0;
 
     public static final int CONTRACT_EXP        = 0;
     public static final int CONTRACT_LAND       = 1;
@@ -206,13 +201,5 @@ public class ContractInfo implements Serializable {
         }
         
         return contract;
-    }
-    
-    public int getDBId(){
-    	return DBId;
-    }
-    
-    public void setDBId(int dbID){
-    	this.DBId = dbID;
     }
 }

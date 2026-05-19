@@ -590,7 +590,7 @@ public class ShortValidator {
 
                 // load the army/player/house
                 SArmy currArmy = i.next();
-                SPlayer currPlayer = CampaignMain.cm.getPlayer(currArmy.getPlayerName());
+                SPlayer currPlayer = CampaignMain.cm.getPlayer(currArmy.getOwner().getName());
                 // Weird ass bug with nameChange and unenroll some times it
                 // doesn't remove their
                 // Old armies.
@@ -673,7 +673,7 @@ public class ShortValidator {
              */
             int maxELO = o.getIntValue("MaxELODifference");
             for (SArmy currArmy : planetMatches) {
-                SPlayer currPlayer = CampaignMain.cm.getPlayer(currArmy.getPlayerName());
+                SPlayer currPlayer = CampaignMain.cm.getPlayer(currArmy.getOwner().getName());
                 ArrayList<Integer> defenderFails = this.validateShortDefender(currPlayer, currArmy, o, target);
                 if (maxELO > 0 && Math.abs(currPlayer.getRating() - ap.getRating()) > maxELO)
                     defenderFails.add(ShortValidator.SFAIL_COMMON_ELODIFFERENCE);
@@ -687,8 +687,8 @@ public class ShortValidator {
                 if (defenderFails.size() == 0)// if player can defend, add
                     fullMatches.add(currArmy);
                 else if (o.getBooleanValue("DebugOp")) { // spamalama
-                    LOGGER.error("Failed Defense reasons for Op: " + o.getName() + " Launched by player: " + ap.getName() + " with army: #" + aa.getID());
-                    LOGGER.error("Defending Player: " + currPlayer.getName() + " Army id: #" + currArmy.getID());
+                    LOGGER.error("Failed Defense reasons for Op: " + o.getName() + " Launched by player: " + ap.getName() + " with army: #" + aa.getId());
+                    LOGGER.error("Defending Player: " + currPlayer.getName() + " Army id: #" + currArmy.getId());
 
                     Iterator<Integer> df = defenderFails.iterator();
                     while (df.hasNext()) {
@@ -1085,12 +1085,7 @@ public class ShortValidator {
         int numTotalUnits = 0;
 
         
-        Iterator<Unit> i = aa.getUnits().iterator();
-        while (i.hasNext()) {
-
-            // load the next unit
-            SUnit currUnit = (SUnit) i.next();
-
+        for (SUnit currUnit : aa.getUnits()) {
             // Check to see if its a unit commander.
             numberOfCommanders = aa.getCommanders().size();
 
@@ -1579,12 +1574,7 @@ public class ShortValidator {
         int numClanUnits = 0;
         int numTotalUnits = 0;
         
-        Iterator<Unit> i = da.getUnits().iterator();
-        while (i.hasNext()) {
-
-            // load the next unit
-            SUnit currUnit = (SUnit) i.next();
-
+        for (SUnit currUnit : da.getUnits()) {
             // Check to see if the unit is a commander
             numberOfCommanders = da.getCommanders().size();
 
@@ -1797,7 +1787,7 @@ public class ShortValidator {
      * message as well as the silent update.
      */
     public void checkOperations(SArmy a, boolean display, TreeMap<String, Operation> operations) {
-        SPlayer p = CampaignMain.cm.getPlayer(a.getPlayerName());
+        SPlayer p = CampaignMain.cm.getPlayer(a.getOwner().getName());
         if (p == null)
             return;
 
@@ -1816,16 +1806,15 @@ public class ShortValidator {
             // check for failures. contruction and milestones only.
             ArrayList<Integer> failures = this.validateShortAttacker(p, a, currType, null, -1, false);
 
-            // if there were failures, try to remve
+            // if there were failures, try to remove
             if (failures.size() > 0) {
-                String removal = a.getLegalOperations().remove(currType.getName());
-                if (removal != null) {
-                    removeNames.add(removal);
+                if (a.removeLegalOperation(currType.getName())) {
+                    removeNames.add(currType.getName());
                 }
 
             // no failures. add to the tree. if the key was connected
             // to a null previously, we need to notify the player.
-            } else if (a.getLegalOperations().put(currType.getName(), currType.getName()) == null) {
+            } else if (a.addLegalOperation(currType.getName()) == false) {
                 addNames.add(currType.getName());
             }
 
@@ -1834,7 +1823,7 @@ public class ShortValidator {
         // if there were changes, pre updates
         if (addNames.size() > 0 || removeNames.size() > 0) {
             // assemble PL| command string
-            String toSend = "PL|UOE|" + a.getID() + "*";
+            String toSend = "PL|UOE|" + a.getId() + "*";
             for (String currName : addNames)
                 toSend += "a*" + currName + "*";
             for (String currName : removeNames)
@@ -1846,8 +1835,8 @@ public class ShortValidator {
             // if verbose, inform the players
             if (display) {
 
-                String addSend = "AM:Army #" + a.getID();
-                String removeSend = "AM:Army #" + a.getID();
+                String addSend = "AM:Army #" + a.getId();
+                String removeSend = "AM:Army #" + a.getId();
 
                 // add messages
                 if (addNames.size() == 1) {

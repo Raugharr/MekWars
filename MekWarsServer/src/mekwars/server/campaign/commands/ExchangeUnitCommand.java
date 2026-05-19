@@ -129,7 +129,7 @@ public class  ExchangeUnitCommand  implements Command {
 					oldID = oldMech.getId();
 					position = a.getUnitPosition(oldID);
 					a.removeUnit(oldID);
-					CampaignMain.cm.toUser("PL|RAU|"+a.getID()+"#"+oldID+"#"+a.getBV(),Username,false);
+					CampaignMain.cm.toUser("PL|RAU|"+a.getId()+"#"+oldID+"#"+a.getBV(),Username,false);
 					CampaignMain.cm.toUser("PL|UU|"+oldMech.getId()+"|"+oldMech.toString(true),Username,false);
 					a.checkLegalRatio(Username);
 				}
@@ -139,11 +139,11 @@ public class  ExchangeUnitCommand  implements Command {
 				//changeMech.setID(oldID);
 				if ( position > -1){
 				    a.addUnit(changeMech,position);
-				    CampaignMain.cm.toUser("PL|AAU|"+a.getID()+"#"+changeMech.getId()+"#"+a.getBV()+"#"+position,Username,false);
+				    CampaignMain.cm.toUser("PL|AAU|"+a.getId()+"#"+changeMech.getId()+"#"+a.getBV()+"#"+position,Username,false);
 				}
 				else{
 				    a.addUnit(changeMech);
-				    CampaignMain.cm.toUser("PL|AAU|"+a.getID()+"#"+changeMech.getId()+"#"+a.getBV(),Username,false);
+				    CampaignMain.cm.toUser("PL|AAU|"+a.getId()+"#"+changeMech.getId()+"#"+a.getBV(),Username,false);
 				}
 				
 				p.resetWeightedArmyNumber();//change made. clear the cached weightedArmyNumber.
@@ -151,13 +151,13 @@ public class  ExchangeUnitCommand  implements Command {
 			}
 			else if (oldMech != null) {//changemech is known to be null from previous if statement
 				a.removeUnit(oldMech.getId());
-				CampaignMain.cm.toUser("PL|RAU|"+a.getID()+"#"+oldMech.getId()+"#"+a.getBV(),Username,false);
+				CampaignMain.cm.toUser("PL|RAU|"+a.getId()+"#"+oldMech.getId()+"#"+a.getBV(),Username,false);
 				a.checkLegalRatio(Username);
 				CampaignMain.cm.toUser("PL|UU|"+oldMech.getId()+"|"+oldMech.toString(true),Username,false);
 			}
 			
 			//tell the player that his army was changed and inform him of any legal ops changes
-			CampaignMain.cm.toUser("AM:Army #"+ a.getID() + " was changed. New BV: " + a.getBV(),Username,true);
+			CampaignMain.cm.toUser("AM:Army #"+ a.getId() + " was changed. New BV: " + a.getBV(),Username,true);
 			CampaignMain.cm.getOpsManager().checkOperations(a,true);
 			
 		}

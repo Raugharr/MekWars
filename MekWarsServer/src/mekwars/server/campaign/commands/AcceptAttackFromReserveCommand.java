@@ -138,7 +138,7 @@ public class  AcceptAttackFromReserveCommand  implements Command {
         if (defensiveFailures.size() == 0) {
             fullMatches.add(da);
         } else {
-        	CampaignMain.cm.toUser("AM:Army #" + da.getID() + "could not defend " + manager.getShortValidator().failuresToString(defensiveFailures), Username, true);
+        	CampaignMain.cm.toUser("AM:Army #" + da.getId() + "could not defend " + manager.getShortValidator().failuresToString(defensiveFailures), Username, true);
 			return;
         }
         
@@ -229,7 +229,7 @@ public class  AcceptAttackFromReserveCommand  implements Command {
 			toSend += ".";
 		
 		//tell the defender that he has succesfully joined the attack.
-        LOGGER.info(LogMarkerHolder.GAME_MARKER, "AcceptAttackFromReserve: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getID());
+        LOGGER.info(LogMarkerHolder.GAME_MARKER, "AcceptAttackFromReserve: " + so.getShortID() + "/" + dp.getName() + " w. Army #" + da.getId());
 		CampaignMain.cm.toUser(toSend,Username,true);
 		
 	}//end process

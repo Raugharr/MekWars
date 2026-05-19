@@ -41,6 +41,6 @@ public class PlayerUnlockArmyCommand implements Command {
 			return;
 		}
 		army.setPlayerLock(aid, false);
-		CampaignMain.cm.toUser("AM:Army " + army.getID() + " unlocked.",Username,true);
+		CampaignMain.cm.toUser("AM:Army " + army.getId() + " unlocked.",Username,true);
 	}
 }

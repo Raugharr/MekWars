@@ -524,7 +524,7 @@ public class StaffUserlistPopupMenu extends JMenu implements ActionListener {
             // receiving user
             PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient, "Receiving Player", PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
-            String receivingplayer = playerDialog.getPlayerName();
+            String receivingplayer = playerDialog.getOwner().getName();
             playerDialog.dispose();
 
             if (receivingplayer == null || receivingplayer.equals(""))

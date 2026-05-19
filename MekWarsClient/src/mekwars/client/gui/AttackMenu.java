@@ -505,7 +505,7 @@ public class AttackMenu extends JMenu implements ActionListener {
             //first, pick an army
             TreeSet<String> names = new TreeSet<String>();
             for (CArmy currArmy : mwclient.getPlayer().getArmies())
-                names.add("#" + currArmy.getID()+ " - BV: "+ currArmy.getBV());
+                names.add("#" + currArmy.getId()+ " - BV: "+ currArmy.getBV());
             
             JComboBox armyCombo = new JComboBox(names.toArray());
             armyCombo.setEditable(false);
@@ -590,7 +590,7 @@ public class AttackMenu extends JMenu implements ActionListener {
             
             PlayerNameDialog playerDialog = new PlayerNameDialog(mwclient,"Select an opponent",PlayerNameDialog.ANY_PLAYER);
             playerDialog.setVisible(true);
-            target = playerDialog.getPlayerName();
+            target = playerDialog.getOwner().getName();
             playerDialog.dispose();
             
             if ( target == null )

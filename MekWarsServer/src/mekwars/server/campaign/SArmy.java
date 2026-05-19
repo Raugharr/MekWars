@@ -13,17 +13,9 @@
 /*
  * Created on 21.05.2004
  */
+
 package mekwars.server.campaign;
 
-import java.util.Iterator;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.Vector;
-
-import mekwars.common.Army;
-import mekwars.common.Unit;
-import mekwars.common.campaign.operations.Operation;
-import mekwars.common.util.TokenReader;
 import megamek.common.Aero;
 import megamek.common.AmmoType;
 import megamek.common.BattleArmor;
@@ -36,203 +28,78 @@ import megamek.common.Protomech;
 import megamek.common.Tank;
 import megamek.common.VTOL;
 import megamek.common.battlevalue.BVCalculator;
+
+import mekwars.common.Army;
+import mekwars.common.CampaignData;
+import mekwars.common.Player;
+import mekwars.common.Unit;
+import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.TokenReader;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+
 /**
  * @author Helge Richter
- *
  */
-
-public class SArmy extends Army {
+public class SArmy extends Army<SUnit> {
     private static final Logger LOGGER = LogManager.getLogger(SArmy.class);
 
-    // VARIABLES
-    private float rawForceSize = 0;
-    private Vector<SArmy> opponents = new Vector<SArmy>(1, 1);
-    private TreeMap<String, String> legalOperations = new TreeMap<String, String>();
-    private String playerName = "";
+    private List<SArmy> opponents = new ArrayList<SArmy>();
 
-    // CONSTRUCTORS
-    public SArmy(String ownerName) {
-        super();
-        opponents = new Vector<SArmy>(1, 1);
-        playerName = ownerName;
+    public SArmy(Player owner) {
+        super(owner);
+        opponents = new ArrayList<>();
     }
 
-    public SArmy(int id, String ownerName) {
-        super();
-        setID(id);
-        opponents = new Vector<SArmy>(1, 1);
-        playerName = ownerName;
+    public SArmy(int id, Player owner) {
+        super(owner);
+        setId(id);
+        opponents = new ArrayList<>();
     }
 
-    // METHODS
     public void addUnit(SUnit u) {
         super.addUnit(u);
         super.setBV(0);
-        setRawForceSize(0);
+        setRawForceSize(-1);
     }
 
     public void addUnit(SUnit u, int position) {
         super.addUnit(u, position);
         super.setBV(0);
-        setRawForceSize(0);
+        setRawForceSize(-1);
     }
 
     public void removeUnit(int id) {
+        Iterator<SUnit> iterator = getUnits().iterator();
+        while (iterator.hasNext()) {
+            SUnit unit = iterator.next();
 
-        Iterator<Unit> i = getUnits().iterator();
-        while (i.hasNext()) {
-            if (i.next().getId() == id) {
-                i.remove();
+            if (unit.getId() == id) {
+                iterator.remove();
                 break;
             }
         }
 
         removeUnitFromC3Network(id);
         super.setBV(0);
-        setRawForceSize(0);
+        setRawForceSize(-1);
         removeCommander(id);
-    }
-
-    public int getUnitPosition(int id) {
-        Vector<Unit> v = getUnits();
-        for (int i = 0; i < v.size(); i++) {
-            SUnit unit = (SUnit) v.elementAt(i);
-            if (unit.getId() == id) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * @return returns the raw force size (Force Mod Rule)
-     */
-    public float getRawForceSize() {
-
-        // dont recalculate if it isnt necessary
-        if (rawForceSize != 0) {
-            return rawForceSize;
-        }
-
-        // no break, generate a raw force size
-        for (Unit u : getUnits()) {
-            if (u.getType() == Unit.INFANTRY) {
-                rawForceSize += CampaignMain.cm.getFloatConfig("InfantryOperationsBVMod");
-            } else if (u.getType() == Unit.VEHICLE) {
-                rawForceSize += CampaignMain.cm.getFloatConfig("VehicleOperationsBVMod");
-            } else if (u.getType() == Unit.BATTLEARMOR) {
-                rawForceSize += CampaignMain.cm.getFloatConfig("BAOperationsBVMod");
-            } else if (u.getType() == Unit.PROTOMEK) {
-                rawForceSize += CampaignMain.cm.getFloatConfig("ProtoOperationsBVMod");
-            } else if (u.getType() == Unit.AERO) {
-                rawForceSize += CampaignMain.cm.getFloatConfig("AeroOperationsBVMod");
-            } else {
-                // all other allowed types have a 1.0 weight
-                rawForceSize += CampaignMain.cm.getFloatConfig("MekOperationsBVMod");
-            }
-        }
-
-        return rawForceSize;
-    }// end getRawForceSize()
-
-    /**
-     * @param rfs
-     *            - the forcesize to set (Operations Rule)
-     */
-    public void setRawForceSize(float rfs) {
-        rawForceSize = rfs;
-    }
-
-    /**
-     * @author Torren 2/23/2007 New Tech Manual rules on force Size. This
-     *         returns the new <code>BV</code> of the <code>this</code> army
-     *         which is considerd the larger force
-     */
-    public int getOperationsBV(SArmy OpposingForce) {
-
-        // if not using the operations rules, return a normal BV.
-        boolean usingOpRules = CampaignMain.cm.getBooleanConfig("UseOperationsRule");
-        if (!usingOpRules) {
-            return getBV();
-        }
-
-        if (OpposingForce == null) {
-            return getBV();
-        }
-
-        double finalMultiplier = forceSizeModifier(OpposingForce);
-        return (int) Math.round(getBV() * finalMultiplier);
-
-    }// end getOperationsBV
-
-    public boolean hasTAGAndHomingCombo() {
-
-        boolean hasTAG = false;
-        boolean hasHoming = false;
-
-        try {
-            for (Unit currU : getUnits()) {
-                SUnit u = (SUnit) currU;
-                if (u.hasTAG()) {
-                    hasTAG = true;
-                }
-                if (u.hasHoming()) {
-                    hasHoming = true;
-                }
-
-                // LOGGER.error(" Unit: "+u.getModelName()+" TAG:
-                // "+hasTAG+" Homing: "+hasHoming);
-                if (hasTAG && hasHoming) {
-                    return true;
-                }
-            }
-        } catch (Exception ex) {
-            LOGGER.error("Bad unit in army for TAGandHomingCombo. Returning false.");
-            LOGGER.error("Exception: ", ex);
-            return false;
-        }
-        return false;
-    }
-
-    public boolean hasTAGAndSemiGuidedCombo() {
-
-        boolean hasTAG = false;
-        boolean hasSemiGuided = false;
-
-        try {
-            for (Unit currU : getUnits()) {
-                SUnit u = (SUnit) currU;
-                if (u.hasTAG()) {
-                    hasTAG = true;
-                }
-                if (u.hasSemiGuided()) {
-                    hasSemiGuided = true;
-                }
-
-                // LOGGER.error(" Unit: "+u.getModelName()+" TAG:
-                // "+hasTAG+" SemiGuided: "+hasSemiGuided);
-                if (hasTAG && hasSemiGuided) {
-                    return true;
-                }
-            }
-        } catch (Exception ex) {
-            LOGGER.error("Bad unit in army for hasTAGAndSemiGuidedCombo. Returning false.");
-            LOGGER.error("Exception: ", ex);
-            return false;
-        }
-        return false;
     }
 
     public int getSemiGuidedBV() {
         int bv = 0;
 
-        for (Unit currU : getUnits()) {
-            SUnit unit = (SUnit) currU;
+        for (SUnit unit : getUnits()) {
             for (Mounted ammo : unit.getEntity().getAmmo()) {
-                if (((AmmoType) ammo.getType()).getMunitionType().contains(AmmoType.Munitions.M_SEMIGUIDED)) {
+                if (((AmmoType) ammo.getType())
+                        .getMunitionType()
+                        .contains(AmmoType.Munitions.M_SEMIGUIDED)) {
                     bv += ((AmmoType) ammo.getType()).getBV(unit.getEntity());
                 }
             }
@@ -250,7 +117,6 @@ public class SArmy extends Army {
     }
 
     public void calcBV() {
-
         int total = 0;
         int subTotal = 0;
         double c3BV = 0;
@@ -259,7 +125,6 @@ public class SArmy extends Army {
         boolean hasSemiGuided = hasTAGAndSemiGuidedCombo();
 
         for (Unit currU : getUnits()) {
-
             // Bad units in the queue(possible issues with rest. best to protect
             // now.
             if (currU == null) {
@@ -268,8 +133,6 @@ public class SArmy extends Army {
 
             SUnit u = (SUnit) currU;
 
-            //c3BV = u.calcBV();
-            
             c3BV = u.getBVForMatch();
 
             if (u.hasBeenC3LinkedTo(this) || getC3Network().get(u.getId()) != null) {
@@ -294,7 +157,10 @@ public class SArmy extends Army {
             // Arrow IV adjustments
             if (hasTAGHomingCombo) {
                 final Crew crew = u.getEntity().getCrew();
-                double temp = subTotal / BVCalculator.bvSkillMultiplier(crew.getGunnery(), crew.getPiloting());
+                double temp =
+                        subTotal
+                                / BVCalculator.bvSkillMultiplier(
+                                        crew.getGunnery(), crew.getPiloting());
                 if (u.hasTAG()) {
                     temp += 200;
                 }
@@ -310,14 +176,12 @@ public class SArmy extends Army {
         if (hasSemiGuided) {
             total += getSemiGuidedBV();
         }
-
         super.setBV(total);
     }
 
     /**
-     * Method which compares two armies and returns a boolean which indicates
-     * whether they fall within each others' unit limits and have a generic BV
-     * match.
+     * Method which compares two armies and returns a boolean which indicates whether they fall
+     * within each others' unit limits and have a generic BV match.
      */
     public boolean matches(SArmy enemy, Operation o) {
         int flatCap = o.getIntValue("MaxBVDifference");
@@ -339,11 +203,9 @@ public class SArmy extends Army {
             if (bvDiff > flatCap) {
                 return false;
             }
-        }
-
         // percentage caps are being used. see which is larger
         // (percent or straight) and check as appropriate.
-        else {
+        } else {
 
             double percentDiff = 0;
 
@@ -359,81 +221,31 @@ public class SArmy extends Army {
                 if (bvDiff > flatCap) {
                     return false;
                 }
-            } else {// percent cap is greater than flat
+            } else { // percent cap is greater than flat
                 if (percentDiff > percentCap) {
                     return false;
                 }
             }
         }
-
-        // BVs match - check limits of THIS army
-        /*
-         * boolean infCounts =
-         * CampaignMain.cm.getBooleanConfig("CountInfForLimiters"); boolean
-         * allowLimiters = CampaignMain.cm.getBooleanConfig("AllowLimiters"); if
-         * (getLowerLimiter() != Army.NO_LIMIT && allowLimiters){
-         *
-         * int smallest = -1; int enemyNum = -1; if (infCounts) { smallest =
-         * getAmountOfUnits() - Math.abs(getLowerLimiter()); enemyNum =
-         * enemy.getAmountOfUnits(); } else { smallest =
-         * getAmountOfUnitsWithoutInfantry() - Math.abs(getLowerLimiter());
-         * enemyNum = enemy.getAmountOfUnitsWithoutInfantry(); }
-         *
-         * //check for 0 and negatives. if (smallest < 1) smallest = 1;
-         *
-         * if (enemyNum < smallest) return false; } if (getUpperLimiter() !=
-         * Army.NO_LIMIT && allowLimiters){
-         *
-         * int highest = -1; int enemyNum = -1; if (infCounts) { highest =
-         * getAmountOfUnits() + getUpperLimiter(); enemyNum =
-         * enemy.getAmountOfUnits(); } else { highest =
-         * getAmountOfUnitsWithoutInfantry() + getUpperLimiter(); enemyNum =
-         * enemy.getAmountOfUnitsWithoutInfantry(); }
-         *
-         * if (enemyNum > highest) return false; }
-         *
-         * //Within Limits of the OTHER army? if (enemy.getLowerLimiter() !=
-         * Army.NO_LIMIT && allowLimiters){
-         *
-         * int smallest = -1; int ownNum = -1; if (infCounts) { smallest =
-         * enemy.getAmountOfUnits() - Math.abs(enemy.getLowerLimiter()); ownNum
-         * = getAmountOfUnits(); } else { smallest =
-         * enemy.getAmountOfUnitsWithoutInfantry() -
-         * Math.abs(getLowerLimiter()); ownNum =
-         * getAmountOfUnitsWithoutInfantry(); }
-         *
-         * if (smallest < 1) smallest = 1;
-         *
-         * if (ownNum < smallest) return false; } if (enemy.getUpperLimiter() !=
-         * Army.NO_LIMIT && allowLimiters){
-         *
-         * int highest = -1; int ownNum = -1; if (infCounts) { highest =
-         * enemy.getAmountOfUnits() + enemy.getUpperLimiter(); ownNum =
-         * getAmountOfUnits(); } else { highest =
-         * enemy.getAmountOfUnitsWithoutInfantry() + enemy.getUpperLimiter();
-         * ownNum = getAmountOfUnitsWithoutInfantry(); }
-         *
-         * if (ownNum > highest) return false; }
-         */
         return true;
-    }// end matches()
-
-    public int getAmountOfUnitsWithoutInfantry() {
-        int total = 0;
-        for (Unit unit : getUnits()) {
-            if (unit.getType() != Unit.INFANTRY) {
-                total++;
-            }
-        }
-        return total;
-    }
+    } 
 
     public String getInaccurateDescription() {
-        if (CampaignMain.cm.getBooleanConfig("ShowUnitTypeCounts")) {
+        if (CampaignData.cd.getCampaignOptions().getBooleanConfig("ShowUnitTypeCounts")) {
             StringBuilder toReturn = new StringBuilder("(Units: ");
-            int numMechs = 0, numVees=0, numVTOLs=0, numInf=0, numProtos=0, numBA=0, numAero=0;
+            int numMechs = 0,
+                    numVees = 0,
+                    numVTOLs = 0,
+                    numInf = 0,
+                    numProtos = 0,
+                    numBA = 0,
+                    numAero = 0;
             for (Unit unit : getUnits()) {
-                Entity e = CampaignMain.cm.getPlayer(playerName).getUnit(unit.getId()).getEntity();
+                Entity e =
+                        CampaignMain.cm
+                                .getPlayer(getOwner().getName())
+                                .getUnit(unit.getId())
+                                .getEntity();
                 if (e instanceof Mech) {
                     numMechs++;
                 } else if (e instanceof VTOL) {
@@ -505,17 +317,17 @@ public class SArmy extends Army {
     }
 
     /**
-     * Special getDescription() which also shows an ID number. Used by SPlayer's
-     * getStatus and the ShowToHouseCommand.
+     * Special getDescription() which also shows an ID number. Used by SPlayer's getStatus and the
+     * ShowToHouseCommand.
      */
     public String getDescription(boolean accurate, boolean showID, boolean idShouldLink) {
 
         String toReturn = "";
         if (accurate) {
             if (showID && !idShouldLink) {
-                toReturn += "#" + getID();
+                toReturn += "#" + getId();
             } else if (showID && idShouldLink) {
-                toReturn += "<a href=\"MEKWARS/c sth#a#" + getID() + "\">#" + getID() + "</a>";
+                toReturn += "<a href=\"MEKWARS/c sth#a#" + getId() + "\">#" + getId() + "</a>";
             }
 
             if (isDisabled()) {
@@ -532,14 +344,11 @@ public class SArmy extends Army {
     }
 
     public String getDescription(boolean accurate) {
-
         return getDescription(accurate, null);
-
     }
 
     public String getDescription(boolean accurate, SArmy opposingArmy) {
         if (accurate) {
-
             StringBuilder result = new StringBuilder();
 
             // only show a name if one is set
@@ -547,48 +356,39 @@ public class SArmy extends Army {
                 result.append("\"" + getName() + "\" - ");
             }
 
-            Iterator<Unit> i = getUnits().iterator();
-            while (i.hasNext()) {
-                SUnit u = (SUnit) i.next();
-                if (isCommander(u.getId())) {
+            Iterator<SUnit> iterator = getUnits().iterator();
+            while (iterator.hasNext()) {
+                SUnit unit = iterator.next();
+                if (isCommander(unit.getId())) {
                     result.append("<i>");
                 }
-                result.append(u.getSmallDescription());
-                if (isCommander(u.getId())) {
+                result.append(unit.getSmallDescription());
+                if (isCommander(unit.getId())) {
                     result.append("</i>");
                 }
-                if (i.hasNext()) {
+                if (iterator.hasNext()) {
                     result.append(", ");
                 }
             }
             result.append("; BV: " + getBV());
 
             if (opposingArmy != null && getBV() != getOperationsBV(opposingArmy)) {
-                result.append(" (BV vs " + opposingArmy.getRawForceSize() + " units : " + getOperationsBV(opposingArmy) + ")");
+                result.append(
+                        " (BV vs "
+                                + opposingArmy.getRawForceSize()
+                                + " units : "
+                                + getOperationsBV(opposingArmy)
+                                + ")");
             }
 
             return result.toString();
         }
-
-        // else
         return getInaccurateDescription();
-    }
-
-    /**
-     * Used by Operations to determine how many mines to assign to
-     * attacker/defender, in lieu of BV.
-     */
-    public int getTotalTonnage() {
-        int tonnage = 0;
-        for (Unit currU : getUnits()) {
-            tonnage += ((SUnit) currU).getEntity().getWeight();
-        }
-        return tonnage;
     }
 
     public void fromString(String s, String delimiter, SPlayer p) {
         StringTokenizer ST = new StringTokenizer(s, delimiter);
-        setID(TokenReader.readInt(ST));
+        setId(TokenReader.readInt(ST));
         setName(TokenReader.readString(ST));
         setLowerLimiter(TokenReader.readInt(ST));
         setUpperLimiter(TokenReader.readInt(ST));
@@ -636,24 +436,14 @@ public class SArmy extends Army {
         return getDescription(true);
     }
 
-    /**
-     * Conduit which returns legal operations from the SArmyData. Note the lack
-     * of a corresponding set().
-     *
-     * @return legalOperations
-     */
-    public TreeMap<String, String> getLegalOperations() {
-        return legalOperations;
-    }
-
     /*
      * Opponent Methods. Used to get, set, add and remove opposing forces.
      */
-    public void setOpponents(Vector<SArmy> v) {
+    public void setOpponents(List<SArmy> v) {
         opponents = v;
     }
 
-    public Vector<SArmy> getOpponents() {
+    public List<SArmy> getOpponents() {
         return opponents;
     }
 
@@ -662,89 +452,44 @@ public class SArmy extends Army {
         // TODO: Sort by faction.
         try {
             opponents.add(a);
-            opponents.trimToSize();
         } catch (Exception e) {
             LOGGER.error("Error adding army to opponentList. Trace follows.");
             LOGGER.error("Exception: ", e);
         }
-    }// end addOpponent
+    } // end addOpponent
 
     public void removeOpponent(SArmy a) {
         try {
             opponents.remove(a);
-            opponents.trimToSize();
         } catch (Exception e) {
             LOGGER.error("Error removing army from opponentList. Trace follows.");
             LOGGER.error("Exception: ", e);
         }
-    }// end removeOpponent()
+    }
 
     @Override
     public void setName(String name) {
         super.setName(name);
 
         if (name.trim().length() >= 0) {
-            CampaignMain.cm.toUser("PL|RNA|" + getID() + "#" + name, getPlayerName(), false);
+            CampaignMain.cm.toUser("PL|RNA|" + getId() + "#" + name, getOwner().getName(), false);
         }
     }
 
     public void setPlayerLock(int aid, boolean lock) {
         if (lock) {
             super.playerLockArmy();
-            CampaignMain.cm.toUser("PL|LA|" + getID(), getPlayerName(), false);
+            CampaignMain.cm.toUser("PL|LA|" + getId(), getOwner().getName(), false);
         } else {
             super.playerUnlockArmy();
-            CampaignMain.cm.toUser("PL|ULA|" + getID(), getPlayerName(), false);
+            CampaignMain.cm.toUser("PL|ULA|" + getId(), getOwner().getName(), false);
         }
     }
 
     @Override
     public void toggleArmyDisabled() {
         super.toggleArmyDisabled();
-        CampaignMain.cm.toUser("PL|TAD|" + getID(), getPlayerName(), false);
-    }
-
-    /*
-     * Playername is stored by contructor in leiu of a complete backreference to
-     * the SPlayer who owns the army (and, in turn, back to his faction). It is
-     * used by checkattack to generate readible output like "Liao(4),
-     * Davion(3)."
-     *
-     * Also used to generate lists of players who should receive notification
-     * when SArmy's owner deactivates or joins a game and moves to
-     * STATUS_FIGHTING.
-     */
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    /**
-     * Override object's .equals().
-     */
-    @Override
-    public boolean equals(Object o) {
-
-        SArmy a = null;
-        try {
-            a = (SArmy) o;
-        } catch (ClassCastException e) {
-            return false;
-        }
-
-        if (a == null) {
-            return false;
-        }
-
-        if (!a.getPlayerName().equals(getPlayerName())) {
-            return false;
-        }
-
-        if (a.getID() != getID()) {
-            return false;
-        }
-
-        // same owner and ID number, so same army.
-        return true;
+        CampaignMain.cm.toUser("PL|TAD|" + getId(), getOwner().getName(), false);
     }
 
     private boolean isLegalMekToInfantryRatio() {
@@ -768,10 +513,7 @@ public class SArmy extends Army {
 
         int ratio = (infcount * 100) / mekcount;
 
-        if (ratio > CampaignMain.cm.getIntegerConfig("MekToInfantryRatio")) {
-            return false;
-        }
-        return true;
+        return ratio <= CampaignData.cd.getCampaignOptions().getIntegerConfig("MekToInfantryRatio");
     }
 
     private boolean isLegalMekToVehicleRatio() {
@@ -795,33 +537,43 @@ public class SArmy extends Army {
 
         int ratio = (veecount * 100) / mekcount;
 
-        if (ratio > CampaignMain.cm.getIntegerConfig("MekToVehicleRatio")) {
-            return false;
-        }
-        return true;
+        return ratio <= CampaignData.cd.getCampaignOptions().getIntegerConfig("MekToVehicleRatio");
     }
 
-    public void checkLegalRatio(String Username) {
-
-        if (CampaignMain.cm.getBooleanConfig("AllowRatios")) {
+    public void checkLegalRatio(String username) {
+        if (CampaignData.cd.getCampaignOptions().getBooleanConfig("AllowRatios")) {
             if (!isLegalMekToInfantryRatio()) {
-                CampaignMain.cm.toUser("This army has an Illegal Mek to Infantry ratio and will not be allowed to participate in games.", Username, true);
+                CampaignMain.cm.toUser(
+                        "This army has an Illegal Mek to Infantry ratio and will not be allowed to"
+                                + " participate in games.",
+                        username,
+                        true);
             } else if (!isLegalMekToVehicleRatio()) {
-                CampaignMain.cm.toUser("This army has an Illegal Mek to Vehicle ratio and will not be allowed to participate in games.", Username, true);
+                CampaignMain.cm.toUser(
+                        "This army has an Illegal Mek to Vehicle ratio and will not be allowed to"
+                                + " participate in games.",
+                        username,
+                        true);
             } else {
-                CampaignMain.cm.toUser("Army Ratio Checks", Username, true);
+                CampaignMain.cm.toUser("Army Ratio Checks", username, true);
             }
         }
     }
 
     @Override
     public void setLowerLimiter(int lowerLimit) {
+        int buffer = CampaignData.cd.getCampaignOptions().getIntegerConfig("LowerLimitBuffer");
 
-        int buffer = CampaignMain.cm.getIntegerConfig("LowerLimitBuffer");
         if (lowerLimit < buffer && lowerLimit != Army.NO_LIMIT) {
             lowerLimit = buffer;
-            CampaignMain.cm.toUser("Army " + getID() + "'s lower limit set to " + buffer + ".", getPlayerName(), true);
-            CampaignMain.cm.toUser("PL|SAB|" + getID() + "#" + getLowerLimiter() + "#" + getUpperLimiter(), getPlayerName(), false);
+            CampaignMain.cm.toUser(
+                    "Army " + getId() + "'s lower limit set to " + buffer + ".",
+                    getOwner().getName(),
+                    true);
+            CampaignMain.cm.toUser(
+                    "PL|SAB|" + getId() + "#" + getLowerLimiter() + "#" + getUpperLimiter(),
+                    getOwner().getName(),
+                    false);
         }
 
         super.setLowerLimiter(lowerLimit);
@@ -829,15 +581,19 @@ public class SArmy extends Army {
 
     @Override
     public void setUpperLimiter(int upperLimit) {
+        int buffer = CampaignData.cd.getCampaignOptions().getIntegerConfig("UpperLimitBuffer");
 
-        int buffer = CampaignMain.cm.getIntegerConfig("UpperLimitBuffer");
         if (upperLimit < buffer && upperLimit != Army.NO_LIMIT) {
             upperLimit = buffer;
-            CampaignMain.cm.toUser("Army " + getID() + "'s upper limit set to " + buffer + ".", getPlayerName(), true);
-            CampaignMain.cm.toUser("PL|SAB|" + getID() + "#" + getLowerLimiter() + "#" + getUpperLimiter(), getPlayerName(), false);
-
+            CampaignMain.cm.toUser(
+                    "Army " + getId() + "'s upper limit set to " + buffer + ".",
+                    getOwner().getName(),
+                    true);
+            CampaignMain.cm.toUser(
+                    "PL|SAB|" + getId() + "#" + getLowerLimiter() + "#" + getUpperLimiter(),
+                    getOwner().getName(),
+                    false);
         }
-
         super.setUpperLimiter(upperLimit);
     }
 
@@ -845,9 +601,7 @@ public class SArmy extends Army {
         if (unit == null) {
             return false;
         }
-        Vector<Unit> v = getUnits();
-        for (int i = 0; i < v.size(); i++) {
-            SUnit newUnit = (SUnit) v.elementAt(i);
+        for (SUnit newUnit : getUnits()) {
             if (newUnit.equals(unit)) {
                 return true;
             }
@@ -855,29 +609,11 @@ public class SArmy extends Army {
         return false;
     }
 
-    public double forceSizeModifier(SArmy opposingForce) {
-
-        double myForceSize = 0;
-        double opposingForceSize = 0;
-
-        setRawForceSize(0);
-        myForceSize = getRawForceSize();
-
-        opposingForce.setRawForceSize(0);
-        opposingForceSize = opposingForce.getRawForceSize();
-
-        if (myForceSize > opposingForceSize) {
-            return ((opposingForceSize / myForceSize) + (myForceSize / opposingForceSize)) - 1;
-        }
-        return 1.0;
-    }
-
     public boolean hasPilotWithTooManySkills() {
-
-        if (!CampaignMain.cm.getBooleanConfig("PlayersCanBuyPilotUpgrades")) {
+        if (!CampaignData.cd.getCampaignOptions().getBooleanConfig("PlayersCanBuyPilotUpgrades")) {
             return false;
         }
-        int maxPilotSkills = CampaignMain.cm.getIntegerConfig("MaxPilotUpgrades");
+        int maxPilotSkills = CampaignData.cd.getCampaignOptions().getIntegerConfig("MaxPilotUpgrades");
 
         if (maxPilotSkills == -1) {
             return false;
@@ -890,5 +626,4 @@ public class SArmy extends Army {
         }
         return false;
     }
-
 }

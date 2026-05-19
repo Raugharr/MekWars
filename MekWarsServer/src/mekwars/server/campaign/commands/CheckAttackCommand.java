@@ -17,6 +17,7 @@
 package mekwars.server.campaign.commands;
 
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import mekwars.common.campaign.operations.Operation;
@@ -102,13 +103,11 @@ public class CheckAttackCommand implements Command {
 				return;
 			}
 			
-			Desc += arm.getID() + " (" + arm.getBV()+ " BV) ";
+			Desc += arm.getId() + " (" + arm.getBV()+ " BV) ";
 			Desc += " may attack: </td><td>&nbsp;</td><td>&nbsp;</td></tr>";
 			
-			Enumeration<SArmy> targets = arm.getOpponents().elements();
-			while (targets.hasMoreElements()) {
-				SArmy currTarget = targets.nextElement();
-				SPlayer currTargetP = CampaignMain.cm.getPlayer(currTarget.getPlayerName());
+            for (SArmy currTarget : arm.getOpponents()) {
+				SPlayer currTargetP = CampaignMain.cm.getPlayer(currTarget.getOwner().getName());
 				String coloredHouseName = currTargetP.getMyHouse().getHouseFightingFor(currTargetP).getColoredName();
 				String defendableOps = listDefendableOperations(arm,currTargetP,currTarget,p.getHouseFightingFor());
 				
@@ -140,15 +139,15 @@ public class CheckAttackCommand implements Command {
             for (SArmy arm: p.getArmies()) {
 				Desc += "<table><tr><td>";
 				if (arm != null && !arm.isDisabled()) {
-					Desc += "Army " + arm.getID() ;
+					Desc += "Army " + arm.getId() ;
 					if ( usingOpRules )
 						Desc += " (" + arm.getBV() + " BV)";
 					Desc += ": </td>";
 					
-					Enumeration<SArmy> targets = arm.getOpponents().elements();
-					while (targets.hasMoreElements()) {
-						SArmy currTarget = targets.nextElement();
-						SPlayer currTargetP = CampaignMain.cm.getPlayer(currTarget.getPlayerName());
+					Iterator<SArmy> targets = arm.getOpponents().iterator();
+					while (targets.hasNext()) {
+						SArmy currTarget = targets.next();
+						SPlayer currTargetP = CampaignMain.cm.getPlayer(currTarget.getOwner().getName());
                         if ( currTargetP == null )
                             continue;
                         String defendableOps = listDefendableOperations(arm,currTargetP,currTarget,p.getHouseFightingFor());
@@ -169,8 +168,9 @@ public class CheckAttackCommand implements Command {
 						Desc += "</td><td>"+defendableOps;
 
 						Desc += "</td></tr>";
-						if ( targets.hasMoreElements() )
+						if (targets.hasNext()) {
 							Desc += "<tr><td>&nbsp;</td>";
+                        }
 					}//end while(more targets)
 					Desc += "</table>";
 				}
@@ -184,7 +184,7 @@ public class CheckAttackCommand implements Command {
 	private String listDefendableOperations(SArmy aa, SPlayer dp, SArmy da, SHouse ah){
 		StringBuffer report = new StringBuffer(" [");
 		I_OperationManager manager = CampaignMain.cm.getOpsManager(); 
-		for ( String attack : aa.getLegalOperations().keySet() ){
+		for (String attack : aa.getLegalOperations()){
 			Operation o = manager.getOperation(attack);
 			// Don't show AFR-only attacks
 			if (o.getBooleanValue("OnlyAllowedFromReserve")) {

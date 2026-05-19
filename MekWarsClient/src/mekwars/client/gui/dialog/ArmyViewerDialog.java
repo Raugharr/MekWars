@@ -216,7 +216,7 @@ public class ArmyViewerDialog extends JDialog implements ActionListener, ListSel
         } else {//Defend
     		for (CArmy army : player.getArmies()) {
     			if (!army.isDisabled())
-    				if ( this.validArmyList.contains(army.getID()))
+    				if ( this.validArmyList.contains(army.getId()))
     					defaultModel.add(x++, formatArmy(army));
     		}
         }
@@ -236,7 +236,7 @@ public class ArmyViewerDialog extends JDialog implements ActionListener, ListSel
 	private String formatArmy(CArmy army) {
 
         StringBuilder result = new StringBuilder();
-		result.append(makeLength("#"+Integer.toString(army.getID()),3) + " "); 
+		result.append(makeLength("#"+Integer.toString(army.getId()),3) + " "); 
         result.append(makeLength(army.getName(),15) + " ");
         result.append(makeLength("BV: "+Integer.toString(army.getBV()), 10)); 
 

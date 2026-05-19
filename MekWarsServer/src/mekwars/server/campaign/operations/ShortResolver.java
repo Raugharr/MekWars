@@ -268,7 +268,7 @@ public class ShortResolver {
         loserBV = 0;
         attackerBV = 0;
         for (SArmy currArmy : allArmies.values()) {
-            if (so.getLosers().containsKey(currArmy.getPlayerName().toLowerCase())) {
+            if (so.getLosers().containsKey(currArmy.getOwner().getName().toLowerCase())) {
                 loserBV += currArmy.getBV();
             } else {
             	attackerBV += currArmy.getBV();
@@ -374,7 +374,7 @@ public class ShortResolver {
          */
         for (SArmy currA : allArmies.values()) {
             currA.setLocked(false);
-            CampaignMain.cm.toUser("PL|SAL|" + currA.getID() + "#" + false, currA.getPlayerName(), false);
+            CampaignMain.cm.toUser("PL|SAL|" + currA.getId() + "#" + false, currA.getOwner().getName(), false);
         }
 
         // Set Player Flags as a result of the operation
@@ -477,7 +477,7 @@ public class ShortResolver {
             // refresh all armies and review all legal operations
             for (SArmy currA : currPlayer.getArmies()) {
                 currA.setBV(0);// force BV recalculation
-                CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), currA.getPlayerName(), false);
+                CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), currA.getOwner().getName(), false);
                 CampaignMain.cm.getOpsManager().checkOperations(currA, true);
             }
 
@@ -610,7 +610,7 @@ public class ShortResolver {
             loserA = loser.getArmy(so.getAllPlayersAndArmies().get(loserName.toLowerCase()));
         }
 
-        if ((winnerA == null) || (winnerA.getPlayerName().trim().length() == 0)) {
+        if ((winnerA == null) || (winnerA.getOwner().getName().trim().length() == 0)) {
             LOGGER.error("Autoreporting error ["+ so.getShortID() + "]:" + " Winner(" + winnerName + ") army  null or had empty owner name.");
 			CampaignMain.cm.toUser("Autoreporting error: Winner army null or had empty owner name.", winnerName, true);
 			CampaignMain.cm.toUser("Autoreporting error: Winner army null or had empty owner name.", loserName, true);
@@ -618,7 +618,7 @@ public class ShortResolver {
             return;
         }
 
-        if ((loserA == null) || (loserA.getPlayerName().trim().length() == 0)) {
+        if ((loserA == null) || (loserA.getOwner().getName().trim().length() == 0)) {
             LOGGER.error("Autoreporting error ["+ so.getShortID() + "]:" + "Loser(" + loserName + ") army  null or had empty owner name.");
 			CampaignMain.cm.toUser("Autoreporting error: Loser army null or had empty owner name.", loserName, true);
 			CampaignMain.cm.toUser("Autoreporting error: Loser army null or had empty owner name.", winnerName, true);
@@ -684,7 +684,7 @@ public class ShortResolver {
         LOGGER.debug("Autoreporting debug ["+ so.getShortID() + "]:" + "Unlock all participating armies");
         for (SArmy currA : allArmies.values()) {
             currA.setLocked(false);
-            CampaignMain.cm.toUser("PL|SAL|" + currA.getID() + "#" + false, currA.getPlayerName(), false);
+            CampaignMain.cm.toUser("PL|SAL|" + currA.getId() + "#" + false, currA.getOwner().getName(), false);
         }
 
         /*
@@ -710,7 +710,7 @@ public class ShortResolver {
         if (winner != null) {
             for (SArmy currA : winner.getArmies()) {
                 currA.setBV(0);
-                CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), currA.getPlayerName(), false);
+                CampaignMain.cm.toUser("PL|SAD|" + currA.toString(true, "%"), currA.getOwner().getName(), false);
                 CampaignMain.cm.getOpsManager().checkOperations(currA, true);
             }
         }
@@ -3785,7 +3785,7 @@ public class ShortResolver {
                     for (Unit currUnit : currArmy.getUnits()) {
                         int currID = currUnit.getId();
                         if ((livingUnits.get(currID) == null) && (salvagableUnits.get(currID) == null) && (destroyedUnits.get(currID) == null)) {
-                            OperationEntity oe = new OperationEntity(currArmy.getPlayerName(), currID, 0, 1, 1, true);
+                            OperationEntity oe = new OperationEntity(currArmy.getOwner().getName(), currID, 0, 1, 1, true);
                             livingUnits.put(currID, oe);
                         }
                     }// end for(all units in currArmy)
@@ -4900,9 +4900,7 @@ public class ShortResolver {
             SArmy curra = currp.getArmy(so.getAllPlayersAndArmies().get(player));
 
             try {
-                Enumeration<Unit> units = curra.getUnits().elements();
-                while (units.hasMoreElements()) {
-                    SUnit unit = (SUnit) units.nextElement();
+                for (SUnit unit : curra.getUnits()) {
                     Entity en = unit.getEntity();
                     if (!en.isOmni()) {
                         continue;

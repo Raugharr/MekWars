@@ -78,7 +78,7 @@ public class  ArmyOpForceSizeCommand  implements Command {
 						else	
 							CampaignMain.cm.toUser("AM:Army #" + armyid + "'s op force size set to " + limit + ".",Username,true);
 						
-						CampaignMain.cm.toUser("PL|SAOFS|"+army.getID()+"#"+army.getOpForceSize(),Username,false);
+						CampaignMain.cm.toUser("PL|SAOFS|"+army.getId()+"#"+army.getOpForceSize(),Username,false);
 					}
 				}
 			}

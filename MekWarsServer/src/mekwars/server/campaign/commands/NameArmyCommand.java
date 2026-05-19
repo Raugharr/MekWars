@@ -82,7 +82,7 @@ public class  NameArmyCommand  implements Command {
 		if (command.hasMoreElements()) {
 			String silent = (String)command.nextElement();
 			if (!silent.equals("SILENT"))
-				CampaignMain.cm.toUser("AM:Army " + army.getID() + " renamed.",Username,true);
+				CampaignMain.cm.toUser("AM:Army " + army.getId() + " renamed.",Username,true);
 		}
 		
 	}//end process()

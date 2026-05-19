@@ -977,7 +977,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
                 // legal for component production then the player doesnt get
                 // anything.
                 boolean fLegalOp = false;
-                for (String Opname : currentArmy.getLegalOperations().keySet()) {
+                for (String Opname : currentArmy.getLegalOperations()) {
                     if (!CampaignMain.cm.getOpsManager().getOperation(Opname).getBooleanValue("DoesNotCountForPP")) {
                         fLegalOp = true;
                         MaxFlatDiff += Math.max(0, CampaignMain.cm.getOpsManager().getOperation(Opname).getIntValue("MaxBVDifference"));
@@ -1495,7 +1495,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         while (!free) {
             free = true;
             for (int j = 0; j < getArmies().size(); j++) {
-                if (getArmies().get(j).getID() == i) {
+                if (getArmies().get(j).getId() == i) {
                     free = false;
                     i++;
                 }
@@ -2228,7 +2228,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
 
     public SArmy getArmy(int id) {
         for (SArmy currA : armies) {
-            if (currA.getID() == id) {
+            if (currA.getId() == id) {
                 return currA;
             }
         }
@@ -2243,7 +2243,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         Iterator<SArmy> i = armies.iterator();
         while (i.hasNext()) {
             SArmy currA = i.next();
-            if (currA.getID() == armyID) {
+            if (currA.getId() == armyID) {
                 i.remove();
                 break;
             }
@@ -2402,7 +2402,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         for (SArmy army : armies) {
             if (army.isUnitInArmy(unit)) {
                 army.setBV(0);
-                CampaignMain.cm.toUser("PL|SABV|" + army.getID() + "#" + army.getBV(), getName(), false);
+                CampaignMain.cm.toUser("PL|SABV|" + army.getId() + "#" + army.getBV(), getName(), false);
             }
         }
     }// end checkAndUpdateArmies
@@ -3056,12 +3056,12 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
 
             numofarmies = (Integer.parseInt((String) ST.nextElement()));
             for (int i = 0; i < numofarmies; i++) {
-                SArmy a = new SArmy(getName());
+                SArmy a = new SArmy(this);
                 a.fromString((String) ST.nextElement(), "%", this);
-                if (armies.size() < a.getID()) {
+                if (armies.size() < a.getId()) {
                     armies.add(a);
                 } else {
-                    armies.add(a.getID(), a);
+                    armies.add(a.getId(), a);
                 }
                 CampaignMain.cm.toUser("PL|SAD|" + a.toString(true, "%"), getName(), false);
             }
@@ -3510,12 +3510,12 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
 
         for (SArmy army : getArmies()) {
 
-            if (army.getID() == armyId) {
+            if (army.getId() == armyId) {
                 army.setLocked(true);
                 CampaignMain.cm.toUser("PL|SAL|" + armyId + "#" + true, getName(), false);
             } else if (army.isLocked()) {
                 army.setLocked(false);
-                CampaignMain.cm.toUser("PL|SAL|" + army.getID() + "#" + false, getName(), false);
+                CampaignMain.cm.toUser("PL|SAL|" + army.getId() + "#" + false, getName(), false);
             }
         }
     }

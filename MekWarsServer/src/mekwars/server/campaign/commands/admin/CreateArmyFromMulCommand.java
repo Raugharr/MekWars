@@ -45,19 +45,19 @@ public class CreateArmyFromMulCommand implements Command {
 		return syntax;
 	}
 
-	public void process(StringTokenizer command, String Username) {
+	public void process(StringTokenizer command, String username) {
 
 		// access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(username);
 		if (userLevel < getExecutionLevel()) {
 			CampaignMain.cm.toUser(
 					"AM:Insufficient access level for command. Level: "
 							+ userLevel + ". Required: " + accessLevel + ".",
-					Username, true);
+					username, true);
 			return;
 		}
 
-		SPlayer p = CampaignMain.cm.getPlayer(Username);
+		SPlayer p = CampaignMain.cm.getPlayer(username);
 		String filename;
 		String armyname;
 
@@ -67,22 +67,22 @@ public class CreateArmyFromMulCommand implements Command {
 			if (command.hasMoreTokens())
 				p = CampaignMain.cm.getPlayer(command.nextToken());
 		} catch (Exception ex) {
-			CampaignMain.cm.toUser("Syntax Error: /createarmyfrommul " + syntax, Username);
+			CampaignMain.cm.toUser("Syntax Error: /createarmyfrommul " + syntax, username);
 			return;
 		}
 
 		if (p == null) {
-			CampaignMain.cm.toUser("Unable to find target player", Username);
+			CampaignMain.cm.toUser("Unable to find target player", username);
 			return;
 		}
 
 		if (p.getArmies().size() >= CampaignMain.cm.getIntegerConfig("MaxLancesPerPlayer")) {
-			CampaignMain.cm.toUser(p.getName()+ " has too many armies already!", Username);
+			CampaignMain.cm.toUser(p.getName()+ " has too many armies already!", username);
 			return;
 		}
 
 		if (!new File("./data/armies").exists()) {
-			CampaignMain.cm.toUser("directory ./data/armies does not exist",Username);
+			CampaignMain.cm.toUser("directory ./data/armies does not exist",username);
 			new File("./data/armies").mkdir();
 			return;
 		}
@@ -90,9 +90,9 @@ public class CreateArmyFromMulCommand implements Command {
 		Vector<SUnit> units = new Vector<SUnit>(1,1);
 		units.addAll(SUnit.createMULUnits(filename));
 
-		SArmy army = new SArmy(p.getName());
+		SArmy army = new SArmy(p);
 
-		army.setID(p.getFreeArmyId());
+		army.setId(p.getFreeArmyId());
 		army.setName(armyname);
 		for ( SUnit cm : units ) {
 			cm.setProducer("Mul Army Unit "+armyname);
@@ -105,7 +105,7 @@ public class CreateArmyFromMulCommand implements Command {
 		
 		CampaignMain.cm.toUser("PL|SAD|" + army.toString(true, "%"), p.getName(),false);
 		CampaignMain.cm.toUser("army created: " + armyname, p.getName(), true);
-		CampaignMain.cm.doSendModMail("NOTE", Username+ " has created an army from file " + filename);
+		CampaignMain.cm.doSendModMail("NOTE", username + " has created an army from file " + filename);
 
 	}
 }

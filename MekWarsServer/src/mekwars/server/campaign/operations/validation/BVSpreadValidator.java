@@ -152,7 +152,7 @@ public abstract class BVSpreadValidator implements I_SpreadValidator {
 	
 	protected void logDebugInfo(SArmy a, Operation o) {
 		StringBuilder s = new StringBuilder("BVSpreadValidator Debug :\n");
-		s.append("\tPlayer: " + a.getPlayerName() + "\n");
+		s.append("\tPlayer: " + a.getOwner().getName() + "\n");
 		s.append("\tOperation: " + o.getName() + "\n");
 		s.append("\tValidatorClass: " + validatorClass + "\n");
 		s.append("\tArmy: " + a.getDescription(true) + "\n");

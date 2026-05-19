@@ -29,8 +29,10 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.RGBImageFilter;
-import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -262,7 +264,7 @@ public class CHQPanel extends JPanel {
 
         for (CArmy currA : mwclient.getPlayer().getArmies()) {
             if (!currA.isPlayerLocked()) {
-                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c removearmy#" + currA.getID());
+                mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c removearmy#" + currA.getId());
             }
         }
     }// end btnRemoveAllArmiesActionPerformed
@@ -536,7 +538,7 @@ public class CHQPanel extends JPanel {
 
                     // if the unit is from an army, remove it
                     if (startArmy != null) {
-                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + startArmy.getID() + "," + dragUnit.getId());
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + startArmy.getId() + "," + dragUnit.getId());
                     }
 
                 }// end if(release over hangar)
@@ -549,14 +551,14 @@ public class CHQPanel extends JPanel {
 
                         // army # or empty space. add the unit.
                         if (exchangeUnit == null) {
-                            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + currArmy.getID() + ",-1" + "#" + dragUnit.getId());
+                            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + currArmy.getId() + ",-1" + "#" + dragUnit.getId());
                         } else if (dragUnit.getId() != exchangeUnit.getId()) {
-                            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + currArmy.getID() + "," + exchangeUnit.getId() + "#" + dragUnit.getId());
+                            mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + currArmy.getId() + "," + exchangeUnit.getId() + "#" + dragUnit.getId());
                         }
                     }
 
                     // within the same army, change positions
-                    else if ((currArmy.getID() == startArmy.getID()) && (exchangeUnit != null) && (dragUnit.getId() != exchangeUnit.getId())) {
+                    else if ((currArmy.getId() == startArmy.getId()) && (exchangeUnit != null) && (dragUnit.getId() != exchangeUnit.getId())) {
                         int newpos = 0;
                         for (Unit currU : currArmy.getUnits()) {
                             if (currU.getId() == exchangeUnit.getId()) {
@@ -564,7 +566,7 @@ public class CHQPanel extends JPanel {
                             }
                             newpos++;
                         }
-                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c unitposition#" + startArmy.getID() + "#" + dragUnit.getId() + "#" + newpos);
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c unitposition#" + startArmy.getId() + "#" + dragUnit.getId() + "#" + newpos);
                     }
 
                 }// end else(target army exists)
@@ -635,7 +637,7 @@ public class CHQPanel extends JPanel {
                     }
 
                     // within the same army, change positions
-                    else if (currArmy.getID() == startArmy.getID()) {
+                    else if (currArmy.getId() == startArmy.getId()) {
 
                         if ((currUnit != null) && (dragUnit.getId() != currUnit.getId()) && (mwclient.getStatus() != MWClient.STATUS_FIGHTING)) {
                             tblMeks.setCursor(positionCursor);
@@ -764,7 +766,7 @@ public class CHQPanel extends JPanel {
                     CArmy l = MekTable.getArmyAt(row);
 
                     if (l != null) {
-                        int lid = l.getID();
+                        int lid = l.getId();
 
                         if (l.getBV() > 0) {
                             menuItem = new JMenuItem("Attack Options");
@@ -1181,7 +1183,7 @@ public class CHQPanel extends JPanel {
                     CUnit cm = null;
                     CArmy l = MekTable.getArmyAt(row);
                     int mid = col;
-                    int lid = l.getID();
+                    int lid = l.getId();
                     cm = MekTable.getMekAt(row, col);
                     boolean hasUnitsFree = false;
 
@@ -1373,25 +1375,22 @@ public class CHQPanel extends JPanel {
                          */
                         JMenu linkMenu = new JMenu("Link");
                         if ((l.getUnits().size() > 0) && !l.isLocked()) {
-                            Vector<CUnit> Masters = new Vector<CUnit>(1, 1);
-                            Enumeration<Unit> c3M = l.getUnits().elements();
-                            while (c3M.hasMoreElements()) {
-                                CUnit c3Unit = (CUnit) c3M.nextElement();
+                            List<CUnit> masters = new ArrayList<CUnit>();
+                            for (CUnit c3Unit : l.getUnits()) {
                                 if (c3Unit.equals(cm)) {
                                     continue;
                                 }
                                 if (cm.getC3Level() != Unit.C3_IMPROVED) {
                                     if (((c3Unit.getC3Level() == Unit.C3_MASTER) || (c3Unit.getC3Level() == Unit.C3_MMASTER)) && c3Unit.checkC3mNetworkHasOpen(l, cm.getC3Level())) {
-                                        Masters.add(c3Unit);
+                                        masters.add(c3Unit);
                                     }
                                 } else if (cm.getC3Level() == Unit.C3_IMPROVED) {
                                     if ((c3Unit.getC3Level() == Unit.C3_IMPROVED) && c3Unit.checkC3iNetworkHasOpen(l)) {
-                                        Masters.add(c3Unit);
+                                        masters.add(c3Unit);
                                     }
                                 }
                             }
-                            for (int i = 0; i < Masters.size(); i++) {
-                                CUnit mm = Masters.elementAt(i);
+                            for (CUnit mm : masters) {
                                 if (l.getUnit(mm.getId()) != null) {
                                     menuItem = new JMenuItem(mm.getModelName() + " " + mm.getBVForMatch() + " BV");
                                     menuItem.setActionCommand("LCN|" + lid + "|" + cm.getId() + "|" + mm.getId());
@@ -2139,7 +2138,7 @@ public class CHQPanel extends JPanel {
 
                 for (CArmy currArmy : mwclient.getPlayer().getArmies()) {
 
-                    if ((lid != -1) && (currArmy.getID() != lid)) {
+                    if ((lid != -1) && (currArmy.getId() != lid)) {
                         continue;
                     }
 
@@ -2182,7 +2181,6 @@ public class CHQPanel extends JPanel {
 
                     // BV and class info
                     else if (mode == 3) {
-
                         int assaultM = 0;
                         int heavyM = 0;
                         int mediumM = 0;
@@ -2199,12 +2197,7 @@ public class CHQPanel extends JPanel {
 
                         boolean showVeeWeights = Boolean.parseBoolean(mwclient.getServerConfigs("ShowVehWeightclassInChallenges"));
 
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
-                        // boolean firstUnit = true;
-                        while (e.hasMoreElements()) {
-
-                            CUnit currUnit = (CUnit) e.nextElement();
-
+                        for (CUnit currUnit : currArmy.getUnits()) {
                             // mechs
                             if ((currUnit.getType() == Unit.MEK) || (currUnit.getType() == Unit.QUAD)) {
                                 if (currUnit.getWeightclass() == Unit.ASSAULT) {
@@ -2302,35 +2295,29 @@ public class CHQPanel extends JPanel {
                     }
 
                     else if (mode == 4) {
-                        int Tonnage = 0;
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
-                            Tonnage += (int) unit.getEntity().getWeight();
+                        int tonnage = 0;
+                        for (CUnit unit : currArmy.getUnits()) {
+                            tonnage += (int) unit.getEntity().getWeight();
                         }
-                        toSend += " " + Tonnage + " tons.";
+                        toSend += " " + tonnage + " tons.";
 
                     }
 
                     else if (mode == 5) {
-                        int Tonnage = 0;
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
-                            Tonnage += (int) unit.getEntity().getWeight();
+                        int tonnage = 0;
+                        for (CUnit unit : currArmy.getUnits()) {
+                            tonnage += (int) unit.getEntity().getWeight();
                         }
                         toSend += " " + Math.round(currArmy.getBV() * forceSizeMod) + " BV";
                         if (forceSizeMod > 1) {
                             toSend += " vs " + opForceSize + " units";
                         }
-                        toSend += ", at " + Tonnage + " tons";
+                        toSend += ", at " + tonnage + " tons";
                     }
 
                     else if (mode == 6) {
                         int Tonnage = 0;
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
+                        for (CUnit unit : currArmy.getUnits()) {
                             Tonnage += (int) unit.getEntity().getWeight();
                         }
                         toSend += " " + Tonnage + " tons, with " + currArmy.getUnits().size();
@@ -2343,9 +2330,7 @@ public class CHQPanel extends JPanel {
 
                     else if (mode == 7) {
                         int Tonnage = 0;
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
+                        for (CUnit unit : currArmy.getUnits()) {
                             Tonnage += (int) unit.getEntity().getWeight();
                         }
                         toSend += " " + Math.round(currArmy.getBV() * forceSizeMod) + " BV";
@@ -2366,9 +2351,7 @@ public class CHQPanel extends JPanel {
                         int medium = 0;
                         int light = 0;
 
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
+                        for (CUnit unit : currArmy.getUnits()) {
                             switch (unit.getWeightclass()) {
                             case Unit.ASSAULT:
                                 assault++;
@@ -2408,9 +2391,7 @@ public class CHQPanel extends JPanel {
                         int medium = 0;
                         int light = 0;
 
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
+                        for (CUnit unit : currArmy.getUnits()) {
                             switch (unit.getWeightclass()) {
                             case Unit.ASSAULT:
                                 assault++;
@@ -2450,9 +2431,7 @@ public class CHQPanel extends JPanel {
                     }
 
                     else if (mode == 10) {
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
+                        for (CUnit unit : currArmy.getUnits()) {
                             toSend += " <a href=\"MEKINFO" + unit.getUnitFilename() + "#" + unit.getBVForMatch() + "#" + unit.getPilot().getGunnery() + "#" + unit.getPilot().getPiloting() + "\">" + unit.getModelName() + "</a>,";
                         }
                         // replace final comma with a period.
@@ -2468,9 +2447,7 @@ public class CHQPanel extends JPanel {
                             toSend += " vs " + opForceSize + " units";
                         }
                         toSend += ",";
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
+                        for (CUnit unit : currArmy.getUnits()) {
                             toSend += " <a href=\"MEKINFO" + unit.getUnitFilename() + "#" + unit.getBVForMatch() + "#" + unit.getPilot().getGunnery() + "#" + unit.getPilot().getPiloting() + "\">" + unit.getModelName() + "</a>,";
                         }
                         // replace final comma with a period.
@@ -2480,11 +2457,8 @@ public class CHQPanel extends JPanel {
                     }
 
                     else if (mode == 12) {
-
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
                         TreeMap<Double, Integer> unitWeights = new TreeMap<Double, Integer>();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
+                        for (CUnit unit : currArmy.getUnits()) {
                             if (!unitWeights.containsKey(unit.getEntity().getWeight())) {
                                 unitWeights.put(unit.getEntity().getWeight(), 1);
                             } else {
@@ -2504,10 +2478,8 @@ public class CHQPanel extends JPanel {
                     else if (mode == 13) {
 
                         toSend += " " + currArmy.getBV() + " BV,";
-                        Enumeration<Unit> e = currArmy.getUnits().elements();
                         TreeMap<Double, Integer> unitWeights = new TreeMap<Double, Integer>();
-                        while (e.hasMoreElements()) {
-                            CUnit unit = (CUnit) e.nextElement();
+                        for (Unit unit : currArmy.getUnits()) {
                             if (!unitWeights.containsKey(unit.getEntity().getWeight())) {
                                 unitWeights.put(unit.getEntity().getWeight(), 1);
                             } else {
@@ -2690,7 +2662,7 @@ public class CHQPanel extends JPanel {
                 // check all armies for the selected unit
                 for (CArmy currA : mwclient.getPlayer().getArmies()) {
                     if (currA.getUnit(mid) != null) {
-                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + currA.getID() + "," + mid);
+                        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c EXM#" + currA.getId() + "," + mid);
                     }
                 }
 
@@ -2979,7 +2951,7 @@ public class CHQPanel extends JPanel {
                         Iterator<CArmy> e = Player.getArmies().iterator();
                         while (e.hasNext() && shouldContinue) {
                             CArmy currArmy = e.next();
-                            if ((currArmy.getID() == army.getID()) && (rowsUsed != row)) {
+                            if ((currArmy.getId() == army.getId()) && (rowsUsed != row)) {
                                 return "";
                             }
                             // else
@@ -2987,7 +2959,7 @@ public class CHQPanel extends JPanel {
                         }// end while
                     }
 
-                    int lid = army.getID();
+                    int lid = army.getId();
                     String range = "";
 
                     boolean limitsAllowed = Boolean.parseBoolean(mwclient.getServerConfigs("AllowLimiters"));
@@ -3190,16 +3162,13 @@ public class CHQPanel extends JPanel {
                                 C3Text.append(" for");
                             }
 
-                            Enumeration<Integer> c3Key = l.getC3Network().keys();
-                            Enumeration<Integer> c3Unit = l.getC3Network().elements();
-                            while (c3Key.hasMoreElements()) {
-                                Integer slave = c3Key.nextElement();
-                                Integer master = c3Unit.nextElement();
+                            for (Map.Entry<Integer, Integer> entrySet : l.getC3Network().entrySet()) {
+                                Integer slave = entrySet.getKey();
+                                Integer master = entrySet.getValue();
                                 if (master.intValue() == cm.getId()) {
                                     C3Text.append(" #" + slave.intValue());
                                 }
                             }
-
                         }
                     }
                     if (mwclient.getPlayer().getMyHouse().getNonFactionUnitsCostMore()) {
