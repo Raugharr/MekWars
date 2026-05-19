@@ -427,21 +427,6 @@ public class UnitFactory implements Serializable {
 		return result;
 	}
 	
-	/*public void binOut(TreeWriter out) {
-		out.write(getName(), "name");
-		out.write(getSize(), "size");
-		out.write(getFounder(), "founder");
-		out.write(getTicksUntilRefresh(), "ticksuntilrefresh");
-		out.write(getRefreshSpeed(), "refreshspeed");
-		out.write(getType(),"type");
-		out.write(isLocked(), "factorylock");
-	}*/
-	
-	/*for serializable
-	public void binIn(TreeReader in, CampaignData data){
-		//empty. todo.
-	}
-	*/
 	public int getWeightclass() {
 		if (getSize().equalsIgnoreCase("Light"))
 			return Unit.LIGHT;
@@ -452,22 +437,6 @@ public class UnitFactory implements Serializable {
 		else if (getSize().equalsIgnoreCase("Assault"))
 			return Unit.ASSAULT;
 		return 0;
-	}
-	
-	public int getBestTypeProducable() {
-		if (this.canProduce(Unit.MEK))
-			return Unit.MEK;
-		if (this.canProduce(Unit.VEHICLE))
-			return Unit.VEHICLE;
-        if (this.canProduce(Unit.AERO))
-            return Unit.AERO;
-		if (this.canProduce(Unit.BATTLEARMOR))
-			return Unit.BATTLEARMOR;
-		if (this.canProduce(Unit.PROTOMEK))
-			return Unit.PROTOMEK;
-		if (this.canProduce(Unit.INFANTRY))
-			return Unit.INFANTRY;
-		return Unit.MEK;
 	}
 	
 	public boolean isLocked() {

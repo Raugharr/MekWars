@@ -164,16 +164,11 @@ public class Statistics {
 	    StringBuilder result = new StringBuilder();
 	    result.append("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"format.css\"><style type=\"text/css\"></style></head><body><font face=\"Verdana, Arial, Helvetica, sans-serif\">");
 	    result.append("<h2>Player Ranking:</h2><p>");
-	    //  result.append("(Only Players with more than 1000 EXP shown)<p>";
-	    Iterator<House> e = CampaignMain.cm.getData().getAllHouses().iterator();
 	    Hashtable<String, EXPRankingContainer> allplayers = new Hashtable<String, EXPRankingContainer>();
-	    //Player DefaultPlayer = null;
-	    while (e.hasNext()) {
-	        SHouse h = (SHouse) e.next();
-	        if (!h.isNewbieHouse()) {
-	            Enumeration<SmallPlayer> en = h.getSmallPlayers().elements();
-	            while (en.hasMoreElements()) {
-	                EXPRankingContainer EXPRankPlayer = new EXPRankingContainer(en.nextElement());
+        for (House house : CampaignMain.cm.getData().getAllHouses()) {
+	        if (!((SHouse)house).isNewbieHouse()) {
+	            for (SmallPlayer smallPlayer : ((SHouse)house).getSmallPlayers().values()) {
+	                EXPRankingContainer EXPRankPlayer = new EXPRankingContainer(smallPlayer);
 	                allplayers.put(EXPRankPlayer.getName(), EXPRankPlayer);
 	            }
 	        }
