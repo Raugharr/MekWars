@@ -21,6 +21,7 @@
 
 package mekwars.common;
 
+import mekwars.common.campaign.PersonalPilotQueues;
 import mekwars.common.flags.PlayerFlags;
 import mekwars.common.util.UnitUtils;
 
@@ -83,7 +84,6 @@ public class Player<T extends Unit> {
     public String getLogo() {
         return logo;
     }
-
 
     public void setLogo(String logo) {
         logo = logo;
@@ -418,6 +418,10 @@ public class Player<T extends Unit> {
      */
     public PlayerFlags getFlags() {
         return flags;
+    }
+
+    public PersonalPilotQueues getPersonalPilotQueue() {
+        return null;
     }
 
     /**
