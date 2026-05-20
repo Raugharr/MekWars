@@ -52,7 +52,7 @@ public class SPlanetConverterTest {
                 xcoord,
                 ycoord     
             );
-        planet.setHomeWorld(isHomeworld);
+        planet.setHomeworld(isHomeworld);
         planet.setOriginalOwner(originalOwner);
         planet.setPlanetFlags(operationFlags);
 
@@ -62,7 +62,7 @@ public class SPlanetConverterTest {
         SPlanet newPlanet = (SPlanet) xstream.fromXML(xml);
 
         assertEquals(newPlanet.getName(), planetName);
-        assertEquals(newPlanet.getCompProduction(), componentProduction);
+        assertEquals(newPlanet.getComponentProduction(), componentProduction);
         assertEquals(newPlanet.getPosition().x, xcoord);
         assertEquals(newPlanet.getPosition().y, ycoord);
         assertEquals(newPlanet.isHomeWorld(), isHomeworld);

@@ -42,7 +42,7 @@ class CampaignDataTest {
     public void testAddPlanet() {
         Planet testPlanet = new Planet("TestPlanet1", position, influence);
 
-        assertEquals(EntityStore.UNSET_ID, testPlanet.getId());
+        assertEquals(0, testPlanet.getId());
         data.addPlanet(testPlanet);
         assertEquals(1, testPlanet.getId());
     }
