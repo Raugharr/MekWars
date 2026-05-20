@@ -177,7 +177,7 @@ public class CampaignData implements TerrainProvider {
 
     // /** Retrieves all planets. */
     public Collection<Planet> getAllPlanets() {
-        return HibernateUtil.getCurrentSession().createQuery(
+        return HibernateUtil.getInstance().getCurrentSession().createQuery(
                         "SELECT p FROM Planet p LEFT JOIN FETCH p.influence",
                         Planet.class)
                 .getResultList();
