@@ -16,14 +16,14 @@
 
 package mekwars.server.campaign.commands;
 
+import mekwars.common.util.HibernateUtil;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.mercenaries.MercHouse;
 
-import java.util.Enumeration;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 public class UnemployedMercsCommand implements Command {
     int accessLevel = 0;
@@ -42,7 +42,6 @@ public class UnemployedMercsCommand implements Command {
     }
 
     public void process(StringTokenizer command, String username) {
-
         if (accessLevel != 0) {
             int userLevel = MWServ.getInstance().getUserLevel(username);
             if (userLevel < getExecutionLevel()) {
@@ -58,21 +57,33 @@ public class UnemployedMercsCommand implements Command {
             }
         }
 
-        String s = "Unemployed Mercenaries: ";
-        Vector<MercHouse> mh = CampaignMain.cm.getMercHouses();
-        for (int i = 0; i < mh.size(); i++) {
-            MercHouse searchHouse = mh.get(i);
+        HibernateUtil.inTransaction(
+                session -> {
+                    String s = "Unemployed Mercenaries: ";
+                    // TODO: When we make House an @Entity, clean this up.
+                    List<MercHouse> mh = CampaignMain.cm.getMercHouses();
+                    for (int i = 0; i < mh.size(); i++) {
+                        MercHouse searchHouse = mh.get(i);
+                        List<SPlayer> playerList =
+                                session.createQuery(
+                                                "SELECT p FROM SPlayer p LEFT JOIN SHouse h ON h.id"
+                                                        + " == p.house_id",
+                                                SPlayer.class)
+                                        .getResultList();
 
-            boolean foundMerc = false;
-            for (SPlayer player: searchHouse.getAllOnlinePlayers().values()) {
-                if (player.getMyHouse().getHouseFightingFor(player).isMercHouse()) {
-                    if (!foundMerc) {
-                        s += player.getName();
-                        foundMerc = true;
-                    } else s += ", " + player.getName();
-                }
-            }
-        }
-        CampaignMain.cm.toUser(s, username, true);
+                        boolean foundMerc = false;
+                        for (SPlayer player : playerList) {
+                            if (player.getMyHouse().getHouseFightingFor(player).isMercHouse()) {
+                                if (!foundMerc) {
+                                    s += player.getName();
+                                    foundMerc = true;
+                                } else {
+                                    s += ", " + player.getName();
+                                }
+                            }
+                        }
+                    }
+                    CampaignMain.cm.toUser(s, username, true);
+                });
     }
 }
