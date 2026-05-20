@@ -16,6 +16,10 @@
 
 package mekwars.server.campaign;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import megamek.common.Aero;
 import megamek.common.AmmoType;
 import megamek.common.BattleArmor;
@@ -47,20 +51,25 @@ import java.util.StringTokenizer;
 /**
  * @author Helge Richter
  */
+@jakarta.persistence.Entity
 public class SArmy extends Army<SUnit> {
     private static final Logger LOGGER = LogManager.getLogger(SArmy.class);
 
-    private List<SArmy> opponents = new ArrayList<SArmy>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "army_opponents",
+        joinColumns = @JoinColumn(name = "army_id"),
+        inverseJoinColumns = @JoinColumn(name = "oppend_army_id")
+    )
+    private List<SArmy> opponents = new ArrayList<>();
 
-    public SArmy(Player owner) {
+    public SArmy(Player<SUnit> owner) {
         super(owner);
-        opponents = new ArrayList<>();
     }
 
-    public SArmy(int id, Player owner) {
+    public SArmy(int id, Player<SUnit> owner) {
         super(owner);
         setId(id);
-        opponents = new ArrayList<>();
     }
 
     public void addUnit(SUnit u) {
