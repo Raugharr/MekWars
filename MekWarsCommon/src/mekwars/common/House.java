@@ -29,6 +29,14 @@ import mekwars.common.util.BinWriter;
 import mekwars.common.util.HTMLConverter;
 import mekwars.common.universe.FactionTag;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Id;
+
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Set;
@@ -37,11 +45,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import megamek.common.TechConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.annotations.SQLRestriction;
 
 /**
  * @author Helge Richter
  * 
  */
+@Entity
 public class House implements MWEntity {
     public static final int RED_VALUE = 0;
     public static final int GREEN_VALUE = 1;
@@ -51,13 +61,26 @@ public class House implements MWEntity {
     private String logo = "";
     private String factionFluFile = "Common";
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Vector<Integer> baseGunner = new Vector<Integer>(Unit.MAXBUILD, 1);
     private Vector<Integer> basePilot = new Vector<Integer>(Unit.MAXBUILD, 1);
     private Vector<String> basePilotSkills = new Vector<String>(Unit.MAXBUILD, 1);
 
+    @ElementCollection
+    @CollectionTable(name = "house_price_mods", joinColumns = @JoinColumn(name = "house_id"))
+    @SQLRestriction("mod_category = 'PRICE'")
     private int factionUnitPriceMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
+
+    @ElementCollection
+    @CollectionTable(name = "house_price_mods", joinColumns = @JoinColumn(name = "house_id"))
+    @SQLRestriction("mod_category = 'INFLUENCE'")
     private int factionUnitFluMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
+
+    @ElementCollection
+    @CollectionTable(name = "house_price_mods", joinColumns = @JoinColumn(name = "house_id"))
+    @SQLRestriction("mod_category = 'COMPONENT'")
     private int factionUnitComponentMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
 
     private String factionColor = "#000000";
