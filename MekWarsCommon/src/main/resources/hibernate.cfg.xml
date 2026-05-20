@@ -1,0 +1,14 @@
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">org.hibernate.community.dialect.SQLiteDialect</property>
+		<property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
+		<property name="hibernate.connection.url">jdbc:sqlite:MekWars.sqlite</property>
+		<property name="hibernate.hbm2ddl.auto">none</property>
+		<property name="current_session_context_class">thread</property>
+		<property name="hibernate.physical_naming_strategy">
+			org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+		</property>
+		<property name="hibernate.jdbc.batch_size">10</property>
+		<property name="hibernate.default_batch_fetch_size">25</property>
+	</session-factory>
+</hibernate-configuration>
