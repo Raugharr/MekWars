@@ -14,10 +14,12 @@
 
 package mekwars.server.campaign.commands.admin;
 
+import java.util.List;
 import java.util.StringTokenizer;
 
 import mekwars.common.CampaignData;
 import mekwars.common.House;
+import mekwars.common.util.HibernateUtil;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -59,7 +61,13 @@ public class AdminLockCampaignCommand implements Command {
         // deactivate all active players, and tell them why.
         for (House house : CampaignMain.cm.getData().getAllHouses()) {
             SHouse h = (SHouse) house;
-            for (SPlayer p : h.getActivePlayers().values()) {
+            List<SPlayer> activePlayers = HibernateUtil.fromTransaction(session ->
+                session.createQuery("FROM SPlayer WHERE myHouse.id = :houseId AND status = :status", SPlayer.class)
+                    .setParameter("houseId", h.getId())
+                    .setParameter("status", SPlayer.STATUS_ACTIVE)
+                    .getResultList()
+            );
+            for (SPlayer p : activePlayers) {
                 p.setActive(false);
                 CampaignMain.cm.toUser("AM:" + username + " locked the campaign. You were deactivated.", p.getName(), true);
                 CampaignMain.cm.sendPlayerStatusUpdate(p, !CampaignData.cd.getCampaignOptions().getBooleanConfig("HideActiveStatus"));
