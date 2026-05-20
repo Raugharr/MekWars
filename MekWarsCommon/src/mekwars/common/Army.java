@@ -20,6 +20,12 @@
  */
 package mekwars.common;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToMany;
+
 import megamek.common.Entity;
 
 import mekwars.common.campaign.CampaignOptions;
@@ -41,11 +47,13 @@ import java.util.TreeSet;
  *
  * @author Helge Richter
  */
+@MappedSuperclass
 public class Army<T extends Unit> {
     private static final Logger LOGGER = LogManager.getLogger(Army.class);
 
     public static final int NO_LIMIT = -1;
 
+    @OneToMany(mappedBy = "army")
     private List<T> units = new ArrayList<>();
     private String name = " ";
 
@@ -53,7 +61,11 @@ public class Army<T extends Unit> {
     private int lowerLimiter = NO_LIMIT;
 
     private int bv = 0;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private boolean locked = false;
 
     private boolean armyPlayerLocked = false; // Used by players to keep armies

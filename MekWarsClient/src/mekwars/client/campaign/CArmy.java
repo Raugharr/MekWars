@@ -35,6 +35,7 @@ import java.util.StringTokenizer;
  * counterpart, very few functional methods, and mostly serves as a holder for server data that the
  * client needs in order to represent forces graphically, load units into games, etc.
  */
+@jakarta.persistence.Entity
 public class CArmy extends Army<CUnit> {
     /**
      * Method that fills in Army data (common.Army value), given an informational String. Called
