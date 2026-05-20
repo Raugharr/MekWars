@@ -29,5 +29,6 @@
 		<Root level="info" additivity="false">
 			<appender-ref ref="fileLogger" />
 		</Root>
+		<Logger name="org.hibernate.SQL" level="DEBUG"/>
 	</Loggers>
 </Configuration>
