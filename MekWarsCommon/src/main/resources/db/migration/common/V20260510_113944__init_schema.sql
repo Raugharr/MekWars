@@ -263,9 +263,45 @@ CREATE TABLE IF NOT EXISTS sync_log (
 );
 
 CREATE UNIQUE INDEX sync_log_entity_id_table_name_index ON sync_log(entity_id, table_name);
+
 CREATE TABLE IF NOT EXISTS subfaction (
 	id INTEGER PRIMARY KEY AUTOINCREMENT
 );
+
+CREATE TABLE IF NOT EXISTS house (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name TEXT NOT NULL,
+	logo TEXT,
+	faction_flu_file TEXT NOT NULL,
+	faction_color TEXT NOT NULL,
+	abbreviation TEXT NOT NULL,
+	faction_player_color TEXT NOT NULL,
+	conquerable INTEGER NOT NULL,
+	tech_level INTEGER NOT NULL,
+	allows_defections_from INTEGER NOT NULL,
+	allows_defections_to INTEGER NOT NULL,
+	used_mek_bay_multiplier INTEGER NOT NULL,
+	non_faction_units_cost_more INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS house_price_mods (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	house_id INTEGER NOT NULL,
+	category TEXT NOT NULL,
+	unit_type INTEGER NOT NULL,
+	unit_weight INTEGER NOT NULL,
+	value INTEGER NOT NULL,
+	FOREIGN KEY (house_id) REFERENCES house(id)
+);
+
+CREATE TABLE IF NOT EXISTS house_flags (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	house_id INTEGER NOT NULL,
+	flag TEXT NOT NULL,
+	FOREIGN KEY (house_id) REFERENCES house(id)
+);
+
+CREATE INDEX house_flags_house_id_index ON house_flags(house_id);
 
 CREATE TABLE IF NOT EXISTS player (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
