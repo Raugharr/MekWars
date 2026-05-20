@@ -35,6 +35,8 @@ import mekwars.common.campaign.targetsystems.TargetSystem;
 import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
 import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
 
+import jakarta.persistence.MappedSuperclass;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
