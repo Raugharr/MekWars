@@ -55,7 +55,7 @@ public class AdminResetFreeMeksCommand implements Command {
 		}
 
 		//mek token counts up to the server limit, reset it to zero
-		p.addMekToken(-p.getMekToken());
+		p.addMekTokens(-p.getMekTokens());
 		CampaignMain.cm.toUser("You reset " + p.getName() + "'s free mek limit.", Username, true);
 		CampaignMain.cm.toUser(Username + " reset your free mek limit.", p.getName(), true);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " reset " + p.getName() + "'s free mek limit.");

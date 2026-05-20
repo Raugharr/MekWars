@@ -65,7 +65,7 @@ public class SPlanetConverterTest {
         assertEquals(newPlanet.getComponentProduction(), componentProduction);
         assertEquals(newPlanet.getPosition().x, xcoord);
         assertEquals(newPlanet.getPosition().y, ycoord);
-        assertEquals(newPlanet.isHomeWorld(), isHomeworld);
+        assertEquals(newPlanet.isHomeworld(), isHomeworld);
         assertEquals(newPlanet.getOriginalOwner(), originalOwner);
 
         assertEquals(newPlanet.getPlanetFlags().size(), 1);

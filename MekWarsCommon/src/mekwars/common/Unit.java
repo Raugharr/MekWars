@@ -42,7 +42,8 @@ import java.io.InputStreamReader;
 /**
  * @author Helge Richter
  */
-public class Unit {
+@MappedSuperclass
+public class Unit<T extends Unit<T>> {
     public static final int LIGHT = 0;
     public static final int MEDIUM = 1;
     public static final int HEAVY = 2;
@@ -75,7 +76,8 @@ public class Unit {
     private int BV;
     private int scrappableFor = -1;
     private Pilot pilot;
-    private Player owner;
+    private Player<T> owner;
+    private Army<T> army;
     private int type;
     private int weightClass;
     private int status = Unit.STATUS_OK;
@@ -232,7 +234,7 @@ public class Unit {
         pilot.setUnit(this);
     }
 
-    public Player getOwner() {
+    public Player<T> getOwner() {
         return owner;
     }
 
