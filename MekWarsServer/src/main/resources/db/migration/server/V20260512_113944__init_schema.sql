@@ -55,3 +55,13 @@ CREATE TABLE IF NOT EXISTS army_opponents (
     FOREIGN KEY (army_id) REFERENCES army(id),
     FOREIGN KEY (opponent_army_id) REFERENCES army(id)
 );
+
+ALTER TABLE house ADD COLUMN money INTEGER NOT NULL;
+ALTER TABLE house ADD COLUMN bays_provided INTEGER NOT NULL;
+ALTER TABLE house ADD COLUMN component_production INTEGER NOT NULL;
+ALTER TABLE house ADD COLUMN show_production_count_next INTEGER NOT NULL;
+ALTER TABLE house ADD COLUMN initial_house_ranking INTEGER NOT NULL;
+ALTER TABLE house ADD COLUMN motd TEXT NOT NULL;
+ALTER TABLE house ADD COLUMN announcement TEXT NOT NULL;
+ALTER TABLE house ADD COLUMN tech_research_points INTEGER NOT NULL;
+ALTER TABLE house ADD COLUMN activity_pp REAL NOT NULL;
