@@ -25,14 +25,11 @@ import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
 
-import mekwars.client.MWClient;
-import mekwars.common.House;
+import mekwars.common.CampaignData;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
-import mekwars.common.CampaignData;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
-import mekwars.common.campaign.targetsystems.TargetSystem;
 import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
 import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
 import mekwars.common.util.TokenReader;
@@ -41,9 +38,6 @@ import mekwars.common.util.UnitUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.StringJoiner;
@@ -53,10 +47,6 @@ import java.util.StringTokenizer;
 public class CUnit extends Unit {
     private static final Logger LOGGER = LogManager.getLogger(CUnit.class);
 
-    private int BV;
-    private int scrappableFor = 0; // value if scrapped
-    private boolean pilotIsRepairing = false;
-    private MWClient mwclient;
     private String htmlQuirkList = " ";
     private String quirkList = " ";
 
@@ -64,13 +54,8 @@ public class CUnit extends Unit {
         init();
     }
 
-    public CUnit(MWClient mwclient) {
-        this.mwclient = mwclient;
-        init();
-    }
-
     private void init() {
-        BV = 0;
+        setBV(0);
         setStatus(STATUS_OK);
         setProducer("unknown origin");
     }
@@ -107,11 +92,11 @@ public class CUnit extends Unit {
         int skillAmount = TokenReader.readInt(STR);
         for (int i = 0; i < skillAmount; i++) {
             PilotSkill skill =
-                new PilotSkill(
-                        TokenReader.readInt(STR),
-                        TokenReader.readString(STR),
-                        TokenReader.readInt(STR),
-                        TokenReader.readString(STR));
+                    new PilotSkill(
+                            TokenReader.readInt(STR),
+                            TokenReader.readString(STR),
+                            TokenReader.readInt(STR),
+                            TokenReader.readString(STR));
 
             if (skill.getName().equals("Weapon Specialist")) {
                 p.setWeapon(TokenReader.readString(STR));
@@ -137,18 +122,18 @@ public class CUnit extends Unit {
         int mmoptionsamount = TokenReader.readInt(ST);
         for (int i = 0; i < mmoptionsamount; i++) {
             MegaMekPilotOption mo =
-                new MegaMekPilotOption(
-                        TokenReader.readString(ST),
-                        Boolean.parseBoolean(TokenReader.readString(ST)));
+                    new MegaMekPilotOption(
+                            TokenReader.readString(ST),
+                            Boolean.parseBoolean(TokenReader.readString(ST)));
             p.addMegamekOption(mo);
         }
 
         setType(TokenReader.readInt(ST));
         // setType(getEntityType(UnitEntity));
         setPilot(p);
-        BV = Math.max(TokenReader.readInt(ST), 0);
+        setBV(Math.max(TokenReader.readInt(ST), 0));
 
-        setWeightclass(TokenReader.readInt(ST));
+        setWeightClass(TokenReader.readInt(ST));
         // if (this.getType() == Unit.MEK || this.getType() == Unit.VEHICLE)
         // setWeightclass(getEntityWeight(UnitEntity));
         setId(TokenReader.readInt(ST));
@@ -226,18 +211,19 @@ public class CUnit extends Unit {
             setSupportUnit(false);
         }
 
-        scrappableFor = TokenReader.readInt(ST);
+        setScrappableFor(TokenReader.readInt(ST));
 
         unitDamage = TokenReader.readString(ST);
 
-        pilotIsRepairing = TokenReader.readBoolean(ST);
+        setPilotIsRepairing(TokenReader.readBoolean(ST));
 
         setRepairCosts(TokenReader.readInt(ST), TokenReader.readInt(ST));
 
         setChristmasUnit(TokenReader.readBoolean(ST));
 
         // @salient Quirks - set unit quirks, or drop data if quirks have been turned off
-        if (ST.hasMoreTokens() && CampaignData.cd.getCampaignOptions().getBooleanConfig("EnableQuirks")) {
+        if (ST.hasMoreTokens()
+                && CampaignData.cd.getCampaignOptions().getBooleanConfig("EnableQuirks")) {
             setUnitQuirks(TokenReader.readString(ST));
         } else if (ST.hasMoreTokens()) {
             TokenReader.readString(ST);
@@ -268,7 +254,6 @@ public class CUnit extends Unit {
                 String quirk = TokenReader.readString(st);
                 if (quirk.equalsIgnoreCase("none") == false)
                     unitEntity.getQuirks().getOption(quirk).setValue(true);
-                // mwclient.sendChat(quirk); //debug
             }
         }
     }
@@ -296,15 +281,13 @@ public class CUnit extends Unit {
                     if (option != null && option.booleanValue()) {
                         quirksList.add(option.getName());
                     }
-                        }
-            }
                 }
+            }
+        }
         return quirksList.toString();
     }
 
     public boolean hasQuirks() {
-        // StringJoiner quirksList = new StringJoiner("&");
-
         for (Enumeration<IOptionGroup> optionGroups = unitEntity.getQuirks().getGroups();
                 optionGroups.hasMoreElements(); ) {
             IOptionGroup group = optionGroups.nextElement();
@@ -315,9 +298,9 @@ public class CUnit extends Unit {
                     if (option != null && option.booleanValue()) {
                         return true;
                     }
-                        }
-            }
                 }
+            }
+        }
         return false;
     }
 
@@ -335,174 +318,12 @@ public class CUnit extends Unit {
         createEntity(); // make the entity
         if (distance > 0) {
             unitEntity.setOffBoard(distance, edge); // move
-                                                    // it
-                                                    // offboard
+            // it
+            // offboard
         }
-    }
-
-    /**
-     * @return a smaller description
-     */
-    public String getSmallDescription() {
-        if ((getType() == Unit.MEK) || (getType() == Unit.VEHICLE) || (getType() == Unit.AERO)) {
-            return getModelName()
-                + " ["
-                + getPilot().getGunnery()
-                + "/"
-                + getPilot().getPiloting()
-                + "]";
-        }
-
-        if ((getType() == Unit.INFANTRY) || (getType() == Unit.BATTLEARMOR)) {
-            if (((Infantry) unitEntity).canMakeAntiMekAttacks()) {
-                return getModelName()
-                    + " ["
-                    + getPilot().getGunnery()
-                    + "/"
-                    + getPilot().getPiloting()
-                    + "]";
-            }
-            return getModelName() + " [" + getPilot().getGunnery() + "]";
-        }
-        return getModelName() + " [" + getPilot().getGunnery() + "]";
-    }
-
-    public String getDisplayInfo(String armyText) {
-        String tinfo = "";
-
-        if ((getType() == Unit.MEK) && !unitEntity.isOmni()) {
-            tinfo =
-                "<html><body>#"
-                + getId()
-                + " "
-                + unitEntity.getChassis()
-                + ", "
-                + getModelName();
-        } else {
-            tinfo = "<html><body>#" + getId() + " " + getModelName();
-        }
-
-        if ((getType() == Unit.MEK) || (getType() == Unit.VEHICLE) || (getType() == Unit.AERO)) {
-            tinfo +=
-                " ("
-                + getPilot().getName()
-                + ", "
-                + getPilot().getGunnery()
-                + "/"
-                + getPilot().getPiloting()
-                + ") <br>";
-        } else if ((getType() == Unit.BATTLEARMOR) || (getType() == Unit.INFANTRY)) {
-            if (((Infantry) unitEntity).canMakeAntiMekAttacks()) {
-                tinfo +=
-                    " ("
-                    + getPilot().getName()
-                    + ", "
-                    + getPilot().getGunnery()
-                    + "/"
-                    + getPilot().getPiloting()
-                    + ") <br>";
-            } else {
-                tinfo += " (" + getPilot().getName() + ", " + getPilot().getGunnery() + ") <br>";
-            }
-        } else {
-            tinfo += " (" + getPilot().getName() + ", " + getPilot().getGunnery() + ") <br>";
-        }
-
-        if (getType() == Unit.VEHICLE) {
-            tinfo += " Movement: " + getEntity().getMovementModeAsString() + "<br>";
-        }
-
-        tinfo += "BV: ";
-
-        if (CampaignData.cd.getCampaignOptions().getBooleanConfig("UseBaseBVForMatching")) {
-            tinfo += getBaseBV();
-        } else {
-            tinfo += BV;
-        }
-
-        // if (CampaignData.cd.getCampaignOptions().getBooleanConfig("RIGHTHERE")))
-        if (Boolean.parseBoolean(mwclient.getConfigParam("ShowUnitBaseBV"))) {
-            if (getBV() != getBaseBV()) {
-                tinfo += " (" + getBaseBV() + ")";
-            }
-        }
-        tinfo +=
-            " // Exp: "
-            + getPilot().getExperience()
-            + " // Kills: "
-            + getPilot().getKills()
-            + "<br> ";
-
-        if (getPilot().getSkills().size() > 0) {
-            tinfo += "Skills: ";
-            /*
-             * Iterator it = getPilot().getSkills().getSkillIterator(); while
-             * (it.hasNext()) { tinfo += ((PilotSkill) it.next()).getName(); if
-             * (it.hasNext()) tinfo += ", "; }
-             */
-            tinfo +=
-                getPilot()
-                .getSkillString(
-                        false,
-                        mwclient.getData()
-                        .getHouseByName(mwclient.getPlayer().getHouse())
-                        .getBasePilotSkill(getType()));
-            tinfo += "<br>";
-        }
-
-        if (getPilot().getHits() > 0) {
-            tinfo += "Hits: " + Integer.toString(getPilot().getHits()) + "<br>";
-        }
-
-        if (!armyText.isEmpty()) {
-            tinfo += armyText + "<br>";
-        }
-
-        String capacity = getEntity().getUnusedString();
-
-        if ((capacity != null) && (capacity.trim().length() > 0)) {
-            if (CampaignData.cd.getCampaignOptions().getBooleanConfig("UseFullCapacityDescription")) {
-                if (capacity.endsWith("<br>")) {
-                    capacity = capacity.substring(0, capacity.length() - 4);
-                }
-
-                if (capacity.indexOf("<br>") > -1) {
-                    tinfo += "Cargo:<br>" + capacity + "<br>";
-                } else {
-                    tinfo += "Cargo: " + capacity + "<br>";
-                }
-            } else if (capacity.startsWith("Troops")) {
-                capacity = capacity.substring(9); // strip "Troops - " from
-                                                  // string
-                tinfo += "Cargo: " + capacity + "<br>";
-            }
-        }
-
-        if (getLifeTimeRepairCost() > 0) {
-            tinfo +=
-                "Repair Costs: "
-                + getCurrentRepairCost()
-                + "/"
-                + getLifeTimeRepairCost()
-                + "<br>";
-        }
-        tinfo += getProducer();
-
-        if ((scrappableFor > 0)
-                && !CampaignData.cd.getCampaignOptions().getBooleanConfig("UseAdvanceRepair")
-                && !CampaignData.cd.getCampaignOptions().getBooleanConfig("UseSimpleRepair")) {
-            tinfo +=
-                "<br><br><b>Scrap Value: "
-                + mwclient.moneyOrFluMessage(true, false, scrappableFor)
-                + "</b>";
-                }
-
-        tinfo += "</body></html>";
-        return (tinfo);
     }
 
     public String getModelName() {
-
         if (getType() != MEK) {
             return new String(getEntity().getChassis() + " " + getEntity().getModel()).trim();
         }
@@ -514,25 +335,7 @@ public class CUnit extends Unit {
         if (getEntity().getModel().trim().length() > 0) {
             return getEntity().getModel().trim();
         }
-
-        // else
         return getEntity().getChassis().trim();
-    }
-
-    public int getBV() {
-        if (BV < 0) {
-            return 0;
-        }
-
-        // else
-        return BV;
-    }
-
-    public int getBVForMatch() {
-        if (CampaignData.cd.getCampaignOptions().getBooleanConfig("UseBaseBVForMatching")) {
-            return getBaseBV();
-        }
-        return getBV();
     }
 
     /** Tries to set UnitEntity from the global MekFileName */
@@ -552,31 +355,7 @@ public class CUnit extends Unit {
     }
 
     public boolean isOmni() {
-        boolean isOmni = getEntity().isOmni();
-        String targetChassis = getEntity().getChassis();
-
-        if ((getType() == Unit.VEHICLE) && !isOmni) {
-            try {
-                FileInputStream fis = new FileInputStream("./data/mechfiles/omnivehiclelist.txt");
-                BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
-                while (dis.ready()) {
-                    String chassie = dis.readLine();
-                    // check to see if the chassies listed in the file match
-                    // omni vehicle chassies.
-                    if (targetChassis.equalsIgnoreCase(chassie)) {
-                        dis.close();
-                        fis.close();
-                        return true;
-                    }
-                }
-                dis.close();
-                fis.close();
-            } catch (Exception ex) {
-
-            }
-        }
-
-        return isOmni;
+        return super.isOmni("./data/mechfiles/omnivehiclelist.txt");
     }
 
     public int getOriginalBV() {
@@ -588,133 +367,8 @@ public class CUnit extends Unit {
         UnitUtils.applyBattleDamage(unitEntity, data, true);
     }
 
-    public boolean getPilotIsReparing() {
-        return pilotIsRepairing;
-    }
-
-    /**
-     * A method which returns the MU cost of a specified campaign unit.
-     *
-     * @return int - # of MU it takes to buy a unit of the given weight class
-     */
-    public static int getPriceForUnit(
-            MWClient mwclient, int weightclass, int type_id, House producer) {
-
-        int result = Integer.MAX_VALUE;
-        try {
-            String classtype =
-                Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "Price";
-
-            if (type_id == Unit.MEK) {
-                result =
-                    Integer.parseInt(
-                            mwclient.getServerConfigs(
-                                Unit.getWeightClassDesc(weightclass) + "Price"));
-            } else {
-                result = Integer.parseInt(mwclient.getServerConfigs(classtype));
-            }
-
-            // modify the result by the faction price modifier
-            result += producer.getHouseUnitPriceMod(type_id, weightclass);
-
-            // dont allow negative pricing
-            if (result < 0) {
-                result = 0;
-            }
-        } catch (Exception ex) {
-            LOGGER.error("Exception: ", ex);
-        }
-        return result;
-            }
-
-    /**
-     * A method which returns the PP COST of a unit. Meks and Vehicles are segregated by
-     * weightclass. Infantry are flat priced accross
-     *
-     * @return int - # if IP it takes to buy a mech of the given units weight class
-     */
-    public static int getInfluenceForUnit(
-            MWClient mwclient, int weightclass, int type_id, House producer) {
-
-        int result = Integer.MAX_VALUE;
-        String classtype =
-            Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "Inf";
-
-        if (type_id == Unit.MEK) {
-            result =
-                Integer.parseInt(
-                        mwclient.getServerConfigs(
-                            Unit.getWeightClassDesc(weightclass) + "Inf"));
-        } else {
-            result = Integer.parseInt(mwclient.getServerConfigs(classtype));
-        }
-
-        // modify the result by the faction price modifier
-        result += producer.getHouseUnitFluMod(type_id, weightclass);
-
-        // dont allow negative pricing
-        if (result < 0) {
-            result = 0;
-        }
-
-        return result;
-            }
-
-    /**
-     * A method which returns the PP COST of a unit. Meks and Vehicles are segregated by
-     * weightclass. Infantry are flat priced accross
-     *
-     * <p>all weight classes. @ param weight - the weight class to be checked @ return int - the PP
-     * cost
-     */
-    public static int getPPForUnit(
-            MWClient mwclient, int weightclass, int type_id, House producer) {
-
-        int result = Integer.MAX_VALUE;
-        String classtype =
-            Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "PP";
-
-        if (type_id == Unit.MEK) {
-            result =
-                Integer.parseInt(
-                        mwclient.getServerConfigs(Unit.getWeightClassDesc(weightclass) + "PP"));
-        } else {
-            result = Integer.parseInt(mwclient.getServerConfigs(classtype));
-        }
-
-        // adjust PP cost by faction specific mod
-        result += producer.getHouseUnitComponentMod(type_id, weightclass);
-
-        // dont allow a unit to consume negative PP
-        if (result < 0) {
-            result = 0;
-        }
-
-        return result;
-            }
-
     public void setAntiAir(boolean aa) {
         Quirks quirks = unitEntity.getQuirks();
         quirks.getOption("anti_air").setValue(aa);
-    }
-
-    public void setTargetSystem(int type) {
-        try {
-            targetSystem.setTargetSystem(type);
-        } catch (TargetTypeOutOfBoundsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (TargetTypeNotImplementedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    public String getTargetSystemTypeDesc() {
-        return targetSystem.getCurrentTypeName();
-    }
-
-    public TargetSystem getTargetSystem() {
-        return targetSystem;
     }
 }

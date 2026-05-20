@@ -441,7 +441,7 @@ public class Player<T extends Unit> {
         for (Unit u : units) {
             if (!u.isChristmasUnit()
                     && (u.getType() == uType)
-                    && (u.getWeightclass() == uWeightClass)) {
+                    && (u.getWeightClass() == uWeightClass)) {
                 count++;
             }
         }

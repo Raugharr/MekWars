@@ -116,8 +116,8 @@ public class TransferUnitCommand implements Command {
 			}
 		} 
 		
-		if ( !targetplayer.hasRoomForUnit(m.getType(), m.getWeightclass()) ) {
-			CampaignMain.cm.toUser("AM:Sorry, " + targetplayer.getName() + " already has the maximum number of " + Unit.getWeightClassDesc(m.getWeightclass()) + " " + Unit.getTypeClassDesc(m.getType()) + "s", Username);
+		if ( !targetplayer.hasRoomForUnit(m.getType(), m.getWeightClass()) ) {
+			CampaignMain.cm.toUser("AM:Sorry, " + targetplayer.getName() + " already has the maximum number of " + Unit.getWeightClassDesc(m.getWeightClass()) + " " + Unit.getTypeClassDesc(m.getType()) + "s", Username);
 			return;
 		}
 
@@ -170,7 +170,7 @@ public class TransferUnitCommand implements Command {
 				//if scrapping costs bills, subtract the appropriate amount.
 				int mechscrapprice = 0;
 				if (house.getIntegerConfig("ScrapsAllowed") > 0) {
-					mechscrapprice = (int)(player.getMyHouse().getPriceForUnit(m.getWeightclass(), m.getType()) * Double.parseDouble(house.getConfig("ScrapCostMultiplier")));
+					mechscrapprice = (int)(player.getMyHouse().getPriceForUnit(m.getWeightClass(), m.getType()) * Double.parseDouble(house.getConfig("ScrapCostMultiplier")));
 					if (player.getMoney() < mechscrapprice)
 						mechscrapprice = player.getMoney();
 					player.addMoney(-mechscrapprice);

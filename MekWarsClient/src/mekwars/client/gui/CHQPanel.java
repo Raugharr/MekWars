@@ -71,6 +71,7 @@ import mekwars.client.gui.dialog.BulkRepairDialog;
 import mekwars.client.gui.dialog.CustomUnitDialog;
 import mekwars.client.gui.dialog.PromotePilotDialog;
 import mekwars.client.gui.dialog.SolFreeBuildDialog;
+import mekwars.client.gui.formatter.UnitFormatter;
 import mekwars.client.gui.utilities.MWTableCellRenderer;
 import mekwars.common.Army;
 import mekwars.common.Unit;
@@ -1240,7 +1241,7 @@ public class CHQPanel extends JPanel {
                                         // BA
                                         // slot
                                     } else {// else, sort by weightclass
-                                        int size = mm.getWeightclass();
+                                        int size = mm.getWeightClass();
                                         SubMenus.elementAt(size).add(menuItem);
                                     }
                                 }
@@ -1473,7 +1474,7 @@ public class CHQPanel extends JPanel {
                                             // BA
                                             // slot
                                         } else {// else, sort by weightclass
-                                            int size = mm.getWeightclass();
+                                            int size = mm.getWeightClass();
                                             SubMenus.elementAt(size).add(menuItem);
                                         }
                                     }
@@ -1904,7 +1905,7 @@ public class CHQPanel extends JPanel {
                         if (ppqsEnabled && (cm.isSinglePilotUnit())) {
 
                             // load possible pilots
-                            Object[] pilots = Player.getPersonalPilotQueue().getPilotQueue(cm.getType(), cm.getWeightclass()).toArray();
+                            Object[] pilots = Player.getPersonalPilotQueue().getPilotQueue(cm.getType(), cm.getWeightClass()).toArray();
                             JMenu jm = new JMenu("Exchange");
 
                             // option to remove pilot, if that hasn't been done
@@ -2200,11 +2201,11 @@ public class CHQPanel extends JPanel {
                         for (CUnit currUnit : currArmy.getUnits()) {
                             // mechs
                             if ((currUnit.getType() == Unit.MEK) || (currUnit.getType() == Unit.QUAD)) {
-                                if (currUnit.getWeightclass() == Unit.ASSAULT) {
+                                if (currUnit.getWeightClass() == Unit.ASSAULT) {
                                     assaultM++;
-                                } else if (currUnit.getWeightclass() == Unit.HEAVY) {
+                                } else if (currUnit.getWeightClass() == Unit.HEAVY) {
                                     heavyM++;
-                                } else if (currUnit.getWeightclass() == Unit.MEDIUM) {
+                                } else if (currUnit.getWeightClass() == Unit.MEDIUM) {
                                     mediumM++;
                                 } else {
                                     lightM++;
@@ -2217,11 +2218,11 @@ public class CHQPanel extends JPanel {
                             } else if (currUnit.getType() == Unit.VEHICLE) {
                                 vehs++;
                                 if (showVeeWeights) {
-                                    if (currUnit.getWeightclass() == Unit.ASSAULT) {
+                                    if (currUnit.getWeightClass() == Unit.ASSAULT) {
                                         assaultV++;
-                                    } else if (currUnit.getWeightclass() == Unit.HEAVY) {
+                                    } else if (currUnit.getWeightClass() == Unit.HEAVY) {
                                         heavyV++;
-                                    } else if (currUnit.getWeightclass() == Unit.MEDIUM) {
+                                    } else if (currUnit.getWeightClass() == Unit.MEDIUM) {
                                         mediumV++;
                                     } else {
                                         lightV++;
@@ -2352,7 +2353,7 @@ public class CHQPanel extends JPanel {
                         int light = 0;
 
                         for (CUnit unit : currArmy.getUnits()) {
-                            switch (unit.getWeightclass()) {
+                            switch (unit.getWeightClass()) {
                             case Unit.ASSAULT:
                                 assault++;
                                 break;
@@ -2392,7 +2393,7 @@ public class CHQPanel extends JPanel {
                         int light = 0;
 
                         for (CUnit unit : currArmy.getUnits()) {
-                            switch (unit.getWeightclass()) {
+                            switch (unit.getWeightClass()) {
                             case Unit.ASSAULT:
                                 assault++;
                                 break;
@@ -3177,7 +3178,7 @@ public class CHQPanel extends JPanel {
                             techCostString = C3Text.toString() + "<br>";
                         }
 
-                        String techAmount = "TechsFor" + Unit.getWeightClassDesc(cm.getWeightclass()) + Unit.getTypeClassDesc(cm.getType());
+                        String techAmount = "TechsFor" + Unit.getWeightClassDesc(cm.getWeightClass()) + Unit.getTypeClassDesc(cm.getType());
                         int numTechs = (int) (Integer.parseInt(mwclient.getServerConfigs(techAmount)) * (mwclient.getPlayer().getMyHouse().houseSupportsUnit(cm.getUnitFilename()) ? 1 : Float.parseFloat(mwclient.getServerConfigs("NonFactionUnitsIncreasedTechs"))));
 
                         techCostString += "Techs required: " + numTechs;
@@ -3273,9 +3274,9 @@ public class CHQPanel extends JPanel {
                         }
 
                         armiesText += "In armies " + Player.getArmiesUnitIsIn(cm.getId());
-                        description = cm.getDisplayInfo(armiesText);
+                        description = UnitFormatter.getDisplayInfo(mwclient, cm, armiesText);
                     } else {
-                        description = cm.getDisplayInfo(C3Text.toString());
+                        description = UnitFormatter.getDisplayInfo(mwclient, cm, C3Text.toString());
                     }
                     c.setToolTipText(description);
                     c.setImageVisible(true);

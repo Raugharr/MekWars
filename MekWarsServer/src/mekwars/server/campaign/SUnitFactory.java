@@ -124,7 +124,7 @@ public class SUnitFactory extends UnitFactory implements Serializable {
         // TODO: Add more icons to make this unambiguous
         String sizeid = "";
         String result = "";
-        int size = getWeightclass();
+        int size = getWeightClass();
         if (size == Unit.LIGHT)
             sizeid += "l";
         else if (size == Unit.MEDIUM)
@@ -195,7 +195,7 @@ public class SUnitFactory extends UnitFactory implements Serializable {
             units.addAll(SUnit.createMULUnits(Filename, producer));
         } else {
             // Build the unit & create history entry
-            SUnit cm = new SUnit(producer, Filename, this.getWeightclass());
+            SUnit cm = new SUnit(producer, Filename, this.getWeightClass());
             cm.setPilot(pilot);
             units.add(cm);
         }
@@ -222,7 +222,7 @@ public class SUnitFactory extends UnitFactory implements Serializable {
          * Change the factory's information (refresh time) Format:
          * HS|CF|weight$metatype$planet$name$timetorefresh$accessLevel|
          */
-        String hsUpdate = "CF|" + getWeightclass() + "$" + getType() + "$" + getPlanet().getName() + "$" + getName() + "$" + getTicksUntilRefresh() + "$" + getAccessLevel() + "|";
+        String hsUpdate = "CF|" + getWeightClass() + "$" + getType() + "$" + getPlanet().getName() + "$" + getName() + "$" + getTicksUntilRefresh() + "$" + getAccessLevel() + "|";
 
         if (sendHSUpdate) {
             SHouse owner = (SHouse) getPlanet().getOwner();

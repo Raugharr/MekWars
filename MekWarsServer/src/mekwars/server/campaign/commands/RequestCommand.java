@@ -212,8 +212,7 @@ public class  RequestCommand  implements Command {
              * weightclass will cause odd behaviour.
              */
             for (SUnitFactory currFac : namedFactories) {
-
-                if (currFac.getWeightclass() == weightclass) {
+                if (currFac.getWeightClass() == weightclass) {
                     factory = currFac;
                     break;
                 }
@@ -394,7 +393,7 @@ public class  RequestCommand  implements Command {
                 if (playerHouse.getBooleanConfig("UseCalculatedCosts")) {
                     double unitCost = mech.getEntity().getCost(false);
                     if (unitCost < 1) {
-                        unitCost = playerHouse.getPriceForUnit(mech.getWeightclass(), mech.getType());
+                        unitCost = playerHouse.getPriceForUnit(mech.getWeightClass(), mech.getType());
                     }
                     double costMod = playerHouse.getDoubleConfig("CostModifier");
 
@@ -428,7 +427,7 @@ public class  RequestCommand  implements Command {
             StringBuilder hsUpdates = new StringBuilder();
 
             // set the refresh miniticks
-            hsUpdates.append(factory.addRefresh((CampaignMain.cm.getIntegerConfig(Unit.getWeightClassDesc(factory.getWeightclass()) + "Refresh") * 100) / factory.getRefreshSpeed(), false));
+            hsUpdates.append(factory.addRefresh((CampaignMain.cm.getIntegerConfig(Unit.getWeightClassDesc(factory.getWeightClass()) + "Refresh") * 100) / factory.getRefreshSpeed(), false));
             hsUpdates.append(playerHouse.addPP(weightclass, type_id, -mechPP, false));// remove
                                                                                       // PP
                                                                                       // from

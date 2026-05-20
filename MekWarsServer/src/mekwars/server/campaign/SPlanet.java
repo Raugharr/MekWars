@@ -286,7 +286,7 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         Vector<SUnitFactory> result = new Vector<SUnitFactory>(getUnitFactories().size(), 1);
         for (int i = 0; i < getUnitFactories().size(); i++) {
             SUnitFactory MF = (SUnitFactory) getUnitFactories().get(i);
-            if (MF.getWeightclass() == weightclass)
+            if (MF.getWeightClass() == weightclass)
                 result.add(MF);
         }
         return result;
@@ -421,9 +421,9 @@ public class SPlanet extends TimeUpdatePlanet implements Serializable, Comparabl
         StringBuilder newOwnerHSUpdates = new StringBuilder();
         for (UnitFactory currUF : getUnitFactories()) {
 
-            oldOwnerHSUpdates.append("RF|" + currUF.getWeightclass() + "$" + currUF.getType() + "$" + this.getName() + "$" + currUF.getName() + "|");
+            oldOwnerHSUpdates.append("RF|" + currUF.getWeightClass() + "$" + currUF.getType() + "$" + this.getName() + "$" + currUF.getName() + "|");
 
-            newOwnerHSUpdates.append("AF|" + currUF.getWeightclass());
+            newOwnerHSUpdates.append("AF|" + currUF.getWeightClass());
             newOwnerHSUpdates.append("$");
             newOwnerHSUpdates.append(currUF.getType());
             newOwnerHSUpdates.append("$");

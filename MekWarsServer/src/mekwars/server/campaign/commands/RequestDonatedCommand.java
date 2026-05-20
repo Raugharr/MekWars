@@ -148,8 +148,8 @@ public class  RequestDonatedCommand  implements Command {
         }// end if(has an unmaintained unit)
 
         // get money and inf costs.
-        int unitCbills = Math.round(Float.parseFloat(house.getConfig("UsedPurchaseCostMulti")) * house.getPriceForUnit(u.getWeightclass(), u.getType()));
-        int unitInfluence = Math.round(Float.parseFloat(house.getConfig("UsedPurchaseCostMulti")) * house.getInfluenceForUnit(u.getWeightclass(), u.getType()));
+        int unitCbills = Math.round(Float.parseFloat(house.getConfig("UsedPurchaseCostMulti")) * house.getPriceForUnit(u.getWeightClass(), u.getType()));
+        int unitInfluence = Math.round(Float.parseFloat(house.getConfig("UsedPurchaseCostMulti")) * house.getInfluenceForUnit(u.getWeightClass(), u.getType()));
         if (unitCbills < 0) {
             unitCbills = 0;
         }
@@ -161,7 +161,7 @@ public class  RequestDonatedCommand  implements Command {
             double costMulti = house.getDoubleConfig("UsedPurchaseCostMulti");
             double unitCost = u.getEntity().getCost(false);
             if (unitCost < 1) {
-                unitCost = house.getPriceForUnit(u.getWeightclass(), u.getType());
+                unitCost = house.getPriceForUnit(u.getWeightClass(), u.getType());
             }
             double costMod = house.getDoubleConfig("CostModifier");
 
@@ -185,7 +185,7 @@ public class  RequestDonatedCommand  implements Command {
         
         if (unitCbills > p.getMoney() || unitInfluence > p.getInfluence()) {
             house.addUnit(u, false);// add the retrieved mech back to the pool
-            CampaignMain.cm.toUser("AM:You cannot afford to purchase " + StringUtils.aOrAn(Unit.getWeightClassDesc(u.getWeightclass()), true) + " " + Unit.getTypeClassDesc(u.getType()) + " from the faction bay (Requires " + CampaignMain.cm.moneyOrFluMessage(true, false, unitCbills) + ", " + CampaignMain.cm.moneyOrFluMessage(false, true, unitInfluence) + ").", Username, true);
+            CampaignMain.cm.toUser("AM:You cannot afford to purchase " + StringUtils.aOrAn(Unit.getWeightClassDesc(u.getWeightClass()), true) + " " + Unit.getTypeClassDesc(u.getType()) + " from the faction bay (Requires " + CampaignMain.cm.moneyOrFluMessage(true, false, unitCbills) + ", " + CampaignMain.cm.moneyOrFluMessage(false, true, unitInfluence) + ").", Username, true);
             return;
         }
 

@@ -3027,7 +3027,7 @@ public class ShortResolver {
 
                             // get the factory's weightclass, then try
                             // all types in order of preference.
-                            int currWeight = currFacility.getWeightclass();
+                            int currWeight = currFacility.getWeightClass();
 
                             for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
 
@@ -3136,7 +3136,7 @@ public class ShortResolver {
 
                                 // get the factory's weightclass, then try
                                 // all types in order of preference.
-                                int currWeight = currFacility.getWeightclass();
+                                int currWeight = currFacility.getWeightClass();
 
                                 for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
 
@@ -3243,7 +3243,7 @@ public class ShortResolver {
 
                             // get the factory's weightclass, then try
                             // all types in order of preference.
-                            int currWeight = currFacility.getWeightclass();
+                            int currWeight = currFacility.getWeightClass();
 
                             for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
 
@@ -3445,7 +3445,7 @@ public class ShortResolver {
                                     }
 
                                     // it can produce. add some PP.
-                                    winnerHSUpdates.append(aWinner.getHouseFightingFor().addPP(currFacility.getWeightclass(), type, ppToGenerate, false));
+                                    winnerHSUpdates.append(aWinner.getHouseFightingFor().addPP(currFacility.getWeightClass(), type, ppToGenerate, false));
 
                                     // tell the players
                                     if (hasLoss) {
@@ -3453,8 +3453,8 @@ public class ShortResolver {
                                         loserMetaString += ",";
                                     }
 
-                                    winnerMetaString += " generated an extra " + ppToGenerate + " " + Unit.getWeightClassDesc(currFacility.getWeightclass()) + " " + Unit.getTypeClassDesc(type) + " components";
-                                    loserMetaString += " inspired the workers on " + target.getNameAsColoredLink() + " to manufacture " + ppToGenerate + " " + Unit.getWeightClassDesc(currFacility.getWeightclass()) + " " + Unit.getTypeClassDesc(type) + " components";
+                                    winnerMetaString += " generated an extra " + ppToGenerate + " " + Unit.getWeightClassDesc(currFacility.getWeightClass()) + " " + Unit.getTypeClassDesc(type) + " components";
+                                    loserMetaString += " inspired the workers on " + target.getNameAsColoredLink() + " to manufacture " + ppToGenerate + " " + Unit.getWeightClassDesc(currFacility.getWeightClass()) + " " + Unit.getTypeClassDesc(type) + " components";
                                     hasLoss = true;
                                     so.checkMercContracts(aWinner, ContractInfo.CONTRACT_COMPONENTS, ppToGenerate);
                                 }
@@ -3657,9 +3657,9 @@ public class ShortResolver {
                         if (saveStats) {
                             SUnit currU = CampaignMain.cm.getPlayer(oEntity.getOwnerName()).getUnit(oEntity.getID());
                             if (so.getWinners().containsKey(oEntity.getOwnerName().toLowerCase())) {
-                                CampaignMain.cm.addMechStat(currU.getUnitFilename(), currU.getWeightclass(), 1, 1, 0, destroyed);
+                                CampaignMain.cm.addMechStat(currU.getUnitFilename(), currU.getWeightClass(), 1, 1, 0, destroyed);
                             } else if (so.getLosers().containsKey(oEntity.getOwnerName().toLowerCase())) {
-                                CampaignMain.cm.addMechStat(currU.getUnitFilename(), currU.getWeightclass(), 1, 0, 0, destroyed);
+                                CampaignMain.cm.addMechStat(currU.getUnitFilename(), currU.getWeightClass(), 1, 0, 0, destroyed);
                             }
                         }// end save stats
 
@@ -3938,9 +3938,9 @@ public class ShortResolver {
 
             // if PPQs are on, insert the pilot in the owner's queue
             if (isPilotChangeable && personalQueues) {
-                owner.getPersonalPilotQueue().addPilot(unit.getPilot(), unit.getWeightclass());
-                CampaignMain.cm.toUser("PL|AP2PPQ|" + unit.getType() + "|" + unit.getWeightclass() + "|" + ((SPilot) unit.getPilot()).toFileFormat("#", true), owner.getName(), false);
-                owner.getPersonalPilotQueue().checkQueueAndWarn(owner.getName(), unit.getType(), unit.getWeightclass());
+                owner.getPersonalPilotQueue().addPilot(unit.getPilot(), unit.getWeightClass());
+                CampaignMain.cm.toUser("PL|AP2PPQ|" + unit.getType() + "|" + unit.getWeightClass() + "|" + ((SPilot) unit.getPilot()).toFileFormat("#", true), owner.getName(), false);
+                owner.getPersonalPilotQueue().checkQueueAndWarn(owner.getName(), unit.getType(), unit.getWeightClass());
                 unit.setPilot(new SPilot("Vacant", 99, 99));
             } else {
                 owner.getHouseFightingFor().addDispossessedPilot(unit, false);
@@ -4016,9 +4016,9 @@ public class ShortResolver {
                     // queues.
                     if (CampaignMain.cm.getRandomNumber(100) < captureChance) {
                         if (CampaignMain.cm.getBooleanConfig("AllowPersonalPilotQueues")) {
-                            pickupPlayer.getPersonalPilotQueue().addPilot(currUnit.getPilot(), currUnit.getWeightclass());
-                            CampaignMain.cm.toUser("PL|AP2PPQ|" + currUnit.getType() + "|" + currUnit.getWeightclass() + "|" + ((SPilot) currUnit.getPilot()).toFileFormat("#", true), pickupPlayer.getName(), false);
-                            pickupPlayer.getPersonalPilotQueue().checkQueueAndWarn(pickupPlayer.getName(), currUnit.getType(), currUnit.getWeightclass());
+                            pickupPlayer.getPersonalPilotQueue().addPilot(currUnit.getPilot(), currUnit.getWeightClass());
+                            CampaignMain.cm.toUser("PL|AP2PPQ|" + currUnit.getType() + "|" + currUnit.getWeightClass() + "|" + ((SPilot) currUnit.getPilot()).toFileFormat("#", true), pickupPlayer.getName(), false);
+                            pickupPlayer.getPersonalPilotQueue().checkQueueAndWarn(pickupPlayer.getName(), currUnit.getType(), currUnit.getWeightClass());
                         } else {
                             pickupPlayer.getHouseFightingFor().addDispossessedPilot(currUnit, true);
                         }
@@ -4092,7 +4092,7 @@ public class ShortResolver {
                 // queues.
                 if (CampaignMain.cm.getRandomNumber(100) < captureChance) {
                     if (CampaignMain.cm.getBooleanConfig("AllowPersonalPilotQueues")) {
-                        pickupPlayer.getPersonalPilotQueue().addPilot(currUnit.getPilot(), currUnit.getWeightclass());
+                        pickupPlayer.getPersonalPilotQueue().addPilot(currUnit.getPilot(), currUnit.getWeightClass());
                         CampaignMain.cm.toUser("PL|PPQ|" + pickupPlayer.getPersonalPilotQueue().toString(true), pickupPlayer.getName(), false);
                     } else {
                         pickupPlayer.getHouseFightingFor().addDispossessedPilot(currUnit, true);
@@ -4288,7 +4288,7 @@ public class ShortResolver {
             // captured. check to see if the pilot defects and joins the queues.
             if (CampaignMain.cm.getRandomNumber(100) < captureChance) {
                 if (CampaignMain.cm.getBooleanConfig("AllowPersonalPilotQueues")) {
-                    pickupPlayer.getPersonalPilotQueue().addPilot(currUnit.getPilot(), currUnit.getWeightclass());
+                    pickupPlayer.getPersonalPilotQueue().addPilot(currUnit.getPilot(), currUnit.getWeightClass());
                     CampaignMain.cm.toUser("PL|PPQ|" + pickupPlayer.getPersonalPilotQueue().toString(true), pickupPlayer.getName(), false);
                 } else {
                     pickupPlayer.getHouseFightingFor().addDispossessedPilot(currUnit, true);
@@ -4391,7 +4391,7 @@ public class ShortResolver {
         if (calcCosts) {
         	newPrice = u.getEntity().getCost(false);
         } else {
-        	newPrice = p.getHouseFightingFor().getPriceForUnit(u.getWeightclass(), u.getType());
+        	newPrice = p.getHouseFightingFor().getPriceForUnit(u.getWeightClass(), u.getType());
         }
         // add a multiple of a similar new unit's cost from the player's faction
         compensation += newPrice * CampaignMain.cm.getFloatConfig("NewCostMultiUnitLossPayment");
@@ -4920,21 +4920,21 @@ public class ShortResolver {
                     for (House house : CampaignMain.cm.getData().getAllHouses()) {
                         SHouse faction = (SHouse) house;
 
-                        buildFile = BuildTable.getFileName(faction.getName(), Unit.getWeightClassDesc(unit.getWeightclass()), timeZone, unit.getType());
+                        buildFile = BuildTable.getFileName(faction.getName(), Unit.getWeightClassDesc(unit.getWeightClass()), timeZone, unit.getType());
                         // LOGGER.error("File: "+fileName);
 
                         if (!tables.contains(buildFile)) {
                             tables.add(buildFile);
                         }
 
-                        buildFile = BuildTable.getFileName("Common", Unit.getWeightClassDesc(unit.getWeightclass()), timeZone, unit.getType());
+                        buildFile = BuildTable.getFileName("Common", Unit.getWeightClassDesc(unit.getWeightClass()), timeZone, unit.getType());
                         if (!tables.contains(buildFile)) {
                             tables.add(buildFile);
                         }
 
                         timeZone = currp.getMyHouse().getConfig("NoFactoryRepodFolder");
                         // LOGGER.error("TimeZone: "+timeZone);
-                        buildFile = BuildTable.getFileName(faction.getName(), Unit.getWeightClassDesc(unit.getWeightclass()), timeZone, unit.getType());
+                        buildFile = BuildTable.getFileName(faction.getName(), Unit.getWeightClassDesc(unit.getWeightClass()), timeZone, unit.getType());
                         // LOGGER.error("File: "+fileName);
 
                         if (!tables.contains(buildFile)) {
@@ -5022,7 +5022,7 @@ public class ShortResolver {
 
                        	cm.getEntity().setExternalSearchlight(en.hasSearchlight());
                         cm.getEntity().setSearchlightState(en.isUsingSearchlight());
-                        cm.setWeightclass(unit.getWeightclass());
+                        cm.setWeightClass(unit.getWeightClass());
                         cm.setType(unit.getType());
 
                         currp.removeUnit(unit.getId(), false);

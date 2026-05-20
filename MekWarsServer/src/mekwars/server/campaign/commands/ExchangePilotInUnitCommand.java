@@ -16,7 +16,6 @@
 
 package mekwars.server.campaign.commands;
 
-import java.util.Enumeration;
 import java.util.StringTokenizer;
 
 import mekwars.server.MWServ;
@@ -59,21 +58,19 @@ public class ExchangePilotInUnitCommand implements Command {
 				newPilotId = Integer.parseInt(command.nextToken());
 			
 			SUnit m = p.getUnit(mechid);
-			if (m != null)
-			{
+			if (m != null) {
                 
                 if ( !m.isSinglePilotUnit() ){
                     CampaignMain.cm.toUser("AM:You may not remove that pilot from this unit.",Username,true);
                     return;
                 }
                 
-				if (p.getDutyStatus() == SPlayer.STATUS_ACTIVE && p.getAmountOfTimesUnitExistsInArmies(mechid) > 0)
-				{
+				if (p.getDutyStatus() == SPlayer.STATUS_ACTIVE && p.getAmountOfTimesUnitExistsInArmies(mechid) > 0) {
 					CampaignMain.cm.toUser(m.getModelName()+" cannot have its pilot switched out while active and in an exisiting army.",Username,true);
 					return;
 				}
 
-                if ( m.getPilotIsReparing() ){
+                if (m.getPilotIsRepairing()) {
                     CampaignMain.cm.toUser(m.getPilot().getName()+" is currently repairing the "+m.getModelName()+" you may not remove them util the job is complete.",Username,true);
                     return;
                 }
@@ -82,7 +79,7 @@ public class ExchangePilotInUnitCommand implements Command {
 				
 				int capSize = CampaignMain.cm.getIntegerConfig("MaxAllowedPilotsInQueueToBuyFromHouse");
 				
-				if ( newPilotId == -1 && p.getPersonalPilotQueue().getPilotQueue(m.getType(), m.getWeightclass()).size() >= capSize ) {
+				if ( newPilotId == -1 && p.getPersonalPilotQueue().getPilotQueue(m.getType(), m.getWeightClass()).size() >= capSize ) {
 					CampaignMain.cm.toUser("AM:There are no free beds in the barracks "+pilot.getName()+" will have to sleep in his unit.", Username);
 					return;
 				}
@@ -90,9 +87,9 @@ public class ExchangePilotInUnitCommand implements Command {
                 pilot.setUnitType(m.getType());
 				if ( !pilot.getName().equals("Vacant") )
 				{
-					p.getPersonalPilotQueue().addPilot(pilot,m.getWeightclass());
+					p.getPersonalPilotQueue().addPilot(pilot,m.getWeightClass());
 					
-                    CampaignMain.cm.toUser("PL|AP2PPQ|"+m.getType()+"|"+m.getWeightclass()+"|"+pilot.toFileFormat("#",true),Username,false);
+                    CampaignMain.cm.toUser("PL|AP2PPQ|"+m.getType()+"|"+m.getWeightClass()+"|"+pilot.toFileFormat("#",true),Username,false);
 					CampaignMain.cm.toUser(pilot.getName() + " was moved from your "+ m.getModelName() + " to your barracks.",Username,true);
 				}
 				
@@ -100,9 +97,9 @@ public class ExchangePilotInUnitCommand implements Command {
 				
 				if ( newPilotId > -1 ){
 					try{
-						p2 = (SPilot) p.getPersonalPilotQueue().getPilot(m.getType(),m.getWeightclass(),newPilotId);
+						p2 = (SPilot) p.getPersonalPilotQueue().getPilot(m.getType(),m.getWeightClass(),newPilotId);
 						if ( p2 != null ) {
-	                        CampaignMain.cm.toUser("PL|RPPPQ|"+m.getType()+"|"+m.getWeightclass()+"|"+newPilotId,Username,false);
+	                        CampaignMain.cm.toUser("PL|RPPPQ|"+m.getType()+"|"+m.getWeightClass()+"|"+newPilotId,Username,false);
 	                        m.setPilot(p2);
 	                        CampaignMain.cm.toUser(p2.getName()+" is now assigned to the "+ m.getModelName()  + " [New BV: " + m.getBVForMatch() + "].",Username,true);
 						}else {

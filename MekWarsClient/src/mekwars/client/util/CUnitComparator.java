@@ -87,8 +87,8 @@ import mekwars.client.campaign.CUnit;
  				return unit1Type.compareTo(unit2Type);	
  				
  			case HQSORT_WEIGHTCLASS : //sort by general class
- 				Integer unit1Class = unit1.getWeightclass();
- 				Integer unit2Class = unit2.getWeightclass();
+ 				Integer unit1Class = unit1.getWeightClass();
+ 				Integer unit2Class = unit2.getWeightClass();
  				return unit1Class.compareTo(unit2Class);	 				
  				
  			case HQSORT_WEIGHTTONS : //sort by entity weight

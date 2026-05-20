@@ -2048,7 +2048,7 @@ public class CMainFrame extends JFrame {
 
         CUnit unit = mwclient.getPlayer().getUnit(Integer.parseInt(unitID));
 
-        String serviceFee = "SellDirect" + Unit.getWeightClassDesc(unit.getWeightclass()) + Unit.getTypeClassDesc(unit.getType()) + "Price";
+        String serviceFee = "SellDirect" + Unit.getWeightClassDesc(unit.getWeightClass()) + Unit.getTypeClassDesc(unit.getType()) + "Price";
         price = JOptionPane.showInputDialog(getContentPane(), "How much do you wish to offer? (" + mwclient.moneyOrFluMessage(true, true, -2) + ")\n\r" + "Please note a service charge of " + mwclient.moneyOrFluMessage(true, true, Integer.parseInt(mwclient.getServerConfigs(serviceFee))) + " will be added.");
 
         if ((price == null) || (price.length() < 1)) {
@@ -2714,10 +2714,10 @@ public class CMainFrame extends JFrame {
                 if (trueCost) {
                     result.append("See Unit Viwer");
                 } else {
-                    result.append(CUnit.getPriceForUnit(mwclient, weight, type, p.getMyHouse()));
+                    result.append(Unit.getPriceForUnit(weight, type, p.getMyHouse()));
                 }
-                result.append("</td><td>" + p.getMyHouse().getInfluenceForUnit(weight, type) + "</td>");
-                result.append("<td>" + CUnit.getPPForUnit(mwclient, weight, type, p.getMyHouse()) + "</td><td>");
+                result.append("</td><td>" + Unit.getInfluenceForUnit(weight, type, p.getMyHouse()) + "</td>");
+                result.append("<td>" + Unit.getPPForUnit(weight, type, p.getMyHouse()) + "</td><td>");
                 if (type == Unit.PROTOMEK) {
                     result.append(mwclient.getServerConfigs("TechsToProtoPointRatio") + " per 5");
                 } else {

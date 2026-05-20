@@ -206,7 +206,7 @@ public class RepairManagmentThread extends Thread{
                         }
         
                         //Pilot is busy repairing wait for the next round.
-                        if ( pos == UnitUtils.TECH_PILOT && unit.getPilotIsReparing() )
+                        if ( pos == UnitUtils.TECH_PILOT && unit.getPilotIsRepairing() )
                             continue;
                         
                         //check to see if CS are viable before anything else.

@@ -32,8 +32,12 @@ import megamek.common.Tank;
 
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.targetsystems.TargetSystem;
+import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
+import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
 
-import java.util.Vector;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 /**
  * @author Helge Richter
@@ -66,17 +70,18 @@ public class Unit {
 
     public static final int TOTALTYPES = 6;
 
-    // VARIABLES
     protected int id;
     protected Entity unitEntity;
+    private int BV;
+    private int scrappableFor = -1;
     private Pilot pilot;
     private int type;
-    private int weightclass;
+    private int weightClass;
     private int status = Unit.STATUS_OK;
     private String producer;
-    private String UnitFilename;
+    private String unitFilename;
     private int posId;
-    private String Modelname;
+    private String modelName;
 
     private int maintainanceLevel = 100; // @urgru 8/2/04
     private int unitC3Level = 0; // @Torren 12/13/04 0=None 1=Slave 2=Master 3=Independent
@@ -89,6 +94,7 @@ public class Unit {
 
     private boolean isSupportUnit = false;
     private boolean ChristmasUnit = false;
+    private boolean pilotIsRepairing = false;
 
     // CONSTRUCTOR
     public Unit() {
@@ -133,13 +139,9 @@ public class Unit {
 
     public static int getEntityType(Entity ent) {
         if (ent instanceof Mech) return Unit.MEK;
-
         if (ent instanceof Tank) return Unit.VEHICLE;
-
         if (ent instanceof BattleArmor) return Unit.BATTLEARMOR;
-
         if (ent instanceof Protomech) return Unit.PROTOMEK;
-
         if (ent instanceof Aero) return Unit.AERO;
 
         return Unit.INFANTRY;
@@ -157,7 +159,6 @@ public class Unit {
     }
 
     public static int getTypeIDForName(String name) {
-
         // If the string contains V, it's supposely a Vehicle
         if (name.toLowerCase().startsWith("v")) return VEHICLE;
 
@@ -189,14 +190,30 @@ public class Unit {
      * @return Returns the modelname.
      */
     public String checkModelName() {
-        return Modelname;
+        return modelName;
     }
 
     /**
      * @param modelname The modelname to set.
      */
-    public void setModelname(String modelname) {
-        Modelname = modelname;
+    public void setModelname(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public int getBV() {
+        return Math.max(0, BV);
+    }
+
+    public void setBV(int bv) {
+        BV = Math.max(0, bv);
+    }
+
+    public int getScrappableFor() {
+        return scrappableFor;
+    }
+
+    public void setScrappableFor(int scrappableFor) {
+        this.scrappableFor = scrappableFor;
     }
 
     /**
@@ -237,8 +254,8 @@ public class Unit {
     /**
      * @param producer The producer to set.
      */
-    public void setProducer(String s) {
-        producer = s;
+    public void setProducer(String producer) {
+        this.producer = producer;
     }
 
     /**
@@ -251,36 +268,36 @@ public class Unit {
     /**
      * @param type The type to set.
      */
-    public void setType(int i) {
-        type = i;
+    public void setType(int type) {
+        this.type = type;
     }
 
     /**
      * @return Returns the unitFilename.
      */
     public String getUnitFilename() {
-        return UnitFilename; // .trim();
+        return unitFilename;
     }
 
     /**
      * @param unitFilename The unitFilename to set.
      */
-    public void setUnitFilename(String s) {
-        UnitFilename = s;
+    public void setUnitFilename(String unitFilename) {
+        this.unitFilename = unitFilename;
     }
 
     /**
      * @return Returns the weightclass.
      */
-    public int getWeightclass() {
-        return weightclass;
+    public int getWeightClass() {
+        return weightClass;
     }
 
     /**
      * @param weightclass The weightclass to set.
      */
-    public void setWeightclass(int i) {
-        weightclass = i;
+    public void setWeightClass(int weightClass) {
+        this.weightClass = weightClass;
     }
 
     /**
@@ -342,22 +359,39 @@ public class Unit {
         setMaintainanceLevel(maintainanceLevel + i);
     }
 
+    public int getBVForMatch() {
+        if (CampaignData.cd.getCampaignOptions().getBooleanConfig("UseBaseBVForMatching")) {
+            return getBaseBV();
+        }
+        return getBV();
+    }
+
     public int linkToC3Network(Army<?> army, Unit master) {
-        if (army == null || master == null) return -1;
+        if (army == null || master == null) {
+            return -1;
+        }
 
-        if (army.getUnit(this.getId()) == null) return -1;
+        if (army.getUnit(this.getId()) == null) {
+            return -1;
+        }
 
-        if (this.getC3Level() == C3_NONE) return -1;
+        if (this.getC3Level() == C3_NONE) {
+            return -1;
+        }
 
         if (this.getC3Level() == C3_SLAVE) {
-
             if (master.getC3Level() != C3_MASTER
-                    && master.getC3Level() != C3_MMASTER) // master is a slave or doens't have C3
-            return -1;
+                    && master.getC3Level() != C3_MMASTER) { // master is a slave or doens't have C3
+                return -1;
+            }
 
-            if (master.hasBeenC3LinkedTo(army) && !master.hasC3SlavesLinkedTo(army)) return -1;
+            if (master.hasBeenC3LinkedTo(army) && !master.hasC3SlavesLinkedTo(army)) {
+                return -1;
+            }
 
-            if (!master.checkC3mNetworkHasOpen(army, this.getC3Level())) return -1;
+            if (!master.checkC3mNetworkHasOpen(army, this.getC3Level())) {
+                return -1;
+            }
 
             army.getC3Network().put(this.getId(), master.getId());
             return master.getId();
@@ -402,7 +436,6 @@ public class Unit {
             army.getC3Network().put(this.getId(), master.getId());
             return master.getId();
         }
-
         return -1;
     }
 
@@ -517,11 +550,17 @@ public class Unit {
 
     public void getC3Type(Entity unit) {
         unit.setShutDown(false);
-        if (unit.hasC3S()) this.setC3Level(C3_SLAVE); // Slave
-        else if (unit.hasC3MM()) this.setC3Level(C3_MMASTER); // Dual Master
-        else if (unit.hasC3M()) this.setC3Level(C3_MASTER); // Master
-        else if (unit.hasC3i()) this.setC3Level(C3_IMPROVED); // Improved
-        else this.setC3Level(C3_NONE);
+        if (unit.hasC3S()) {
+            this.setC3Level(C3_SLAVE); // Slave
+        } else if (unit.hasC3MM()) {
+            this.setC3Level(C3_MMASTER); // Dual Master
+        } else if (unit.hasC3M()) {
+            this.setC3Level(C3_MASTER); // Master
+        } else if (unit.hasC3i()) {
+            this.setC3Level(C3_IMPROVED); // Improved
+        } else {
+            this.setC3Level(C3_NONE);
+        }
     }
 
     /**
@@ -539,11 +578,10 @@ public class Unit {
     }
 
     public AmmoType getEntityAmmo(int weaponType, String ammoName) {
-        Vector<AmmoType> v_Ammo = AmmoType.getMunitionsFor(weaponType);
-        AmmoType at = null;
-        for (int count = 0; count < v_Ammo.size(); count++) {
-            at = v_Ammo.elementAt(count);
-            if (at.getInternalName().equalsIgnoreCase(ammoName)) return at;
+        for (AmmoType ammoType : AmmoType.getMunitionsFor(weaponType)) {
+            if (ammoType.getInternalName().equalsIgnoreCase(ammoName)) {
+                return ammoType;
+            }
         }
 
         // couldn't find the ammo retun null and just use the entities standard ammo.
@@ -563,9 +601,9 @@ public class Unit {
     }
 
     public void addRepairCost(int cost) {
-
-        if (cost < 0) currentRepairCost = 0;
-        else {
+        if (cost < 0) {
+            currentRepairCost = 0;
+        } else {
             currentRepairCost += cost;
             lifeTimeRepairCost += cost;
         }
@@ -579,16 +617,23 @@ public class Unit {
         return lifeTimeRepairCost;
     }
 
+    public boolean getPilotIsRepairing() {
+        return pilotIsRepairing;
+    }
+
+    public void setPilotIsRepairing(boolean repair) {
+        pilotIsRepairing = repair;
+    }
+
+    public int getBaseBV() {
+        return getEntity().calculateBattleValue(false, true);
+    }
+
     public boolean isSinglePilotUnit() {
-
-        if (this.getType() == Unit.MEK
-                || this.getType() == Unit.PROTOMEK
-                || this.getType() == Unit.QUAD
-                || this.getType() == Unit.AERO) {
-            return true;
-        }
-
-        return false;
+        return this.getType() == MEK
+                || this.getType() == PROTOMEK
+                || this.getType() == QUAD
+                || this.getType() == AERO;
     }
 
     /**
@@ -661,7 +706,130 @@ public class Unit {
         return false;
     }
 
-    public int getBaseBV() {
-        return getEntity().calculateBattleValue(false, true);
+    public void setTargetSystem(int type) {
+        if ((type != TargetSystem.TS_TYPE_STANDARD) && CampaignData.cd.targetSystemIsBanned(type)) {
+            setTargetSystem(TargetSystem.TS_TYPE_STANDARD);
+        }
+        try {
+            targetSystem.setTargetSystem(type);
+        } catch (TargetTypeOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (TargetTypeNotImplementedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getTargetSystemTypeDesc() {
+        return targetSystem.getCurrentTypeName();
+    }
+
+    public TargetSystem getTargetSystem() {
+        return targetSystem;
+    }
+
+    /**
+     * @param omniVehicleListPath The path to the omnivehiclelist.txt file.
+     */
+    protected boolean isOmni(String omniVehicleListPath) {
+        boolean isOmni = getEntity().isOmni();
+        String targetChassis = getEntity().getChassis();
+
+        if ((getType() == Unit.VEHICLE) && !isOmni) {
+            try {
+                FileInputStream fis = new FileInputStream("./data/buildtables/omnivehiclelist.txt");
+                BufferedReader dis = new BufferedReader(new InputStreamReader(fis));
+                while (dis.ready()) {
+                    String chassie = dis.readLine();
+                    // check to see if the chassies listed in the file match
+                    // omni vehicle chassies.
+                    if (targetChassis.equalsIgnoreCase(chassie)) {
+                        dis.close();
+                        fis.close();
+                        return true;
+                    }
+                }
+                dis.close();
+                fis.close();
+            } catch (Exception ex) {
+                // Simply means no omniveh list present. Ignore.
+            }
+        }
+        return isOmni;
+    }
+
+    /**
+     * A method which returns the MU cost of a specified campaign unit.
+     *
+     * @return int - # of MU it takes to buy a unit of the given weight class
+     */
+    public static int getPriceForUnit(int weightClass, int typeId, House producer) {
+        int result = Integer.MAX_VALUE;
+        String classtype =
+                Unit.getWeightClassDesc(weightClass) + Unit.getTypeClassDesc(typeId) + "Price";
+
+        if (typeId == Unit.MEK) {
+            result =
+                    CampaignData.cd
+                            .getCampaignOptions()
+                            .getIntegerConfig(Unit.getWeightClassDesc(weightClass) + "Price");
+        } else {
+            result = CampaignData.cd.getCampaignOptions().getIntegerConfig(classtype);
+        }
+
+        // modify the result by the faction price modifier
+        result += producer.getHouseUnitPriceMod(typeId, weightClass);
+        return Math.max(0, result);
+    }
+
+    /**
+     * A method which returns the influence cost of a specified campaign mech.
+     *
+     * @return int - # if IP it takes to buy a mech of the given units weight class
+     */
+    public static int getInfluenceForUnit(int weightClass, int typeId, House producer) {
+        int result = Integer.MAX_VALUE;
+        String classtype =
+                Unit.getWeightClassDesc(weightClass) + Unit.getTypeClassDesc(typeId) + "Inf";
+
+        if (typeId == Unit.MEK) {
+            result =
+                    CampaignData.cd
+                            .getCampaignOptions()
+                            .getIntegerConfig(Unit.getWeightClassDesc(weightClass) + "Inf");
+        } else {
+            result = CampaignData.cd.getCampaignOptions().getIntegerConfig(classtype);
+        }
+
+        // modify the result by the faction price modifier
+        result += producer.getHouseUnitFluMod(typeId, weightClass);
+
+        return Math.max(0, result);
+    }
+
+    /**
+     * A method which returns the PP COST of a unit. Meks and Vehicles are segregated by
+     * weightClass. Infantry are flat priced accross
+     *
+     * <p>all weight classes. @ param weight - the weight class to be checked @ return int - the PP
+     * cost
+     */
+    public static int getPPForUnit(int weightClass, int typeId, House producer) {
+        int result = Integer.MAX_VALUE;
+        String classtype =
+                Unit.getWeightClassDesc(weightClass) + Unit.getTypeClassDesc(typeId) + "PP";
+
+        if (typeId == Unit.MEK) {
+            result =
+                    CampaignData.cd
+                            .getCampaignOptions()
+                            .getIntegerConfig(Unit.getWeightClassDesc(weightClass) + "PP");
+        } else {
+            result = CampaignData.cd.getCampaignOptions().getIntegerConfig(classtype);
+        }
+
+        // adjust PP cost by faction specific mod
+        result += producer.getHouseUnitComponentMod(typeId, weightClass);
+
+        return Math.max(0, result);
     }
 }

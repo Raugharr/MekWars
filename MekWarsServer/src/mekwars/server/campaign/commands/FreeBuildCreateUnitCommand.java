@@ -209,7 +209,7 @@ public class FreeBuildCreateUnitCommand implements Command {
 
 	private Boolean playerUnitLimitChecks()
 	{
-		if(!player.hasRoomForUnit(unit.getType(), unit.getWeightclass()))
+		if(!player.hasRoomForUnit(unit.getType(), unit.getWeightClass()))
 		{
 			CampaignMain.cm.toUser("AM:You have reached the limit for this type of unit at this weight class.",username,true);
 			return false;
@@ -446,7 +446,7 @@ public class FreeBuildCreateUnitCommand implements Command {
 
 		Boolean result = false;
 
-        buildTableName += "_" + SUnit.getWeightClassDesc(unitToCheck.getWeightclass());
+        buildTableName += "_" + SUnit.getWeightClassDesc(unitToCheck.getWeightClass());
 
         //debug
         //CampaignMain.cm.toUser("DEBUG: Unit Type is... " + SUnit.getTypeClassDesc(unitToCheck.getType()), p.getName(), true);
