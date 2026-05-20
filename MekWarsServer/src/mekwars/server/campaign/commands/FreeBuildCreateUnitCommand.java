@@ -165,7 +165,7 @@ public class FreeBuildCreateUnitCommand implements Command {
     	}
 
     	// if a limit has been set, check to make sure player has not exceeded limit
-    	if(freeBuildLimit > 0 && player.getMekToken() == freeBuildLimit)
+    	if(freeBuildLimit > 0 && player.getMekTokens() == freeBuildLimit)
     	{
     		CampaignMain.cm.toUser("AM:You have reached the server limit of free units.",username,true);
     		return false;
@@ -547,15 +547,15 @@ public class FreeBuildCreateUnitCommand implements Command {
 	private void calcRemainingFreeMeks() {
 		//user is not in newbie faction, a limit is set and it applies only to post defection unit creation
 		if (limitOnlyPostDefection && !house.getName().equalsIgnoreCase(newbieHouseName) && freeBuildLimit > 0) {
-			player.addMekToken(1);
-			int remaining = freeBuildLimit - player.getMekToken();
+			player.addMekTokens(1);
+			int remaining = freeBuildLimit - player.getMekTokens();
 			CampaignMain.cm.toUser(remaining + " free units remain.",username,true);
 		}
 
 		//user is in newbie faction, a limit is set and it applies to newbie faction only
 		if (!limitOnlyPostDefection && house.getName().equalsIgnoreCase(newbieHouseName) && freeBuildLimit > 0) {
-			player.addMekToken(1);
-			int remaining = freeBuildLimit - player.getMekToken();
+			player.addMekTokens(1);
+			int remaining = freeBuildLimit - player.getMekTokens();
 			CampaignMain.cm.toUser(remaining + " free units remain.",username,true);
 		}
 	}
