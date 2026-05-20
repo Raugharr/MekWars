@@ -79,7 +79,7 @@ public class SolDeleteUnitCommand implements Command {
 		//though.. i think this may be dead code, pretty sure if there is a limit the del option wont show
 		if (CampaignData.cd.getCampaignOptions().getConfig("FreeBuild_LimitPostDefOnly").equalsIgnoreCase("false") &&
 			h.getHouseOptions().getIntegerConfig("FreeBuild_Limit") > 0) {
-			p.addMekToken(-1);
+			p.addMekTokens(-1);
 		}
 	}
 }//end SolDeleteUnitCommand

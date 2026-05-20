@@ -17,7 +17,6 @@ package mekwars.client.campaign;
 
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
-import megamek.common.Infantry;
 import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.OffBoardDirection;
@@ -25,11 +24,11 @@ import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
 
-import mekwars.client.MWClient;
+import jakarta.persistence.Entity;
+
 import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.common.MegaMekPilotOption;
-import mekwars.common.Player;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
@@ -46,7 +45,8 @@ import java.util.StringJoiner;
 import java.util.StringTokenizer;
 
 /** Class for unit object used by Client */
-public class CUnit extends Unit {
+@Entity
+public class CUnit extends Unit<CUnit> {
     private static final Logger LOGGER = LogManager.getLogger(CUnit.class);
 
     private String htmlQuirkList = " ";

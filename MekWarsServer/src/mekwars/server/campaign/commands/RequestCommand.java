@@ -177,7 +177,7 @@ public class RequestCommand implements Command {
         }
 
         if (!Boolean.parseBoolean(
-                p.getSubFaction()
+                p.getSubfaction()
                         .getConfig(
                                 "CanBuyNew"
                                         + Unit.getWeightClassDesc(weightclass)

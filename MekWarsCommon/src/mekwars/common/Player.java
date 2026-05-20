@@ -21,6 +21,16 @@
 
 package mekwars.common;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
+
 import mekwars.common.campaign.PersonalPilotQueues;
 import mekwars.common.composition.IHasUnits;
 import mekwars.common.flags.PlayerFlags;
@@ -38,7 +48,11 @@ public abstract class Player implements IHasUnits {
 
     private String name = "";
     private String logo = "";
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "house_id", nullable = false)
     private House myHouse = null;
+
     private int money = 0;
     private int experience = 0;
     // @salient - changed from 50 to 0, starting flu can be set in SO faction.
@@ -56,16 +70,25 @@ public abstract class Player implements IHasUnits {
 
     protected int totalTechs[] = new int[UnitUtils.TECH_TYPES];
     protected int availableTechs[] = new int[UnitUtils.TECH_TYPES];
-    protected PlayerFlags flags = new PlayerFlags();
+    @Transient protected PlayerFlags flags = new PlayerFlags();
     // This is only going to be set for staff
-    protected PlayerFlags defaultPlayerFlags = new PlayerFlags();
+    @Transient protected PlayerFlags defaultPlayerFlags = new PlayerFlags();
     // A counter for how many meks a player is allowed to create in freebuild
-    protected int mekToken = 0;
+    protected int mekTokens = 0;
+    @Column(name = "hanger_bv")
     protected int bvTracker = 0; // used to track hangar BV in mini campaigns
 
     public Player() {
         Arrays.fill(totalTechs, 0);
         Arrays.fill(availableTechs, 0);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public House getMyHouse() {
@@ -214,17 +237,17 @@ public abstract class Player implements IHasUnits {
     }
 
     /**
-     * @return the mekToken
+     * @return the mekTokens
      */
-    public int getMekToken() {
-        return mekToken;
+    public int getMekTokens() {
+        return mekTokens;
     }
 
     /**
-     * @param mekToken the mekToken to set
+     * @param mekTokens the mekTokens to set
      */
-    public void setMekToken(int mekToken) {
-        this.mekToken = mekToken;
+    public void setMekTokens(int mekTokens) {
+        this.mekTokens = mekTokens;
     }
 
     /**

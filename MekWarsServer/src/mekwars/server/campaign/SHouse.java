@@ -28,6 +28,7 @@ import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.campaign.ComponentList;
 import mekwars.common.composition.HasUnits;
 import mekwars.common.util.ComponentToCritsConverter;
+import mekwars.common.util.HibernateUtil;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitComponents;
@@ -79,6 +80,7 @@ import java.util.stream.Collectors;
  *     tick. Looping through the planets was taking way too long. - Moved component prodution to
  *     addActivityPP to enable access from a Quartz task
  */
+@jakarta.persistence.Entity
 public class SHouse extends TimeUpdateHouse
         implements Comparable<Object>, ISeller, IBuyer, Serializable {
     private static final Logger LOGGER = LogManager.getLogger(SHouse.class);
@@ -464,33 +466,7 @@ public class SHouse extends TimeUpdateHouse
     /** Constructor used for serialization */
     public SHouse() {
         super();
-        reservePlayers = new ConcurrentHashMap<String, SPlayer>();
-        activePlayers = new ConcurrentHashMap<String, SPlayer>();
-        fightingPlayers = new ConcurrentHashMap<String, SPlayer>();
         smallPlayers = new HashMap<String, SmallPlayer>();
-    }
-
-    /*
-     * Players are stores in 3 seperate hashtables. Each hash is indicative of a
-     * different activity level. As players move back and forth between these
-     * levels, they are transferred from hash to hash. At NO TIME should a
-     * player exist in multiple hashes.
-     *
-     * This 3-hash system replaces the old fighting/logged in 2 hash system and
-     * the SPlayer's activity boolean.
-     *
-     * TODO: massively improve commenting here. @urgru 1.14.06
-     */
-    public ConcurrentHashMap<String, SPlayer> getReservePlayers() {
-        return reservePlayers;
-    }
-
-    public ConcurrentHashMap<String, SPlayer> getActivePlayers() {
-        return activePlayers;
-    }
-
-    public ConcurrentHashMap<String, SPlayer> getFightingPlayers() {
-        return fightingPlayers;
     }
 
     public int getBaysProvided() {
@@ -592,18 +568,23 @@ public class SHouse extends TimeUpdateHouse
      * to the faction
      */
     public boolean isLoggedIntoFaction(String playerName) {
-
+        // Use database query to check if player is online in any status
         String lowerName = playerName.toLowerCase();
-        if (getReservePlayers().containsKey(lowerName)) {
-            return true;
-        } else if (getActivePlayers().containsKey(lowerName)) {
-            return true;
-        } else if (getFightingPlayers().containsKey(lowerName)) {
-            return true;
-        }
+        Integer houseId = this.getId();
 
-        // not in the faction under any status.
-        return false;
+        // Find players by name in this house
+        List<SPlayer> players =
+                HibernateUtil.fromTransaction(
+                        session ->
+                                session.createQuery(
+                                                "FROM SPlayer WHERE myHouse.id = :houseId AND name"
+                                                        + " = :name",
+                                                SPlayer.class)
+                                        .setParameter("houseId", houseId)
+                                        .setParameter("name", playerName)
+                                        .getResultList());
+
+        return !players.isEmpty();
     }
 
     public long remainingHangarSpaceForWeightclass(int weightClass, int typeId) {
@@ -1532,21 +1513,6 @@ public class SHouse extends TimeUpdateHouse
         return true;
     }
 
-    public SPlayer getPlayer(String s) {
-        String lowerName = s.toLowerCase();
-        if (getReservePlayers().containsKey(lowerName)) {
-            return getReservePlayers().get(lowerName);
-        }
-        if (getActivePlayers().containsKey(lowerName)) {
-            return getActivePlayers().get(lowerName);
-        }
-        if (getFightingPlayers().containsKey(lowerName)) {
-            return getFightingPlayers().get(lowerName);
-        }
-
-        return null;
-    }
-
     /**
      * A method which returns the MU cost of a specified campaign unit.
      *
@@ -1825,18 +1791,7 @@ public class SHouse extends TimeUpdateHouse
         CampaignMain.cm.toUser(
                 "GO|" + CampaignMain.cm.getMegaMekOptionsToString(), realName, false);
 
-        /*
-         * Remove from all status hashes and place in reserve, in case the
-         * players was somewho disconnected and not recognized while signing
-         * back on. The code will later check for a running game and escalate to
-         * fighting state if needed.
-         */
-        reservePlayers.remove(lowerName);
-        activePlayers.remove(lowerName);
-        fightingPlayers.remove(lowerName);
-
-        getReservePlayers().put(lowerName, p);
-        p.setLastSentStatus("");
+        p.setStatus(SPlayer.STATUS_RESERVE);
 
         CampaignMain.cm.toUser("CS|" + SPlayer.STATUS_RESERVE, realName, false);
 
@@ -1973,10 +1928,7 @@ public class SHouse extends TimeUpdateHouse
         // if (p.getDutyStatus() == SPlayer.STATUS_ACTIVE)
         p.setActive(false);
 
-        // remove from all status hashes
-        reservePlayers.remove(lowerName);
-        activePlayers.remove(lowerName);
-        fightingPlayers.remove(lowerName);
+        p.setStatus(SPlayer.STATUS_LOGGEDOUT);
 
         CampaignMain.cm.forceSavePlayer(p);
         // add info to logs
@@ -2281,19 +2233,6 @@ public class SHouse extends TimeUpdateHouse
 
     public void addShowProductionCountNext(int amount) {
         setShowProductionCountNext(getShowProductionCountNext() + amount);
-    }
-
-    /**
-     * Returns all online players. Should be used sparingly.
-     *
-     * <p>TODO: Remove references to this method, where possible.
-     */
-    public Map<String, SPlayer> getAllOnlinePlayers() {
-        Map<String, SPlayer> allPlayers = new HashMap<String, SPlayer>();
-        allPlayers.putAll(getReservePlayers());
-        allPlayers.putAll(getActivePlayers());
-        allPlayers.putAll(getFightingPlayers());
-        return allPlayers;
     }
 
     /**

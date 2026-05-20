@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import jakarta.persistence.Entity;
+
 import mekwars.client.GUIClientConfig;
 import mekwars.client.MWClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
@@ -46,6 +48,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Class for Player object used by Client
  */
+@Entity
 public class CPlayer extends Player {
     private static final Logger LOGGER = LogManager.getLogger(CPlayer.class);
 
@@ -256,7 +259,7 @@ public class CPlayer extends Player {
         doPayTechniciansMath();
         setRewardPoints(TokenReader.readInt(ST));
         String string = TokenReader.readString(ST);
-        setMekToken(Integer.parseInt(string));
+        setMekTokens(Integer.parseInt(string));
         House = TokenReader.readString(ST);
         setHouseFightingFor(TokenReader.readString(ST));
         setLogo(TokenReader.readString(ST));

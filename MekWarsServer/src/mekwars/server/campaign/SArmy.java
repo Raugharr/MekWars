@@ -16,6 +16,7 @@
 
 package mekwars.server.campaign;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -63,11 +64,11 @@ public class SArmy extends Army<SUnit> {
     )
     private List<SArmy> opponents = new ArrayList<>();
 
-    public SArmy(Player<SUnit> owner) {
+    public SArmy(Player owner) {
         super(owner);
     }
 
-    public SArmy(int id, Player<SUnit> owner) {
+    public SArmy(int id, Player owner) {
         super(owner);
         setId(id);
     }

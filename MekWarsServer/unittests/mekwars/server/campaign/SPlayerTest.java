@@ -75,7 +75,7 @@ class SPlayerTest {
             doNothing().when(CampaignMain.cm).toUser("PL|UMT|3", "", false);
             doNothing().when(player).setSave();
 
-            player.addMekToken(3);
+            player.addMekTokens(3);
 
             assertEquals(7, player.getRemainingMekTokens());
             assertEquals(10, player.getMekTokenLimit());
@@ -85,7 +85,7 @@ class SPlayerTest {
         public void testHasUnusedReturnsTrue() {
             when(house.getConfig("FreeBuild_Limit")).thenReturn("5");
 
-            player.addMekToken(2);
+            player.addMekTokens(2);
 
             assertTrue(player.hasUnusedMekTokens());
         }
