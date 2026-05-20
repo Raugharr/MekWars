@@ -16,43 +16,53 @@
 
 package mekwars.server.campaign.commands.mod;
 
-import java.util.StringTokenizer;
 import mekwars.server.MWServ;
 import mekwars.common.House;
+import mekwars.common.util.HibernateUtil;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.commands.Command;
 
+import java.util.List;
+import java.util.StringTokenizer;
+
 public class NotifyFightingCommand implements Command {
-	
 	int accessLevel = IAuthenticator.MODERATOR;
 	String syntax = "Message";
 	public int getExecutionLevel(){return accessLevel;}
 	public void setExecutionLevel(int i) {accessLevel = i;}
 	public String getSyntax() { return syntax;}
 	
-	public void process(StringTokenizer command,String Username) {
+	public void process(StringTokenizer command,String username) {
 		
 		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(username);
 		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
+			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",username,true);
 			return;
 		}
 		
 		//load the message
 		String Message = (String)command.nextElement();
-		
+
 		//send to all fighters from all houses
 		for (House h : CampaignMain.cm.getData().getAllHouses()) {
 			SHouse currH = (SHouse)h;
-			for (String currName : currH.getFightingPlayers().keySet())
-				CampaignMain.cm.toUser("PM|SERVER|" + Message,currName,false);
+			List<SPlayer> fightingPlayers = HibernateUtil.fromTransaction(session ->
+				session.createQuery("FROM SPlayer WHERE myHouse.id = :houseId AND status = :status", SPlayer.class)
+					.setParameter("houseId", currH.getId())
+					.setParameter("status", SPlayer.STATUS_FIGHTING)
+					.getResultList()
+			);
+			for (SPlayer p : fightingPlayers) {
+				CampaignMain.cm.toUser("PM|SERVER|" + Message, p.getName(), false);
+			}
 		}
-			
-		CampaignMain.cm.doSendModMail("NOTE",Username + " sent a message to all fighting players: " + Message);
-		CampaignMain.cm.toUser("Message sent to all fighting players: " + Message,Username,true);
+
+		CampaignMain.cm.doSendModMail("NOTE",username + " sent a message to all fighting players: " + Message);
+		CampaignMain.cm.toUser("Message sent to all fighting players: " + Message,username,true);
 			
 	}//end process()
 }//end notifyfightingcommand.java
