@@ -30,7 +30,7 @@ import megamek.common.TechConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class UnitComponents{
+public class UnitComponents {
     private static final Logger LOGGER = LogManager.getLogger(UnitComponents.class);
 
     private Hashtable<String, Integer> components = new Hashtable<>();
