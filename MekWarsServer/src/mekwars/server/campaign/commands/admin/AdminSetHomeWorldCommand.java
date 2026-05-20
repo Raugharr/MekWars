@@ -52,7 +52,7 @@ public class AdminSetHomeWorldCommand implements Command {
             if ( command.hasMoreTokens() )
                 homeworld = Boolean.parseBoolean(command.nextToken());
             else
-            	homeworld = !planet.isHomeWorld();
+            	homeworld = !planet.isHomeworld();
         }catch (Exception ex){
         	CampaignMain.cm.toUser("Invalid syntax. Try: adminsethomeworld#Planet#[true/false]",Username);
         }
@@ -60,7 +60,7 @@ public class AdminSetHomeWorldCommand implements Command {
         if ( planet == null )
             return;
         
-        planet.setHomeWorld(homeworld);
+        planet.setHomeworld(homeworld);
         
 		CampaignMain.cm.toUser(planet.getName()+"'s homeworld status set to: " + homeworld + ".",Username,true);
 		CampaignMain.cm.doSendModMail("NOTE",Username + " has set " + planet.getName() +"'s homeworld status to: " + homeworld + ".");

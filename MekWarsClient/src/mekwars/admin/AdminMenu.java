@@ -382,20 +382,6 @@ public class AdminMenu extends JMenu {
             }
         });
 
-        jMenuAdminSetPlanetMapSize.setText("Set Planet Map Size");
-        jMenuAdminSetPlanetMapSize.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuAdminSetPlanetMapSize_actionPerformed(e);
-            }
-        });
-
-        jMenuAdminSetPlanetBoardSize.setText("Set Planet Board Size");
-        jMenuAdminSetPlanetBoardSize.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jMenuAdminSetPlanetBoardSize_actionPerformed(e);
-            }
-        });
-
         jMenuAdminSetPlanetTemperature.setText("Set Planet Temperature");
         jMenuAdminSetPlanetTemperature.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -1530,32 +1516,6 @@ public class AdminMenu extends JMenu {
 
     }
 
-    public void jMenuAdminSetPlanetMapSize_actionPerformed(ActionEvent e) {
-        PlanetNameDialog planetDialog = new PlanetNameDialog(mwclient, "Select a Planet", null);
-        planetDialog.setVisible(true);
-        String planetNamestr = planetDialog.getPlanetName();
-        planetDialog.dispose();
-
-        if ((planetNamestr == null) || (planetNamestr.length() == 0)) {
-            return;
-        }
-
-        String xSize = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "X size");
-
-        if ((xSize == null) || (xSize.length() == 0)) {
-            return;
-        }
-
-        String ySize = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Y Size");
-
-        if ((ySize == null) || (ySize.length() == 0)) {
-            return;
-        }
-
-        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetplanetmapsize#" + planetNamestr + "#" + xSize + "#" + ySize);
-        mwclient.reloadData();
-    }
-
     public void jMenuAdminSetPlanetHomeWorld_actionPerformed(ActionEvent e) {
         PlanetNameDialog planetDialog = new PlanetNameDialog(mwclient, "Select a Planet", null);
         planetDialog.setVisible(true);
@@ -1580,32 +1540,6 @@ public class AdminMenu extends JMenu {
         mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsethomeworld#" + planetNamestr + "#" + homeworld);
         mwclient.reloadData();
 
-    }
-
-    public void jMenuAdminSetPlanetBoardSize_actionPerformed(ActionEvent e) {
-        PlanetNameDialog planetDialog = new PlanetNameDialog(mwclient, "Select a Planet", null);
-        planetDialog.setVisible(true);
-        String planetNamestr = planetDialog.getPlanetName();
-        planetDialog.dispose();
-
-        if ((planetNamestr == null) || (planetNamestr.length() == 0)) {
-            return;
-        }
-
-        String xSize = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "X size");
-
-        if ((xSize == null) || (xSize.length() == 0)) {
-            return;
-        }
-
-        String ySize = JOptionPane.showInputDialog(mwclient.getGUIClient().getMainFrame(), "Y Size");
-
-        if ((ySize == null) || (ySize.length() == 0)) {
-            return;
-        }
-
-        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c adminsetplanetboardsize#" + planetNamestr + "#" + xSize + "#" + ySize);
-        mwclient.reloadData();
     }
 
     public void jMenuAdminSetPlanetOriginalOwner_actionPerformed(ActionEvent ex) {
@@ -1710,3 +1644,4 @@ public class AdminMenu extends JMenu {
 		mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "adminReloadHTMLSanitizerConfigs");
 	}
 }
+

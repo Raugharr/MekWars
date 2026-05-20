@@ -3434,7 +3434,7 @@ public class ShortResolver {
                             // Only generate PP if your suppose to
                             if (ppToGenerate > 0) {
                                 // get a random factory
-                                SUnitFactory currFacility = target.getRandomUnitFactory();
+                                UnitFactory currFacility = target.getRandomUnitFactory();
 
                                 for (int type = Unit.MEK; type < Unit.MAXBUILD; type++) {
 

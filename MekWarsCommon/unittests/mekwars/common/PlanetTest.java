@@ -50,7 +50,7 @@ class PlanetTest {
     public void testId() {
         Planet testPlanet = new Planet("TestPlanet1", position, influence);
 
-        assertEquals(EntityStore.UNSET_ID, testPlanet.getId());
+        assertEquals(0, testPlanet.getId());
     }
 
     @Nested
@@ -101,12 +101,12 @@ class PlanetTest {
         public void testAddContinent() {
             Planet planet = new Planet("TestPlanet", position, influence);
 
-            continents[0].setID(10);
+            continents[0].setId(10);
             planet.addContinent(continents[0]);
 
             assertEquals(1, planet.getContinents().size());
             assertTrue(planet.hasContinents());
-            assertEquals(continents[0].getID(), planet.getContinents().get(0).getID());
+            assertEquals(continents[0].getId(), planet.getContinents().get(0).getId());
         }
 
         @Test
