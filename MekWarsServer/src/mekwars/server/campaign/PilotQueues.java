@@ -339,7 +339,6 @@ public class PilotQueues {
 	 * newbie faction units and for units generated with CreateMechCommand.
 	 */
 	public String getRandomPilotName() {
-		
 		String result = "Noelle";//something we hope never returns
         if (CampaignMain.cm.getBooleanConfig("UseCommonPilotNameFileOnly"))
         	return SPilot.getRandomPilotName(CampaignMain.cm.getR());
@@ -386,5 +385,4 @@ public class PilotQueues {
             	queues.add(v);
             }
 	}
-
 }
