@@ -45,23 +45,23 @@ public class AdminCreateTerrainCommand implements Command {
 		}
 		
 		try{
-			SPlanet p = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
+			SPlanet planet = CampaignMain.cm.getPlanetFromPartialString(command.nextToken(),Username);
 			String terraintype = command.nextToken();
 			String advTerrainType = command.nextToken();
 			int chance = Integer.parseInt(command.nextToken());
 			
-			if (p == null) {
+			if (planet == null) {
 				CampaignMain.cm.toUser("Planet not found:",Username,true);
 				return;
 			}
 
-			Continent cont = new Continent(chance, CampaignMain.cm.getData().getTerrainByName(terraintype), CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainType));
-			p.addContinent(cont);
-			p.updated();
+			Continent cont = new Continent(planet, chance, CampaignMain.cm.getData().getTerrainByName(terraintype), CampaignMain.cm.getData().getAdvancedTerrainByName(advTerrainType));
+			planet.addContinent(cont);
+			planet.updated();
 
 			//server.MWLogger.modLog(Username + " added terrain to " + p.getName() + " (" + terraintype + ").");
-			CampaignMain.cm.toUser("Terrain added to " + p.getName() + "(" + terraintype + "-" + advTerrainType + ").",Username,true);
-			CampaignMain.cm.doSendModMail("NOTE",Username + " added terrain to planet " + p.getName() + "(" + terraintype + "-" + advTerrainType + ").");
+			CampaignMain.cm.toUser("Terrain added to " + planet.getName() + "(" + terraintype + "-" + advTerrainType + ").",Username,true);
+			CampaignMain.cm.doSendModMail("NOTE",Username + " added terrain to planet " + planet.getName() + "(" + terraintype + "-" + advTerrainType + ").");
 		}
 		
 		catch (Exception ex){

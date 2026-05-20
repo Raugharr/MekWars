@@ -15,6 +15,7 @@ package mekwars.common.entities;
 import mekwars.common.House;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.campaign.pilot.skills.PilotSkillStore;
+import mekwars.common.entities.MWEntity;
 import mekwars.common.entities.factiontrait.Trait;
 
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +27,7 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 /** Represents a list of skills a pilot can obtain for a specific {@link House}. */
-public class FactionTrait implements Entity {
+public class FactionTrait implements MWEntity {
     private static final Logger LOGGER = LogManager.getLogger(FactionTrait.class);
     private static int NEXT_ID = 1;
 

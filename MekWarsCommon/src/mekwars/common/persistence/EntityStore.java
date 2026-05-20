@@ -20,11 +20,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import mekwars.common.entities.Entity;
+import mekwars.common.entities.MWEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class EntityStore<T extends Entity> {
+public class EntityStore<T extends MWEntity> {
     private static final Logger LOGGER = LogManager.getLogger(EntityStore.class);
 
     public static final int UNSET_ID = -1;

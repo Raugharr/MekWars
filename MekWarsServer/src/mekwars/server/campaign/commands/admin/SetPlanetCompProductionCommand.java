@@ -84,16 +84,16 @@ public class SetPlanetCompProductionCommand implements Command {
 
         if (owner != null) {
             owner.setComponentProduction(
-                    owner.getComponentProduction() - planet.getCompProduction());
+                    owner.getComponentProduction() - planet.getComponentProduction());
             owner.setComponentProduction(owner.getComponentProduction() + compProduction);
         }
 
-        planet.setCompProduction(compProduction);
+        planet.setComponentProduction(compProduction);
 
         CampaignMain.cm.toUser(
                 planet.getName()
                         + " has had its component production set to "
-                        + planet.getCompProduction(),
+                        + planet.getComponentProduction(),
                 username,
                 true);
         CampaignMain.cm.doSendModMail(
@@ -102,7 +102,7 @@ public class SetPlanetCompProductionCommand implements Command {
                         + " has set planet "
                         + PlanetName
                         + "'s component production to "
-                        + planet.getCompProduction());
+                        + planet.getComponentProduction());
         planet.updated();
     }
 }

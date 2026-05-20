@@ -20,7 +20,7 @@
  */
 package mekwars.server.campaign.commands.admin;
 
-import mekwars.common.UnitFactory;
+import mekwars.common.util.HibernateUtil;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -29,9 +29,7 @@ import mekwars.server.campaign.SPlanet;
 import mekwars.server.campaign.SUnitFactory;
 import mekwars.server.campaign.commands.Command;
 
-import java.util.List;
 import java.util.StringTokenizer;
-import java.util.UUID;
 
 /**
  * @author Helge Richter
@@ -54,7 +52,6 @@ public class AdminCreateFactoryCommand implements Command {
     }
 
     public void process(StringTokenizer command, String username) {
-
         // access level check
         int userLevel = MWServ.getInstance().getUserLevel(username);
         if (userLevel < getExecutionLevel()) {
@@ -80,20 +77,15 @@ public class AdminCreateFactoryCommand implements Command {
         if (command.hasMoreElements()) buildTableFolder = command.nextToken();
         if (command.hasMoreElements()) accessLevel = Integer.parseInt(command.nextToken());
 
-        SUnitFactory fac =
+        SUnitFactory factory =
                 new SUnitFactory(
                         name, planet, size, faction, 0, 100, type, buildTableFolder, accessLevel);
 
-        fac.setID(UUID.randomUUID().toString());
+        HibernateUtil.getInstance().inTransaction(session -> session.persist(factory));
 
-        List<UnitFactory> uf = planet.getUnitFactories();
-        uf.add(fac);
-        fac.setPlanet(planet);
-        SHouse owner = (SHouse) planet.getOwner();
-
-        if (owner != null) {
-            owner.removePlanet(planet);
-            owner.addPlanet(planet);
+        if (planet.getOwner() != null) {
+            ((SHouse)planet.getOwner()).removePlanet(planet);
+            ((SHouse)planet.getOwner()).addPlanet(planet);
         }
         planet.updated();
 
@@ -103,7 +95,7 @@ public class AdminCreateFactoryCommand implements Command {
                 "NOTE",
                 username
                         + " has created factory "
-                        + fac.getName()
+                        + factory.getName()
                         + " on planet "
                         + planet.getName());
     }

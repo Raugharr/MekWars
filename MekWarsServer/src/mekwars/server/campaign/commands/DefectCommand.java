@@ -693,7 +693,7 @@ public class  DefectCommand  implements Command {
 
         SPlanet planet = (SPlanet) planetList.get(planetNumber);
         planet.setConquestPoints(1000);
-        planet.setCompProduction(1000);
+        planet.setComponentProduction(1000);
         int baseCommonBuildTableShare = CampaignMain.cm.getIntegerConfig("BaseCommonBuildTableShares");
 
         for (int weight = 0; weight <= SUnit.ASSAULT; weight++) {

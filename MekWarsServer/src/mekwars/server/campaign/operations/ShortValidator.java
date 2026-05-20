@@ -813,9 +813,9 @@ public class ShortValidator {
          */
         boolean mustHaveHome = o.getBooleanValue("OnlyAgainstHomeWorlds");
         boolean mustNotHaveHome = o.getBooleanValue("OnlyAgainstNonHomeWorlds");
-        if (mustHaveHome && !target.isHomeWorld())
+        if (mustHaveHome && !target.isHomeworld())
             failureReasons.add(SFAIL_ATTACK_NEEDSHOME);
-        if (mustNotHaveHome && target.isHomeWorld())
+        if (mustNotHaveHome && target.isHomeworld())
             failureReasons.add(SFAIL_ATTACK_HASHOME);
 
         // check for allowed op flags
