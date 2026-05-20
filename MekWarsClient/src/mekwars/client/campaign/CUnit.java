@@ -39,6 +39,8 @@ import mekwars.common.util.UnitUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import jakarta.persistence.Entity;
+
 import java.util.Enumeration;
 import java.util.List;
 import java.util.StringJoiner;

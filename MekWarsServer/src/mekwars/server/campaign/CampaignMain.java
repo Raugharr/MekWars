@@ -809,15 +809,15 @@ public final class CampaignMain implements Serializable {
         return data;
     }
 
-    public Vector<MercHouse> getMercHouses() {
-        Vector<MercHouse> result = new Vector<MercHouse>(1, 1);
+    public List<MercHouse> getMercHouses() {
+        List<MercHouse> result = new ArrayList<MercHouse>();
+
         for (House currH : data.getAllHouses()) {
             SHouse sh = (SHouse) currH;
             if (sh.isMercHouse()) {
                 result.add((MercHouse) currH);
             }
         }
-        result.trimToSize();
         return result;
     }
 

@@ -34,6 +34,7 @@ import megamek.common.TechConstants;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -49,6 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Helge Richter
  * 
  */
+@Entity
 public class House implements MWEntity {
     public static final int RED_VALUE = 0;
     public static final int GREEN_VALUE = 1;
@@ -58,9 +60,23 @@ public class House implements MWEntity {
     private String logo = "";
     private String factionFluFile = "Common";
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ElementCollection
+    @CollectionTable(name = "house_price_mods", joinColumns = @JoinColumn(name = "house_id"))
+    @SQLRestriction("mod_category = 'PRICE'")
     private int factionUnitPriceMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
+
+    @ElementCollection
+    @CollectionTable(name = "house_price_mods", joinColumns = @JoinColumn(name = "house_id"))
+    @SQLRestriction("mod_category = 'INFLUENCE'")
     private int factionUnitFluMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
+
+    @ElementCollection
+    @CollectionTable(name = "house_price_mods", joinColumns = @JoinColumn(name = "house_id"))
+    @SQLRestriction("mod_category = 'COMPONENT'")
     private int factionUnitComponentMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
 
     private String factionColor = "#000000";
