@@ -48,7 +48,7 @@ import java.util.TreeSet;
  * @author Helge Richter
  */
 @MappedSuperclass
-public class Army<T extends Unit> {
+public class Army<T extends Unit<T>> {
     private static final Logger LOGGER = LogManager.getLogger(Army.class);
 
     public static final int NO_LIMIT = -1;
