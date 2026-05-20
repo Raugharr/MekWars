@@ -102,6 +102,7 @@ import mekwars.common.Unit;
 import mekwars.common.campaign.Buildings;
 import mekwars.common.campaign.UnitRepairCostCalculator;
 import mekwars.common.util.GameReport;
+import mekwars.common.util.HibernateUtil;
 import mekwars.common.util.ThreadManager;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
@@ -1292,7 +1293,7 @@ public final class MWClient extends GameHost implements IClient {
      * @return Returns the data.
      */
     public CampaignData getData() {
-        if ((data == null)) {
+        if (data == null) {
 
             // Lets reload everything from the cache and then pull down and
             // planet changes
@@ -1731,11 +1732,11 @@ public final class MWClient extends GameHost implements IClient {
 
     public int getMinPlanetOwnerShip(Planet p) {
 
-        if (p.getMinPlanetOwnerShip() == -1) {
+        if (p.getMinPlanetOwnership() == -1) {
             return Integer.parseInt(getServerConfigs("MinPlanetOwnerShip"));
         }
 
-        return p.getMinPlanetOwnerShip();
+        return p.getMinPlanetOwnership();
     }
 
     public int getTotalRepairCosts(Entity unit) {

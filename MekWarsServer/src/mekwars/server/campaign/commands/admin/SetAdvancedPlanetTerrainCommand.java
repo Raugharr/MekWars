@@ -68,21 +68,21 @@ public class SetAdvancedPlanetTerrainCommand implements Command {
 
         int id = Integer.parseInt(command.nextToken());
         int aid = Integer.parseInt(command.nextToken());
-        //		int conid = 0;
 
         AdvancedTerrain advancedTerrain = CampaignMain.cm.getData().getAdvancedTerrain(aid);
         List<Continent> originalContinents = planet.getContinents();
         List<Continent> changedContinents = new ArrayList<Continent>();
 
-        for (int x = 0; x < originalContinents.size(); x++) {
-            if (originalContinents.get(x).getEnvironment().getId() == id) {
+        for (int i = 0; i < originalContinents.size(); i++) {
+            if (originalContinents.get(i).getEnvironment().getId() == id) {
                 changedContinents.add(
                         new Continent(
-                                originalContinents.get(x).getSize(),
-                                originalContinents.get(x).getEnvironment(),
+                                planet,
+                                originalContinents.get(i).getSize(),
+                                originalContinents.get(i).getEnvironment(),
                                 advancedTerrain));
             } else {
-                changedContinents.add(originalContinents.get(x));
+                changedContinents.add(originalContinents.get(i));
             }
         }
 

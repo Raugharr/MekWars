@@ -38,7 +38,6 @@ public class PDiff implements ServerCommand {
 
 	public void execute(Date timestamp, BinWriter out, CampaignData data)
 			throws Exception {
-
 	    boolean fullUpdate = false;
 		// System.err.println("PDiff Timestamp: "+timestamp.toString());
 		if (timestamp == null || CampaignMain.cm.getHousePlanetUpdate().compareTo(timestamp)  > 0 ) {
@@ -54,15 +53,11 @@ public class PDiff implements ServerCommand {
 		
 		ArrayList<Planet> planets = new ArrayList<Planet>();
 		synchronized (data.getAllPlanets()) {
-
 			for (Planet e : data.getAllPlanets()) {
 				TimeUpdatePlanet tPlanet = (TimeUpdatePlanet) e;
-				// System.err.println("Planet time:
-				// "+tPlanet.getLastChanged().toString());
 				if (tPlanet.getLastChanged() != null
 						&& tPlanet.getLastChanged().compareTo(timestamp) > 0) {
 					planets.add(e);
-					// ids.add(new Integer(e.getId()));
 				}
 			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -70,7 +65,6 @@ public class PDiff implements ServerCommand {
 			out.println(fullUpdate, "FullUpdate");
 			
 			data.binPlanetsOut(planets, out);
-
 		}
 	}
 }

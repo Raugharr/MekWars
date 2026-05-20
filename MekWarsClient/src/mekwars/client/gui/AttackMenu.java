@@ -196,9 +196,9 @@ public class AttackMenu extends JMenu implements ActionListener {
                         continue;
                     
                     //check homeworld requirements
-                    if (tp.isHomeWorld() && homeInfo.equals("none"))
+                    if (tp.isHomeworld() && homeInfo.equals("none"))
                         continue;
-                    else if (!tp.isHomeWorld() && homeInfo.equals("only"))
+                    else if (!tp.isHomeworld() && homeInfo.equals("only"))
                         continue;
                     
                     // convert minOwn and maxOwn to a percentage

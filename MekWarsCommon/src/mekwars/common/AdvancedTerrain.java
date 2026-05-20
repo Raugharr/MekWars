@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  * Original author Helge Richter (McWizard)
  *
@@ -17,37 +17,49 @@
 
 package mekwars.common;
 
-import java.io.IOException;
-import java.util.StringTokenizer;
-import mekwars.common.entities.Entity;
-import mekwars.common.persistence.EntityStore;
-import mekwars.common.util.BinReader;
-import mekwars.common.util.BinWriter;
-import mekwars.common.util.TokenReader;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
+
 import megamek.common.planetaryconditions.Atmosphere;
 import megamek.common.planetaryconditions.EMI;
 import megamek.common.planetaryconditions.Fog;
 import megamek.common.planetaryconditions.Light;
-import megamek.common.planetaryconditions.PlanetaryConditions;
 import megamek.common.planetaryconditions.Weather;
 import megamek.common.planetaryconditions.Wind;
 import megamek.common.planetaryconditions.WindDirection;
 
-/**
- * Advanced Environment for planets.
- * 
- * @@author Torren (Jason Tighe) allows So's to set up each individual terrain on a planet.
- */
+import mekwars.common.entities.MWEntity;
+import mekwars.common.util.BinReader;
+import mekwars.common.util.BinWriter;
+import mekwars.common.util.TokenReader;
 
-public class AdvancedTerrain implements Entity {
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+/**
+ * Advanced Environment for planets. @author Torren (Jason Tighe) allows So's to set up each
+ * individual terrain on a planet.
+ */
+@Entity
+public class AdvancedTerrain implements MWEntity {
     private String displayName = "none";
-    private int id = EntityStore.UNSET_ID;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private String name = "none";
-    
-    //NOTE: These fields are unused and kept to keep the xml file consistent
-    private int blizzardChance = 0;
-    private int blowingSandChance = 0;
-    private int highWindChance = 0;
+
+    // NOTE: These fields are unused and kept only to keep the XML parser happy.
+    @Transient private int blizzardChance = 0;
+    @Transient private int blowingSandChance = 0;
+    @Transient private int highWindChance = 0;
 
     private int lowTemp = 25;
     private int highTemp = 25;
@@ -60,6 +72,8 @@ public class AdvancedTerrain implements Entity {
     private int nightTempMod = 0;
     private int minVisibility = 100;
     private int maxVisibility = 100;
+
+    @Enumerated(EnumType.STRING)
     private Atmosphere atmosphere = Atmosphere.STANDARD;
 
     private int lightRainfallChance = 0;
@@ -79,7 +93,11 @@ public class AdvancedTerrain implements Entity {
     private int moderateWindChance = 0;
     private int strongWindChance = 0;
     private int stormWindChance = 0;
+
+    @Column(name = "tornado_f13_wind_chance")
     private int tornadoF13WindChance = 0;
+
+    @Column(name = "tornado_f4_wind_chance")
     private int tornadoF4WindChance = 0;
 
     private int lightFogChance = 0;
@@ -89,16 +107,32 @@ public class AdvancedTerrain implements Entity {
 
     // MegaMek Planetary Conditions
     // set up the specific conditions
+    @Enumerated(EnumType.STRING)
     private Light lightConditions = Light.DAY;
+
+    @Enumerated(EnumType.STRING)
     private Weather weatherConditions = Weather.CLEAR;
+
+    @Enumerated(EnumType.STRING)
     private Wind windStrength = Wind.CALM;
+
+    @Enumerated(EnumType.STRING)
     private WindDirection windDirection = WindDirection.RANDOM;
+
+    @Enumerated(EnumType.STRING)
     private Wind maxWindStrength = Wind.TORNADO_F4;
+
     private boolean shiftingWindDirection = false;
     private boolean shiftingWindStrength = false;
+
+    @Enumerated(EnumType.STRING)
     private Fog fog = Fog.FOG_NONE;
+
     private int temperature = 25;
+
+    @Enumerated(EnumType.STRING)
     private EMI emi = EMI.EMI_NONE;
+
     private boolean terrainAffected = true;
 
     @Override
@@ -183,6 +217,7 @@ public class AdvancedTerrain implements Entity {
     }
 
     public void binIn(BinReader in) throws IOException {
+        id = in.readInt("id");
         displayName = in.readLine("displayName");
         name = in.readLine("name");
         lowTemp = in.readInt("lowTemp");
@@ -220,6 +255,7 @@ public class AdvancedTerrain implements Entity {
     }
 
     public void binOut(BinWriter out) throws IOException {
+        out.println(id, "id");
         out.println(displayName, "displayName");
         out.println(name, "name");
         out.println(lowTemp, "lowTemp");
@@ -305,11 +341,9 @@ public class AdvancedTerrain implements Entity {
         setEMI(EMI.values()[TokenReader.readInt(command)]);
         setTerrainAffected(TokenReader.readBoolean(command));
         setMaxWindStrength(Wind.values()[TokenReader.readInt(command)]);
-
     }
 
-    public AdvancedTerrain() {
-    }
+    public AdvancedTerrain() {}
 
     public String getDisplayName() {
         return displayName;
@@ -317,7 +351,7 @@ public class AdvancedTerrain implements Entity {
 
     public void setDisplayName(String name) {
         displayName = name;
-        this.name = name; 
+        this.name = name;
     }
 
     @Deprecated
@@ -594,7 +628,7 @@ public class AdvancedTerrain implements Entity {
         clone.setWeatherConditions(weatherConditions);
         clone.setWindDirection(windDirection);
         clone.setWindStrength(windStrength);
-       
+
         return clone;
     }
 
@@ -753,21 +787,21 @@ public class AdvancedTerrain implements Entity {
     }
 
     public void setId(int unusedTerrainID) {
-        id = unusedTerrainID;        
+        id = unusedTerrainID;
     }
 
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         displayName = name;
         this.name = name;
     }
 
     public String toImageDescription() {
-         StringBuilder results = new StringBuilder();
-        
+        StringBuilder results = new StringBuilder();
+
         results.append("<table><TR>");
         results.append("<TD>");
         results.append("lightConditions");
@@ -790,7 +824,7 @@ public class AdvancedTerrain implements Entity {
         results.append("</TD><TD>");
         results.append("terrainAffected");
         results.append("</TD><TD>");
-        results.append("maxWindStrength");        
+        results.append("maxWindStrength");
         results.append("</TD></TR><TR><TD>");
         results.append(lightConditions.toString());
         results.append("</TD><TD>");
@@ -814,15 +848,11 @@ public class AdvancedTerrain implements Entity {
         results.append("</TD><TD>");
         results.append(maxWindStrength.toString());
         results.append("</TR><table>");
-        
-        
-        
-        return results.toString();
 
+        return results.toString();
     }
 
-    public String WeatherForcast()
-    {
+    public String WeatherForcast() {
         Light worstLight = Light.DAY;
         float worstLightProb = 0;
         Light likelyLight = Light.DAY;
@@ -835,10 +865,10 @@ public class AdvancedTerrain implements Entity {
         float worstWindProb = 0;
         Wind likelyWind = Wind.CALM;
         float windProb = 0;
-        
+
         StringBuilder results = new StringBuilder();
-        
-        //find the worst light conditions and the most likely conditions (other than day)
+
+        // find the worst light conditions and the most likely conditions (other than day)
         if (duskChance > 0) {
             likelyLight = worstLight = Light.DUSK;
             lightProb = worstLightProb = duskChance;
@@ -852,7 +882,7 @@ public class AdvancedTerrain implements Entity {
             worstLightProb = fullMoonChance;
         }
         if (moonlessNightChance > 0) {
-            if (moonlessNightChance > lightProb)  {
+            if (moonlessNightChance > lightProb) {
                 likelyLight = Light.MOONLESS;
                 lightProb = moonlessNightChance;
             }
@@ -870,32 +900,32 @@ public class AdvancedTerrain implements Entity {
 
         results.append("likely / worst <br>");
         results.append("Light:");
-        if (lightProb > 0){
-            results.append(lightProb/10);
+        if (lightProb > 0) {
+            results.append(lightProb / 10);
             results.append("% ");
             results.append(likelyLight.toString());
             results.append(" / ");
             results.append(worstLightProb / 10);
             results.append("% ");
             results.append(worstLight.toString());
-            results.append("<br>");            
+            results.append("<br>");
         } else {
-            results.append("100% Daylight");            
-            results.append("<br>");                        
+            results.append("100% Daylight");
+            results.append("<br>");
         }
-            
+
         if (lightRainfallChance > 0) {
             likelyWeather = worstWeather = Weather.LIGHT_RAIN;
             weatherProb = worstWeatherProb = lightRainfallChance;
         }
         if (lightSnowfallChance > 0) {
             if (lightSnowfallChance > weatherProb) {
-                likelyWeather= Weather.LIGHT_SNOW;
+                likelyWeather = Weather.LIGHT_SNOW;
                 weatherProb = lightSnowfallChance;
             }
             worstWeather = Weather.LIGHT_SNOW;
             worstWeatherProb = lightSnowfallChance;
-        }    
+        }
         if (moderateRainfallChance > 0) {
             if (moderateRainfallChance > weatherProb) {
                 likelyWeather = Weather.MOD_RAIN;
@@ -903,7 +933,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWeather = Weather.MOD_RAIN;
             worstWeatherProb = moderateRainfallChance;
-        }    
+        }
         if (moderateSnowfallChance > 0) {
             if (moderateSnowfallChance > weatherProb) {
                 likelyWeather = Weather.MOD_SNOW;
@@ -911,7 +941,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWeather = Weather.MOD_SNOW;
             worstWeatherProb = moderateSnowfallChance;
-        }    
+        }
         if (heavyRainfallChance > 0) {
             if (heavyRainfallChance > weatherProb) {
                 likelyWeather = Weather.HEAVY_RAIN;
@@ -919,7 +949,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWeather = Weather.HEAVY_RAIN;
             worstWeatherProb = heavyRainfallChance;
-        }    
+        }
         if (heavySnowfallChance > 0) {
             if (heavySnowfallChance > weatherProb) {
                 likelyWeather = Weather.HEAVY_SNOW;
@@ -927,7 +957,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWeather = Weather.HEAVY_SNOW;
             worstWeatherProb = heavySnowfallChance;
-        }    
+        }
         if (downPourChance > 0) {
             if (downPourChance > weatherProb) {
                 likelyWeather = Weather.DOWNPOUR;
@@ -935,7 +965,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWeather = Weather.DOWNPOUR;
             worstWeatherProb = downPourChance;
-        }    
+        }
 
         results.append("Weather:");
         if (weatherProb > 0) {
@@ -946,18 +976,15 @@ public class AdvancedTerrain implements Entity {
             results.append(worstWeatherProb / 10);
             results.append("% ");
             results.append(worstWeather.toString());
-            if (lightHailChance > 0 || heavyHailChance > 0)
-                results.append(" (hail)");                            
-            if (sleetChance > 0)
-                results.append(" (sleet)");        
-            if (iceStormChance > 0)
-                results.append(" (ice storm)");        
-            results.append("<br>");                                    
+            if (lightHailChance > 0 || heavyHailChance > 0) results.append(" (hail)");
+            if (sleetChance > 0) results.append(" (sleet)");
+            if (iceStormChance > 0) results.append(" (ice storm)");
+            results.append("<br>");
         } else {
-            results.append("100% CLEAR");            
-            results.append("<br>");                        
+            results.append("100% CLEAR");
+            results.append("<br>");
         }
-        
+
         if (lightWindChance > 0) {
             likelyWind = worstWind = Wind.LIGHT_GALE;
             windProb = worstWindProb = lightWindChance;
@@ -969,7 +996,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWind = Wind.MOD_GALE;
             worstWindProb = moderateWindChance;
-        }    
+        }
         if (strongWindChance > 0) {
             if (strongWindChance > weatherProb) {
                 likelyWind = Wind.STRONG_GALE;
@@ -977,7 +1004,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWind = Wind.STRONG_GALE;
             worstWindProb = strongWindChance;
-        }    
+        }
         if (stormWindChance > 0) {
             if (stormWindChance > weatherProb) {
                 likelyWind = Wind.STORM;
@@ -985,7 +1012,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWind = Wind.STORM;
             worstWindProb = stormWindChance;
-        }    
+        }
         if (tornadoF13WindChance > 0) {
             if (tornadoF13WindChance > weatherProb) {
                 likelyWind = Wind.TORNADO_F1_TO_F3;
@@ -993,7 +1020,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWind = Wind.TORNADO_F1_TO_F3;
             worstWindProb = tornadoF13WindChance;
-        }    
+        }
         if (tornadoF4WindChance > 0) {
             if (tornadoF4WindChance > weatherProb) {
                 likelyWind = Wind.TORNADO_F4;
@@ -1001,7 +1028,7 @@ public class AdvancedTerrain implements Entity {
             }
             worstWind = Wind.TORNADO_F4;
             worstWindProb = tornadoF4WindChance;
-        }    
+        }
 
         results.append("Wind:");
         if (windProb > 0) {
@@ -1012,28 +1039,26 @@ public class AdvancedTerrain implements Entity {
             results.append(worstWindProb / 10);
             results.append("% ");
             results.append(worstWind.toString());
-            results.append("<br>");            
+            results.append("<br>");
         } else {
-            results.append("100% Calm");            
-            results.append("<br>");                        
+            results.append("100% Calm");
+            results.append("<br>");
         }
-        
-        
+
         if (lightFogChance > 0 || heavyFogChance > 0) {
             results.append("Fog:");
             results.append((float) Math.max(lightFogChance, heavyFogChance) / 10);
             results.append("% ");
         }
-        results.append("<br>");                        
-        
-        
+        results.append("<br>");
+
         return results.toString();
     }
 
     public String getHumanReadableWeather() {
         StringBuilder results = new StringBuilder();
         int adverse = 0;
-        
+
         results.append(lightConditions.toString());
         results.append("/" + weatherConditions.toString());
         results.append("/" + windStrength.toString());
@@ -1047,9 +1072,9 @@ public class AdvancedTerrain implements Entity {
         if (fog != Fog.FOG_NONE) adverse++;
         if (atmosphere != Atmosphere.STANDARD) adverse++;
         if (gravity != 1.0) adverse++;
-        
+
         results.append("/" + adverse);
-        
+
         return results.toString();
     }
 }
