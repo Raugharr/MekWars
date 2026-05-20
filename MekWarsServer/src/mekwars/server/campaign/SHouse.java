@@ -1359,9 +1359,10 @@ public class SHouse extends TimeUpdateHouse
             int type, int weight, boolean ignoreRefresh) {
         List<SUnitFactory> possible = new ArrayList<>();
         Iterator<SPlanet> e = planets.values().iterator();
+
         while (e.hasNext()) {
-            SPlanet p = e.next();
-            List<SUnitFactory> v = p.getFactoriesOfWeighclass(weight);
+            SPlanet planet = e.next();
+            List<SUnitFactory> v = planet.getFactoriesOfWeightClass(weight);
             for (int i = 0; i < v.size(); i++) {
                 SUnitFactory MF = v.get(i);
                 if (MF.canProduce(type) && (ignoreRefresh || MF.getTicksUntilRefresh() < 1)) {
@@ -1777,11 +1778,15 @@ public class SHouse extends TimeUpdateHouse
                         + toReturn.toString());
     }
 
+    public ConcurrentHashMap<String, SPlanet> getPlanets() {
+        return planets;
+    }
+
     public void addPlanet(SPlanet p) {
         if (getPlanets().get(p.getName()) == null) {
             getPlanets().put(p.getName(), p);
             setBaysProvided(getBaysProvided() + p.getBaysProvided());
-            setComponentProduction(getComponentProduction() + p.getCompProduction());
+            setComponentProduction(getComponentProduction() + p.getComponentProduction());
 
             // Add unit production here
             if (CampaignMain.cm.isUsingIncreasedTechs() && p.getFactoryCount() > 0) {
@@ -1794,7 +1799,7 @@ public class SHouse extends TimeUpdateHouse
         if (getPlanets().get(p.getName()) != null) {
             getPlanets().remove(p.getName());
             setBaysProvided(getBaysProvided() - p.getBaysProvided());
-            setComponentProduction(getComponentProduction() - p.getCompProduction());
+            setComponentProduction(getComponentProduction() - p.getComponentProduction());
 
             // Remove unit production here
             if (CampaignMain.cm.isUsingIncreasedTechs() && p.getFactoryCount() > 0) {
@@ -2207,7 +2212,7 @@ public class SHouse extends TimeUpdateHouse
                 result.append(currFactory.getName() + internalDelim);
                 result.append(currFactory.getTicksUntilRefresh() + internalDelim);
                 result.append(currFactory.getAccessLevel() + internalDelim);
-                result.append(currFactory.getID() + internalDelim);
+                result.append(currFactory.getId() + internalDelim);
                 result.append(cmdDelim);
             }
         }
@@ -2321,10 +2326,6 @@ public class SHouse extends TimeUpdateHouse
             toReturn += "]";
         }
         return toReturn += "</font>";
-    }
-
-    public ConcurrentHashMap<String, SPlanet> getPlanets() {
-        return planets;
     }
 
     public void setMoney(int newMoney) {
@@ -2481,8 +2482,8 @@ public class SHouse extends TimeUpdateHouse
 
     private void modifyUnitSupport(SPlanet p, boolean addProduction) {
         if (p.getFactoryCount() > 0) {
-            for (int weightclass = Unit.LIGHT; weightclass <= Unit.ASSAULT; weightclass++) {
-                for (SUnitFactory uf : p.getFactoriesOfWeighclass(weightclass)) {
+            for (int weightClass = Unit.LIGHT; weightClass <= Unit.ASSAULT; weightClass++) {
+                for (SUnitFactory uf : p.getFactoriesOfWeightClass(weightClass)) {
                     String typeString = uf.getTypeString();
                     String dirName =
                             "./campaign/factions/support/"

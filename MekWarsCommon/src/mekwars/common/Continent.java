@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,87 +20,135 @@
  */
 package mekwars.common;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+import java.util.Objects;
+
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
+import org.hibernate.annotations.FetchProfileOverride;
+
 /**
  * @author Helge Richter
  */
+@Entity
+@FetchProfile(name = "EagerContinent")
 public class Continent {
-	private Terrain environment;
-	private AdvancedTerrain advTerrain;
-	private int size = 1;
-	private int id = -1;
-	
-	public Continent(int size, Terrain env, AdvancedTerrain advTerr) {
-		this.size = size;
-		environment = env;
-		advTerrain = advTerr;
-	}
-	
-	
-	public Continent() {
-		// for serialisation
-	}
-	
+    @ManyToOne
+    @JoinColumn(name = "terrain_id")
+    @FetchProfileOverride(profile = Continent_.PROFILE_EAGER_CONTINENT, mode = FetchMode.JOIN)
+    private Terrain environment;
 
-	/**
-	 * @return Returns the size.
-	 */
-	public int getSize() {
-		return size;
-	}
-	/**
-	 * @param size The size to set.
-	 */
-	public void setSize(int size) {
-		this.size = size;
-	}
-	
-	
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof Continent))
-			return false;
-		Continent cont = (Continent)o;
-		if (cont.getSize() != getSize()) {
-			return false;
-        }
-		if (!cont.getEnvironment().equals(getEnvironment())) {
-			return false;
-        }
-		if (!cont.getAdvancedTerrain().equals(getAdvancedTerrain())) {
-			return false;
-        }
-		return true;
-	}
-	/**
-	 * @return Returns the envID.
-	 */
-	public Terrain getEnvironment() {
-		return environment;
-	}
-	/**
-	 * @return Returns the envID.
-	 */
-	public AdvancedTerrain getAdvancedTerrain() {
-			return advTerrain;
+    @ManyToOne
+    @JoinColumn(name = "advanced_terrain_id")
+    @FetchProfileOverride(profile = Continent_.PROFILE_EAGER_CONTINENT, mode = FetchMode.JOIN)
+    private AdvancedTerrain advancedTerrain;
 
-	}
-	
-	/**
-	 * @return Returns the Continent ID
-	 */
-	public int getID() {
-		return id;
-	}
-	
-	/**
-	 * Sets the continent ID;
-	 * @param id
-	 */
-	public void setID(int id) {
-		this.id = id;
-	}
-	
-	public String getDropBoxName() {
-		return getEnvironment().getName() + "(" + getAdvancedTerrain().getName() + ") %" + getSize();        
-	}
+    private int size = 1;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "planet_id")
+    @FetchProfileOverride(profile = Continent_.PROFILE_EAGER_CONTINENT, mode = FetchMode.JOIN)
+    private Planet planet;
+
+    public Continent(int size, Terrain terrain, AdvancedTerrain advancedTerrain) {
+        this.size = size;
+        this.environment = terrain;
+        this.advancedTerrain = advancedTerrain;
+    }
+
+    public Continent(Planet planet, int size, Terrain terrain, AdvancedTerrain advancedTerrain) {
+        this(size, terrain, advancedTerrain);
+        this.planet = planet;
+    }
+
+    public Continent() {
+        // for serialisation
+    }
+
+    /**
+     * @return Returns the size.
+     */
+    public int getSize() {
+        return size;
+    }
+
+    /**
+     * @param size The size to set.
+     */
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSize(), getEnvironment(), getAdvancedTerrain());
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Continent)) return false;
+        Continent continent = (Continent) object;
+
+        if (continent.getSize() != getSize()) return false;
+        if (!continent.getEnvironment().equals(getEnvironment())) return false;
+        if (!continent.getAdvancedTerrain().equals(getAdvancedTerrain())) return false;
+        return true;
+    }
+
+    /**
+     * @return Returns the envID.
+     */
+    public Terrain getEnvironment() {
+        return environment;
+    }
+
+    /**
+     * @return Returns the envID.
+     */
+    public AdvancedTerrain getAdvancedTerrain() {
+        return advancedTerrain;
+    }
+
+    /**
+     * @return Returns the Continent ID
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Sets the continent ID;
+     *
+     * @param id
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Planet getPlanet() {
+        return planet;
+    }
+
+    public void setPlanet(Planet planet) {
+        this.planet = planet;
+    }
+
+    public String getDropBoxName() {
+        return getEnvironment().getName()
+                + "("
+                + getAdvancedTerrain().getName()
+                + ") %"
+                + getSize();
+    }
 }

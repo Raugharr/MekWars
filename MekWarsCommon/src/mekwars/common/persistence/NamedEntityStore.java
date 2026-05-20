@@ -20,11 +20,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import mekwars.common.entities.Entity;
+import mekwars.common.entities.MWEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class NamedEntityStore<T extends Entity> extends EntityStore<T> {
+public class NamedEntityStore<T extends MWEntity> extends EntityStore<T> {
     private static final Logger LOGGER = LogManager.getLogger(NamedEntityStore.class);
 
     protected SortedMap<String, Integer> entityNames = Collections.synchronizedSortedMap(new TreeMap());

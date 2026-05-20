@@ -542,15 +542,18 @@ public class DataFetchClient {
      * Transfer the data from cache.
      */
     public CampaignData getCacheData(String cachePath) throws IOException {
-        BinReader in = new BinReader(new FileReader(cachePath + "/data.dat"));
         CampaignOptions campaignOptions =
             new CampaignOptions(FileSystem.getInstance().getCampaignConfig());
-        CampaignData data = new CampaignData(campaignOptions, in);
-        in.close();
-        this.data = data;
-        store();
+        return new CampaignData(campaignOptions);
+        // BinReader in = new BinReader(new FileReader(cachePath + "/data.dat"));
+        // CampaignOptions campaignOptions =
+        //     new CampaignOptions(FileSystem.getInstance().getCampaignConfig());
+        // CampaignData data = new CampaignData(campaignOptions, in);
+        // in.close();
+        // this.data = data;
+        // store();
 
-        return data;
+        // return data;
     }
 
     /**

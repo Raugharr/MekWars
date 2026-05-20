@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,26 +16,26 @@
 
 package mekwars.server.dataProvider.commands;
 
-import java.util.Date;
-
 import mekwars.common.CampaignData;
 import mekwars.common.util.BinWriter;
+import mekwars.common.util.HibernateUtil;
 import mekwars.server.dataProvider.ServerCommand;
 
+import java.util.Date;
 
 /**
  * Retrieve all planet information (if the data cache is lost at client side)
- * 
+ *
  * @author Imi (immanuel.scholz@gmx.de)
  */
 public class All implements ServerCommand {
 
     /**
-     * @see server.dataProvider.ServerCommand#execute(java.util.Date,
-     *      java.io.PrintWriter, common.CampaignData)
+     * @see server.dataProvider.ServerCommand#execute(java.util.Date, java.io.PrintWriter,
+     *     common.CampaignData)
      */
-    public void execute(Date timestamp, BinWriter out, CampaignData data)
-            throws Exception {
+    public void execute(Date timestamp, BinWriter out, CampaignData data) throws Exception {
+        // HibernateUtil.getInstance().inSession(session -> {try { data.binOut(out); } catch(Exception e){e.printStackTrace();}});
         data.binOut(out);
     }
 }
