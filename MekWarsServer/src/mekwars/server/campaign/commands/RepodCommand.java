@@ -485,7 +485,7 @@ public class RepodCommand implements Command {
         if (!global) {
 
             String needPartsList =
-                    p.getUnitParts().canRepodUnit(m.getEntity(), cm.getEntity()).trim();
+                    p.getUnitComponents().canRepodUnit(m.getEntity(), cm.getEntity()).trim();
             if (CampaignMain.cm.getBooleanConfig("UsePartsRepair")
                     && (needPartsList.length() > 0)) {
                 CampaignMain.cm.toUser(
@@ -606,8 +606,8 @@ public class RepodCommand implements Command {
 
         // Take the parts for it.
         if (CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
-            p.getUnitParts().repodUnit(entity, cm.getEntity());
-            CampaignMain.cm.toUser("PL|RPPC|" + p.getUnitParts().toString(), username, false);
+            p.getUnitComponents().repodUnit(entity, cm.getEntity());
+            CampaignMain.cm.toUser("PL|RPPC|" + p.getUnitComponents().toString(), username, false);
         }
 
         // remove the old unit *before* adding the new one, since they share a

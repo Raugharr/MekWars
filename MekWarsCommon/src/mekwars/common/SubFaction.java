@@ -21,7 +21,7 @@ import java.util.StringTokenizer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class SubFaction{
+public class SubFaction {
     private static final Logger LOGGER = LogManager.getLogger(SubFaction.class);
 
 	private static Properties defaultSettings = new Properties();
@@ -41,6 +41,10 @@ public class SubFaction{
 		factionSettings.setProperty("Name", name);
 		factionSettings.setProperty("AccessLevel", accessLevel);
 	}
+
+    public int getAccessLevel() {
+        return Integer.parseInt(getConfig("AccessLevel"));
+    }
 	
 	public static Properties getDefault(){
 		defaultSettings.setProperty("Name", "");

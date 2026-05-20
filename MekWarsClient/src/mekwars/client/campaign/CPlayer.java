@@ -39,7 +39,6 @@ import mekwars.common.Player;
 import mekwars.common.SubFaction;
 import mekwars.common.Unit;
 import mekwars.common.util.TokenReader;
-import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.OffBoardDirection;
@@ -80,10 +79,6 @@ public class CPlayer extends Player {
 
     private int conventionalMinesAllowed = 0;
     private int vibraMinesAllowed = 0;
-
-    private UnitComponents partsCache = new UnitComponents();
-
-    private String subFactionName = "";
 
     public CPlayer(MWClient client) {
         mwclient = client;
@@ -275,7 +270,7 @@ public class CPlayer extends Player {
         setInvisible(TokenReader.readBoolean(ST));
 
         if (Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsRepair"))) {
-            partsCache.fromString(TokenReader.readString(ST), "|");
+            getUnitComponents().fromString(TokenReader.readString(ST), "|");
         } else {
             TokenReader.readString(ST);
         }
@@ -1192,36 +1187,6 @@ public class CPlayer extends Player {
             mwclient.getServerConfigs().setProperty(key, value);
         }
         mwclient.setWaiting(false);
-    }
-
-    public UnitComponents getPartsCache() {
-        return partsCache;
-    }
-
-    public void setSubFaction(String name) {
-        subFactionName = name;
-    }
-
-    public SubFaction getSubFaction() {
-        SubFaction mySubFaction = getMyHouse().getSubFactionList().get(subFactionName);
-        if (mySubFaction == null) {
-            return new SubFaction();
-        }
-
-        return mySubFaction;
-    }
-
-    public int getSubFactionAccess() {
-        SubFaction mySubFaction = getMyHouse().getSubFactionList().get(subFactionName);
-        if (mySubFaction == null) {
-            return 0;
-        }
-
-        return Integer.parseInt(mySubFaction.getConfig("AccessLevel"));
-    }
-
-    public String getSubFactionName() {
-        return subFactionName;
     }
 
     public int getHangarPenalty() {

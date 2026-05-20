@@ -28,7 +28,7 @@ public class SPlayerToJSON {
     	stringJson("discordID",player.getDiscordID());
     	stringJson("house",player.getMyHouse().getName());
     	stringJson("fluffText",player.getFluffText());
-    	stringJson("subFaction",player.getSubFaction().getName());
+    	stringJson("subFaction",player.getSubFactionName());
     	doubleJson("rating",player.getRating());
     	intJson("experience",player.getExperience());
     	intJson("money",player.getMoney());

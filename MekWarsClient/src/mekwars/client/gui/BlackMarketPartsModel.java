@@ -138,10 +138,10 @@ public class BlackMarketPartsModel extends AbstractTableModel {
         case TECH:
             return bme.getTech(Integer.parseInt(mwclient.getServerConfigs("CampaignYear")));
         case AMOUNT:
-            if (mwclient.getPlayer().getPartsCache().getPartsCritCount(bme.getEquipmentInternalName()) < 1) {
+            if (mwclient.getPlayer().getUnitComponents().getPartsCritCount(bme.getEquipmentInternalName()) < 1) {
                 return bme.getAmount();
             }
-            return bme.getAmount() + "(" + mwclient.getPlayer().getPartsCache().getPartsCritCount(bme.getEquipmentInternalName()) + ")";
+            return bme.getAmount() + "(" + mwclient.getPlayer().getUnitComponents().getPartsCritCount(bme.getEquipmentInternalName()) + ")";
         case INTERNALPART:
             return bme.getEquipmentInternalName();
         }

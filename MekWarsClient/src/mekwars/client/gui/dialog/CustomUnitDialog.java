@@ -360,7 +360,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                     continue;
                 }
 
-                if (usingCrits && (mwclient.getPlayer().getPartsCache().getPartsCritCount(atCheck.getInternalName()) < 1) && !ammoAlreadyLoaded(atCheck) && (// !mwclient.getPlayer().getAutoReorder()
+                if (usingCrits && (mwclient.getPlayer().getUnitComponents().getPartsCritCount(atCheck.getInternalName()) < 1) && !ammoAlreadyLoaded(atCheck) && (// !mwclient.getPlayer().getAutoReorder()
                         mwclient.getBlackMarketEquipmentList().get(atCheck.getInternalName()) == null)) {
                     continue;
                 }
@@ -591,7 +591,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
                 }
                 if (m.getLocation() == Entity.LOC_NONE) {
                     if (usingCrits) {
-                        m_choice.addItem(at.getName() + " (" + shotsLeft + "/1/" + mwclient.getPlayer().getPartsCache().getPartsCritCount(at.getInternalName()) + ")");
+                        m_choice.addItem(at.getName() + " (" + shotsLeft + "/1/" + mwclient.getPlayer().getUnitComponents().getPartsCritCount(at.getInternalName()) + ")");
                     } else {
                         m_choice.addItem(at.getName() + " (" + shotsLeft + "/1) " + mwclient.moneyOrFluMessage(true, true, (int) ammoCost));
                     }
@@ -615,7 +615,7 @@ public class CustomUnitDialog extends JDialog implements ActionListener {
 
                     // LOGGER.error("Cost: "+cost+" string: "+mwclient.moneyOrFluMessage(true,true,cost));
                     if (usingCrits) {
-                        m_choice.addItem(at.getName() + " (" + shotsLeft + "/" + refillShots + "/" + mwclient.getPlayer().getPartsCache().getPartsCritCount(at.getInternalName()) + ")");
+                        m_choice.addItem(at.getName() + " (" + shotsLeft + "/" + refillShots + "/" + mwclient.getPlayer().getUnitComponents().getPartsCritCount(at.getInternalName()) + ")");
                     } else {
                         m_choice.addItem(at.getName() + " (" + shotsLeft + "/" + refillShots + ") " + mwclient.moneyOrFluMessage(true, true, cost));
                     }

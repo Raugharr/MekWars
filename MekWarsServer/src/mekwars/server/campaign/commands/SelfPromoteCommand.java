@@ -103,7 +103,7 @@ public class  SelfPromoteCommand  implements Command {
             return;
         }
 
-        user.setSubFaction(subFactionName);
+        user.setSubfaction(user.getMyHouse().getSubfaction(subFactionName));
         CampaignMain.cm.toUser("PL|SSN|" + subFactionName, user.toString(), false);
         CampaignMain.cm.doSendToAllOnlinePlayers("PI|FT|" + user.getName() + "|" + user.getFluffText(), false);
         CampaignMain.cm.doSendToAllOnlinePlayers("PI|SSN|" + user.getName() + "|" + subFactionName, false);

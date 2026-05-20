@@ -2335,7 +2335,7 @@ public class CMainFrame extends JFrame {
         StringBuilder result = new StringBuilder();
         int year = Integer.parseInt(mwclient.getServerConfigs("CampaignYear"));
 
-        result.append(p.getPartsCache().tableizeComponents(year));
+        result.append(p.getUnitComponents().tableizeComponents(year));
         mwclient.doParseDataInput("SM|" + result.toString());
     }
 

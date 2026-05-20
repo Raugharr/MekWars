@@ -128,8 +128,6 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
 
     private MWPasswdRecord password = null;
 
-    private UnitComponents unitParts = new UnitComponents();
-
     private boolean userValidated = false;
 
     boolean isLoading = false; // Player was getting saved multiple times
@@ -137,7 +135,6 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
     // back in, as saving during load is causing DB
     // issues.
 
-    private String subFaction = "";
     private long lastPromoted = 0;
 
     public volatile int leechCount = 0;
@@ -3074,7 +3071,7 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
                 result.append("0");
             }
         }
-        result.append(unitParts.toString("|"));
+        result.append(getUnitComponents().toString("|"));
         result.append(getAutoReorder());
         if (!toClient) {
             result.append(getTeamNumber());
@@ -3261,7 +3258,7 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
                 return;
             }
             if (CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
-                unitParts.fromString(TokenReader.readString(ST), "|");
+                getUnitComponents().fromString(TokenReader.readString(ST), "|");
             } else {
                 TokenReader.readString(ST);
             }
@@ -3270,7 +3267,7 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
 
 
             setTeamNumber(TokenReader.readInt(ST));
-            subFaction = TokenReader.readString(ST);
+            setSubfaction(getMyHouse().getSubfaction(TokenReader.readString(ST)));
             lastPromoted = TokenReader.readLong(ST);
 
             loadFlags(CampaignMain.cm.getDefaultPlayerFlags().export());
@@ -3367,32 +3364,28 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
         }
     }
 
-    public UnitComponents getUnitParts() {
-        return unitParts;
-    }
-
     public int getPartsAmount(String part) {
         int amount = 0;
         amount += getHouseFightingFor().getPartsAmount(part);
-        amount += getUnitParts().getPartsCritCount(part);
+        amount += getUnitComponents().getPartsCritCount(part);
         return amount;
     }
 
     public void updatePartsCache(String part, int amount) {
 
         if (amount < 0) {
-            int playerAmount = getUnitParts().getPartsCritCount(part);
+            int playerAmount = getUnitComponents().getPartsCritCount(part);
 
             if (playerAmount >= Math.abs(amount)) {
-                getUnitParts().remove(part, amount);
+                getUnitComponents().remove(part, amount);
             } else {
                 amount += playerAmount;
                 getHouseFightingFor().updatePartsCache(part, amount);
-                getUnitParts().remove(part, playerAmount);
+                getUnitComponents().remove(part, playerAmount);
                 amount = -playerAmount;
             }
         } else {
-            getUnitParts().add(part, amount);
+            getUnitComponents().add(part, amount);
         }
         CampaignMain.cm.toUser("PL|UPPC|" + part + "#" + amount, getName(), false);
     }
@@ -3414,37 +3407,13 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
         setSave();
     }
 
-    public void setSubFaction(String subFaction) {
-        this.subFaction = subFaction;
+    @Override
+    public void setSubfaction(SubFaction subfaction) {
+        super.setSubfaction(subfaction);
         if (getSubFactionAccess() != 0) {
             setLastPromoted(System.currentTimeMillis());
         }
         setSave();
-    }
-
-    public SubFaction getSubFaction() {
-        SubFaction sub = getMyHouse().getSubFactionList().get(subFaction);
-
-        if (sub == null) {
-            return new SubFaction();
-        }
-
-        return sub;
-    }
-
-    public int getSubFactionAccess() {
-        SubFaction sub = getMyHouse().getSubFactionList().get(subFaction);
-
-        if (sub == null) {
-            return 0;
-        }
-
-        return Integer.parseInt(sub.getConfig("AccessLevel"));
-
-    }
-
-    public String getSubFactionName() {
-        return subFaction;
     }
 
     public boolean playerIsLoading() {
@@ -3496,7 +3465,7 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
     		return;
     	}
 
-        SubFaction subfaction = getSubFaction();
+        SubFaction subfaction = getSubfaction();
 
         int access = getSubFactionAccess();
         int elo = Integer.parseInt(subfaction.getConfig("MinELO"));
@@ -3525,7 +3494,7 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
         	}
         	SubFaction subFaction = newSF;
             String subFactionName = subFaction.getConfig("Name");
-            setSubFaction(subFactionName);
+            setSubfaction(subFaction);
             CampaignMain.cm.toUser("PL|SSN|" + subFactionName, getName(), false);
             CampaignMain.cm.doSendToAllOnlinePlayers("PI|FT|" + getName() + "|" + getFluffText(), false);
             CampaignMain.cm.toUser("HS|CA|0", getName(), false);// clear

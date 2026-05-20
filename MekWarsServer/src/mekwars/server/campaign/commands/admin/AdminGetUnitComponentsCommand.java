@@ -81,7 +81,7 @@ public class AdminGetUnitComponentsCommand implements Command {
 
             if (option.equalsIgnoreCase("DisplayParts")) {
                 result.append("You have the current parts stockpiled<br>");
-                result.append(target.getUnitParts().tableizeComponents(year));
+                result.append(target.getUnitComponents().tableizeComponents(year));
 
                 CampaignMain.cm.toUser(result.toString(), Username);
             } else if (option.equalsIgnoreCase("addParts")) {
@@ -89,7 +89,7 @@ public class AdminGetUnitComponentsCommand implements Command {
                 int unitID = Integer.parseInt(command.nextToken());
                 SUnit m = target.getUnit(unitID);
 
-                target.getUnitParts().add(getUnitComponents(m.getEntity()));
+                target.getUnitComponents().add(getUnitComponents(m.getEntity()));
 
                 CampaignMain.cm.toUser(
                         "All useable parts from " + m.getModelName()

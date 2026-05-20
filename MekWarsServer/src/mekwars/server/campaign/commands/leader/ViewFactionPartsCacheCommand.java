@@ -61,7 +61,7 @@ public class ViewFactionPartsCacheCommand implements Command {
         if ( house == null )
             return;
         
-        String results = "SM|"+house.getUnitParts().tableizeComponents(year);
+        String results = "SM|"+house.getUnitComponents().tableizeComponents(year);
         
         CampaignMain.cm.toUser(results, Username,false);
     }

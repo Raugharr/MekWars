@@ -100,7 +100,7 @@ public class DemotePlayerCommand implements Command {
             return;
         }
 
-        grunt.setSubFaction(subFactionName);
+        grunt.setSubfaction(grunt.getMyHouse().getSubfaction(subFactionName));
         CampaignMain.cm.toUser("PL|SSN|" + subFactionName, grunt.getName(), false);
         CampaignMain.cm.doSendToAllOnlinePlayers("PI|FT|" + grunt.getName() + "|" + grunt.getFluffText(), false);
         CampaignMain.cm.toUser("HS|CA|0", grunt.getName(), false);// clear old data

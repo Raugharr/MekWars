@@ -24,6 +24,7 @@ package mekwars.common;
 import mekwars.common.campaign.PersonalPilotQueues;
 import mekwars.common.composition.IHasUnits;
 import mekwars.common.flags.PlayerFlags;
+import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 
 import org.apache.logging.log4j.LogManager;
@@ -50,6 +51,9 @@ public abstract class Player implements IHasUnits {
     private double rating = INITIAL_RATING;
     private boolean isInvisible = false; // Evil command for Big brother err admins.
     private boolean autoReorderParts = false;
+    private UnitComponents unitComponents = new UnitComponents();
+    private SubFaction subfaction = null;
+
     protected int totalTechs[] = new int[UnitUtils.TECH_TYPES];
     protected int availableTechs[] = new int[UnitUtils.TECH_TYPES];
     protected PlayerFlags flags = new PlayerFlags();
@@ -81,7 +85,7 @@ public abstract class Player implements IHasUnits {
     }
 
     public void setLogo(String logo) {
-        logo = logo;
+        this.logo = logo;
     }
 
     public String getName() {
@@ -329,6 +333,37 @@ public abstract class Player implements IHasUnits {
      */
     public boolean getAutoReorder() {
         return this.autoReorderParts;
+    }
+
+    public UnitComponents getUnitComponents() {
+        return unitComponents;
+    }
+
+    public void setSubfaction(SubFaction subfaction) {
+        this.subfaction = subfaction;
+    }
+
+    public SubFaction getSubfaction() {
+        if (subfaction == null) {
+            return new SubFaction();
+        }
+        return subfaction;
+    }
+
+    public int getSubFactionAccess() {
+        if (getSubfaction() == null) {
+            return 0;
+        }
+
+        return getSubfaction().getAccessLevel();
+    }
+
+    public String getSubFactionName() {
+        if (getSubfaction() == null) {
+            return "";
+        }
+
+        return getSubfaction().getName();
     }
 
     /**

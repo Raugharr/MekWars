@@ -79,7 +79,7 @@ public class ForcedDefectCommand implements Command {
 		p.getMyHouse().removeLeader(p.getName());
 		p.getMyHouse().removePlayer(p,false);
 		p.setMyHouse(h);
-		p.setSubFaction(h.getZeroLevelSubFaction());
+		p.setSubfaction(h.getZeroLevelSubFaction());
 		
 		//log the player into his new faction
 		if (playerOnline) {
