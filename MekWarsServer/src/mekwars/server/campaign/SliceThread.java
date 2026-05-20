@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,18 +16,18 @@
 
 package mekwars.server.campaign;
 
-import mekwars.server.campaign.CampaignMain;
+import mekwars.common.CampaignData;
+import mekwars.common.util.HibernateUtil;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 
 /**
  * @author urgru A barebones timing thread which calls slices in CampaignMain.
- * 
- * Created in CM as follows: SThread = new SliceThread(this,
- * Integer.parseInt(getConfig("SliceTime"))); SThread.start();//it slices, it
- * dices, it chops!
+ *     <p>Created in CM as follows: SThread = new SliceThread(this,
+ *     Integer.parseInt(getConfig("SliceTime"))); SThread.start();//it slices, it dices, it chops!
  */
-
 public class SliceThread extends Thread {
     private static final Logger LOGGER = LogManager.getLogger(SliceThread.class);
 
@@ -54,7 +54,7 @@ public class SliceThread extends Thread {
         } catch (Exception ex) {
             LOGGER.error("Exception: ", ex);
         }
-    }// end ExtendedWait(time)
+    } // end ExtendedWait(time)
 
     public long getRemainingSleepTime() {
         return Math.max(0, until - System.currentTimeMillis());
@@ -64,39 +64,48 @@ public class SliceThread extends Thread {
     public synchronized void run() {
         try {
             int sleepTime = Duration;
-            long startTime = 0;
             while (true) {
                 this.extendedWait(sleepTime);
-                startTime = System.currentTimeMillis();
+                final long startTime = System.currentTimeMillis();
                 sliceid++;
-                try {
-                    myCampaign.slice(getSliceID());
-
-                    if (CampaignMain.cm.getBooleanConfig("ProcessHouseTicksAtSlice")) {
-                        long endTime = startTime + Duration/2;
-                        while ( endTime > System.currentTimeMillis()) {
-                            if ( lastHouseId > CampaignMain.cm.getData().getAllHouses().size() ) {
-                                lastHouseId = 0;
-                            }
-                            SHouse house = CampaignMain.cm.getHouseById(lastHouseId);
-                            if ( house != null && house.getAllOnlinePlayers().size() > 0 ) {
-                                CampaignMain.cm.getHouseById(lastHouseId).tick(true, sliceid );
-                                lastHouseId++;
-                            }else {
-                                lastHouseId++;
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    LOGGER.error("Exception: ", ex);
-                    myCampaign.doSendToAllOnlinePlayers("Slice skipped. Errors occured", true);
-                }
-                sleepTime = (int)(Duration - (System.currentTimeMillis() - startTime));
+                HibernateUtil.inTransaction(session -> runSession(session, startTime));
+                sleepTime = (int) (Duration - (System.currentTimeMillis() - startTime));
                 sleepTime = Math.max(100, sleepTime);
-                
             }
         } catch (Exception ex) {
             LOGGER.error("Exception: ", ex);
+        }
+    }
+
+    private void runSession(Session session, long startTime) {
+        try {
+            myCampaign.slice(getSliceID());
+
+            if (CampaignData.cd.getCampaignOptions().getBooleanConfig("ProcessHouseTicksAtSlice")) {
+                long endTime = startTime + Duration / 2;
+                while (endTime > System.currentTimeMillis()) {
+                    if (lastHouseId > CampaignMain.cm.getData().getAllHouses().size()) {
+                        lastHouseId = 0;
+                    }
+                    SHouse house = CampaignMain.cm.getHouseById(lastHouseId);
+                    long onlinePlayers =
+                            session.createQuery(
+                                            "SELECT COUNT(p) SPlayer p LEFT JOIN SHouse h ON"
+                                                + " :houseId == p.house_id",
+                                            Long.class)
+                                    .setParameter("houseId", house.getId())
+                                    .getSingleResult();
+                    if (house != null && onlinePlayers > 0) {
+                        CampaignMain.cm.getHouseById(lastHouseId).tick(true, sliceid);
+                        lastHouseId++;
+                    } else {
+                        lastHouseId++;
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Exception: ", ex);
+            myCampaign.doSendToAllOnlinePlayers("Slice skipped. Errors occured", true);
         }
     }
 }

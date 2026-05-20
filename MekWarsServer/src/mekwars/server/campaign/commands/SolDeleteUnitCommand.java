@@ -83,7 +83,7 @@ public class SolDeleteUnitCommand implements Command {
 			h.getName().equalsIgnoreCase(CampaignMain.cm.getConfig("NewbieHouseName")) &&
 			Integer.parseInt((h.getConfig("FreeBuild_Limit"))) > 0)
 		{
-			p.addMekToken(-1);
+			p.addMekTokens(-1);
 		}
 
 	}

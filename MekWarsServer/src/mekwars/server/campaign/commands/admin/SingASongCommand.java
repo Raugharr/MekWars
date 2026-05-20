@@ -22,8 +22,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import mekwars.common.House;
+import mekwars.common.util.HibernateUtil;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -76,45 +78,32 @@ public class SingASongCommand implements Command {
 		CampaignMain.cm.doSendToAllOnlinePlayers("AM:"+Username + " forces you all to sing "+request, true);
 		StringTokenizer songLyrics = new StringTokenizer(song,"#");
 		
-		try{
-			while ( songLyrics.hasMoreTokens() ){
-				String songLine ="";
-				
-				if ( faction != null ){
-					for (SPlayer player : faction.getAllOnlinePlayers().values() ){
-						if ( player.getDutyStatus() < SPlayer.STATUS_RESERVE)
-							continue;
-						if ( MWServ.getInstance().isAdmin(player.getName()) )
-							continue;
-						if ( player.getName().equalsIgnoreCase("Spork") )
-							continue;
-						songLine = songLyrics.nextToken();
-						CampaignMain.cm.doSendToAllOnlinePlayers(player.getName()+"|"+songLine,true);
-						Thread.sleep(1000);
-					}
-				}
-				Iterator<House> factions = CampaignMain.cm.getData().getAllHouses().iterator();  
-				while (factions.hasNext()){
-                    faction = (SHouse) factions.next();
-                    for (SPlayer player : faction.getAllOnlinePlayers().values() ){
-						if ( player.getDutyStatus() < SPlayer.STATUS_RESERVE)
-							continue;
-						if (MWServ.getInstance().isAdmin(player.getName()))
-							continue;
-						if ( player.getName().equalsIgnoreCase("Spork") )
-							continue;
-						songLine = songLyrics.nextToken();
-						CampaignMain.cm.doSendToAllOnlinePlayers(player.getName()+"|"+songLine,true);
-						Thread.sleep(1000);
-					}
-				}
-				
-			}
-		}
-		catch (Exception ex){
-			
-		}
-		
+        HibernateUtil.inTransaction(session -> {
+            try {
+                while (songLyrics.hasMoreTokens()) {
+                    String songLine ="";
+                    
+                    List<SPlayer> players = session.createNamedQuery("SPlayer.getAllLoggedIn").getResultList();
+                    Iterator<House> factions = CampaignMain.cm.getData().getAllHouses().iterator();  
+                    for (SPlayer player : players){
+                        if (player.getDutyStatus() < SPlayer.STATUS_RESERVE) {
+                            continue;
+                        }
+                        if (MWServ.getInstance().isAdmin(player.getName())) {
+                            continue;
+                        }
+                        if (player.getName().equalsIgnoreCase("Spork")) {
+                            continue;
+                        }
+                        songLine = songLyrics.nextToken();
+                        CampaignMain.cm.doSendToAllOnlinePlayers(player.getName()+"|"+songLine,true);
+                    }
+                    
+                }
+            } catch (Exception ex) {
+                
+            }
+        });
 	}
 	
 	public void listSongs(String user){

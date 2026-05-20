@@ -235,7 +235,7 @@ public class CPlayerPanel extends JScrollPane {
         }
 
         lblRewardPoints.setText(PP_REWARD + " " + player.getRewardPoints() + "/" + mwclient.getServerConfigs("XPRewardCap"));
-        lblFreeMeks.setText(PP_FREEUNITS + " " + (Integer.parseInt(mwclient.getServerConfigs("FreeBuild_Limit")) - mwclient.getPlayer().getMekToken()) + " Remain"); //@Salient for free build
+        lblFreeMeks.setText(PP_FREEUNITS + " " + (Integer.parseInt(mwclient.getServerConfigs("FreeBuild_Limit")) - mwclient.getPlayer().getMekTokens()) + " Remain"); //@Salient for free build
     }
 
     public void setNextTick(long nextTick) {

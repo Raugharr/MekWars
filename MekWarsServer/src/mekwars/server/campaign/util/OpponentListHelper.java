@@ -19,6 +19,7 @@ package mekwars.server.campaign.util;
 import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.common.campaign.operations.Operation;
+import mekwars.common.util.HibernateUtil;
 import mekwars.common.util.StringUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;

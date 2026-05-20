@@ -285,10 +285,13 @@ CREATE TABLE IF NOT EXISTS player (
 	available_techs TEXT NOT NULL,
 	mek_tokens INTEGER NOT NULL,
 	hanger_bv INTEGER NOT NULL,
-	subfaction_id INTEGER
+	subfaction_id INTEGER,
+
+	FOREIGN KEY(house_id) REFERENCES house(id)
 );
 
 CREATE UNIQUE INDEX player_name_index ON player(name);
+CREATE UNIQUE INDEX player_house_id_index ON player(house_id);
 
 CREATE TABLE IF NOT EXISTS army (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
