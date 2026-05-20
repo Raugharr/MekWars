@@ -47,3 +47,11 @@ ALTER TABLE player ADD COLUMN status INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN exclusion_list_id INTEGER NOT NULL REFERENCES exclusion_list(id);
 
 CREATE UNIQUE INDEX player_exclusion_list_id_index ON player(exclusion_list_id);
+
+CREATE TABLE IF NOT EXISTS army_opponents (
+    army_id INTEGER NOT NULL,
+    opponent_army_id INTEGER NOT NULL,
+    PRIMARY KEY (army_id, opponent_army_id),
+    FOREIGN KEY (army_id) REFERENCES army(id),
+    FOREIGN KEY (opponent_army_id) REFERENCES army(id)
+);
