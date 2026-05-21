@@ -182,10 +182,12 @@ public class Army<T extends Unit<T>> {
 
     public void addUnit(T unit, int position) {
         units.add(position, unit);
+        unit.setArmy(this);
     }
 
     public void addUnit(T unit) {
         units.add(unit);
+        unit.setArmy(this);
     }
 
     /**
