@@ -11,3 +11,6 @@ ALTER TABLE player ADD COLUMN repair_tech_type INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN repair_retries INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN conventional_mines_allowed INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN vibra_mines_allowed INTEGER NOT NULL;
+
+ALTER TABLE unit ADD COLUMN html_quirk_list TEXT NOT NULL;
+ALTER TABLE unit ADD COLUMN quirk_list TEXT NOT NULL;
