@@ -409,7 +409,7 @@ public class ChristmasHandler {
 	 * @param unitFileName the unit to be created
 	 * @return SUnit the unit
 	 */
-	private <T extends Unit> SUnit getUnit(String unitFileName, Player<T> player) {
+	private <T extends Unit<T>> SUnit getUnit(String unitFileName, Player<T> player) {
 		SUnit u;
 		String fluff = "Merry Christmas!";
 		int gunnery = 4;
