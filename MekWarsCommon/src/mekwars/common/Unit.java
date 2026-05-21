@@ -30,6 +30,11 @@ import megamek.common.Mounted;
 import megamek.common.Protomech;
 import megamek.common.Tank;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.targetsystems.TargetSystem;
 import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
@@ -73,12 +78,14 @@ public class Unit<T extends Unit<T>> {
 
     public static final int TOTALTYPES = 6;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
     protected Entity unitEntity;
     private int BV;
     private int scrappableFor = -1;
     private Pilot pilot;
-    private Player<T> owner;
+    private Player owner;
     private Army<T> army;
     private int type;
     private int weightClass;
@@ -236,7 +243,7 @@ public class Unit<T extends Unit<T>> {
         pilot.setUnit(this);
     }
 
-    public Player<T> getOwner() {
+    public Player getOwner() {
         return owner;
     }
 
@@ -244,6 +251,15 @@ public class Unit<T extends Unit<T>> {
         this.owner = owner;
     }
 
+
+    public Army getArmy() {
+        return army;
+    }
+
+    public void setArmy(Army army) {
+        this.army = army;
+    }
+    
     /**
      * @return Returns the posId.
      */

@@ -25,19 +25,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
-
 import mekwars.common.CampaignData;
 import mekwars.common.Player;
 import mekwars.common.SubFaction;
@@ -109,7 +96,7 @@ import java.util.StringTokenizer;
 @CheckHQL
 @Entity
 @Table(name = "player")
-public class SPlayer extends Player<SUnit> implements Comparable<Object>, IBuyer, ISeller {
+public class SPlayer extends Player implements Comparable<Object>, IBuyer, ISeller {
     private static final Logger LOGGER = LogManager.getLogger(SPlayer.class);
 
     // STATIC VARIABLES

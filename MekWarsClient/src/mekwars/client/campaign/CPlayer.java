@@ -52,7 +52,7 @@ import org.apache.logging.log4j.Logger;
  * Class for Player object used by Client
  */
 @Entity
-public class CPlayer extends Player<CUnit> {
+public class CPlayer extends Player {
     private static final Logger LOGGER = LogManager.getLogger(CPlayer.class);
 
     public static final String DELIMITER = "#"; // delimiter for player strings
