@@ -36,6 +36,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.annotations.SQLRestriction;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Id;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumSet;

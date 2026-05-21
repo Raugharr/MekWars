@@ -56,6 +56,9 @@ CREATE TABLE IF NOT EXISTS army_opponents (
     FOREIGN KEY (opponent_army_id) REFERENCES army(id)
 );
 
+ALTER TABLE unit ADD COLUMN passes_maintainance_until INTEGER NOT NULL;
+ALTER TABLE unit ADD COLUMN last_combat_pilot_id INTEGER NOT NULL;
+
 ALTER TABLE house ADD COLUMN money INTEGER NOT NULL;
 ALTER TABLE house ADD COLUMN bays_provided INTEGER NOT NULL;
 ALTER TABLE house ADD COLUMN component_production INTEGER NOT NULL;

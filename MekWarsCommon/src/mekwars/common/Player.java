@@ -46,6 +46,10 @@ public abstract class Player implements IHasUnits {
     private static final Logger LOGGER = LogManager.getLogger(Player.class);
     private static final double INITIAL_RATING = 1600;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private String name = "";
     private String logo = "";
 

@@ -15,6 +15,8 @@
  */
 package mekwars.client.campaign;
 
+import jakarta.persistence.Entity;
+
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
 import megamek.common.Mech;

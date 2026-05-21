@@ -69,7 +69,8 @@ import java.util.Vector;
  * @author Helge Richter (McWizard) Jun 10/04 - Dave Poole added an overloaded constructor to allow
  *     creation of a new SUnit with the same UnitID as an existing Mech to facilitate repodding
  */
-public final class SUnit extends Unit implements Comparable<SUnit> {
+@jakarta.persistence.Entity
+public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
     private static final Logger LOGGER = LogManager.getLogger(SUnit.class);
 
     private long passesMaintainanceUntil = 0;
