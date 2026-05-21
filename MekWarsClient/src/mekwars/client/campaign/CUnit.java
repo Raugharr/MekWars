@@ -15,9 +15,10 @@
  */
 package mekwars.client.campaign;
 
+import jakarta.persistence.Entity;
+
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
-import megamek.common.Infantry;
 import megamek.common.Mech;
 import megamek.common.Mounted;
 import megamek.common.OffBoardDirection;
