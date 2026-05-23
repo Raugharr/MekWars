@@ -183,12 +183,12 @@ public class SArmy extends Army<SUnit> {
      * Method which compares two armies and returns a boolean which indicates whether they fall
      * within each others' unit limits and have a generic BV match.
      */
-    public boolean matches(SArmy enemy, Operation o) {
-        int flatCap = o.getIntValue("MaxBVDifference");
-        double percentCap = o.getDoubleValue("MaxBVPercent");
+    public boolean matches(SArmy enemy, Operation operation) {
+        int flatCap = operation.getIntValue("MaxBVDifference");
+        double percentCap = operation.getDoubleValue("MaxBVPercent");
 
         // catch a 0 BV, just in case getBV(false) calls lead here
-        if (enemy.getBV() == 0 && !o.getBooleanValue("MULArmiesOnly")) {
+        if (enemy.getBV() == 0 && !operation.getBooleanValue("MULArmiesOnly")) {
             return false;
         }
 
@@ -206,16 +206,16 @@ public class SArmy extends Army<SUnit> {
         // percentage caps are being used. see which is larger
         // (percent or straight) and check as appropriate.
         } else {
-
             double percentDiff = 0;
 
             // use smaller army to determine percentage; gives narrowest legal
             // range possible
+            // TODO: smalledDiff and smalledBV are identical, don't know why.
             double smallestDiff = Math.min(enemyOpBV, myOpBV);
             double smallestBV = Math.min(enemyOpBV, myOpBV);
             double precentTotal = percentCap * smallestBV;
 
-            percentDiff = bvDiff / smallestDiff;
+            percentDiff = (double) bvDiff / smallestDiff;
 
             if (precentTotal < flatCap) {
                 if (bvDiff > flatCap) {

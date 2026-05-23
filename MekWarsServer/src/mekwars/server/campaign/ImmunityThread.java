@@ -173,7 +173,9 @@ public final class ImmunityThread extends Thread {//no extension
 						CampaignMain.cm .toUser("[!] Your post-game immunity expired!",p.getName(), true);
 						
 						//alert other players
-						OpponentListHelper olh = new OpponentListHelper(p,OpponentListHelper.MODE_ADD);
+						OpponentListHelper olh = new OpponentListHelper(p);
+
+                        olh.execute(OpponentListHelper.MODE_ADD);
 						olh.sendInfoToOpponents(" finished an R&R cycle and returned to the front. You may attack it with ");
 						
 						//newbie player handling. if he has resets left, tell him time has expired. always remove from the list.
