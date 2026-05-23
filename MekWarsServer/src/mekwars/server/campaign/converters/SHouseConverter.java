@@ -76,10 +76,6 @@ public class SHouseConverter implements Converter {
         writer.setValue(Boolean.toString(house.isConquerable()));
         writer.endNode();
 
-        writer.startNode("inHouseAttacks");
-        writer.setValue(Boolean.toString(house.isInHouseAttacks()));
-        writer.endNode();
-
         writer.startNode("housePlayerColor");
         writer.setValue(house.getHouseColor());
         writer.endNode();
@@ -163,7 +159,6 @@ public class SHouseConverter implements Converter {
         if (logo != null) {
             house.setLogo(logo);
         }
-        house.setInHouseAttacks(inHouseAttacks);
         house.setConquerable(conquerable);
         house.setHousePlayerColors(housePlayerColor);
         house.setTags(tags);
