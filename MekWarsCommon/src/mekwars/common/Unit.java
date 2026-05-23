@@ -792,31 +792,6 @@ public class Unit {
     }
 
     /**
-     * A method which returns the influence cost of a specified campaign mech.
-     *
-     * @return int - # if IP it takes to buy a mech of the given units weight class
-     */
-    public static int getInfluenceForUnit(int weightClass, int typeId, House producer) {
-        int result = Integer.MAX_VALUE;
-        String classtype =
-                Unit.getWeightClassDesc(weightClass) + Unit.getTypeClassDesc(typeId) + "Inf";
-
-        if (typeId == Unit.MEK) {
-            result =
-                    CampaignData.cd
-                            .getCampaignOptions()
-                            .getIntegerConfig(Unit.getWeightClassDesc(weightClass) + "Inf");
-        } else {
-            result = CampaignData.cd.getCampaignOptions().getIntegerConfig(classtype);
-        }
-
-        // modify the result by the faction price modifier
-        result += producer.getHouseUnitFluMod(typeId, weightClass);
-
-        return Math.max(0, result);
-    }
-
-    /**
      * A method which returns the PP COST of a unit. Meks and Vehicles are segregated by
      * weightClass. Infantry are flat priced accross
      *
