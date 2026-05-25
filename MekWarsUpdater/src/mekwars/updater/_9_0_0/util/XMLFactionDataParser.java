@@ -212,7 +212,6 @@ public class XMLFactionDataParser implements XMLResponder {
             
             if (Logo != null)
                 h.setLogo(Logo);
-            h.setInHouseAttacks(inHouseAttacks);
             h.setConquerable(this.canConquer);
             h.setHousePlayerColors(houseColor);
             //RESET VARIABLES

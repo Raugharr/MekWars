@@ -1510,7 +1510,6 @@ public final class CampaignMain implements Serializable {
         Commands.put("SETHOUSEBASEPILOTINGSKILLS", new SetHouseBasePilotingSkillsCommand());
         Commands.put("SETHOUSELOGO", new SetHouseLogoCommand());
         Commands.put("SETHOUSECONQUER", new SetHouseConquerCommand());
-        Commands.put("SETHOUSEINHOUSEATTACKS", new SetHouseInHouseAttacksCommand());
         Commands.put("SETOPERATION", new SetOperationCommand());
         Commands.put("SETMAINTAINED", new SetMaintainedCommand());
         Commands.put("SETMMOTD", new SetMMOTDCommand());

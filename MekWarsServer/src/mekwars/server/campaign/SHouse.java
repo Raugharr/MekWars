@@ -105,8 +105,6 @@ public class SHouse extends TimeUpdateHouse
     private PilotQueues pilotQueues =
             new PilotQueues(getBaseGunnerVect(), getBasePilotVect(), getBasePilotSkillVect());
 
-    private boolean inHouseAttacks = false;
-
     private List<String> leaders = new ArrayList<>();
     private int techResearchPoints = 0;
     private UnitComponents unitParts = new UnitComponents();
@@ -181,7 +179,6 @@ public class SHouse extends TimeUpdateHouse
 
         result.append(getInitialHouseRanking());
         result.append(isConquerable());
-        result.append(isInHouseAttacks());
         result.append(getId());
         result.append(getHousePlayerColor());
         result.append(getHouseDefectionFrom());
@@ -457,7 +454,6 @@ public class SHouse extends TimeUpdateHouse
 
             setInitialHouseRanking(TokenReader.readInt(ST));
             setConquerable(TokenReader.readBoolean(ST));
-            setInHouseAttacks(TokenReader.readBoolean(ST));
 
             TokenReader.readString(ST);
             String housePlayerColor = TokenReader.readString(ST);
@@ -2649,20 +2645,6 @@ public class SHouse extends TimeUpdateHouse
      */
     public void setMotd(String motd) {
         this.motd = motd;
-    }
-
-    /**
-     * @return Returns the inHouseAttacks.
-     */
-    public boolean isInHouseAttacks() {
-        return inHouseAttacks;
-    }
-
-    /**
-     * @param inHouseAttacks The inHouseAttacks to set.
-     */
-    public void setInHouseAttacks(boolean inHouseAttacks) {
-        this.inHouseAttacks = inHouseAttacks;
     }
 
     public float getHighestUnitCost(int weight, int type) {
