@@ -779,6 +779,7 @@ public class CPlayer extends Player<CUnit> {
         personalPilotQueue = queue;
     }
 
+    @Override
     public CPersonalPilotQueues getPersonalPilotQueue() {
         return personalPilotQueue;
     }

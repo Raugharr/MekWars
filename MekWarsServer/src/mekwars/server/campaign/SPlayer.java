@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 import mekwars.common.CampaignData;
@@ -2464,6 +2465,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         return clientVersion;
     }
 
+    @Override
     public SPersonalPilotQueues getPersonalPilotQueue() {
         return personalPilotQueue;
     }
@@ -2589,7 +2591,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             int typeList[] = { Unit.MEK, Unit.PROTOMEK, Unit.AERO };
             for (int type : typeList) {
                 for (int weight = 0; weight <= Unit.ASSAULT; weight++) {
-                    List<Pilot> list = personalPilotQueue.getPilotQueue(type, weight);
+                    Queue<Pilot> list = personalPilotQueue.getPilotQueue(type, weight);
                     for (Pilot pilot : list) {
                         if (pilot.getHits() <= 0) {
                             continue;
@@ -2635,7 +2637,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
             int typeList[] = { Unit.MEK, Unit.PROTOMEK, Unit.AERO };
             for (int type : typeList) {
                 for (int weight = 0; weight <= Unit.ASSAULT; weight++) {
-                    List<Pilot> list = personalPilotQueue.getPilotQueue(type, weight);
+                    Queue<Pilot> list = personalPilotQueue.getPilotQueue(type, weight);
                     for (Pilot pilot : list) {
                         if (pilot.getHits() <= 0) {
                             continue;

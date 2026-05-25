@@ -50,7 +50,6 @@ public class PilotQueues {
 	private Vector<Integer> basePiloting = new Vector<Integer>(Unit.MAXBUILD,1);
 	private Vector<String>  basePilotSkills = new Vector<String>(Unit.MAXBUILD,1);
 	private String factionString = "";//string for faction specific name list
-	private int factionID;
 	private BufferedReader dis;
 	
 	public PilotQueues(Vector<Integer>baseGunnery, Vector<Integer>basePiloting, Vector<String>basePilotSkill) {
@@ -358,14 +357,6 @@ public class PilotQueues {
 	    synchronized(basePilotSkills) {
 	    	this.basePilotSkills.set(type,skills);
 	    }
-	}
-	
-	public void setFactionID(int factionID) {
-		this.factionID = factionID;
-	}
-	
-	public int getFactionID(){
-	    return this.factionID;
 	}
 	
 	/**
