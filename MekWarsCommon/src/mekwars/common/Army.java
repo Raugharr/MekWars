@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -66,11 +67,11 @@ public class Army<T extends Unit> {
     private List<Integer> commanders = new ArrayList<Integer>(1);
     private float rawForceSize = -1;
     private Set<String> legalOperations = new TreeSet<>();
-    private Player owner;
+    private Player<T> owner;
 
     public Army() {}
 
-    public Army(Player owner) {
+    public Army(Player<T> owner) {
         this.owner = owner;
     }
 
@@ -270,7 +271,7 @@ public class Army<T extends Unit> {
         return id;
     }
 
-    public Player getOwner() {
+    public Player<T> getOwner() {
         return owner;
     }
 
@@ -589,30 +590,17 @@ public class Army<T extends Unit> {
             return true;
         }
 
-        if(!(object instanceof Army)) {
+        if (!(object instanceof Army)) {
             return false;
         }
 
-        Army army = (Army) object;
-        if (army == null) {
-            return false;
-        }
+        Army<?> army = (Army<?>) object;
+        Player<?> owner = getOwner();
+        Player<?> otherOwner = army.getOwner();
 
-        if (army.getId() != getId()) {
-            return false;
-        }
-
-        Player owner = getOwner();
-        Player otherOwner = army.getOwner();
-
-        if (owner == null && otherOwner == null) {
-            return true;
-        }
-
-        if (owner == null || otherOwner == null) {
-            return false;
-        }
-
-        return owner.getName().equals(otherOwner.getName());
+        return (!Objects.equals(getId(), army.getId()))
+                && Objects.equals(
+                        owner != null ? owner.getName() : null,
+                        otherOwner != null ? otherOwner.getName() : null);
     }
 }
