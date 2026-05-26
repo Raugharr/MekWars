@@ -760,22 +760,6 @@ public class Planet implements Comparable<Object>, MutableSerializable, Entity {
          */
     }
 
-    public Dimension getMapSize() {
-        return MapSize;
-    }
-
-    public void setMapSize(Dimension map) {
-        MapSize = map;
-    }
-
-    public Dimension getBoardSize() {
-        return BoardSize;
-    }
-
-    public void setBoardSize(Dimension board) {
-        BoardSize = board;
-    }
-
     public int getMinPlanetOwnerShip() {
         return minPlanetOwnerShip;
     }

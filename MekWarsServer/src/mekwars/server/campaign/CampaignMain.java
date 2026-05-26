@@ -1269,11 +1269,9 @@ public final class CampaignMain implements Serializable {
         Commands.put("ADMINSETHOUSEFLUFILE", new AdminSetHouseFluFileCommand());
         Commands.put("ADMINSETHOUSEPLAYERCOLOR", new AdminSetHousePlayerColorCommand());
         Commands.put("ADMINSETHOUSETECHLEVEL", new AdminSetHouseTechLevelCommand());
-        Commands.put("ADMINSETPLANETBOARDSIZE", new AdminSetPlanetBoardSizeCommand());
         Commands.put("ADMINSETPLANETGRAVITY", new AdminSetPlanetGravityCommand());
         Commands.put("ADMINSETPLANETOPFLAGS", new AdminSetPlanetOpFlagsCommand());
         Commands.put("ADMINSETPLANETORIGINALOWNER", new AdminSetPlanetOriginalOwnerCommand());
-        Commands.put("ADMINSETPLANETMAPSIZE", new AdminSetPlanetMapSizeCommand());
         Commands.put("ADMINSETPLANETTEMPERATURE", new AdminSetPlanetTemperatureCommand());
         Commands.put("ADMINSETPLANETVACUUM", new AdminSetPlanetVacuumCommand());
         Commands.put("ADMINSETHOUSEAMMOBAN", new AdminSetHouseAmmoBanCommand());

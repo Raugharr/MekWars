@@ -280,8 +280,6 @@ public class XMLPlanetDataParser implements XMLResponder {
             // This has to be called last since the Bays provided are added to
             // the faction then for instance
             p.setConquerable(conquerable);
-            p.setMapSize(new Dimension(xmap, ymap));
-            p.setBoardSize(new Dimension(xboard, yboard));
             /*
              * for ( Integer id: AdvTerrTreeMap.keySet() ){
              * p.getAdvancedTerrain().put(id,AdvTerrTreeMap.get(id)); }
