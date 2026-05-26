@@ -20,8 +20,8 @@
  */
 package mekwars.common;
 
-import mekwars.common.entities.Entity;
-import mekwars.common.persistence.EntityStore;
+import mekwars.common.entities.MWEntity;
+import mekwars.common.persistence.MWEntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.HTMLConverter;
@@ -39,7 +39,7 @@ import org.apache.logging.log4j.Logger;
  * @author Helge Richter
  * 
  */
-public class House implements Entity {
+public class House implements MWEntity {
     private static final Logger LOGGER = LogManager.getLogger(House.class);
     
     public static final int RED_VALUE = 0;
@@ -286,7 +286,7 @@ public class House implements Entity {
     }
 
     public House() {
-        setId(EntityStore.UNSET_ID);
+        setId(MWEntityStore.UNSET_ID);
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
             baseGunner.add(4);
             basePilot.add(5);

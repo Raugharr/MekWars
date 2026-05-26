@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import mekwars.common.campaign.CampaignOptions;
-import mekwars.common.persistence.EntityStore;
+import mekwars.common.persistence.MWEntityStore;
 import mekwars.common.util.Position;
 
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ class CampaignDataTest {
     public void testAddPlanet() {
         Planet testPlanet = new Planet("TestPlanet1", position, influence);
 
-        assertEquals(EntityStore.UNSET_ID, testPlanet.getId());
+        assertEquals(MWEntityStore.UNSET_ID, testPlanet.getId());
         data.addPlanet(testPlanet);
         assertEquals(1, testPlanet.getId());
     }
@@ -51,7 +51,7 @@ class CampaignDataTest {
     public void testAddHouse() {
         House testHouse = new House();
 
-        assertEquals(EntityStore.UNSET_ID, testHouse.getId());
+        assertEquals(MWEntityStore.UNSET_ID, testHouse.getId());
         data.addHouse(testHouse);
         assertEquals(1, testHouse.getId());
     }

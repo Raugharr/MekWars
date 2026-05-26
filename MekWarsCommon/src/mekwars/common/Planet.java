@@ -20,8 +20,8 @@
  */
 package mekwars.common;
 
-import mekwars.common.entities.Entity;
-import mekwars.common.persistence.EntityStore;
+import mekwars.common.entities.MWEntity;
+import mekwars.common.persistence.MWEntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.Position;
@@ -39,12 +39,12 @@ import java.util.TreeMap;
 /**
  * @author Helge Richter
  */
-public class Planet implements Comparable<Object>, MutableSerializable, Entity {
+public class Planet implements Comparable<Object>, MutableSerializable, MWEntity {
     /**
      * Unique id of this planet. Mutable field (although it will not change, it has to be
      * transfered)
      */
-    private int id = EntityStore.UNSET_ID;
+    private int id = MWEntityStore.UNSET_ID;
 
     /** name of the planet. Should be unique among planets too. */
     private String name;

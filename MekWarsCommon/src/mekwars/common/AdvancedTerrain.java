@@ -19,8 +19,8 @@ package mekwars.common;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
-import mekwars.common.entities.Entity;
-import mekwars.common.persistence.EntityStore;
+import mekwars.common.entities.MWEntity;
+import mekwars.common.persistence.MWEntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.TokenReader;
@@ -39,9 +39,9 @@ import megamek.common.planetaryconditions.WindDirection;
  * @@author Torren (Jason Tighe) allows So's to set up each individual terrain on a planet.
  */
 
-public class AdvancedTerrain implements Entity {
+public class AdvancedTerrain implements MWEntity {
     private String displayName = "none";
-    private int id = EntityStore.UNSET_ID;
+    private int id = MWEntityStore.UNSET_ID;
     private String name = "none";
     
     //NOTE: These fields are unused and kept to keep the xml file consistent

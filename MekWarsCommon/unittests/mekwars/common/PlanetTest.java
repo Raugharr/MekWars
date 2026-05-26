@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-import mekwars.common.persistence.EntityStore;
+import mekwars.common.persistence.MWEntityStore;
 import mekwars.common.util.Position;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +46,7 @@ class PlanetTest {
     public void testId() {
         Planet testPlanet = new Planet("TestPlanet1", position, influence);
 
-        assertEquals(EntityStore.UNSET_ID, testPlanet.getId());
+        assertEquals(MWEntityStore.UNSET_ID, testPlanet.getId());
     }
 
     @Nested

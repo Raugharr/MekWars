@@ -20,21 +20,21 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import mekwars.common.entities.Entity;
+import mekwars.common.entities.MWEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class EntityStore<T extends Entity> {
-    private static final Logger LOGGER = LogManager.getLogger(EntityStore.class);
+public class MWEntityStore<T extends MWEntity> {
+    private static final Logger LOGGER = LogManager.getLogger(MWEntityStore.class);
 
     public static final int UNSET_ID = -1;
 
     protected SortedMap<Integer, T> entities = Collections.synchronizedSortedMap(new TreeMap());
 
     /**
-     * Adds an Entity to the EntityStore.
+     * Adds an MWEntity to the MWEntityStore.
      *
-     * @param entity The {@link Entity} to add to the {@link EntityStore}.
+     * @param entity The {@link MWEntity} to add to the {@link MWEntityStore}.
      */
     public void put(T entity) {
         LOGGER.info("Adding {}: '{}'", entity.getClass().getSimpleName(), entity.getName());
@@ -48,9 +48,9 @@ public class EntityStore<T extends Entity> {
     /**
      * Gets an entity by their id.
      *
-     * @param id The id of the {@link Entity} to retrieve.
+     * @param id The id of the {@link MWEntity} to retrieve.
      *
-     * @return The {@link Entity} of the given id.
+     * @return The {@link MWEntity} of the given id.
      */
     public T get(int id) {
         return entities.get(id);
@@ -59,16 +59,16 @@ public class EntityStore<T extends Entity> {
     /**
      * Removes an entity by their id.
      *
-     * @param id The id of the {@link Entity} to remove.
+     * @param id The id of the {@link MWEntity} to remove.
      *
-     * @return The {@link Entity} that is associated with the given id.
+     * @return The {@link MWEntity} that is associated with the given id.
      */
     public T remove(int id) {
         return entities.remove(id);
     }
 
     /**
-     * Removes all entities from the EntityStore.
+     * Removes all entities from the MWEntityStore.
      */
     public void clear() {
         entities.clear();
@@ -77,17 +77,17 @@ public class EntityStore<T extends Entity> {
     /**
      * Returns a list of all stores entities.
      *
-     * @return A Collection of all {@link Entity entities}.
+     * @return A Collection of all {@link MWEntity entities}.
      */
     public Collection<T> values() {
         return entities.values();
     }
 
     /**
-     * Returns the number of entities in the EntityStore. If the Entity store contains more than
+     * Returns the number of entities in the MWEntityStore. If the MWEntity store contains more than
      * Integer.MAX_VALUE elements, returns Integer.MAX_VALUE.
      *
-     * @return The number of {@link Entity entities} in this {@link EntityStore}
+     * @return The number of {@link MWEntity entities} in this {@link MWEntityStore}
      */
     public int size() {
         return entities.size();
@@ -96,7 +96,7 @@ public class EntityStore<T extends Entity> {
     /**
      * Returns the next available id free for an entity.
      *
-     * @return The next available id free for an {@link Entity}.
+     * @return The next available id free for an {@link MWEntity}.
      */
     protected int nextId() {
         return entities.keySet().stream().max(Integer::compare).orElse(0) + 1;

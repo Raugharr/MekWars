@@ -19,7 +19,7 @@ package mekwars.common;
 import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.campaign.HouseOptions;
 import mekwars.common.persistence.BannedAmmoStore;
-import mekwars.common.persistence.NamedEntityStore;
+import mekwars.common.persistence.NamedMWEntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 
@@ -53,10 +53,10 @@ public class CampaignData implements TerrainProvider {
 
     public static CampaignData cd;
 
-    private NamedEntityStore<House> factions = new NamedEntityStore<>();
-    private NamedEntityStore<Planet> planets = new NamedEntityStore<>();
-    private NamedEntityStore<Terrain> terrains = new NamedEntityStore<>();
-    private NamedEntityStore<AdvancedTerrain> advancedTerrains = new NamedEntityStore<>();
+    private NamedMWEntityStore<House> factions = new NamedMWEntityStore<>();
+    private NamedMWEntityStore<Planet> planets = new NamedMWEntityStore<>();
+    private NamedMWEntityStore<Terrain> terrains = new NamedMWEntityStore<>();
+    private NamedMWEntityStore<AdvancedTerrain> advancedTerrains = new NamedMWEntityStore<>();
 
     private Vector<Integer> bannedTargetingSystems = new Vector<>();
     private HashMap<String, Integer> commands = new HashMap<>();

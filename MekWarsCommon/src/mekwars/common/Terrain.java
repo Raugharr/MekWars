@@ -15,8 +15,8 @@
 
 package mekwars.common;
 
-import mekwars.common.entities.Entity;
-import mekwars.common.persistence.EntityStore;
+import mekwars.common.entities.MWEntity;
+import mekwars.common.persistence.MWEntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 
@@ -29,9 +29,9 @@ import java.util.StringTokenizer;
  * A Terrain Base Terrain container for all environments. Each environment can be a different theme
  * to allow for different times of year.
  */
-public final class Terrain implements Entity {
+public final class Terrain implements MWEntity {
     // id
-    private int id = EntityStore.UNSET_ID;
+    private int id = MWEntityStore.UNSET_ID;
     private String name = "None";
     private List<PlanetEnvironment> environments = new ArrayList<PlanetEnvironment>();
 
