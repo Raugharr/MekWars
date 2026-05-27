@@ -1,0 +1,73 @@
+/*
+ * MekWars - Copyright (C) 2004
+ *
+ * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ */
+
+/*
+ * Created on 18.04.2004
+ */
+package mekwars.common.campaign.pilot.skills;
+
+import megamek.common.Entity;
+
+import mekwars.common.CampaignData;
+import mekwars.common.campaign.pilot.Pilot;
+
+/**
+ * Reduces the bay-consume of the unit.
+ *
+ * @author Helge Richter
+ */
+public class AstechSkill extends PilotSkill {
+    public AstechSkill(int id) {
+        super(id, "Astech", "AT");
+        setDescription("Reduces the number of techs needed to repair a unit by 1");
+    }
+
+    public AstechSkill() {
+        // TODO: Remove when no longer necessary
+    }
+
+    @Override
+    public void modifyPilot(Pilot p) {
+        if (!CampaignData.cd.isUsingAdvanceRepair()) p.setBayModifier(p.getBayModifier() - 1);
+    }
+
+    @Override
+    public int getBVMod(Entity unit, Pilot pilot) {
+        return 0;
+    }
+
+    @Override
+    public void addToPilot(Pilot pilot) {
+        // this.setLevel(-1);
+        pilot.getSkills().add(this);
+    }
+
+    /**
+     * @param level The level to set.
+     */
+    @Override
+    public void setLevel(int level) {
+        if (CampaignData.cd.isUsingAdvanceRepair()) {
+            if (level == -1) {
+                super.setLevel(0);
+            } else {
+                super.setLevel(level);
+            }
+        } else {
+            super.setLevel(-1);
+        }
+    }
+}

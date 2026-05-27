@@ -75,6 +75,7 @@ public class Unit {
     private int BV;
     private int scrappableFor = -1;
     private Pilot pilot;
+    private Player owner;
     private int type;
     private int weightClass;
     private int status = Unit.STATUS_OK;
@@ -226,8 +227,17 @@ public class Unit {
     /**
      * @param pilot The pilot to set.
      */
-    public void setPilot(Pilot p) {
-        this.pilot = p;
+    public void setPilot(Pilot pilot) {
+        this.pilot = pilot;
+        pilot.setUnit(this);
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 
     /**

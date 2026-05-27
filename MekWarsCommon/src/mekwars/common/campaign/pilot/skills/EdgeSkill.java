@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2004 
- * 
+ * MekWars - Copyright (C) 2004
+ *
  * Derived from MegaMekNET (http://www.sourceforge.net/projects/megameknet)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,29 +18,23 @@
  * Created on 18.04.2004
  *
  */
-package mekwars.server.campaign.pilot.skills;
+package mekwars.common.campaign.pilot.skills;
 
+import mekwars.common.CampaignData;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.campaign.pilot.skills.PilotSkill;
-//import mekwars.common.Unit;
-import megamek.common.Entity;
-import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SHouse;
-import mekwars.server.campaign.pilot.SPilot;
 
 /**
  * Reduces the bay-consume of the unit.
- * 
+ *
  * @author Helge Richter
  */
-public class EdgeSkill extends SPilotSkill {
-
-    boolean edge_when_tac = true;
-    boolean edge_when_ko = true;
-    boolean edge_when_headhit = true;
-    boolean edge_when_explosion = true;
+public class EdgeSkill extends PilotSkill {
+    boolean edgeWhenTac = true;
+    boolean edgeWhenKo = true;
+    boolean edgeWhenHeadhit = true;
+    boolean edgeWhenExplosion = true;
 
     public EdgeSkill(int id) {
         super(id, "Edge", "ED");
@@ -57,40 +51,21 @@ public class EdgeSkill extends SPilotSkill {
     }
 
     @Override
-    public int getBVMod(Entity unit) {
-        return CampaignMain.cm.getIntegerConfig("EdgeBaseBVMod");
-    }
-
-    @Override
-    public int getBVMod(Entity unit, SPilot p) {
-        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
-
-        if (house != null) {
-            return house.getIntegerConfig("EdgeBaseBVMod");
-        }
-        return CampaignMain.cm.getIntegerConfig("EdgeBaseBVMod");
-    }
-
-    @Override
     public int getChance(int unitType, Pilot p) {
+        int maxEdgeChances =
+                CampaignData.cd.getCampaignOptions().getIntegerConfig("MaxEdgeChanges");
 
         if (unitType != Unit.MEK) {
             return 0;
         }
 
-        if (p.getSkills().has(PilotSkill.EdgeSkillID) && (p.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel() > CampaignMain.cm.getIntegerConfig("MaxEdgeChanges"))) {
+        if (p.getSkills().has(PilotSkill.EdgeSkillID)
+                && (p.getSkills().getPilotSkill(PilotSkill.EdgeSkillID).getLevel()
+                        > maxEdgeChances)) {
             return 0;
         }
 
-        String chance = "chancefor" + getAbbreviation() + "for" + Unit.getTypeClassDesc(unitType);
-
-        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
-
-        if (house == null) {
-            return CampaignMain.cm.getIntegerConfig(chance);
-        }
-
-        return house.getIntegerConfig(chance);
+        return super.getChance(unitType, p);
     }
 
     @Override
@@ -100,12 +75,10 @@ public class EdgeSkill extends SPilotSkill {
     }
 
     /**
-     * @param level
-     *            The level to set.
+     * @param level The level to set.
      */
     @Override
     public void setLevel(int level) {
-
         if (level < 1) {
             super.setLevel(1);
         } else {
@@ -114,34 +87,34 @@ public class EdgeSkill extends SPilotSkill {
     }
 
     public boolean getTac() {
-        return edge_when_tac;
+        return edgeWhenTac;
     }
 
     public boolean getKO() {
-        return edge_when_ko;
+        return edgeWhenKo;
     }
 
     public boolean getHeadHit() {
-        return edge_when_headhit;
+        return edgeWhenHeadhit;
     }
 
     public boolean getExplosion() {
-        return edge_when_explosion;
+        return edgeWhenExplosion;
     }
 
     public void setTac(boolean value) {
-        edge_when_tac = value;
+        edgeWhenTac = value;
     }
 
     public void setKO(boolean value) {
-        edge_when_ko = value;
+        edgeWhenKo = value;
     }
 
     public void setHeadHit(boolean value) {
-        edge_when_headhit = value;
+        edgeWhenHeadhit = value;
     }
 
     public void setExplosion(boolean value) {
-        edge_when_explosion = value;
+        edgeWhenExplosion = value;
     }
 }

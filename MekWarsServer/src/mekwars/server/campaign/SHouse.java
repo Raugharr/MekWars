@@ -103,7 +103,7 @@ public class SHouse extends TimeUpdateHouse
     private String announcement = "";
 
     private PilotQueues pilotQueues =
-            new PilotQueues(getBaseGunnerVect(), getBasePilotVect(), getBasePilotSkillVect());
+            new PilotQueues(this, getBaseGunnerVect(), getBasePilotVect(), getBasePilotSkillVect());
 
     private List<String> leaders = new ArrayList<>();
     private int techResearchPoints = 0;
@@ -568,11 +568,10 @@ public class SHouse extends TimeUpdateHouse
             } catch (Exception ex) {
                 setPilotQueues(
                         new PilotQueues(
-                                getBaseGunnerVect(), getBasePilotVect(), getBasePilotSkillVect()));
-                getPilotQueues().setFactionString(getName()); // set the
-                // faction
-                // name for
-                // the queue
+                                this,
+                                getBaseGunnerVect(),
+                                getBasePilotVect(),
+                                getBasePilotSkillVect()));
             }
 
             try {
@@ -583,11 +582,10 @@ public class SHouse extends TimeUpdateHouse
             } catch (Exception ex) {
                 setPilotQueues(
                         new PilotQueues(
-                                getBaseGunnerVect(), getBasePilotVect(), getBasePilotSkillVect()));
-                getPilotQueues().setFactionString(getName()); // set the
-                // faction
-                // name for
-                // the queue
+                                this,
+                                getBaseGunnerVect(),
+                                getBasePilotVect(),
+                                getBasePilotSkillVect()));
             }
 
             setTechLevel(TokenReader.readInt(ST));
@@ -662,8 +660,10 @@ public class SHouse extends TimeUpdateHouse
 
             setPilotQueues(
                     new PilotQueues(
-                            getBaseGunnerVect(), getBasePilotVect(), getBasePilotSkillVect()));
-            getPilotQueues().setFactionString(getName()); // set the
+                            this,
+                            getBaseGunnerVect(),
+                            getBasePilotVect(),
+                            getBasePilotSkillVect()));
             // faction name
             // for the queue
 
@@ -856,7 +856,6 @@ public class SHouse extends TimeUpdateHouse
 
     public SPilot getNewPilot(int uType) {
         SPilot pilot = getPilotQueues().getPilot(uType);
-        pilot.setCurrentFaction(getName());
         return pilot;
     }
 
@@ -1164,13 +1163,41 @@ public class SHouse extends TimeUpdateHouse
                             if (!Boolean.parseBoolean(this.getConfig("UseCalculatedCosts"))) {
                                 // set the refresh miniticks
                                 if (m.getWeightClass() == Unit.LIGHT) {
-                                    hsUpdates.append(m.addRefresh((Integer.parseInt(this.getConfig("LightRefresh")) * 100) / m.getRefreshSpeed(), false));
+                                    hsUpdates.append(
+                                            m.addRefresh(
+                                                    (Integer.parseInt(
+                                                                            this.getConfig(
+                                                                                    "LightRefresh"))
+                                                                    * 100)
+                                                            / m.getRefreshSpeed(),
+                                                    false));
                                 } else if (m.getWeightClass() == Unit.MEDIUM) {
-                                    hsUpdates.append(m.addRefresh((Integer.parseInt(this.getConfig("MediumRefresh")) * 100) / m.getRefreshSpeed(), false));
+                                    hsUpdates.append(
+                                            m.addRefresh(
+                                                    (Integer.parseInt(
+                                                                            this.getConfig(
+                                                                                    "MediumRefresh"))
+                                                                    * 100)
+                                                            / m.getRefreshSpeed(),
+                                                    false));
                                 } else if (m.getWeightClass() == Unit.HEAVY) {
-                                    hsUpdates.append(m.addRefresh((Integer.parseInt(this.getConfig("HeavyRefresh")) * 100) / m.getRefreshSpeed(), false));
+                                    hsUpdates.append(
+                                            m.addRefresh(
+                                                    (Integer.parseInt(
+                                                                            this.getConfig(
+                                                                                    "HeavyRefresh"))
+                                                                    * 100)
+                                                            / m.getRefreshSpeed(),
+                                                    false));
                                 } else if (m.getWeightClass() == Unit.ASSAULT) {
-                                    hsUpdates.append(m.addRefresh((Integer.parseInt(this.getConfig("AssaultRefresh")) * 100) / m.getRefreshSpeed(), false));
+                                    hsUpdates.append(
+                                            m.addRefresh(
+                                                    (Integer.parseInt(
+                                                                            this.getConfig(
+                                                                                    "AssaultRefresh"))
+                                                                    * 100)
+                                                            / m.getRefreshSpeed(),
+                                                    false));
                                 }
                             }
 
@@ -2037,7 +2064,7 @@ public class SHouse extends TimeUpdateHouse
                 && unit.isSinglePilotUnit()
                 && !unit.hasVacantPilot()) {
             getPilotQueues().addPilot(unit.getType(), (SPilot) unit.getPilot());
-            unit.setPilot(new SPilot("Vacant", 99, 99));
+            unit.setPilot(new SPilot(null, "Vacant", 99, 99));
         }
 
         if (Boolean.parseBoolean(this.getConfig("UseOnlyOneVehicleSize"))

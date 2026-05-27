@@ -24,7 +24,7 @@ import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
-import mekwars.server.campaign.pilot.skills.EdgeSkill;
+import mekwars.common.campaign.pilot.skills.EdgeSkill;
 
 public class SetEdgeSkillsCommand implements Command {
 	

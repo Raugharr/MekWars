@@ -29,19 +29,21 @@ import java.io.InputStreamReader;
 import java.util.Random;
 import java.util.StringTokenizer;
 
+import mekwars.common.CampaignData;
+import mekwars.common.House;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.campaign.pilot.skills.PilotSkillStore;
 import mekwars.common.util.TokenReader;
 import megamek.common.Infantry;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
-import mekwars.server.campaign.pilot.skills.AstechSkill;
-import mekwars.server.campaign.pilot.skills.EdgeSkill;
-import mekwars.server.campaign.pilot.skills.SPilotSkill;
-import mekwars.server.campaign.pilot.skills.TraitSkill;
-import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
+import mekwars.common.campaign.pilot.skills.AstechSkill;
+import mekwars.common.campaign.pilot.skills.EdgeSkill;
+import mekwars.common.campaign.pilot.skills.TraitSkill;
+import mekwars.common.campaign.pilot.skills.WeaponSpecialistSkill;
 import mekwars.server.campaign.util.SerializedMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,8 +59,8 @@ public class SPilot extends Pilot {
     private int pickedUpID;
     private boolean death = false;
 
-    public SPilot(String name, int gunnery, int piloting) {
-        super(name, gunnery, piloting);
+    public SPilot(House house, String name, int gunnery, int piloting) {
+        super(house, name, gunnery, piloting);
     }
 
     public SPilot() {
@@ -76,8 +78,7 @@ public class SPilot extends Pilot {
      * @return a string detailing outcome.
      */
     public String checkForPilotSkillImprovement(SUnit unit, SPlayer owner) {
-
-        if ( CampaignMain.cm.getBooleanConfig("PlayersCanBuyPilotUpgrades") ){
+        if (CampaignMain.cm.getBooleanConfig("PlayersCanBuyPilotUpgrades")) {
             return "";
         }
 
@@ -95,7 +96,7 @@ public class SPilot extends Pilot {
         // units
 
         int currentSkillAmount = getGunnery() + getPiloting();
-        SPilotSkill skillToAdd = null;
+        PilotSkill skillToAdd = null;
 
         /*
          * - If the differential is positive, we will always level gunnery. - If
@@ -225,7 +226,7 @@ public class SPilot extends Pilot {
 
             int dieRoll = CampaignMain.cm.getRandomNumber(100) + 1;
             if (dieRoll < chanceToGainSkill) {
-                skillToAdd = SPilotSkills.getRandomSkill(this, unit.getType());
+                skillToAdd = PilotSkillStore.getRandomSkill(this, unit.getType());
             }
         }
 
@@ -373,12 +374,12 @@ public class SPilot extends Pilot {
                 ((TraitSkill) skillToAdd).assignTrait(this);
             } else if (skillToAdd instanceof EdgeSkill) {
                 if (getSkills().has(PilotSkill.EdgeSkillID)) {
-                    skillToAdd = (SPilotSkill) getSkills().getPilotSkill(PilotSkill.EdgeSkillID);
+                    skillToAdd = getSkills().getPilotSkill(PilotSkill.EdgeSkillID);
                     ((EdgeSkill) skillToAdd).setLevel(skillToAdd.getLevel() + 1);
                 }
             }else if (skillToAdd instanceof AstechSkill) {
                 if (getSkills().has(PilotSkill.AstechSkillID)) {
-                    skillToAdd = (SPilotSkill) getSkills().getPilotSkill(PilotSkill.AstechSkillID);
+                    skillToAdd = getSkills().getPilotSkill(PilotSkill.AstechSkillID);
                     ((AstechSkill) skillToAdd).setLevel(skillToAdd.getLevel() + 1);
                 }
             }
@@ -420,38 +421,34 @@ public class SPilot extends Pilot {
         result.append(getExperience());
         result.append(getGunnery());
         result.append(getPiloting());
+        result.append(getHouse().getName());
         result.append(getSkills().size());
         for (PilotSkill skill : getSkills().getPilotSkills()) {
-            SPilotSkill sk = (SPilotSkill) skill;
-            result.append(sk.getId());
+            result.append(skill.getId());
             if (toPlayer) {
-                result.append(sk.getName());
+                result.append(skill.getName());
             }
-            result.append(sk.getLevel());
+            result.append(skill.getLevel());
             if (toPlayer) {
-                result.append(sk.getAbbreviation());
+                result.append(skill.getAbbreviation());
             }
-            if (sk instanceof WeaponSpecialistSkill) {
+            if (skill instanceof WeaponSpecialistSkill) {
                 result.append(getWeapon());
             }
-            if (sk instanceof TraitSkill) {
+            if (skill instanceof TraitSkill) {
                 result.append(getTraitName());
             }
-            if (sk instanceof EdgeSkill) {
-                result.append(((EdgeSkill) sk).getTac());
-                result.append(((EdgeSkill) sk).getKO());
-                result.append(((EdgeSkill) sk).getHeadHit());
-                result.append(((EdgeSkill) sk).getExplosion());
+            if (skill instanceof EdgeSkill) {
+                result.append(((EdgeSkill) skill).getTac());
+                result.append(((EdgeSkill) skill).getKO());
+                result.append(((EdgeSkill) skill).getHeadHit());
+                result.append(((EdgeSkill) skill).getExplosion());
             }
 
         }
         result.append(getKills());
         if (!toPlayer) {
-            if (getCurrentFaction().trim().length() > 0) {
-                result.append(getCurrentFaction());
-            } else {
-                result.append(CampaignMain.cm.getConfig("NewbieHouseName"));
-            }
+            result.append(getHouse().getName());
             result.append(getPilotId());
         }
         if (CampaignMain.cm.getBooleanConfig("AllowPilotDamageToTransfer")) {
@@ -481,7 +478,6 @@ public class SPilot extends Pilot {
     }
 
     public void fromFileFormat(String s, String delimiter) {
-
         TraitSkill traitSkill = null;
 
         try {
@@ -495,9 +491,10 @@ public class SPilot extends Pilot {
             setExperience(TokenReader.readInt(ST));
             setGunnery(TokenReader.readInt(ST));
             setPiloting(TokenReader.readInt(ST));
+            setHouse(CampaignData.cd.getHouseByName(TokenReader.readString(ST)));
             int skills = TokenReader.readInt(ST);
             for (int i = 0; i < skills; i++) {
-                SPilotSkill skill = SPilotSkills.getPilotSkill(TokenReader.readInt(ST));
+                PilotSkill skill = PilotSkillStore.getPilotSkill(TokenReader.readInt(ST));
                 int level = TokenReader.readInt(ST);
                 if (skill instanceof AstechSkill) {
                     skill = new AstechSkill(PilotSkill.AstechSkillID);
@@ -530,13 +527,9 @@ public class SPilot extends Pilot {
             }
 
             setKills(TokenReader.readInt(ST));
-
-            setCurrentFaction(TokenReader.readString(ST));
-
+            setHouse(CampaignData.cd.getHouseByName(TokenReader.readString(ST)));
             setPilotId(TokenReader.readInt(ST));
-
             setHits(TokenReader.readInt(ST));
-
             TokenReader.readString(ST);
 
             /*

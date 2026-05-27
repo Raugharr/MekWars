@@ -634,5 +634,6 @@ public class Player<T extends Unit> {
 
     protected void addUnit(T unit) {
         units.add(unit);
+        unit.setOwner(this);
     }
 }

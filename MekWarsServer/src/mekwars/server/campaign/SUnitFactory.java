@@ -31,6 +31,8 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.Vector;
 
+import mekwars.common.CampaignData;
+import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.UnitFactory;
 import mekwars.common.util.TokenReader;
@@ -192,7 +194,14 @@ public class SUnitFactory extends UnitFactory implements Serializable {
 			LOGGER.info("New unit for " + this.getFounder() + " on " + this.getPlanet().getName() + ": " + Filename + "(Table: " + buildtableName + ")");
 		
         if (Filename.toLowerCase().trim().endsWith(".mul")) {
-            units.addAll(SUnit.createMULUnits(Filename, producer));
+            House house = planet.getOwner();
+            
+            if (house == null) {
+                String newbieHouseName = CampaignData.cd.getCampaignOptions().getConfig("NewbieHouseName");
+                house = CampaignData.cd.getHouseByName(newbieHouseName);
+            }
+
+            units.addAll(SUnit.createMULUnits(house, Filename, producer));
         } else {
             // Build the unit & create history entry
             SUnit cm = new SUnit(producer, Filename, this.getWeightClass());

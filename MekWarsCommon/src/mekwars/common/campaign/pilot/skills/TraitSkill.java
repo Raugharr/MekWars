@@ -13,22 +13,22 @@
 /*
  * Created on 18.04.2004
  */
-package mekwars.server.campaign.pilot.skills;
+package mekwars.common.campaign.pilot.skills;
 
-import java.util.Vector;
+import megamek.common.Entity;
 
+import mekwars.common.CampaignData;
+import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
-import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SHouse;
+import mekwars.common.entities.FactionTrait;
+import mekwars.common.io.file.FactionTraitFile;
+import mekwars.common.util.RandomUtils;
 
-/**
- * Pilot traits for use with moding the gaining of other traits
- *
- * @@author Torren (Jason Tighe)
- */
-public class TraitSkill extends SPilotSkill {
+import java.util.List;
+
+/** Pilot traits for use with moding the gaining of other traits @@author Torren (Jason Tighe) */
+public class TraitSkill extends PilotSkill {
 
     public TraitSkill(int id) {
         super(id, "Trait", "TN");
@@ -47,45 +47,33 @@ public class TraitSkill extends SPilotSkill {
 
         String chance = "chancefor" + getAbbreviation() + "for" + Unit.getTypeClassDesc(unitType);
 
-        SHouse house = CampaignMain.cm.getHouseFromPartialString(pilot.getCurrentFaction());
-
-        if (house == null) {
-            return CampaignMain.cm.getIntegerConfig(chance);
-        }
-
-        return house.getIntegerConfig(chance);
+        return pilot.getHouse().getHouseOptions().getIntegerConfig(chance);
     }
 
     @Override
-    public int getBVMod(Entity unit) {
+    public int getBVMod(Entity unit, Pilot pilot) {
         return 0;
     }
 
     public void assignTrait(Pilot p) {
-        int size = 0;
-        String Trait = "none";
-        String faction = p.getCurrentFaction();
+        FactionTraitFile factionTraitFile = CampaignData.cd.getFactionTraitFileByHouse(p.getHouse().getName());
 
-        // LOGGER.error("Trait Skill Faction: "+faction);
-        Vector<String> traitNames = CampaignMain.cm.getFactionTraits(faction);
-
-        size = traitNames.size();
-
-        // LOGGER.error("Trait Skill size: "+size);
+        if (factionTraitFile == null) {
+            return;
+        }
+        List<FactionTrait> traitNames = factionTraitFile.getFactionTraits();
+        int size = traitNames.size();
 
         if (size < 1) {
             return;
         }
 
+        FactionTrait traits = null;
         if (size == 1) {
-            Trait = traitNames.elementAt(0);
+            traits = traitNames.get(0);
         } else {
-            Trait = traitNames.elementAt(CampaignMain.cm.getRandomNumber(size));
+            traits = traitNames.get(RandomUtils.getRandomNumber(size));
         }
-        if (Trait.indexOf("*") > -1) {
-            p.setTraitName(Trait.substring(0, Trait.indexOf("*")));
-        } else {
-            p.setTraitName(Trait);
-        }
+        p.setTraitName(traits.getName());
     }
 }

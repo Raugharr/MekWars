@@ -25,18 +25,16 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class NewbieHouse extends NonConqHouse {
-    TreeMap<String, Integer> resetPlayers; // <lowerName,numResetsRemaning>
+    TreeMap<String, Integer> resetPlayers = new TreeMap<String, Integer>();
 
     /** Used for serialization */
     public NewbieHouse() {
         super();
-        resetPlayers = new TreeMap<String, Integer>();
     }
 
     public NewbieHouse(
             String name, String houseColor, int baseGunner, int basePilot, String abbreviation) {
         super(name, houseColor, baseGunner, basePilot, abbreviation);
-        resetPlayers = new TreeMap<String, Integer>();
     }
 
     @Override
@@ -110,7 +108,7 @@ public class NewbieHouse extends NonConqHouse {
 
         List<SUnit> newbieUnits = new ArrayList<>();
         if (unitFilename.toLowerCase().trim().endsWith(".mul")) {
-            newbieUnits.addAll(SUnit.createMULUnits(unitFilename, "Training Unit"));
+            newbieUnits.addAll(SUnit.createMULUnits(this, unitFilename, "Training Unit"));
         } else {
             // build the new unit
             SUnit newbieUnit = new SUnit(factionName, unitFilename, weightClass);

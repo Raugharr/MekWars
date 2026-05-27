@@ -2880,10 +2880,10 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
         result.append(getMoney());
         result.append(getExperience());
         result.append(getUnits().size());
-        if (getUnits().size() > 0) {
+        if (!getUnits().isEmpty()) {
             synchronized (getUnits()) {
                 for (SUnit currU : getUnits()) {
-                    currU.getPilot().setCurrentFaction(getMyHouse().getName());
+                    currU.getPilot().setHouse(getMyHouse());
                     result.append(currU.toString(toClient));
                 }
             }

@@ -13,24 +13,23 @@
 /*
  * Created on 24.04.2004
  */
-package mekwars.server.campaign.pilot.skills;
+package mekwars.common.campaign.pilot.skills;
 
-import mekwars.common.Unit;
-import mekwars.common.campaign.pilot.Pilot;
 import megamek.common.Entity;
-import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SHouse;
+
+import mekwars.common.campaign.pilot.Pilot;
 
 /**
  * If a pilot has this skill, it levels as if it had one level less of the ability
  *
  * @author Helge Richter
- *
  */
-public class NaturalAptitudeGunnerySkill extends SPilotSkill {
+public class NaturalAptitudeGunnerySkill extends PilotSkill {
     public NaturalAptitudeGunnerySkill(int id) {
         super(id, "Natural Aptitude: Gunnery", "NAG");
-        setDescription("The pilot checks leveling for gunnery at one level higher then current i.e. 5 instead of 4 for a 4/5 pilot");
+        setDescription(
+                "The pilot checks leveling for gunnery at one level higher then current i.e. 5"
+                    + " instead of 4 for a 4/5 pilot");
     }
 
     public NaturalAptitudeGunnerySkill() {
@@ -38,25 +37,7 @@ public class NaturalAptitudeGunnerySkill extends SPilotSkill {
     }
 
     @Override
-    public int getChance(int unitType, Pilot p) {
-        if (p.getSkills().has(this)) {
-            return 0;
-        }
-
-        String chance = "chancefor" + getAbbreviation() + "for" + Unit.getTypeClassDesc(unitType);
-
-        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
-
-        if (house == null) {
-            return CampaignMain.cm.getIntegerConfig(chance);
-        }
-
-        return house.getIntegerConfig(chance);
-    }
-
-    @Override
-    public int getBVMod(Entity unit) {
+    public int getBVMod(Entity unit, Pilot pilot) {
         return 0;
     }
-
 }

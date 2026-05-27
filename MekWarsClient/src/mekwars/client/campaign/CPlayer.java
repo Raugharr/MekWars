@@ -436,7 +436,7 @@ public class CPlayer extends Player<CUnit> {
                     break;
             }
 
-            currUnit.setAutoUnitData(filename, distInHexes, direction);
+            currUnit.setAutoUnitData(getMyHouse(), filename, distInHexes, direction);
             autoArmy.add(currUnit);
         }// end while(tokens)
     }// end setAutoArmy()
@@ -462,7 +462,7 @@ public class CPlayer extends Player<CUnit> {
             }
 
             CUnit currUnit = new CUnit();
-            currUnit.setAutoUnitData(filename, 0, OffBoardDirection.NORTH);
+            currUnit.setAutoUnitData(getMyHouse(), filename, 0, OffBoardDirection.NORTH);
             autoArmy.add(currUnit);
         }// end while(tokens)
     }// end setAutoArmy()

@@ -37,19 +37,19 @@ import megamek.common.loaders.EntityLoadingException;
 import megamek.common.options.PilotOptions;
 
 import mekwars.common.CampaignData;
+import mekwars.common.House;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.campaign.pilot.skills.PilotSkillStore;
+import mekwars.common.campaign.pilot.skills.TraitSkill;
+import mekwars.common.campaign.pilot.skills.WeaponSpecialistSkill;
 import mekwars.common.campaign.targetsystems.TargetSystem;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.pilot.SPilot;
-import mekwars.server.campaign.pilot.SPilotSkills;
-import mekwars.server.campaign.pilot.skills.SPilotSkill;
-import mekwars.server.campaign.pilot.skills.TraitSkill;
-import mekwars.server.campaign.pilot.skills.WeaponSpecialistSkill;
 import mekwars.server.campaign.util.SerializedMessage;
 
 import org.apache.logging.log4j.LogManager;
@@ -59,7 +59,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -102,7 +101,10 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         } else {
             setPilot(
                     new SPilot(
-                            SPilot.getRandomPilotName(CampaignMain.cm.getR()), gunnery, piloting));
+                            house,
+                            SPilot.getRandomPilotName(CampaignMain.cm.getR()),
+                            gunnery,
+                            piloting));
         }
 
         setWeightClass(weightclass); // default weight class.
@@ -125,7 +127,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         Entity ent = SUnit.loadMech(getUnitFilename());
         setEntity(ent);
         init();
-        setPilot(new SPilot("Vacant", 99, 99)); // only used for repods. A real
+        setPilot(new SPilot(null, "Vacant", 99, 99)); // only used for repods. A real
         // pilot is
         // transferred in later.
         setId(replaceId);
@@ -133,7 +135,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         unitEntity = ent;
     }
 
-    // STATIC METHODS
     /**
      * Method which checks a unit for illegal ammo and replaces it with default ammo loads. useful
      * for removing faction banned ammo from salvage. Note that this is primarily designed to strip
@@ -343,11 +344,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         msg.append(getProducer());
         msg.append(((SPilot) getPilot()).toFileFormat("#", toPlayer));
         if (toPlayer) {
-            LinkedList<MegaMekPilotOption> mmoptions = getPilot().getMegamekOptions();
-            msg.append(mmoptions.size());
-            Iterator<MegaMekPilotOption> i = mmoptions.iterator();
-            while (i.hasNext()) {
-                MegaMekPilotOption mmo = i.next();
+            msg.append(getPilot().getMegamekOptions().size());
+            for (MegaMekPilotOption mmo : getPilot().getMegamekOptions()) {
                 msg.append(mmo.getMmname());
                 msg.append(mmo.isValue());
             }
@@ -916,9 +914,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         setEntity(entity);
 
         if (p.getSkills().has(PilotSkill.WeaponSpecialistSkillID)) {
-            Iterator<PilotSkill> ski = p.getSkills().getSkillIterator();
-            while (ski.hasNext()) {
-                SPilotSkill skill = (SPilotSkill) ski.next();
+            for (PilotSkill skill : p.getSkills().getPilotSkills()) {
                 if (skill.getName().equals("Weapon Specialist")
                         && p.getWeapon().equals("Default")) {
                     // LOGGER.error("setPilot inside");
@@ -972,8 +968,10 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         }
 
         // load configurables
-        int baseUnmaintained = CampaignData.cd.getCampaignOptions().getIntegerConfig("BaseUnmaintainedLevel");
-        int unmaintPenalty = CampaignData.cd.getCampaignOptions().getIntegerConfig("UnmaintainedPenalty");
+        int baseUnmaintained =
+                CampaignData.cd.getCampaignOptions().getIntegerConfig("BaseUnmaintainedLevel");
+        int unmaintPenalty =
+                CampaignData.cd.getCampaignOptions().getIntegerConfig("UnmaintainedPenalty");
 
         // set the actual status
         setStatus(STATUS_UNMAINTAINED);
@@ -1068,8 +1066,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         int skillBV = 0;
         Iterator<PilotSkill> pilotSkills = getPilot().getSkills().getSkillIterator();
 
-        while (pilotSkills.hasNext()) {
-            SPilotSkill skill = (SPilotSkill) pilotSkills.next();
+        for (PilotSkill skill : getPilot().getSkills().getPilotSkills()) {
             skillBV += skill.getBVMod(getEntity(), (SPilot) getPilot());
         }
 
@@ -1094,10 +1091,13 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
     }
 
     public static List<SUnit> createMULUnits(String filename) {
-        return SUnit.createMULUnits(filename, "autoassigned unit");
+        String newbieHouseName = CampaignData.cd.getCampaignOptions().getConfig("NewbieHouseName");
+        House house = CampaignData.cd.getHouseByName(newbieHouseName);
+
+        return SUnit.createMULUnits(house, filename, "autoassigned unit");
     }
 
-    public static List<SUnit> createMULUnits(String filename, String fluff) {
+    public static List<SUnit> createMULUnits(House house, String filename, String fluff) {
         ArrayList<SUnit> mulUnits = new ArrayList<>();
 
         Vector<Entity> loadedUnits = null;
@@ -1113,7 +1113,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         }
 
         for (Entity en : loadedUnits) {
-
             SUnit cm = new SUnit();
 
             cm.setEntity(en);
@@ -1125,6 +1124,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             SPilot pilot = null;
             pilot =
                     new SPilot(
+                            house,
                             en.getCrew().getName(),
                             en.getCrew().getGunnery(),
                             en.getCrew().getPiloting());
@@ -1134,7 +1134,6 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                 pilot.setName(SPilot.getRandomPilotName(CampaignMain.cm.getR()));
             }
 
-            pilot.setCurrentFaction("Common");
             StringTokenizer skillList =
                     new StringTokenizer(
                             en.getCrew().getOptionList(",", PilotOptions.LVL3_ADVANTAGES), ",");
@@ -1145,11 +1144,11 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                 if (skill.toLowerCase().startsWith("weapon_specialist")) {
                     pilot.addMegamekOption(new MegaMekPilotOption("weapon_specialist", true));
                     pilot.getSkills()
-                            .add(SPilotSkills.getPilotSkill(PilotSkill.WeaponSpecialistSkillID));
+                            .add(PilotSkillStore.getPilotSkill(PilotSkill.WeaponSpecialistSkillID));
                     pilot.setWeapon(skill.substring("weapon_specialist".length()).trim());
                 } else if (skill.toLowerCase().startsWith("edge ")) {
                     pilot.addMegamekOption(new MegaMekPilotOption("edge", true));
-                    pilot.getSkills().add(SPilotSkills.getPilotSkill(PilotSkill.EdgeSkillID));
+                    pilot.getSkills().add(PilotSkillStore.getPilotSkill(PilotSkill.EdgeSkillID));
                     try {
                         pilot.getSkills()
                                 .getPilotSkill(PilotSkill.EdgeSkillID)
@@ -1168,7 +1167,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
                     pilot.setExplosion(true);
                 } else {
                     pilot.getSkills()
-                            .add(SPilotSkills.getPilotSkill(PilotSkill.getMMSkillID(skill)));
+                            .add(PilotSkillStore.getPilotSkill(PilotSkill.getMMSkillID(skill)));
                     pilot.addMegamekOption(new MegaMekPilotOption(skill, true));
                 }
             }
@@ -1180,7 +1179,8 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
             while (skillList.hasMoreTokens()) {
                 String skill = skillList.nextToken();
 
-                pilot.getSkills().add(SPilotSkills.getPilotSkill(PilotSkill.getMMSkillID(skill)));
+                pilot.getSkills()
+                        .add(PilotSkillStore.getPilotSkill(PilotSkill.getMMSkillID(skill)));
                 pilot.addMegamekOption(new MegaMekPilotOption(skill, true));
             }
 
@@ -1249,6 +1249,7 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
      * @return the created unit
      */
     public static SUnit create(
+            House house,
             String filename,
             String fluff,
             int gunnery,
@@ -1275,22 +1276,28 @@ public final class SUnit extends Unit implements Comparable<SUnit> {
         }
 
         SPilot pilot = null;
-        if (gunnery == 99 || piloting == 99) pilot = new SPilot("Vacant", 99, 99);
-        else
+        if (gunnery == 99 || piloting == 99) {
+            pilot = new SPilot(null, "Vacant", 99, 99);
+        } else {
             pilot =
                     new SPilot(
-                            SPilot.getRandomPilotName(CampaignMain.cm.getR()), gunnery, piloting);
-
-        pilot.setCurrentFaction("Common");
+                            house,
+                            SPilot.getRandomPilotName(CampaignMain.cm.getR()),
+                            gunnery,
+                            piloting);
+        }
 
         if (skillTokens != null) {
             StringTokenizer skillList = new StringTokenizer(skillTokens, ",");
+
             while (skillList.hasMoreTokens()) {
                 String skill = skillList.nextToken();
-                SPilotSkill pSkill = null;
-                if (skill.equalsIgnoreCase("random"))
-                    pSkill = SPilotSkills.getRandomSkill(pilot, cm.getType());
-                else pSkill = SPilotSkills.getPilotSkill(skill);
+                PilotSkill pSkill = null;
+                if (skill.equalsIgnoreCase("random")) {
+                    pSkill = PilotSkillStore.getRandomSkill(pilot, cm.getType());
+                } else {
+                    pSkill = PilotSkillStore.getPilotSkill(skill);
+                }
 
                 if (pSkill != null) {
                     if (pSkill instanceof TraitSkill) {

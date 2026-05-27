@@ -25,8 +25,11 @@ import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
 
+import mekwars.client.MWClient;
 import mekwars.common.CampaignData;
+import mekwars.common.House;
 import mekwars.common.MegaMekPilotOption;
+import mekwars.common.Player;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
@@ -34,7 +37,6 @@ import mekwars.common.campaign.targetsystems.TargetTypeNotImplementedException;
 import mekwars.common.campaign.targetsystems.TargetTypeOutOfBoundsException;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -87,7 +89,8 @@ public class CUnit extends Unit {
         exp = TokenReader.readInt(STR);
         gunnery = TokenReader.readInt(STR);
         piloting = TokenReader.readInt(STR);
-        p = new Pilot(pilotname, gunnery, piloting);
+        House house = CampaignData.cd.getHouseByName(TokenReader.readString(STR));
+        p = new Pilot(house, pilotname, gunnery, piloting);
         p.setExperience(exp);
         int skillAmount = TokenReader.readInt(STR);
         for (int i = 0; i < skillAmount; i++) {
@@ -310,12 +313,12 @@ public class CUnit extends Unit {
      *
      * @urgru 1/4/05
      */
-    public void setAutoUnitData(String filename, int distance, OffBoardDirection edge) {
+    public void setAutoUnitData(House house, String filename, int distance,
+            OffBoardDirection edge) {
+
         setUnitFilename(filename);
-        // setProducer("Autounit");
-        setPilot(new Pilot("Autopilot", 4, 5));
-        // setType(Unit.VEHICLE);//auto units are always vehs ...
-        createEntity(); // make the entity
+        setPilot(new Pilot(house, "Autopilot", 4, 5));
+        createEntity();// make the entity
         if (distance > 0) {
             unitEntity.setOffBoard(distance, edge); // move
             // it

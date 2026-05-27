@@ -578,7 +578,7 @@ public class MWServ {
         } else { 
             sendRemoveUserToAll(name, true);
         }
-        LOGGER.info("Client " + name + "logged out.");
+        LOGGER.info("Client " + name + " logged out.");
         users.remove(name.toLowerCase());
 
         // remove his host, if he has a game open

@@ -3888,7 +3888,7 @@ public class ShortResolver {
             boolean isPilotChangeable = unit.isSinglePilotUnit();
 
             if (isPilotChangeable && personalQueues) {
-                SPilot pilot = new SPilot("Vacant", 99, 99);
+                SPilot pilot = new SPilot(null, "Vacant", 99, 99);
                 unit.setPilot(pilot);
             }
 
@@ -3941,7 +3941,7 @@ public class ShortResolver {
                 owner.getPersonalPilotQueue().addPilot(unit.getPilot(), unit.getWeightClass());
                 CampaignMain.cm.toUser("PL|AP2PPQ|" + unit.getType() + "|" + unit.getWeightClass() + "|" + ((SPilot) unit.getPilot()).toFileFormat("#", true), owner.getName(), false);
                 owner.getPersonalPilotQueue().checkQueueAndWarn(owner.getName(), unit.getType(), unit.getWeightClass());
-                unit.setPilot(new SPilot("Vacant", 99, 99));
+                unit.setPilot(new SPilot(null, "Vacant", 99, 99));
             } else {
                 owner.getHouseFightingFor().addDispossessedPilot(unit, false);
             }
@@ -4774,7 +4774,7 @@ public class ShortResolver {
         } else {
             for (SUnit unit : so.preCapturedUnits) {
                 if (attacker.getUnit(unit.getId()) != null) {
-                    SPilot pilot = new SPilot("Vacant", 99, 99);
+                    SPilot pilot = new SPilot(null, "Vacant", 99, 99);
                     unit.setPilot(pilot);
                 }
 
@@ -4873,7 +4873,7 @@ public class ShortResolver {
         synchronized (so.preCapturedUnits) {
 			for (int pos = 0; pos < so.preCapturedUnits.size(); pos++) {
 				if (so.preCapturedUnits.elementAt(pos).getId() == unitId) {
-					SPilot pilot = new SPilot("Vacant", 99, 99);
+					SPilot pilot = new SPilot(null, "Vacant", 99, 99);
 					so.preCapturedUnits.elementAt(pos).setPilot(pilot);
 					so.preCapturedUnits.removeElementAt(pos);
 					break;

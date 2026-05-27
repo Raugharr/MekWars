@@ -12,21 +12,20 @@
 
 package mekwars.server.campaign.commands;
 
-import java.util.StringTokenizer;
-
 import mekwars.common.Unit;
+import mekwars.common.campaign.pilot.skills.AstechSkill;
+import mekwars.common.campaign.pilot.skills.EdgeSkill;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.campaign.pilot.skills.PilotSkillStore;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.pilot.SPilot;
-import mekwars.server.campaign.pilot.SPilotSkills;
-import mekwars.server.campaign.pilot.skills.AstechSkill;
-import mekwars.server.campaign.pilot.skills.EdgeSkill;
-import mekwars.server.campaign.pilot.skills.SPilotSkill;
 
-public class  DemotePilotCommand  implements Command {
+import java.util.StringTokenizer;
+
+public class DemotePilotCommand implements Command {
     int accessLevel = 0;
     String syntax = "demotepilot#unitid#skill";
 
@@ -42,22 +41,29 @@ public class  DemotePilotCommand  implements Command {
         return syntax;
     }
 
-    public void process(StringTokenizer command, String Username) {
+    public void process(StringTokenizer command, String username) {
 
         if (accessLevel != 0) {
-            int userLevel = MWServ.getInstance().getUserLevel(Username);
+            int userLevel = MWServ.getInstance().getUserLevel(username);
             if (userLevel < getExecutionLevel()) {
-                CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".", Username, true);
+                CampaignMain.cm.toUser(
+                        "AM:Insufficient access level for command. Level: "
+                                + userLevel
+                                + ". Required: "
+                                + accessLevel
+                                + ".",
+                        username,
+                        true);
                 return;
             }
         }
 
         SUnit unit;
-        SPlayer player = CampaignMain.cm.getPlayer(Username);
+        SPlayer player = CampaignMain.cm.getPlayer(username);
         String skill;
         double cost = 0;
         SPilot pilot;
-        SPilotSkill ps = null;
+        PilotSkill ps = null;
 
         if (!player.getMyHouse().getBooleanConfig("PlayersCanBuyPilotUpgrades")) {
             return;
@@ -71,51 +77,74 @@ public class  DemotePilotCommand  implements Command {
             unit = player.getUnit(Integer.parseInt(command.nextToken()));
             skill = command.nextToken();
         } catch (Exception ex) {
-            CampaignMain.cm.toUser("AM:Improper format. Try: /c " + syntax, Username);
+            CampaignMain.cm.toUser("AM:Improper format. Try: /c " + syntax, username);
             return;
         }
 
         if (unit == null) {
-            CampaignMain.cm.toUser("AM:Cannot find that unit!", Username);
+            CampaignMain.cm.toUser("AM:Cannot find that unit!", username);
             return;
         }
 
         if (unit.hasVacantPilot()) {
-            CampaignMain.cm.toUser("AM:Unit " + unit.getModelName() + " has no pilot to promote!", Username);
+            CampaignMain.cm.toUser(
+                    "AM:Unit " + unit.getModelName() + " has no pilot to promote!", username);
             return;
         }
 
         pilot = (SPilot) unit.getPilot();
 
         if (skill.trim().length() < 1) {
-            CampaignMain.cm.toUser("AM:A skill needs to be provided", Username, true);
+            CampaignMain.cm.toUser("AM:A skill needs to be provided", username, true);
             return;
         }
 
-        ps = SPilotSkills.getPilotSkill(skill);
+        ps = PilotSkillStore.getPilotSkill(skill);
 
         if (!pilot.getSkills().has(ps)) {
-            CampaignMain.cm.toUser("AM:" + pilot.getName() + " does not have " + ps.getName() + ".", Username, true);
+            CampaignMain.cm.toUser(
+                    "AM:" + pilot.getName() + " does not have " + ps.getName() + ".",
+                    username,
+                    true);
             return;
         }
 
         skill = ps.getName();
-        if (pilot.getSkills().has(ps.getId()) && pilot.getSkills().getPilotSkill(ps.getId()).getLevel() >= 0) {
+        if (pilot.getSkills().has(ps.getId())
+                && pilot.getSkills().getPilotSkill(ps.getId()).getLevel() >= 0) {
             if (ps.getId() == PilotSkill.AstechSkillID) {
 
-                ps = (SPilotSkill) pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID);
-                cost = player.getMyHouse().getIntegerConfig("chancefor" + ps.getAbbreviation() + "for" + Unit.getTypeClassDesc(unit.getType()));
+                ps = pilot.getSkills().getPilotSkill(PilotSkill.AstechSkillID);
+                cost =
+                        player.getMyHouse()
+                                .getIntegerConfig(
+                                        "chancefor"
+                                                + ps.getAbbreviation()
+                                                + "for"
+                                                + Unit.getTypeClassDesc(unit.getType()));
                 cost *= ps.getLevel() + 1;
             } else if (ps.getId() == PilotSkill.EdgeSkillID) {
-                ps = (SPilotSkill) pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID);
-                cost = player.getMyHouse().getIntegerConfig("chancefor" + ps.getAbbreviation() + "for" + Unit.getTypeClassDesc(unit.getType()));
+                ps = pilot.getSkills().getPilotSkill(PilotSkill.EdgeSkillID);
+                cost =
+                        player.getMyHouse()
+                                .getIntegerConfig(
+                                        "chancefor"
+                                                + ps.getAbbreviation()
+                                                + "for"
+                                                + Unit.getTypeClassDesc(unit.getType()));
                 cost *= ps.getLevel();
             } else {
-                CampaignMain.cm.toUser("AM:Your pilot already has that skill!", Username);
+                CampaignMain.cm.toUser("AM:Your pilot already has that skill!", username);
                 return;
             }
         } else {
-            cost = player.getMyHouse().getIntegerConfig("chancefor" + ps.getAbbreviation() + "for" + Unit.getTypeClassDesc(unit.getType()));
+            cost =
+                    player.getMyHouse()
+                            .getIntegerConfig(
+                                    "chancefor"
+                                            + ps.getAbbreviation()
+                                            + "for"
+                                            + Unit.getTypeClassDesc(unit.getType()));
         }
 
         cost *= player.getMyHouse().getDoubleConfig("PilotUpgradeSellBackPercent");
@@ -142,9 +171,16 @@ public class  DemotePilotCommand  implements Command {
 
         unit.setPilot(pilot);
 
-        CampaignMain.cm.toUser("AM:Skill " + skill + " removed from pilot " + pilot.getName() + " for " + (int) cost + " exp.", Username);
-        CampaignMain.cm.toUser("PL|UU|" + unit.getId() + "|" + unit.toString(true), Username, false);
-
-    }// end process()
-
+        CampaignMain.cm.toUser(
+                "AM:Skill "
+                        + skill
+                        + " removed from pilot "
+                        + pilot.getName()
+                        + " for "
+                        + (int) cost
+                        + " exp.",
+                username);
+        CampaignMain.cm.toUser(
+                "PL|UU|" + unit.getId() + "|" + unit.toString(true), username, false);
+    } // end process()
 }

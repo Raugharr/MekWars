@@ -12,18 +12,13 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-package mekwars.server.campaign.pilot.skills;
+package mekwars.common.campaign.pilot.skills;
 
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import mekwars.common.campaign.pilot.skills.PilotSkill;
-import megamek.common.Entity;
-import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SHouse;
-import mekwars.server.campaign.pilot.SPilot;
 
-public class PainShunt extends SPilotSkill {
+public class PainShunt extends PilotSkill {
 
     public PainShunt(int id) {
         super(id, "Pain Shunt", "PS");
@@ -38,35 +33,10 @@ public class PainShunt extends SPilotSkill {
     }
 
     @Override
-    public int getBVMod(Entity unit) {
-        return CampaignMain.cm.getIntegerConfig("PainShuntBaseBVMod");
-    }
-
-    @Override
-    public int getBVMod(Entity unit, SPilot p) {
-        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
-        return house.getIntegerConfig("PainShuntBaseBVMod");
-    }
-
-    @Override
     public int getChance(int unitType, Pilot p) {
-        if (p.getSkills().has(PilotSkill.PainShuntID)) {
-            return 0;
-        }
-
         if (unitType == Unit.PROTOMEK) {
             return 0;
         }
-
-        String chance = "chancefor" + getAbbreviation() + "for" + Unit.getTypeClassDesc(unitType);
-
-        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
-
-        if (house == null) {
-            return CampaignMain.cm.getIntegerConfig(chance);
-        }
-
-        return house.getIntegerConfig(chance);
+        return super.getChance(unitType, p);
     }
-
 }

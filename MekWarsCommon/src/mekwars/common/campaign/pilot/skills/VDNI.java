@@ -13,22 +13,20 @@
  * for more details.
  */
 
-package mekwars.server.campaign.pilot.skills;
+package mekwars.common.campaign.pilot.skills;
 
+import megamek.common.Entity;
+
+import mekwars.common.CampaignData;
+import mekwars.common.House;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
-import megamek.common.Entity;
-import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SHouse;
-import mekwars.server.campaign.pilot.SPilot;
 
 /**
- * VDNI
- * 
  * @author Jason Tighe
  */
-public class VDNI extends SPilotSkill {
+public class VDNI extends PilotSkill {
 
     public VDNI(int id) {
         super(id, "VDNI", "VDNI");
@@ -39,39 +37,20 @@ public class VDNI extends SPilotSkill {
     public void modifyPilot(Pilot p) {
         // super.addToPilot(p);
         p.addMegamekOption(new MegaMekPilotOption("vdni", true));
-        p.setBvMod(p.getBVMod() + 0.01);
+        // p.setBvMod(p.getBVMod() + 0.01);
     }
 
     @Override
-    public int getBVMod(Entity unit) {
-        return CampaignMain.cm.getIntegerConfig("VDNIBaseBVMod");
-    }
-
-    @Override
-    public int getBVMod(Entity unit, SPilot p) {
-        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
-        return house.getIntegerConfig("VDNIBaseBVMod");
+    public int getBVMod(Entity unit, Pilot pilot) {
+        return pilot.getHouse().getHouseOptions().getIntegerConfig("VDNIBaseBVMod");
     }
 
     @Override
     public int getChance(int unitType, Pilot p) {
-        if (p.getSkills().has(this)) {
-            return 0;
-        }
-
         if ((unitType != Unit.MEK) && (unitType != Unit.VEHICLE)) {
             return 0;
         }
 
-        String chance = "chancefor" + getAbbreviation() + "for" + Unit.getTypeClassDesc(unitType);
-
-        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
-
-        if (house == null) {
-            return CampaignMain.cm.getIntegerConfig(chance);
-        }
-
-        return house.getIntegerConfig(chance);
+        return super.getChance(unitType, p);
     }
-
 }

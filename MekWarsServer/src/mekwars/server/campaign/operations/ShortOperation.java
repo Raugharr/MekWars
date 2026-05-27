@@ -2898,7 +2898,7 @@ public class ShortOperation implements Comparable<Object> {
 
                 boolean noUnits = false;
                 while (!noUnits && (numCaptured < unitsToCapture)) {
-                    SPilot pilot = new SPilot("Vacant", 99, 99);
+                    SPilot pilot = new SPilot(null, "Vacant", 99, 99);
                     Vector<SUnit> captured = new Vector<SUnit>(1, 1);
                     if (forced) {
                         captured.addAll(currFacility.getMechProduced(type, pilot));
@@ -2982,10 +2982,9 @@ public class ShortOperation implements Comparable<Object> {
         StringBuilder results = new StringBuilder("HS|");
 
         for (SUnit unit : units) {
-
             if (unit.hasVacantPilot()) {
                 SHouse attackingHouse = initiator.getHouseFightingFor();
-                SPilot pilot = new SPilot(SPilot.getRandomPilotName(CampaignMain.cm.getR()), attackingHouse.getBaseGunner(Unit.MEK), attackingHouse.getBasePilot(Unit.MEK));
+                SPilot pilot = new SPilot(unit.getOwner().getMyHouse(), SPilot.getRandomPilotName(CampaignMain.cm.getR()), attackingHouse.getBaseGunner(Unit.MEK), attackingHouse.getBasePilot(Unit.MEK));
                 unit.setPilot(pilot);
             }
             results.append(defendingHouse.removeUnit(unit, false));

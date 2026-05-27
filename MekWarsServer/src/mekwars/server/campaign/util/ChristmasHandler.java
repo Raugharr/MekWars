@@ -31,6 +31,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import mekwars.common.CampaignData;
+import mekwars.common.Player;
+import mekwars.common.Unit;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SPlayer;
 import mekwars.server.campaign.SUnit;
@@ -337,7 +339,7 @@ public class ChristmasHandler {
 		}
 		for(String s : unitList) {
 			CampaignMain.cm.toUser("AM:Under the tree, you find a " + s, p.getName(), true);
-			SUnit u = getUnit(s);
+			SUnit u = getUnit(s, p);
 			p.addUnit(u, true);
 		}
 		setUserReceivedGifts(p);
@@ -407,14 +409,14 @@ public class ChristmasHandler {
 	 * @param unitFileName the unit to be created
 	 * @return SUnit the unit
 	 */
-	private SUnit getUnit(String unitFileName) {
+	private <T extends Unit> SUnit getUnit(String unitFileName, Player<T> player) {
 		SUnit u;
 		String fluff = "Merry Christmas!";
 		int gunnery = 4;
 		int piloting = 5;
 		String skillTokens = "";
 		
-		u = SUnit.create(unitFileName, fluff, gunnery, piloting, null, skillTokens);
+		u = SUnit.create(player.getMyHouse(), unitFileName, fluff, gunnery, piloting, null, skillTokens);
 		u.setChristmasUnit(true);
 		return u;
 	}

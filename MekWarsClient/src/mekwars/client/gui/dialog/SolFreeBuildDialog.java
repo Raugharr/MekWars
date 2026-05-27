@@ -23,8 +23,6 @@
  * 
  */
 
- 
-
 package mekwars.client.gui.dialog;
 
 import mekwars.client.MWClient;
@@ -1168,7 +1166,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
              * hardflag necessary values.
              */
             setUnitFilename(fn.trim());
-            setPilot(new Pilot("Autopilot", 4, 5));
+            setPilot(new Pilot(null, "Autopilot", 4, 5));
 
             /*
              * Try to get an entity from the unit cache, given a filename. This
@@ -1205,7 +1203,7 @@ public class SolFreeBuildDialog extends JFrame implements ItemListener {
 
 
             setUnitFilename(realFilename);
-            setPilot(new Pilot("Autopilot", 4, 5));
+            setPilot(new Pilot(null, "Autopilot", 4, 5));
 
             // get the unit from the summary cache
             unitEntity = en;

@@ -18,6 +18,8 @@ package mekwars.common;
 
 import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.campaign.HouseOptions;
+import mekwars.common.campaign.pilot.skills.PilotSkillStore;
+import mekwars.common.io.file.FactionTraitFile;
 import mekwars.common.persistence.BannedAmmoStore;
 import mekwars.common.persistence.NamedEntityStore;
 import mekwars.common.util.BinReader;
@@ -53,6 +55,8 @@ public class CampaignData implements TerrainProvider {
 
     public static CampaignData cd;
 
+    // Key: House id.
+    private HashMap<String, FactionTraitFile> factionTraitFiles = new HashMap<>();
     private NamedEntityStore<House> factions = new NamedEntityStore<>();
     private NamedEntityStore<Planet> planets = new NamedEntityStore<>();
     private NamedEntityStore<Terrain> terrains = new NamedEntityStore<>();
@@ -285,6 +289,7 @@ public class CampaignData implements TerrainProvider {
     public CampaignData(CampaignOptions campaignOptions) {
         cd = this;
         this.campaignOptions = campaignOptions;
+        PilotSkillStore.initializePilotSkills();
     }
 
     /** Generate the campaign data from an binary stream. */
@@ -470,5 +475,25 @@ public class CampaignData implements TerrainProvider {
         }
 
         houseOptionsMap.put(house.getName(), new HouseOptions(path));
+    }
+
+    /*
+     * Checks to see if the campaign is using advanced repairs and starts up the
+     * thread if it is null
+     */
+    public boolean isUsingAdvanceRepair() {
+        boolean isUsing =
+                getCampaignOptions().getBooleanConfig("UseAdvanceRepair")
+                        || getCampaignOptions().getBooleanConfig("UseSimpleRepair");
+
+        return isUsing;
+    }
+
+    public FactionTraitFile getFactionTraitFileByHouse(String houseName) {
+        return factionTraitFiles.get(houseName.toLowerCase());
+    }
+
+    public void addFactionTraitFile(FactionTraitFile file) {
+        factionTraitFiles.put(file.getHouseName().toLowerCase(), file);
     }
 }

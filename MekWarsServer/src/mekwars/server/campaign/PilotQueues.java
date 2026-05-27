@@ -24,17 +24,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import mekwars.common.CampaignData;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.server.campaign.pilot.SPilot;
-import mekwars.server.campaign.pilot.SPilotSkills;
-import mekwars.server.campaign.pilot.skills.SPilotSkill;
-import mekwars.server.campaign.pilot.skills.TraitSkill;
+import mekwars.common.campaign.pilot.skills.PilotSkillStore;
+import mekwars.common.campaign.pilot.skills.TraitSkill;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,10 +48,11 @@ public class PilotQueues {
 	private Vector<Integer> baseGunnery = new Vector<Integer>(Unit.MAXBUILD,1);
 	private Vector<Integer> basePiloting = new Vector<Integer>(Unit.MAXBUILD,1);
 	private Vector<String>  basePilotSkills = new Vector<String>(Unit.MAXBUILD,1);
-	private String factionString = "";//string for faction specific name list
+    private SHouse owner;
 	private BufferedReader dis;
 	
-	public PilotQueues(Vector<Integer>baseGunnery, Vector<Integer>basePiloting, Vector<String>basePilotSkill) {
+	public PilotQueues(SHouse owner, Vector<Integer>baseGunnery, Vector<Integer>basePiloting, Vector<String>basePilotSkill) {
+        this.owner = owner;
 		for (int i = Unit.MEK; i < Unit.MAXBUILD; i++) {
 			LinkedList<SPilot> v = new LinkedList<SPilot>();
 			queues.add(i,v);
@@ -60,12 +60,19 @@ public class PilotQueues {
 		this.baseGunnery = baseGunnery;
 		this.basePiloting = basePiloting;
 		this.basePilotSkills = basePilotSkill;
-		this.factionString = "";
 	}
 	
 	public PilotQueues() {
 		//Only needed for XStream
 	}
+
+    public SHouse getOwner() {
+        return owner;
+    }
+
+    public void setOwner(SHouse owner) {
+        this.owner = owner;
+    }
 	
 	/**
 	 * 
@@ -80,20 +87,16 @@ public class PilotQueues {
 	 * pilots with the WizWom option true) intact.
 	 */
 	public void addPilot(int type, SPilot p, boolean skipSkillChange) {
-		
 		if (p.getName().equalsIgnoreCase("Vacant")) {
 			p = null;//nuke him
 			return;
 		}
 		
-		p.setCurrentFaction(factionString);
 	    if ( p.getSkills().has(PilotSkill.WeaponSpecialistSkillID)
 	            && !p.getWeapon().equals("Default")){
 	        
-	        Iterator<PilotSkill> ski = p.getSkills().getSkillIterator();
-	        while ( ski.hasNext() ){
-	            SPilotSkill skill = (SPilotSkill)ski.next();
-	            if ( skill.getName().equals("Weapon Specialist")){
+	        for (PilotSkill skill : p.getSkills().getPilotSkills()) {
+	            if (skill.getName().equals("Weapon Specialist")) {
 	                p.getSkills().remove(skill);
 	                break;
 	            }
@@ -121,20 +124,16 @@ public class PilotQueues {
 	 * @urgru 6/07/04
 	 */
 	public void addPilot(int type, SPilot p) {
-		
 		if (p.getName().equalsIgnoreCase("Vacant")) {
 			p = null;//nuke him
 			return;
 		}
 		
-		p.setCurrentFaction(factionString);
-		if ( p.getSkills().has(PilotSkill.WeaponSpecialistSkillID)
-	            && !p.getWeapon().equals("Default")){
+		if (p.getSkills().has(PilotSkill.WeaponSpecialistSkillID)
+	            && !p.getWeapon().equals("Default")) {
 	        
-	        Iterator<PilotSkill> ski = p.getSkills().getSkillIterator();
-	        while ( ski.hasNext() ){
-	            SPilotSkill skill = (SPilotSkill)ski.next();
-	            if ( skill.getName().equals("Weapon Specialist")){
+	        for (PilotSkill skill : p.getSkills().getPilotSkills()) {
+	            if (skill.getName().equals("Weapon Specialist")) {
 	                p.getSkills().remove(skill);
 	                break;
 	            }
@@ -142,7 +141,6 @@ public class PilotQueues {
 	    }
 
 	    if (CampaignMain.cm.getBooleanConfig("ReduceSkillsInQue")) {
-			
 			int rnd = CampaignMain.cm.getRandomNumber(100);
 			if (rnd >= CampaignMain.cm.getIntegerConfig("ClearXPInQue")) {
 				p.setExperience(0);
@@ -213,21 +211,21 @@ public class PilotQueues {
 	 * from the dat files without reprocessing them.
 	 */
 	public void loadPilot(int type, SPilot p) {
-	    p.setCurrentFaction(factionString);
 	    queues.get(type).addLast(p);
 	}//end void loadPilot()
 	
 	public SPilot getPilot(int type) {
 		LinkedList<SPilot> list = queues.get(type);
-		while (list.size() < 10) 
+		while (list.size() < 10)  {
 			addPilot(type, rollNewPilot(type), true);
+        }
 		
 		SPilot pilot = list.remove(CampaignMain.cm.getRandomNumber(list.size()));
 		
 		StringTokenizer ST = new StringTokenizer(getBasePilotSkill(type),"$");
 		
 		while ( ST.hasMoreTokens() ) {
-		    SPilotSkill pSkill = SPilotSkills.getPilotSkill(ST.nextToken());
+		    PilotSkill pSkill = PilotSkillStore.getPilotSkill(ST.nextToken());
 		    if ( !pilot.getSkills().has(pSkill) )
 			pilot.getSkills().add(pSkill);
 		}
@@ -236,15 +234,14 @@ public class PilotQueues {
 	}
 	
 	private SPilot rollNewPilot(int unitType) {
-		
 		SPilot result;
 		int gunnery = this.getBaseGunnery(unitType);
 		int piloting = this.getBasePiloting(unitType);
-		int skillChance = CampaignMain.cm.getIntegerConfig("BornSkillChance");
+		int skillChance = CampaignData.cd.getCampaignOptions().getIntegerConfig("BornSkillChance");
 			
 		int rnd = CampaignMain.cm.getRandomNumber(100);//reroll rnd, use to check for improved pilots
-		boolean allowGreenPilots = CampaignMain.cm.getBooleanConfig("AllowGreenPilots");
-		boolean allowVetPilots = CampaignMain.cm.getBooleanConfig("AllowVetPilots");
+		boolean allowGreenPilots = CampaignData.cd.getCampaignOptions().getBooleanConfig("AllowGreenPilots");
+		boolean allowVetPilots = CampaignData.cd.getCampaignOptions().getBooleanConfig("AllowVetPilots");
 			
 		//Green Pilots
 		if (rnd < 10 && allowGreenPilots) {
@@ -257,22 +254,22 @@ public class PilotQueues {
 			
 		//Improved Pilots
 		if (rnd >= 90 && allowVetPilots) {
-			if (rnd >= 90 && rnd < 95)
+			if (rnd >= 90 && rnd < 95) {
 				piloting--;
-			else if (rnd >= 95)
+            } else if (rnd >= 95) {
 				gunnery--;
+            }
 		}
 			 
-		result = new SPilot(getRandomPilotName(),gunnery,piloting);
-		result.setCurrentFaction(factionString);
+		result = new SPilot(getOwner(), getRandomPilotName(), gunnery, piloting);
 		
 		rnd = CampaignMain.cm.getRandomNumber(100);//reroll rnd, use to check for improved pilots
-		if (rnd <= skillChance && CampaignMain.cm.getBooleanConfig("PilotSkills")) {
-			
-			SPilotSkill skill = SPilotSkills.getRandomSkill(result,unitType);
+		if (rnd <= skillChance && CampaignData.cd.getCampaignOptions().getBooleanConfig("PilotSkills")) {
+			PilotSkill skill = PilotSkillStore.getRandomSkill(result, unitType);
 			if (skill != null) {
-				if (skill instanceof TraitSkill)
+				if (skill instanceof TraitSkill) {
 					((TraitSkill)skill).assignTrait(result);
+                }
 				skill.addToPilot(result);
 				skill.modifyPilot(result);
 			}
@@ -284,31 +281,6 @@ public class PilotQueues {
 	
 	public int getQueueSize(int type) {
 		return queues.get(type).size();
-	}
-	
-	/**
-	 * @param s faction name string
-	 * 
-	 * A method which should be called immedaitely after a pilot
-	 * que is contructed, if faction specific name lists are enabled.
-	 */
-	public void setFactionString(String s) {
-		factionString = s;
-	}
-	
-	/**
-	 * @return the faction string
-	 */
-	public String getFactionString() {
-		return factionString;
-	}
-	
-	public void setFactionBasePilotSkills(String skills) {
-	    StringTokenizer ST = new StringTokenizer(skills);
-	    
-	    while ( ST.hasMoreTokens() ) {
-		
-	    }
 	}
 	
 	/**
@@ -373,7 +345,7 @@ public class PilotQueues {
         	return SPilot.getRandomPilotName(CampaignMain.cm.getR());
        
         try {
-        	File configFile = new File("./data/pilotnames/" + factionString + "Pilotnames.txt");
+        	File configFile = new File("./data/pilotnames/" + owner.getName() + "Pilotnames.txt");
         	FileInputStream fis = new FileInputStream(configFile);
         	dis = new BufferedReader(new InputStreamReader(fis));
         	int names = Integer.parseInt(dis.readLine());
@@ -390,7 +362,7 @@ public class PilotQueues {
         	fis.close();
 
         } catch (Exception e) {
-        	LOGGER.error("A problem occured while retreiving a name from the " + factionString + " Pilotnames File! Tried using Pilotnames.txt instead.");
+        	LOGGER.error("A problem occured while retreiving a name from the " + owner.getName() + " Pilotnames File! Tried using Pilotnames.txt instead.");
         	result = SPilot.getRandomPilotName(CampaignMain.cm.getR());
         }finally{
         	

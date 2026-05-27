@@ -39,16 +39,16 @@ public class CreateUnitCommand implements Command {
 	public void setExecutionLevel(int i) {accessLevel = i;}
 	public String getSyntax() { return syntax;}
 	
-	public void process(StringTokenizer command,String Username) {
+	public void process(StringTokenizer command,String username) {
 		
 		//access level check
-		int userLevel = MWServ.getInstance().getUserLevel(Username);
+		int userLevel = MWServ.getInstance().getUserLevel(username);
 		if(userLevel < getExecutionLevel()) {
-			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",Username,true);
+			CampaignMain.cm.toUser("AM:Insufficient access level for command. Level: " + userLevel + ". Required: " + accessLevel + ".",username,true);
 			return;
 		}
 		
-        SPlayer p = CampaignMain.cm.getPlayer(Username);
+        SPlayer player = CampaignMain.cm.getPlayer(username);
 		String filename;
 		String FlavorText;
 		String gunnery;
@@ -60,24 +60,25 @@ public class CreateUnitCommand implements Command {
 			FlavorText = command.nextToken();
 			gunnery = command.nextToken();
 			piloting = command.nextToken();
-		}catch(Exception ex) {
-			CampaignMain.cm.toUser(syntax, Username);
+		} catch(Exception ex) {
+			CampaignMain.cm.toUser(syntax, username);
 			return;
 		}
 		
 		int weight = SUnit.LIGHT;
 		
-		if ( command.hasMoreElements() )
+		if (command.hasMoreElements()) {
 			weight = Integer.parseInt(command.nextToken());
+        }
 
-		if (command.hasMoreTokens()){
+		if (command.hasMoreTokens()) {
 			skillTokens = command.nextToken();
 		}
 		//cm.setPilot(pilot);
-		SUnit cm = SUnit.create(filename, FlavorText, Integer.parseInt(gunnery), Integer.parseInt(piloting), weight, skillTokens);
-		p.addUnit(cm, true);
-		CampaignMain.cm.toUser("Unit created: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+cm.getPilot().getSkillString(true) + ". ID #" + cm.getId(),Username,true);
-		//server.MWLogger.modLog(Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true));	
-		CampaignMain.cm.doSendModMail("NOTE",Username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+cm.getPilot().getSkillString(true));
+		SUnit cm = SUnit.create(player.getMyHouse(), filename, FlavorText, Integer.parseInt(gunnery), Integer.parseInt(piloting), weight, skillTokens);
+		player.addUnit(cm, true);
+		CampaignMain.cm.toUser("Unit created: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+cm.getPilot().getSkillString(true) + ". ID #" + cm.getId(),username,true);
+		//server.MWLogger.modLog(username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+pilot.getSkillString(true));	
+		CampaignMain.cm.doSendModMail("NOTE",username + " created a unit: " + filename + " " + FlavorText + " " + gunnery + " " + piloting+" "+cm.getPilot().getSkillString(true));
 	}
 }

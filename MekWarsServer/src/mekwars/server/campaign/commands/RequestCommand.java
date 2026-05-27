@@ -406,7 +406,7 @@ public class  RequestCommand  implements Command {
 
                 if (CampaignMain.cm.getBooleanConfig("AllowPersonalPilotQueues") && mech.isSinglePilotUnit()) {
                     SPilot pilot1 = (SPilot) mech.getPilot();
-                    SPilot pilot2 = new SPilot("Vacant", 99, 99);
+                    SPilot pilot2 = new SPilot(null, "Vacant", 99, 99);
                     mech.setPilot(pilot2);
 
                     if (!pilot1.getName().equalsIgnoreCase("Vacant")) {

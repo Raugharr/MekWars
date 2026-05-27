@@ -13,13 +13,11 @@
 /*
  * Created on 24.04.2004
  */
-package mekwars.server.campaign.pilot.skills;
+package mekwars.common.campaign.pilot.skills;
 
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import megamek.common.Entity;
-import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SHouse;
 
 /**
  * If a pilot has this skill they will have a +20% of returning home if ejected and left on the field.
@@ -27,7 +25,7 @@ import mekwars.server.campaign.SHouse;
  * @author Helge Richter
  *
  */
-public class SurvivalistSkill extends SPilotSkill {
+public class SurvivalistSkill extends PilotSkill {
     public SurvivalistSkill(int id) {
         super(id, "Survivalist", "SV");
         setDescription("If a pilot has this skill they will have a +20% of returning home if ejected andleft on the field.");
@@ -38,29 +36,16 @@ public class SurvivalistSkill extends SPilotSkill {
     }
 
     @Override
-    public int getChance(int unitType, Pilot p) {
-        if (p.getSkills().has(this)) {
-            return 0;
-        }
-
+    public int getChance(int unitType, Pilot pilot) {
         if (unitType != Unit.MEK) {
             return 0;
         }
 
-        String chance = "chancefor" + getAbbreviation() + "for" + Unit.getTypeClassDesc(unitType);
-
-        SHouse house = CampaignMain.cm.getHouseFromPartialString(p.getCurrentFaction());
-
-        if (house == null) {
-            return CampaignMain.cm.getIntegerConfig(chance);
-        }
-
-        return house.getIntegerConfig(chance);
+        return super.getChance(unitType, pilot);
     }
 
     @Override
-    public int getBVMod(Entity unit) {
+    public int getBVMod(Entity unit, Pilot pilot) {
         return 0;
     }
-
 }

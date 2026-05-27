@@ -492,7 +492,6 @@ public class DataFetchClient {
      * @see CMainFrame.java
      */
     public void getServerTraitFiles() throws IOException {
-
         try {
             // MMClient.mwClientLog.clientErrLog("- opening connection to datafeed. requesting Trait Files");
             BinReader in = openConnection("ServerTrait");
@@ -520,7 +519,6 @@ public class DataFetchClient {
         } catch (Exception ex) {
             LOGGER.error("Exception: ", ex);
         }
-
     }
 
     /**
@@ -756,7 +754,5 @@ public class DataFetchClient {
             LOGGER.error("Exception: ", ex);
             dataSocket = null;
         }
-
     }
-
 }
