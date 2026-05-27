@@ -86,7 +86,7 @@ public class  SelfPromoteCommand  implements Command {
             return;
         }
 
-        subFaction = user.getMyHouse().getSubFactionList().get(subFactionName);
+        subFaction = user.getMyHouse().getSubfaction(subFactionName);
 
         if (subFaction == null) 
         {

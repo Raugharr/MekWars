@@ -18,14 +18,13 @@ package mekwars.server.campaign.commands;
 
 import java.util.StringTokenizer;
 
+import mekwars.common.SubFaction;
 import mekwars.common.House;
 import mekwars.server.MWServ;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SPlayer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -67,10 +66,10 @@ public class  ListSubFactionCommand  implements Command {
 			for ( House faction : CampaignMain.cm.getData().getAllHouses() ){
 				StringBuffer result = new StringBuffer("SM|Subfaction list for faction ");
 				result.append(faction.getName());
-				for (String subFactionName : faction.getSubFactionList().keySet() ){
-					result.append("<BR>");
-					result.append(subFactionName);
-				}
+                for (SubFaction subFaction : faction.getSubfactions()) {
+                    result.append("<BR>");
+                    result.append(subFaction.getName());
+                }
 				
 				CampaignMain.cm.toUser(result.toString(), Username,false);
 				result.setLength(0);
@@ -85,9 +84,9 @@ public class  ListSubFactionCommand  implements Command {
 
 		StringBuffer result = new StringBuffer("SM|Subfaction list for faction ");
 		result.append(faction.getName());
-		for (String subFactionName : faction.getSubFactionList().keySet() ){
+		for (SubFaction subFaction : faction.getSubfactions()) {
 			result.append("<BR>");
-			result.append(subFactionName);
+			result.append(subFaction.getName());
 		}
 		
 		CampaignMain.cm.toUser(result.toString(), Username,false);

@@ -40,13 +40,9 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import mekwars.client.MWClient;
+import mekwars.common.SubFaction;
 import mekwars.common.House;
 import mekwars.common.util.SpringLayoutHelper;
-//util imports
-//swing imports
-//mekwars imports
-
-
 
 public class SubFactionNameDialog extends JDialog implements ActionListener {
 
@@ -86,8 +82,8 @@ public class SubFactionNameDialog extends JDialog implements ActionListener {
 		if ( faction == null )
 			return;
 		
-		for (String subFaction : faction.getSubFactionList().keySet()) {
-			subFactionNames.add(subFaction);
+		for (SubFaction subFaction : faction.getSubfactions()) {
+			subFactionNames.add(subFaction.getName());
 		}
 		final String[] allSubFactionNames = subFactionNames.toArray(new String[subFactionNames.size()]);
 		
@@ -100,6 +96,7 @@ public class SubFactionNameDialog extends JDialog implements ActionListener {
 		//does most of the work to update list contents
 		nameField = new JTextField();//field for user input
 		nameField.addCaretListener(new CaretListener(){
+            @Override
 			public void caretUpdate(CaretEvent e) {
 				new Thread() {
 					@Override
@@ -111,10 +108,11 @@ public class SubFactionNameDialog extends JDialog implements ActionListener {
 						}
 						ArrayList<String> possibleHouses = new ArrayList<String>();
 						text = text.toLowerCase();
-						for (String subFaction : faction.getSubFactionList().keySet()) {	
-							if (subFaction.toLowerCase().indexOf(text) != -1)
-								possibleHouses.add(subFaction);
-						}
+                        SubFaction subfaction = faction.getSubfaction(text);
+
+                        if (subfaction != null) {
+                            possibleHouses.add(text);
+                        }
 						matchingHousesList.setListData(possibleHouses.toArray(new String[possibleHouses.size()]));
 						
 						/*
@@ -188,26 +186,28 @@ public class SubFactionNameDialog extends JDialog implements ActionListener {
 	 * OK or CANCEL buttons pressed. Handle any
 	 * changes and then close the dialouge.
 	 */
+    @Override
 	public void actionPerformed(ActionEvent event) {
-		
 		String command = event.getActionCommand();
 		
 		if (command.equals(okayCommand)) {
 			 String selectedHouse = (String)matchingHousesList.getSelectedValue();
-		        if (selectedHouse == null)
+		        if (selectedHouse == null) {
 		        	selectedHouse = nameField.getText();
-		        if (!addblank && (selectedHouse == null || selectedHouse.equals("")))
+                }
+		        if (!addblank && (selectedHouse == null || selectedHouse.equals(""))) {
 		        	return;
-		        if (matchingHousesList.getModel().getSize() == 1)
+                }
+		        if (matchingHousesList.getModel().getSize() == 1) {
 		        	selectedHouse = (String)matchingHousesList.getModel().getElementAt(0);
-				for (String subFaction : faction.getSubFactionList().keySet()) {	
-		        	if (selectedHouse.equals(subFaction)) {
-		        	    this.setSubFactionName(subFaction);
-		        	    this.setVisible(false);
-		        		//this.dispose();
-		        		return;
-		        	}
-		        }
+                }
+                SubFaction subfaction = faction.getSubfaction(selectedHouse);
+
+                if (subfaction != null) {
+                    this.setSubFactionName(selectedHouse);
+                    this.setVisible(false);
+                    return;
+                }
 				//New SubFaction
         	    this.setSubFactionName(nameField.getText());
         	    this.setVisible(false);

@@ -69,13 +69,13 @@ public class SetSubFactionConfigCommand implements Command {
 		if ( faction == null )
 			return;
 		
-		if ( !faction.getSubFactionList().containsKey(subFactionName) ){
-			CampaignMain.cm.toUser(faction.getName()+" does not have a subfaction by the name of "+subFactionName, Username);
+		if (faction.getSubfaction(subFactionName) == null) {
+			CampaignMain.cm.toUser(faction.getName() + " does not have a subfaction by the name of " + subFactionName, Username);
 			return;
 		}
 		
 		
-		SubFaction subFaction = faction.getSubFactionList().get(subFactionName);
+		SubFaction subFaction = faction.getSubfaction(subFactionName);
 		
 		try{
 		while( command.hasMoreElements() ){
@@ -86,7 +86,7 @@ public class SetSubFactionConfigCommand implements Command {
 			return;
 		}
 		
-		faction.getSubFactionList().put(subFactionName, subFaction);
+		faction.addSubfaction(subFaction);
 		faction.updated();
 
 		CampaignMain.cm.doSendModMail("NOTE", Username +" has updated configs for subfaction "+subFactionName+" for faction "+faction.getName());

@@ -26,14 +26,21 @@ import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.HTMLConverter;
 import mekwars.common.universe.FactionTag;
-import java.io.IOException;
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 import megamek.common.TechConstants;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Helge Richter
@@ -71,7 +78,7 @@ public class House implements Entity {
     private boolean allowDefectionsFrom = true;
     private boolean allowDefectionsTo = true;
 
-    private ConcurrentHashMap<String, SubFaction> subFactionList = new ConcurrentHashMap<String, SubFaction>();
+    private List<SubFaction> subfactions = new CopyOnWriteArrayList<SubFaction>();
     public ConcurrentHashMap<String, Integer> supportedUnits = new ConcurrentHashMap<String, Integer>();
     public float usedMekBayMultiplier;
     private boolean nonFactionUnitsCostMore = false;
@@ -333,9 +340,9 @@ public class House implements Entity {
         for(FactionTag tag : tags) {
             out.println(tag.ordinal(), "value");
         }
-        out.println(this.getSubFactionList().size(), "subfactionsize");
+        out.println(this.subfactions.size(), "subfactionsize");
 
-        for (SubFaction subFaction : this.getSubFactionList().values()) {
+        for (SubFaction subFaction : this.subfactions) {
             out.println(subFaction.getConfig("Name"), "SubFactionName");
             out.println(subFaction.getConfig("AccessLevel"), "SubFactionAccessLevel");
             for (int type = 0; type < Unit.MAXBUILD; type++ ){
@@ -410,7 +417,7 @@ public class House implements Entity {
 
         int size = in.readInt("subfactionsize");
 
-        this.subFactionList.clear();
+        this.subfactions.clear();
         for (; size > 0; size--) {
             SubFaction subFaction = new SubFaction(in.readLine("SubFactionName"));
             subFaction.setConfig("AccessLevel", in.readLine("SubFactionAccessLevel"));
@@ -424,7 +431,7 @@ public class House implements Entity {
             }
             subFaction.setConfig("MinELO", in.readLine("SubFactionMinELO"));
             subFaction.setConfig("MinExp", in.readLine("SubFactionMinExp"));
-            this.subFactionList.put(subFaction.getConfig("Name"), subFaction);
+            this.subfactions.add(subFaction);
         }
 
     }
@@ -527,12 +534,37 @@ public class House implements Entity {
         return this.usedMekBayMultiplier;
     }
 
-    public ConcurrentHashMap<String, SubFaction> getSubFactionList() {
-        return subFactionList;
+    public List<SubFaction> getSubfactions() {
+        return Collections.unmodifiableList(subfactions);
     }
 
     public SubFaction getSubfaction(String name) {
-        return subFactionList.get(name);
+        for (SubFaction subfaction : subfactions) {
+            if(subfaction.getName().equals(name)) {
+                return subfaction;
+            }
+        }
+        return null;
+    }
+
+    public void addSubfaction(SubFaction subfaction) {
+        if (getSubfaction(subfaction.getName()) == null) {
+            subfactions.add(subfaction);
+        }
+    }
+
+    public boolean removeSubfaction(String name) {
+        Iterator<SubFaction> iterator = subfactions.iterator();
+
+        while (iterator.hasNext()) {
+            SubFaction subfaction = iterator.next();
+
+            if(subfaction.getName().equals(name)) {
+                iterator.remove();
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean houseSupportsUnit(String fileName) {

@@ -39,7 +39,6 @@ import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.composition.HasUnits;
 import mekwars.common.flags.PlayerFlags;
 import mekwars.common.util.TokenReader;
-import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 import megamek.common.Protomech;
 import megamek.Version;
@@ -3421,7 +3420,7 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
     }
 
     public boolean canBePromoted() {
-        if (getMyHouse().getSubFactionList().size() < 1) {
+        if (getMyHouse().getSubfactions().size() < 1) {
             return false;
         }
 
@@ -3453,7 +3452,7 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
         }
         int currentAccessLevel = getSubFactionAccess();
 
-        for (SubFaction subFaction : getMyHouse().getSubFactionList().values()) {
+        for (SubFaction subFaction : getMyHouse().getSubfactions()) {
             if ((currentAccessLevel < Integer.parseInt(subFaction.getConfig("AccessLevel"))) && (getRating() >= Integer.parseInt(subFaction.getConfig("MinELO"))) && (getExperience() >= Integer.parseInt(subFaction.getConfig("MinExp")))) {
                 CampaignMain.cm.toUser("You are eligible for a promotion to subFaction " + subFaction.getConfig("Name") + ". <a href=\"MEKWARS/c RequestSubFactionPromotion#" + subFaction.getConfig("Name") + "\">Click here to request promotion.</a>", getName());
             }
@@ -3479,7 +3478,7 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
         // Auto Promotes and Demotes no need to inform anyone
         if (CampaignMain.cm.getBooleanConfig("autoPromoteSubFaction")) {
         	SubFaction newSF = null;
-        	for (SubFaction subFaction : getMyHouse().getSubFactionList().values()) {
+        	for (SubFaction subFaction : getMyHouse().getSubfactions()) {
         		if ((access > Integer.parseInt(subFaction.getConfig("AccessLevel"))) && (getRating() >= Integer.parseInt(subFaction.getConfig("MinELO"))) && (getExperience() >= Integer.parseInt(subFaction.getConfig("MinExp")))) {
         			if (newSF == null) {
         				newSF = subFaction;
@@ -3515,19 +3514,16 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
             message.append(" no longer meets the eligbility requirements for subfaction ");
             message.append(getSubFactionName());
             message.append(". He is eligible for the following:<br>");
-            for (SubFaction subFaction : getMyHouse().getSubFactionList().values()) {
-
+            for (SubFaction subFaction : getMyHouse().getSubfactions()) {
                 if ((access > Integer.parseInt(subFaction.getConfig("AccessLevel"))) && (getRating() >= Integer.parseInt(subFaction.getConfig("MinELO"))) && (getExperience() >= Integer.parseInt(subFaction.getConfig("MinExp")))) {
-                    message.append(subFaction.getConfig("Name"));
+                    message.append(subFaction.getName());
                     message.append(". <a href=\"MEKWARS/c demoteplayer#");
                     message.append(getName());
                     message.append("#");
                     message.append(subFaction.getConfig("Name"));
                     message.append("\">Click here to demote.</a><br>");
                 }
-
             }
-
 
             message.append("None");
             message.append(". <a href=\"MEKWARS/c demoteplayer#");

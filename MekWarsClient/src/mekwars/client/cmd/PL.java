@@ -106,7 +106,7 @@ public class PL extends Command {
             player.setTechnicians(TokenReader.readInt(st));
         } else if (cmd.equals("SSN")) {
             String subfactionName = TokenReader.readString(st);
-            SubFaction subfaction = player.getMyHouse().getSubFactionList().get(subfactionName);
+            SubFaction subfaction = player.getMyHouse().getSubfaction(subfactionName);
 
             player.setSubfaction(subfaction);
         } else if (cmd.equals("AAA")) {

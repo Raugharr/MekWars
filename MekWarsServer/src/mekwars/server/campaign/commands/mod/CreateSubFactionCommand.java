@@ -70,12 +70,13 @@ public class CreateSubFactionCommand implements Command {
 		if ( faction == null )
 			return;
 		
-		if ( faction.getSubFactionList().containsKey(subFactionName) )
+		if (faction.getSubfaction(subFactionName) != null) {
 			return;
+        }
 		
 		SubFaction subFaction = new SubFaction(subFactionName,Integer.toString(access));
 		
-		faction.getSubFactionList().put(subFactionName, subFaction);
+		faction.addSubfaction(subFaction);
 		
 		faction.updated();
 		

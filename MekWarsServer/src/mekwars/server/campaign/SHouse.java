@@ -259,10 +259,10 @@ public class SHouse extends TimeUpdateHouse
 
         result.append(getTechLevel());
 
-        result.append(getSubFactionList().size());
+        result.append(getSubfactions().size());
 
-        for (String key : getSubFactionList().keySet()) {
-            result.append(getSubFactionList().get(key).toString());
+        for (SubFaction subfaction : getSubfactions()) {
+            result.append(subfaction.toString());
         }
 
         result.append(leaders.size());
@@ -595,7 +595,7 @@ public class SHouse extends TimeUpdateHouse
             for (; amount > 0; amount--) {
                 SubFaction newSubFaction = new SubFaction();
                 newSubFaction.fromString(TokenReader.readString(ST));
-                getSubFactionList().put(newSubFaction.getConfig("Name"), newSubFaction);
+                addSubfaction(newSubFaction);
             }
 
             amount = TokenReader.readInt(ST);
@@ -2717,11 +2717,11 @@ public class SHouse extends TimeUpdateHouse
     }
 
     public SubFaction getZeroLevelSubFaction() {
-        if (getSubFactionList().size() < 1) {
+        if (getSubfactions().size() < 1) {
             return null;
         }
 
-        for (SubFaction subfaction : getSubFactionList().values()) {
+        for (SubFaction subfaction : getSubfactions()) {
             if (subfaction.getAccessLevel() == 0) {
                 return subfaction;
             }
