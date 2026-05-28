@@ -67,11 +67,11 @@ public class Army<T extends Unit> {
     private List<Integer> commanders = new ArrayList<Integer>(1);
     private float rawForceSize = -1;
     private Set<String> legalOperations = new TreeSet<>();
-    private Player<T> owner;
+    private Player owner;
 
     public Army() {}
 
-    public Army(Player<T> owner) {
+    public Army(Player owner) {
         this.owner = owner;
     }
 
@@ -271,7 +271,7 @@ public class Army<T extends Unit> {
         return id;
     }
 
-    public Player<T> getOwner() {
+    public Player getOwner() {
         return owner;
     }
 
@@ -595,8 +595,8 @@ public class Army<T extends Unit> {
         }
 
         Army<?> army = (Army<?>) object;
-        Player<?> owner = getOwner();
-        Player<?> otherOwner = army.getOwner();
+        Player owner = getOwner();
+        Player otherOwner = army.getOwner();
 
         return (!Objects.equals(getId(), army.getId()))
                 && Objects.equals(

@@ -20,6 +20,8 @@ package mekwars.client.campaign;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -41,13 +43,14 @@ import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
 import megamek.common.CriticalSlot;
 import megamek.common.OffBoardDirection;
+import mekwars.common.composition.HasUnits;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
  * Class for Player object used by Client
  */
-public class CPlayer extends Player<CUnit> {
+public class CPlayer extends Player {
     private static final Logger LOGGER = LogManager.getLogger(CPlayer.class);
 
     public static final String DELIMITER = "#"; // delimiter for player strings
@@ -60,6 +63,7 @@ public class CPlayer extends Player<CUnit> {
     private int hangarPenalty;
     private int hangarPurchasePenalties[][] = new int[6][4];
 
+    private HasUnits<CUnit> units = new HasUnits<>();
     private List<CArmy> armies;
     private List<CUnit> autoArmy;
 
@@ -91,6 +95,77 @@ public class CPlayer extends Player<CUnit> {
         personalPilotQueue = new CPersonalPilotQueues();
         adminExcludes = new ArrayList<String>();
         playerExcludes = new ArrayList<String>();
+    }
+
+    /**
+     * @see IHasUnits#getUnits
+     */
+    public List<CUnit> getUnits() {
+        return (List<CUnit>) Collections.unmodifiableList(units.getAll());
+    }
+
+    /**
+     * @see IHasUnits#getUnit(int)
+     */
+    public CUnit getUnit(int id) {
+        return units.get(id);
+    }
+
+    /**
+     * @see IHasUnits#addUnit(Unit, int)
+     */
+    @Override
+    public void addUnit(int position, Unit unit) {
+        unit.setOwner(this);
+        units.add(position, (CUnit) unit);
+    }
+
+    /**
+     * @see IHasUnits#addUnit(Unit)
+     */
+    @Override
+    public void addUnit(Unit unit) {
+        unit.setOwner(this);
+        units.add((CUnit) unit);
+    }
+
+    /**
+     * @see IHasUnits#removeUnit(int)
+     */
+    @Override
+    public boolean removeUnit(int id) {
+        CUnit unit = units.get(id);
+        
+        if (unit != null) {
+            unit.setOwner(null);
+            units.remove(id);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @see IHasUnits#getUnitCount()
+     */
+    @Override
+    public int getUnitCount() {
+        return units.count();
+    }
+
+    /**
+     * @see IHasUnits#countUnits(int, int)
+     */
+    @Override
+    public int countUnits(int type, int weightClass) {
+        return units.count(type, weightClass);
+    }
+
+    /**
+     * @see IHasUnits#clear()
+     */
+    @Override
+    public void clearUnits() {
+        units.clear();
     }
 
     public boolean decodeCommand(String command) {
@@ -883,17 +958,17 @@ public class CPlayer extends Player<CUnit> {
 
         // run third sort
         if ((tertiarySort != primarySort) && (tertiarySort != secondarySort) && (tertiarySort != CUnitComparator.HQSORT_NONE)) {
-            sortUnits(new CUnitComparator(tertiarySort));
+            getUnits().sort(new CUnitComparator(tertiarySort));
         }
 
         // run the second sort
         if ((primarySort != secondarySort) && (secondarySort != CUnitComparator.HQSORT_NONE)) {
-            sortUnits(new CUnitComparator(secondarySort));
+            getUnits().sort(new CUnitComparator(secondarySort));
         }
 
         // now the primary sort
         if (primarySort != CUnitComparator.HQSORT_NONE) {
-            sortUnits(new CUnitComparator(primarySort));
+            getUnits().sort(new CUnitComparator(primarySort));
         }
     }
 
