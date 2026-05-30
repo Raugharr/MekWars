@@ -359,7 +359,6 @@ public class Army<T extends Unit> {
     }
 
     public void removeUnitFromC3Network(int unitId) {
-
         if (getC3Network().get(unitId) != null) {
             getC3Network().remove(unitId);
             return;
@@ -414,14 +413,10 @@ public class Army<T extends Unit> {
     }
 
     public boolean isCommander(int id) {
-        if (commanders.contains(id)) {
-            return true;
-        }
-
-        return false;
+        return commanders.contains(id);
     }
 
-    public void removeCommander(int id) {
+    public void removeCommander(Integer id) {
         commanders.remove(id);
     }
 
