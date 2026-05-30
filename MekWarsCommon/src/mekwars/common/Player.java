@@ -22,24 +22,19 @@
 package mekwars.common;
 
 import mekwars.common.campaign.PersonalPilotQueues;
+import mekwars.common.composition.IHasUnits;
 import mekwars.common.flags.PlayerFlags;
 import mekwars.common.util.UnitUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
 
-public class Player<T extends Unit> {
+public abstract class Player implements IHasUnits {
     private static final Logger LOGGER = LogManager.getLogger(Player.class);
     private static final double INITIAL_RATING = 1600;
 
-    private List<T> units = new ArrayList<>();
     private String name = "";
     private String logo = "";
     private House myHouse = null;
@@ -120,15 +115,6 @@ public class Player<T extends Unit> {
         return getMyHouse().isClan();
     }
 
-    public T getUnit(int unitId) {
-        for (T currU : units) {
-            if (currU.getId() == unitId) {
-                return currU;
-            }
-        }
-        return null;
-    }
-
     public void setTotalTechs(int slot, int techs) {
         if (slot < 0 || slot >= UnitUtils.TECH_TYPES) {
             return;
@@ -159,18 +145,6 @@ public class Player<T extends Unit> {
         return availableTechs;
     }
 
-    public List<T> getUnits() {
-        return Collections.unmodifiableList(units);
-    }
-
-    public void sortUnits(Comparator<? super T> comparator) {
-        Collections.sort(units, comparator);
-    }
-
-    // @salient
-    public int getUnitCount() {
-        return units.size();
-    }
 
     public int getRewardPoints() {
         return rewardPoints;
@@ -425,34 +399,6 @@ public class Player<T extends Unit> {
     }
 
     /**
-     * A method to count the units of a given type and weight in a player's hangar
-     *
-     * @param uType
-     * @param uWeightClass
-     * @return number of units
-     */
-    public int countUnits(int uType, int uWeightClass) {
-        if ((uType < 0) || (uType > Unit.AERO)) {
-            LOGGER.error("Invalid uType {}", uType);
-            return 0;
-        }
-        if ((uWeightClass < 0) || (uWeightClass > Unit.ASSAULT)) {
-            LOGGER.error("Invalid uWeightClass {}", uWeightClass);
-            return 0;
-        }
-        // Actually count them now
-        int count = 0;
-        for (Unit u : units) {
-            if (!u.isChristmasUnit()
-                    && (u.getType() == uType)
-                    && (u.getWeightClass() == uWeightClass)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    /**
      * A method to determine if the player is over the unit limit and the server is configured to
      * use sliding hangar cost increases
      */
@@ -505,24 +451,6 @@ public class Player<T extends Unit> {
             }
         }
         return penalty;
-    }
-
-    /**
-     * Remove a unit from the player's hangar. Called from PL after receipt of a PL|RU|ID
-     * (RemoveUnit#ID) command.
-     *
-     * <p>Note that there is NOT an analagous addUnit() method. Single additions are sent to the
-     * clients using (obtusely enough) the PL|HD (hangar data) command. See .setHangarData()'s
-     * comments, as well as those in SUnit.addUnit(), for details/explanation.
-     */
-    public boolean removeUnit(int unitID) {
-        for (Iterator<T> i = units.iterator(); i.hasNext(); ) {
-            if (i.next().getId() == unitID) {
-                i.remove();
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -626,14 +554,5 @@ public class Player<T extends Unit> {
          * again if possible.
          */
         setCurrentTechPayment(Math.max(0, Math.round(amountToPay)));
-    }
-
-    protected void clearUnits() {
-        units.clear();
-    }
-
-    protected void addUnit(T unit) {
-        units.add(unit);
-        unit.setOwner(this);
     }
 }

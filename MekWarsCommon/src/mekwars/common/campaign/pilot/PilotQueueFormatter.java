@@ -39,7 +39,7 @@ public class PilotQueueFormatter {
      * @return The string containing the contents of every weight class's current pilots for the
      *     player.
      */
-    public static <T extends Unit> String renderAllPilotLists(Player<T> player) {
+    public static String renderAllPilotLists(Player player) {
         StringBuilder pilotListBuilder = new StringBuilder();
 
         pilotListBuilder.append(renderPilotSection(player, "Mek Pilots", Unit.MEK));
@@ -48,8 +48,7 @@ public class PilotQueueFormatter {
         return pilotListBuilder.toString();
     }
 
-    public static <T extends Unit> String renderPilotSection(
-            Player<T> player, String title, int sectionType) {
+    public static String renderPilotSection(Player player, String title, int sectionType) {
         // set up a string buffer to contain the return info
         StringBuilder builder = new StringBuilder();
 

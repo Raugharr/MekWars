@@ -27,11 +27,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class PlayerTest {
-
     @Mock private CampaignData campaignData;
 
     @Mock private CampaignOptions campaignOptions;
@@ -40,11 +40,11 @@ class PlayerTest {
 
     @Mock private House house;
 
-    private Player<Unit> player;
+    private Player player;
 
     @BeforeEach
     void setup() {
-        player = new Player<>();
+        player = Mockito.mock(Player.class, Mockito.CALLS_REAL_METHODS);
 
         player.setMyHouse(house);
         when(campaignData.getCampaignOptions()).thenReturn(campaignOptions);
@@ -59,7 +59,7 @@ class PlayerTest {
         }
 
         @Test
-        void testDoPayTechniciansMath_ZeroTechnicians() {
+        void testZeroTechnicians() {
             player.setTechnicians(0);
             player.doPayTechniciansMath();
 
@@ -68,7 +68,7 @@ class PlayerTest {
         }
 
         @Test
-        void testDoPayTechniciansMath_NegativeAdditivePertech() {
+        void testNegativeAdditivePertech() {
             player.setTechnicians(1);
             when(houseOptions.getFloatConfig("AdditivePerTech")).thenReturn(-0.04f);
             when(houseOptions.getFloatConfig("AdditiveCostCeiling")).thenReturn(1.20f);
@@ -91,7 +91,7 @@ class PlayerTest {
             }
 
             @Test
-            void testDoPayTechniciansMath_OneTechnician() {
+            void testOneTechnician() {
                 player.setTechnicians(1);
                 player.doPayTechniciansMath();
 
@@ -100,7 +100,7 @@ class PlayerTest {
             }
 
             @Test
-            void testDoPayTechniciansMath_MultipleTechniciansBelowCeiling() {
+            void testMultipleTechniciansBelowCeiling() {
                 player.setTechnicians(5);
                 player.doPayTechniciansMath();
 
@@ -109,7 +109,7 @@ class PlayerTest {
             }
 
             @Test
-            void testDoPayTechniciansMath_TechniciansAboveCeiling() {
+            void testTechniciansAboveCeiling() {
                 player.setTechnicians(35);
                 player.doPayTechniciansMath();
 

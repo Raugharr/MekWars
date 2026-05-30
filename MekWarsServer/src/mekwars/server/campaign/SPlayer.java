@@ -21,6 +21,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -34,6 +36,7 @@ import mekwars.common.SubFaction;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
+import mekwars.common.composition.HasUnits;
 import mekwars.common.flags.PlayerFlags;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitComponents;
@@ -67,7 +70,7 @@ import org.apache.logging.log4j.Logger;
  * - Moved slice flu generation to a Quartz task
  */
 
-public final class SPlayer extends Player<SUnit> implements Comparable<Object>, IBuyer, ISeller {
+public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISeller {
     private static final Logger LOGGER = LogManager.getLogger(SPlayer.class);
 
     // STATIC VARIABLES
@@ -92,6 +95,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
 
     private long lastOnline = 0;
 
+    private HasUnits<SUnit> units = new HasUnits<>();
     private List<SArmy> armies = new ArrayList<>();
 
     private SPersonalPilotQueues personalPilotQueue = new SPersonalPilotQueues();
@@ -157,6 +161,79 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
      */
     public SHouse getMyHouse() {
         return (SHouse) super.getMyHouse();
+    }
+
+    /**
+     * @see IHasUnits#getUnits
+     */
+    @Override
+    public List<SUnit> getUnits() {
+        return (List<SUnit>) Collections.unmodifiableList(units.getAll());
+    }
+
+    /**
+     * @see IHasUnits#getUnit(int)
+     */
+    @Override
+    public SUnit getUnit(int id) {
+        return units.get(id);
+    }
+
+    /**
+     * @see IHasUnits#addUnit(Unit, int)
+     */
+    @Override
+    public void addUnit(int position, Unit unit) {
+        unit.setOwner(this);
+        units.add(position, (SUnit) unit);
+    }
+
+    /**
+     * @see IHasUnits#addUnit(Unit)
+     */
+    @Override
+    public void addUnit(Unit unit) {
+        unit.setOwner(this);
+        units.add((SUnit) unit);
+    }
+
+    /**
+     * @see IHasUnits#removeUnit(int)
+     */
+    @Override
+    public boolean removeUnit(int id) {
+        SUnit unit = units.get(id);
+        
+        if (unit != null) {
+            unit.setOwner(null);
+            units.remove(id);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @see IHasUnits#getUnitCount()
+     */
+    @Override
+    public int getUnitCount() {
+        return units.count();
+    }
+
+    /**
+     * @see IHasUnits#countUnits(int, int)
+     */
+    @Override
+    public int countUnits(int type, int weightClass) {
+        return units.count(type, weightClass);
+    }
+
+    /**
+     * @see IHasUnits#clear()
+     */
+    @Override
+    public void clearUnits() {
+        units.clear();
     }
 
     /**
@@ -306,22 +383,6 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     }
 
     /**
-     * Return an SUnit with a given unique ID. If the player doesn't own the
-     * unit, return a null.
-     *
-     * @param int - id the the unit to return
-     * @return the desired unit, or null.
-     */
-    public SUnit getUnit(int id) {
-        for (SUnit currU : getUnits()) {
-            if (currU.getId() == id) {
-                return currU;
-            }
-        }
-        return null;
-    }
-
-    /**
      * ISeller-compliant .removeUnit(). Simply get the unit ID and pass to
      * normal SPlayer.removeUnit(int,bool). Use the (int,boolean) version of
      * remove unit whenever possible in order to intelligently pass select the
@@ -347,7 +408,7 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     public void removeUnit(int unitId, boolean sendArmyUpdate) {
         SUnit Mech = null;
 
-        super.removeUnit(unitId);
+        removeUnit(unitId);
         for (SArmy currA : getArmies()) {
             if (currA.getUnitPosition(unitId) > -1) {
                 currA.removeUnit(unitId);
@@ -2273,14 +2334,14 @@ public final class SPlayer extends Player<SUnit> implements Comparable<Object>, 
     }
 
     // Comparable
-    public int compareTo(Object o) {
-        SPlayer p = (SPlayer) o;
-        if (getRating() > p.getRating()) {
+    @Override
+    public int compareTo(SPlayer player) {
+        if (getRating() > player.getRating()) {
             return 1;
-        } else if (getRating() < p.getRating()) {
+        } else if (getRating() < player.getRating()) {
             return -1;
         }
-        return p.getName().compareTo(getName());
+        return player.getName().compareTo(getName());
     }
 
     public int getScrapsThisTick() {
