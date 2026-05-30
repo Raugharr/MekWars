@@ -2716,7 +2716,7 @@ public class CMainFrame extends JFrame {
                 } else {
                     result.append(Unit.getPriceForUnit(weight, type, p.getMyHouse()));
                 }
-                result.append("</td><td>" + Unit.getInfluenceForUnit(weight, type, p.getMyHouse()) + "</td>");
+                result.append("</td><td>" + p.getMyHouse().getInfluenceForUnit(weight, type) + "</td>");
                 result.append("<td>" + Unit.getPPForUnit(weight, type, p.getMyHouse()) + "</td><td>");
                 if (type == Unit.PROTOMEK) {
                     result.append(mwclient.getServerConfigs("TechsToProtoPointRatio") + " per 5");

@@ -660,18 +660,18 @@ public class House implements Entity {
      * @return int - # of PP it takes to buy a mech of the given units weight
      *         class
      */
-    public int getInfluenceForUnit(int weightclass, int type_id) {
+    public int getInfluenceForUnit(int weightClass, int type_id) {
         int result = Integer.MAX_VALUE;
-        String classtype = Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id) + "Inf";
+        String classtype = Unit.getWeightClassDesc(weightClass) + Unit.getTypeClassDesc(type_id) + "Inf";
 
         if (type_id == Unit.MEK) {
-            result = getHouseOptions().getIntegerConfig(Unit.getWeightClassDesc(weightclass) + "Inf");
+            result = getHouseOptions().getIntegerConfig(Unit.getWeightClassDesc(weightClass) + "Inf");
         } else {
             result = getHouseOptions().getIntegerConfig(classtype);
         }
 
         // modify the result by the faction price modifier
-        result += getHouseUnitFluMod(type_id, weightclass);
+        result += getHouseUnitFluMod(type_id, weightClass);
         return Math.max(result, 0);
     }
 }
