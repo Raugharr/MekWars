@@ -272,6 +272,18 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
         return false;
     }
 
+    public boolean hasSameIP(SPlayer otherPlayer) {
+        try {
+            String p1 = MWServ.getInstance().getIP(getName()).toString();
+            String p2 = MWServ.getInstance().getIP(otherPlayer.getName()).toString();
+
+            return p1.equals(p2);
+        } catch (Exception e) {
+            LOGGER.error("Exception while checking players' IPs", e);
+        }
+        return false;
+    }
+
     /**
      * A Method that returns a rounded ELO rating for this player. Used to send
      * truncated doubles to the userlist.
@@ -823,7 +835,8 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
              * longer an eligible attack target. Need to remove his oplists and
              * clear his entries on other players oplists.
              */
-            OpponentListHelper olh = new OpponentListHelper(this, OpponentListHelper.MODE_REMOVE);
+            OpponentListHelper olh = new OpponentListHelper(this);
+            olh.execute(OpponentListHelper.MODE_REMOVE);
             olh.sendInfoToOpponents("left the front lines and may no longer be attacked");
 
             /*
@@ -873,7 +886,8 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
              * [NOTE: actual checks moved into a helper class so they can be run
              * as a player logs in w/ a running game and after games as well].
              */
-            OpponentListHelper olh = new OpponentListHelper(this, OpponentListHelper.MODE_ADD);
+            OpponentListHelper olh = new OpponentListHelper(this);
+            olh.execute(OpponentListHelper.MODE_ADD);
             olh.sendInfoToOpponents("is headed to the front lines. You may attack it with ");
 
             // make the hash switch
@@ -922,7 +936,8 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
              * logging in because they disconnected mid-game since they have
              * empty op lists.
              */
-            OpponentListHelper olh = new OpponentListHelper(this, OpponentListHelper.MODE_REMOVE);
+            OpponentListHelper olh = new OpponentListHelper(this);
+            olh.execute(OpponentListHelper.MODE_REMOVE);
             olh.sendInfoToOpponents(" entered combat and may no longer be attacked");
         }
 
@@ -954,7 +969,8 @@ public final class SPlayer extends Player implements Comparable<SPlayer>, IBuyer
              * players immediately.
              */
             if (!MWServ.getInstance().getIThread().isImmune(this)) {
-                OpponentListHelper olh = new OpponentListHelper(this, OpponentListHelper.MODE_ADD);
+                OpponentListHelper olh = new OpponentListHelper(this);
+                olh.execute(OpponentListHelper.MODE_ADD);
                 olh.sendInfoToOpponents(" halted combat operations and returned to its post. You may attack it with ");
             }
         }
