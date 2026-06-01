@@ -99,7 +99,7 @@ public class ReaderThread extends Thread {
             System.arraycopy(rlBuffer, 0, a, 0, n);
             return new String(a, "UTF8");
         } catch (Exception e) {
-            throw new IOException();
+            throw new IOException(e);
         }
     }
 

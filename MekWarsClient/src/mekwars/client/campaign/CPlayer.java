@@ -373,6 +373,19 @@ public class CPlayer extends Player {
          * the client and wait for the configs but I'll let it go. --Torren
          */
         mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getfactionconfigs#0" + mwclient.getServerConfigs("TIMESTAMP"));
+        /**
+         * FIXME: This is a hack. Currently the house config files only exist on the server and are
+         * then appended to the campaignconfig.txt above. In order to make the server and client
+         * both use the House's config file we create a dummy config below that will have no
+         * parameters and pass through to the campaignconfig.txt. Later this hack will be removed
+         * when house config files exist properly on the client side.
+         */
+        if (CampaignData.cd.getHouseOptions(getMyHouse().getName()) == null) {
+            Path configPath = FileSystem.getInstance().getFactionConfigPath(getMyHouse().getName());
+
+            CampaignData.cd.loadHouseOptions(configPath, getMyHouse());
+        }
+
 
         /*
          * Now that we have a house set, we can check for BM access properly. Do
@@ -1159,19 +1172,6 @@ public class CPlayer extends Player {
     }
 
     public void setFactionConfigs(String data) {
-        /**
-         * FIXME: This is a hack. Currently the house config files only exist on the server and are
-         * then appended to the campaignconfig.txt above. In order to make the server and client
-         * both use the House's config file we create a dummy config below that will have no
-         * parameters and pass through to the campaignconfig.txt. Later this hack will be removed
-         * when house config files exist properly on the client side.
-         */
-        if (CampaignData.cd.getHouseOptions(getMyHouse().getName()) == null) {
-            Path configPath = FileSystem.getInstance().getFactionConfigPath(getMyHouse().getName());
-
-            CampaignData.cd.loadHouseOptions(configPath, getMyHouse());
-        }
-
         if (data.startsWith("DONE#DONE")) {
             mwclient.setWaiting(false);
             return;
