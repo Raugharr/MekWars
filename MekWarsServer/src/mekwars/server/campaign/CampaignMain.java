@@ -247,12 +247,6 @@ public final class CampaignMain implements Serializable {
             FileSystem.getInstance().getBanAmmoFile().load(data);
         }
 
-        for (House house : data.getAllHouses()) {
-            Path configPath = FileSystem.getInstance().getFactionConfigPath(house.getName());
-
-            CampaignData.cd.loadHouseOptions(configPath, house);
-        }
-
         // misc loads.
         cm.loadOmniVariantMods();
         cm.loadBlackMarketSettings();
@@ -2988,6 +2982,9 @@ public final class CampaignMain implements Serializable {
                     factionFile = new File("./data/factions.xml");
                     SHouse[] factionList = (SHouse[]) getXStream().fromXML(factionFile);
                     for (SHouse house : factionList) {
+                        Path configPath = FileSystem.getInstance().getFactionConfigPath(house.getName());
+
+                        CampaignData.cd.loadHouseOptions(configPath, house);
                         addHouse(house);
                     }
                 } catch (Exception ex) {

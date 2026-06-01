@@ -316,6 +316,9 @@ public class SHouse extends TimeUpdateHouse
 
             StringTokenizer ST = new StringTokenizer(s, "|");
             setName(TokenReader.readString(ST));
+            Path configPath = FileSystem.getInstance().getFactionConfigPath(getName());
+
+            CampaignData.cd.loadHouseOptions(configPath, this);
 
             setMoney(TokenReader.readInt(ST));
             setHouseColor(TokenReader.readString(ST));
