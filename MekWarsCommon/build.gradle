@@ -31,7 +31,7 @@ ext {
     mmconf = "mmconf"
 }
 
-test {  
+test {
     jvmArgs "-Dlog4j2.configurationFile=log4j2.xml"
     useJUnitPlatform()
 }

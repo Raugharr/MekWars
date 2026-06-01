@@ -36,7 +36,9 @@ application {
     applicationDefaultJvmArgs = [
             '-Dlog4j2.configurationFile=log4j2.xml',
             '-Xmx4096m',
-            '-Dsun.awt.disablegrab=true'
+            '-Dsun.awt.disablegrab=true',
+            '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+            '--add-opens', 'java.base/java.util=ALL-UNNAMED'
     ]
 }
 
@@ -109,7 +111,7 @@ distributions {
     }
 }
 
-test {  
+test {
     jvmArgs "-Dlog4j2.configurationFile=log4j2.xml"
     useJUnitPlatform()
 }
