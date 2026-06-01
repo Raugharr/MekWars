@@ -17,7 +17,6 @@
 package mekwars.server.campaign.commands.admin;
 
 import mekwars.common.House;
-import mekwars.common.Unit;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
@@ -25,8 +24,9 @@ import mekwars.server.campaign.SHouse;
 import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.commands.Command;
 
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public class AdminListAndRemoveOMGCommand implements Command {
     int accessLevel = IAuthenticator.ADMIN;
@@ -66,31 +66,28 @@ public class AdminListAndRemoveOMGCommand implements Command {
          */
         for (House house : CampaignMain.cm.getData().getAllHouses()) {
             SHouse faction = (SHouse) house;
-            ConcurrentLinkedQueue<SUnit> units =
-                    new ConcurrentLinkedQueue<SUnit>(faction.getHangar(Unit.MEK).get(Unit.LIGHT));
+            List<SUnit> badUnitList = faction.getHangar().stream()
+                .filter(unit -> unit.getModelName().equals("OMG-UR-FD"))
+                .collect(Collectors.toList());
 
-            for (SUnit currU : units) {
-                if (currU.getModelName().equals("OMG-UR-FD")) {
-                    CampaignMain.cm.doSendModMail(
-                            "NOTE",
-                            username
-                                    + " removed an OMG from the "
-                                    + faction.getName()
-                                    + " bays. Should have been a "
-                                    + currU.getUnitFilename()
-                                    + ".");
-                    CampaignMain.cm.toUser(
-                            "Removed an OMG from the "
-                                    + faction.getName()
-                                    + " bays. Should have been a "
-                                    + currU.getUnitFilename()
-                                    + ".",
-                            username,
-                            true);
-                    faction.getHangar(Unit.MEK).get(Unit.LIGHT).remove(currU);
-                    CampaignMain.cm.doSendToAllOnlinePlayers(
-                            faction, "HS|" + faction.getHSUnitRemovalString(currU), false);
-                }
+            for (SUnit unit : badUnitList) {
+                CampaignMain.cm.doSendModMail(
+                        "NOTE",
+                        username
+                                + " removed an OMG from the "
+                                + faction.getName()
+                                + " bays. Should have been a "
+                                + unit.getUnitFilename()
+                                + ".");
+                CampaignMain.cm.toUser(
+                        "Removed an OMG from the "
+                                + faction.getName()
+                                + " bays. Should have been a "
+                                + unit.getUnitFilename()
+                                + ".",
+                        username,
+                        true);
+                faction.removeUnit(unit, true);
             }
         }
     }

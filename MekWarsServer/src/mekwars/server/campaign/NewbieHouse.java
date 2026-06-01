@@ -57,20 +57,16 @@ public class NewbieHouse extends NonConqHouse {
     }
 
     public String cleanupHangarAndPP() {
-        // Should never be anything in training faction bay.
-        for (int type = 0; type < 3; type++) {
-            for (int size = 0; size < 4; size++) {
-                List<SUnit> Weightclass = getHangar(type).get(size);
-                Weightclass.clear();
-            }
-        }
+        hangar.clear();
         return "";
     }
 
     @Override
     public SUnit getEntity(int weightClass, int typeId) {
         SUnit m = super.getEntity(weightClass, typeId);
-        if (m == null) m = this.getRandomUnit(typeId, weightClass, null).get(0);
+        if (m == null) {
+            m = this.getRandomUnit(typeId, weightClass, null).get(0);
+        }
         return m;
     }
 

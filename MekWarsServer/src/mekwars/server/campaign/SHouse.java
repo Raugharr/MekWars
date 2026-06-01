@@ -25,11 +25,13 @@ import mekwars.common.Planet;
 import mekwars.common.SubFaction;
 import mekwars.common.Unit;
 import mekwars.common.campaign.CampaignOptions;
+import mekwars.common.composition.HasUnits;
 import mekwars.common.util.ComponentToCritsConverter;
 import mekwars.common.util.StringUtils;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitComponents;
 import mekwars.common.util.UnitUtils;
+import mekwars.common.util.RandomUtils;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.commands.Command;
 import mekwars.server.campaign.data.TimeUpdateHouse;
@@ -39,6 +41,7 @@ import mekwars.server.campaign.mercenaries.ContractInfo;
 import mekwars.server.campaign.mercenaries.MercHouse;
 import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.util.SerializedMessage;
+import mekwars.server.io.FileSystem;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,6 +53,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,6 +65,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * A class holding a server-side representation of a House
@@ -77,6 +82,7 @@ public class SHouse extends TimeUpdateHouse
         implements Comparable<Object>, ISeller, IBuyer, Serializable {
     private static final Logger LOGGER = LogManager.getLogger(SHouse.class);
 
+    protected HasUnits<SUnit> hangar = new HasUnits<>();
     // store all online players in *THREE* hashes, one for each primary status
     private ConcurrentHashMap<String, SPlayer> reservePlayers =
             new ConcurrentHashMap<String, SPlayer>();
@@ -86,8 +92,6 @@ public class SHouse extends TimeUpdateHouse
             new ConcurrentHashMap<String, SPlayer>();
 
     private ConcurrentHashMap<String, SPlanet> planets = new ConcurrentHashMap<String, SPlanet>();
-    private ConcurrentHashMap<Integer, List<List<SUnit>>> hangar =
-            new ConcurrentHashMap<Integer, List<List<SUnit>>>();
 
     private Map<String, SmallPlayer> smallPlayers = new HashMap<String, SmallPlayer>();
     private Map<Integer, List<Integer>> components = new HashMap<Integer, List<Integer>>();
@@ -124,39 +128,10 @@ public class SHouse extends TimeUpdateHouse
         result.append(getBasePilot());
         result.append(getAbbreviation());
 
-        // Store the Meks
-        for (int i = 0; i < 4; i++) {
-            List<SUnit> tmpVec = getHangar(Unit.MEK).get(i);
-
-            result.append(tmpVec.size());
-            for (SUnit currU : tmpVec) {
-                result.append(currU.toString(false));
-            }
+        result.append(hangar.count());
+        for (SUnit unit : hangar.getAll()) {
+            result.append(unit.toString(false));
         }
-
-        // Store the Vehicles
-        for (int i = 0; i < 4; i++) {
-            List<SUnit> tmpVec = getHangar(Unit.VEHICLE).get(i);
-
-            result.append(tmpVec.size());
-            for (SUnit currU : tmpVec) {
-                result.append(currU.toString(false));
-            }
-        }
-
-        // Store the Infantry
-        if (Boolean.parseBoolean(this.getConfig("UseInfantry"))) {
-
-            for (int i = 0; i < 4; i++) {
-                List<SUnit> tmpVec = getHangar(Unit.INFANTRY).get(i);
-
-                result.append(tmpVec.size());
-                for (SUnit currU : tmpVec) {
-                    result.append(currU.toString(false));
-                }
-            }
-        }
-
         result.append(getLogo());
 
         if ("".equals(getAnnouncement())) {
@@ -199,26 +174,6 @@ public class SHouse extends TimeUpdateHouse
         }
 
         result.append(getHouseFluFile());
-
-        // Store the BattleArmor (Units)
-        for (int i = 0; i < 4; i++) {
-            List<SUnit> tmpVec = getHangar(Unit.BATTLEARMOR).get(i);
-
-            result.append(tmpVec.size());
-            for (SUnit currU : tmpVec) {
-                result.append(currU.toString(false));
-            }
-        }
-
-        // Store the ProtoMeks (Units)
-        for (int i = 0; i < 4; i++) {
-            List<SUnit> tmpVec = getHangar(Unit.PROTOMEK).get(i);
-
-            result.append(tmpVec.size());
-            for (SUnit currU : tmpVec) {
-                result.append(currU.toString(false));
-            }
-        }
 
         // Store BattleArmor (Pilots)
         result.append(getPilotQueues().getQueueSize(Unit.BATTLEARMOR));
@@ -277,16 +232,6 @@ public class SHouse extends TimeUpdateHouse
             result.append(componentConverter.get(key).toString());
         }
 
-        // Store the Aero (Units)
-        for (int i = 0; i < 4; i++) {
-            List<SUnit> tmpVec = getHangar(Unit.AERO).get(i);
-
-            result.append(tmpVec.size());
-            for (SUnit currU : tmpVec) {
-                result.append(currU.toString(false));
-            }
-        }
-
         // Store Aero (Pilots)
         result.append(getPilotQueues().getQueueSize(Unit.AERO));
         PilotList = getPilotQueues().getPilotQueue(Unit.AERO);
@@ -327,87 +272,24 @@ public class SHouse extends TimeUpdateHouse
 
             setAbbreviation(TokenReader.readString(ST));
 
-            getHangar().put(Unit.MEK, new ArrayList<List<SUnit>>(5));
-            getHangar().put(Unit.VEHICLE, new ArrayList<List<SUnit>>(5));
-            getHangar().put(Unit.INFANTRY, new ArrayList<List<SUnit>>(5));
-            getHangar().put(Unit.PROTOMEK, new ArrayList<List<SUnit>>(5));
-            getHangar().put(Unit.BATTLEARMOR, new ArrayList<List<SUnit>>(5));
-            getHangar().put(Unit.AERO, new ArrayList<List<SUnit>>(5));
-            // Init all of the hangars
-            for (int i = 0; i < 4; i++) {
-
-                getHangar(Unit.MEK).add(new ArrayList<SUnit>());
-                getHangar(Unit.VEHICLE).add(new ArrayList<SUnit>());
-                getHangar(Unit.INFANTRY).add(new ArrayList<SUnit>());
-                getHangar(Unit.BATTLEARMOR).add(new ArrayList<SUnit>());
-                getHangar(Unit.PROTOMEK).add(new ArrayList<SUnit>());
-                getHangar(Unit.AERO).add(new ArrayList<SUnit>());
-            }
-
             boolean newbieHouse = isNewbieHouse();
 
-            // READ THE MEKS
-            for (int i = 0; i < 4; i++) {
-                int numofmechs = (TokenReader.readInt(ST));
-                SUnit m = null;
-                for (int j = 0; j < numofmechs; j++) {
-                    m = new SUnit();
-                    m.fromString(TokenReader.readString(ST));
+            // Read units
+            int hangarSize = TokenReader.readInt(ST);
+            for (int i = 0; i < hangarSize; i++) {
+                SUnit unit = new SUnit();
+                unit.fromString(TokenReader.readString(ST));
 
-                    if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
-                        int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
-                        CampaignMain.cm
-                                .getMarket()
-                                .addListing("Faction_" + getName(), m, priceForUnit, rareSalesTime);
-                        m.setStatus(Unit.STATUS_FORSALE);
-                    }
-                    addUnit(m, false);
+                if (newbieHouse) {
+                    int priceForUnit = getPriceForUnit(unit.getWeightClass(), unit.getType());
+                    int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
+                    CampaignMain.cm
+                            .getMarket()
+                            .addListing("Faction_" + getName(), unit, priceForUnit, rareSalesTime);
+                    unit.setStatus(Unit.STATUS_FORSALE);
                 }
+                addUnit(unit, false);
             }
-
-            // READ THE VEHICLES
-            for (int i = 0; i < 4; i++) {
-                int numofvehicles = (TokenReader.readInt(ST));
-                SUnit m;
-                for (int j = 0; j < numofvehicles; j++) {
-                    m = new SUnit();
-                    m.fromString(TokenReader.readString(ST));
-
-                    if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
-                        int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
-                        CampaignMain.cm
-                                .getMarket()
-                                .addListing("Faction_" + getName(), m, priceForUnit, rareSalesTime);
-                        m.setStatus(Unit.STATUS_FORSALE);
-                    }
-                    addUnit(m, false);
-                }
-            }
-
-            // READ THE INFANTRY
-            if (Boolean.parseBoolean(this.getConfig("UseInfantry"))) {
-                for (int i = 0; i < 4; i++) {
-                    int numofinfantry = (TokenReader.readInt(ST));
-                    SUnit m;
-                    for (int j = 0; j < numofinfantry; j++) {
-                        m = new SUnit();
-                        m.fromString(TokenReader.readString(ST));
-
-                        if (newbieHouse) {
-                            int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
-                            int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
-                            CampaignMain.cm
-                                    .getMarket()
-                                    .addListing(
-                                            "Faction_" + getName(), m, priceForUnit, rareSalesTime);
-                            m.setStatus(Unit.STATUS_FORSALE);
-                        }
-                        addUnit(m, false);
-                    } // end for(num infantry)
-                } // end for(4 weight classes)
-            } // end if("Use Infantry")
 
             setAnnouncement(TokenReader.readString(ST));
 
@@ -501,48 +383,6 @@ public class SHouse extends TimeUpdateHouse
 
             setHouseFluFile(TokenReader.readString(ST));
 
-            // READ THE BattleArmor
-
-            for (int i = 0; i < 4; i++) {
-                int numofmechs = TokenReader.readInt(ST);
-                SUnit m = null;
-                for (int j = 0; j < numofmechs; j++) {
-                    m = new SUnit();
-                    m.fromString(TokenReader.readString(ST));
-
-                    if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
-                        int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
-                        CampaignMain.cm
-                                .getMarket()
-                                .addListing("Faction_" + getName(), m, priceForUnit, rareSalesTime);
-                        m.setStatus(Unit.STATUS_FORSALE);
-                    }
-                    addUnit(m, false);
-                }
-            }
-
-            // READ THE Protos
-
-            for (int i = 0; i < 4; i++) {
-                int numofmechs = TokenReader.readInt(ST);
-                SUnit m = null;
-                for (int j = 0; j < numofmechs; j++) {
-                    m = new SUnit();
-                    m.fromString(TokenReader.readString(ST));
-
-                    if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
-                        int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
-                        CampaignMain.cm
-                                .getMarket()
-                                .addListing("Faction_" + getName(), m, priceForUnit, rareSalesTime);
-                        m.setStatus(Unit.STATUS_FORSALE);
-                    }
-                    addUnit(m, false);
-                }
-            }
-
             // BattleArmor
             pilotCount = TokenReader.readInt(ST);
             for (; pilotCount > 0; pilotCount--) {
@@ -623,27 +463,6 @@ public class SHouse extends TimeUpdateHouse
                 converter.setComponentUsedWeight(TokenReader.readInt(ST));
             }
 
-            // READ THE Aero units on the BM
-
-            for (int i = 0; i < 4; i++) {
-                int numofmechs = TokenReader.readInt(ST);
-                SUnit m = null;
-                for (int j = 0; j < numofmechs; j++) {
-                    m = new SUnit();
-                    m.fromString(TokenReader.readString(ST));
-
-                    if (newbieHouse) {
-                        int priceForUnit = getPriceForUnit(m.getWeightClass(), m.getType());
-                        int rareSalesTime = Integer.parseInt(this.getConfig("RareMinSaleTime"));
-                        CampaignMain.cm
-                                .getMarket()
-                                .addListing("Faction_" + getName(), m, priceForUnit, rareSalesTime);
-                        m.setStatus(Unit.STATUS_FORSALE);
-                    }
-                    addUnit(m, false);
-                }
-            }
-
             // Aero's
             pilotCount = TokenReader.readInt(ST);
             for (; pilotCount > 0; pilotCount--) {
@@ -684,11 +503,6 @@ public class SHouse extends TimeUpdateHouse
                 }
                 ((MercHouse) this).setOutstandingContracts(merctable);
             }
-
-            /*
-             * this.getPilotQueues().setBaseGunnery(this.getBaseGunner());
-             * this.getPilotQueues().setBasePiloting(this.getBasePilot());
-             */
 
             setUsedMekBayMultiplier(Float.parseFloat(getConfig("UsedPurchaseCostMulti")));
             return s;
@@ -762,21 +576,6 @@ public class SHouse extends TimeUpdateHouse
         }
         // currentPP = new ArrayList();
         setMoney(0);
-        getHangar().put(Unit.MEK, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.VEHICLE, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.INFANTRY, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.PROTOMEK, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.BATTLEARMOR, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.AERO, new ArrayList<List<SUnit>>());
-        for (int i = 0; i < 4; i++) {
-            getHangar(Unit.MEK).add(new ArrayList<SUnit>());
-            getHangar(Unit.VEHICLE).add(new ArrayList<SUnit>());
-            getHangar(Unit.INFANTRY).add(new ArrayList<SUnit>());
-            getHangar(Unit.PROTOMEK).add(new ArrayList<SUnit>());
-            getHangar(Unit.BATTLEARMOR).add(new ArrayList<SUnit>());
-            getHangar(Unit.AERO).add(new ArrayList<SUnit>());
-        }
-
         // init the componet array(vectors)
         getComponents().put(Unit.MEK, new ArrayList<Integer>());
         getComponents().put(Unit.VEHICLE, new ArrayList<Integer>());
@@ -795,15 +594,20 @@ public class SHouse extends TimeUpdateHouse
         }
     }
 
-    public ConcurrentHashMap<Integer, List<List<SUnit>>> getHangar() {
-        return hangar;
+    public List<SUnit> getHangar() {
+        return hangar.getAll();
     }
 
-    public List<List<SUnit>> getHangar(int typeId) {
-        if (hangar == null || hangar.size() < typeId) {
-            return null;
-        }
-        return hangar.get(typeId);
+    public List<SUnit> getHangar(int typeId) {
+        List<SUnit> unitList =
+                hangar.getAll().stream()
+                        .filter(unit -> unit.getType() == typeId)
+                        .collect(Collectors.toList());
+        return Collections.unmodifiableList(unitList);
+    }
+
+    public void clearHangar() {
+        hangar.clear();
     }
 
     public boolean isNewbieHouse() {
@@ -881,26 +685,28 @@ public class SHouse extends TimeUpdateHouse
         return false;
     }
 
-    public int remainingHangarSpaceForWeightclass(int weightClass, int typeId) {
-
+    public long remainingHangarSpaceForWeightclass(int weightClass, int typeId) {
         // don't want to count units that are for sale.
-        int trueHangarSize = getNumberOfNonSaleUnits(getHangar(typeId).get(weightClass));
+        long trueHangarSize = 
+                hangar.getAll().stream()
+                        .filter(unit -> unit.getType() == typeId)
+                        .filter(unit -> unit.getWeightClass() == weightClass)
+                        .filter(unit -> unit.getStatus() != Unit.STATUS_FORSALE)
+                        .count();
 
         if (weightClass == Unit.LIGHT) {
             if (typeId != Unit.MEK) {
-                return (Integer.parseInt(this.getConfig("MaxLightUnits")) / 2) - trueHangarSize;
+                return (getHouseOptions().getIntegerConfig("MaxLightUnits") / 2) - trueHangarSize;
             }
-
-            // else
-            return Integer.parseInt(this.getConfig("MaxLightUnits")) - trueHangarSize;
+            return getHouseOptions().getIntegerConfig("MaxLightUnits") - trueHangarSize;
         }
 
         // else (nonlight weighclass)
         if (typeId != Unit.MEK) {
-            return (Integer.parseInt(this.getConfig("MaxOtherUnits")) / 2) - trueHangarSize;
+            return (getHouseOptions().getIntegerConfig("MaxOtherUnits") / 2) - trueHangarSize;
         }
 
-        return Integer.parseInt(this.getConfig("MaxOtherUnits")) - trueHangarSize;
+        return getHouseOptions().getIntegerConfig("MaxOtherUnits") - trueHangarSize;
     }
 
     /**
@@ -1005,9 +811,15 @@ public class SHouse extends TimeUpdateHouse
                 // keep scrapping/selling until we're at cap.
                 while (remainingHangarSpaceForWeightclass(i, typeId) < 0) {
 
+                    final int captureTypeId = typeId;
+                    final int captureWeightClass = i;
                     // get vector of units of the right weight, then select a
                     // random unit from the stack.
-                    List<SUnit> v = this.getHangar(typeId).get(i);
+                    List<SUnit> v = 
+                        hangar.getAll().stream()
+                                .filter(unit -> unit.getType() == captureTypeId)
+                                .filter(unit -> unit.getWeightClass() == captureWeightClass)
+                                .collect(Collectors.toList());
 
                     // Get a unit.  If the SO has set the flag for selecting the oldest units,
                     // first, get that one, if not, get a random one.
@@ -1740,38 +1552,21 @@ public class SHouse extends TimeUpdateHouse
      * like removeUnit() does. Code that makes use of getEntity will need to set up and send one
      * using getHSUnitRemovalString().
      */
-    public SUnit getEntity(int weightclass, int typeId) {
-        List<SUnit> s;
-        try {
-            s = this.getHangar(typeId).get(weightclass);
-        } catch (Exception ex) {
-            LOGGER.error("Exception: ", ex);
-            LOGGER.error("Empty Vector in getEntity");
+    public SUnit getEntity(int weightClass, int typeId) {
+        List<SUnit> unitList =
+                hangar.getAll().stream()
+                        .filter(unit -> unit.getType() == typeId)
+                        .filter(unit -> unit.getWeightClass() == weightClass)
+                        .filter(unit -> unit.getStatus() != Unit.STATUS_FORSALE)
+                        .collect(Collectors.toList());
+
+        if (unitList.isEmpty()) {
             return null;
         }
-
-        if (s == null) {
-            return null;
-        }
-
-        if (getNumberOfNonSaleUnits(s) > 0) {
-            SUnit m = null;
-
-            List<SUnit> unitsToBuy = new ArrayList<>(s.size());
-            for (int pos = 0; pos < s.size(); pos++) {
-                m = s.get(pos);
-                if (m.getStatus() != Unit.STATUS_FORSALE) {
-                    unitsToBuy.add(m);
-                    m.setStatus(Unit.STATUS_OK);
-                }
-            }
-            int ran = CampaignMain.cm.getRandomNumber(unitsToBuy.size());
-            m = unitsToBuy.get(ran);
-            s.remove(m);
-            unitsToBuy.clear();
-            return m;
-        }
-        return null;
+        int index = RandomUtils.getRandomNumber(unitList.size());
+        SUnit unit = unitList.get(index);
+        hangar.remove(unit.getId());
+        return unit;
     }
 
     private int getNumberOfNonSaleUnits(List<SUnit> units) {
@@ -1794,30 +1589,10 @@ public class SHouse extends TimeUpdateHouse
     }
 
     /**
-     * Method required for compliance with ISeller. Loop through all house queues and return a unit
-     * with matching ID, or null if no matching unit is found.
-     *
-     * <p>NOTE: This should be used sparingly. Outside of the Market and various admin commands,
-     * there are ALWAYS better ways to get a unit from SHouse.
+     * Method required for compliance with ISeller. 
      */
-    public SUnit getUnit(int unitIDtoFind) {
-        // for all types and weight classes
-        for (int typeId = 0; typeId < Unit.TOTALTYPES; typeId++) {
-            for (int i = Unit.LIGHT; i <= Unit.ASSAULT; i++) {
-
-                // Loop through all units of the current type/weightclass
-                Iterator<SUnit> it = (this.getHangar(typeId).get(i)).iterator();
-                while (it.hasNext()) {
-                    SUnit currU = it.next();
-                    if (currU.getId() == unitIDtoFind) {
-                        return currU;
-                    }
-                }
-            } // end weight class loop
-        } // end unit type loop
-
-        // no matching unit in any weight/type queue
-        return null;
+    public SUnit getUnit(int id) {
+        return hangar.get(id);
     }
 
     /**
@@ -2036,10 +1811,7 @@ public class SHouse extends TimeUpdateHouse
     }
 
     public String removeUnit(SUnit unitToRemove, boolean sendUpdate) {
-
-        List<SUnit> weightClass =
-                this.getHangar(unitToRemove.getType()).get(unitToRemove.getWeightClass());
-        weightClass.remove(unitToRemove);
+        hangar.remove(unitToRemove.getId());
 
         String hsUpdate = getHSUnitRemovalString(unitToRemove);
         if (sendUpdate) {
@@ -2075,13 +1847,11 @@ public class SHouse extends TimeUpdateHouse
             unit.setWeightClass(Unit.LIGHT);
         }
 
-        List<SUnit> weightClass = getHangar(unit.getType()).get(unit.getWeightClass());
-        if (weightClass.contains(unit)) {
+        if (hangar.get(unit.getId()) != null) {
             return "";
         }
-
-        weightClass.add(unit);
-
+        
+        hangar.add(unit);
         String hsUpdate = this.getHSUnitAdditionString(unit);
         if (sendUpdate
                 && !(this.isNewbieHouse()
@@ -2448,19 +2218,11 @@ public class SHouse extends TimeUpdateHouse
 
         if (!(this.isNewbieHouse()
                 && Boolean.parseBoolean(CampaignMain.cm.getConfig("HiddenBMUnits")))) {
-            for (int typeId = 0; typeId < Unit.TOTALTYPES; typeId++) {
-
-                for (int weight = Unit.LIGHT; weight <= Unit.ASSAULT; weight++) {
-
-                    // skip units that are for sale. send all others.
-                    List<SUnit> unitSet = this.getHangar(typeId).get(weight);
-                    for (SUnit currU : unitSet) {
-                        if (currU.getStatus() == Unit.STATUS_FORSALE) {
-                            continue;
-                        }
-                        result.append(getHSUnitAdditionString(currU));
-                    }
+            for (SUnit unit : hangar.getAll()) {
+                if (unit.getStatus() == Unit.STATUS_FORSALE) {
+                    continue;
                 }
+                result.append(getHSUnitAdditionString(unit));
             }
         }
         return result.toString();
@@ -2677,30 +2439,6 @@ public class SHouse extends TimeUpdateHouse
         this.motd = motd;
     }
 
-    public float getHighestUnitCost(int weight, int type) {
-        float cost = 0;
-        List<SUnit> s;
-
-        try {
-            s = this.getHangar(type).get(weight);
-        } catch (Exception ex) {
-            LOGGER.error("Exception: ", ex);
-            LOGGER.error("Empty Vector in getHighestUnitCost");
-            return Float.MAX_VALUE;
-        }
-        if (s == null) {
-            return Float.MAX_VALUE;
-        }
-
-        for (SUnit unit : s) {
-            if (unit.getEntity().getCost(false) > cost) {
-                cost = (float) unit.getEntity().getCost(false);
-            }
-        }
-
-        return cost;
-    }
-
     public void sendMessageToHouseLeaders(String msg) {
         for (String name : leaders) {
             CampaignMain.cm.toUser(msg, name);
@@ -2805,20 +2543,6 @@ public class SHouse extends TimeUpdateHouse
         }
         // currentPP = new ArrayList();
         setMoney(0);
-        getHangar().put(Unit.MEK, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.VEHICLE, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.INFANTRY, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.PROTOMEK, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.BATTLEARMOR, new ArrayList<List<SUnit>>());
-        getHangar().put(Unit.AERO, new ArrayList<List<SUnit>>());
-        for (int i = 0; i < 4; i++) {
-            getHangar(Unit.MEK).add(new ArrayList<SUnit>());
-            getHangar(Unit.VEHICLE).add(new ArrayList<SUnit>());
-            getHangar(Unit.INFANTRY).add(new ArrayList<SUnit>());
-            getHangar(Unit.PROTOMEK).add(new ArrayList<SUnit>());
-            getHangar(Unit.BATTLEARMOR).add(new ArrayList<SUnit>());
-            getHangar(Unit.AERO).add(new ArrayList<SUnit>());
-        }
 
         // init the componet array(vectors)
         getComponents().put(Unit.MEK, new ArrayList<Integer>());

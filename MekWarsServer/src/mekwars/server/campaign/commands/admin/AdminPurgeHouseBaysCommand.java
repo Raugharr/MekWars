@@ -26,6 +26,7 @@ import mekwars.server.campaign.commands.Command;
 
 import java.util.StringTokenizer;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdminPurgeHouseBaysCommand implements Command {
 
@@ -63,8 +64,6 @@ public class AdminPurgeHouseBaysCommand implements Command {
         String faction = "";
         String strType = "";
         String strClass = "";
-        int unitType = Unit.MEK;
-        int unitClass = Unit.LIGHT;
 
         try {
             faction = command.nextToken();
@@ -85,25 +84,27 @@ public class AdminPurgeHouseBaysCommand implements Command {
 
         try {
             if (strType.equalsIgnoreCase("ALL")) {
-                for (List<List<SUnit>> hangers : h.getHangar().values()) {
-                    for (int size = Unit.LIGHT; size <= Unit.ASSAULT; size++) {
-                        hangers.get(size).clear();
-                    }
-                }
-            } // else select a unit type
-            else {
+                h.clearHangar();
+            // else select a unit type
+            } else {
                 strClass = command.nextToken();
-                unitType = Integer.parseInt(strType);
-                List<List<SUnit>> hanger = h.getHangar(unitType);
+                final int unitType = Integer.parseInt(strType);
 
                 if (strClass.equalsIgnoreCase("ALL")) {
-                    for (int size = Unit.LIGHT; size <= Unit.ASSAULT; size++) {
-                        hanger.get(size).clear();
+                    List<SUnit> hangar = h.getHangar(unitType);
+                    for (SUnit unit : hangar) {
+                        h.removeUnit(unit, false);
                     }
-                } // else one unit size
-                else {
-                    unitClass = Integer.parseInt(strClass);
-                    hanger.get(unitClass).clear();
+                } else {
+                    final int unitClass = Integer.parseInt(strClass);
+                    List<SUnit> hangar = h.getHangar()
+                        .stream()
+                            .filter(unit -> unit.getType() == unitType)
+                            .filter(unit -> unit.getWeightClass() == unitClass)
+                            .collect(Collectors.toList());
+                    for (SUnit unit : hangar) {
+                        h.removeUnit(unit, false);
+                    }
                 }
             }
         } catch (Exception ex) {
