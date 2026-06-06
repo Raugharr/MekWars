@@ -25,6 +25,7 @@ import mekwars.common.Planet;
 import mekwars.common.SubFaction;
 import mekwars.common.Unit;
 import mekwars.common.campaign.CampaignOptions;
+import mekwars.common.campaign.ComponentList;
 import mekwars.common.composition.HasUnits;
 import mekwars.common.util.ComponentToCritsConverter;
 import mekwars.common.util.StringUtils;
@@ -94,7 +95,7 @@ public class SHouse extends TimeUpdateHouse
     private ConcurrentHashMap<String, SPlanet> planets = new ConcurrentHashMap<String, SPlanet>();
 
     private Map<String, SmallPlayer> smallPlayers = new HashMap<String, SmallPlayer>();
-    private Map<Integer, List<Integer>> components = new HashMap<Integer, List<Integer>>();
+    private ComponentList components = new ComponentList();
     private Map<Integer, Integer> unitComponents = new HashMap<Integer, Integer>();
 
     private int money;
@@ -142,14 +143,7 @@ public class SHouse extends TimeUpdateHouse
 
         // Write the Components / BuildingPP's
         result.append("Components");
-        for (Integer id : getComponents().keySet()) {
-            List<Integer> componentList = getComponents().get(id);
-            result.append(id.intValue());
-            result.append(componentList.size());
-            for (Integer amount : componentList) {
-                result.append(amount.intValue());
-            }
-        }
+        getComponents().forEach(component -> result.append(component.getProductionPoints()));
         result.append("EndComponents");
 
         result.append(getInitialHouseRanking());
@@ -252,7 +246,7 @@ public class SHouse extends TimeUpdateHouse
         return motd.replaceAll("[\\r\\n]", "");
     }
 
-    public Map<Integer, List<Integer>> getComponents() {
+    public ComponentList getComponents() {
         return components;
     }
 
@@ -291,6 +285,7 @@ public class SHouse extends TimeUpdateHouse
                 addUnit(unit, false);
             }
 
+            setLogo(TokenReader.readString(ST));
             setAnnouncement(TokenReader.readString(ST));
 
             /*
@@ -303,39 +298,8 @@ public class SHouse extends TimeUpdateHouse
                 next = TokenReader.readString(ST);
             }
 
-            // init the componet array(vectors)
-            getComponents().put(Unit.MEK, new ArrayList<Integer>());
-            getComponents().put(Unit.VEHICLE, new ArrayList<Integer>());
-            getComponents().put(Unit.INFANTRY, new ArrayList<Integer>());
-            getComponents().put(Unit.BATTLEARMOR, new ArrayList<Integer>());
-            getComponents().put(Unit.PROTOMEK, new ArrayList<Integer>());
-            getComponents().put(Unit.AERO, new ArrayList<Integer>());
-
-            for (int i = 0; i < 4; i++) {
-                getComponents().get(Unit.MEK).add(0);
-                getComponents().get(Unit.VEHICLE).add(0);
-                getComponents().get(Unit.INFANTRY).add(0);
-                getComponents().get(Unit.BATTLEARMOR).add(0);
-                getComponents().get(Unit.PROTOMEK).add(0);
-                getComponents().get(Unit.AERO).add(0);
-            }
-
-            boolean finished = false;
-            while (!finished) {
-                next = TokenReader.readString(ST);
-                if (!next.equals("EndComponents")) {
-                    Integer id = Integer.parseInt(next);
-                    int count = TokenReader.readInt(ST);
-                    for (int i = 0; i < count; i++) {
-                        List<Integer> v = getComponents().get(id);
-                        int val = TokenReader.readInt(ST);
-                        v.set(i, val);
-                    }
-                    // getComponents().put(id,v);
-                } else {
-                    finished = true;
-                }
-            }
+            getComponents().fromString(ST);
+            next = TokenReader.readString(ST);
 
             setInitialHouseRanking(TokenReader.readInt(ST));
             setConquerable(TokenReader.readBoolean(ST));
@@ -563,35 +527,8 @@ public class SHouse extends TimeUpdateHouse
         setAbbreviation(abbreviation);
         setHouseColor(houseColor);
         setName(name);
-        // Vehicles = new ArrayList();
 
-        for (int j = 0; j < 5; j++) // Type
-        {
-            List<Integer> v = new ArrayList<Integer>();
-            for (int i = 0; i < 4; i++) // Weight
-            {
-                v.add(0);
-            }
-            getComponents().put(j, v);
-        }
-        // currentPP = new ArrayList();
         setMoney(0);
-        // init the componet array(vectors)
-        getComponents().put(Unit.MEK, new ArrayList<Integer>());
-        getComponents().put(Unit.VEHICLE, new ArrayList<Integer>());
-        getComponents().put(Unit.INFANTRY, new ArrayList<Integer>());
-        getComponents().put(Unit.BATTLEARMOR, new ArrayList<Integer>());
-        getComponents().put(Unit.AERO, new ArrayList<Integer>());
-        getComponents().put(Unit.PROTOMEK, new ArrayList<Integer>());
-
-        for (int i = 0; i < 4; i++) {
-            getComponents().get(Unit.MEK).add(0);
-            getComponents().get(Unit.VEHICLE).add(0);
-            getComponents().get(Unit.INFANTRY).add(0);
-            getComponents().get(Unit.BATTLEARMOR).add(0);
-            getComponents().get(Unit.PROTOMEK).add(0);
-            getComponents().get(Unit.AERO).add(0);
-        }
     }
 
     public List<SUnit> getHangar() {
@@ -1344,15 +1281,7 @@ public class SHouse extends TimeUpdateHouse
      * @return typeId - number of PP the faction has for a given weight class
      */
     public int getPP(int weight, int typeId) {
-        List<Integer> v = getComponents().get(typeId);
-        if (v == null) {
-            return 0;
-        }
-        Integer i = v.get(weight);
-        if (i == null) {
-            return 0;
-        }
-        return i.intValue();
+        return getComponents().get(typeId, weight).getProductionPoints();
     }
 
     public List<SUnitFactory> getPossibleFactoryForProduction(
@@ -1506,7 +1435,6 @@ public class SHouse extends TimeUpdateHouse
         int startingPP = getPP(weight, typeId);
 
         try {
-
             // nothing to add if they have no factories.
             if (!Boolean.parseBoolean(this.getConfig("ProduceComponentsWithNoFactory"))
                     && getPossibleFactoryForProduction(typeId, weight, true).size() < 1
@@ -1514,19 +1442,13 @@ public class SHouse extends TimeUpdateHouse
                 return "";
             }
 
-            // standard addition
-            List<Integer> v = getComponents().get(typeId);
-            v.set(weight, v.get(weight).intValue() + val);
+            getComponents().get(typeId, weight).addAmount(val);
         } catch (Exception ex) {
             LOGGER.error("Unable to add PP to house: ", ex);
             LOGGER.error("weight: " + weight + " type: " + typeId + " value: " + val);
-            List<Integer> v = new ArrayList<Integer>();
-            for (int i = 0; i < 4; i++) {
-                // Weight
-                v.add(0);
+            for (int i = Unit.MEK; i < Unit.AERO; i++) {
+                getComponents().get(typeId, i).setProductionPoints(0);
             }
-
-            getComponents().put(typeId, v);
         }
 
         // if PP is unchanged, no need to send a real update
@@ -2532,34 +2454,8 @@ public class SHouse extends TimeUpdateHouse
         setHousePlayerColors(CampaignMain.cm.getConfig("DisputedPlanetColor"));
 
         LOGGER.debug(getName());
-        // Vehicles = new ArrayList();
-
-        for (int j = 0; j < 5; j++) { // Type
-            List<Integer> v = new ArrayList<Integer>();
-            for (int i = 0; i < 4; i++) { // Weight
-                v.add(0);
-            }
-            getComponents().put(j, v);
-        }
-        // currentPP = new ArrayList();
+        
         setMoney(0);
-
-        // init the componet array(vectors)
-        getComponents().put(Unit.MEK, new ArrayList<Integer>());
-        getComponents().put(Unit.VEHICLE, new ArrayList<Integer>());
-        getComponents().put(Unit.INFANTRY, new ArrayList<Integer>());
-        getComponents().put(Unit.BATTLEARMOR, new ArrayList<Integer>());
-        getComponents().put(Unit.PROTOMEK, new ArrayList<Integer>());
-        getComponents().put(Unit.AERO, new ArrayList<Integer>());
-
-        for (int i = 0; i < 4; i++) {
-            getComponents().get(Unit.MEK).add(0);
-            getComponents().get(Unit.VEHICLE).add(0);
-            getComponents().get(Unit.INFANTRY).add(0);
-            getComponents().get(Unit.BATTLEARMOR).add(0);
-            getComponents().get(Unit.PROTOMEK).add(0);
-            getComponents().get(Unit.AERO).add(0);
-        }
         updated();
     }
 
@@ -2759,9 +2655,9 @@ public class SHouse extends TimeUpdateHouse
 
                     components = Math.ceil(components);
                     components = Math.max(1, components);
-                    if (getComponents()
-                                    .get(converter.getComponentUsedType())
-                                    .get(converter.getComponentUsedWeight())
+                    if (getComponents().get(
+                                converter.getComponentUsedType(),
+                                converter.getComponentUsedWeight()).getProductionPoints()
                             < components) {
                         continue;
                     }
@@ -2824,9 +2720,9 @@ public class SHouse extends TimeUpdateHouse
 
                     components = Math.max(1, components);
 
-                    if (getComponents()
-                                    .get(converter.getComponentUsedType())
-                                    .get(converter.getComponentUsedWeight())
+                    if (getComponents().get(
+                                converter.getComponentUsedType(),
+                                converter.getComponentUsedWeight()).getProductionPoints()
                             < components) {
                         continue;
                     }
