@@ -89,9 +89,8 @@ public final class SubFactionConfigurationDialog implements ActionListener {
         if ( faction == null )
             return;
         
-        if ( faction.getSubFactionList().containsKey(subFactionName) ) 
-            this.subFactionConfig = faction.getSubFactionList().get(subFactionName);
-        else{
+        this.subFactionConfig = faction.getSubfaction(subFactionName);
+        if (this.subFactionConfig == null) {
             this.subFactionConfig = new SubFaction(subFactionName,"0");
             this.subFactionConfig.setConfig("MinELO", "0");
             this.subFactionConfig.setConfig("MinExp", "0");

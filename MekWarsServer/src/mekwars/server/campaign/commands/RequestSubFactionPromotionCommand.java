@@ -46,7 +46,7 @@ public class  RequestSubFactionPromotionCommand  implements Command {
 		
 		try{
 			subFactionName = command.nextToken();
-			subFaction = faction.getSubFactionList().get(subFactionName);
+			subFaction = faction.getSubfaction(subFactionName);
 		}catch(Exception ex){
 			CampaignMain.cm.toUser("AM:Invalid Syntax: /RequestSubFactionPromotion subFactionname", Username);
 			return;

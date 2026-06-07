@@ -67,7 +67,7 @@ public class RemoveSubFactionCommand implements Command {
 			return;
 		
 
-		faction.getSubFactionList().remove(subFactionName);
+		faction.removeSubfaction(subFactionName);
 		
 		faction.updated();
 		

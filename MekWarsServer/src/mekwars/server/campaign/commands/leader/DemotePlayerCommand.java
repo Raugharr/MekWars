@@ -80,7 +80,7 @@ public class DemotePlayerCommand implements Command {
         if (subFactionName.equalsIgnoreCase("none"))
             subFaction = new SubFaction();
         else
-            subFaction = grunt.getMyHouse().getSubFactionList().get(subFactionName);
+            subFaction = grunt.getMyHouse().getSubfaction(subFactionName);
 
         if (subFaction == null) {
             CampaignMain.cm.toUser("AM:That SubFaction does not exist for faction " + grunt.getMyHouse().getName() + ".", Username);

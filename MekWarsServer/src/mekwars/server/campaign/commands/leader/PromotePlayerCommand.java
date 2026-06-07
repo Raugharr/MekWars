@@ -82,7 +82,7 @@ public class PromotePlayerCommand implements Command {
             CampaignMain.cm.toUser("AM:You can only promote players that within your same faction!", Username);
             return;
         }
-        subFaction = grunt.getMyHouse().getSubFactionList().get(subFactionName);
+        subFaction = grunt.getMyHouse().getSubfaction(subFactionName);
 
         if (subFaction == null) {
             CampaignMain.cm.toUser("AM:That SubFaction does not exist for faction " + grunt.getMyHouse().getName() + ".", Username);
