@@ -24,7 +24,7 @@ import mekwars.client.GUIClient;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
-import mekwars.common.CampaignData;
+import mekwars.common.SubFaction;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
@@ -105,7 +105,10 @@ public class PL extends Command {
         } else if (cmd.equals("ST")) {
             player.setTechnicians(TokenReader.readInt(st));
         } else if (cmd.equals("SSN")) {
-            player.setSubFaction(TokenReader.readString(st));
+            String subfactionName = TokenReader.readString(st);
+            SubFaction subfaction = player.getMyHouse().getSubFactionList().get(subfactionName);
+
+            player.setSubfaction(subfaction);
         } else if (cmd.equals("AAA")) {
             player.setAutoArmy(st);// give it the whole tokenizer
         } else if (cmd.equals("AAM")) {
@@ -172,7 +175,7 @@ public class PL extends Command {
         } else if (cmd.equals("UPPC")) {
             mwclient.updatePlayerPartsCache(TokenReader.readString(st));
         } else if (cmd.equals("RPPC")) {
-            mwclient.getPlayer().getPartsCache().fromString(st);
+            mwclient.getPlayer().getUnitComponents().fromString(st);
         } else if (cmd.equals("STN")) {
             mwclient.getPlayer().setTeamNumber(TokenReader.readInt(st));
         } else if (cmd.equals("VUI")) {
@@ -200,7 +203,7 @@ public class PL extends Command {
             UnitUtils.applyBattleDamage(unit.getEntity(), damage, true);
             new AdvancedRepairDialog(mwclient, unit, unit.getEntity(), false);
         } else if (cmd.equals("CPPC")) {
-            mwclient.getPlayer().getPartsCache().clear();
+            mwclient.getPlayer().getUnitComponents().clear();
         } else if (cmd.equals("UDAO")) {
             mwclient.updateOpData(true);
             if (!mwclient.isDedicated()) {

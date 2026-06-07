@@ -531,6 +531,10 @@ public class House implements Entity {
         return subFactionList;
     }
 
+    public SubFaction getSubfaction(String name) {
+        return subFactionList.get(name);
+    }
+
     public boolean houseSupportsUnit(String fileName) {
         if (fileName.indexOf(".") > 0)
             fileName = fileName.substring(0, fileName.indexOf("."));

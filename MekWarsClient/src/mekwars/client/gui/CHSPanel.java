@@ -694,7 +694,7 @@ public class CHSPanel extends JPanel {
 
                     TreeMap<String, String> facs = factoriesInfo.get(weight + "$" + typetocheck);
                     if ((facs != null)
-                            && Boolean.parseBoolean(thePlayer.getSubFaction().getConfig(buyNew))) {
+                            && Boolean.parseBoolean(thePlayer.getSubfaction().getConfig(buyNew))) {
 
                         boolean hasOpen = false;
                         int minrefresh = Integer.MAX_VALUE;
@@ -875,7 +875,7 @@ public class CHSPanel extends JPanel {
                         "CanBuyUsed"
                                 + Unit.getWeightClassDesc(weight)
                                 + Unit.getTypeClassDesc(type);
-                if (!Boolean.parseBoolean(thePlayer.getSubFaction().getConfig(buyUsed))) {
+                if (!Boolean.parseBoolean(thePlayer.getSubfaction().getConfig(buyUsed))) {
                     continue;
                 }
 

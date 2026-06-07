@@ -1934,9 +1934,9 @@ public final class MWClient extends GameHost implements IClient {
         int value = Integer.parseInt(ST.nextToken());
 
         if (value < 1) {
-            getPlayer().getPartsCache().remove(key, Math.abs(value));
+            getPlayer().getUnitComponents().remove(key, Math.abs(value));
         } else {
-            getPlayer().getPartsCache().add(key, value);
+            getPlayer().getUnitComponents().add(key, value);
         }
 
         getGUIClient().getMainFrame().getMainPanel().refreshBME();

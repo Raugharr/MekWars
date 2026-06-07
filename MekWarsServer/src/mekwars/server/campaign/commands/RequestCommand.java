@@ -150,7 +150,7 @@ public class  RequestCommand  implements Command {
             return;
         }
 
-        if (!Boolean.parseBoolean(p.getSubFaction().getConfig("CanBuyNew" + Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id)))) {
+        if (!Boolean.parseBoolean(p.getSubfaction().getConfig("CanBuyNew" + Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id)))) {
             CampaignMain.cm.toUser("AM:Sorry as a member of " + p.getSubFactionName() + " you are unable to purchase this unit.", Username);
             return;
         }

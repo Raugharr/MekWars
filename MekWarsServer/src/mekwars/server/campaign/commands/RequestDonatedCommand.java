@@ -133,7 +133,7 @@ public class  RequestDonatedCommand  implements Command {
             return;
         }
 
-        if (!Boolean.parseBoolean(p.getSubFaction().getConfig("CanBuyUsed" + Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id)))) {
+        if (!Boolean.parseBoolean(p.getSubfaction().getConfig("CanBuyUsed" + Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(type_id)))) {
         	
             CampaignMain.cm.toUser("AM:Sorry as a member of " + p.getSubFactionName() + " you are unable to purchase this unit.", Username);
             return;

@@ -174,7 +174,7 @@ public class SetUnitAmmoByCritCommand implements Command {
                 ammoCharge = 0;
                 
                 // unload all of old ammo
-                p.getUnitParts().add(currAmmo.getInternalName(), mWeapon.getUsableShotsLeft());
+                p.getUnitComponents().add(currAmmo.getInternalName(), mWeapon.getUsableShotsLeft());
                 int newAmmoAmount = p.getPartsAmount(ammoType.getInternalName());
 
                 if (p.getAutoReorder() && (newAmmoAmount < refillShots)) {

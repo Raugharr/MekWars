@@ -564,7 +564,7 @@ public class  DefectCommand  implements Command {
 
             p.getMyHouse().removePlayer(p, false);
             p.setMyHouse(newHouse);
-            p.setSubFaction(newHouse.getZeroLevelSubFaction());
+            p.setSubfaction(newHouse.getZeroLevelSubFaction());
             // CampaignMain.cm.forceSavePlayer(p);
 
             // send the various messages

@@ -76,7 +76,7 @@ public class  RequestSubFactionPromotionCommand  implements Command {
 		}
 		
 		if ( CampaignMain.cm.getBooleanConfig("autoPromoteSubFaction") ){
-			player.setSubFaction(subFactionName);
+            player.setSubfaction(player.getMyHouse().getSubfaction(subFactionName));
 			CampaignMain.cm.toUser("PL|SSN|"+subFactionName, Username,false);
 			CampaignMain.cm.toUser("HS|CA|0", player.getName(), false);//clear old data
 			CampaignMain.cm.toUser(player.getMyHouse().getCompleteStatus(),player.getName(), false);

@@ -59,7 +59,7 @@ public class ViewPlayerPartsCommand implements Command {
 
 		StringBuffer toReturn = new StringBuffer("Parts cache for "+p.getName()+".<br>");
 		
-		toReturn.append(p.getUnitParts().tableizeComponents(CampaignMain.cm.getIntegerConfig("CampaignYear")));
+		toReturn.append(p.getUnitComponents().tableizeComponents(CampaignMain.cm.getIntegerConfig("CampaignYear")));
 
 		CampaignMain.cm.toUser("SM|"+toReturn.toString(),Username,false);
 	

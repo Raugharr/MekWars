@@ -186,7 +186,7 @@ public class RepairUnitCommand implements Command {
                     && CampaignMain.cm.getBooleanConfig("UsePartsRepair")) {
                 String crit = UnitUtils.getCritName(entity, slot, location, armor);
                 int damagedCrits = UnitUtils.getNumberOfDamagedCrits(entity, slot, location, armor);
-                // LOGGER.error(crit+" Crits: "+player.getUnitParts().getPartsCritCount(crit)+"
+                // LOGGER.error(crit+" Crits: "+player.getUnitComponents().getPartsCritCount(crit)+"
                 // Needed: "+damagedCrits);
                 if (player.getPartsAmount(crit) < damagedCrits) {
 

@@ -2716,18 +2716,17 @@ public class SHouse extends TimeUpdateHouse
         return leaders.contains(leader.toLowerCase());
     }
 
-    public String getZeroLevelSubFaction() {
+    public SubFaction getZeroLevelSubFaction() {
         if (getSubFactionList().size() < 1) {
-            return "";
+            return null;
         }
 
-        for (SubFaction subFac : getSubFactionList().values()) {
-            if (Integer.parseInt(subFac.getConfig("AccessLevel")) == 0) {
-                return subFac.getConfig("Name");
+        for (SubFaction subfaction : getSubFactionList().values()) {
+            if (subfaction.getAccessLevel() == 0) {
+                return subfaction;
             }
         }
-
-        return "";
+        return null;
     }
 
     public void addCommonUnitSupport() {
@@ -2929,21 +2928,21 @@ public class SHouse extends TimeUpdateHouse
         techResearchPoints = 0;
     }
 
-    public UnitComponents getUnitParts() {
+    public UnitComponents getUnitComponents() {
         return unitParts;
     }
 
     public void updatePartsCache(String part, int amount) {
         if (amount < 0) {
-            getUnitParts().remove(part, amount);
+            getUnitComponents().remove(part, amount);
         } else {
-            getUnitParts().add(part, amount);
+            getUnitComponents().add(part, amount);
         }
     }
 
     public int getPartsAmount(String part) {
         int amount = 0;
-        amount += getUnitParts().getPartsCritCount(part);
+        amount += getUnitComponents().getPartsCritCount(part);
         return amount;
     }
 
