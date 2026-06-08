@@ -9,27 +9,30 @@ public class SerializedMessage {
 		this.message = new StringBuilder();
 	}
 	
-	public void append(String element){
+	public void append(String element) {
+        if ("".equals(element.trim())) {
+            element = " ";
+        }
 		message.append(element);
 		message.append(delimiter);
 	}
 
-	public void append(int element){
+	public void append(int element) {
 		message.append(element);
 		message.append(delimiter);
 	}
 	
-	public void append(long element){
+	public void append(long element) {
 		message.append(element);
 		message.append(delimiter);
 	}
 	
-	public void append(double element){
+	public void append(double element) {
 		message.append(element);
 		message.append(delimiter);
 	}
 
-	public void append(boolean element){
+	public void append(boolean element) {
 		message.append(element);
 		message.append(delimiter);
 	}
