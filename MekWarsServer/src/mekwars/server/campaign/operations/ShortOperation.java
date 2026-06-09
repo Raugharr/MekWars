@@ -2984,7 +2984,9 @@ public class ShortOperation implements Comparable<Object> {
         for (SUnit unit : units) {
             if (unit.hasVacantPilot()) {
                 SHouse attackingHouse = initiator.getHouseFightingFor();
-                SPilot pilot = new SPilot(unit.getOwner().getMyHouse(), SPilot.getRandomPilotName(CampaignMain.cm.getR()), attackingHouse.getBaseGunner(Unit.MEK), attackingHouse.getBasePilot(Unit.MEK));
+                int gunnery = attackingHouse.getBasePilotStats().getGunnery();
+                int piloting = attackingHouse.getBasePilotStats().getPiloting();
+                SPilot pilot = new SPilot(unit.getOwner().getMyHouse(), SPilot.getRandomPilotName(CampaignMain.cm.getR()), gunnery, piloting);
                 unit.setPilot(pilot);
             }
             results.append(defendingHouse.removeUnit(unit, false));

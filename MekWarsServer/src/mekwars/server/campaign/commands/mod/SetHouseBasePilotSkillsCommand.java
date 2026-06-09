@@ -65,8 +65,8 @@ public class SetHouseBasePilotSkillsCommand implements Command {
             return;
         }
         
-        house.getPilotQueues().setBaseGunnery(gunnery, pilotType);
-        house.getPilotQueues().setBasePiloting(piloting, pilotType);
+        house.getBasePilotStats().setGunnery(gunnery, pilotType);
+        house.getBasePilotStats().setPiloting(piloting, pilotType);
         
 		//log, and inform mods.
 		CampaignMain.cm.toUser("You set have set the gunnery and piloting for unit "+Unit.getTypeClassDesc(pilotType)+" for house "+house.getName()+" to "+gunnery+"/"+piloting,Username);

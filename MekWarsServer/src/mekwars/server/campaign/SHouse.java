@@ -107,8 +107,7 @@ public class SHouse extends TimeUpdateHouse
     private String motd = "";
     private String announcement = "";
 
-    private PilotQueues pilotQueues =
-            new PilotQueues(this, getBaseGunnerVect(), getBasePilotVect(), getBasePilotSkillVect());
+    private PilotQueues pilotQueues = new PilotQueues(this);
 
     private List<String> leaders = new ArrayList<>();
     private int techResearchPoints = 0;
@@ -125,8 +124,8 @@ public class SHouse extends TimeUpdateHouse
         result.append(getName());
         result.append(getMoney());
         result.append(getHouseColor());
-        result.append(this.getBaseGunner());
-        result.append(getBasePilot());
+        result.append(getBasePilotStats().getGunnery());
+        result.append(getBasePilotStats().getPiloting());
         result.append(getAbbreviation());
 
         result.append(hangar.count());
@@ -193,12 +192,12 @@ public class SHouse extends TimeUpdateHouse
         result.append(getHouseDefectionTo());
 
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
-            result.append(getBaseGunner(pos));
-            result.append(getBasePilot(pos));
+            result.append(getBasePilotStats().getGunnery(pos));
+            result.append(getBasePilotStats().getPiloting(pos));
         }
 
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
-            String skill = getBasePilotSkill(pos);
+            String skill = getBasePilotStats().getSkills(pos);
             if (skill.length() < 1) {
                 result.append(" ");
             } else {
@@ -261,8 +260,8 @@ public class SHouse extends TimeUpdateHouse
 
             setMoney(TokenReader.readInt(ST));
             setHouseColor(TokenReader.readString(ST));
-            setBaseGunner(TokenReader.readInt(ST));
-            setBasePilot(TokenReader.readInt(ST));
+            getBasePilotStats().setGunnery(TokenReader.readInt(ST), Unit.MEK);
+            getBasePilotStats().setPiloting(TokenReader.readInt(ST), Unit.MEK);
 
             setAbbreviation(TokenReader.readString(ST));
 
@@ -369,30 +368,20 @@ public class SHouse extends TimeUpdateHouse
 
             try {
                 for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
-                    setBaseGunner(TokenReader.readInt(ST), pos);
-                    setBasePilot(TokenReader.readInt(ST), pos);
+                    getBasePilotStats().setGunnery(TokenReader.readInt(ST), pos);
+                    getBasePilotStats().setPiloting(TokenReader.readInt(ST), pos);
                 }
             } catch (Exception ex) {
-                setPilotQueues(
-                        new PilotQueues(
-                                this,
-                                getBaseGunnerVect(),
-                                getBasePilotVect(),
-                                getBasePilotSkillVect()));
+                setPilotQueues(new PilotQueues(this));
             }
 
             try {
                 for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
                     String skill = TokenReader.readString(ST);
-                    setBasePilotSkill(skill, pos);
+                    getBasePilotStats().setSkills(skill, pos);
                 }
             } catch (Exception ex) {
-                setPilotQueues(
-                        new PilotQueues(
-                                this,
-                                getBaseGunnerVect(),
-                                getBasePilotVect(),
-                                getBasePilotSkillVect()));
+                setPilotQueues(new PilotQueues(this));
             }
 
             setTechLevel(TokenReader.readInt(ST));
@@ -444,12 +433,7 @@ public class SHouse extends TimeUpdateHouse
                 getComponentConverter().put(converter.getCritName(), converter);
             }
 
-            setPilotQueues(
-                    new PilotQueues(
-                            this,
-                            getBaseGunnerVect(),
-                            getBasePilotVect(),
-                            getBasePilotSkillVect()));
+            setPilotQueues(new PilotQueues(this));
             // faction name
             // for the queue
 
@@ -2171,8 +2155,8 @@ public class SHouse extends TimeUpdateHouse
             result.append(u.getPilot().getGunnery());
             result.append(u.getPilot().getPiloting());
         } else {
-            result.append(getBaseGunner(u.getType()));
-            result.append(getBasePilot(u.getType()));
+            result.append(getBasePilotStats().getGunnery(u.getType()));
+            result.append(getBasePilotStats().getPiloting(u.getType()));
         }
         // if using AR, send damage information
         if (CampaignMain.cm.isUsingAdvanceRepair()) {

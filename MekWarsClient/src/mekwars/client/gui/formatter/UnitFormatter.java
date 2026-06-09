@@ -143,8 +143,8 @@ public class UnitFormatter {
                             .getSkillString(
                                     false,
                                     mwclient.getData()
-                                            .getHouseByName(mwclient.getPlayer().getHouse())
-                                            .getBasePilotSkill(unit.getType()));
+                                            .getHouseByName(mwclient.getPlayer().getHouse()).getBasePilotStats()
+                                            .getSkills(unit.getType()));
             tinfo += "<br>";
         }
 

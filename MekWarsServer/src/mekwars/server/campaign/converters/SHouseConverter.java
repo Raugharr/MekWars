@@ -65,11 +65,11 @@ public class SHouseConverter implements Converter {
         writer.endNode();
 
         writer.startNode("baseGunner");
-        writer.setValue(Integer.toString(house.getBaseGunner()));
+        writer.setValue(Integer.toString(house.getBasePilotStats().getGunnery()));
         writer.endNode();
 
         writer.startNode("basePilot");
-        writer.setValue(Integer.toString(house.getBasePilot()));
+        writer.setValue(Integer.toString(house.getBasePilotStats().getPiloting()));
         writer.endNode();
 
         writer.startNode("conquerable");

@@ -192,7 +192,9 @@ public class FreeBuildCreateUnitCommand implements Command {
 			weight = Integer.parseInt(command.nextToken());
 
 		//Note that if you look at the create method of SUnit, it appears you dont really need to pass the weight...
-		SUnit tempUnit = SUnit.create(player.getMyHouse(), filename, FlavorText, house.getBaseGunner(), house.getBasePilot(), weight, skillTokens);
+        int gunnery = house.getBasePilotStats().getGunnery();
+        int piloting = house.getBasePilotStats().getPiloting();
+		SUnit tempUnit = SUnit.create(player.getMyHouse(), filename, FlavorText, gunnery, piloting, weight, skillTokens);
         //This will create a pilot based on faction settings defined by server operator
 		SPilot tempPilot = house.getNewPilot(tempUnit.getType());
         tempUnit.setPilot(tempPilot);
