@@ -24,9 +24,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.List;
 
 import mekwars.common.CampaignData;
 import mekwars.common.Unit;
@@ -43,27 +43,23 @@ import org.apache.logging.log4j.Logger;
 
 public class PilotQueues {
     private static final Logger LOGGER = LogManager.getLogger(PilotQueues.class);
+    public static final int MIN_PILOTS = 10;
 
-    private Vector<LinkedList<SPilot>> queues = new Vector<LinkedList<SPilot>>(Unit.MAXBUILD,1);
-	private Vector<Integer> baseGunnery = new Vector<Integer>(Unit.MAXBUILD,1);
-	private Vector<Integer> basePiloting = new Vector<Integer>(Unit.MAXBUILD,1);
-	private Vector<String>  basePilotSkills = new Vector<String>(Unit.MAXBUILD,1);
+    private List<List<SPilot>> queues = new ArrayList<>(Unit.MAXBUILD);
     private SHouse owner;
 	private BufferedReader dis;
 	
-	public PilotQueues(SHouse owner, Vector<Integer>baseGunnery, Vector<Integer>basePiloting, Vector<String>basePilotSkill) {
-        this.owner = owner;
-		for (int i = Unit.MEK; i < Unit.MAXBUILD; i++) {
-			LinkedList<SPilot> v = new LinkedList<SPilot>();
-			queues.add(i,v);
-		}
-		this.baseGunnery = baseGunnery;
-		this.basePiloting = basePiloting;
-		this.basePilotSkills = basePilotSkill;
-	}
-	
 	public PilotQueues() {
-		//Only needed for XStream
+        this.queues = new ArrayList<>(Unit.MAXBUILD);
+        for (int i = Unit.MEK; i < Unit.MAXBUILD; i++) {
+            List<SPilot> pilotList = new ArrayList<SPilot>();
+            queues.add(i, pilotList);
+        }
+	}
+
+	public PilotQueues(SHouse owner) {
+        this();
+        this.owner = owner;
 	}
 
     public SHouse getOwner() {
@@ -106,9 +102,9 @@ public class PilotQueues {
 		if (!skipSkillChange) {
 			this.addPilot(type, p);
 		}
-		else {//skip the skill adjustmebnt
-			queues.get(type).addLast(p);
-		}//end else(bypass the adjustmenbt)
+		else {//skip the skill adjustment
+			queues.get(type).add(p);
+		}//end else(bypass the adjustment)
 	}
 	
 	/**
@@ -140,7 +136,7 @@ public class PilotQueues {
 	        }
 	    }
 
-	    if (CampaignMain.cm.getBooleanConfig("ReduceSkillsInQue")) {
+	    if (CampaignData.cd.getCampaignOptions().getBooleanConfig("ReduceSkillsInQue")) {
 			int rnd = CampaignMain.cm.getRandomNumber(100);
 			if (rnd >= CampaignMain.cm.getIntegerConfig("ClearXPInQue")) {
 				p.setExperience(0);
@@ -197,9 +193,7 @@ public class PilotQueues {
 				}//end else(piloting less or equal)
 			}//end else if(both pilot and gunner have skill improvements)
 		}//end if(downgrade elites)
-		
-		queues.get(type).addLast(p);
-
+		queues.get(type).add(p);
 	}//end void addPilot()
 	
 	/**
@@ -211,12 +205,12 @@ public class PilotQueues {
 	 * from the dat files without reprocessing them.
 	 */
 	public void loadPilot(int type, SPilot p) {
-	    queues.get(type).addLast(p);
+	    queues.get(type).add(p);
 	}//end void loadPilot()
 	
 	public SPilot getPilot(int type) {
-		LinkedList<SPilot> list = queues.get(type);
-		while (list.size() < 10)  {
+		List<SPilot> list = queues.get(type);
+		while (list.size() < MIN_PILOTS)  {
 			addPilot(type, rollNewPilot(type), true);
         }
 		
@@ -224,10 +218,12 @@ public class PilotQueues {
 		
 		StringTokenizer ST = new StringTokenizer(getBasePilotSkill(type),"$");
 		
-		while ( ST.hasMoreTokens() ) {
+		while (ST.hasMoreTokens()) {
 		    PilotSkill pSkill = PilotSkillStore.getPilotSkill(ST.nextToken());
-		    if ( !pilot.getSkills().has(pSkill) )
-			pilot.getSkills().add(pSkill);
+
+		    if (!pilot.getSkills().has(pSkill)) {
+                pilot.getSkills().add(pSkill);
+            }
 		}
 		
 		return pilot;
@@ -287,14 +283,14 @@ public class PilotQueues {
 	 * @return int this queue's base piloting #
 	 */
 	public int getBasePiloting(int type) {
-		return this.basePiloting.elementAt(type);
+        return owner.getBasePilotStats().getPiloting(type);
 	}
 	
 	/**
 	 * @return int this queue's base gunnery #
 	 */
 	public int getBaseGunnery(int type) {
-		return this.baseGunnery.elementAt(type);
+        return owner.getBasePilotStats().getGunnery(type);
 	}
 	
 	/**
@@ -302,33 +298,7 @@ public class PilotQueues {
 	 * @return base piloting skills for specific unit type.
 	 */
 	public String getBasePilotSkill(int type) {
-	    return this.basePilotSkills.elementAt(type);
-	}
-	
-	/*
-	 * Sets BasePiloting for this queue
-	 */
-	
-	public void setBasePiloting(int piloting,int type){
-	    synchronized(basePiloting) {
-	    	this.basePiloting.set(type,piloting);
-	    }
-	}
-	
-	/*
-	 * Sets Base Gunnery for this queue
-	 */
-	
-	public void setBaseGunnery(int gunnery,int type){
-	    synchronized(baseGunnery) {
-	    	this.baseGunnery.set(type,gunnery);
-	    }
-	}
-	
-	public void setBasePilotSkill(String skills, int type) {
-	    synchronized(basePilotSkills) {
-	    	this.basePilotSkills.set(type,skills);
-	    }
+        return owner.getBasePilotStats().getSkills(type);
 	}
 	
 	/**
@@ -339,7 +309,6 @@ public class PilotQueues {
 	 * newbie faction units and for units generated with CreateMechCommand.
 	 */
 	public String getRandomPilotName() {
-		
 		String result = "Noelle";//something we hope never returns
         if (CampaignMain.cm.getBooleanConfig("UseCommonPilotNameFileOnly"))
         	return SPilot.getRandomPilotName(CampaignMain.cm.getR());
@@ -354,7 +323,6 @@ public class PilotQueues {
         		String line = dis.readLine();
         		if (pilotid <= 0)
         			return line;
-        		//else
         		pilotid--;
         	}
 
@@ -362,29 +330,26 @@ public class PilotQueues {
         	fis.close();
 
         } catch (Exception e) {
-        	LOGGER.error("A problem occured while retreiving a name from the " + owner.getName() + " Pilotnames File! Tried using Pilotnames.txt instead.");
+        	LOGGER.error("A problem occured while retrieving a name from the " + owner.getName() + " Pilotnames File! Tried using Pilotnames.txt instead.");
         	result = SPilot.getRandomPilotName(CampaignMain.cm.getR());
-        }finally{
-        	
         }
         
 	    return result;
 	  }//end getRandomPilotName
 	
-	public LinkedList<SPilot> getPilotQueue(int type) {
-		LinkedList<SPilot> list = queues.get(type);
-		return list;
+	public List<SPilot> getPilotQueue(int type) {
+		return queues.get(type);
 	}
 
 	/**
 	 * Obliterate all queued pilots.
 	 */
 	public void flushQueue() {
-            queues.removeAllElements();
-            for (int i = Unit.MEK; i < Unit.MAXBUILD; i++) {
-            	LinkedList<SPilot> v = new LinkedList<SPilot>();
-            	queues.add(v);
-            }
-	}
+        queues.clear();
 
+        for (int i = Unit.MEK; i < Unit.MAXBUILD; i++) {
+            List<SPilot> v = new ArrayList<SPilot>();
+            queues.add(v);
+        }
+	}
 }

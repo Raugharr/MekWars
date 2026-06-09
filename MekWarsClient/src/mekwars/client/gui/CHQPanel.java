@@ -3070,7 +3070,7 @@ public class CHQPanel extends JPanel {
             CArmy army = getArmyAt(row);
             StringBuilder result = new StringBuilder(cm.getModelName());
             // TODO: When registering as a new player the player's house is null for a second.
-            String skillSet = cm.getPilot().getSkillString(false, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getBasePilotSkill(cm.getType()));
+            String skillSet = cm.getPilot().getSkillString(false, mwclient.getData().getHouseByName(mwclient.getPlayer().getHouse()).getBasePilotStats().getSkills(cm.getType()));
             StringTokenizer skills = new StringTokenizer(skillSet, ",");
             while (skills.hasMoreElements()) {
                 skills.nextElement();

@@ -639,7 +639,6 @@ public class  DefectCommand  implements Command {
     }// end process()
 
     public SHouse createSingleFaction(String houseName, String shortName) {
-
         SHouse house = new SHouse();
         int maxHouseName = CampaignMain.cm.getIntegerConfig("MaxFactionName");
         int maxShortName = CampaignMain.cm.getIntegerConfig("MaxFactionShortName");
@@ -657,8 +656,6 @@ public class  DefectCommand  implements Command {
         house.createNoneHouse();
         house.setName(houseName);
         house.setAbbreviation(shortName);
-        house.setBaseGunner(4);
-        house.setBasePilot(5);
         house.setConquerable(true);
         house.setTechLevel(TechConstants.T_INTRO_BOXSET);
         CampaignMain.cm.addHouse(house);

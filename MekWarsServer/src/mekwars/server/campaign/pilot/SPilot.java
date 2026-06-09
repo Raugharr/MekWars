@@ -329,8 +329,8 @@ public class SPilot extends Pilot {
         else if (shouldLevelDown) {
 
             // return pilot to faction base
-            setGunnery(owner.getMyHouse().getBaseGunner(unit.getType()));
-            setPiloting(owner.getMyHouse().getBasePilot(unit.getType()));
+            setGunnery(owner.getMyHouse().getBasePilotStats().getGunnery(unit.getType()));
+            setPiloting(owner.getMyHouse().getBasePilotStats().getPiloting(unit.getType()));
 
             // Store the old name for use in return, and change to successor
             // name

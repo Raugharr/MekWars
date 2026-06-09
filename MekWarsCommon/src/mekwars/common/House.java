@@ -25,19 +25,20 @@ import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
 import mekwars.common.util.HTMLConverter;
+import mekwars.common.util.TokenReader;
 import mekwars.common.universe.FactionTag;
+import mekwars.common.campaign.BasePilotStats;
 import megamek.common.TechConstants;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Vector;
+import java.util.StringTokenizer;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,12 +59,6 @@ public class House implements Entity {
     private String factionFluFile = "Common";
 
     private int id;
-    private Vector<Integer> baseGunner = new Vector<Integer>(Unit.MAXBUILD, 1);
-    private Vector<Integer> basePilot = new Vector<Integer>(Unit.MAXBUILD, 1);
-    private Vector<String> basePilotSkills = new Vector<String>(Unit.MAXBUILD, 1);
-
-    // private int factionPlayerColors[] = new int[3]; // [red,green,blue]
-
     private int factionUnitPriceMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
     private int factionUnitFluMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
     private int factionUnitComponentMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
@@ -71,6 +66,7 @@ public class House implements Entity {
     private String factionColor = "#000000";
     private String abbreviation = "";
     private String factionPlayerColors = "#000000";
+    private BasePilotStats basePilotStats;
 
     private boolean conquerable = true;
 
@@ -86,116 +82,14 @@ public class House implements Entity {
     private Set<FactionTag> tags = EnumSet.noneOf(FactionTag.class);
 
     /**
-     * @return Returns the baseGunner.
-     */
-    public int getBaseGunner() {
-        return baseGunner.elementAt(0);
-    }
-
-    /**
-     * @return baseGunner vector
-     */
-    public Vector<Integer> getBaseGunnerVect() {
-        return baseGunner;
-    }
-
-    /**
-     * @return Returns the baseGunner.
-     */
-    public int getBaseGunner(int type) {
-        return baseGunner.elementAt(type);
-    }
-
-    /**
-     * @return basePilotSkills vector
-     */
-    public Vector<String> getBasePilotSkillVect() {
-        return basePilotSkills;
-    }
-
-    /**
-     * @return Returns the basePilotSkill String.
-     */
-    public String getBasePilotSkill(int type) {
-        return basePilotSkills.elementAt(type);
-    }
-
-    /**
-     * @param baseGunner
-     *            The baseGunner to set.
-     */
-    public void setBaseGunner(int baseGunner) {
-        synchronized(this.baseGunner) {
-            this.baseGunner.set(0, baseGunner);
-        }
-    }
-
-    /**
-     * @param basePilotSkill
-     *            The base piloting skill for unit <code>type</code> to set.
-     */
-    public void setBasePilotSkill(String basePilotSkill, int type) {
-        synchronized(this.basePilotSkills) {
-            this.basePilotSkills.set(type, basePilotSkill);
-        }
-    }
-
-    /**
-     * @param baseGunner
-     *            The baseGunner to set.
-     */
-    public void setBaseGunner(int baseGunner, int type) {
-        synchronized(this.baseGunner) {
-            this.baseGunner.set(type, baseGunner);
-        }
-    }
-
-    /**
-     * @return Returns the basePilot.
-     */
-    public int getBasePilot() {
-        return basePilot.elementAt(0);
-    }
-
-    /**
-     * @return Returns the basePilot.
-     */
-    public int getBasePilot(int type) {
-        return basePilot.elementAt(type);
-    }
-
-    /**
-     * @return basePilot vector
-     */
-    public Vector<Integer> getBasePilotVect() {
-        return basePilot;
-    }
-
-    /**
-     * @param basePilot
-     *            The basePilot to set.
-     */
-    public void setBasePilot(int basePilot) {
-        synchronized(this.basePilot) {
-            this.basePilot.set(0, basePilot);
-        }
-    }
-
-    /**
-     * @param basePilot
-     *            The basePilot to set.
-     */
-    public void setBasePilot(int basePilot, int type) {
-        synchronized(this.basePilot) {
-            this.basePilot.set(type, basePilot);
-        }
-    }
-
-    /**
      * @return Returns the myAbbreviation.
      */
     public String getAbbreviation() {
         return abbreviation;
+    }
+
+    public BasePilotStats getBasePilotStats() {
+        return basePilotStats;
     }
 
     /**
@@ -294,11 +188,23 @@ public class House implements Entity {
 
     public House() {
         setId(EntityStore.UNSET_ID);
-        for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
-            baseGunner.add(4);
-            basePilot.add(5);
-            basePilotSkills.add(" ");
-        }
+        basePilotStats = new BasePilotStats();
+    }
+
+    public House(StringTokenizer st) {
+        setId(TokenReader.readInt(st));
+        setName(TokenReader.readString(st));
+        setLogo(TokenReader.readString(st));
+        getBasePilotStats().setGunnery(TokenReader.readInt(st), Unit.MEK);
+        getBasePilotStats().setPiloting(TokenReader.readInt(st), Unit.MEK);
+        setHouseColor(TokenReader.readString(st));
+        setHousePlayerColors(TokenReader.readString(st));
+        setAbbreviation(TokenReader.readString(st));
+        setConquerable(TokenReader.readBoolean(st));
+        setTechLevel(TokenReader.readInt(st));
+        setHouseDefectionFrom(TokenReader.readBoolean(st));
+        setHouseDefectionTo(TokenReader.readBoolean(st));
+        setUsedMekBayMultiplier(TokenReader.readFloat(st));
     }
 
     /**
@@ -308,8 +214,7 @@ public class House implements Entity {
         out.println(id, "id");
         out.println(name, "name");
         out.println(logo, "logo");
-        out.println(getBaseGunner(), "baseGunner");
-        out.println(getBasePilot(), "basePilot");
+        basePilotStats.binOut(out);
         out.println(factionColor, "factionColor");
 
         out.println(factionPlayerColors, "factionPlayerColor");
@@ -326,10 +231,6 @@ public class House implements Entity {
         for (int type = 0; type < Unit.MAXBUILD; type++)
             for (int weight = 0; weight < 4; weight++)
                 out.println(this.getHouseUnitFluMod(type, weight), "fluMod" + type + weight);
-
-        for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
-            out.println(basePilotSkills.elementAt(pos), "factionBasePilotSkill");
-        }
 
         out.println(this.getTechLevel(), "techLevel");
         out.println(this.getHouseDefectionFrom(), "defectFrom");
@@ -362,17 +263,10 @@ public class House implements Entity {
      * Read itself from a stream.
      */
     public House(BinReader in) throws IOException {
-        for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
-            baseGunner.add(4);
-            basePilot.add(5);
-            basePilotSkills.add(" ");
-        }
-
         id = in.readInt("id");
         name = HTMLConverter.br2cr(in.readLine("name"));
         logo = HTMLConverter.br2cr(in.readLine("logo"));
-        setBaseGunner(in.readInt("baseGunner"));
-        setBasePilot(in.readInt("basePilot"));
+        basePilotStats = new BasePilotStats(in);
         factionColor = in.readLine("factionColor");
 
         factionPlayerColors = in.readLine("factionPlayerColor");
@@ -396,10 +290,6 @@ public class House implements Entity {
             for (int weight = 0; weight < 4; weight++) {
                 this.setHouseUnitFluMod(type, weight, in.readInt("fluMod" + type + weight));
             }
-        }
-
-        for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
-            basePilotSkills.set(pos, in.readLine("factionBasePilotSkill"));
         }
 
         this.setTechLevel(in.readInt("techLevel"));
@@ -634,9 +524,9 @@ public class House implements Entity {
         else
             result.append(logo);
         result.append("|");
-        result.append(getBaseGunner());
+        result.append(getBasePilotStats().getGunnery(Unit.MEK));
         result.append("|");
-        result.append(getBasePilot());
+        result.append(getBasePilotStats().getPiloting(Unit.MEK));
         result.append("|");
         result.append(factionColor);
         result.append("|");

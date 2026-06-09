@@ -34,7 +34,6 @@ public class SetHouseBasePilotingSkillsCommand implements Command {
 	public String getSyntax() { return syntax;}
 	
 	public void process(StringTokenizer command,String Username) {
-		
 		//access level check
 		int userLevel = MWServ.getInstance().getUserLevel(Username);
 		if(userLevel < getExecutionLevel()) {
@@ -63,12 +62,10 @@ public class SetHouseBasePilotingSkillsCommand implements Command {
                 return;
             }
 
-            house.getPilotQueues().setBasePilotSkill(skills, pilotType);
-            
+            house.getBasePilotStats().setSkills(skills, pilotType);
             house.updated();
             //log, and inform mods.
             CampaignMain.cm.toUser("You added a piloting skill for unit "+Unit.getTypeClassDesc(pilotType)+" for house "+house.getName()+" to "+skills,Username);
             CampaignMain.cm.doSendModMail("NOTE",Username + " has added a piloting skill for unit "+Unit.getTypeClassDesc(pilotType)+" for house "+house.getName()+" to "+skills+ ".");
-		
 	}//end process
 }

@@ -2009,22 +2009,7 @@ public final class MWClient extends GameHost implements IClient {
     }// end PurgeAutoSaves
 
     public void createNewHouse(StringTokenizer st) {
-        House house = new House();
-
-        house.setId(TokenReader.readInt(st));
-        house.setName(TokenReader.readString(st));
-        house.setLogo(TokenReader.readString(st));
-        house.setBaseGunner(TokenReader.readInt(st));
-        house.setBasePilot(TokenReader.readInt(st));
-        house.setHouseColor(TokenReader.readString(st));
-        house.setHousePlayerColors(TokenReader.readString(st));
-        house.setAbbreviation(TokenReader.readString(st));
-        house.setConquerable(TokenReader.readBoolean(st));
-        house.setTechLevel(TokenReader.readInt(st));
-        house.setHouseDefectionFrom(TokenReader.readBoolean(st));
-        house.setHouseDefectionTo(TokenReader.readBoolean(st));
-        house.setUsedMekBayMultiplier(TokenReader.readFloat(st));
-        getData().addHouse(house);
+        getData().addHouse(new House(st));
     }
 
     /**

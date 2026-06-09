@@ -16,7 +16,7 @@
 
 package mekwars.server.campaign.commands.admin;
 
-import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import mekwars.common.Unit;
@@ -70,9 +70,10 @@ public class AdminHousePilotsCommand implements Command {
             toReturn.append("Faction Base Pilot: " + currQ.getBaseGunnery(type) + "/" + currQ.getBasePiloting(type)+"<br>");
             toReturn.append("Faction Base Pilot Skills: " + currQ.getBasePilotSkill(type)+"<br>");
 			toReturn.append("<b>Queue for " + Unit.getTypeClassDesc(type) + ":</b><OL>");
-			LinkedList<SPilot> l = currQ.getPilotQueue(type);
-			for (SPilot currP : l)
+			List<SPilot> l = currQ.getPilotQueue(type);
+			for (SPilot currP : l) {
 				toReturn.append("<LI>"+currP.getName()+"("+currP.getGunnery()+"/"+currP.getPiloting()+") ["+currP.getSkillString(true)+"]</LI>");
+            }
 			toReturn.append("</OL>");
 		}
 		
@@ -81,8 +82,5 @@ public class AdminHousePilotsCommand implements Command {
 		CampaignMain.cm.toUser(toReturn.toString(),Username,true);
 		//server.MWLogger.modLog(Username + " checked House " + h.getName() + " Pilots");
 		CampaignMain.cm.doSendModMail("NOTE",Username + " checked House "+ h.getName() + " Pilots");
-		
-		
-		
 	}
 }

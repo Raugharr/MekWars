@@ -85,8 +85,8 @@ public class CBMUnit {
 		 * vehicles) or just gunnery (misc. infantry types).
 		 */
 		if (!hidden) {
-			int factionGunnery = campaign.getPlayer().getMyHouse().getBaseGunner();
-			int factionPiloting = campaign.getPlayer().getMyHouse().getBasePilot();
+			int factionGunnery = campaign.getPlayer().getMyHouse().getBasePilotStats().getGunnery();
+			int factionPiloting = campaign.getPlayer().getMyHouse().getBasePilotStats().getPiloting();
             House owner = campaign.getPlayer().getMyHouse();
 
 			if ((embeddedUnit.getType() == Unit.MEK) || (embeddedUnit.getType() == Unit.VEHICLE)) {
