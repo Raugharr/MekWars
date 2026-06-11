@@ -66,6 +66,7 @@ import megamek.common.icons.Camouflage;
 import megamek.common.options.GameOptions;
 import megamek.common.options.IBasicOption;
 import megamek.server.Server;
+import mekwars.client.campaign.CBMUnit;
 import mekwars.client.campaign.CCampaign;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
@@ -81,6 +82,7 @@ import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.commands.IGUICommand;
 import mekwars.client.gui.commands.MailGCmd;
 import mekwars.client.gui.commands.PingGCmd;
+import mekwars.client.gui.dialog.ArmyViewerDialog;
 import mekwars.client.io.FileSystem;
 import mekwars.client.net.hpgnet.HPGClient;
 import mekwars.client.protocol.DataFetchClient;
@@ -405,6 +407,89 @@ public final class MWClient extends GameHost implements IClient {
             chatCaptureForBot(myUsername,addon,input); //@salient
         }
     }// end processGUIInput
+    
+    public boolean decodeCommand(String command) {
+        StringTokenizer ST;
+        String element;
+
+        ST = new StringTokenizer(command, "|");
+        element = TokenReader.readString(ST);
+        command = command.substring(3);
+
+        if (element.equals("PS")) {
+            if (!getPlayer().setData(command)) {
+                getGUIClient().addToChat("Player data load failed!<br>");
+                return(false);
+            }
+            return(true);
+        }
+
+        if (element.equals("CC")) { // Campaign Command 
+            String commandid = TokenReader.readString(ST);
+            if (commandid.equals("AT")) {//incoming attack
+
+                if (getConfig().isParam("ENABLEATTACKSOUND")) {
+                    getSoundManager().doPlaySound(getConfigParam("SOUNDONATTACK"));
+                }
+
+                getGUIClient().addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_HMAIL);
+                getGUIClient().addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_PMAIL,"Server");
+                if (getConfig().isParam("POPUPONATTACK")) {
+                    int opID = TokenReader.readInt(ST);
+                    int teams = TokenReader.readInt(ST);
+                    new ArmyViewerDialog(this,null,ST,ArmyViewerDialog.AVD_DEFEND,null,null,opID,teams);
+                }
+            }
+            if (commandid.equals("NT")) {//next tick
+                int time = TokenReader.readInt(ST);
+                boolean decrement = TokenReader.readBoolean(ST);
+                processTick(time);
+
+                /*
+                 * Decrements tick counters for units without explicit auction
+                 * length being sent from the server to save a bit of bandwidth.
+                 */
+                if (decrement) {
+                    for (CBMUnit currUnit : getCampaign().getBlackMarket().values()) {
+                        currUnit.decrementSalesTicks();
+                    }
+                    getGUIClient().refreshGUI(GUIClient.REFRESH_BMPANEL);
+                }
+            }
+            return (true);
+        }
+        if (element.equals("CA")) {
+            if (!setData(command)) {
+                getGUIClient().addToChat("<b>Error: Campaign data load failed.</b><br>");
+                return(false);
+            }
+            return(true);
+        }
+        if (element.equals("PL")) {
+            if (!getPlayer().decodeCommand(command)) {
+                getGUIClient().addToChat("<b>Error: Player data load failed.</b><br>");
+                return(false);
+            }
+            return(true);
+        }
+        if (element.equals("MS")) {
+            if (!getCampaign().showMsg(command)) {
+                getGUIClient().addToChat("<b>Error: Message show failed.</b><br>");
+                return(false);
+            }
+            return(true);
+        }
+        if (element.equals("ST")) {
+            if (!getCampaign().showStatus(command)) {
+                getGUIClient().addToChat("<b>Error: Status show failed.</b><br>");
+                return(false);
+            }
+            return(true);
+        }
+
+        getGUIClient().addToChat("<b>Error: Wrong campaign command from server.</b><br>");
+        return(false);
+    }
 
     protected void createGUICommands() {
         addGUICommand(new PingGCmd(this));
