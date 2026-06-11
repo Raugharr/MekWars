@@ -18,6 +18,8 @@
 package mekwars.client.campaign;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -26,10 +28,13 @@ import mekwars.client.GUIClient;
 import mekwars.client.gui.CCommPanel;
 import mekwars.client.gui.dialog.ArmyViewerDialog;
 import mekwars.common.BMEquipment;
+import mekwars.common.CampaignData;
 import mekwars.common.util.ComponentToCritsConverter;
 import mekwars.common.util.TokenReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import megamek.common.OffBoardDirection;
 
 /**
  * Class for Campaign object used by Client
@@ -48,7 +53,7 @@ public class CCampaign {
 
     public CCampaign(MWClient client) {
         mwclient = client;
-        Player = new CPlayer(mwclient);
+        Player = new CPlayer();
     }
 
     /**
@@ -128,8 +133,118 @@ public class CCampaign {
                 ComponentConverter.put(converter.getCritName(), converter);
             }
             mwclient.setWaiting(false);
-        }catch(Exception ex) {
+        } catch(Exception ex) {
             LOGGER.error("Exception: ", ex);
         }
     }
+
+    /**
+     * Method which returns the autoArmy arraylist.
+     */
+    public List<CUnit> getAutoArmy() {
+        return autoArmy;
+    }
+
+    /**
+     * Method which greates an autoarmy. takes in a string with weight classes,
+     * and uses server configs (path, filenames) to construct units of those
+     * weights.
+     *
+     * Units are added to servers when a player joins a game, same as units from
+     * locked armies.
+     */
+    public void setAutoArmy(StringTokenizer st) {
+        /*
+         * clear the previous autoarmy. Auto army is always called first, and is
+         * cleared correctly even if only gun emplacements are sent.
+         */
+        autoArmy = new ArrayList<CUnit>();
+
+        // if its a null, this was just a clearing call.
+        if (st == null) {
+            return;
+        }
+
+        while (st.hasMoreTokens()) {
+            String filename = TokenReader.readString(st);
+            if (filename.equals("CLEAR")) {
+                return;
+            }
+
+            // get the distance
+            int distInBoards = CampaignData.cd.getCampaignOptions().getIntegerConfig("DistanceFromMap");
+            int distInHexes = distInBoards * 17;// 17 hexes per board.
+
+            CUnit currUnit = new CUnit();
+
+            /*
+             * This is needed to set the edge for auto arty when auto edge is
+             * set for players. Else, arty edge is set in MM when the players
+             * click on the edge they want.
+             */
+            OffBoardDirection direction = OffBoardDirection.NORTH;
+            switch (mwclient.getPlayerStartingEdge()) {
+                case 0:
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                    direction = OffBoardDirection.NORTH;
+                    break;
+                case 4:
+                    direction = OffBoardDirection.EAST;
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                    direction = OffBoardDirection.SOUTH;
+                    break;
+                case 8:
+                    direction = OffBoardDirection.WEST;
+                    break;
+            }
+
+            currUnit.setAutoUnitData(getPlayer().getMyHouse(), filename, distInHexes, direction);
+            autoArmy.add(currUnit);
+        }
+    }
+
+    public void setMULCreatedArmy(StringTokenizer st) {
+        while (st.hasMoreElements()) {
+            String data = TokenReader.readString(st);
+            if (data.equalsIgnoreCase("CLEAR")) {
+                return;
+            }
+
+            CUnit cm = new CUnit();
+            cm.setData(data);
+            autoArmy.add(cm);
+        }
+    }
+
+    /**
+     * Method which greates an autoarmy gun emplacements. takes in a string with
+     * weight classes, and uses server configs (path, filenames) to construct
+     * units of those weights.
+     *
+     * Units are added to servers when a player joins a game, same as units from
+     * locked armies.
+     */
+    public void setAutoGunEmplacements(StringTokenizer st) {
+        // if its a null, this was just a clearing call.
+        if (st == null) {
+            return;
+        }
+
+        while (st.hasMoreTokens()) {
+            String filename = TokenReader.readString(st);
+            if (filename.equals("CLEAR")) {
+                return;
+            }
+
+            CUnit currUnit = new CUnit();
+            currUnit.setAutoUnitData(getPlayer().getMyHouse(), filename, 0, OffBoardDirection.NORTH);
+            autoArmy.add(currUnit);
+        }// end while(tokens)
+    }// end setAutoArmy()
 }

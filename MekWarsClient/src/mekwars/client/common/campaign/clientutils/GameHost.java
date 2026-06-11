@@ -540,6 +540,9 @@ public abstract class GameHost implements GameListener, IGameHost {
         return ("");
     }
 
+    protected boolean setData(String command) {
+        return(true);
+    }
 
     protected void sendServerGameUpdate() {
         // Report the mech stat
