@@ -17,6 +17,7 @@
 
 package mekwars.client.cmd;
 
+import java.nio.file.Path;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
@@ -24,6 +25,9 @@ import mekwars.client.GUIClient;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
+import mekwars.client.io.FileSystem;
+import mekwars.common.CampaignData;
+import mekwars.common.House;
 import mekwars.common.SubFaction;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.TokenReader;
@@ -66,6 +70,7 @@ public class PL extends Command {
 
         if (cmd.equals("RA")) {
             player.removeArmy(TokenReader.readInt(st));
+            mwclient.getGUIClient().getMainFrame().updateAttackMenu();
         } else if (cmd.equals("LA")) {
             player.playerLockArmy(TokenReader.readInt(st));
         } else if (cmd.equals("ULA")) {
@@ -74,12 +79,14 @@ public class PL extends Command {
             player.toggleArmyDisabled(TokenReader.readInt(st));
         } else if (cmd.equals("SAD")) {
             player.setArmyData(TokenReader.readString(st));
+            mwclient.getGUIClient().getMainFrame().updateAttackMenu();
         } else if (cmd.equals("SABV")) {
             player.setArmyBV(TokenReader.readString(st));
         } else if (cmd.equals("AAU")) {
             player.addArmyUnit(TokenReader.readString(st));
         } else if (cmd.equals("RAU")) {
             player.removeArmyUnit(TokenReader.readString(st));
+            mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
         } else if (cmd.equals("HD")) {
             player.setHangarData(TokenReader.readString(st));
         } else if (cmd.equals("RU")) {
@@ -101,7 +108,7 @@ public class PL extends Command {
         } else if (cmd.equals("SRP")) {
             player.setRewardPoints(TokenReader.readInt(st));
         } else if (cmd.equals("SH")) {
-            player.setHouse(TokenReader.readString(st));
+            setHouse(st, player);
         } else if (cmd.equals("ST")) {
             player.setTechnicians(TokenReader.readInt(st));
         } else if (cmd.equals("SSN")) {
@@ -110,11 +117,11 @@ public class PL extends Command {
 
             player.setSubfaction(subfaction);
         } else if (cmd.equals("AAA")) {
-            player.setAutoArmy(st);// give it the whole tokenizer
+            mwclient.getCampaign().setAutoArmy(st);// give it the whole tokenizer
         } else if (cmd.equals("AAM")) {
             player.setMines(st);// give it the whole tokenizer
         } else if (cmd.equals("GEA")) {
-            player.setAutoGunEmplacements(st);// give it the whole tokenizer
+            mwclient.getCampaign().setAutoGunEmplacements(st);// give it the whole tokenizer
         } else if (cmd.equals("SUS")) {
             player.setUnitStatus(TokenReader.readString(st));
         } else if (cmd.equals("RNA")) {
@@ -135,12 +142,15 @@ public class PL extends Command {
             player.getPersonalPilotQueue().fromString(TokenReader.readString(st));
         } else if (cmd.equals("PEU")) {
             player.setPlayerExcludes(TokenReader.readString(st), "$");
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getUserListPanel().repaint();
         } else if (cmd.equals("AEU")) {
             player.setAdminExcludes(TokenReader.readString(st), "$");
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getUserListPanel().repaint();
         } else if (cmd.equals("RPU")) {
             player.repositionArmyUnit(TokenReader.readString(st));
         } else if (cmd.equals("UOE")) {
             player.updateOperations(TokenReader.readString(st));
+            mwclient.getGUIClient().getMainFrame().updateAttackMenu();
         } else if (cmd.equals("UTT")) {
             player.updateTotalTechs(TokenReader.readString(st));
         } else if (cmd.equals("UAT")) {
@@ -169,7 +179,7 @@ public class PL extends Command {
         } else if (cmd.equals("SAOFS")) {
             player.setArmyOpForceSize(TokenReader.readString(st));
         } else if (cmd.equals("FC")) {
-            player.setFactionConfigs(TokenReader.readString(st));
+            setFactionConfigs(TokenReader.readString(st));
         } else if (cmd.equals("UPBM")) {
             mwclient.updatePartsBlackMarket(TokenReader.readString(st), Integer.parseInt(mwclient.getServerConfigs("CampaignYear")));
         } else if (cmd.equals("UPPC")) {
@@ -235,7 +245,7 @@ public class PL extends Command {
             player.getMyHouse().supportedUnits.clear();
             player.getMyHouse().setNonFactionUnitsCostMore(Boolean.parseBoolean(mwclient.getServerConfigs("UseNonFactionUnitsIncreasedTechs")));
         } else if (cmd.equals("SMA")) {
-            mwclient.getPlayer().setMULCreatedArmy(st);
+            mwclient.getCampaign().setMULCreatedArmy(st);
         } else if (cmd.equals("ANH")) {
             mwclient.createNewHouse(st);
         } else if (cmd.equals("RPF")) {
@@ -269,6 +279,7 @@ public class PL extends Command {
             mwclient.getPlayer().setAutoReorder(TokenReader.readBoolean(st));
         } else if (cmd.equals("SHP")) {
             player.parseHangarPenaltyString(TokenReader.readString(st));
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().updateDisplay();
         } else if (cmd.equals("STS")) {
             int unitID = TokenReader.readInt(st);
             int targetType = TokenReader.readInt(st);
@@ -282,5 +293,60 @@ public class PL extends Command {
         mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
         mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_PLAYERPANEL);
         mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_BMPANEL);
+    }
+
+    public void setFactionConfigs(String data) {
+        if (data.startsWith("DONE#DONE")) {
+            mwclient.setWaiting(false);
+            return;
+        }
+
+        StringTokenizer ST = new StringTokenizer(data, CPlayer.DELIMITER);
+        while (ST.hasMoreTokens()) {
+            String key = TokenReader.readString(ST);
+            String value = TokenReader.readString(ST);
+
+            mwclient.getServerConfigs().setProperty(key, value);
+        }
+        mwclient.setWaiting(false);
+    }
+
+    private void setHouse(StringTokenizer st, CPlayer player) {
+        House playerHouse = player.getMyHouse();
+        player.setHouse(TokenReader.readString(st));
+        /*
+         * Get the faction configs before starting anything else. I could pause
+         * the client and wait for the configs but I'll let it go. --Torren
+         */
+        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getfactionconfigs#0" + mwclient.getServerConfigs("TIMESTAMP"));
+        /**
+         * FIXME: This is a hack. Currently the house config files only exist on the server and are
+         * then appended to the campaignconfig.txt above. In order to make the server and client
+         * both use the House's config file we create a dummy config below that will have no
+         * parameters and pass through to the campaignconfig.txt. Later this hack will be removed
+         * when house config files exist properly on the client side.
+         */
+        if (CampaignData.cd.getHouseOptions(playerHouse.getName()) == null) {
+            Path configPath = FileSystem.getInstance().getFactionConfigPath(playerHouse.getName());
+
+            CampaignData.cd.loadHouseOptions(configPath, playerHouse);
+        }
+
+
+        /*
+         * Now that we have a house set, we can check for BM access properly. Do
+         * the BM buy and sell button checks.
+         */
+        if (mwclient.getGUIClient().getMainFrame().getMainPanel().getBMPanel() != null) {
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getBMPanel().checkFactionAccess();
+        }
+
+        /*
+         * Same thing for the HQ. We have a house, so we can rebuild the button
+         * bar w/ or w/o a reset button, as appropriate.
+         */
+        if (mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel() != null) {
+            mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel().reinitialize();
+        }
     }
 }

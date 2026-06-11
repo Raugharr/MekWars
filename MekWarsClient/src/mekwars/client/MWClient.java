@@ -1099,7 +1099,7 @@ public final class MWClient extends GameHost implements IClient {
 
         if (deploy) {
             meks = myPlayer.getLockedUnits();
-            autoArmy = myPlayer.getAutoArmy();
+            autoArmy = getCampaign().getAutoArmy();
         } else {
             meks = new ArrayList<Unit>();
             autoArmy = new ArrayList<CUnit>();
@@ -1188,7 +1188,7 @@ public final class MWClient extends GameHost implements IClient {
 
             if (deploy) {
                 meks = myPlayer.getLockedUnits();
-                autoArmy = myPlayer.getAutoArmy();
+                autoArmy = getCampaign().getAutoArmy();
             }
 
             ClientThread tmpThread = new ClientThread(Config.getParam("NAME"),

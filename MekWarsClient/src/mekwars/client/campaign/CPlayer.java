@@ -19,24 +19,21 @@ package mekwars.client.campaign;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import mekwars.client.GUIClientConfig;
 import mekwars.client.MWClient;
-import mekwars.client.GUIClient;
 import mekwars.client.common.campaign.clientutils.GameHost;
+import mekwars.client.campaign.sort.ArmySorter;
+import mekwars.client.campaign.sort.HangarSorter;
 import mekwars.client.io.FileSystem;
-import mekwars.client.util.CArmyComparator;
-import mekwars.client.util.CUnitComparator;
 import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.common.Player;
-import mekwars.common.SubFaction;
 import mekwars.common.Unit;
 import mekwars.common.util.TokenReader;
 import mekwars.common.util.UnitUtils;
@@ -54,7 +51,6 @@ public class CPlayer extends Player {
 
     public static final String DELIMITER = "#"; // delimiter for player strings
 
-    private MWClient mwclient;
     private String House;
 
     private int bays;
@@ -64,7 +60,6 @@ public class CPlayer extends Player {
 
     private HasUnits<CUnit> units = new HasUnits<>();
     private List<CArmy> armies;
-    private List<CUnit> autoArmy;
 
     private List<String> adminExcludes;
     private List<String> playerExcludes;
@@ -80,12 +75,10 @@ public class CPlayer extends Player {
     private int conventionalMinesAllowed = 0;
     private int vibraMinesAllowed = 0;
 
-    public CPlayer(MWClient client) {
-        mwclient = client;
+    public CPlayer() {
         bays = 0;
         House = "";
         armies = new ArrayList<>();
-        autoArmy = new ArrayList<>();
         setMyHouse(new House());
         personalPilotQueue = new CPersonalPilotQueues();
         adminExcludes = new ArrayList<String>();
@@ -190,7 +183,7 @@ public class CPlayer extends Player {
      */
     public void setArmyData(String data) {
         CArmy newArmy = new CArmy();
-        newArmy.fromString(data, this, "%", mwclient);
+        newArmy.fromString(data, this, "%");
 
         // Save the old army's legal operations.
         CArmy oldArmy = getArmy(newArmy.getId());
@@ -250,7 +243,7 @@ public class CPlayer extends Player {
         Armiescount = (TokenReader.readInt(ST));
         for (i = 0; i < Armiescount; i++) {
             CArmy army = new CArmy();
-            army.fromString(TokenReader.readString(ST), this, "%", mwclient);
+            army.fromString(TokenReader.readString(ST), this, "%");
             armies.add(army);
             LOGGER.debug("Adding army {} with {} units", army.getName(), army.getAmountOfUnits());
         }
@@ -269,7 +262,7 @@ public class CPlayer extends Player {
         setLogo(TokenReader.readString(ST));
         setInvisible(TokenReader.readBoolean(ST));
 
-        if (Boolean.parseBoolean(mwclient.getServerConfigs("UsePartsRepair"))) {
+        if (CampaignData.cd.getCampaignOptions().getBooleanConfig("UsePartsRepair")) {
             getUnitComponents().fromString(TokenReader.readString(ST), "|");
         } else {
             TokenReader.readString(ST);
@@ -277,8 +270,6 @@ public class CPlayer extends Player {
 
         setAutoReorder(TokenReader.readBoolean(ST));
 
-        //flags.loadDefaults(mwclient.getPlayer().getDefaultPlayerFlags().export());
-        //flags.loadPersonal(TokenReader.readString(ST));
         LOGGER.info("My Player Flags: " + flags.export());
         // traps run. sort the HQ. this isn't duplicative, b/c
         // direct lods (PS instead of PL) don't trigger sorts.
@@ -336,17 +327,13 @@ public class CPlayer extends Player {
      * removes all old instances of an army before adding the new data.
      */
     public boolean removeArmy(int lanceID) {
-
         for (Iterator<CArmy> i = armies.iterator(); i.hasNext();) {
             if (i.next().getId() == lanceID) {
                 i.remove();
-                mwclient.getGUIClient().getMainFrame().updateAttackMenu();// removing an army
-                                                                          // needs to reset
-                                                                          // menu
-                return (true);
+                return true;
             }
         }
-        return (false);
+        return false;
     }
 
     /**
@@ -365,43 +352,8 @@ public class CPlayer extends Player {
     }
 
     public void setHouse(String faction) {
-        setMyHouse(mwclient.getData().getHouseByName(faction));
+        setMyHouse(CampaignData.cd.getHouseByName(faction));
         House = faction;
-
-        /*
-         * Get the faction configs before starting anything else. I could pause
-         * the client and wait for the configs but I'll let it go. --Torren
-         */
-        mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c getfactionconfigs#0" + mwclient.getServerConfigs("TIMESTAMP"));
-        /**
-         * FIXME: This is a hack. Currently the house config files only exist on the server and are
-         * then appended to the campaignconfig.txt above. In order to make the server and client
-         * both use the House's config file we create a dummy config below that will have no
-         * parameters and pass through to the campaignconfig.txt. Later this hack will be removed
-         * when house config files exist properly on the client side.
-         */
-        if (CampaignData.cd.getHouseOptions(getMyHouse().getName()) == null) {
-            Path configPath = FileSystem.getInstance().getFactionConfigPath(getMyHouse().getName());
-
-            CampaignData.cd.loadHouseOptions(configPath, getMyHouse());
-        }
-
-
-        /*
-         * Now that we have a house set, we can check for BM access properly. Do
-         * the BM buy and sell button checks.
-         */
-        if (mwclient.getGUIClient().getMainFrame().getMainPanel().getBMPanel() != null) {
-            mwclient.getGUIClient().getMainFrame().getMainPanel().getBMPanel().checkFactionAccess();
-        }
-
-        /*
-         * Same thing for the HQ. We have a house, so we can rebuild the button
-         * bar w/ or w/o a reset button, as appropriate.
-         */
-        if (mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel() != null) {
-            mwclient.getGUIClient().getMainFrame().getMainPanel().getHQPanel().reinitialize();
-        }
     }
 
     public String getHouse() {
@@ -414,7 +366,7 @@ public class CPlayer extends Player {
     }
 
     public void setHouseFightingFor(String faction) {
-        houseFightingFor = mwclient.getData().getHouseByName(faction);
+        houseFightingFor = CampaignData.cd.getHouseByName(faction);
     }
 
     public House getHouseFightingFor() {
@@ -458,116 +410,6 @@ public class CPlayer extends Player {
             }
         }
         return newID;
-    }
-
-    /**
-     * Method which greates an autoarmy. takes in a string with weight classes,
-     * and uses server configs (path, filenames) to construct units of those
-     * weights.
-     *
-     * Units are added to servers when a player joins a game, same as units from
-     * locked armies.
-     */
-    public void setAutoArmy(StringTokenizer st) {
-        /*
-         * clear the previous autoarmy. Auto army is always called first, and is
-         * cleared correctly even if only gun emplacements are sent.
-         */
-        autoArmy = new ArrayList<CUnit>();
-
-        // if its a null, this was just a clearing call.
-        if (st == null) {
-            return;
-        }
-
-        while (st.hasMoreTokens()) {
-            String filename = TokenReader.readString(st);
-            if (filename.equals("CLEAR")) {
-                return;
-            }
-
-            // get the distance
-            int distInBoards = Integer.parseInt(mwclient.getServerConfigs("DistanceFromMap"));
-            int distInHexes = distInBoards * 17;// 17 hexes per board.
-
-            CUnit currUnit = new CUnit();
-
-            /*
-             * This is needed to set the edge for auto arty when auto edge is
-             * set for players. Else, arty edge is set in MM when the players
-             * click on the edge they want.
-             */
-            OffBoardDirection direction = OffBoardDirection.NORTH;
-            switch (mwclient.getPlayerStartingEdge()) {
-                case 0:
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                    direction = OffBoardDirection.NORTH;
-                    break;
-                case 4:
-                    direction = OffBoardDirection.EAST;
-                    break;
-                case 5:
-                case 6:
-                case 7:
-                    direction = OffBoardDirection.SOUTH;
-                    break;
-                case 8:
-                    direction = OffBoardDirection.WEST;
-                    break;
-            }
-
-            currUnit.setAutoUnitData(getMyHouse(), filename, distInHexes, direction);
-            autoArmy.add(currUnit);
-        }// end while(tokens)
-    }// end setAutoArmy()
-
-    /**
-     * Method which greates an autoarmy gun emplacements. takes in a string with
-     * weight classes, and uses server configs (path, filenames) to construct
-     * units of those weights.
-     *
-     * Units are added to servers when a player joins a game, same as units from
-     * locked armies.
-     */
-    public void setAutoGunEmplacements(StringTokenizer st) {
-        // if its a null, this was just a clearing call.
-        if (st == null) {
-            return;
-        }
-
-        while (st.hasMoreTokens()) {
-            String filename = TokenReader.readString(st);
-            if (filename.equals("CLEAR")) {
-                return;
-            }
-
-            CUnit currUnit = new CUnit();
-            currUnit.setAutoUnitData(getMyHouse(), filename, 0, OffBoardDirection.NORTH);
-            autoArmy.add(currUnit);
-        }// end while(tokens)
-    }// end setAutoArmy()
-
-    public void setMULCreatedArmy(StringTokenizer st) {
-        while (st.hasMoreElements()) {
-            String data = TokenReader.readString(st);
-            if (data.equalsIgnoreCase("CLEAR")) {
-                return;
-            }
-
-            CUnit cm = new CUnit();
-            cm.setData(data);
-            autoArmy.add(cm);
-        }
-    }
-
-    /**
-     * Method which returns the autoArmy arraylist.
-     */
-    public List<CUnit> getAutoArmy() {
-        return autoArmy;
     }
 
     public CArmy getArmy(int id) {
@@ -687,7 +529,6 @@ public class CPlayer extends Player {
             getArmy(army).setBV(bv);
             getArmy(army).getC3Network().remove(unitId);
         }
-        mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
     }
 
     /**
@@ -728,10 +569,6 @@ public class CPlayer extends Player {
                 army.getLegalOperations().remove(name);
             }
         }// end while(more tokens)
-
-        // update the CMainFrame Attack menu
-        mwclient.getGUIClient().getMainFrame().updateAttackMenu();
-
     }// end updateOperations
 
     public void repositionArmyUnit(String data) {
@@ -769,7 +606,7 @@ public class CPlayer extends Player {
                 return;
             }
 
-            if (mwclient.isUsingAdvanceRepairs() && (status == Unit.STATUS_UNMAINTAINED)) {
+            if (CampaignData.cd.isUsingAdvanceRepair() && (status == Unit.STATUS_UNMAINTAINED)) {
                 unit.setStatus(Unit.STATUS_OK);
             } else {
                 unit.setStatus(status);
@@ -883,7 +720,6 @@ public class CPlayer extends Player {
                 adminExcludes.add(curr);
             }
         }
-        mwclient.getGUIClient().getMainFrame().getMainPanel().getUserListPanel().repaint();
     }
 
     /**
@@ -900,7 +736,6 @@ public class CPlayer extends Player {
                 playerExcludes.add(curr);
             }
         }
-        mwclient.getGUIClient().getMainFrame().getMainPanel().getUserListPanel().repaint();
     }
 
     public List<String> getAdminExcludes() {
@@ -911,156 +746,26 @@ public class CPlayer extends Player {
         return playerExcludes;
     }
 
-    /*
-     * Hangar sorting mechanisms. Client and server need not order hangars in
-     * the same fashion, since all transactions (after the initial data feed)
-     * take place on a unit by unit basis.
-     *
-     * Sort options: - BV - Name - Type - Unit ID - Weight - No sort [load
-     * order]
-     *
-     * BV is (for all intents and purposes) an exclusive sort. The others can
-     * lead to significant clustering. Hence, secondary filters can be applied.
-     */
-
     /**
-     * Method which resorts every unit. Inefficient, but we hate clients.
-     * Because we're evil. So there.
-     *
-     * @urgru 4.4.05
+     * Method which resorts every unit.
      */
     public void sortHangar() {
-        // load configs
-        String primeSortOrder = mwclient.getConfigParam("PRIMARYHQSORTORDER");
-        String secondarySortOrder = mwclient.getConfigParam("SECONDARYHQSORTORDER");
-        String tertiarySortOrder = mwclient.getConfigParam("TERTIARYHQSORTORDER");
-
-        // Choices [note - this array must be duplicated in CHQPanel's
-        // maybeShowPopup()]
-        String[] choices =
-        { "Name", "Battle Value", "Gunnery Skill", "ID Number", "MP (Jumping)", "MP (Walking)", "Pilot Kills", "Unit Type", "Weight (Class)", "Weight (Tons)", "No Sort" };
-
-        // determine which sort will dominate
-        int primarySort = CUnitComparator.HQSORT_NONE;
-        for (int i = 0; i < choices.length; i++) {
-            if (primeSortOrder.equals(choices[i])) {
-                primarySort = i;
-            }
-        }
-
-        // determine secondary sort
-        int secondarySort = CUnitComparator.HQSORT_NONE;
-        for (int i = 0; i < choices.length; i++) {
-            if (secondarySortOrder.equals(choices[i])) {
-                secondarySort = i;
-            }
-        }
-
-        // determine tertiary sort
-        int tertiarySort = CUnitComparator.HQSORT_NONE;
-        for (int i = 0; i < choices.length; i++) {
-            if (tertiarySortOrder.equals(choices[i])) {
-                tertiarySort = i;
-            }
-        }
-
-        // run third sort
-        if ((tertiarySort != primarySort) && (tertiarySort != secondarySort) && (tertiarySort != CUnitComparator.HQSORT_NONE)) {
-            getUnits().sort(new CUnitComparator(tertiarySort));
-        }
-
-        // run the second sort
-        if ((primarySort != secondarySort) && (secondarySort != CUnitComparator.HQSORT_NONE)) {
-            getUnits().sort(new CUnitComparator(secondarySort));
-        }
-
-        // now the primary sort
-        if (primarySort != CUnitComparator.HQSORT_NONE) {
-            getUnits().sort(new CUnitComparator(primarySort));
-        }
+        HangarSorter.sort(units.getAll(),
+                List.of(
+                        GUIClientConfig.getInstance().getParam("PRIMARYHQSORTORDER"),
+                        GUIClientConfig.getInstance().getParam("SECONDARYHQSORTORDER"),
+                        GUIClientConfig.getInstance().getParam("TERTIARYHQSORTORDER")));
     }
 
-    /*
-     * Hangar sorting mechanisms. Client and server need not order hangars in
-     * the same fashion, since all transactions (after the initial data feed)
-     * take place on a unit by unit basis.
-     *
-     * Sort options: - BV - Name - Type - Unit ID - Weight - No sort [load
-     * order]
-     *
-     * BV is (for all intents and purposes) an exclusive sort. The others can
-     * lead to significant clustering. Hence, secondary filters can be applied.
-     */
-
     /**
-     * Method which resorts every unit. Inefficient, but we hate clients.
-     * Because we're evil. So there.
-     *
-     * @urgru 4.4.05
+     * Method which resorts every army.
      */
     public void sortArmies() {
-        // load configs
-        String primeSortOrder = mwclient.getConfigParam("PRIMARYARMYSORTORDER");
-        String secondarySortOrder = mwclient.getConfigParam("SECONDARYARMYSORTORDER");
-        String tertiarySortOrder = mwclient.getConfigParam("TERTIARYARMYSORTORDER");
-
-        // Choices [note - this array must be duplicated in CHQPanel's
-        // maybeShowPopup()]
-        String[] choices =
-        { "Name", "Battle Value", "ID Number", "Max Tonnage", "Avg Walk MP", "Avg Jump MP", "Number Of Units", "No Sort" };
-
-        // determine which sort will dominate
-        int primarySort = CArmyComparator.ARMYSORT_NONE;
-        for (int i = 0; i < choices.length; i++) {
-            if (primeSortOrder.equals(choices[i])) {
-                primarySort = i;
-            }
-        }
-
-        // determine secondary sort
-        int secondarySort = CArmyComparator.ARMYSORT_NONE;
-        for (int i = 0; i < choices.length; i++) {
-            if (secondarySortOrder.equals(choices[i])) {
-                secondarySort = i;
-            }
-        }
-
-        // determine tertiary sort
-        int tertiarySort = CArmyComparator.ARMYSORT_NONE;
-        for (int i = 0; i < choices.length; i++) {
-            if (tertiarySortOrder.equals(choices[i])) {
-                tertiarySort = i;
-            }
-        }
-
-        // we know this holds CUnits. Can safely cast.
-        Object[] armiesArray = armies.toArray();
-
-        // run third sort
-        if ((tertiarySort != primarySort) && (tertiarySort != secondarySort) && (tertiarySort != CArmyComparator.ARMYSORT_NONE)) {
-            Arrays.sort(armiesArray, new CArmyComparator(tertiarySort));
-        }
-
-        // run the second sort
-        if ((primarySort != secondarySort) && (secondarySort != CArmyComparator.ARMYSORT_NONE)) {
-            Arrays.sort(armiesArray, new CArmyComparator(secondarySort));
-        }
-
-        // now the primary sort
-        if (primarySort != CArmyComparator.ARMYSORT_NONE) {
-            Arrays.sort(armiesArray, new CArmyComparator(primarySort));
-        }
-
-        // overwrite the hangar with a new arraylist constructed from the
-        // unitsArray.
-        ArrayList<CArmy> Army2 = new ArrayList<>();
-        for (Object element : armiesArray) {
-            Army2.add((CArmy) element);
-        }
-
-        // replace the hangar and flush the array
-        armies = Army2;
-        armiesArray = null;
+        ArmySorter.sort(getArmies(),
+                List.of(
+                        GUIClientConfig.getInstance().getParam("PRIMARYARMYSORTORDER"),
+                        GUIClientConfig.getInstance().getParam("SECONDARYARMYSORTORDER"),
+                        GUIClientConfig.getInstance().getParam("TERTIARYARMYSORTORDER")));
     }
 
     public int getHangarSpaceRequired(int typeid, int weightclass, int baymod, String model) {
@@ -1068,7 +773,7 @@ public class CPlayer extends Player {
             return 0;
         }
 
-        if ((typeid == Unit.INFANTRY) && Boolean.parseBoolean(mwclient.getServerConfigs("FootInfTakeNoBays"))) {
+        if ((typeid == Unit.INFANTRY) && CampaignData.cd.getCampaignOptions().getBooleanConfig("FootInfTakeNoBays")) {
             // check types
             boolean isFoot = model.startsWith("Foot");
             boolean isAMFoot = model.startsWith("Anti-Mech Foot");
@@ -1080,10 +785,10 @@ public class CPlayer extends Player {
 
         int result = 1;
         String techAmount = "TechsFor" + Unit.getWeightClassDesc(weightclass) + Unit.getTypeClassDesc(typeid);
-        result = Integer.parseInt(mwclient.getServerConfigs(techAmount));
+        result = CampaignData.cd.getCampaignOptions().getIntegerConfig(techAmount);
 
         // Apply Pilot Mods (Astech skill)
-        if (!mwclient.isUsingAdvanceRepairs()) {
+        if (!CampaignData.cd.isUsingAdvanceRepair()) {
             result += baymod;
         }
 
@@ -1171,24 +876,6 @@ public class CPlayer extends Player {
         setVibraMinesAllowed(TokenReader.readInt(st));
     }
 
-    public void setFactionConfigs(String data) {
-        if (data.startsWith("DONE#DONE")) {
-            mwclient.setWaiting(false);
-            return;
-        }
-
-        StringTokenizer ST = new StringTokenizer(data, DELIMITER);
-        // mwclient.getServerConfigs().clear();
-        // mwclient.getServerConfigData();
-        while (ST.hasMoreTokens()) {
-            String key = TokenReader.readString(ST);
-            String value = TokenReader.readString(ST);
-
-            mwclient.getServerConfigs().setProperty(key, value);
-        }
-        mwclient.setWaiting(false);
-    }
-
     public int getHangarPenalty() {
         return hangarPenalty;
     }
@@ -1213,6 +900,5 @@ public class CPlayer extends Player {
                 setHangarPurchasePenalty(type, weight, Integer.parseInt(st.nextToken()));
             }
         }
-        mwclient.getGUIClient().getMainFrame().getMainPanel().getHSPanel().updateDisplay();
     }
 }
