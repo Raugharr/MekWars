@@ -35,11 +35,6 @@ import mekwars.common.util.BinWriter;
  */
 
 public class UnitFactory implements Serializable {
-	
-	/**
-     * 
-     */
-    private static final long serialVersionUID = -5221016867627976085L;
     private String name;
 	private String size;
 	private String founder;
