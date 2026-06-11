@@ -37,7 +37,7 @@ public class CC extends Command {
 	 */
 	@Override
 	public void execute(String input) {
-		mwclient.getCampaign().decodeCommand(input);
+		mwclient.decodeCommand(input);
 		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_HQPANEL);
 		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_PLAYERPANEL);
 		mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_BMPANEL);
