@@ -41,6 +41,7 @@ import mekwars.common.campaign.clientutils.IClientConfig;
  */
 public class GUIClientConfig implements IClientConfig {
 	private static final Logger LOGGER = LogManager.getLogger(GUIClientConfig.class);
+    private static GUIClientConfig instance = null;
 
     private static final long serialVersionUID = 415432969624634387L;
     // VARIABLES
@@ -51,7 +52,6 @@ public class GUIClientConfig implements IClientConfig {
 
     // CONSTRUCTOR
     public GUIClientConfig(boolean dedicated) {
-
         config = setDefaults();
         images = new TreeMap<String, ImageIcon>();
 
@@ -119,6 +119,7 @@ public class GUIClientConfig implements IClientConfig {
         if (getParam("UNITCAMO").trim().length() != 0) {
             loadImage(CAMO_PATH + getParam("UNITCAMO"), "CAMO", 84, 72);
         }
+        this.instance = this;
     }
 
     // METHODS
@@ -625,6 +626,10 @@ public class GUIClientConfig implements IClientConfig {
             LOGGER.error("Exception: ", ex);
             LOGGER.error("Failed saving config file");
         }
+    }
+
+    static public GUIClientConfig getInstance() {
+        return instance;
     }
 
 }
