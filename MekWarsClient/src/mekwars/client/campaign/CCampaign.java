@@ -44,110 +44,11 @@ public class CCampaign {
     TreeMap<Integer,CBMUnit> BlackMarket = new TreeMap<Integer,CBMUnit>();
     TreeMap<String,BMEquipment> BlackMarketParts = new TreeMap<String, BMEquipment>();
     TreeMap<String, ComponentToCritsConverter> ComponentConverter = new TreeMap<String, ComponentToCritsConverter>();
+    private List<CUnit> autoArmy;
 
     public CCampaign(MWClient client) {
         mwclient = client;
         Player = new CPlayer(mwclient);
-    }
-
-    public boolean decodeCommand(String command) {
-        StringTokenizer ST;
-        String element;
-
-        ST = new StringTokenizer(command, "|");
-        element = TokenReader.readString(ST);
-        /*    if (!element.equals("CC")) {return(false);}
-         element = TokenReader.readString(ST);*/
-        command = command.substring(3);
-
-        if (element.equals("PS")) {
-            if (!Player.setData(command)) {
-                mwclient.getGUIClient().addToChat("Player data load failed!<br>");
-                return(false);
-            }
-            return(true);
-        }
-
-        if (element.equals("CC")) // Campaign Command
-        {
-            String commandid = TokenReader.readString(ST);
-            if (commandid.equals("AT")) {//incoming attack
-
-                if (mwclient.getConfig().isParam("ENABLEATTACKSOUND")) {
-                    mwclient.getSoundManager().doPlaySound(mwclient.getConfigParam("SOUNDONATTACK"));
-                }
-
-                mwclient.getGUIClient().addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_HMAIL);
-                mwclient.getGUIClient().addToChat("<font color=\"red\"><b>Your forces are under attack!</b></font>", CCommPanel.CHANNEL_PMAIL,"Server");
-                if (mwclient.getConfig().isParam("POPUPONATTACK")) {
-                    int opID = TokenReader.readInt(ST);
-                    int teams = TokenReader.readInt(ST);
-                    //mwclient.showInfoWindow("Your forces are under attack!");
-                    new ArmyViewerDialog(mwclient,null,ST,ArmyViewerDialog.AVD_DEFEND,null,null,opID,teams);
-                }
-            }
-            if (commandid.equals("NT")) {//next tick
-
-                int time = TokenReader.readInt(ST);
-                boolean decrement = TokenReader.readBoolean(ST);
-                mwclient.processTick(time);
-
-                /*
-                 * Decrements tick counters for units without explicit auction
-                 * length being sent from the server to save a bit of bandwidth.
-                 */
-                if (decrement) {
-                    for (CBMUnit currUnit : BlackMarket.values()) {
-                        currUnit.decrementSalesTicks();
-                    }
-                    mwclient.getGUIClient().refreshGUI(GUIClient.REFRESH_BMPANEL);
-                }
-            }
-            return (true);
-        }
-        if (element.equals("CA"))
-        {
-            if (!setData(command))
-            {
-                mwclient.getGUIClient().addToChat("<b>Error: Campaign data load failed.</b><br>");
-                return(false);
-            }
-            return(true);
-        }
-        if (element.equals("PL"))
-        {
-            if (!Player.decodeCommand(command))
-            {
-                mwclient.getGUIClient().addToChat("<b>Error: Player data load failed.</b><br>");
-                return(false);
-            }
-            return(true);
-        }
-        if (element.equals("MS"))
-        {
-            if (!showMsg(command))
-            {
-                mwclient.getGUIClient().addToChat("<b>Error: Message show failed.</b><br>");
-                return(false);
-            }
-            return(true);
-        }
-        if (element.equals("ST"))
-        {
-            if (!showStatus(command))
-            {
-                mwclient.getGUIClient().addToChat("<b>Error: Status show failed.</b><br>");
-                return(false);
-            }
-            return(true);
-        }
-
-        mwclient.getGUIClient().addToChat("<b>Error: Wrong campaign command from server.</b><br>");
-        return(false);
-    }
-
-    protected boolean setData(String command) {
-        return(true);
     }
 
     /**
@@ -195,13 +96,13 @@ public class CCampaign {
         BlackMarket.put(bmUnit.getAuctionID(), bmUnit);
     }
 
-    protected boolean showMsg(String command) {
-        return(true);
+    public boolean showMsg(String command) {
+        return true;
     }
 
-    protected boolean showStatus(String command) {
+    public boolean showStatus(String command) {
         mwclient.getGUIClient().addToChat(command);
-        return(true);
+        return true;
     }
 
     //public MWClient getClient() {return mwclient;}
