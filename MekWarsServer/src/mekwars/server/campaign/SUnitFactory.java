@@ -42,17 +42,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public class SUnitFactory extends UnitFactory implements Serializable {
+public class SUnitFactory extends UnitFactory {
     private static final Logger LOGGER = LogManager.getLogger(SUnitFactory.class);
 
-    private static final long serialVersionUID = 1735176578439214960L;
-    // VARIABLES
     private SPlanet planet;
     
-    // CONSTRUCTORS
-    public SUnitFactory() {
-        // empty
-    }
+    public SUnitFactory() {}
 
     public SUnitFactory(String name, SPlanet planet, String size, String faction, int ticksUntilRefresh, int refreshSpeed, int type, String buildTableFolder, int accessLevel) {
 		super(name, size, faction, ticksUntilRefresh, refreshSpeed, type, buildTableFolder, accessLevel);
