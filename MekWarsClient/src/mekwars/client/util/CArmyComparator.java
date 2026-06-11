@@ -23,11 +23,11 @@
 
 import mekwars.client.campaign.CArmy;
 
- public class CArmyComparator implements Comparator<Object> {
-
- 	//NOTE: This order must match order of
- 	//sort options in CPLayer.sortArmies()'s
- 	//"choices" array.
+ public class CArmyComparator implements Comparator<CArmy> {
+ 	/*
+     * NOTE: This order must match order of
+ 	 * sort options in ArmySorters's SORT_CHOICES array
+     */
  	public static final int ARMYSORT_NAME = 0;
  	public static final int ARMYSORT_BV = 1;
  	public static final int ARMYSORT_ID = 2;
@@ -43,44 +43,40 @@ import mekwars.client.campaign.CArmy;
  		this.sortOrder = sortOrder;
  	}
  	
- 	public int compare(Object obj1, Object obj2) {
- 		
- 		CArmy army1 = (CArmy)obj1;
- 		CArmy army2 = (CArmy)obj2;
- 		
+ 	public int compare(CArmy left, CArmy right) {
  		switch (sortOrder) {
  		
  			case ARMYSORT_NAME : //the name
-				return army1.getName().compareTo(army2.getName());
+				return left.getName().compareTo(right.getName());
  		
  			case ARMYSORT_BV : //self evident
- 				Integer army1BV = army1.getBV();
- 				Integer army2BV = army2.getBV();
+ 				Integer army1BV = left.getBV();
+ 				Integer army2BV = right.getBV();
  				return army1BV.compareTo(army2BV);
  				
  			case ARMYSORT_ID : //the unique unit ID
- 				Integer army1ID = army1.getId();
- 				Integer army2ID = army2.getId();
+ 				Integer army1ID = left.getId();
+ 				Integer army2ID = right.getId();
  				return army1ID.compareTo(army2ID);	
 
  			case ARMYSORT_TONNAGE: //Total tonnage of the army
- 				Double army1Ton = army1.getTotalTonnage();
- 				Double army2Ton = army2.getTotalTonnage();
+ 				Double army1Ton = left.getTotalTonnage();
+ 				Double army2Ton = right.getTotalTonnage();
  				return army1Ton.compareTo(army2Ton);
 
  			case ARMYSORT_AVGMPWALK : //average walk MP for the army
- 				Double army1MP = army1.getAverageWalk();
- 				Double army2MP = army2.getAverageWalk();
+ 				Double army1MP = left.getAverageWalk();
+ 				Double army2MP = right.getAverageWalk();
  				return army1MP.compareTo(army2MP);	
 
  			case ARMYSORT_AVGMPJUMP : //average jump mp of the army
- 				Double army1JP = army1.getAverageJump();
- 				Double army2JP = army2.getAverageJump();
+ 				Double army1JP = left.getAverageJump();
+ 				Double army2JP = right.getAverageJump();
  				return army1JP.compareTo(army2JP);	
 
  			case ARMYSORT_UNITS:
- 				Integer army1Size = army1.getUnits().size();
- 				Integer army2Size = army2.getUnits().size();
+ 				Integer army1Size = left.getUnits().size();
+ 				Integer army2Size = right.getUnits().size();
  				return army1Size.compareTo(army2Size);
  				
  			default :
