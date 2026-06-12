@@ -21,14 +21,16 @@
 
 package mekwars.common;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 
 import mekwars.common.campaign.PersonalPilotQueues;
@@ -42,7 +44,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 
-@MappedSuperclass
+@Entity
 public abstract class Player implements IHasUnits {
     private static final Logger LOGGER = LogManager.getLogger(Player.class);
     private static final double INITIAL_RATING = 1600;
@@ -71,7 +73,10 @@ public abstract class Player implements IHasUnits {
     private boolean isInvisible = false; // Evil command for Big brother err admins.
     private boolean autoReorderParts = false;
     private UnitComponents unitComponents = new UnitComponents();
-    private SubFaction subfaction = null;
+
+    @ManyToOne
+    @JoinColumn(name = "subfaction_id")
+    private SubFaction subfaction;
 
     protected int totalTechs[] = new int[UnitUtils.TECH_TYPES];
     protected int availableTechs[] = new int[UnitUtils.TECH_TYPES];

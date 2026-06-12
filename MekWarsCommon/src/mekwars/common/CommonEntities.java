@@ -22,11 +22,13 @@ import java.util.List;
 public final class CommonEntities {
     public static final List<Class<?>> ALL =
             List.of(
-                    mekwars.common.PlanetEnvironment.class,
-                    mekwars.common.Terrain.class,
                     mekwars.common.AdvancedTerrain.class,
                     mekwars.common.Continent.class,
                     mekwars.common.House.class,
+                    mekwars.common.Player.class,
                     mekwars.common.Planet.class,
+                    mekwars.common.PlanetEnvironment.class,
+                    mekwars.common.SubFaction.class,
+                    mekwars.common.Terrain.class,
                     mekwars.common.UnitFactory.class);
 }
