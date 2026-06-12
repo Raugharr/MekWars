@@ -42,6 +42,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 
+@MappedSuperclass
 public abstract class Player implements IHasUnits {
     private static final Logger LOGGER = LogManager.getLogger(Player.class);
     private static final double INITIAL_RATING = 1600;

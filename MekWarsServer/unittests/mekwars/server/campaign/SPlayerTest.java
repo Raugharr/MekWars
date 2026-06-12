@@ -47,7 +47,6 @@ class SPlayerTest {
     public void setup() {
         CampaignMain.cm = campaignMain;
         CampaignData.cd = campaignData;
-        when(CampaignMain.cm.getIntegerConfig("NoPlayListSize")).thenReturn(5);
         when(campaignData.getCampaignOptions()).thenReturn(campaignOptions);
         when(campaignOptions.getConfig("NewbieHouseName")).thenReturn("NoHouse");
         when(CampaignData.cd.getHouseByName("NoHouse")).thenReturn(house);
@@ -109,9 +108,6 @@ class SPlayerTest {
             when(campaignMain.getConfig("RPShortName")).thenReturn("RP");
             doNothing().when(campaignMain).toUser(anyString(), anyString(), anyBoolean());
 
-            /*
-             * Start with 90 XP, add 20 -> 110. Should roll over 100, grant 1 RP, reset counter to 10
-             */
             player.addExperience(90, false);
             player.addExperience(20, false);
 
@@ -127,10 +123,6 @@ class SPlayerTest {
             when(house.getIntegerConfig("FluXPRollOverCap")).thenReturn(0);
             doNothing().when(campaignMain).toUser(anyString(), anyString(), anyBoolean());
 
-            /*
-             * Start with 90 XP, add 20 -> 110. Should roll over 100, but does not grant an RP because
-             * a moderator gave experience.
-             */
             player.addExperience(90, true);
             player.addExperience(20, false);
 
@@ -147,9 +139,6 @@ class SPlayerTest {
             when(campaignMain.getConfig("FluShortName")).thenReturn("FLU");
             doNothing().when(campaignMain).toUser(anyString(), anyString(), anyBoolean());
 
-            /*
-             * Start with 90 XP, add 20 -> 110. Should roll over 100, grant 1 FLU, reset counter to 10
-             */
             player.addExperience(90, false);
             player.addExperience(20, false);
 
@@ -165,9 +154,6 @@ class SPlayerTest {
             when(house.getIntegerConfig("FluXPRollOverCap")).thenReturn(100);
             doNothing().when(campaignMain).toUser(anyString(), anyString(), anyBoolean());
 
-            /*
-             * Start with 90 XP, add 20 -> 110. Should roll over 100, but does not grant a FLU because a moderator gave experience.
-             */
             player.addExperience(90, true);
             player.addExperience(20, false);
 
