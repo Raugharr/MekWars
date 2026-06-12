@@ -74,7 +74,7 @@ public class CreateSubFactionCommand implements Command {
 			return;
         }
 		
-		SubFaction subFaction = new SubFaction(subFactionName,Integer.toString(access));
+		SubFaction subFaction = new SubFaction(subFactionName, access);
 		
 		faction.addSubfaction(subFaction);
 		

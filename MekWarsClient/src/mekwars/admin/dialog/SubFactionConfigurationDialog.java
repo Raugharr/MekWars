@@ -91,7 +91,7 @@ public final class SubFactionConfigurationDialog implements ActionListener {
         
         this.subFactionConfig = faction.getSubfaction(subFactionName);
         if (this.subFactionConfig == null) {
-            this.subFactionConfig = new SubFaction(subFactionName,"0");
+            this.subFactionConfig = new SubFaction(subFactionName, 0);
             this.subFactionConfig.setConfig("MinELO", "0");
             this.subFactionConfig.setConfig("MinExp", "0");
             mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c CreateSubFaction#"+this.subFactionConfig.getConfig("Name")+"#0#"+this.houseName);

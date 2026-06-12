@@ -15,101 +15,197 @@
  */
 package mekwars.common;
 
-import java.util.Properties;
-import java.util.StringTokenizer;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PostPersist;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
+
+@Entity
 public class SubFaction {
     private static final Logger LOGGER = LogManager.getLogger(SubFaction.class);
 
-	private static Properties defaultSettings = new Properties();
-	private Properties factionSettings = null;
+    private String name;
 
-	public SubFaction(){
-		factionSettings = new Properties(SubFaction.getDefault());
+    @OneToMany
+    @JoinColumn(name = "subfaction_id")
+    private List<Player> players;
+
+    @ManyToOne
+    @JoinColumn(name = "house_id")
+    private House owner;
+    private int accessLevel = 0;
+    private int minElo = 0;
+    private int minExp = 0;
+
+    @ElementCollection
+    @CollectionTable(name = "subfaction_settings", joinColumns = @JoinColumn(name = "subfaction_id"))
+    @MapKeyColumn(name = "key")
+    @Column(name = "value")
+	private Map<String, String> settings;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+	public SubFaction() {
 	}
 	
 	public SubFaction(String name){
-		factionSettings = new Properties(SubFaction.getDefault());
-		factionSettings.setProperty("Name", name);	
+        this();
+        this.name = name;
 	}
 
-	public SubFaction(String name, String accessLevel){
-		factionSettings = new Properties(SubFaction.getDefault());
-		factionSettings.setProperty("Name", name);
-		factionSettings.setProperty("AccessLevel", accessLevel);
+	public SubFaction(String name, int accessLevel){
+        this(name);
+        this.accessLevel = accessLevel;
 	}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public House getOwner() {
+        return owner;
+    }
+
+    public void setOwner(House owner) {
+        this.owner = owner;
+    }
 
     public int getAccessLevel() {
-        return Integer.parseInt(getConfig("AccessLevel"));
+        return accessLevel;
+    }
+
+    public void setAccessLevel(int accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
+    public int getMinElo() {
+        return minElo;
+    }
+
+    public void setMinElo(int minElo) {
+        this.minElo = minElo;
+    }
+
+    public int getMinExp() {
+        return minExp;
+    }
+
+    public void setMinExp(int minExp) {
+        this.minExp = minExp;
     }
 	
-	public static Properties getDefault(){
-		defaultSettings.setProperty("Name", "");
-		defaultSettings.setProperty("AccessLevel", "0");
-		for (int type = 0; type < Unit.MAXBUILD; type++ ){
-		    for ( int weight = 0; weight <= Unit.ASSAULT; weight++){
-		        String setting = "CanBuyNew"+Unit.getWeightClassDesc(weight)+Unit.getTypeClassDesc(type);
-		        defaultSettings.setProperty(setting, "true");
-		        setting = "CanBuyUsed"+Unit.getWeightClassDesc(weight)+Unit.getTypeClassDesc(type);
-		        defaultSettings.setProperty(setting, "true");
+    @PostPersist
+	public void getDefault(){
+		for (int type = 0; type < Unit.MAXBUILD; type++) {
+		    for (int weight = 0; weight <= Unit.ASSAULT; weight++) {
+                String poststring = Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type); 
+
+                settings.put("CanBuyNew" + poststring, "true");
+                settings.put("CanBuyUsed" + poststring, "true");
 		    }
 		}
-		defaultSettings.setProperty("MinELO", "0");
-		defaultSettings.setProperty("MinExp", "0");
-		
-		return defaultSettings;
 	}
 	
 	public String getConfig(String key) {
-		if ( !factionSettings.containsKey(key) ){
-			if ( SubFaction.getDefault().containsKey(key) ) {
-                return SubFaction.getDefault().getProperty(key);
-            }
+        switch (key) {
+            case "Name":
+                return name;
+            case "AccessLevel":
+                return String.valueOf(accessLevel);
+            case "MinELO":
+                return String.valueOf(minElo);
+            case "MinExp":
+                return String.valueOf(minExp);
+        }
+
+        String value = settings.get(key);
+		if (value == null) {
             LOGGER.error("Unable to find subfaction config: {}", key);
 			return "-1";
 		}
-		return factionSettings.getProperty(key);
+		return value;
 	}
 	
 	public void setConfig(String key, String value) {
-		factionSettings.setProperty(key, value);
+        switch (key) {
+            case "Name":
+                setName(value);
+            case "AccessLevel":
+                setAccessLevel(Integer.parseInt(value));
+            case "MinELO":
+                setMinElo(Integer.parseInt(value));
+            case "MinExp":
+                setMinExp(Integer.parseInt(value));
+            default:
+                settings.put(key, value);
+        }
 	}
 	
 	@Override
     public String toString() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		
-		if ( factionSettings.size() < 1 )
+		if (settings.isEmpty()) {
 			return "# #";
-		for (Object key : factionSettings.keySet()){
-			result.append(key.toString());
-			result.append("#");
-			result.append(factionSettings.getProperty(key.toString()));
-			result.append("#");
-		}
-		
+        }
+
+        appendSetting(result, "Name", name);
+        appendSetting(result, "AccessLevel", String.valueOf(accessLevel));
+        appendSetting(result, "MinELO", String.valueOf(minElo));
+        appendSetting(result, "MinExp", String.valueOf(minExp));
+        settings.forEach((key, value) -> appendSetting(result, key, value));
 		return result.toString();
 	}
-	
+
 	public void fromString(String settings) {
 		StringTokenizer propertyList = new StringTokenizer(settings,"#");
 		
-		while ( propertyList.hasMoreElements() ){
-			
+		while (propertyList.hasMoreElements()) {
 			String key = propertyList.nextToken();
 			
-			if ( !propertyList.hasMoreElements() )
+			if (!propertyList.hasMoreElements()) {
 				return;
+            }
 			
 			String value = propertyList.nextToken();
 			setConfig(key, value);
 		}
 	}
 
-    public String getName() {
-        return factionSettings.getProperty("Name");
+    private void appendSetting(StringBuilder sb, String key, String value) {
+        sb.append(key).append("#").append(value).append("#");
     }
 }
