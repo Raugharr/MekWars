@@ -32,6 +32,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 
@@ -111,6 +112,8 @@ public class Planet implements Comparable<Object>, MWEntity {
     // size
 
     /** House that has the most influence on this planet. */
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
     private House owner = null;
 
     /**
