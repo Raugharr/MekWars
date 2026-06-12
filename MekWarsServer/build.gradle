@@ -19,6 +19,7 @@ sourceSets {
         }
         resources {
             srcDirs = ['unittests/resources']
+            srcDir project(':MekWarsCommon').sourceSets.test.resources.srcDirs
         }
     }
 }
