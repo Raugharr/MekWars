@@ -22,6 +22,7 @@ package mekwars.common;
 
 import megamek.common.TechConstants;
 
+import mekwars.common.campaign.BasePilotStats;
 import mekwars.common.entities.MWEntity;
 import mekwars.common.persistence.EntityStore;
 import mekwars.common.util.BinReader;
@@ -29,7 +30,16 @@ import mekwars.common.util.BinWriter;
 import mekwars.common.util.HTMLConverter;
 import mekwars.common.util.TokenReader;
 import mekwars.common.universe.FactionTag;
-import mekwars.common.campaign.BasePilotStats;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+
 import megamek.common.TechConstants;
 
 import org.apache.logging.log4j.LogManager;
@@ -60,6 +70,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Entity
 public class House implements MWEntity {
+    private static final Logger LOGGER = LogManager.getLogger(House.class);
+
     public static final int RED_VALUE = 0;
     public static final int GREEN_VALUE = 1;
     public static final int BLUE_VALUE = 2;

@@ -93,25 +93,30 @@ public class OpponentListHelper {
          * immune players, people at the same IP, or excluded players to creep
          * into the OLH.
          */
-        for (House h : CampaignMain.cm.getData().getAllHouses()) {
-            SHouse currHouse = (SHouse) h;
+        HibernateUtil.inTransaction(
+            session -> {
+                SHouse searchHouse = searchPlayer.getHouseFightingFor();
 
-            // check all active player and ONLY active players
-            for (SPlayer currPlayer : currHouse.getActivePlayers().values()) {
-                if (!isValidOpponent(currPlayer)) {
-                    continue;
+                List<SPlayer> players =
+                session.createNamedQuery("SPlayer.findPlayersInStatus", SPlayer.class)
+                    .setParameter("status", SPlayer.STATUS_ACTIVE)
+                    .getResultList();
+                // check all active player and ONLY active players
+                for (SPlayer currPlayer : players) {
+                    if (!isValidOpponent(currPlayer)) {
+                        continue;
+                    }
+                    /*
+                     * Player passes all bars. Check his armies against those
+                     * of the activating player. If the armies match, add the
+                     * enemy army to possDefendArmies and crossing the armies
+                     * as opponents in each others' lists.
+                     */
+                    List<SArmy> matched = matchedEnemyArmies(currPlayer);
+
+                    potentialOpponents.put(currPlayer.getName(), matched);
                 }
-                /*
-                 * Player passes all bars. Check his armies against those
-                 * of the activating player. If the armies match, add the
-                 * enemy army to possDefendArmies and crossing the armies
-                 * as opponents in each others' lists.
-                 */
-                List<SArmy> matched = matchedEnemyArmies(currPlayer);
-
-                potentialOpponents.put(currPlayer.getName(), matched);
-            }
-        }
+        });
     }
 
     /**

@@ -87,13 +87,6 @@ public class SHouse extends TimeUpdateHouse
     private static final Logger LOGGER = LogManager.getLogger(SHouse.class);
 
     protected HasUnits<SUnit> hangar = new HasUnits<>();
-    // store all online players in *THREE* hashes, one for each primary status
-    private ConcurrentHashMap<String, SPlayer> reservePlayers =
-            new ConcurrentHashMap<String, SPlayer>();
-    private ConcurrentHashMap<String, SPlayer> activePlayers =
-            new ConcurrentHashMap<String, SPlayer>();
-    private ConcurrentHashMap<String, SPlayer> fightingPlayers =
-            new ConcurrentHashMap<String, SPlayer>();
 
     private ConcurrentHashMap<String, SPlanet> planets = new ConcurrentHashMap<String, SPlanet>();
 

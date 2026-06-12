@@ -64,6 +64,9 @@ import mekwars.server.campaign.util.scheduler.UserActivityComponentsJob;
 import mekwars.server.campaign.util.scheduler.UserActivityInfluenceJob;
 import mekwars.server.util.MWPasswdRecord;
 
+import megamek.Version;
+import megamek.common.Protomech;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.annotations.Filter;
@@ -77,6 +80,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -140,7 +144,6 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
     private int baysOwned = 0;
 
     private long lastOnline = 0;
-
     private HasUnits<SUnit> units = new HasUnits<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
@@ -3595,8 +3598,16 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
         int currentAccessLevel = getSubFactionAccess();
 
         for (SubFaction subFaction : getMyHouse().getSubfactions()) {
-            if ((currentAccessLevel < Integer.parseInt(subFaction.getConfig("AccessLevel"))) && (getRating() >= Integer.parseInt(subFaction.getConfig("MinELO"))) && (getExperience() >= Integer.parseInt(subFaction.getConfig("MinExp")))) {
-                CampaignMain.cm.toUser("You are eligible for a promotion to subFaction " + subFaction.getConfig("Name") + ". <a href=\"MEKWARS/c RequestSubFactionPromotion#" + subFaction.getConfig("Name") + "\">Click here to request promotion.</a>", getName());
+            if ((currentAccessLevel < Integer.parseInt(subFaction.getConfig("AccessLevel")))
+                    && (getRating() >= Integer.parseInt(subFaction.getConfig("MinELO")))
+                    && (getExperience() >= Integer.parseInt(subFaction.getConfig("MinExp")))) {
+                CampaignMain.cm.toUser(
+                        "You are eligible for a promotion to subFaction "
+                                + subFaction.getConfig("Name")
+                                + ". <a href=\"MEKWARS/c RequestSubFactionPromotion#"
+                                + subFaction.getConfig("Name")
+                                + "\">Click here to request promotion.</a>",
+                        getName());
             }
         }
     }
