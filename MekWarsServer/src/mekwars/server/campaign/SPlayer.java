@@ -114,7 +114,6 @@ import java.util.StringTokenizer;
 @Filter(name = "FilterByOnline")
 @CheckHQL
 @Entity
-@Table(name = "player")
 public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISeller {
     private static final Logger LOGGER = LogManager.getLogger(SPlayer.class);
 

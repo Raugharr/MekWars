@@ -31,28 +31,22 @@ import mekwars.common.util.HTMLConverter;
 import mekwars.common.util.TokenReader;
 import mekwars.common.universe.FactionTag;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToMany;
 
 import megamek.common.TechConstants;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.annotations.SQLRestriction;
-
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Id;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -110,6 +104,7 @@ public class House implements MWEntity {
     private boolean allowDefectionsFrom = true;
     private boolean allowDefectionsTo = true;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "owner")
     private List<SubFaction> subfactions = new CopyOnWriteArrayList<SubFaction>();
     public ConcurrentHashMap<String, Integer> supportedUnits = new ConcurrentHashMap<String, Integer>();
     public float usedMekBayMultiplier;

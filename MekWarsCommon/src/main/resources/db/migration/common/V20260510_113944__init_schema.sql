@@ -267,8 +267,28 @@ CREATE TABLE IF NOT EXISTS sync_log (
 CREATE UNIQUE INDEX sync_log_entity_id_table_name_index ON sync_log(entity_id, table_name);
 
 CREATE TABLE IF NOT EXISTS subfaction (
-	id INTEGER PRIMARY KEY AUTOINCREMENT
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	house_id INTEGER NOT NULL,
+	name TEXT NOT NULL,
+	access_level INTEGER NOT NULL,
+	min_elo INTEGER NOT NULL,
+	min_exp INTEGER NOT NULL,
+
+	FOREIGN KEY(house_id) REFERENCES house(id)
 );
+
+CREATE INDEX subfaction_house_id_index ON subfaction(house_id);
+
+CREATE TABLE IF NOT EXISTS subfaction_settings (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	key TEXT NOT NULL,
+	value TEXT NOT NULL,
+	subfaction_id INTEGER NOT NULL,
+
+	FOREIGN KEY(subfaction_id) REFERENCES subfaction(id)
+);
+
+CREATE INDEX subfaction_settings_subfaction_id_index ON subfaction_settings(subfaction_id);
 
 CREATE TABLE IF NOT EXISTS house (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -326,10 +346,12 @@ CREATE TABLE IF NOT EXISTS player (
 	subfaction_id INTEGER,
 
 	FOREIGN KEY(house_id) REFERENCES house(id)
+	FOREIGN KEY(subfaction_id) REFERENCES subfaction(id)
 );
 
 CREATE UNIQUE INDEX player_name_index ON player(name);
 CREATE UNIQUE INDEX player_house_id_index ON player(house_id);
+CREATE UNIQUE INDEX player_subfaction_id_index ON player(subfaction_id);
 
 CREATE TABLE IF NOT EXISTS army (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
