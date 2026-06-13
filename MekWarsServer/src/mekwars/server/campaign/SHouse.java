@@ -16,6 +16,10 @@
 
 package mekwars.server.campaign;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+
 import megamek.common.Entity;
 import megamek.common.TechConstants;
 
@@ -107,6 +111,9 @@ public class SHouse extends TimeUpdateHouse
 
     private List<String> leaders = new ArrayList<>();
     private int techResearchPoints = 0;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "unit_components_id")
     private UnitComponents unitParts = new UnitComponents();
     private Map<String, ComponentToCritsConverter> componentConverter =
             new HashMap<String, ComponentToCritsConverter>();
@@ -1598,9 +1605,9 @@ public class SHouse extends TimeUpdateHouse
         StringBuilder toReturn = new StringBuilder();
         if (houseSupportsUnit(fileName)) {
             int num = getSupportedUnits().get(fileName);
-            supportedUnits.put(fileName, num + 1);
+            getSupportedUnits().put(fileName, num + 1);
         } else {
-            supportedUnits.put(fileName, 1);
+            getSupportedUnits().put(fileName, 1);
             toReturn.append(fileName);
         }
         if (toReturn.length() == 0) {
@@ -1618,13 +1625,13 @@ public class SHouse extends TimeUpdateHouse
         fileName = fileName.trim();
         StringBuilder toReturn = new StringBuilder();
         if (houseSupportsUnit(fileName)) {
-            int num = supportedUnits.get(fileName);
+            int num = getSupportedUnits().get(fileName);
             if (num == 1) {
                 // Remove it from the HashMap
-                supportedUnits.remove(fileName);
+                getSupportedUnits().remove(fileName);
                 toReturn.append(fileName);
             } else {
-                supportedUnits.put(fileName, num - 1);
+                getSupportedUnits().put(fileName, num - 1);
             }
         } else {
             // Error. We should never get here.

@@ -72,6 +72,9 @@ public abstract class Player implements IHasUnits {
     private double rating = INITIAL_RATING;
     private boolean isInvisible = false; // Evil command for Big brother err admins.
     private boolean autoReorderParts = false;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "unit_components_id")
     private UnitComponents unitComponents = new UnitComponents();
 
     @ManyToOne
