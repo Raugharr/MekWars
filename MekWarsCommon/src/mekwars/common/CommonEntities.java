@@ -27,8 +27,10 @@ public final class CommonEntities {
                     mekwars.common.House.class,
                     mekwars.common.Player.class,
                     mekwars.common.Planet.class,
+                    mekwars.common.Player.class,
                     mekwars.common.PlanetEnvironment.class,
                     mekwars.common.SubFaction.class,
                     mekwars.common.Terrain.class,
-                    mekwars.common.UnitFactory.class);
+                    mekwars.common.UnitFactory.class,
+                    mekwars.common.util.UnitComponents.class);
 }

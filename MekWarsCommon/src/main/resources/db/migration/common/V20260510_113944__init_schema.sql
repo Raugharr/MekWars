@@ -325,6 +325,21 @@ CREATE TABLE IF NOT EXISTS house_flags (
 
 CREATE INDEX house_flags_house_id_index ON house_flags(house_id);
 
+CREATE TABLE IF NOT EXISTS unit_components (
+	id INTEGER PRIMARY KEY AUTOINCREMENT
+);
+
+CREATE TABLE IF NOT EXISTS unit_component_parts (
+	unit_components_id INTEGER NOT NULL,
+	part_name TEXT NOT NULL,
+	quantity INTEGER NOT NULL,
+	PRIMARY KEY (unit_components_id, part_name)
+
+ 	FOREIGN KEY (unit_components_id) REFERENCES unit_components(id)
+);
+
+CREATE INDEX unit_component_parts_unit_components_id_index ON unit_components(id);
+
 CREATE TABLE IF NOT EXISTS player (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	dtype TEXT NOT NULL DEFAULT 'Player',
@@ -344,9 +359,11 @@ CREATE TABLE IF NOT EXISTS player (
 	mek_tokens INTEGER NOT NULL,
 	hanger_bv INTEGER NOT NULL,
 	subfaction_id INTEGER,
+	unit_components_id INTEGER,
 
 	FOREIGN KEY(house_id) REFERENCES house(id)
 	FOREIGN KEY(subfaction_id) REFERENCES subfaction(id)
+	FOREIGN KEY(unit_components_id) REFERENCES unit_components(id)
 );
 
 CREATE UNIQUE INDEX player_name_index ON player(name);
@@ -390,4 +407,17 @@ CREATE TABLE IF NOT EXISTS unit (
 	is_support_unit INTEGER NOT NULL,
 	christmas_unit INTEGER NOT NULL,
 	pilot_is_repairing INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS house_supported_unit (
+	tag TEXT NOT NULL,
+	house_id INTEGER NOT NULL,
+	PRIMARY KEY (tag, house_id)
+);
+
+CREATE TABLE IF NOT EXISTS house_tag (
+	filename TEXT NOT NULL,
+	quantity INTEGER NOT NULL,	
+	house_id INTEGER NOT NULL,
+	PRIMARY KEY (filename, house_id)
 );

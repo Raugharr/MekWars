@@ -242,7 +242,7 @@ public class PL extends Command {
         } else if (cmd.equals("CSU")) {
             // clear supported units
             LOGGER.info("Clearing Supported Units");
-            player.getMyHouse().supportedUnits.clear();
+            player.getMyHouse().clearSupportedUnits();
             player.getMyHouse().setNonFactionUnitsCostMore(Boolean.parseBoolean(mwclient.getServerConfigs("UseNonFactionUnitsIncreasedTechs")));
         } else if (cmd.equals("SMA")) {
             mwclient.getCampaign().setMULCreatedArmy(st);
