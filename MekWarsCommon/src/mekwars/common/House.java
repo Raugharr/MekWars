@@ -31,16 +31,23 @@ import mekwars.common.util.HTMLConverter;
 import mekwars.common.util.TokenReader;
 import mekwars.common.universe.FactionTag;
 
+import jakarta.persistence.Entity;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.CollectionTable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Id;
+import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 
 import megamek.common.TechConstants;
 
@@ -51,10 +58,12 @@ import org.hibernate.annotations.SQLRestriction;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -106,10 +115,20 @@ public class House implements MWEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "owner")
     private List<SubFaction> subfactions = new CopyOnWriteArrayList<SubFaction>();
-    public ConcurrentHashMap<String, Integer> supportedUnits = new ConcurrentHashMap<String, Integer>();
-    public float usedMekBayMultiplier;
+
+    @ElementCollection
+    @CollectionTable(name = "house_supported_unit", joinColumns = @JoinColumn(name = "house_id"))
+    @MapKeyColumn(name = "filename")
+    @Column(name = "quantity")
+    private Map<String, Integer> supportedUnits = new HashMap<String, Integer>();
+    private float usedMekBayMultiplier;
     private boolean nonFactionUnitsCostMore = false;
+    //
     // NOTE: Once MekWars uses MegaMek version 50.04 this should use megamek.common.universe.FactionTag.
+    @ElementCollection
+    @CollectionTable(name = "house_tag", joinColumns = @JoinColumn(name = "house_id"))
+    @Column(name = "tag")
+    @Enumerated(EnumType.STRING)
     private Set<FactionTag> tags = EnumSet.noneOf(FactionTag.class);
 
     /**
@@ -494,7 +513,7 @@ public class House implements MWEntity {
         return supportedUnits.containsKey(fileName);
     }
 
-    public ConcurrentHashMap<String, Integer> getSupportedUnits() {
+    public Map<String, Integer> getSupportedUnits() {
         return supportedUnits;
     }
 
@@ -531,6 +550,10 @@ public class House implements MWEntity {
             // MWServ.mwlog.mainLog(" --> House: " + getName() + ", Unit: " +
             // fileName);
         }
+    }
+
+    public void clearSupportedUnits() {
+        supportedUnits.clear();
     }
 
     public boolean getNonFactionUnitsCostMore() {
