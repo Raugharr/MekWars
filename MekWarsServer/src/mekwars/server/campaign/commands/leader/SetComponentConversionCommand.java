@@ -68,16 +68,16 @@ public class SetComponentConversionCommand implements Command {
             ComponentToCritsConverter converter = new ComponentToCritsConverter();
             converter.setComponentUsedType(type);
             converter.setComponentUsedWeight(weight);
-            converter.setMinCritLevel(maxProduction);
-            house.getComponentConverter().put(converter.getCritName(),converter);
+            converter.setMinCriticalLevel(maxProduction);
+            house.getComponentConverter().add(converter);
         }else {
             house.getComponentConverter().remove("All");
             ComponentToCritsConverter converter = new ComponentToCritsConverter();
-            converter.setCritName(crit);
+            converter.setCriticalName(crit);
             converter.setComponentUsedType(type);
             converter.setComponentUsedWeight(weight);
-            converter.setMinCritLevel(maxProduction);
-            house.getComponentConverter().put(converter.getCritName(),converter);
+            converter.setMinCriticalLevel(maxProduction);
+            house.getComponentConverter().add(converter);
         }
         
         CampaignMain.cm.doSendHouseMail(house, "NOTE", player.getName()+" has set components to crit conversion for "+crit+" for "+SUnit.getWeightClassDesc(weight)+"/"+SUnit.getTypeClassDesc(type)+" to a max of "+maxProduction+"  crits.");

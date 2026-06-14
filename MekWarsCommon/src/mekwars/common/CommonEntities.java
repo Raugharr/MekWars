@@ -32,5 +32,6 @@ public final class CommonEntities {
                     mekwars.common.SubFaction.class,
                     mekwars.common.Terrain.class,
                     mekwars.common.UnitFactory.class,
+                    mekwars.common.util.ComponentToCritsConverter.class,
                     mekwars.common.util.UnitComponents.class);
 }

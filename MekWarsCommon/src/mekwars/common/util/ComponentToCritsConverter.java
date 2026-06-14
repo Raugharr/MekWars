@@ -22,29 +22,45 @@
 
 package mekwars.common.util;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import mekwars.common.Unit;
 
-public class ComponentToCritsConverter{
-
-    private int minCritLevel = 10;
+@Entity
+public class ComponentToCritsConverter {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private int minCriticalLevel = 10;
     private int componentUsedType = Unit.MEK;
     private int componentUsedWeight = Unit.LIGHT;
-    private String critName = "All";
+    private String criticalName = "All";
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     
     /**
      * 
      * @param int level
      */
-    public void setMinCritLevel(int level) {
-        this.minCritLevel = level;
+    public void setMinCriticalLevel(int level) {
+        this.minCriticalLevel = level;
     }
     
     /**
      * 
      * @return int
      */
-    public int getMinCritLevel() {
-        return this.minCritLevel;
+    public int getMinCriticalLevel() {
+        return this.minCriticalLevel;
     }
     
     /**
@@ -83,16 +99,16 @@ public class ComponentToCritsConverter{
      * 
      * @param String crit
      */
-    public void setCritName(String crit) {
-        this.critName = crit;
+    public void setCriticalName(String crit) {
+        this.criticalName = crit;
     }
     
     /**
      * 
      * @return string
      */
-    public String getCritName() {
-        return this.critName;
+    public String getCriticalName() {
+        return this.criticalName;
     }
 
     public String toString() {
@@ -102,10 +118,10 @@ public class ComponentToCritsConverter{
     public String toString(String token) {
         StringBuffer results = new StringBuffer();
         
-        results.append(critName);
+        results.append(criticalName);
         results.append(" ");
         results.append(token);
-        results.append(minCritLevel);
+        results.append(minCriticalLevel);
         results.append(token);
         results.append(componentUsedType);
         results.append(token);
