@@ -81,4 +81,8 @@ public class HibernateUtil {
     public static SessionFactory getInstance() {
         return instance;
     }
+
+    public static Session getCurrentSession() {
+        return getInstance().getCurrentSession();
+    }
 }
