@@ -48,6 +48,7 @@ import mekwars.server.campaign.market2.IBuyer;
 import mekwars.server.campaign.market2.ISeller;
 import mekwars.server.campaign.mercenaries.ContractInfo;
 import mekwars.server.campaign.mercenaries.MercHouse;
+import mekwars.server.campaign.persistence.SHouseQueries_;
 import mekwars.server.campaign.pilot.SPilot;
 import mekwars.server.campaign.util.SerializedMessage;
 import mekwars.server.io.FileSystem;
@@ -125,6 +126,7 @@ public class SHouse extends TimeUpdateHouse
         new ArrayList<ComponentToCritsConverter>();
 
     private double activityPP = 0.0;
+    private SHouseQueries_ queries;
 
     @Override
     public String toString() {
@@ -473,7 +475,8 @@ public class SHouse extends TimeUpdateHouse
     /** Constructor used for serialization */
     public SHouse() {
         super();
-        smallPlayers = new HashMap<String, SmallPlayer>();
+        smallPlayers = new Hashtable<String, SmallPlayer>();
+        queries = new SHouseQueries_(HibernateUtil.getCurrentSession());
     }
 
     public int getBaysProvided() {
@@ -579,19 +582,7 @@ public class SHouse extends TimeUpdateHouse
         String lowerName = playerName.toLowerCase();
         Integer houseId = this.getId();
 
-        // Find players by name in this house
-        List<SPlayer> players =
-                HibernateUtil.fromTransaction(
-                        session ->
-                                session.createQuery(
-                                                "FROM SPlayer WHERE myHouse.id = :houseId AND name"
-                                                        + " = :name",
-                                                SPlayer.class)
-                                        .setParameter("houseId", houseId)
-                                        .setParameter("name", playerName)
-                                        .getResultList());
-
-        return !players.isEmpty();
+        return !queries.findPlayerInHouse(houseId, playerName).isEmpty();
     }
 
     public long remainingHangarSpaceForWeightclass(int weightClass, int typeId) {
