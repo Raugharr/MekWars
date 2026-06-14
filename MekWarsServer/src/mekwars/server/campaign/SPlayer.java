@@ -101,7 +101,7 @@ import java.util.StringTokenizer;
             query = "FROM SPlayer WHERE myHouse.id = :houseId"),
     @NamedQuery(
             name = "SPlayer.findPlayersInStatus",
-            query = "FROM SPlayer WHERE AND status = :status"),
+            query = "FROM SPlayer WHERE status = :status"),
     @NamedQuery(
             name = "SPlayer.getAllLoggedIn",
             query = "FROM SPlayer WHERE status != " + SPlayer.STATUS_LOGGEDOUT),
