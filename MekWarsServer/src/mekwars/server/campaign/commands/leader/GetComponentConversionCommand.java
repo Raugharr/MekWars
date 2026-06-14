@@ -60,7 +60,7 @@ public class GetComponentConversionCommand implements Command {
         
         
         StringBuffer results = new StringBuffer("PL|CCC|");
-        for ( ComponentToCritsConverter converter :  house.getComponentConverter().values() ) {
+        for (ComponentToCritsConverter converter :  house.getComponentConverter()) {
             results.append(converter.toString("#"));
         }
         

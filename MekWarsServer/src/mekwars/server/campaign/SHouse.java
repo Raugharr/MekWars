@@ -17,8 +17,11 @@
 package mekwars.server.campaign;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 
 import megamek.common.Entity;
 import megamek.common.TechConstants;
@@ -115,8 +118,11 @@ public class SHouse extends TimeUpdateHouse
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "unit_components_id")
     private UnitComponents unitParts = new UnitComponents();
-    private Map<String, ComponentToCritsConverter> componentConverter =
-            new HashMap<String, ComponentToCritsConverter>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "house_id")
+    private List<ComponentToCritsConverter> componentConverter =
+        new ArrayList<ComponentToCritsConverter>();
 
     private double activityPP = 0.0;
 
@@ -224,8 +230,8 @@ public class SHouse extends TimeUpdateHouse
         result.append(unitParts.toString("#"));
         result.append(componentConverter.size());
 
-        for (String key : componentConverter.keySet()) {
-            result.append(componentConverter.get(key).toString());
+        for (ComponentToCritsConverter converter : componentConverter) {
+            result.append(converter.toString());
         }
 
         // Store Aero (Pilots)
@@ -413,8 +419,8 @@ public class SHouse extends TimeUpdateHouse
             int size = TokenReader.readInt(ST);
             for (; size > 0; size--) {
                 ComponentToCritsConverter converter = new ComponentToCritsConverter();
-                converter.setCritName(TokenReader.readString(ST));
-                converter.setMinCritLevel(TokenReader.readInt(ST));
+                converter.setCriticalName(TokenReader.readString(ST));
+                converter.setMinCriticalLevel(TokenReader.readInt(ST));
                 converter.setComponentUsedType(TokenReader.readInt(ST));
                 converter.setComponentUsedWeight(TokenReader.readInt(ST));
             }
@@ -432,8 +438,8 @@ public class SHouse extends TimeUpdateHouse
                 ComponentToCritsConverter converter = new ComponentToCritsConverter();
                 converter.setComponentUsedType(SUnit.MEK);
                 converter.setComponentUsedWeight(SUnit.LIGHT);
-                converter.setMinCritLevel(100);
-                getComponentConverter().put(converter.getCritName(), converter);
+                converter.setMinCriticalLevel(100);
+                getComponentConverter().add(converter);
             }
 
             setPilotQueues(new PilotQueues(this));
@@ -2494,11 +2500,7 @@ public class SHouse extends TimeUpdateHouse
         return amount;
     }
 
-    public void addComponentConverter(ComponentToCritsConverter converter) {
-        componentConverter.put(converter.getCritName(), converter);
-    }
-
-    public Map<String, ComponentToCritsConverter> getComponentConverter() {
+    public List<ComponentToCritsConverter> getComponentConverter() {
         return componentConverter;
     }
 
@@ -2532,7 +2534,6 @@ public class SHouse extends TimeUpdateHouse
         return getHouseOptions().getLongConfig(key);
     }
 
-    @Deprecated(since = "9.0.0", forRemoval = false)
     private void produceCrits() {
         CampaignOptions campaignOptions = CampaignData.cd.getCampaignOptions();
 
@@ -2545,17 +2546,18 @@ public class SHouse extends TimeUpdateHouse
 
         double baseCost = campaignOptions.getDoubleConfig("BaseComponentToMoneyRatio");
 
-        if (getComponentConverter().containsKey("All")) {
-            ComponentToCritsConverter converter = getComponentConverter().get("All");
-            int minCrits = converter.getMinCritLevel();
+        ComponentToCritsConverter defaultConverter = queries.getDefaultComponentToCritsConverter();
+
+        if (defaultConverter != null) {
+            int minCrits = defaultConverter.getMinCriticalLevel();
             baseCost *=
                     campaignOptions.getDoubleConfig(
                             "ComponentToPartsModifier"
-                                    + SUnit.getTypeClassDesc(converter.getComponentUsedType()));
+                                    + SUnit.getTypeClassDesc(defaultConverter.getComponentUsedType()));
             baseCost *=
                     campaignOptions.getDoubleConfig(
                             "ComponentToPartsModifier"
-                                    + SUnit.getWeightClassDesc(converter.getComponentUsedWeight()));
+                                    + SUnit.getWeightClassDesc(defaultConverter.getComponentUsedWeight()));
 
             for (BMEquipment eq : CampaignMain.cm.getPartsMarket().getEquipmentList().values()) {
                 // do not produce something that the is allowed in the BM
@@ -2581,15 +2583,15 @@ public class SHouse extends TimeUpdateHouse
                     components = Math.ceil(components);
                     components = Math.max(1, components);
                     if (getComponents().get(
-                                converter.getComponentUsedType(),
-                                converter.getComponentUsedWeight()).getProductionPoints()
+                                defaultConverter.getComponentUsedType(),
+                                defaultConverter.getComponentUsedWeight()).getProductionPoints()
                             < components) {
                         continue;
                     }
 
                     addPP(
-                            converter.getComponentUsedWeight(),
-                            converter.getComponentUsedType(),
+                            defaultConverter.getComponentUsedWeight(),
+                            defaultConverter.getComponentUsedType(),
                             (int) -components,
                             false);
                     updatePartsCache(eq.getEquipmentInternalName(), critsToAdd);
@@ -2597,10 +2599,8 @@ public class SHouse extends TimeUpdateHouse
                 }
             }
         } else {
-
-            for (ComponentToCritsConverter converter : getComponentConverter().values()) {
-
-                int minCrits = converter.getMinCritLevel();
+            for (ComponentToCritsConverter converter : getComponentConverter()) {
+                int minCrits = converter.getMinCriticalLevel();
                 baseCost = campaignOptions.getDoubleConfig("BaseComponentToMoneyRatio");
                 baseCost *=
                         campaignOptions.getDoubleConfig(
@@ -2616,7 +2616,7 @@ public class SHouse extends TimeUpdateHouse
                         CampaignMain.cm
                                 .getPartsMarket()
                                 .getEquipmentList()
-                                .get(converter.getCritName());
+                                .get(converter.getCriticalName());
 
                 if (eq == null) {
                     continue;
