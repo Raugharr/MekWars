@@ -126,11 +126,11 @@ public class CCampaign {
             ComponentConverter.clear();
             while (st.hasMoreTokens()) {
                 ComponentToCritsConverter converter = new ComponentToCritsConverter();
-                converter.setCritName(TokenReader.readString(st));
-                converter.setMinCritLevel(TokenReader.readInt(st));
+                converter.setCriticalName(TokenReader.readString(st));
+                converter.setMinCriticalLevel(TokenReader.readInt(st));
                 converter.setComponentUsedType(TokenReader.readInt(st));
                 converter.setComponentUsedWeight(TokenReader.readInt(st));
-                ComponentConverter.put(converter.getCritName(), converter);
+                ComponentConverter.put(converter.getCriticalName(), converter);
             }
             mwclient.setWaiting(false);
         } catch(Exception ex) {

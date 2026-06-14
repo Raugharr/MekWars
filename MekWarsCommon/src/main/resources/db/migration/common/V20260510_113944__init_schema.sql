@@ -421,3 +421,14 @@ CREATE TABLE IF NOT EXISTS house_tag (
 	house_id INTEGER NOT NULL,
 	PRIMARY KEY (filename, house_id)
 );
+
+CREATE TABLE IF NOT EXISTS component_to_crits_converter (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	min_critical_level INTEGER NOT NULL,
+	component_used_type INTEGER NOT NULL,
+	component_used_weight INTEGER NOT NULL,
+	critical_name TEXT NOT NULL,
+	house_id INTEGER NOT NULL,
+
+	FOREIGN KEY(house_id) REFERENCES house(id)
+);

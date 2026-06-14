@@ -201,7 +201,7 @@ public final class ComponentConverterDialog implements ActionListener {
 
         if ( converter == null || converter.getComponentUsedType() != type
                 || converter.getComponentUsedWeight() != weight
-                || converter.getMinCritLevel() != Integer.parseInt(amount) ){
+                || converter.getMinCriticalLevel() != Integer.parseInt(amount) ){
 
             if (isMod) {
                 mwclient.sendChat(GameHost.CAMPAIGN_PREFIX + "c Setcomponentconversion#" + crit + "#" + weight + "#" + type + "#" + amount + "#" + factionCombo.getSelectedItem().toString());
@@ -288,17 +288,17 @@ public final class ComponentConverterDialog implements ActionListener {
 
             if (converter == null) {
                 converter = new ComponentToCritsConverter();
-                converter.setCritName("All");
+                converter.setCriticalName("All");
                 converter.setComponentUsedType(Unit.MEK);
                 converter.setComponentUsedWeight(Unit.LIGHT);
-                converter.setMinCritLevel(100);
+                converter.setMinCriticalLevel(100);
             }
 
             critPanel = new JPanel();
             baseTextField = new JTextField(5);
             baseTextField.setEditable(false);
-            baseTextField.setName(converter.getCritName());
-            baseTextField.setText(converter.getCritName());
+            baseTextField.setName(converter.getCriticalName());
+            baseTextField.setText(converter.getCriticalName());
             critPanel.add(baseTextField);
 
             weightCombo = new JComboBox(weight);
@@ -313,7 +313,7 @@ public final class ComponentConverterDialog implements ActionListener {
 
             baseTextField = new JTextField(5);
             baseTextField.setName("amount");
-            baseTextField.setText(Integer.toString(converter.getMinCritLevel()));
+            baseTextField.setText(Integer.toString(converter.getMinCriticalLevel()));
             critPanel.add(baseTextField);
 
             mainPanel.add(critPanel);
@@ -333,10 +333,10 @@ public final class ComponentConverterDialog implements ActionListener {
 
                     if ( converter == null ) {
                         converter = new ComponentToCritsConverter();
-                        converter.setCritName(eq.getEquipmentInternalName());
+                        converter.setCriticalName(eq.getEquipmentInternalName());
                         converter.setComponentUsedType(basicType);
                         converter.setComponentUsedWeight(basicWeight);
-                        converter.setMinCritLevel(basicAmount);
+                        converter.setMinCriticalLevel(basicAmount);
                     }
 
                     critPanel = new JPanel();
@@ -358,7 +358,7 @@ public final class ComponentConverterDialog implements ActionListener {
 
                     baseTextField = new JTextField(5);
                     baseTextField.setName("amount");
-                    baseTextField.setText(Integer.toString(converter.getMinCritLevel()));
+                    baseTextField.setText(Integer.toString(converter.getMinCriticalLevel()));
                     critPanel.add(baseTextField);
 
                     mainPanel.add(critPanel);
