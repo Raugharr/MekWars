@@ -30,9 +30,12 @@ dependencies {
     implementation "org.hibernate.orm:hibernate-platform:6.6.50.Final"
     implementation 'org.hibernate.orm:hibernate-community-dialects:6.6.50.Final'
     implementation 'jakarta.transaction:jakarta.transaction-api'
+
     testImplementation "org.mockito:mockito-junit-jupiter:5.11.0"
     testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
     testImplementation "org.mockito:mockito-junit-jupiter:5.11.0"
+
+    annotationProcessor 'org.hibernate.orm:hibernate-jpamodelgen:6.6.50.Final'
 }
 
 application {
