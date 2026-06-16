@@ -105,6 +105,7 @@ public class SHouse extends TimeUpdateHouse
     )
     protected HasUnits<SUnit> hangar = new HasUnits<>();
 
+    @Transient
     private ConcurrentHashMap<String, SPlanet> planets = new ConcurrentHashMap<String, SPlanet>();
 
     @Transient
@@ -278,6 +279,26 @@ public class SHouse extends TimeUpdateHouse
 
     public ComponentList getComponents() {
         return components;
+    }
+
+    /**
+     * Method which checks all three activity states to see if a player w/ a given name is logged in
+     * to the faction
+     */
+    public boolean isLoggedIntoFaction(String playerName) {
+        return !findPlayerInHouse(playerName.toLowerCase()).isEmpty();
+    }
+
+    public List<SPlayer> findPlayerInHouse(String playerName) {
+        return queries.findPlayerInHouse(getId(), playerName.toLowerCase());
+    }
+
+    public List<SPlayer> findPlayerWithStatus(Integer status) {
+        return queries.findPlayerWithStatus(getId(), status);
+    }
+
+    public List<SPlayer> allLoggedInPlayers() {
+        return queries.allLoggedInPlayers(getId());
     }
 
     public String fromString(String s, Random r) {
@@ -591,18 +612,6 @@ public class SHouse extends TimeUpdateHouse
     public SPilot getNewPilot(int uType) {
         SPilot pilot = getPilotQueues().getPilot(uType);
         return pilot;
-    }
-
-    /**
-     * Method which checks all three activity states to see if a player w/ a given name is logged in
-     * to the faction
-     */
-    public boolean isLoggedIntoFaction(String playerName) {
-        // Use database query to check if player is online in any status
-        String lowerName = playerName.toLowerCase();
-        Integer houseId = this.getId();
-
-        return !queries.findPlayerInHouse(houseId, playerName).isEmpty();
     }
 
     public long remainingHangarSpaceForWeightclass(int weightClass, int typeId) {

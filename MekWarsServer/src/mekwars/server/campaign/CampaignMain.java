@@ -27,6 +27,7 @@ import mekwars.common.Planet;
 import mekwars.common.Terrain;
 import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.campaign.operations.Operation;
+import mekwars.common.campaign.persistence.TerrainQueries_;
 import mekwars.common.io.file.FactionTraitFile;
 import mekwars.common.flags.PlayerFlags;
 import mekwars.common.util.HibernateUtil;

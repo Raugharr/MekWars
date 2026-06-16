@@ -20,7 +20,7 @@ import jakarta.persistence.MappedSuperclass;
 
 import mekwars.common.House;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Adds the ability to trace the last change time to a planet.
@@ -33,32 +33,21 @@ public class TimeUpdateHouse extends House {
     /** Constructor used for serialization */
     public TimeUpdateHouse() {
         super();
+        updated();
     }
 
     /** The time at which this data was changed last. */
-    private Date timestamp;
+    private Instant timestamp;
 
     /**
      * @return Returns the timestamp which this data was last changed.
      */
-    public Date getLastChanged() {
+    public Instant getLastChanged() {
         return timestamp;
     }
 
     /** Mark the data as updated. */
     public void updated() {
-        timestamp = new Date();
+        timestamp = Instant.now();
     }
-
-    /**
-     * Writing itself into a stream @Override public void binOut(TreeWriter out) {
-     * super.binOut(out); SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-     * out.write(sdf.format(getLastChanged()),"lastChanged"); }
-     *
-     * <p>/** Reading itself from a stream @Override public void binIn(TreeReader in, CampaignData
-     * data) throws IOException { super.binIn(in, data); SimpleDateFormat sdf = new
-     * SimpleDateFormat("yyyyMMddHHmmss"); try { timestamp =
-     * sdf.parse(in.readString("lastChanged")); } catch (ParseException e) { throw new
-     * IOException("corrupted date format"); } }
-     */
 }

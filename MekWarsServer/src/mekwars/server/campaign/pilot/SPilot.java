@@ -55,8 +55,7 @@ import org.apache.logging.log4j.Logger;
 public class SPilot extends Pilot {
     private static final Logger LOGGER = LogManager.getLogger(SPilot.class);
 
-    private int originalID;
-    private int pickedUpID;
+    private int pickedUpId;
     private boolean death = false;
 
     public SPilot(House house, String name, int gunnery, int piloting) {
@@ -555,33 +554,18 @@ public class SPilot extends Pilot {
      */
 
     /**
-     * @return Returns the originalID.
+     * @return Returns the pickedUpId.
      */
-    public int getOriginalID() {
-        return originalID;
+    public int getPickedUpId() {
+        return pickedUpId;
     }
 
     /**
-     * @param originalID
-     *            The originalID to set.
+     * @param pickedUpId
+     *            The pickedUpId to set.
      */
-    public void setOriginalID(int originalID) {
-        this.originalID = originalID;
-    }
-
-    /**
-     * @return Returns the pickedUpID.
-     */
-    public int getPickedUpID() {
-        return pickedUpID;
-    }
-
-    /**
-     * @param pickedUpID
-     *            The pickedUpID to set.
-     */
-    public void setPickedUpID(int pickedUpID) {
-        this.pickedUpID = pickedUpID;
+    public void setPickedUpId(int pickedUpId) {
+        this.pickedUpId = pickedUpId;
     }
 
     /**
@@ -603,8 +587,7 @@ public class SPilot extends Pilot {
 
     public static SPilot getMekWarrior(int originalID, int pickedUpId) {
         SPilot mw = new SPilot();
-        mw.setOriginalID(originalID);
-        mw.setPickedUpID(pickedUpId);
+        mw.setPickedUpId(pickedUpId);
         return mw;
     }
 

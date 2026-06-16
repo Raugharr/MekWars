@@ -32,6 +32,7 @@ import megamek.common.Mounted;
 import megamek.common.Protomech;
 import megamek.common.Tank;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -104,7 +105,8 @@ public abstract class Unit<T extends Unit<T>> {
     private String modelName;
 
     private int maintainanceLevel = 100; // @urgru 8/2/04
-    private int unitC3Level = 0; // @Torren 12/13/04 0=None 1=Slave 2=Master 3=Independent
+    @Column(name = "c3_level")
+    private int c3Level = 0; // @Torren 12/13/04 0=None 1=Slave 2=Master 3=Independent
 
     public int simpleRepairCost = 0;
     private int currentRepairCost = 0;
@@ -602,14 +604,14 @@ public abstract class Unit<T extends Unit<T>> {
      * @Gets the units current C3 Level 0=None 1=Slave 2=Master 3=Independent 4=Dual Masters
      */
     public int getC3Level() {
-        return unitC3Level;
+        return c3Level;
     }
 
     /**
      * @param level Sets the units current C3 Level
      */
     public void setC3Level(int level) {
-        unitC3Level = level;
+        c3Level = level;
     }
 
     public AmmoType getEntityAmmo(int weaponType, String ammoName) {

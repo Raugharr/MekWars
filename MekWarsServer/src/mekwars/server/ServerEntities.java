@@ -29,6 +29,7 @@ public final class ServerEntities {
                             CommonEntities.ALL.stream(),
                             Stream.of(
                                     mekwars.server.campaign.SHouse.class,
+                                    mekwars.server.campaign.pilot.SPilot.class,
                                     mekwars.server.campaign.SPlayer.class,
                                     mekwars.server.campaign.SUnitFactory.class,
                                     mekwars.server.campaign.SPlanet.class,

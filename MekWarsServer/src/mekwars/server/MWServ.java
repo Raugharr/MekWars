@@ -124,6 +124,7 @@ public class MWServ {
 
     public static void main(String[] argv) {
         String trackerAddress = MWServ.getInstance().getCampaign().getConfig("TrackerAddress");
+        HibernateUtil.buildSessionFactory(ServerEntities.ALL);
 
         try {
             CampaignOptions campaignOptions =
@@ -168,7 +169,6 @@ public class MWServ {
 
     public MWServ() {
         LOGGER.info("----- MekWars Server V " + SERVER_VERSION + " is starting up... -----");
-        HibernateUtil.buildSessionFactory(ServerEntities.ALL);
         EquipmentType.initializeTypes();
         MechSummaryCache.getInstance();
         /*** Required to kick off the Server ***/

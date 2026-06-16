@@ -184,7 +184,7 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
     private long activeSince = 0;
     private long attackRestrictionUntil = 0;
 
-    private String sellingto = "";
+    private String sellingTo = "";
     private Version clientVersion; // version gets sent by the player and
     // set
 
@@ -1318,7 +1318,7 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
         xpTillReward = 0;
         xpTillFlu = 0;
         setMekTokens(0);
-        sellingto = " ";
+        sellingTo = " ";
         weightedArmyNumber = 0;
         setSave();
     }
@@ -2621,11 +2621,11 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
     }
 
     public void setPlayerSellingto(String selling) {
-        sellingto = selling;
+        sellingTo = selling;
     }
 
     public String getPlayerSellingto() {
-        return sellingto;
+        return sellingTo;
     }
 
     public void setPlayerClientVersion(Version version) {

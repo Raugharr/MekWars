@@ -26,6 +26,8 @@ public class Component {
     private int unitWeight;
     private int productionPoints = 0;
 
+    public Component() {}
+
     public Component(int unitType, int unitWeight) {
         this.unitType = unitType;
         this.unitWeight = unitWeight;
