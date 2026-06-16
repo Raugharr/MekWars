@@ -28,6 +28,7 @@ import megamek.common.options.Quirks;
 
 import jakarta.persistence.Entity;
 
+import mekwars.common.Army;
 import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.common.MegaMekPilotOption;
@@ -42,6 +43,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import java.util.Enumeration;
 import java.util.List;
@@ -53,11 +56,22 @@ import java.util.StringTokenizer;
 public class CUnit extends Unit<CUnit> {
     private static final Logger LOGGER = LogManager.getLogger(CUnit.class);
 
+    @ManyToOne
+    @JoinColumn(name = "army_id")
+    private CArmy army;
     private String htmlQuirkList = " ";
     private String quirkList = " ";
 
     public CUnit() {
         init();
+    }
+
+    public CArmy getArmy() {
+        return army;
+    }
+
+    public void setArmy(Army army) {
+        this.army = (CArmy) army;
     }
 
     private void init() {
