@@ -85,7 +85,7 @@ public class Army<T extends Unit> {
     private Set<String> legalOperations = new TreeSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "player_id")
+    @JoinColumn(name = "owner_id")
     private Player owner;
 
     public Army() {}

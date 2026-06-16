@@ -66,7 +66,7 @@ public class HibernateUtil {
     }
 
     public static void inTransaction(Consumer<Session> consumer) {
-        Session session = getInstance().getCurrentSession();
+        Session session = getCurrentSession();
         Transaction transaction = session.beginTransaction();
 
         try {

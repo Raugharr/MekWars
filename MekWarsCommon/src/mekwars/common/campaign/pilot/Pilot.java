@@ -21,6 +21,16 @@
  */
 package mekwars.common.campaign.pilot;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
+
 import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.MegaMekPilotOption;
@@ -40,6 +50,7 @@ public class Pilot {
     private String name = "John Doe";
     private int experience = 0;
     private int hits = 0;
+    @OneToMany
     private List<MegaMekPilotOption> megamekOptions = new ArrayList<MegaMekPilotOption>();
     private String weapon = "Default"; // for Weapon Specialist skill
     private House house;

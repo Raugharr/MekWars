@@ -30,4 +30,10 @@ public interface SHouseQueries {
 
     @HQL("FROM SPlayer p WHERE p.myHouse.id = :houseId AND p.name = :name")
     List<SPlayer> findPlayerInHouse(Integer houseId, String name);
+
+    @HQL("FROM SPlayer p WHERE p.myHouse.id = :houseId AND status = :statusId")
+    List<SPlayer> findPlayerWithStatus(Integer houseId, Integer statusId);
+
+    @HQL("FROM SPlayer p WHERE p.myHouse.id = :houseId AND status != " + SPlayer.STATUS_LOGGEDOUT)
+    List<SPlayer> allLoggedInPlayers(Integer houseId);
 }

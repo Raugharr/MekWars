@@ -3,17 +3,21 @@
 
 CREATE TABLE IF NOT EXISTS house (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	dtype TEXT,
 	name TEXT NOT NULL,
 	logo TEXT,
 	faction_flu_file TEXT NOT NULL,
 	faction_color TEXT NOT NULL,
 	abbreviation TEXT NOT NULL,
-	faction_player_color TEXT NOT NULL,
 	conquerable INTEGER NOT NULL,
 	tech_level INTEGER NOT NULL,
-	allows_defections_from INTEGER NOT NULL,
-	allows_defections_to INTEGER NOT NULL,
+	allow_defections_from INTEGER NOT NULL,
+	allow_defections_to INTEGER NOT NULL,
 	used_mek_bay_multiplier INTEGER NOT NULL,
+	base_gunner INTEGER NOT NULL,
+	base_pilot INTEGER NOT NULL,
+	base_pilot_skills TEXT NOT NULL,
+	faction_player_colors TEXT NOT NULL,
 	non_faction_units_cost_more INTEGER NOT NULL
 );
 
@@ -448,6 +452,8 @@ CREATE TABLE IF NOT EXISTS unit (
 	is_support_unit INTEGER NOT NULL,
 	christmas_unit INTEGER NOT NULL,
 	pilot_is_repairing INTEGER NOT NULL,
+	maintainance_level INTEGER NOT NULL,
+	c3_level INTEGER NOT NULL,
 	house_id INTEGER,
 	player_id INTEGER,
 	army_id INTEGER,
@@ -495,4 +501,67 @@ CREATE TABLE IF NOT EXISTS house_components (
 	FOREIGN KEY(house_id) REFERENCES house(id)
 );
 
-CREATE INDEX house_components_house_id_index ON house(id);
+CREATE INDEX house_components_house_id_index ON house_components(house_id);
+
+CREATE TABLE IF NOT EXISTS pilot (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	dtype TEXT NOT NULL,
+	gunnery INTEGER NOT NULL,
+	piloting INTEGER NOT NULL,
+	name TEXT NOT NULL,
+	experience INTEGER NOT NULL,
+	hits INTEGER NOT NULL,
+	weapon INTEGER NOT NULL,
+	house_id INTEGER NOT NULL,
+	unit_id INTEGER,
+	trait TEXT,
+	edge_when_tac INTEGER NOT NULL,
+	edge_when_ko INTEGER NOT NULL,
+	edge_when_headhit INTEGER NOT NULL,
+	edge_when_explosion INTEGER NOT NULL,
+	bv_mod REAL NOT NULL,
+	bay_modifier INTEGER NOT NULL,
+	kills INTEGER NOT NULL,
+	unit_type INTEGER NOT NULL,
+
+	FOREIGN KEY(house_id) REFERENCES house(id),
+	FOREIGN KEY(unit_id) REFERENCES unit(id)
+);
+
+CREATE INDEX pilot_house_id_index ON pilot(house_id);
+CREATE INDEX pilot_unit_id_index ON pilot(unit_id);
+
+CREATE TABLE IF NOT EXISTS pilot_option (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	pilot_id INTEGER NOT NULL,
+	mmname TEXT NOT NULL,
+	value INTEGER NOT NULL,
+
+	FOREIGN KEY(pilot_id) REFERENCES pilot(id)
+);
+
+CREATE INDEX pilot_option_pilot_id_index ON pilot_option(pilot_id);
+
+CREATE TABLE IF NOT EXISTS pilot_skill (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	skill_type INTEGER NOT NULL,
+	name TEXT NOT NULL,
+	abbreviation TEXT NOT NULL,
+	description TEXT NOT NULL,
+	level INTEGER NOT NULL,
+	pilot_id INTEGER NOT NULL,
+
+	FOREIGN KEY(pilot_id) REFERENCES pilot(id)
+);
+
+CREATE INDEX pilot_skill_pilot_id_index ON pilot_skill(pilot_id);
+
+CREATE TABLE IF NOT EXISTS pilot_stats (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	gunnery_json TEXT NOT NULL,
+	piloting_json TEXT NOT NULL,
+	skills_json TEXT NOT NULL,
+	house_id INTEGER NOT NULL UNIQUE,
+
+	FOREIGN KEY(house_id) REFERENCES house(id)
+);

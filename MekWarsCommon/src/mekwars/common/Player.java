@@ -56,7 +56,7 @@ public abstract class Player implements IHasUnits {
     private String name = "";
     private String logo = "";
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "house_id", nullable = false)
     private House myHouse = null;
 

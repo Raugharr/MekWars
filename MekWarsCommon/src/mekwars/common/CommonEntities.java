@@ -23,9 +23,11 @@ public final class CommonEntities {
     public static final List<Class<?>> ALL =
             List.of(
                     mekwars.common.AdvancedTerrain.class,
+                    mekwars.common.campaign.BasePilotStats.class,
+                    mekwars.common.campaign.pilot.skills.PilotSkill.class,
                     mekwars.common.Continent.class,
                     mekwars.common.House.class,
-                    mekwars.common.Player.class,
+                    mekwars.common.MegaMekPilotOption.class,
                     mekwars.common.Planet.class,
                     mekwars.common.Player.class,
                     mekwars.common.PlanetEnvironment.class,

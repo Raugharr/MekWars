@@ -3988,7 +3988,7 @@ public class ShortResolver {
                 // pilot isn't dead. check to see if it was picked up.
                 // pickup only matters if it was by a living unit.
                 SPlayer pickupPlayer = null;
-                OperationEntity pickupEntity = livingUnits.get(mw.getPickedUpID());
+                OperationEntity pickupEntity = livingUnits.get(mw.getPickedUpId());
                 if (pickupEntity != null) {
                     pickupPlayer = CampaignMain.cm.getPlayer(pickupEntity.getOwnerName());
                 }
