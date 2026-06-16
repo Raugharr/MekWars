@@ -98,8 +98,10 @@ public class SHouse extends TimeUpdateHouse
 
     private ConcurrentHashMap<String, SPlanet> planets = new ConcurrentHashMap<String, SPlanet>();
 
+    @Transient
     private Map<String, SmallPlayer> smallPlayers = new HashMap<String, SmallPlayer>();
     private ComponentList components = new ComponentList();
+    @Transient
     private Map<Integer, Integer> unitComponents = new HashMap<Integer, Integer>();
 
     private int money;
@@ -126,6 +128,8 @@ public class SHouse extends TimeUpdateHouse
         new ArrayList<ComponentToCritsConverter>();
 
     private double activityPP = 0.0;
+
+    @Transient
     private SHouseQueries_ queries;
 
     @Override
