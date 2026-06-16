@@ -16,12 +16,16 @@
 
 package mekwars.server.campaign;
 
+import jakarta.persistence.AssociationOverride;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.Transient;
 
 import megamek.common.Entity;
 import megamek.common.TechConstants;
@@ -94,6 +98,11 @@ public class SHouse extends TimeUpdateHouse
         implements Comparable<Object>, ISeller, IBuyer, Serializable {
     private static final Logger LOGGER = LogManager.getLogger(SHouse.class);
 
+    @Embedded
+    @AssociationOverride(
+        name="units",   
+        joinColumns = @JoinColumn(name="house_id")
+    )
     protected HasUnits<SUnit> hangar = new HasUnits<>();
 
     private ConcurrentHashMap<String, SPlanet> planets = new ConcurrentHashMap<String, SPlanet>();
