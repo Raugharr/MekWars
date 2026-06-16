@@ -14,20 +14,34 @@
 
 package mekwars.common.campaign;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OrderBy;
+
 import mekwars.common.Unit;
 import mekwars.common.util.TokenReader;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Interface for storing {@link Component components} based on a {@link Unit unit's} weight and type.
+ * Interface for storing {@link Component components} based on a {@link Unit unit's} weight and
+ * type.
  */
+@Embeddable
 public class ComponentList implements Iterable<Component> {
     private final int TYPE_SIZE = Unit.AERO - Unit.MEK + 1;
     private final int WEIGHT_SIZE = Unit.ASSAULT - Unit.LIGHT + 1;
 
-    private Component[] components = new Component[TYPE_SIZE * WEIGHT_SIZE];
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "house_components", joinColumns = @JoinColumn(name = "house_id"))
+    @OrderBy("unitType ASC, unitWeight ASC")
+    private List<Component> components = new ArrayList<>();
 
     public class ComponentListIterator implements Iterator<Component> {
         private int unitType = 0;
@@ -56,10 +70,12 @@ public class ComponentList implements Iterable<Component> {
         }
     }
 
-    public ComponentList() {
+    public ComponentList() {}
+
+    public void initialize() {
         for (int type = 0; type < TYPE_SIZE; ++type) {
             for (int weight = 0; weight < WEIGHT_SIZE; ++weight) {
-                components[getIndex(type, weight)] = new Component(type, weight);
+                components.add(new Component(type, weight));
             }
         }
     }
@@ -86,13 +102,13 @@ public class ComponentList implements Iterable<Component> {
         if (unitWeight < 0 || unitWeight >= WEIGHT_SIZE) {
             throw new IndexOutOfBoundsException("Invalid unitWeight " + unitWeight);
         }
-        return components[getIndex(unitType, unitWeight)];
+        return components.get(getIndex(unitType, unitWeight));
     }
 
     public void fromString(StringTokenizer tokenizer) {
         for (int type = 0; type < TYPE_SIZE; ++type) {
             for (int weight = 0; weight < WEIGHT_SIZE; ++weight) {
-                components[getIndex(type, weight)].setProductionPoints(TokenReader.readInt(tokenizer));
+                get(type, weight).setProductionPoints(TokenReader.readInt(tokenizer));
             }
         }
     }

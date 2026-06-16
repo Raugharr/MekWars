@@ -100,6 +100,8 @@ public class SHouse extends TimeUpdateHouse
 
     @Transient
     private Map<String, SmallPlayer> smallPlayers = new HashMap<String, SmallPlayer>();
+
+    @Embedded
     private ComponentList components = new ComponentList();
     @Transient
     private Map<Integer, Integer> unitComponents = new HashMap<Integer, Integer>();
@@ -131,6 +133,11 @@ public class SHouse extends TimeUpdateHouse
 
     @Transient
     private SHouseQueries_ queries;
+
+    @PostPersist
+    public void onPostPersist() {
+            components.initialize();
+    }
 
     @Override
     public String toString() {
