@@ -17,13 +17,17 @@
 
 package mekwars.common.composition;
 
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Embeddable;
+
 import mekwars.common.Unit;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
+@Embeddable
 public class HasUnits<T extends Unit> {
+    @OneToMany
     private List<T> units = new ArrayList<>();
 
     /**

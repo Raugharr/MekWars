@@ -16,8 +16,10 @@
 
 package mekwars.server.campaign;
 
+import jakarta.persistence.AssociationOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -143,6 +145,12 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
     private int baysOwned = 0;
 
     private long lastOnline = 0;
+
+    @Embedded
+    @AssociationOverride(
+        name="units",   
+        joinColumns = @JoinColumn(name="player_id")
+    )
     private HasUnits<SUnit> units = new HasUnits<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
