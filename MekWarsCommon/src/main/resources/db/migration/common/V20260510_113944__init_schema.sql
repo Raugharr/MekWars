@@ -1,6 +1,42 @@
 -- Migration: init_schema
 -- Created: Tue May 10 11:39:44 CDT 2026
 
+CREATE TABLE IF NOT EXISTS house (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name TEXT NOT NULL,
+	logo TEXT,
+	faction_flu_file TEXT NOT NULL,
+	faction_color TEXT NOT NULL,
+	abbreviation TEXT NOT NULL,
+	faction_player_color TEXT NOT NULL,
+	conquerable INTEGER NOT NULL,
+	tech_level INTEGER NOT NULL,
+	allows_defections_from INTEGER NOT NULL,
+	allows_defections_to INTEGER NOT NULL,
+	used_mek_bay_multiplier INTEGER NOT NULL,
+	non_faction_units_cost_more INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS house_price_mods (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	house_id INTEGER NOT NULL,
+	category TEXT NOT NULL,
+	unit_type INTEGER NOT NULL,
+	unit_weight INTEGER NOT NULL,
+	value INTEGER NOT NULL,
+	FOREIGN KEY (house_id) REFERENCES house(id)
+);
+
+CREATE TABLE IF NOT EXISTS house_flags (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	house_id INTEGER NOT NULL,
+	flag TEXT NOT NULL,
+	FOREIGN KEY (house_id) REFERENCES house(id)
+);
+
+CREATE INDEX house_flags_house_id_index ON house_flags(house_id);
+
+
 CREATE TABLE IF NOT EXISTS planet (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	x REAL NOT NULL,
@@ -16,9 +52,12 @@ CREATE TABLE IF NOT EXISTS planet (
 	homeworld INTEGER NOT NULL DEFAULT 0,
 	original_owner TEXT NOT NULL,
 	conquest_points INTEGER NOT NULL DEFAULT 100,
-	owner_id INTEGER,
-	FOREIGN KEY (owner_id) REFERENCES house(id)
+	owner_id INTEGER NOT NULL,
+
+	FOREIGN KEY(owner_id) REFERENCES house(id)
 );
+
+CREATE INDEX planet_owner_id_index ON planet(owner_id);
 
 CREATE UNIQUE INDEX planet_name_index ON planet(name);
 
@@ -333,9 +372,9 @@ CREATE TABLE IF NOT EXISTS unit_component_parts (
 	unit_components_id INTEGER NOT NULL,
 	part_name TEXT NOT NULL,
 	quantity INTEGER NOT NULL,
-	PRIMARY KEY (unit_components_id, part_name)
+	PRIMARY KEY (unit_components_id, part_name),
 
- 	FOREIGN KEY (unit_components_id) REFERENCES unit_components(id)
+	FOREIGN KEY (unit_components_id) REFERENCES unit_components(id)
 );
 
 CREATE INDEX unit_component_parts_unit_components_id_index ON unit_components(id);
@@ -360,6 +399,8 @@ CREATE TABLE IF NOT EXISTS player (
 	hanger_bv INTEGER NOT NULL,
 	subfaction_id INTEGER,
 	unit_components_id INTEGER,
+	rating INTEGER NOT NULL,
+	team_number INTEGER NOT NULL,
 
 	FOREIGN KEY(house_id) REFERENCES house(id)
 	FOREIGN KEY(subfaction_id) REFERENCES subfaction(id)
@@ -406,8 +447,18 @@ CREATE TABLE IF NOT EXISTS unit (
 	life_time_repair_cost INTEGER NOT NULL,
 	is_support_unit INTEGER NOT NULL,
 	christmas_unit INTEGER NOT NULL,
-	pilot_is_repairing INTEGER NOT NULL
+	pilot_is_repairing INTEGER NOT NULL,
+	house_id INTEGER,
+	player_id INTEGER,
+	army_id INTEGER,
+
+	FOREIGN KEY(house_id) REFERENCES house(id),
+	FOREIGN KEY(player_id) REFERENCES player(id),
+	FOREIGN KEY(army_id) REFERENCES army(id)
 );
+
+CREATE INDEX unit_house_id_index ON unit(house_id);
+CREATE INDEX unit_player_id_index ON unit(player_id);
 
 CREATE TABLE IF NOT EXISTS house_supported_unit (
 	tag TEXT NOT NULL,
@@ -417,7 +468,7 @@ CREATE TABLE IF NOT EXISTS house_supported_unit (
 
 CREATE TABLE IF NOT EXISTS house_tag (
 	filename TEXT NOT NULL,
-	quantity INTEGER NOT NULL,	
+	quantity INTEGER NOT NULL,
 	house_id INTEGER NOT NULL,
 	PRIMARY KEY (filename, house_id)
 );
@@ -432,3 +483,16 @@ CREATE TABLE IF NOT EXISTS component_to_crits_converter (
 
 	FOREIGN KEY(house_id) REFERENCES house(id)
 );
+
+CREATE INDEX component_to_crits_converter_house_id_index ON component_to_crits_converter(house_id);
+
+CREATE TABLE IF NOT EXISTS house_components (
+	house_id INTEGER,
+	unit_type INTEGER,
+	unit_weight INTEGER,
+	production_points INTEGER,
+
+	FOREIGN KEY(house_id) REFERENCES house(id)
+);
+
+CREATE INDEX house_components_house_id_index ON house(id);
