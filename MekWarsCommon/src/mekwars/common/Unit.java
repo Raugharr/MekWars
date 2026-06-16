@@ -86,10 +86,13 @@ public abstract class Unit<T extends Unit<T>> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
+    @Transient
     protected Entity unitEntity;
     private int BV;
     private int scrappableFor = -1;
+    @Transient
     private Pilot pilot;
+    @Transient
     private Player owner;
 
     private int type;
@@ -107,6 +110,7 @@ public abstract class Unit<T extends Unit<T>> {
     private int currentRepairCost = 0;
     private int lifeTimeRepairCost = 0;
 
+    @Transient
     protected TargetSystem targetSystem = new TargetSystem();
 
     private boolean isSupportUnit = false;

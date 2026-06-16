@@ -87,19 +87,13 @@ public class House implements MWEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ElementCollection
-    @CollectionTable(name = "house_price_mods", joinColumns = @JoinColumn(name = "house_id"))
-    @SQLRestriction("mod_category = 'PRICE'")
+    @Transient
     private int factionUnitPriceMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
 
-    @ElementCollection
-    @CollectionTable(name = "house_price_mods", joinColumns = @JoinColumn(name = "house_id"))
-    @SQLRestriction("mod_category = 'INFLUENCE'")
+    @Transient
     private int factionUnitFluMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
 
-    @ElementCollection
-    @CollectionTable(name = "house_price_mods", joinColumns = @JoinColumn(name = "house_id"))
-    @SQLRestriction("mod_category = 'COMPONENT'")
+    @Transient
     private int factionUnitComponentMod[][] = new int[Unit.MAXBUILD][4]; // [Type][Weight]
 
     private String factionColor = "#000000";

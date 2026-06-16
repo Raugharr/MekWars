@@ -148,6 +148,7 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<SArmy> armies = new ArrayList<>();
 
+    @Transient
     private SPersonalPilotQueues personalPilotQueue = new SPersonalPilotQueues();
 
     @OneToOne(cascade = CascadeType.ALL)
