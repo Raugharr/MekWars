@@ -14,10 +14,13 @@
 
 package mekwars.common.campaign;
 
+import jakarta.persistence.Embeddable;
+
 /**
  * Tracks the number of production points a {@link House} has for a specific {@link Unit unit's}
  * weight and type.
  */
+@Embeddable
 public class Component {
     private int unitType;
     private int unitWeight;
