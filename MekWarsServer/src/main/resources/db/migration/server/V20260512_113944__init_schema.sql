@@ -44,6 +44,10 @@ ALTER TABLE player ADD COLUMN user_validated INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN last_promoted INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN leech_count INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN status INTEGER NOT NULL;
+ALTER TABLE player ADD COLUMN phasemc INTEGER NOT NULL;
+ALTER TABLE player ADD COLUMN sellingto INTEGER NOT NULL;
+ALTER TABLE player ADD COLUMN xp_till_flu INTEGER NOT NULL;
+ALTER TABLE player ADD COLUMN xp_till_reward INTEGER NOT NULL;
 ALTER TABLE player ADD COLUMN exclusion_list_id INTEGER NOT NULL REFERENCES exclusion_list(id);
 
 CREATE UNIQUE INDEX player_exclusion_list_id_index ON player(exclusion_list_id);

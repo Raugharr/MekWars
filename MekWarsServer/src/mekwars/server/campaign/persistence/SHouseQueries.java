@@ -28,6 +28,6 @@ public interface SHouseQueries {
     @HQL("FROM ComponentToCritsConverter WHERE criticalName = \"ALL\"")
     ComponentToCritsConverter getDefaultComponentToCritsConverter();
 
-    @HQL("FROM SPlayer p WHERE p.myHouse.id = :houseId and p.name = :name")
-    List<SPlayer> findPlayerInHouse(int houseId, String name);
+    @HQL("FROM SPlayer p WHERE p.myHouse.id = :houseId AND p.name = :name")
+    List<SPlayer> findPlayerInHouse(Integer houseId, String name);
 }
