@@ -27,6 +27,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 
 import megamek.common.Entity;
 
@@ -76,6 +77,7 @@ public class Army<T extends Unit> {
 
     private float opForceSize = NO_LIMIT;
 
+    @Transient
     private Map<Integer, Integer> c3Network = new HashMap<Integer, Integer>();
 
     private List<Integer> commanders = new ArrayList<Integer>(1);
