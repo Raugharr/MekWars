@@ -35,7 +35,10 @@ import megamek.common.Tank;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.targetsystems.TargetSystem;
@@ -52,7 +55,7 @@ import java.io.InputStreamReader;
  * @author Helge Richter
  */
 @MappedSuperclass
-public class Unit<T extends Unit<T>> {
+public abstract class Unit<T extends Unit<T>> {
     public static final int LIGHT = 0;
     public static final int MEDIUM = 1;
     public static final int HEAVY = 2;
@@ -88,7 +91,7 @@ public class Unit<T extends Unit<T>> {
     private int scrappableFor = -1;
     private Pilot pilot;
     private Player owner;
-    private Army<T> army;
+
     private int type;
     private int weightClass;
     private int status = Unit.STATUS_OK;
@@ -254,13 +257,9 @@ public class Unit<T extends Unit<T>> {
     }
 
 
-    public Army getArmy() {
-        return army;
-    }
+    abstract public Army getArmy();
 
-    public void setArmy(Army army) {
-        this.army = army;
-    }
+    abstract public void setArmy(Army army);
     
     /**
      * @return Returns the posId.

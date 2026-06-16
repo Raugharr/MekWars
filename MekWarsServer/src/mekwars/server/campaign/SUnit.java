@@ -16,6 +16,10 @@
 
 package mekwars.server.campaign;
 
+import jakarta.persistence.AssociationOverride;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
 import megamek.common.AmmoType;
 import megamek.common.AmmoType.Munitions;
 import megamek.common.BattleArmor;
@@ -36,6 +40,7 @@ import megamek.common.enums.Gender;
 import megamek.common.loaders.EntityLoadingException;
 import megamek.common.options.PilotOptions;
 
+import mekwars.common.Army;
 import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.common.MegaMekPilotOption;
@@ -73,6 +78,9 @@ import java.util.Vector;
 public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
     private static final Logger LOGGER = LogManager.getLogger(SUnit.class);
 
+    @ManyToOne
+    @JoinColumn(name = "army_id")
+    private SArmy army;
     private long passesMaintainanceUntil = 0;
     private int lastCombatPilot = -1;
 
@@ -134,6 +142,14 @@ public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
         setId(replaceId);
         setProducer(p);
         unitEntity = ent;
+    }
+
+    public SArmy getArmy() {
+        return army;
+    }
+
+    public void setArmy(Army army) {
+        this.army = (SArmy) army;
     }
 
     /**
