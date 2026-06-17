@@ -16,11 +16,22 @@
 
 package mekwars.common.util;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.JoinColumn;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
@@ -33,7 +44,18 @@ import org.apache.logging.log4j.Logger;
 public class UnitComponents {
     private static final Logger LOGGER = LogManager.getLogger(UnitComponents.class);
 
-    private Hashtable<String, Integer> components = new Hashtable<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ElementCollection
+    @CollectionTable(
+    name = "unit_component_parts",
+    joinColumns = @JoinColumn(name = "unit_components_id")
+    )
+    @MapKeyColumn(name = "part_name")
+    @Column(name = "quantity")
+    private Map<String, Integer> components = new HashMap<>();
 
     public String tableizeComponents(int year) {
         return tableizeComponents(components, year);
@@ -47,20 +69,16 @@ public class UnitComponents {
         };
     }
 
-    public String tableizeComponents(Hashtable<String, Integer>parts, int year) {
-
+    public String tableizeComponents(Map<String, Integer>parts, int year) {
         StringBuffer result = new StringBuffer();
-
         Comparator <? super Object> stringCompare = UnitComponents.stringComparator();
-
-        Hashtable<String,String> keys = new Hashtable<String, String>();
+        Map<String,String> keys = new HashMap<String, String>();
 
         for ( String key : parts.keySet() ) {
-
             keys.put(UnitComponents.getName(key),key);
         }
 
-        Vector<String> equipment = new Vector<String>(keys.keySet());
+        List<String> equipment = new ArrayList<String>(keys.keySet());
         //equipment.addAll();
         Collections.sort(equipment,stringCompare);
 
@@ -153,10 +171,8 @@ public class UnitComponents {
 
     }
 
-    public void add(Hashtable<String, Integer> parts) {
-
+    public void add(Map<String, Integer> parts) {
         for ( String part :  parts.keySet() ) {
-
             if ( components.containsKey(part) ) {
                 components.put(part, components.get(part)+parts.get(part));
             } else {
@@ -167,8 +183,8 @@ public class UnitComponents {
 
     public String canRepodUnit(Entity mainUnit, Entity repodUnit) {
 
-        Hashtable<String,Integer> mainUnitParts = new Hashtable<String,Integer>();
-        Hashtable<String,Integer> repodUnitParts = new Hashtable<String,Integer>();
+        Map<String,Integer> mainUnitParts = new HashMap<String,Integer>();
+        Map<String,Integer> repodUnitParts = new HashMap<String,Integer>();
 
         int IS = 0;
         int armor = 0;
@@ -317,8 +333,7 @@ public class UnitComponents {
     }
 
     public boolean repodUnit(Entity mainUnit, Entity repodUnit) {
-
-        Hashtable<String,Integer> repodUnitParts = new Hashtable<String,Integer>();
+        Map<String,Integer> repodUnitParts = new HashMap<String,Integer>();
 
         int IS = 0;
         int armor = 0;
