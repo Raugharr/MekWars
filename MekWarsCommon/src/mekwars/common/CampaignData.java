@@ -177,14 +177,10 @@ public class CampaignData implements TerrainProvider {
 
     // /** Retrieves all planets. */
     public Collection<Planet> getAllPlanets() {
-        return HibernateUtil.fromTransaction(
-                session -> {
-                    session.enableFetchProfile(Planet_.PROFILE_EAGER_PLANET);
-                    return session.createQuery(
-                                    "SELECT p FROM Planet p LEFT JOIN FETCH p.influence",
-                                    Planet.class)
-                            .getResultList();
-                });
+        return HibernateUtil.getCurrentSession().createQuery(
+                        "SELECT p FROM Planet p LEFT JOIN FETCH p.influence",
+                        Planet.class)
+                .getResultList();
     }
 
     /**

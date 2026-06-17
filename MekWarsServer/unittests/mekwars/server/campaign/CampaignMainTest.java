@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class CampaignMainTest {
-
     @BeforeAll
     static void setup() throws IOException {
         Files.createDirectories(Path.of("campaign", "players"));

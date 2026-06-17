@@ -240,26 +240,15 @@ public final class CampaignMain implements Serializable {
         cm.loadTopUnitID();
 
         try {
-            long size =
-                    HibernateUtil.fromTransaction(
-                            session ->
-                                    session.createQuery("SELECT COUNT(*) FROM Terrain", Long.class)
-                                            .getSingleResult());
+            System.out.println("Transaction active: " + HibernateUtil.getCurrentSession().getTransaction().isActive());
+            long size = new TerrainQueries_(HibernateUtil.getCurrentSession()).count();
+            Session session = HibernateUtil.getCurrentSession();
 
             if (size == 0) {
-                Session session = HibernateUtil.getInstance().getCurrentSession();
-                Transaction transaction = session.beginTransaction();
-
-                try {
                     loadTerrainData(session);
                     loadAdvancedTerrainData(session);
                     loadFactionData();
                     loadPlanetData(session);
-                    transaction.commit();
-                } catch (Exception e) {
-                    transaction.rollback();
-                    throw e;
-                }
             }
         } catch (IOException exception) {
             LOGGER.error("Unable to parse file", exception);
@@ -832,174 +821,165 @@ public final class CampaignMain implements Serializable {
      * the player ignores the SignOn click-through and attempts to log in anyway.
      */
     public void doLoginPlayer(String username) {
-        HibernateUtil.inTransaction(session -> {
-            // Loop through the houses and make sure he's not already logged in
-            for (House vh : data.getAllHouses()) {
-                SHouse currH = (SHouse) vh;
-                if (currH.isLoggedIntoFaction(username)) {
-                    toUser(
-                            "You are already logged in to " + currH.getColoredNameAsLink() + ".",
-                            username,
-                            true);
-                    return;
-                }
-            }
-
-            /*
-             * He's not in a house. lets look in the save queue and pfiles. If the
-             * getPlayer is null, extend an invitation to enroll (same as in
-             * SignOn.java, for uniformity).
-             */
-            SPlayer toLogin = this.getPlayer(username);
-
-            if (toLogin == null) {
-                this.toUser(
-                        "<font color=\"teal\"><br>---<br>"
-                                + "It appears that you haven't signed up for this server's "
-                                + "campaign.<br><a href=\"MEKWARS/c enroll\">Click here to get "
-                                + "started.</a><br>---<br></font>",
+        // Loop through the houses and make sure he's not already logged in
+        for (House vh : data.getAllHouses()) {
+            SHouse currH = (SHouse) vh;
+            if (currH.isLoggedIntoFaction(username)) {
+                toUser(
+                        "You are already logged in to " + currH.getColoredNameAsLink() + ".",
                         username,
                         true);
                 return;
             }
+        }
 
-            /*
-             * Now that we have a player who needs to be placed in a house. The
-             * player holds a faction name in his .dat file, which is used to
-             * bootstrap a link to the SHouse into SPlayer at load time. We may
-             * assume that this data is valid (if not, we have much deeper problems
-             * with the data we're using here) and put the player into the
-             * approperiate faction. Note that the old MMNET code looped through the
-             * houses until it found one that purported to "own" the player. This is
-             * a pretty dramatic reversal of process, and not as OO-appropriate :-(
-             */
-            SHouse loginHouse = toLogin.getMyHouse();
-            if (loginHouse == null) {
-                toUser("    . Major problem. Report ASAP.", username, true);
-                CampaignMain.cm.doSendModMail(
-                        "NOTE",
-                        toLogin.getName()
-                                + " has a null login faction! Moving to "
-                                + CampaignMain.cm.getConfig("NewbieHouseName"));
-                loginHouse =
-                        CampaignMain.cm.getHouseFromPartialString(
-                                CampaignMain.cm.getConfig("NewbieHouseName"));
-                toLogin.setMyHouse(loginHouse);
-            }
-            String s = loginHouse.doLogin(toLogin);
+        /*
+         * He's not in a house. lets look in the save queue and pfiles. If the
+         * getPlayer is null, extend an invitation to enroll (same as in
+         * SignOn.java, for uniformity).
+         */
+        SPlayer toLogin = this.getPlayer(username);
 
-            /*
-             * String returned from house includes motd, etc. The house performs one
-             * last-ditch check to see if the player is already in the house and may
-             * return a null if it finds the player present, despite the failure of
-             * all of our previous location attempts.
-             */
-            if (s != null) {
-                // send the login message/MOTD
-                toUser(s, username, true);
+        if (toLogin == null) {
+            this.toUser(
+                    "<font color=\"teal\"><br>---<br>"
+                            + "It appears that you haven't signed up for this server's "
+                            + "campaign.<br><a href=\"MEKWARS/c enroll\">Click here to get "
+                            + "started.</a><br>---<br></font>",
+                    username,
+                    true);
+            return;
+        }
 
-                // Send the player his basic info (units, techs, etc)
-                CampaignMain.cm.toUser("PS|" + toLogin.toString(true), username, false);
+        /*
+         * Now that we have a player who needs to be placed in a house. The
+         * player holds a faction name in his .dat file, which is used to
+         * bootstrap a link to the SHouse into SPlayer at load time. We may
+         * assume that this data is valid (if not, we have much deeper problems
+         * with the data we're using here) and put the player into the
+         * approperiate faction. Note that the old MMNET code looped through the
+         * houses until it found one that purported to "own" the player. This is
+         * a pretty dramatic reversal of process, and not as OO-appropriate :-(
+         */
+        SHouse loginHouse = toLogin.getMyHouse();
+        if (loginHouse == null) {
+            toUser("    . Major problem. Report ASAP.", username, true);
+            CampaignMain.cm.doSendModMail(
+                    "NOTE",
+                    toLogin.getName()
+                            + " has a null login faction! Moving to "
+                            + CampaignMain.cm.getConfig("NewbieHouseName"));
+            loginHouse =
+                    CampaignMain.cm.getHouseFromPartialString(
+                            CampaignMain.cm.getConfig("NewbieHouseName"));
+            toLogin.setMyHouse(loginHouse);
+        }
+        String s = loginHouse.doLogin(toLogin);
 
-                if (isUsingAdvanceRepair()) {
+        /*
+         * String returned from house includes motd, etc. The house performs one
+         * last-ditch check to see if the player is already in the house and may
+         * return a null if it finds the player present, despite the failure of
+         * all of our previous location attempts.
+         */
+        if (s != null) {
+            // send the login message/MOTD
+            toUser(s, username, true);
 
-                    if (!toLogin.hasRepairingUnits()) {
-                        CampaignMain.cm.toUser(
-                                "PL|UTT|" + toLogin.totalTechsToString(), username, false);
-                        CampaignMain.cm.toUser(
-                                "PL|UAT|" + toLogin.totalTechsToString(), username, false);
-                    } else {
-                        CampaignMain.cm.toUser(
-                                "PL|UTT|" + toLogin.totalTechsToString(), username, false);
-                        CampaignMain.cm.toUser(
-                                "PL|UAT|" + toLogin.availableTechsToString(), username, false);
-                    }
-                }
+            // Send the player his basic info (units, techs, etc)
+            CampaignMain.cm.toUser("PS|" + toLogin.toString(true), username, false);
 
-                /*
-                 * Player is logging in so clear their armies opps and send the
-                 * player his army eligibilities.
-                 */
-                for (SArmy currA : toLogin.getArmies()) {
-                    currA.getLegalOperations().clear();
-                    CampaignMain.cm.getOpsManager().checkOperations(currA, false);
-                }
+            if (isUsingAdvanceRepair()) {
 
-                // send all currently online players to the one logging in
-                StringBuilder result = new StringBuilder("PI|PL|");
-                for (House vh : data.getAllHouses()) {
-                    SHouse currH = (SHouse) vh;
-                    List<SPlayer> playerList = 
-                        session.createQuery(
-                                    "SELECT COUNT(p) SPlayer p WHERE"
-                                        + " :houseId = p.house_id AND status = :statusId",
-                                        SPlayer.class)
-                                .setParameter("houseId", currH.getId())
-                                .setParameter("status", SPlayer.STATUS_LOGGEDOUT)
-                                .getResultList();
-                    for (SPlayer currP : playerList) {
-                        result.append(getPlayerUpdateString(currP) + "|");
-                    }
-                }
-                toUser(result.toString(), username, false);
-
-                // Add the logging in player to everyone who is already online
-                this.doSendToAllOnlinePlayers("PI|DA|" + getPlayerUpdateString(toLogin), false);
-
-                /*
-                 * Once the player is logged in, set his last-command-sent to the
-                 * current time. This stops the idle-kicking code from immediately
-                 * logging out players who've just come online and not yet sent any
-                 * commands.
-                 */
-                toLogin.setLastTimeCommandSent(System.currentTimeMillis());
-                toLogin.setLastOnline(System.currentTimeMillis());
-
-                /*
-                 * Check if Staff Member and send MMOTD if so.
-                 */
-                if (MWServ.getInstance().isModerator(username)) {
+                if (!toLogin.hasRepairingUnits()) {
                     CampaignMain.cm.toUser(
-                            "(Moderator Mail) Mod MOTD: " + CampaignMain.cm.getConfig("MMOTD"),
-                            username);
-                }
-
-                /*
-                 * INCREDIBLY BAD HACK! As player's sign into factions, get an IP
-                 * and add it to the LOGGER. With the demise of nfc.log (removed
-                 * from NFC2, which was grafted into MekWars), there is a need for a
-                 * grepable iplog.0 to search for double accounts and re-
-                 * entering/ban circumventing players. Despite the heinous way we
-                 * draw the IP, this should work. @urgru 1.29.06 :-(
-                 */
-                LOGGER.info("Name: " + username + " IP: " + MWServ.getInstance().getIP(username));
-                CampaignMain.cm.toUser("PL|SUD|1", username, false);
-                CampaignMain.cm.toUser("PL|SHP|" + toLogin.buildHangarPenaltyString(), username, false);
-
-                // Send him the Tick Counter
-                try {
+                            "PL|UTT|" + toLogin.totalTechsToString(), username, false);
                     CampaignMain.cm.toUser(
-                            "CC|NT|" + TickJob.millisecondsUntilNextFire() + "|" + false,
-                            username,
-                            false);
-                } catch (Exception exception) {
-                    LOGGER.catching(exception);
-                }
-
-                // Check for Christmas
-                if (ChristmasHandler.getInstance().isItChristmas()) {
-                    // Check if the user has received his Christmas Gifts
-                    if (!ChristmasHandler.getInstance().userHasReceivedGifts(username)) {
-                        // He needs his presents!!!
-                        ChristmasHandler.getInstance().sendChristmasGifts(this.getPlayer(username));
-                    } else {
-                        // No presents for you!
-                        // CampaignMain.cm.toUser("AM:You have already received presents", username,
-                        // true);
-                    }
+                            "PL|UAT|" + toLogin.totalTechsToString(), username, false);
+                } else {
+                    CampaignMain.cm.toUser(
+                            "PL|UTT|" + toLogin.totalTechsToString(), username, false);
+                    CampaignMain.cm.toUser(
+                            "PL|UAT|" + toLogin.availableTechsToString(), username, false);
                 }
             }
-        });
+
+            /*
+             * Player is logging in so clear their armies opps and send the
+             * player his army eligibilities.
+             */
+            for (SArmy currA : toLogin.getArmies()) {
+                currA.getLegalOperations().clear();
+                CampaignMain.cm.getOpsManager().checkOperations(currA, false);
+            }
+
+            // send all currently online players to the one logging in
+            StringBuilder result = new StringBuilder("PI|PL|");
+            for (House vh : data.getAllHouses()) {
+                SHouse currH = (SHouse) vh;
+                List<SPlayer> playerList = currH.allLoggedInPlayers();
+                for (SPlayer currP : playerList) {
+                    result.append(getPlayerUpdateString(currP) + "|");
+                }
+            }
+            toUser(result.toString(), username, false);
+
+            // Add the logging in player to everyone who is already online
+            this.doSendToAllOnlinePlayers("PI|DA|" + getPlayerUpdateString(toLogin), false);
+
+            /*
+             * Once the player is logged in, set his last-command-sent to the
+             * current time. This stops the idle-kicking code from immediately
+             * logging out players who've just come online and not yet sent any
+             * commands.
+             */
+            toLogin.setLastTimeCommandSent(System.currentTimeMillis());
+            toLogin.setLastOnline(System.currentTimeMillis());
+
+            /*
+             * Check if Staff Member and send MMOTD if so.
+             */
+            if (MWServ.getInstance().isModerator(username)) {
+                CampaignMain.cm.toUser(
+                        "(Moderator Mail) Mod MOTD: " + CampaignMain.cm.getConfig("MMOTD"),
+                        username);
+            }
+
+            /*
+             * INCREDIBLY BAD HACK! As player's sign into factions, get an IP
+             * and add it to the LOGGER. With the demise of nfc.log (removed
+             * from NFC2, which was grafted into MekWars), there is a need for a
+             * grepable iplog.0 to search for double accounts and re-
+             * entering/ban circumventing players. Despite the heinous way we
+             * draw the IP, this should work. @urgru 1.29.06 :-(
+             */
+            LOGGER.info("Name: " + username + " IP: " + MWServ.getInstance().getIP(username));
+            CampaignMain.cm.toUser("PL|SUD|1", username, false);
+            CampaignMain.cm.toUser("PL|SHP|" + toLogin.buildHangarPenaltyString(), username, false);
+
+            // Send him the Tick Counter
+            try {
+                CampaignMain.cm.toUser(
+                        "CC|NT|" + TickJob.millisecondsUntilNextFire() + "|" + false,
+                        username,
+                        false);
+            } catch (Exception exception) {
+                LOGGER.catching(exception);
+            }
+
+            // Check for Christmas
+            if (ChristmasHandler.getInstance().isItChristmas()) {
+                // Check if the user has received his Christmas Gifts
+                if (!ChristmasHandler.getInstance().userHasReceivedGifts(username)) {
+                    // He needs his presents!!!
+                    ChristmasHandler.getInstance().sendChristmasGifts(this.getPlayer(username));
+                } else {
+                    // No presents for you!
+                    // CampaignMain.cm.toUser("AM:You have already received presents", username,
+                    // true);
+                }
+            }
+        }
     } // end CampaignMain.doLogin(String userName)
 
     /**
@@ -1139,8 +1119,8 @@ public final class CampaignMain implements Serializable {
             return lostSouls.get(playerName.toLowerCase());
         }
 
-        Session session = HibernateUtil.getInstance().getCurrentSession();
-        return session.createNamedQuery("SPlayer.findByName", SPlayer.class)
+        return HibernateUtil.getCurrentSession()
+             .createNamedQuery("SPlayer.findByName", SPlayer.class)
              .setParameter("name", playerName)
              .uniqueResult();
     }
@@ -1674,9 +1654,11 @@ public final class CampaignMain implements Serializable {
                 }
             }
         }
+        long planetCount = HibernateUtil.getCurrentSession().createQuery("SELECT COUNT(*) FROM Planet", Long.class)
+            .getSingleResult();
 
         // Is the server data already there? (config files)? if not, create one
-        if (data.getAllPlanets().size() > 0 && data.getAllHouses().size() > 0) {
+        if (planetCount > 0 && data.getAllHouses().size() > 0) {
             return;
         }
 
@@ -1902,14 +1884,7 @@ public final class CampaignMain implements Serializable {
                 long maxIdleTime = Long.parseLong(CampaignMain.cm.getConfig("MaxIdleTime")) * 60000;
 
                 LOGGER.info("Slice #" + sliceID + " house: " + currH.getName() + " reservePlayers");
-                List<SPlayer> reservePlayers = 
-                    session.createQuery(
-                                "SELECT COUNT(p) SPlayer p WHERE"
-                                    + " :houseId = p.house_id AND status = :statusId",
-                                    SPlayer.class)
-                            .setParameter("houseId", currH.getId())
-                            .setParameter("status", SPlayer.STATUS_RESERVE)
-                            .getResultList();
+                List<SPlayer> reservePlayers = currH.findPlayerWithStatus(SPlayer.STATUS_RESERVE);
                 for (SPlayer currP : reservePlayers) {
                     if (maxIdleTime > 0) {
                         try {
@@ -1935,14 +1910,8 @@ public final class CampaignMain implements Serializable {
                  * maintainance, and an idle check (if enabled).
                  */
                 LOGGER.info("Slice #" + sliceID + " house: " + currH.getName() + " ActivePlayers");
-                List<SPlayer> activePlayers = 
-                    session.createQuery(
-                                "SELECT COUNT(p) SPlayer p WHERE"
-                                    + " :houseId = p.house_id AND status = :statusId",
-                                    SPlayer.class)
-                            .setParameter("houseId", currH.getId())
-                            .setParameter("status", SPlayer.STATUS_ACTIVE)
-                            .getResultList();
+                List<SPlayer> activePlayers = currH.findPlayerWithStatus(SPlayer.STATUS_ACTIVE);
+
                 for (SPlayer currP : activePlayers) {
                     try {
                         currP.doMaintainance();
@@ -1966,14 +1935,8 @@ public final class CampaignMain implements Serializable {
 
                 // fighters only have maint. they get influence grants post-game.
                 LOGGER.info("Slice #" + sliceID + " house: " + currH.getName() + " fightingPlayers");
-                List<SPlayer> fightingPlayers = 
-                    session.createQuery(
-                                "SELECT COUNT(p) SPlayer p WHERE"
-                                    + " :houseId = p.house_id AND status = :statusId",
-                                    SPlayer.class)
-                            .setParameter("houseId", currH.getId())
-                            .setParameter("status", SPlayer.STATUS_FIGHTING)
-                            .getResultList();
+                List<SPlayer> fightingPlayers = currH.findPlayerWithStatus(SPlayer.STATUS_FIGHTING);
+
                 for (SPlayer currP : fightingPlayers) {
                     try {
                         currP.doMaintainance();
@@ -2061,7 +2024,7 @@ public final class CampaignMain implements Serializable {
                  */
                 long activePs =
                     session.createQuery(
-                                    "SELECT COUNT(p) SPlayer p WHERE"
+                                    "SELECT COUNT(p) FROM SPlayer p WHERE"
                                         + " :houseId = p.house_id AND status = :statusId",
                                     Long.class)
                             .setParameter("houseId", currH.getId())
@@ -2069,7 +2032,7 @@ public final class CampaignMain implements Serializable {
                             .getSingleResult();
                 long fightingPs = 
                     session.createQuery(
-                                    "SELECT COUNT(p) SPlayer p WHERE"
+                                    "SELECT COUNT(p) FROM SPlayer p WHERE"
                                         + " :houseId = p.house_id AND status = :statusId",
                                     Long.class)
                             .setParameter("houseId", currH.getId())
@@ -2077,7 +2040,7 @@ public final class CampaignMain implements Serializable {
                             .getSingleResult();
                 long totalFactionPlayers = 
                     session.createQuery(
-                                    "SELECT COUNT(p) SPlayer p WHERE"
+                                    "SELECT COUNT(p) FROM SPlayer p WHERE"
                                         + " :houseId = p.house_id AND status = :statusId",
                                     Long.class)
                             .setParameter("houseId", currH.getId())
@@ -2472,13 +2435,8 @@ public final class CampaignMain implements Serializable {
         HibernateUtil.inTransaction(session -> {
             for (House vh : CampaignMain.cm.getData().getAllHouses()) {
                 SHouse currH = (SHouse) vh;
-                List<SPlayer> players = session.createQuery(
-                            "SELECT COUNT(p) SPlayer p WHERE"
-                                + " :houseId = p.house_id AND status = :statusId",
-                        SPlayer.class)
-                .setParameter("houseId", currH.getId())
-                .setParameter("status", SPlayer.STATUS_LOGGEDOUT)
-                .getResultList();
+                List<SPlayer> players = currH.allLoggedInPlayers();
+
                 for (SPlayer currP : players) {
                     savePlayerFile(currP);
                 }
@@ -2499,13 +2457,7 @@ public final class CampaignMain implements Serializable {
         HibernateUtil.inTransaction(session -> {
             for (House vh : CampaignMain.cm.getData().getAllHouses()) {
                 SHouse currH = (SHouse) vh;
-                List<SPlayer> players = session.createQuery(
-                        "SELECT COUNT(p) SPlayer p WHERE"
-                            + " :houseId = p.house_id AND status = :statusId",
-                        SPlayer.class)
-                .setParameter("houseId", currH.getId())
-                .setParameter("status", SPlayer.STATUS_LOGGEDOUT)
-                .getResultList();
+                List<SPlayer> players = currH.allLoggedInPlayers();
                 for (SPlayer currP : players) {
                     savePlayerFile(currP);
                     if (username != null) {
