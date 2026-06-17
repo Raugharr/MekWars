@@ -20,6 +20,8 @@
  */
 package mekwars.server.campaign.pilot;
 
+import jakarta.persistence.Entity;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,6 +54,7 @@ import org.apache.logging.log4j.Logger;
  * @author Helge Richter
  *
  */
+@Entity
 public class SPilot extends Pilot {
     private static final Logger LOGGER = LogManager.getLogger(SPilot.class);
 
@@ -585,7 +588,7 @@ public class SPilot extends Pilot {
         return death;
     }
 
-    public static SPilot getMekWarrior(int originalID, int pickedUpId) {
+    public static SPilot getMekWarrior(int pickedUpId) {
         SPilot mw = new SPilot();
         mw.setPickedUpId(pickedUpId);
         return mw;

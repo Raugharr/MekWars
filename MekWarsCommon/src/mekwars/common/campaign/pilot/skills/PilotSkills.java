@@ -22,7 +22,7 @@ import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Encapsulates a set of piloting skills.
@@ -43,17 +43,14 @@ public class PilotSkills {
     }
 
     public boolean has(int id) {
-        Iterator<PilotSkill> it = getSkillIterator();
-        while (it.hasNext()) {
-            if (((PilotSkill) it.next()).getSkillId() == id) return true;
-        }
-        return false;
+        return skills.stream().anyMatch(skill -> skill.getSkillId() == id);
     }
 
     /** Add a skill to the pilot's skill list. */
     public void add(PilotSkill p) {
-        if (p != null && !has(p))
+        if (p != null && !has(p)) {
             skills.add(p);
+        }
     }
 
     /** Removes a skill from the pilot's skill list */

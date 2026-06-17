@@ -1882,7 +1882,7 @@ public class ShortOperation implements Comparable<Object> {
             int pickupID = Integer.parseInt(tokenizer.nextToken());
             boolean isDead = Boolean.parseBoolean(tokenizer.nextToken());
 
-            SPilot mw = SPilot.getMekWarrior(originalID, pickupID);
+            SPilot mw = SPilot.getMekWarrior(pickupID);
             mw.setDeath(isDead);
 
             pilotsInProgress.put(originalID, mw);// key to host unit
