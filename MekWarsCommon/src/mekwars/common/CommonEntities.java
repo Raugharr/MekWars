@@ -30,6 +30,7 @@ public final class CommonEntities {
                     mekwars.common.MegaMekPilotOption.class,
                     mekwars.common.Planet.class,
                     mekwars.common.Player.class,
+                    mekwars.common.campaign.pilot.Pilot.class,
                     mekwars.common.PlanetEnvironment.class,
                     mekwars.common.SubFaction.class,
                     mekwars.common.Terrain.class,

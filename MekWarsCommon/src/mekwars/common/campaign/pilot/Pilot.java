@@ -32,8 +32,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
 
 import mekwars.common.House;
-import mekwars.common.Unit;
 import mekwars.common.MegaMekPilotOption;
+import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.campaign.pilot.skills.PilotSkills;
 
@@ -44,7 +44,12 @@ import java.util.List;
 /**
  * @author Helge Richter
  */
+@Entity
 public class Pilot {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id = -1;
+
     private int gunnery = 4;
     private int piloting = 5;
     private String name = "John Doe";
@@ -53,16 +58,23 @@ public class Pilot {
     @OneToMany
     private List<MegaMekPilotOption> megamekOptions = new ArrayList<MegaMekPilotOption>();
     private String weapon = "Default"; // for Weapon Specialist skill
+
+    @ManyToOne
+    @JoinColumn(name = "house_id")
     private House house;
+
+    @ManyToOne
+    @JoinColumn(name = "unit_id")
     private Unit unit;
+
     private String trait = null;
-    private int id = -1;
-    boolean edge_when_tac = true;
-    boolean edge_when_ko = true;
-    boolean edge_when_headhit = true;
-    boolean edge_when_explosion = true;
+    boolean edgeWhenTac = true;
+    boolean edgeWhenKo = true;
+    boolean edgeWhenHeadhit = true;
+    boolean edgeWhenExplosion = true;
 
     /** List of skills this pilot has obtained. */
+    @Embedded
     private PilotSkills skills = new PilotSkills();
 
     private double bvMod = 0.0;
@@ -190,6 +202,7 @@ public class Pilot {
 
     public void addMegamekOption(MegaMekPilotOption op) {
         megamekOptions.add(op);
+        op.setPilot(this);
     }
 
     /**
@@ -295,34 +308,34 @@ public class Pilot {
     }
 
     public boolean getTac() {
-        return edge_when_tac;
+        return edgeWhenTac;
     }
 
     public boolean getKO() {
-        return edge_when_ko;
+        return edgeWhenKo;
     }
 
     public boolean getHeadHit() {
-        return edge_when_headhit;
+        return edgeWhenHeadhit;
     }
 
     public boolean getExplosion() {
-        return edge_when_explosion;
+        return edgeWhenExplosion;
     }
 
     public void setTac(boolean value) {
-        edge_when_tac = value;
+        edgeWhenTac = value;
     }
 
     public void setKO(boolean value) {
-        edge_when_ko = value;
+        edgeWhenKo = value;
     }
 
     public void setHeadHit(boolean value) {
-        edge_when_headhit = value;
+        edgeWhenHeadhit = value;
     }
 
     public void setExplosion(boolean value) {
-        edge_when_explosion = value;
+        edgeWhenExplosion = value;
     }
 }

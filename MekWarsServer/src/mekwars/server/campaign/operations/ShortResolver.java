@@ -3572,7 +3572,7 @@ public class ShortResolver {
                         int pickUpID = Integer.parseInt(mwTokenizer.nextToken());
                         boolean isDead = Boolean.parseBoolean(mwTokenizer.nextToken());
 
-                        SPilot mw = SPilot.getMekWarrior(originalID, pickUpID);
+                        SPilot mw = SPilot.getMekWarrior(pickUpID);
                         mw.setDeath(isDead);
 
                         pilots.put(originalID, mw);// key to host unit
@@ -3850,7 +3850,7 @@ public class ShortResolver {
 
                         // if the entity if a mech, eject the pilot
                         if ((randomEntity.getType() == Unit.MEK) || (randomEntity.getType() == Unit.QUAD)) {
-                            pilots.put(randomEntity.getID(), SPilot.getMekWarrior(randomEntity.getID(), -1));
+                            pilots.put(randomEntity.getID(), SPilot.getMekWarrior(-1));
                         }
 
                         // make the unit salvageable

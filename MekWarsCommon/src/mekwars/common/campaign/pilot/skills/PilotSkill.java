@@ -17,10 +17,12 @@
 
 package mekwars.common.campaign.pilot.skills;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import megamek.common.Entity;
 
-import mekwars.common.CampaignData;
-import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 
@@ -29,6 +31,7 @@ import mekwars.common.campaign.pilot.Pilot;
  *
  * @author Helge Richter and Immanuel Scholz
  */
+@jakarta.persistence.Entity
 public class PilotSkill {
     public static final int DodgeManeuverSkillID = 1;
     public static final int AstechSkillID = 2;
@@ -56,8 +59,12 @@ public class PilotSkill {
     public static final int PainShuntID = 24;
     public static final int PILOT_SKILL_SIZE = 25;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id = -1;
+
     /** The unique ID of this skill */
-    private int id;
+    private int skillId;
 
     /** Each skill has a name to display. */
     private String name = "Unnamed Skill";
@@ -111,8 +118,12 @@ public class PilotSkill {
     /**
      * @return Returns the id.
      */
-    public final int getId() {
+    public int getId() {
         return id;
+    }
+
+    public int getSkillId() {
+        return skillId;
     }
 
     /**
