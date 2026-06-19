@@ -89,10 +89,10 @@ public class PromotePlayerCommand implements Command {
             return;
         }
 
-        int minELO = Integer.parseInt(subFaction.getConfig("MinELO"));
-        int minEXP = Integer.parseInt(subFaction.getConfig("MinExp"));
+        int minELO = subFaction.getMinElo();
+        int minEXP = subFaction.getMinExp();
 
-        if (grunt.getSubFactionAccess() > Integer.parseInt(subFaction.getConfig("AccessLevel"))) {
+        if (grunt.getSubFactionAccess() > subFaction.getAccessLevel()) {
             CampaignMain.cm.toUser("AM:You cannot promote " + grunt.getName() + " to a subfaction with a lower access level, try demoting.", Username);
             return;
         }
