@@ -94,8 +94,8 @@ public class  SelfPromoteCommand  implements Command {
             return;
         }
 
-        int minELO = Integer.parseInt(subFaction.getConfig("MinELO"));
-        int minEXP = Integer.parseInt(subFaction.getConfig("MinExp"));
+        int minELO = subFaction.getMinElo();
+        int minEXP = subFaction.getMinExp();
 
 
         if (user.getExperience() < minEXP || user.getRating() < minELO) {

@@ -1,6 +1,6 @@
 /*
- * MekWars - Copyright (C) 2007 
- * 
+ * MekWars - Copyright (C) 2007
+ *
  * Original author - jtighe (torren@users.sourceforge.net)
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -15,32 +15,46 @@
  */
 package mekwars.common;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PostPersist;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 @Entity
 public class SubFaction {
+    public enum SettingKey {
+        NAME("Name"),
+        ACCESS_LEVEL("AccessLevel"),
+        MIN_ELO("MinELO"),
+        MIN_EXP("MinExp");
+
+        private final String label;
+
+        SettingKey(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
+
     private static final Logger LOGGER = LogManager.getLogger(SubFaction.class);
 
     private String name;
@@ -52,32 +66,33 @@ public class SubFaction {
     @ManyToOne
     @JoinColumn(name = "house_id")
     private House owner;
+
     private int accessLevel = 0;
     private int minElo = 0;
     private int minExp = 0;
 
     @ElementCollection
-    @CollectionTable(name = "subfaction_settings", joinColumns = @JoinColumn(name = "subfaction_id"))
+    @CollectionTable(
+            name = "subfaction_settings",
+            joinColumns = @JoinColumn(name = "subfaction_id"))
     @MapKeyColumn(name = "key")
     @Column(name = "value")
-	private Map<String, String> settings;
+    private Map<String, String> settings;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-	public SubFaction() {
-	}
-	
-	public SubFaction(String name){
-        this();
-        this.name = name;
-	}
+    public SubFaction() {}
 
-	public SubFaction(String name, int accessLevel){
+    public SubFaction(String name) {
+        this.name = name;
+    }
+
+    public SubFaction(String name, int accessLevel) {
         this(name);
         this.accessLevel = accessLevel;
-	}
+    }
 
     public int getId() {
         return id;
@@ -126,84 +141,106 @@ public class SubFaction {
     public void setMinExp(int minExp) {
         this.minExp = minExp;
     }
-	
+
     @PostPersist
-	public void getDefault(){
-		for (int type = 0; type < Unit.MAXBUILD; type++) {
-		    for (int weight = 0; weight <= Unit.ASSAULT; weight++) {
-                String poststring = Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type); 
+    public void getDefault() {
+        for (int type = 0; type < Unit.MAXBUILD; type++) {
+            for (int weight = 0; weight <= Unit.ASSAULT; weight++) {
+                String poststring = Unit.getWeightClassDesc(weight) + Unit.getTypeClassDesc(type);
 
                 settings.put("CanBuyNew" + poststring, "true");
                 settings.put("CanBuyUsed" + poststring, "true");
-		    }
-		}
-	}
-	
-	public String getConfig(String key) {
+            }
+        }
+    }
+
+    public String getConfig(SettingKey key) {
         switch (key) {
-            case "Name":
+            case NAME:
                 return name;
-            case "AccessLevel":
+            case ACCESS_LEVEL:
                 return String.valueOf(accessLevel);
-            case "MinELO":
+            case MIN_ELO:
                 return String.valueOf(minElo);
-            case "MinExp":
+            case MIN_EXP:
                 return String.valueOf(minExp);
         }
+        return "-1";
+    }
 
-        String value = settings.get(key);
-		if (value == null) {
-            LOGGER.error("Unable to find subfaction config: {}", key);
-			return "-1";
-		}
-		return value;
-	}
-	
-	public void setConfig(String key, String value) {
-        switch (key) {
-            case "Name":
-                setName(value);
-            case "AccessLevel":
-                setAccessLevel(Integer.parseInt(value));
-            case "MinELO":
-                setMinElo(Integer.parseInt(value));
-            case "MinExp":
-                setMinExp(Integer.parseInt(value));
-            default:
-                settings.put(key, value);
-        }
-	}
-	
-	@Override
-    public String toString() {
-		StringBuilder result = new StringBuilder();
-		
-		if (settings.isEmpty()) {
-			return "# #";
-        }
-
-        appendSetting(result, "Name", name);
-        appendSetting(result, "AccessLevel", String.valueOf(accessLevel));
-        appendSetting(result, "MinELO", String.valueOf(minElo));
-        appendSetting(result, "MinExp", String.valueOf(minExp));
-        settings.forEach((key, value) -> appendSetting(result, key, value));
-		return result.toString();
-	}
-
-	public void fromString(String settings) {
-		StringTokenizer propertyList = new StringTokenizer(settings,"#");
-		
-		while (propertyList.hasMoreElements()) {
-			String key = propertyList.nextToken();
-			
-			if (!propertyList.hasMoreElements()) {
-				return;
+    /**
+     * String-based overload kept for serialization compat (BinReader/BinWriter callers, fromString,
+     * SubFactionConfigurationDialog). Delegates to the type-safe version above when possible.
+     */
+    public String getConfig(String key) {
+        try {
+            return getConfig(SettingKey.valueOf(key.replace(' ', '_')));
+        } catch (IllegalArgumentException e) {
+            String value = settings.get(key);
+            if (value == null) {
+                LOGGER.error("Unable to find subfaction config: {}", key);
+                return "-1";
             }
-			
-			String value = propertyList.nextToken();
-			setConfig(key, value);
-		}
-	}
+            return value;
+        }
+    }
+
+    public void setConfig(SettingKey key, String value) {
+        switch (key) {
+            case NAME:
+                setName(value);
+                break;
+            case ACCESS_LEVEL:
+                setAccessLevel(Integer.parseInt(value));
+                break;
+            case MIN_ELO:
+                setMinElo(Integer.parseInt(value));
+                break;
+            case MIN_EXP:
+                setMinExp(Integer.parseInt(value));
+                break;
+        }
+    }
+
+    /** String-based overload kept for serialization compat. */
+    public void setConfig(String key, String value) {
+        try {
+            setConfig(SettingKey.valueOf(key.replace(' ', '_')), value);
+        } catch (IllegalArgumentException e) {
+            settings.put(key, value);
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        if (settings.isEmpty()) {
+            return "# #";
+        }
+
+        appendSetting(result, SettingKey.NAME.toString(), name);
+        appendSetting(result, SettingKey.ACCESS_LEVEL.toString(), String.valueOf(accessLevel));
+        appendSetting(result, SettingKey.MIN_ELO.toString(), String.valueOf(minElo));
+        appendSetting(result, SettingKey.MIN_EXP.toString(), String.valueOf(minExp));
+        settings.forEach((key, value) -> appendSetting(result, key, value));
+        return result.toString();
+    }
+
+    public void fromString(String settings) {
+        StringTokenizer propertyList = new StringTokenizer(settings, "#");
+
+        while (propertyList.hasMoreElements()) {
+            String key = propertyList.nextToken();
+
+            if (!propertyList.hasMoreElements()) {
+                return;
+            }
+
+            String value = propertyList.nextToken();
+            setConfig(key, value);
+        }
+    }
 
     private void appendSetting(StringBuilder sb, String key, String value) {
         sb.append(key).append("#").append(value).append("#");

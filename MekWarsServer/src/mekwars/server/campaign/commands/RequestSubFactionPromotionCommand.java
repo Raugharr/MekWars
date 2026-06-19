@@ -57,15 +57,15 @@ public class  RequestSubFactionPromotionCommand  implements Command {
 			return;
 		}
 		
-		int minELO = Integer.parseInt(subFaction.getConfig("MinELO"));
-		int minEXP = Integer.parseInt(subFaction.getConfig("MinExp"));
+		int minELO = subFaction.getMinElo();
+		int minEXP = subFaction.getMinExp();
 		
 		if ( player.getExperience() < minEXP || player.getRating() < minELO ){
 			CampaignMain.cm.toUser("AM:Sorry but you are not skilled enough to join that SubFaction.", Username);
 			return;
 		}
 		
-		if ( player.getSubFactionAccess() > Integer.parseInt(subFaction.getConfig("AccessLevel")) ){
+		if ( player.getSubFactionAccess() > subFaction.getAccessLevel() ){
 			CampaignMain.cm.toUser("AM:Sorry but you cannot demote yourself", Username);
 			return;
 		}

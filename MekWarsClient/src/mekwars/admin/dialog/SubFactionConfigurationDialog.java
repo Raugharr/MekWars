@@ -92,9 +92,9 @@ public final class SubFactionConfigurationDialog implements ActionListener {
         this.subFactionConfig = faction.getSubfaction(subFactionName);
         if (this.subFactionConfig == null) {
             this.subFactionConfig = new SubFaction(subFactionName, 0);
-            this.subFactionConfig.setConfig("MinELO", "0");
-            this.subFactionConfig.setConfig("MinExp", "0");
-            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c CreateSubFaction#"+this.subFactionConfig.getConfig("Name")+"#0#"+this.houseName);
+            this.subFactionConfig.setConfig(SubFaction.SettingKey.MIN_ELO, "0");
+            this.subFactionConfig.setConfig(SubFaction.SettingKey.MIN_EXP, "0");
+            mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c CreateSubFaction#"+this.subFactionConfig.getName()+"#0#"+this.houseName);
         }
         
         //TAB PANELS (these are added to the root pane as tabs)
@@ -228,7 +228,7 @@ public final class SubFactionConfigurationDialog implements ActionListener {
                     configPairs.append("#");
                 }
             
-                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c SetSubFactionConfig#"+this.subFactionConfig.getConfig("Name")+"#"+houseName+"#"+configPairs.toString());
+                mwclient.sendChat(MWClient.CAMPAIGN_PREFIX+ "c SetSubFactionConfig#"+this.subFactionConfig.getName()+"#"+houseName+"#"+configPairs.toString());
             }
             mwclient.sendChat(MWClient.CAMPAIGN_PREFIX + "c adminsave");
             mwclient.refreshData();
