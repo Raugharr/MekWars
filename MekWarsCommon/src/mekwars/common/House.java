@@ -275,8 +275,8 @@ public class House implements MWEntity {
         out.println(this.subfactions.size(), "subfactionsize");
 
         for (SubFaction subFaction : this.subfactions) {
-            out.println(subFaction.getConfig("Name"), "SubFactionName");
-            out.println(subFaction.getConfig("AccessLevel"), "SubFactionAccessLevel");
+            out.println(subFaction.getConfig(SubFaction.SettingKey.NAME), "SubFactionName");
+            out.println(subFaction.getConfig(SubFaction.SettingKey.ACCESS_LEVEL), "SubFactionAccessLevel");
             for (int type = 0; type < Unit.MAXBUILD; type++ ){
                 for ( int weight = 0; weight <= Unit.ASSAULT; weight++){
                     String setting = "CanBuyNew"+Unit.getWeightClassDesc(weight)+Unit.getTypeClassDesc(type);
@@ -285,8 +285,8 @@ public class House implements MWEntity {
                     out.println(subFaction.getConfig(setting), setting);
                 }
             }
-            out.println(subFaction.getConfig("MinELO"), "SubFactionMinELO");
-            out.println(subFaction.getConfig("MinExp"), "SubFactionMinExp");
+            out.println(subFaction.getConfig(SubFaction.SettingKey.MIN_ELO), "SubFactionMinELO");
+            out.println(subFaction.getConfig(SubFaction.SettingKey.MIN_EXP), "SubFactionMinExp");
         }
     }
 
@@ -341,7 +341,7 @@ public class House implements MWEntity {
         this.subfactions.clear();
         for (; size > 0; size--) {
             SubFaction subFaction = new SubFaction(in.readLine("SubFactionName"));
-            subFaction.setConfig("AccessLevel", in.readLine("SubFactionAccessLevel"));
+            subFaction.setConfig(SubFaction.SettingKey.ACCESS_LEVEL, in.readLine("SubFactionAccessLevel"));
             for (int type = 0; type < Unit.MAXBUILD; type++ ){
                 for ( int weight = 0; weight <= Unit.ASSAULT; weight++){
                     String setting = "CanBuyNew"+Unit.getWeightClassDesc(weight)+Unit.getTypeClassDesc(type);
@@ -350,8 +350,8 @@ public class House implements MWEntity {
                     subFaction.setConfig(setting, in.readLine(setting));
                 }
             }
-            subFaction.setConfig("MinELO", in.readLine("SubFactionMinELO"));
-            subFaction.setConfig("MinExp", in.readLine("SubFactionMinExp"));
+            subFaction.setConfig(SubFaction.SettingKey.MIN_ELO, in.readLine("SubFactionMinELO"));
+            subFaction.setConfig(SubFaction.SettingKey.MIN_EXP, in.readLine("SubFactionMinExp"));
             this.subfactions.add(subFaction);
         }
 

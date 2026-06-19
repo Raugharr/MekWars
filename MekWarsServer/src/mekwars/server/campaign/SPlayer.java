@@ -3597,14 +3597,14 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
         int currentAccessLevel = getSubFactionAccess();
 
         for (SubFaction subFaction : getMyHouse().getSubfactions()) {
-            if ((currentAccessLevel < Integer.parseInt(subFaction.getConfig("AccessLevel")))
-                    && (getRating() >= Integer.parseInt(subFaction.getConfig("MinELO")))
-                    && (getExperience() >= Integer.parseInt(subFaction.getConfig("MinExp")))) {
+            if ((currentAccessLevel < subFaction.getAccessLevel())
+                    && (getRating() >= subFaction.getMinElo())
+                    && (getExperience() >= subFaction.getMinExp())) {
                 CampaignMain.cm.toUser(
                         "You are eligible for a promotion to subFaction "
-                                + subFaction.getConfig("Name")
+                                + subFaction.getName()
                                 + ". <a href=\"MEKWARS/c RequestSubFactionPromotion#"
-                                + subFaction.getConfig("Name")
+                                + subFaction.getName()
                                 + "\">Click here to request promotion.</a>",
                         getName());
             }
@@ -3619,8 +3619,8 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
         SubFaction subfaction = getSubfaction();
 
         int access = getSubFactionAccess();
-        int elo = Integer.parseInt(subfaction.getConfig("MinELO"));
-        int exp = Integer.parseInt(subfaction.getConfig("MinExp"));
+        int elo = subfaction.getMinElo();
+        int exp = subfaction.getMinExp();
 
         // can go any lower
         if (access < 1) {
@@ -3631,10 +3631,10 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
         if (CampaignMain.cm.getBooleanConfig("autoPromoteSubFaction")) {
         	SubFaction newSF = null;
         	for (SubFaction subFaction : getMyHouse().getSubfactions()) {
-        		if ((access > Integer.parseInt(subFaction.getConfig("AccessLevel"))) && (getRating() >= Integer.parseInt(subFaction.getConfig("MinELO"))) && (getExperience() >= Integer.parseInt(subFaction.getConfig("MinExp")))) {
+        		if ((access > subFaction.getAccessLevel()) && (getRating() >= subFaction.getMinElo()) && (getExperience() >= subFaction.getMinExp())) {
         			if (newSF == null) {
         				newSF = subFaction;
-        			} else if (Integer.parseInt(subFaction.getConfig("AccessLevel")) > Integer.parseInt(newSF.getConfig("AccessLevel"))) {
+        			} else if (subFaction.getAccessLevel() > newSF.getAccessLevel()) {
         				newSF = subFaction;
         			}
         		}
@@ -3644,7 +3644,7 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
                 return; // Nothing to demote him to
             }
             SubFaction subFaction = newSF;
-            String subFactionName = subFaction.getConfig("Name");
+            String subFactionName = subFaction.getName();
             setSubfaction(subFaction);
             CampaignMain.cm.toUser("PL|SSN|" + subFactionName, getName(), false);
             CampaignMain.cm.doSendToAllOnlinePlayers(
@@ -3677,12 +3677,12 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
             message.append(getSubFactionName());
             message.append(". He is eligible for the following:<br>");
             for (SubFaction subFaction : getMyHouse().getSubfactions()) {
-                if ((access > Integer.parseInt(subFaction.getConfig("AccessLevel"))) && (getRating() >= Integer.parseInt(subFaction.getConfig("MinELO"))) && (getExperience() >= Integer.parseInt(subFaction.getConfig("MinExp")))) {
+                if ((access > subFaction.getAccessLevel()) && (getRating() >= subFaction.getMinElo()) && (getExperience() >= subFaction.getMinExp())) {
                     message.append(subFaction.getName());
                     message.append(". <a href=\"MEKWARS/c demoteplayer#");
                     message.append(getName());
                     message.append("#");
-                    message.append(subFaction.getConfig("Name"));
+                    message.append(subFaction.getName());
                     message.append("\">Click here to demote.</a><br>");
                 }
             }
