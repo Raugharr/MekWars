@@ -21,6 +21,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+
 import megamek.common.Aero;
 import megamek.common.AmmoType;
 import megamek.common.BattleArmor;
@@ -53,6 +55,7 @@ import java.util.StringTokenizer;
  * @author Helge Richter
  */
 @jakarta.persistence.Entity
+@Table(name = "army")
 public class SArmy extends Army<SUnit> {
     private static final Logger LOGGER = LogManager.getLogger(SArmy.class);
 

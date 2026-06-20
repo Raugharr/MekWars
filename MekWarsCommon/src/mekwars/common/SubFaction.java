@@ -27,6 +27,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PostPersist;
+import jakarta.persistence.Table;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,6 +37,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 @Entity
+@Table(name = "subfaction")
 public class SubFaction {
     public enum SettingKey {
         NAME("Name"),

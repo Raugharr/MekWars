@@ -14,9 +14,6 @@ CREATE TABLE IF NOT EXISTS house (
 	allow_defections_from INTEGER NOT NULL,
 	allow_defections_to INTEGER NOT NULL,
 	used_mek_bay_multiplier INTEGER NOT NULL,
-	base_gunner INTEGER NOT NULL,
-	base_pilot INTEGER NOT NULL,
-	base_pilot_skills TEXT NOT NULL,
 	faction_player_colors TEXT NOT NULL,
 	non_faction_units_cost_more INTEGER NOT NULL
 );
@@ -333,41 +330,6 @@ CREATE TABLE IF NOT EXISTS subfaction_settings (
 
 CREATE INDEX subfaction_settings_subfaction_id_index ON subfaction_settings(subfaction_id);
 
-CREATE TABLE IF NOT EXISTS house (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	name TEXT NOT NULL,
-	logo TEXT,
-	faction_flu_file TEXT NOT NULL,
-	faction_color TEXT NOT NULL,
-	abbreviation TEXT NOT NULL,
-	faction_player_color TEXT NOT NULL,
-	conquerable INTEGER NOT NULL,
-	tech_level INTEGER NOT NULL,
-	allows_defections_from INTEGER NOT NULL,
-	allows_defections_to INTEGER NOT NULL,
-	used_mek_bay_multiplier INTEGER NOT NULL,
-	non_faction_units_cost_more INTEGER NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS house_price_mods (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	house_id INTEGER NOT NULL,
-	category TEXT NOT NULL,
-	unit_type INTEGER NOT NULL,
-	unit_weight INTEGER NOT NULL,
-	value INTEGER NOT NULL,
-	FOREIGN KEY (house_id) REFERENCES house(id)
-);
-
-CREATE TABLE IF NOT EXISTS house_flags (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	house_id INTEGER NOT NULL,
-	flag TEXT NOT NULL,
-	FOREIGN KEY (house_id) REFERENCES house(id)
-);
-
-CREATE INDEX house_flags_house_id_index ON house_flags(house_id);
-
 CREATE TABLE IF NOT EXISTS unit_components (
 	id INTEGER PRIMARY KEY AUTOINCREMENT
 );
@@ -418,8 +380,9 @@ CREATE UNIQUE INDEX player_subfaction_id_index ON player(subfaction_id);
 CREATE TABLE IF NOT EXISTS army (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT NOT NULL,
-	upper_limit INTEGER NOT NULL,
-	lower_limit INTEGER NOT NULL,
+	bv INTEGER NOT NULL,
+	upper_limiter INTEGER NOT NULL,
+	lower_limiter INTEGER NOT NULL,
 	locked INTEGER NOT NULL,
 	army_player_locked INTEGER NOT NULL,
 	army_disabled INTEGER NOT NULL,

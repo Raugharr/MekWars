@@ -125,6 +125,7 @@ public class SHouse extends TimeUpdateHouse
     private String motd = "";
     private String announcement = "";
 
+    @Transient
     private PilotQueues pilotQueues = new PilotQueues(this);
 
     private List<String> leaders = new ArrayList<>();
