@@ -19,6 +19,8 @@ package mekwars.server.campaign;
 import jakarta.persistence.AssociationOverride;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 import megamek.common.AmmoType;
 import megamek.common.AmmoType.Munitions;
@@ -46,6 +48,7 @@ import mekwars.common.House;
 import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
+import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.campaign.pilot.skills.PilotSkillStore;
 import mekwars.common.campaign.pilot.skills.TraitSkill;
@@ -75,6 +78,7 @@ import java.util.Vector;
  *     creation of a new SUnit with the same UnitID as an existing Mech to facilitate repodding
  */
 @jakarta.persistence.Entity
+@Table(name = "unit")
 public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
     private static final Logger LOGGER = LogManager.getLogger(SUnit.class);
 

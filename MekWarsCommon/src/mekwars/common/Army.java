@@ -80,8 +80,10 @@ public class Army<T extends Unit> {
     @Transient
     private Map<Integer, Integer> c3Network = new HashMap<Integer, Integer>();
 
+    @Transient
     private List<Integer> commanders = new ArrayList<Integer>(1);
     private float rawForceSize = -1;
+    @Transient
     private Set<String> legalOperations = new TreeSet<>();
 
     @ManyToOne
