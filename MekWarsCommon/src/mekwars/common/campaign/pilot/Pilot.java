@@ -63,8 +63,7 @@ public class Pilot {
     @JoinColumn(name = "house_id")
     private House house;
 
-    @ManyToOne
-    @JoinColumn(name = "unit_id")
+    @Transient
     private Unit unit;
 
     private String trait = null;
@@ -91,6 +90,14 @@ public class Pilot {
 
     /** Used for serialization */
     public Pilot() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     /**
      * @return Returns the gunnery.
@@ -337,5 +344,23 @@ public class Pilot {
 
     public void setExplosion(boolean value) {
         edgeWhenExplosion = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+        Pilot pilot = (Pilot) other;
+        return getId() == pilot.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(id).hashCode();
     }
 }
