@@ -14,18 +14,50 @@
 
 package mekwars.common.campaign;
 
+import mekwars.common.House;
 import mekwars.common.Unit;
 import mekwars.common.util.BinReader;
 import mekwars.common.util.BinWriter;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Converter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Convert;
+import mekwars.common.campaign.converters.IntegerListConverter;
+import mekwars.common.campaign.converters.StringListConverter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "pilot_stats")
 public class BasePilotStats {
-    private List<Integer> gunnery = new ArrayList<Integer>(Unit.MAXBUILD);
-    private List<Integer> piloting = new ArrayList<Integer>(Unit.MAXBUILD);
-    private List<String> pilotSkills = new ArrayList<String>(Unit.MAXBUILD);
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "house_id")
+    private House house;
+
+    @Column(name = "gunnery_json")
+    @Convert(converter = IntegerListConverter.class)
+    private List<Integer> gunnery = new ArrayList<>();
+
+    @Column(name = "piloting_json")
+    @Convert(converter = IntegerListConverter.class)
+    private List<Integer> piloting = new ArrayList<>();
+
+    @Column(name = "skills_json")
+    @Convert(converter = StringListConverter.class)
+    private List<String> pilotSkills = new ArrayList<>();
 
     public BasePilotStats() {
         for (int pos = 0; pos < Unit.MAXBUILD; pos++) {
@@ -82,5 +114,21 @@ public class BasePilotStats {
 
     public void setSkills(String skills, Integer type) {
         pilotSkills.set(type, skills);
+    }
+
+    public House getHouse() {
+        return house;
+    }
+
+    public void setHouse(House house) {
+        this.house = house;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
