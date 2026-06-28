@@ -218,7 +218,6 @@ public class FlagSet {
 	 * to the instance
 	 */
 	public void save(File file) {
-		//File file = new File("./data/pFlags.dat");
 		if (!file.exists()) {
 			try{
 				file.createNewFile();
@@ -246,7 +245,6 @@ public class FlagSet {
 	 */
 	public void loadFromDisk(File file) {
 		try {
-			//File file = new File("./data/pFlags.dat");
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
 			String s;
@@ -278,5 +276,9 @@ public class FlagSet {
 
 	public Set<Integer> getKeySet() {
 		return flagNames.keySet();
+	}
+
+	public boolean isEmpty() {
+		return flags.isEmpty();
 	}
 }

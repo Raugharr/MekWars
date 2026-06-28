@@ -19,6 +19,7 @@ package mekwars.common;
 import mekwars.common.campaign.CampaignOptions;
 import mekwars.common.campaign.HouseOptions;
 import mekwars.common.campaign.pilot.skills.PilotSkillStore;
+import mekwars.common.flags.PlayerFlags;
 import mekwars.common.io.file.FactionTraitFile;
 import mekwars.common.persistence.BannedAmmoStore;
 import mekwars.common.persistence.NamedEntityStore;
@@ -70,6 +71,7 @@ public class CampaignData implements TerrainProvider {
 
     private BannedAmmoStore bannedAmmoStore = new BannedAmmoStore();
     private CampaignOptions campaignOptions;
+    private PlayerFlags defaultPlayerFlags = new PlayerFlags();
 
     /** Create empty campaign data. */
     public CampaignData(CampaignOptions campaignOptions) {
@@ -121,6 +123,8 @@ public class CampaignData implements TerrainProvider {
         } finally {
             session.close();
         }
+        // Load the default player flags
+        defaultPlayerFlags.loadFromDisk();
     }
 
     public BannedAmmoStore getBannedAmmoStore() {
@@ -515,6 +519,13 @@ public class CampaignData implements TerrainProvider {
 
     public CampaignOptions getCampaignOptions() {
         return campaignOptions;
+    }
+
+    /**
+     * @return the defaultPlayerFlags
+     */
+    public PlayerFlags getDefaultPlayerFlags() {
+        return defaultPlayerFlags;
     }
 
     public boolean targetSystemIsBanned(int id) {

@@ -18,8 +18,4 @@ public class PlayerFlags extends FlagSet {
 		super();
 		flagType = FLAGTYPE_PLAYER;
 	}
-	
-	public boolean isEmpty() {
-		return (flags.isEmpty());
-	}
 }

@@ -84,8 +84,6 @@ public abstract class Player implements IHasUnits {
     protected int totalTechs[] = new int[UnitUtils.TECH_TYPES];
     protected int availableTechs[] = new int[UnitUtils.TECH_TYPES];
     @Transient protected PlayerFlags flags = new PlayerFlags();
-    // This is only going to be set for staff
-    @Transient protected PlayerFlags defaultPlayerFlags = new PlayerFlags();
     // A counter for how many meks a player is allowed to create in freebuild
     protected int mekTokens = 0;
     @Column(name = "hanger_bv")
@@ -449,13 +447,6 @@ public abstract class Player implements IHasUnits {
      */
     public String exportFlags() {
         return flags.export();
-    }
-
-    /**
-     * @return the defaultPlayerFlags
-     */
-    public PlayerFlags getDefaultPlayerFlags() {
-        return defaultPlayerFlags;
     }
 
     /**

@@ -18,6 +18,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
+import mekwars.common.CampaignData;
 import mekwars.server.MWServ;
 import mekwars.server.campaign.CampaignMain;
 import mekwars.server.campaign.commands.Command;
@@ -65,7 +66,7 @@ public class ShutdownCommand implements Command {
             System.currentTimeMillis(),
             CampaignMain.cm.getData()
         );
-        CampaignMain.cm.getDefaultPlayerFlags().save();
+        CampaignData.cd.getDefaultPlayerFlags().save();
         CampaignMain.cm.toUser("AM:You halted the server. Have a nice day.", Username, true);
         LOGGER.info(Username + " halted the server. Have a nice day!");
         MWServ.getInstance().addToNewsFeed("Server halted!", "Server News", "");

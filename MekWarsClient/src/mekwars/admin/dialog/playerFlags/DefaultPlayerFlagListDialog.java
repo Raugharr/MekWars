@@ -23,6 +23,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import mekwars.client.MWClient;
+import mekwars.common.CampaignData;
 import mekwars.common.VerticalLayout;
 import mekwars.common.flags.PlayerFlags;
 import mekwars.client.common.campaign.clientutils.GameHost;
@@ -177,7 +178,7 @@ public class DefaultPlayerFlagListDialog extends JDialog implements ActionListen
 	public DefaultPlayerFlagListDialog(MWClient c) {
 		super(new JFrame(),"Player Flags",true);
 		mwclient = c;
-		loadPlayerFlags(mwclient.getPlayer().getDefaultPlayerFlags().export());
+		loadPlayerFlags(CampaignData.cd.getDefaultPlayerFlags().export());
 		//flagTable = new JTable();
 		String[] columnNames = {"Flag Name", "Set by Default"};
 
