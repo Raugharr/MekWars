@@ -19,11 +19,11 @@ package mekwars.client.campaign;
 
 import java.util.StringTokenizer;
 
+import mekwars.client.campaign.pilot.CPilot;
+import megamek.client.generator.RandomGenderGenerator;
 import mekwars.common.Unit;
 import mekwars.common.House;
-import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.TokenReader;
-import megamek.client.generator.RandomGenderGenerator;
 import megamek.common.CrewType;
 
 /**
@@ -90,9 +90,9 @@ public class CBMUnit {
             House owner = campaign.getPlayer().getMyHouse();
 
 			if ((embeddedUnit.getType() == Unit.MEK) || (embeddedUnit.getType() == Unit.VEHICLE)) {
-                embeddedUnit.setPilot(new Pilot(owner, "BM Unit", factionGunnery, factionPiloting));
+                embeddedUnit.setPilot(new CPilot(owner, "BM Unit", factionGunnery, factionPiloting));
             } else {
-                embeddedUnit.setPilot(new Pilot(owner, "BM Unit", factionGunnery, 5));
+                embeddedUnit.setPilot(new CPilot(owner, "BM Unit", factionGunnery, 5));
             }
 
 			/*

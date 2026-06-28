@@ -20,11 +20,11 @@
  */
 package mekwars.common;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.ManyToOne;
 
 import mekwars.common.campaign.pilot.Pilot;
@@ -34,15 +34,11 @@ import mekwars.common.campaign.pilot.Pilot;
  * @author Helge Richter
  *
  */
-@Entity
-public class MegaMekPilotOption {
+@MappedSuperclass
+public abstract class MegaMekPilotOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "pilot_id")
-    private Pilot pilot;
 
 	private String mmname;
 	private boolean value;
@@ -64,13 +60,9 @@ public class MegaMekPilotOption {
         this.id = id;
     }
 
-    public Pilot getPilot() {
-        return pilot;
-    }
+    public abstract Pilot getPilot();
 
-    public void setPilot(Pilot pilot) {
-        this.pilot = pilot;
-    }
+    public abstract void setPilot(Pilot pilot);
 	/**
 	 * @return Returns the mmname.
 	 */

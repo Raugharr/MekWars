@@ -14,7 +14,6 @@
  */
 package mekwars.common.campaign.pilot.skills;
 
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 
@@ -28,7 +27,7 @@ public class PainShunt extends PilotSkill {
     @Override
     public void modifyPilot(Pilot p) {
         // super.addToPilot(p);
-        p.addMegamekOption(new MegaMekPilotOption("pain_shunt", true));
+        p.addMegamekOption("pain_shunt", true);
         p.setBvMod(p.getBVMod() + 0.01);
     }
 

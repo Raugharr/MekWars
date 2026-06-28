@@ -45,7 +45,6 @@ import megamek.common.options.PilotOptions;
 import mekwars.common.Army;
 import mekwars.common.CampaignData;
 import mekwars.common.House;
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
 import mekwars.common.campaign.pilot.Pilot;
@@ -85,6 +84,10 @@ public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
     @ManyToOne
     @JoinColumn(name = "army_id")
     private SArmy army;
+
+    @OneToOne
+    @JoinColumn(name = "pilot_id")
+    private SPilot pilot;
     private long passesMaintainanceUntil = 0;
     private int lastCombatPilot = -1;
 
@@ -146,6 +149,14 @@ public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
         setId(replaceId);
         setProducer(p);
         unitEntity = ent;
+    }
+
+    public SPilot getPilot() {
+        return pilot;
+    }
+
+    public void setPilot(Pilot pilot) {
+        this.pilot = (SPilot) pilot;
     }
 
     public SArmy getArmy() {
@@ -949,7 +960,7 @@ public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
         }
 
         p.setUnitType(getType());
-        super.setPilot(p);
+        setPilot(p);
     }
 
     public void init() {
@@ -1163,12 +1174,12 @@ public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
                 String skill = skillList.nextToken();
 
                 if (skill.toLowerCase().startsWith("weapon_specialist")) {
-                    pilot.addMegamekOption(new MegaMekPilotOption("weapon_specialist", true));
+                    pilot.addMegamekOption("weapon_specialist", true);
                     pilot.getSkills()
                             .add(PilotSkillStore.getPilotSkill(PilotSkill.WeaponSpecialistSkillID));
                     pilot.setWeapon(skill.substring("weapon_specialist".length()).trim());
                 } else if (skill.toLowerCase().startsWith("edge ")) {
-                    pilot.addMegamekOption(new MegaMekPilotOption("edge", true));
+                    pilot.addMegamekOption("edge", true);
                     pilot.getSkills().add(PilotSkillStore.getPilotSkill(PilotSkill.EdgeSkillID));
                     try {
                         pilot.getSkills()
@@ -1189,7 +1200,7 @@ public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
                 } else {
                     pilot.getSkills()
                             .add(PilotSkillStore.getPilotSkill(PilotSkill.getMMSkillID(skill)));
-                    pilot.addMegamekOption(new MegaMekPilotOption(skill, true));
+                    pilot.addMegamekOption(skill, true);
                 }
             }
 
@@ -1202,7 +1213,7 @@ public final class SUnit extends Unit<SUnit> implements Comparable<SUnit> {
 
                 pilot.getSkills()
                         .add(PilotSkillStore.getPilotSkill(PilotSkill.getMMSkillID(skill)));
-                pilot.addMegamekOption(new MegaMekPilotOption(skill, true));
+                pilot.addMegamekOption(skill, true);
             }
 
             cm.setPilot(pilot);

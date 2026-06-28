@@ -18,6 +18,7 @@ package mekwars.client.gui.dialog;
 
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CUnit;
+import mekwars.client.campaign.pilot.CPilot;
 import mekwars.client.common.campaign.clientutils.GameHost;
 import mekwars.client.gui.MWUnitDisplayHelper;
 import mekwars.client.gui.TableSorter;
@@ -1108,7 +1109,7 @@ public class TableViewerDialog extends JFrame implements ItemListener {
              * hardflag necessary values.
              */
             setUnitFilename(fn.trim());
-            setPilot(new Pilot(null, "Autopilot", 4, 5));
+            setPilot(new CPilot(null, "Autopilot", 4, 5));
 
             /*
              * Try to get an entity from the unit cache, given a filename. This
@@ -1145,7 +1146,7 @@ public class TableViewerDialog extends JFrame implements ItemListener {
 
 
             setUnitFilename(realFilename);
-            setPilot(new Pilot(null, "Autopilot", 4, 5));
+            setPilot(new CPilot(null, "Autopilot", 4, 5));
 
             // get the unit from the summary cache
             unitEntity = en;

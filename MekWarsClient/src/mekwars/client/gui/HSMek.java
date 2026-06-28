@@ -21,8 +21,8 @@ import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
 import mekwars.client.campaign.CUnit;
+import mekwars.client.campaign.pilot.CPilot;
 import mekwars.common.Unit;
-import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.util.TokenReader;
 import megamek.client.generator.RandomGenderGenerator;
 import megamek.common.BattleArmor;
@@ -68,15 +68,15 @@ public class HSMek {
         if (embeddedUnit.getType() != Unit.PROTOMEK) {
             if (embeddedUnit.getType() == Unit.INFANTRY) {
                 if (((Infantry)embeddedUnit.getEntity()).canMakeAntiMekAttacks() ) {
-                    embeddedUnit.setPilot(new Pilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, factionPiloting));
+                    embeddedUnit.setPilot(new CPilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, factionPiloting));
                 } else {
-                    embeddedUnit.setPilot(new Pilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, 5));
+                    embeddedUnit.setPilot(new CPilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, 5));
                 }
             } else {
-                embeddedUnit.setPilot(new Pilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, factionPiloting));
+                embeddedUnit.setPilot(new CPilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, factionPiloting));
             }
         } else {
-            embeddedUnit.setPilot(new Pilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, 5));
+            embeddedUnit.setPilot(new CPilot(mwclient.getPlayer().getMyHouse(), "BM Unit", factionGunnery, 5));
         }
 
         /*
@@ -158,5 +158,4 @@ public class HSMek {
     public int getBV() {
         return embeddedUnit.getEntity().calculateBattleValue();
     }
-
 }
