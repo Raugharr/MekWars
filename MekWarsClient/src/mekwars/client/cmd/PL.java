@@ -24,6 +24,7 @@ import mekwars.client.MWClient;
 import mekwars.client.GUIClient;
 import mekwars.client.campaign.CPlayer;
 import mekwars.client.campaign.CUnit;
+import mekwars.client.campaign.pilot.CPilot;
 import mekwars.client.gui.dialog.AdvancedRepairDialog;
 import mekwars.client.io.FileSystem;
 import mekwars.common.CampaignData;
@@ -209,7 +210,7 @@ public class PL extends Command {
 
             unit.setUnitFilename(filename);
             unit.createEntity();
-            unit.setPilot(new Pilot(player.getMyHouse(), "Jeeves", 4, 5));
+            unit.setPilot(new CPilot(player.getMyHouse(), "Jeeves", 4, 5));
             UnitUtils.applyBattleDamage(unit.getEntity(), damage, true);
             new AdvancedRepairDialog(mwclient, unit, unit.getEntity(), false);
         } else if (cmd.equals("CPPC")) {

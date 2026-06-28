@@ -21,7 +21,7 @@
  */
 package mekwars.common.campaign.pilot;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +29,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.MappedSuperclass;
 
 import mekwars.common.House;
 import mekwars.common.MegaMekPilotOption;
@@ -44,8 +44,8 @@ import java.util.List;
 /**
  * @author Helge Richter
  */
-@Entity
-public class Pilot {
+@MappedSuperclass
+public abstract class Pilot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id = -1;
@@ -55,16 +55,12 @@ public class Pilot {
     private String name = "John Doe";
     private int experience = 0;
     private int hits = 0;
-    @OneToMany
-    private List<MegaMekPilotOption> megamekOptions = new ArrayList<MegaMekPilotOption>();
+
     private String weapon = "Default"; // for Weapon Specialist skill
 
     @ManyToOne
     @JoinColumn(name = "house_id")
     private House house;
-
-    @Transient
-    private Unit unit;
 
     private String trait = null;
     boolean edgeWhenTac = true;
@@ -207,10 +203,25 @@ public class Pilot {
         this.experience = experience;
     }
 
-    public void addMegamekOption(MegaMekPilotOption op) {
-        megamekOptions.add(op);
-        op.setPilot(this);
-    }
+    /**
+     * Add a MegaMek pilot option with the given name and value.
+     *
+     * @param name The option name
+     * @param value The option value
+     */
+    public abstract void addMegamekOption(String name, boolean value);
+
+    /**
+     * Add a MegaMek pilot option with the given name and value.
+     *
+     * @param option The {@link MegaMekPilotOption} to add
+     */
+    public abstract void addMegamekOption(MegaMekPilotOption option);
+
+    /**
+     * @return Returns the megamekOptions.
+     */
+    public abstract List<? extends MegaMekPilotOption> getMegamekOptions();
 
     /**
      * @return Returns the bvMod.
@@ -245,13 +256,6 @@ public class Pilot {
      */
     public PilotSkills getSkills() {
         return skills;
-    }
-
-    /**
-     * @return Returns the megamekOptions.
-     */
-    public List<MegaMekPilotOption> getMegamekOptions() {
-        return megamekOptions;
     }
 
     public int getKills() {
@@ -290,13 +294,9 @@ public class Pilot {
         this.house = house;
     }
 
-    public Unit getUnit() {
-        return unit;
-    }
+    public abstract Unit getUnit();
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
+    public abstract void setUnit(Unit unit);
 
     public String getTraitName() {
         return trait;

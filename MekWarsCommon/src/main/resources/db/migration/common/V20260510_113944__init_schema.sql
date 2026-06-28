@@ -476,7 +476,6 @@ CREATE TABLE IF NOT EXISTS pilot (
 	hits INTEGER NOT NULL,
 	weapon INTEGER NOT NULL,
 	house_id INTEGER NOT NULL,
-	unit_id INTEGER,
 	trait TEXT,
 	edge_when_tac INTEGER NOT NULL,
 	edge_when_ko INTEGER NOT NULL,
@@ -487,14 +486,12 @@ CREATE TABLE IF NOT EXISTS pilot (
 	kills INTEGER NOT NULL,
 	unit_type INTEGER NOT NULL,
 
-	FOREIGN KEY(house_id) REFERENCES house(id),
-	FOREIGN KEY(unit_id) REFERENCES unit(id)
+	FOREIGN KEY(house_id) REFERENCES house(id)
 );
 
 CREATE INDEX pilot_house_id_index ON pilot(house_id);
-CREATE INDEX pilot_unit_id_index ON pilot(unit_id);
 
-CREATE TABLE IF NOT EXISTS pilot_option (
+CREATE TABLE IF NOT EXISTS megamek_pilot_option (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	pilot_id INTEGER NOT NULL,
 	mmname TEXT NOT NULL,
@@ -503,7 +500,7 @@ CREATE TABLE IF NOT EXISTS pilot_option (
 	FOREIGN KEY(pilot_id) REFERENCES pilot(id)
 );
 
-CREATE INDEX pilot_option_pilot_id_index ON pilot_option(pilot_id);
+CREATE INDEX megamek_pilot_option_pilot_id_index ON megamek_pilot_option(pilot_id);
 
 CREATE TABLE IF NOT EXISTS pilot_skill (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,

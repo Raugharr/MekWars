@@ -27,7 +27,6 @@ import megamek.common.WeaponType;
 import megamek.common.battlevalue.BVCalculator;
 
 import mekwars.common.CampaignData;
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.campaign.pilot.Pilot;
 
 /**
@@ -48,7 +47,7 @@ public class GunneryMissileSkill extends PilotSkill {
 
     @Override
     public void modifyPilot(Pilot pilot) {
-        pilot.addMegamekOption(new MegaMekPilotOption("gunnery_missile", true));
+        pilot.addMegamekOption("gunnery_missile", true);
         // pilot.setBvMod(pilot.getBVMod() + 0.02);
     }
 

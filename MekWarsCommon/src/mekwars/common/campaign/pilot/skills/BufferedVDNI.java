@@ -14,7 +14,6 @@
  */
 package mekwars.common.campaign.pilot.skills;
 
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.campaign.pilot.Pilot;
 
 public class BufferedVDNI extends PilotSkill {
@@ -25,7 +24,7 @@ public class BufferedVDNI extends PilotSkill {
 
     @Override
     public void modifyPilot(Pilot p) {
-        p.addMegamekOption(new MegaMekPilotOption("bvdni", true));
+        p.addMegamekOption("bvdni", true);
         // p.setBvMod(p.getBVMod() + 0.01);
     }
 }

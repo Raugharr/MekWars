@@ -16,6 +16,8 @@
 package mekwars.client.campaign;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 import megamek.common.AmmoType;
 import megamek.common.CriticalSlot;
@@ -26,8 +28,7 @@ import megamek.common.options.IOption;
 import megamek.common.options.IOptionGroup;
 import megamek.common.options.Quirks;
 
-import jakarta.persistence.Entity;
-
+import mekwars.client.campaign.pilot.CPilot;
 import mekwars.common.Army;
 import mekwars.common.CampaignData;
 import mekwars.common.House;
@@ -53,17 +54,30 @@ import java.util.StringTokenizer;
 
 /** Class for unit object used by Client */
 @Entity
+@Table(name = "unit")
 public class CUnit extends Unit<CUnit> {
     private static final Logger LOGGER = LogManager.getLogger(CUnit.class);
 
     @ManyToOne
     @JoinColumn(name = "army_id")
     private CArmy army;
+
+    @OneToOne
+    @JoinColumn(name = "pilot_id")
+    private CPilot pilot;
     private String htmlQuirkList = " ";
     private String quirkList = " ";
 
     public CUnit() {
         init();
+    }
+
+    public CPilot getPilot() {
+        return pilot;
+    }
+
+    public void setPilot(Pilot pilot) {
+        this.pilot = (CPilot) pilot;
     }
 
     public CArmy getArmy() {
@@ -101,14 +115,14 @@ public class CUnit extends Unit<CUnit> {
         int gunnery = 4;
         int piloting = 5;
         int exp = 0;
-        Pilot p = null;
+        CPilot p = null;
         StringTokenizer STR = new StringTokenizer(TokenReader.readString(ST), "#");
         pilotname = TokenReader.readString(STR);
         exp = TokenReader.readInt(STR);
         gunnery = TokenReader.readInt(STR);
         piloting = TokenReader.readInt(STR);
         House house = CampaignData.cd.getHouseByName(TokenReader.readString(STR));
-        p = new Pilot(house, pilotname, gunnery, piloting);
+        p = new CPilot(house, pilotname, gunnery, piloting);
         p.setExperience(exp);
         int skillAmount = TokenReader.readInt(STR);
         for (int i = 0; i < skillAmount; i++) {
@@ -142,11 +156,9 @@ public class CUnit extends Unit<CUnit> {
 
         int mmoptionsamount = TokenReader.readInt(ST);
         for (int i = 0; i < mmoptionsamount; i++) {
-            MegaMekPilotOption mo =
-                    new MegaMekPilotOption(
-                            TokenReader.readString(ST),
-                            Boolean.parseBoolean(TokenReader.readString(ST)));
-            p.addMegamekOption(mo);
+            String name = TokenReader.readString(ST);
+            boolean value = Boolean.parseBoolean(TokenReader.readString(ST));
+            p.addMegamekOption(name, value);
         }
 
         setType(TokenReader.readInt(ST));
@@ -335,7 +347,7 @@ public class CUnit extends Unit<CUnit> {
             OffBoardDirection edge) {
 
         setUnitFilename(filename);
-        setPilot(new Pilot(house, "Autopilot", 4, 5));
+        setPilot(new CPilot(house, "Autopilot", 4, 5));
         createEntity();// make the entity
         if (distance > 0) {
             unitEntity.setOffBoard(distance, edge); // move

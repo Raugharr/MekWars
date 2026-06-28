@@ -24,7 +24,6 @@ import megamek.common.Entity;
 import megamek.common.Mech;
 
 import mekwars.common.CampaignData;
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 
@@ -55,7 +54,7 @@ public class IronManSkill extends PilotSkill {
 
     @Override
     public void modifyPilot(Pilot pilot) {
-        pilot.addMegamekOption(new MegaMekPilotOption("iron_man", true));
+        pilot.addMegamekOption("iron_man", true);
         // pilot.setBvMod(pilot.getBVMod() +  0.02);
     }
 
