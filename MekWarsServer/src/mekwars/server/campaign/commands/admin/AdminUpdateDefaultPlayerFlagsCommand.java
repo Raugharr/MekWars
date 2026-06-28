@@ -2,6 +2,7 @@ package mekwars.server.campaign.commands.admin;
 
 import java.util.StringTokenizer;
 import mekwars.server.MWServ;
+import mekwars.common.CampaignData;
 import mekwars.common.flags.PlayerFlags;
 import mekwars.server.MWChatServer.auth.IAuthenticator;
 import mekwars.server.campaign.CampaignMain;
@@ -24,7 +25,7 @@ public class AdminUpdateDefaultPlayerFlagsCommand implements Command {
 				return;
 			}
 		}
-		PlayerFlags flags = CampaignMain.cm.getDefaultPlayerFlags();
+		PlayerFlags flags = CampaignData.cd.getDefaultPlayerFlags();
 		String action;
 		String flagName;
 		boolean value = false;
@@ -51,7 +52,7 @@ public class AdminUpdateDefaultPlayerFlagsCommand implements Command {
 				CampaignMain.cm.toUser("Removed DefaultPlayerFlag " + flagName, Username, true);
 			}
 		}
-		CampaignMain.cm.getDefaultPlayerFlags().save();
+		CampaignData.cd.getDefaultPlayerFlags().save();
 	}
 		
 }

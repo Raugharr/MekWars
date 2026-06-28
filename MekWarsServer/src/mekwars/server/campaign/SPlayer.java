@@ -3237,7 +3237,7 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
         result.append(
                 exportFlags().length() > 1
                         ? exportFlags()
-                        : CampaignMain.cm.getDefaultPlayerFlags().export());
+                        : CampaignData.cd.getDefaultPlayerFlags().export());
         result.append(saveDiscordInfo()); // @salient adding new field to save
         return result.getMessage();
     }
@@ -3424,7 +3424,7 @@ public class SPlayer extends Player implements Comparable<SPlayer>, IBuyer, ISel
             setSubfaction(getMyHouse().getSubfaction(TokenReader.readString(ST)));
             lastPromoted = TokenReader.readLong(ST);
 
-            loadFlags(CampaignMain.cm.getDefaultPlayerFlags().export());
+            loadFlags(CampaignData.cd.getDefaultPlayerFlags().export());
 
             String flagString = TokenReader.readString(ST);
             if (flagString.length() > 1) flags.loadPersonal(flagString);

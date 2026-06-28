@@ -450,14 +450,12 @@ public class UnitFactory implements Serializable {
         if (buildTableFolder.equals("standard")) buildTableFolder = "";
     }
 
-    @Transient
     public String getBuildTableFolder() {
         return (buildTableFolder.trim().length() < 1)
                 ? "standard"
                 : "standard" + File.separatorChar + buildTableFolder.trim();
     }
 
-    @Transient
     public String getIcons() {
         // TODO: Add more icons to make this unambiguous
         String sizeid = "";

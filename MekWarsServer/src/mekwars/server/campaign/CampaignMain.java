@@ -203,7 +203,6 @@ public final class CampaignMain implements Serializable {
     private Hashtable<String, SPlayer> lostSouls = new Hashtable<String, SPlayer>();
 
     private Vector<String> supportUnits = new Vector<String>();
-    private PlayerFlags defaultPlayerFlags = new PlayerFlags();
     private MWScheduler scheduler;
     private ChristmasHandler christmas;
     private SMMNetXStream xstream;
@@ -303,9 +302,6 @@ public final class CampaignMain implements Serializable {
                 new HtmlSanitizer(
                         getBooleanConfig("AllowLinksInMOTD"),
                         getBooleanConfig("AllowPlanetsInMOTD"));
-
-        // Load the default player flags
-        defaultPlayerFlags.loadFromDisk();
 
         // Load the scheduler
         scheduler = MWScheduler.getInstance();
@@ -3425,13 +3421,6 @@ public final class CampaignMain implements Serializable {
      */
     public void setSupportUnits(Vector<String> supportUnits) {
         this.supportUnits = supportUnits;
-    }
-
-    /**
-     * @return the defaultPlayerFlags
-     */
-    public PlayerFlags getDefaultPlayerFlags() {
-        return defaultPlayerFlags;
     }
 
     /**
