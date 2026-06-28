@@ -288,7 +288,7 @@ public class ShortOperation implements Comparable<Object> {
 
         // increase the unit and BV counts
         startingBV += a.getOperationsBV(null);
-        startingUnits += a.getAmountOfUnits();
+        startingUnits += a.getUnitCount();
 
         if (o.getBooleanValue("TeamOperation")) {
 
@@ -356,7 +356,7 @@ public class ShortOperation implements Comparable<Object> {
 
             // decrease starting values
             startingBV -= p.getArmy(armyID).getOperationsBV(null);
-            startingUnits -= p.getArmy(armyID).getAmountOfUnits();
+            startingUnits -= p.getArmy(armyID).getUnitCount();
         }
         playerModifyingOps.remove(pNameLower);
     }
@@ -377,7 +377,7 @@ public class ShortOperation implements Comparable<Object> {
 
         // increase the unit and BV counts
         startingBV += a.getOperationsBV(null);
-        startingUnits += a.getAmountOfUnits();
+        startingUnits += a.getUnitCount();
 
         /*
          * Check for Team games if a team game then launch when the max players
@@ -417,7 +417,7 @@ public class ShortOperation implements Comparable<Object> {
 
             // decrease starting values
             startingBV -= p.getArmy(armyID).getOperationsBV(null);
-            startingUnits -= p.getArmy(armyID).getAmountOfUnits();
+            startingUnits -= p.getArmy(armyID).getUnitCount();
         }
         playerModifyingOps.remove(pNameLower);
     }
@@ -2055,7 +2055,7 @@ public class ShortOperation implements Comparable<Object> {
             for (String currN : attackers.keySet()) {
                 SArmy currArmy = CampaignMain.cm.getPlayer(currN).getArmy(attackers.get(currN));
                 totalBV = totalBV + currArmy.getOperationsBV(null);
-                totalUnits = totalUnits + currArmy.getAmountOfUnits();
+                totalUnits = totalUnits + currArmy.getUnitCount();
             }
 
             resultString += "(Total Units: " + totalUnits + " / Total BV: " + totalBV + ")";
@@ -2129,7 +2129,7 @@ public class ShortOperation implements Comparable<Object> {
             for (String currN : attackers.keySet()) {
                 SArmy currArmy = CampaignMain.cm.getPlayer(currN).getArmy(attackers.get(currN));
                 totalBV = totalBV + currArmy.getOperationsBV(null);
-                totalUnits = totalUnits + currArmy.getAmountOfUnits();
+                totalUnits = totalUnits + currArmy.getUnitCount();
             }
 
             resultString += "(Total Units: " + totalUnits + " / Total BV: " + totalBV + ")";
@@ -2204,7 +2204,7 @@ public class ShortOperation implements Comparable<Object> {
             for (String currN : attackers.keySet()) {
                 SArmy currArmy = CampaignMain.cm.getPlayer(currN).getArmy(attackers.get(currN));
                 totalBV = totalBV + currArmy.getOperationsBV(null);
-                totalUnits = totalUnits + currArmy.getAmountOfUnits();
+                totalUnits = totalUnits + currArmy.getUnitCount();
                 if (mod || (complete && !blindDrop)) {
                     resultString += "with " + currArmy.getDescription(true, null);
                 }
@@ -2249,7 +2249,7 @@ public class ShortOperation implements Comparable<Object> {
                 try {
                     SArmy currArmy = CampaignMain.cm.getPlayer(currN).getArmy(defenders.get(currN));
                     totalBV = totalBV + currArmy.getOperationsBV(null);
-                    totalUnits = totalUnits + currArmy.getAmountOfUnits();
+                    totalUnits = totalUnits + currArmy.getUnitCount();
                     if (mod || (complete && !blindDrop)) {
                         resultString += "with " + currArmy.getDescription(true, null);
                     }

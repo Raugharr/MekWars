@@ -91,6 +91,7 @@ public class CPlayer extends Player {
     /**
      * @see IHasUnits#getUnits
      */
+    @Override
     public List<CUnit> getUnits() {
         return (List<CUnit>) Collections.unmodifiableList(units.getAll());
     }
@@ -98,6 +99,7 @@ public class CPlayer extends Player {
     /**
      * @see IHasUnits#getUnit(int)
      */
+    @Override
     public CUnit getUnit(int id) {
         return units.get(id);
     }
@@ -248,7 +250,7 @@ public class CPlayer extends Player {
             CArmy army = new CArmy();
             army.fromString(TokenReader.readString(ST), this, "%");
             armies.add(army);
-            LOGGER.debug("Adding army {} with {} units", army.getName(), army.getAmountOfUnits());
+            LOGGER.debug("Adding army {} with {} units", army.getName(), army.getUnitCount());
         }
 
         bays = TokenReader.readInt(ST);
@@ -502,7 +504,7 @@ public class CPlayer extends Player {
             int bv = TokenReader.readInt(ST);
             int position = TokenReader.readInt(ST);
             if (position >= 0) {
-                getArmy(army).addUnit(getUnit(unitid), position);
+                getArmy(army).addUnit(position, getUnit(unitid));
             } else {
                 getArmy(army).addUnit(getUnit(unitid));
             }
@@ -594,7 +596,7 @@ public class CPlayer extends Player {
         }
 
         // then re-add the unit
-        getArmy(army).addUnit(getUnit(unitid), position);
+        getArmy(army).addUnit(position, getUnit(unitid));
     }
 
     public void setUnitStatus(String data) {

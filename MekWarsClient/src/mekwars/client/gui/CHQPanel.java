@@ -1607,7 +1607,7 @@ public class CHQPanel extends JPanel {
                             /*
                              * The POSITION menu. Moves units around -within- the army. Only shown if there are enough units to warrant movement (>1).
                              */
-                            if (l.getAmountOfUnits() > 1) {
+                            if (l.getUnitCount() > 1) {
                                 JMenu pjm = new JMenu("Position");
                                 popup.add(pjm);
                                 int currPos = 0;
@@ -2845,7 +2845,7 @@ public class CHQPanel extends JPanel {
 
         // number of rows consumed by given army
         public int getRowsForArmy(CArmy army) {
-            int toReturn = (int) Math.ceil((double) army.getAmountOfUnits() / (double) (getColumnCount() - 1));
+            int toReturn = (int) Math.ceil((double) army.getUnitCount() / (double) (getColumnCount() - 1));
             if (toReturn < 1) {
                 return 1;
             }
@@ -2969,10 +2969,10 @@ public class CHQPanel extends JPanel {
                         // lower limit
                         if (army.getLowerLimiter() == Army.NO_LIMIT) {
                             range = "No Lower";
-                        } else if ((army.getAmountOfUnits() - army.getLowerLimiter()) < 1) {
+                        } else if ((army.getUnitCount() - army.getLowerLimiter()) < 1) {
                             range = "1";
                         } else {
-                            range = "" + (army.getAmountOfUnits() - army.getLowerLimiter());
+                            range = "" + (army.getUnitCount() - army.getLowerLimiter());
                         }
 
                         // divider
@@ -2982,7 +2982,7 @@ public class CHQPanel extends JPanel {
                         if (army.getUpperLimiter() == Army.NO_LIMIT) {
                             range += "No Upper";
                         } else {
-                            range += "" + (army.getAmountOfUnits() + army.getUpperLimiter());
+                            range += "" + (army.getUnitCount() + army.getUpperLimiter());
                         }
 
                         // overwrite if there are no limits at all

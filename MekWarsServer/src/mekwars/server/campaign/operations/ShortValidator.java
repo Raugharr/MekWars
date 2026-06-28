@@ -1008,7 +1008,7 @@ public class ShortValidator {
         if (o.getBooleanValue("EnforceAttackerAeroRatio")) {
             boolean countAeroSupport = o.getBooleanValue("CountSupportUnitsInAeroRatio");
             int numAero = aa.getNumberOfUnitTypes(Unit.AERO, countAeroSupport);
-            int totalUnits = aa.getAmountOfUnits();
+            int totalUnits = aa.getUnitCount();
             double minPercent = o.getDoubleValue("MinAttackerAeroPercent");
             double maxPercent = o.getDoubleValue("MaxAttackerAeroPercent");
             double actualPercent = (double) (((double)numAero / (double)totalUnits) * 100);
@@ -1498,7 +1498,7 @@ public class ShortValidator {
         if (o.getBooleanValue("EnforceDefenderAeroRatio")) {
             boolean countAeroSupport = o.getBooleanValue("CountSupportUnitsInAeroRatio");
             int numAero = da.getNumberOfUnitTypes(Unit.AERO, countAeroSupport);
-            int totalUnits = da.getAmountOfUnits();
+            int totalUnits = da.getUnitCount();
             double minPercent = o.getDoubleValue("MinAttackerAeroPercent");
             double maxPercent = o.getDoubleValue("MaxAttackerAeroPercent");
             double actualPercent = (double) (((double)numAero / (double)totalUnits) * 100);

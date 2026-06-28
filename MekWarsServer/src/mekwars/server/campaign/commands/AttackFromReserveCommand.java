@@ -341,7 +341,7 @@ public class AttackFromReserveCommand implements Command {
                                 + " on planet "
                                 + target.getNameAsColoredLink()
                                 + " with "
-                                + aa.getAmountOfUnits()
+                                + aa.getUnitCount()
                                 + " units totalling "
                                 + aa.getBV()
                                 + " BV. You may accept with:  <br>");
@@ -351,7 +351,7 @@ public class AttackFromReserveCommand implements Command {
 
             int aID = currArmy.getId();
             int aBV = currArmy.getOperationsBV(null);
-            int aUnits = currArmy.getAmountOfUnits();
+            int aUnits = currArmy.getUnitCount();
 
             toSend.append(
                     "<a href=\"MEKWARS/c acceptattackfromreserve#"

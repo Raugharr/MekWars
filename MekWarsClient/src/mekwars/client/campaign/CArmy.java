@@ -21,13 +21,17 @@
 
 package mekwars.client.campaign;
 
-import mekwars.client.MWClient;
+import jakarta.persistence.Table;
+
 import mekwars.common.Army;
 import mekwars.common.Unit;
+import mekwars.common.composition.HasUnits;
 import mekwars.common.util.TokenReader;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -36,7 +40,88 @@ import java.util.StringTokenizer;
  * client needs in order to represent forces graphically, load units into games, etc.
  */
 @jakarta.persistence.Entity
-public class CArmy extends Army<CUnit> {
+@Table(name = "army")
+public class CArmy extends Army {
+    private HasUnits<CUnit> units = new HasUnits<>();
+
+    /**
+     * @see IHasUnits#getUnits
+     */
+    @Override
+    public List<CUnit> getUnits() {
+        return (List<CUnit>) Collections.unmodifiableList(units.getAll());
+    }
+
+    /**
+     * @see IHasUnits#getUnit(int)
+     */
+    @Override
+    public CUnit getUnit(int id) {
+        return units.get(id);
+    }
+
+    /**
+     * @see IHasUnits#addUnit(Unit, int)
+     */
+    @Override
+    public void addUnit(int position, Unit unit) {
+        unit.setArmy(this);
+        units.add(position, (CUnit) unit);
+    }
+
+    /**
+     * @see IHasUnits#addUnit(Unit)
+     */
+    @Override
+    public void addUnit(Unit unit) {
+        unit.setArmy(this);
+        units.add((CUnit) unit);
+    }
+
+    /**
+     * @see IHasUnits#removeUnit(int)
+     */
+    @Override
+    public boolean removeUnit(int id) {
+        CUnit unit = units.get(id);
+
+        if (unit == null) {
+            return false;
+        }
+
+        removeUnitFromC3Network(id);
+        super.setBV(0);
+        setRawForceSize(-1);
+        
+        unit.setOwner(null);
+        units.remove(id);
+        return true;
+    }
+
+    /**
+     * @see IHasUnits#getUnitCount()
+     */
+    @Override
+    public int getUnitCount() {
+        return units.count();
+    }
+
+    /**
+     * @see IHasUnits#countUnits(int, int)
+     */
+    @Override
+    public int countUnits(int type, int weightClass) {
+        return units.count(type, weightClass);
+    }
+
+    /**
+     * @see IHasUnits#clear()
+     */
+    @Override
+    public void clearUnits() {
+        units.clear();
+    }
+
     /**
      * Method that fills in Army data (common.Army value), given an informational String. Called
      * from CPlayer.setArmyData() and CPlayer.setData(). In both instances, the string being passed

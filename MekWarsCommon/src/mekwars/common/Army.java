@@ -32,6 +32,7 @@ import jakarta.persistence.Transient;
 import megamek.common.Entity;
 
 import mekwars.common.campaign.CampaignOptions;
+import mekwars.common.composition.IHasUnits;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,13 +52,11 @@ import java.util.TreeSet;
  * @author Helge Richter
  */
 @MappedSuperclass
-public class Army<T extends Unit> {
+public abstract class Army implements IHasUnits {
     private static final Logger LOGGER = LogManager.getLogger(Army.class);
 
     public static final int NO_LIMIT = -1;
 
-    @OneToMany(mappedBy = "army")
-    private List<T> units = new ArrayList<>();
     private String name = " ";
 
     private int upperLimiter = NO_LIMIT;
@@ -81,7 +80,7 @@ public class Army<T extends Unit> {
     private Map<Integer, Integer> c3Network = new HashMap<Integer, Integer>();
 
     @Transient
-    private List<Integer> commanders = new ArrayList<Integer>(1);
+    private List<Integer> commanders = new ArrayList<Integer>();
     private float rawForceSize = -1;
     @Transient
     private Set<String> legalOperations = new TreeSet<>();
@@ -94,10 +93,6 @@ public class Army<T extends Unit> {
 
     public Army(Player owner) {
         this.owner = owner;
-    }
-
-    public int getAmountOfUnits() {
-        return units.size();
     }
 
     public boolean isDisabled() {
@@ -189,27 +184,18 @@ public class Army<T extends Unit> {
         name = s.trim();
     }
 
-    public void addUnit(T unit, int position) {
-        units.add(position, unit);
+    public void addUnit(int position, Unit unit) {
         unit.setArmy(this);
     }
 
-    public void addUnit(T unit) {
-        units.add(unit);
+    public void addUnit(Unit unit) {
         unit.setArmy(this);
-    }
-
-    /**
-     * @return Returns the units.
-     */
-    public List<T> getUnits() {
-        return units;
     }
 
     public int getUnitPosition(int id) {
         int index = 0;
 
-        for (T unit : units) {
+        for (Unit unit : getUnits()) {
             if (unit.getId() == id) {
                 return index;
             }
@@ -228,7 +214,7 @@ public class Army<T extends Unit> {
     public int getNumberOfUnitTypes(int type) {
         int count = 0;
 
-        for (T unit : getUnits()) {
+        for (Unit unit : getUnits()) {
             if (unit.getType() == type) {
                 count++;
             }
@@ -248,7 +234,7 @@ public class Army<T extends Unit> {
     public int getNumberOfUnitTypes(int type, boolean countSupport) {
         int count = 0;
 
-        for (T unit : getUnits()) {
+        for (Unit unit : getUnits()) {
             if (unit.getType() == type) {
                 if (!unit.isSupportUnit() || (unit.isSupportUnit() && countSupport)) {
                     count++;
@@ -264,13 +250,9 @@ public class Army<T extends Unit> {
      * @return Total number of support units in the army
      */
     public int getTotalSupportUnits() {
-        int count = 0;
-        for (T unit : getUnits()) {
-            if (unit.isSupportUnit()) {
-                count++;
-            }
-        }
-        return count;
+        return (int) getUnits().stream()
+                .filter(Unit::isSupportUnit)
+                .count();
     }
 
     /**
@@ -298,9 +280,9 @@ public class Army<T extends Unit> {
         return owner;
     }
 
-    public T getUnit(int unitId) {
+    public Unit getUnit(int unitId) {
 
-        for (T currU : getUnits()) {
+        for (Unit currU : getUnits()) {
             if (currU.getId() == unitId) {
                 return currU;
             }
@@ -338,7 +320,7 @@ public class Army<T extends Unit> {
         result.append(delimiter);
         result.append(getUnits().size());
         result.append(delimiter);
-        for (T unit : getUnits()) {
+        for (Unit unit : getUnits()) {
             result.append(unit.getId());
             result.append(delimiter);
         }
@@ -461,7 +443,7 @@ public class Army<T extends Unit> {
         CampaignOptions campaignOptions = CampaignData.cd.getCampaignOptions();
 
         // no break, generate a raw force size
-        for (T u : this.getUnits()) {
+        for (Unit u : this.getUnits()) {
             if (u.getType() == Unit.INFANTRY) {
                 rawForceSize += campaignOptions.getFloatConfig("InfantryOperationsBVMod");
             } else if (u.getType() == Unit.VEHICLE) {
@@ -548,7 +530,7 @@ public class Army<T extends Unit> {
         boolean hasTAG = false;
         boolean hasHoming = false;
 
-        for (T unit : getUnits()) {
+        for (Unit unit : getUnits()) {
             hasTAG |= unit.hasTAG();
             hasHoming |= unit.hasHoming();
 
@@ -563,7 +545,7 @@ public class Army<T extends Unit> {
         boolean hasTAG = false;
         boolean hasSemiGuided = false;
 
-        for (T unit : getUnits()) {
+        for (Unit unit : getUnits()) {
             hasTAG |= unit.hasTAG();
             hasSemiGuided |= unit.hasSemiGuided();
 
@@ -578,12 +560,12 @@ public class Army<T extends Unit> {
      * Used by Operations to determine how many mines to assign to attacker/defender, in lieu of BV.
      */
     public double getTotalTonnage() {
-        return getUnits().stream().map(T::getEntity).mapToDouble(Entity::getWeight).sum();
+        return getUnits().stream().map(Unit::getEntity).mapToDouble(Entity::getWeight).sum();
     }
 
     public double getAverageWalk() {
         return getUnits().stream()
-                .map(T::getEntity)
+                .map(Unit::getEntity)
                 .mapToInt(Entity::getWalkMP)
                 .average()
                 .orElse(0.0);
@@ -591,7 +573,7 @@ public class Army<T extends Unit> {
 
     public double getAverageJump() {
         return getUnits().stream()
-                .map(T::getEntity)
+                .map(Unit::getEntity)
                 .mapToInt(Entity::getJumpMP)
                 .average()
                 .orElse(0.0);
@@ -601,7 +583,6 @@ public class Army<T extends Unit> {
         return (int) getUnits().stream().filter(unit -> unit.getType() != Unit.INFANTRY).count();
     }
 
-    /** Override object's .equals(). */
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -612,7 +593,7 @@ public class Army<T extends Unit> {
             return false;
         }
 
-        Army<?> army = (Army<?>) object;
+        Army army = (Army) object;
         Player owner = getOwner();
         Player otherOwner = army.getOwner();
 
@@ -620,5 +601,11 @@ public class Army<T extends Unit> {
                 && Objects.equals(
                         owner != null ? owner.getName() : null,
                         otherOwner != null ? otherOwner.getName() : null);
+    }
+
+    @Override
+    public int hashCode() {
+        Player owner = getOwner();
+        return Objects.hash(getId(), owner != null ? owner.getName() : null);
     }
 }

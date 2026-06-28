@@ -118,11 +118,11 @@ public class CheckAttackCommand implements Command {
 				
 				//adjust return for infantry settings
 				if(CampaignMain.cm.getBooleanConfig("ShowInfInCheckAttack"))
-					Desc += coloredHouseName + "(" + currTarget.getAmountOfUnits() + ")";
+					Desc += coloredHouseName + "(" + currTarget.getUnitCount() + ")";
 				else 
 					Desc += coloredHouseName + "(" + currTarget.getAmountOfUnitsWithoutInfantry() + ")";
 
-				if ( usingOpRules && arm.getAmountOfUnits() > currTarget.getAmountOfUnits()) {
+				if ( usingOpRules && arm.getUnitCount() > currTarget.getUnitCount()) {
 					Desc += "(BV Against: "+ arm.getOperationsBV(currTarget) +")";
 				}
 				
@@ -157,11 +157,11 @@ public class CheckAttackCommand implements Command {
 						Desc += "<td>";
 						//adjust return for infantry settings
 						if(CampaignMain.cm.getBooleanConfig("ShowInfInCheckAttack"))
-							Desc += coloredHouseName + "(" + currTarget.getAmountOfUnits() + ")";
+							Desc += coloredHouseName + "(" + currTarget.getUnitCount() + ")";
 						else 
 							Desc += coloredHouseName + "(" + currTarget.getAmountOfUnitsWithoutInfantry() + ")";
 
-						if ( usingOpRules && arm.getAmountOfUnits() > currTarget.getAmountOfUnits()) {
+						if ( usingOpRules && arm.getUnitCount() > currTarget.getUnitCount()) {
 								Desc += "(BV Against: "+ arm.getOperationsBV(currTarget) +")";
 						}
 						

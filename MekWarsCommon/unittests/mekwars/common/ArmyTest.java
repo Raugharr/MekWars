@@ -26,17 +26,30 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 @ExtendWith(MockitoExtension.class)
 class ArmyTest {
-    private Army<Unit> army;
+    private Army army;
 
     @Mock(answer = Answers.CALLS_REAL_METHODS)
     private Player player;
 
     @BeforeEach
-    public void setup() {
-        army = new Army<>(player);
+    public void setup() throws Exception {
+        army = Mockito.mock(Army.class, Mockito.CALLS_REAL_METHODS);
         army.setId(1);
+
+        // Initialize transient fields that aren't set by constructor in mocked instances
+        Field c3NetworkField = Army.class.getDeclaredField("c3Network");
+        c3NetworkField.setAccessible(true);
+        c3NetworkField.set(army, new HashMap<>());
+
+        Field commandersField = Army.class.getDeclaredField("commanders");
+        commandersField.setAccessible(true);
+        commandersField.set(army, new ArrayList<>());
     }
 
     @Test
@@ -76,16 +89,6 @@ class ArmyTest {
         army.removeCommander(5);
 
         assertEquals(0, army.getCommanders().size());
-    }
-
-    @Test
-    public void testGetUnitById() {
-        Unit unit = Mockito.mock(Unit.class);
-
-        Mockito.when(unit.getId()).thenReturn(1);
-        army.addUnit(unit);
-
-        assertNotNull(army.getUnit(1));
     }
 
     @Test

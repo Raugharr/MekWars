@@ -501,7 +501,7 @@ public class OpsChickenThread extends Thread {
         for (SArmy currArmy : parmies) {
             int aID = currArmy.getId();
             int aBV = currArmy.getOperationsBV(null);
-            int aUnits = currArmy.getAmountOfUnits();
+            int aUnits = currArmy.getUnitCount();
 
             if (hasAnArmy)
                 toSend.append(", ");

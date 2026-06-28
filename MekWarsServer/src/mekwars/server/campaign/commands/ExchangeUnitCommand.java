@@ -138,7 +138,7 @@ public class  ExchangeUnitCommand  implements Command {
 				//Exchange the old and the new mech
 				//changeMech.setID(oldID);
 				if ( position > -1){
-				    a.addUnit(changeMech,position);
+				    a.addUnit(position, changeMech);
 				    CampaignMain.cm.toUser("PL|AAU|"+a.getId()+"#"+changeMech.getId()+"#"+a.getBV()+"#"+position,Username,false);
 				}
 				else{

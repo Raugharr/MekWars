@@ -41,12 +41,14 @@ import mekwars.common.CampaignData;
 import mekwars.common.Player;
 import mekwars.common.Unit;
 import mekwars.common.campaign.operations.Operation;
+import mekwars.common.composition.HasUnits;
 import mekwars.common.util.TokenReader;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -56,8 +58,10 @@ import java.util.StringTokenizer;
  */
 @jakarta.persistence.Entity
 @Table(name = "army")
-public class SArmy extends Army<SUnit> {
+public class SArmy extends Army {
     private static final Logger LOGGER = LogManager.getLogger(SArmy.class);
+
+    private HasUnits<SUnit> units = new HasUnits<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
@@ -76,33 +80,85 @@ public class SArmy extends Army<SUnit> {
         setId(id);
     }
 
-    public void addUnit(SUnit u) {
-        super.addUnit(u);
-        super.setBV(0);
+    /**
+     * @see IHasUnits#getUnits
+     */
+    @Override
+    public List<SUnit> getUnits() {
+        return (List<SUnit>) Collections.unmodifiableList(units.getAll());
+    }
+
+    /**
+     * @see IHasUnits#getUnit(int)
+     */
+    @Override
+    public SUnit getUnit(int id) {
+        return units.get(id);
+    }
+
+    /**
+     * @see IHasUnits#addUnit(Unit, int)
+     */
+    @Override
+    public void addUnit(int position, Unit unit) {
+        unit.setArmy(this);
+        units.add(position, (SUnit) unit);
         setRawForceSize(-1);
     }
 
-    public void addUnit(SUnit u, int position) {
-        super.addUnit(u, position);
-        super.setBV(0);
+    /**
+     * @see IHasUnits#addUnit(Unit)
+     */
+    @Override
+    public void addUnit(Unit unit) {
+        unit.setArmy(this);
+        units.add((SUnit) unit);
         setRawForceSize(-1);
     }
 
-    public void removeUnit(int id) {
-        Iterator<SUnit> iterator = getUnits().iterator();
-        while (iterator.hasNext()) {
-            SUnit unit = iterator.next();
-
-            if (unit.getId() == id) {
-                iterator.remove();
-                break;
-            }
+    /**
+     * @see IHasUnits#removeUnit(int)
+     */
+    @Override
+    public boolean removeUnit(int id) {
+        SUnit unit = units.get(id);
+        
+        if (unit == null) {
+            return false;
         }
 
-        removeUnitFromC3Network(id);
+        removeUnitFromC3Network(unit.getId());
         super.setBV(0);
         setRawForceSize(-1);
-        removeCommander(id);
+        removeCommander(unit.getId());
+        
+        unit.setOwner(null);
+        units.remove(unit.getId());
+        return true;
+    }
+
+    /**
+     * @see IHasUnits#getUnitCount()
+     */
+    @Override
+    public int getUnitCount() {
+        return units.count();
+    }
+
+    /**
+     * @see IHasUnits#countUnits(int, int)
+     */
+    @Override
+    public int countUnits(int type, int weightClass) {
+        return units.count(type, weightClass);
+    }
+
+    /**
+     * @see IHasUnits#clear()
+     */
+    @Override
+    public void clearUnits() {
+        units.clear();
     }
 
     public int getSemiGuidedBV() {
@@ -325,7 +381,7 @@ public class SArmy extends Army<SUnit> {
             toReturn.append(" / BV: " + getBV() + ")");
             return toReturn.toString();
         } else {
-            return "(Units: " + getAmountOfUnits() + " / BV: " + getBV() + ")";
+            return "(Units: " + getUnitCount() + " / BV: " + getBV() + ")";
         }
     }
 

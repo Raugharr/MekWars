@@ -172,7 +172,7 @@ import org.apache.logging.log4j.Logger;
 		
 	public void addArmy(boolean attackerArmy, SArmy army) {
 		// Keep a list of units for each side
-		int numUnits = army.getAmountOfUnits();
+		int numUnits = army.getUnitCount();
 		if(attackerArmy)
 			opData.setAttackerSize(numUnits);
 		else

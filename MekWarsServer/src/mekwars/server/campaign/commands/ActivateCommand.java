@@ -134,7 +134,7 @@ public class  ActivateCommand  implements Command {
         // check for empty armies, pilotless units
         for (SArmy currA : p.getArmies()) {
 
-            if (currA.getAmountOfUnits() == 0 && !MULOnlyOps) {
+            if (currA.getUnitCount() == 0 && !MULOnlyOps) {
                 CampaignMain.cm.toUser("AM:You may not activate with empty armies.", Username, true);
                 return;
             }
