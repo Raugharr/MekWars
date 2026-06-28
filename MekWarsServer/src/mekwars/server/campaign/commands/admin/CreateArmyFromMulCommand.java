@@ -101,7 +101,7 @@ public class CreateArmyFromMulCommand implements Command {
 		}
 		p.getArmies().add(army);
 		army.getBV();
-		army.setOpForceSize(army.getAmountOfUnits());
+		army.setOpForceSize(army.getUnitCount());
 		
 		CampaignMain.cm.toUser("PL|SAD|" + army.toString(true, "%"), p.getName(),false);
 		CampaignMain.cm.toUser("army created: " + armyname, p.getName(), true);

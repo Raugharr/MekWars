@@ -69,7 +69,7 @@ public class  RemoveArmyCommand  implements Command {
 			return;
 		}
 		
-		if (p.getDutyStatus() == SPlayer.STATUS_ACTIVE && toRemove.getAmountOfUnits() != 0){
+		if (p.getDutyStatus() == SPlayer.STATUS_ACTIVE && toRemove.getUnitCount() != 0){
 			CampaignMain.cm.toUser("AM:You may not modify armies while active.",Username,true);
 			return;
 		}

@@ -390,7 +390,7 @@ public abstract class Unit<T extends Unit<T>> {
         return getBV();
     }
 
-    public int linkToC3Network(Army<?> army, Unit master) {
+    public int linkToC3Network(Army army, Unit master) {
         if (army == null || master == null) {
             return -1;
         }
@@ -464,7 +464,7 @@ public abstract class Unit<T extends Unit<T>> {
     }
 
     // check to see if someone else is linked to this unit
-    public boolean hasBeenC3LinkedTo(Army<?> army) {
+    public boolean hasBeenC3LinkedTo(Army army) {
 
         if (army.getUnit(this.getId()) == null) return false;
 
@@ -478,7 +478,7 @@ public abstract class Unit<T extends Unit<T>> {
     }
 
     // checks that a master only has slaves connected to it
-    public boolean hasC3SlavesLinkedTo(Army<?> army) {
+    public boolean hasC3SlavesLinkedTo(Army army) {
         if (army.getUnit(this.getId()) == null) {
             return false;
         }
@@ -494,7 +494,7 @@ public abstract class Unit<T extends Unit<T>> {
         return true;
     }
 
-    public boolean checkC3mNetworkHasOpen(Army<?> army, int c3Type) {
+    public boolean checkC3mNetworkHasOpen(Army army, int c3Type) {
         int MAX_UNITS = 4;
         int unitCount = 1; // this unit is already in the network :)
 
@@ -547,7 +547,7 @@ public abstract class Unit<T extends Unit<T>> {
         return unitCount < MAX_UNITS;
     }
 
-    public boolean checkC3iNetworkHasOpen(Army<?> army) {
+    public boolean checkC3iNetworkHasOpen(Army army) {
         int MAX_UNITS = 6;
         int unitCount = 1; // this unit is already in the network :)
 

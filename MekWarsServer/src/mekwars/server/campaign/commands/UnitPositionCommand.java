@@ -94,8 +94,8 @@ public class UnitPositionCommand implements Command {
 				return;
 			} 
 			
-			if (newposition > a.getAmountOfUnits()) {
-				CampaignMain.cm.toUser("AM:Highest position available in Army #" + armyid + " is Pos. #" + a.getAmountOfUnits() + ".",Username,true);
+			if (newposition > a.getUnitCount()) {
+				CampaignMain.cm.toUser("AM:Highest position available in Army #" + armyid + " is Pos. #" + a.getUnitCount() + ".",Username,true);
 				return;
 			}
 			
@@ -108,10 +108,10 @@ public class UnitPositionCommand implements Command {
 			//from the army and then immediately re-add it at the
 			//new position
 			a.removeUnit(unitid);
-			if (newposition >= a.getAmountOfUnits())
+			if (newposition >= a.getUnitCount())
 				a.addUnit(u);//put at end
 			else
-				a.addUnit(u, newposition);
+				a.addUnit(newposition, u);
 			
 			//now, send an update command to the client
 			CampaignMain.cm.toUser("PL|RPU|"+a.getId()+"#"+u.getId()+"#"+newposition,Username,false);
