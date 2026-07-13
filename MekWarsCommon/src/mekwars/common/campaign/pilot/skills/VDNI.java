@@ -19,7 +19,6 @@ import megamek.common.Entity;
 
 import mekwars.common.CampaignData;
 import mekwars.common.House;
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 
@@ -36,7 +35,7 @@ public class VDNI extends PilotSkill {
     @Override
     public void modifyPilot(Pilot p) {
         // super.addToPilot(p);
-        p.addMegamekOption(new MegaMekPilotOption("vdni", true));
+        p.addMegamekOption("vdni", true);
         // p.setBvMod(p.getBVMod() + 0.01);
     }
 

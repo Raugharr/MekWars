@@ -21,7 +21,6 @@
 package mekwars.common.campaign.pilot.skills;
 
 
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.campaign.pilot.Pilot;
 
 /**
@@ -43,7 +42,7 @@ public class TacticalGeniusSkill extends PilotSkill {
 
     @Override
     public void modifyPilot(Pilot pilot) {
-        pilot.addMegamekOption(new MegaMekPilotOption("tactical_genius", true));
+        pilot.addMegamekOption("tactical_genius", true);
         pilot.setBvMod(pilot.getBVMod() + 0.02);
     }
 }

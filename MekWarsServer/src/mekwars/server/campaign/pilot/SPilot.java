@@ -20,7 +20,11 @@
  */
 package mekwars.server.campaign.pilot;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,24 +32,28 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 
 import mekwars.common.CampaignData;
 import mekwars.common.House;
+import mekwars.common.Unit;
+import mekwars.common.MegaMekPilotOption;
 import mekwars.common.campaign.pilot.Pilot;
 import mekwars.common.campaign.pilot.skills.PilotSkill;
 import mekwars.common.campaign.pilot.skills.PilotSkillStore;
 import mekwars.common.util.TokenReader;
 import megamek.common.Infantry;
-import mekwars.server.campaign.CampaignMain;
-import mekwars.server.campaign.SHouse;
-import mekwars.server.campaign.SPlayer;
-import mekwars.server.campaign.SUnit;
 import mekwars.common.campaign.pilot.skills.AstechSkill;
 import mekwars.common.campaign.pilot.skills.EdgeSkill;
 import mekwars.common.campaign.pilot.skills.TraitSkill;
 import mekwars.common.campaign.pilot.skills.WeaponSpecialistSkill;
+import mekwars.server.campaign.CampaignMain;
+import mekwars.server.campaign.SHouse;
+import mekwars.server.campaign.SPlayer;
+import mekwars.server.campaign.SUnit;
 import mekwars.server.campaign.util.SerializedMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,11 +63,19 @@ import org.apache.logging.log4j.Logger;
  *
  */
 @Entity
+@Table(name = "pilot")
 public class SPilot extends Pilot {
     private static final Logger LOGGER = LogManager.getLogger(SPilot.class);
 
     private int pickedUpId;
     private boolean death = false;
+
+    @OneToOne(mappedBy = "pilot")
+    private SUnit unit;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SMegaMekPilotOption> megamekOptions = new ArrayList<>();
+
 
     public SPilot(House house, String name, int gunnery, int piloting) {
         super(house, name, gunnery, piloting);
@@ -67,6 +83,31 @@ public class SPilot extends Pilot {
 
     public SPilot() {
         // TODO: remove when possible
+    }
+
+    public SUnit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = (SUnit) unit;
+    }
+
+    @Override
+    public void addMegamekOption(String name, boolean value) {
+        SMegaMekPilotOption option = new SMegaMekPilotOption(name, value);
+        option.setPilot(this);
+        megamekOptions.add(option);
+    }
+
+    @Override
+    public void addMegamekOption(MegaMekPilotOption option) {
+        megamekOptions.add((SMegaMekPilotOption) option);
+    }
+
+    @Override
+    public List<SMegaMekPilotOption> getMegamekOptions() {
+        return megamekOptions;
     }
 
     /**

@@ -28,7 +28,8 @@ dependencies {
     implementation 'jakarta.transaction:jakarta.transaction-api'
     implementation 'org.xerial:sqlite-jdbc:3.53.0.0'
     implementation 'org.flywaydb:flyway-core:9.22.3'
-  
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+
     annotationProcessor 'org.hibernate.orm:hibernate-jpamodelgen:6.6.50.Final'
 }
 

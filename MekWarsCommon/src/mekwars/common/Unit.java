@@ -92,8 +92,6 @@ public abstract class Unit<T extends Unit<T>> {
     private int BV;
     private int scrappableFor = -1;
     @Transient
-    private Pilot pilot;
-    @Transient
     private Player owner;
 
     private int type;
@@ -239,20 +237,9 @@ public abstract class Unit<T extends Unit<T>> {
         this.scrappableFor = scrappableFor;
     }
 
-    /**
-     * @return Returns the pilot.
-     */
-    public Pilot getPilot() {
-        return pilot;
-    }
+    public abstract Pilot getPilot();
 
-    /**
-     * @param pilot The pilot to set.
-     */
-    public void setPilot(Pilot pilot) {
-        this.pilot = pilot;
-        pilot.setUnit(this);
-    }
+    public abstract void setPilot(Pilot pilot);
 
     public Player getOwner() {
         return owner;

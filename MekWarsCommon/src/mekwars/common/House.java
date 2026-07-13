@@ -40,6 +40,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
@@ -47,6 +48,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PostPersist;
 import jakarta.persistence.Transient;
 
 import megamek.common.TechConstants;
@@ -99,7 +102,6 @@ public class House implements MWEntity {
     private String factionColor = "#000000";
     private String abbreviation = "";
     private String factionPlayerColors = "#000000";
-    private BasePilotStats basePilotStats;
 
     private boolean conquerable = true;
 
@@ -125,6 +127,14 @@ public class House implements MWEntity {
     @Enumerated(EnumType.STRING)
     private Set<FactionTag> tags = EnumSet.noneOf(FactionTag.class);
 
+    @OneToOne(mappedBy = "house", cascade = CascadeType.ALL, orphanRemoval = true)
+    private BasePilotStats basePilotStats;
+
+    @PostPersist
+    public void addBasePilotStats() {
+        setBasePilotStats(new BasePilotStats());
+    }
+
     /**
      * @return Returns the myAbbreviation.
      */
@@ -134,6 +144,13 @@ public class House implements MWEntity {
 
     public BasePilotStats getBasePilotStats() {
         return basePilotStats;
+    }
+
+    public void setBasePilotStats(BasePilotStats basePilotStats) {
+        this.basePilotStats = basePilotStats;
+        if (basePilotStats != null) {
+            basePilotStats.setHouse(this);
+        }
     }
 
     /**
@@ -232,7 +249,6 @@ public class House implements MWEntity {
 
     public House() {
         setId(EntityStore.UNSET_ID);
-        basePilotStats = new BasePilotStats();
     }
 
     public House(StringTokenizer st) {

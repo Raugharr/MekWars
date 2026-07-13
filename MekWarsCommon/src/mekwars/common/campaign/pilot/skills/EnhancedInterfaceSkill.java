@@ -16,7 +16,6 @@
 
 package mekwars.common.campaign.pilot.skills;
 
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 
@@ -41,7 +40,7 @@ public class EnhancedInterfaceSkill extends PilotSkill {
     @Override
     public void modifyPilot(Pilot p) {
         // super.addToPilot(p);
-        p.addMegamekOption(new MegaMekPilotOption("ei_implant", true));
+        p.addMegamekOption("ei_implant", true);
         p.setBvMod(p.getBVMod() + 0.01);
     }
 
