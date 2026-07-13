@@ -3,6 +3,7 @@ package mekwars.client.cmd;
 import java.util.StringTokenizer;
 
 import mekwars.client.MWClient;
+import mekwars.common.CampaignData;
 
 public class PF extends Command {
 	/**
@@ -20,8 +21,8 @@ public class PF extends Command {
 		String action = st.nextToken();
 		if (action.equalsIgnoreCase("SDF")) {
 			// Set Default Flags
-			mwclient.getPlayer().getDefaultPlayerFlags().loadDefaults(st.nextToken());
-			mwclient.getPlayer().getDefaultPlayerFlags().save();
+			CampaignData.cd.getDefaultPlayerFlags().loadDefaults(st.nextToken());
+			CampaignData.cd.getDefaultPlayerFlags().save();
 		} else if (action.equalsIgnoreCase("AF")) {
 			// Add a Flag
 			// Should be a string with this format:  name|id|value
@@ -29,13 +30,13 @@ public class PF extends Command {
 			int id = Integer.parseInt(st.nextToken());
 			boolean value = Boolean.parseBoolean(st.nextToken());
 			mwclient.getPlayer().getFlags().addFlag(name, id, value);
-			mwclient.getPlayer().getDefaultPlayerFlags().addFlag(name, id, value);
+			CampaignData.cd.getDefaultPlayerFlags().addFlag(name, id, value);
 		} else if (action.equalsIgnoreCase("DF")) {
 			// Delete a Flag
 			// Should be a string with this format:  name
 			String name = st.nextToken();
 			mwclient.getPlayer().getFlags().clearFlag(name);
-			mwclient.getPlayer().getDefaultPlayerFlags().clearFlag(name);
+			CampaignData.cd.getDefaultPlayerFlags().clearFlag(name);
 			
 		} else if (action.equalsIgnoreCase("SF")) {
 			// Set Flag
@@ -49,7 +50,7 @@ public class PF extends Command {
 			// Should be a string with this format: name|value
 			String name = st.nextToken();
 			boolean value = Boolean.parseBoolean(st.nextToken());
-			mwclient.getPlayer().getDefaultPlayerFlags().setFlag(name, value);
+			CampaignData.cd.getDefaultPlayerFlags().setFlag(name, value);
 		}
 		// As this is the last command sent on login, and since players' hangars aren't
 		// being sorted when first logging in, it seems an appropriate time to send a

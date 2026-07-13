@@ -1924,9 +1924,9 @@ public class SHouse extends TimeUpdateHouse
         // Send default player flags if it's an admin or mod
         if (MWServ.getInstance().isModerator(p.getName())
                 || MWServ.getInstance().isAdmin(p.getName())) {
-            if (!CampaignMain.cm.getDefaultPlayerFlags().isEmpty()) {
+            if (!CampaignData.cd.getDefaultPlayerFlags().isEmpty()) {
                 CampaignMain.cm.toUser(
-                        "PF|SDF|" + CampaignMain.cm.getDefaultPlayerFlags().export(),
+                        "PF|SDF|" + CampaignData.cd.getDefaultPlayerFlags().export(),
                         p.getName(),
                         false);
             }

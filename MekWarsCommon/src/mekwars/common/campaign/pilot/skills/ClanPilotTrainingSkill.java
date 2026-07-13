@@ -16,7 +16,6 @@
 
 package mekwars.common.campaign.pilot.skills;
 
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.campaign.pilot.Pilot;
 import megamek.common.Entity;
 
@@ -35,7 +34,7 @@ public class ClanPilotTrainingSkill extends PilotSkill {
 
     @Override
     public void modifyPilot(Pilot pilot) {
-        pilot.addMegamekOption(new MegaMekPilotOption("clan_pilot_training", true));
+        pilot.addMegamekOption("clan_pilot_training", true);
         // piilot.setBvMod(pilot.getBVMod() + 0.01);
     }
 

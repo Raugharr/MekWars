@@ -21,7 +21,6 @@
 package mekwars.common.campaign.pilot.skills;
 
 import mekwars.common.CampaignData;
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 
@@ -47,7 +46,7 @@ public class EdgeSkill extends PilotSkill {
 
     @Override
     public void modifyPilot(Pilot p) {
-        p.addMegamekOption(new MegaMekPilotOption("edge", true));
+        p.addMegamekOption("edge", true);
     }
 
     @Override

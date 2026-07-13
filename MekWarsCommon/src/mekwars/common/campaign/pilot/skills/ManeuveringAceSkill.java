@@ -24,7 +24,6 @@ import megamek.common.Entity;
 
 import mekwars.common.CampaignData;
 import mekwars.common.House;
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.campaign.pilot.Pilot;
 
 /**
@@ -46,7 +45,7 @@ public class ManeuveringAceSkill extends PilotSkill {
 
     @Override
     public void modifyPilot(Pilot pilot) {
-        pilot.addMegamekOption(new MegaMekPilotOption("maneuvering_ace", true));
+        pilot.addMegamekOption("maneuvering_ace", true);
         // pilot.setBvMod(pilot.getBVMod() + 0.01);
     }
 

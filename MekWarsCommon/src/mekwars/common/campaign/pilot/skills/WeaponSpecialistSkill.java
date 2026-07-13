@@ -27,7 +27,6 @@ import megamek.common.battlevalue.BVCalculator;
 
 import mekwars.common.CampaignData;
 import mekwars.common.util.RandomUtils;
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.campaign.pilot.Pilot;
 
 import java.util.Enumeration;
@@ -52,7 +51,7 @@ public class WeaponSpecialistSkill extends PilotSkill {
 
     @Override
     public void modifyPilot(Pilot pilot) {
-        pilot.addMegamekOption(new MegaMekPilotOption("weapon_specialist", true));
+        pilot.addMegamekOption("weapon_specialist", true);
         // pilot.setBvMod(pilot.getBVMod() +  0.02);
     }
 

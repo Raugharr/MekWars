@@ -20,7 +20,6 @@
  */
 package mekwars.common.campaign.pilot.skills;
 
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 
@@ -41,7 +40,7 @@ public class DodgeManeuverSkill extends PilotSkill {
 
     @Override
     public void modifyPilot(Pilot p) {
-        p.addMegamekOption(new MegaMekPilotOption("dodge_maneuver", true));
+        p.addMegamekOption("dodge_maneuver", true);
         // p.setBvMod(p.getBVMod() + 0.01);
     }
 

@@ -20,6 +20,8 @@
  */
 package mekwars.client.campaign;
 
+import mekwars.client.campaign.pilot.CPilot;
+
 import mekwars.common.CampaignData;
 import mekwars.common.House;
 import mekwars.common.Unit;
@@ -57,7 +59,7 @@ public class CPersonalPilotQueues extends PersonalPilotQueues {
 
         House pilotHouse = CampaignData.cd.getHouseByName(houseName);
         // set up the pilot
-        Pilot pilot = new Pilot(pilotHouse, pilotname, gunnery, piloting);
+        Pilot pilot = new CPilot(pilotHouse, pilotname, gunnery, piloting);
         pilot.setExperience(exp);
 
         // read skills, if any

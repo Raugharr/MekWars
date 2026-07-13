@@ -21,7 +21,6 @@ import megamek.common.Mech;
 
 import mekwars.common.CampaignData;
 import mekwars.common.House;
-import mekwars.common.MegaMekPilotOption;
 import mekwars.common.Unit;
 import mekwars.common.campaign.pilot.Pilot;
 
@@ -45,7 +44,7 @@ public class PainResistanceSkill extends PilotSkill {
     @Override
     public void modifyPilot(Pilot p) {
         // super.addToPilot(p);
-        p.addMegamekOption(new MegaMekPilotOption("pain_resistance", true));
+        p.addMegamekOption("pain_resistance", true);
         p.setBvMod(p.getBVMod() + 0.01);
     }
 
